@@ -30,8 +30,8 @@ RUN mv -f /tmp/webassembly_threads_release.zip /root/.local/share/godot/template
 
 # Build resotoui
 WORKDIR /usr/local/resoto/ui
-COPY ui /usr/src/ui
-RUN /build/godot/Godot_v${GODOT_VERSION}-stable_linux_headless.64 --path /usr/src/ui/src --export HTML5 /usr/local/resoto/ui/index.html
+COPY src /usr/src/ui
+RUN /build/godot/Godot_v${GODOT_VERSION}-stable_linux_headless.64 --path /usr/src/ui --export HTML5 /usr/local/resoto/ui/index.html
 
 RUN echo "${SOURCE_COMMIT:-unknown}" > /usr/local/etc/git-commit.HEAD
 
