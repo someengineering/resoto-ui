@@ -8,9 +8,9 @@ on:
             - main
     pull_request:
         paths:
-            - 'Dockerfile'
-            - 'src/**'
-            - '.github/workflows/docker-build.yml'
+            - "Dockerfile"
+            - "src/**"
+            - ".github/workflows/docker-build.yml"
     workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
                 uses: docker/setup-buildx-action@v1
 
             -   name: Log in to GitHub Container Registry
-                if: github.event_name != 'pull_request'
+                if: github.event_name != "pull_request"
                 uses: docker/login-action@v1
                 with:
                     registry: ghcr.io
@@ -53,7 +53,7 @@ jobs:
                     context: .
                     file: ./Dockerfile
                     platforms: linux/amd64
-                    push: ${{ github.event_name != 'pull_request' }}
+                    push: ${{ github.event_name != "pull_request" }}
                     build-args: |
                         SOURCE_COMMIT=${{ github.sha }}
                         TESTS=false
