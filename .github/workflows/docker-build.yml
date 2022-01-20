@@ -28,12 +28,13 @@ jobs:
                     images: |
                         ghcr.io/someengineering/resoto-ui
                     flavor: |
-                      latest=true
+                      latest=auto
                     tags: |
                         type=pep440,pattern={{version}}
                         type=pep440,pattern={{major}}.{{minor}}
                         type=pep440,pattern={{major}}
                         type=sha,prefix=
+                        type=edge
 
             -   name: Set up Docker Buildx
                 id: buildx
