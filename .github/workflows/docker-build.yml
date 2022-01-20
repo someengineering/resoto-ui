@@ -21,6 +21,15 @@ jobs:
             -   name: Check out repository
                 uses: actions/checkout@v2
 
+            -   name: Set build platforms
+                id: platform
+                run: |
+                    if [ "${{ github.ref_type }}" = tag ]; then
+                        echo "::set-output name=latest::true"
+                    else
+                        echo "::set-output name=latest::false"
+                    fi
+
             -   name: Docker meta
                 id: meta
                 uses: docker/metadata-action@v3
@@ -28,7 +37,7 @@ jobs:
                     images: |
                         ghcr.io/someengineering/resoto-ui
                     flavor: |
-                        latest=auto
+                        latest=${{ steps.platform.outputs.latest }}
                     tags: |
                         type=pep440,pattern={{version}}
                         type=pep440,pattern={{major}}.{{minor}}
