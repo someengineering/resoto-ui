@@ -1,11 +1,11 @@
 extends Node
 
 # Start docker with:
-# docker run -p 8900:8900 ghcr.io/someengineering/cloudkeeper:latest --host 0.0.0.0
+# docker run -p 8900:8900 ghcr.io/someengineering/resoto:latest --host 0.0.0.0
 #
 # Or start docker without JWT auth
 # ( NOT recommended and NOT necessary anymore ):
-# docker run -p 8900:8900 -e PSK="" ghcr.io/someengineering/cloudkeeper:latest --host 0.0.0.0
+# docker run -p 8900:8900 -e PSK="" ghcr.io/someengineering/resoto:latest --host 0.0.0.0
 
 const DEFAULT_PSK = "changeme"
 const DEBUG_MESSAGES := true
@@ -36,7 +36,7 @@ func connect_to_core( adress := current_adress, port := current_port, _psk := ps
 	var had_timeout = false
 	current_adress = adress
 	current_port = port
-	
+
 	err = http.connect_to_host(current_adress, current_port)
 	if err != OK:
 		debug_message("Error in connection! Check adress and port!")
@@ -55,7 +55,7 @@ func connect_to_core( adress := current_adress, port := current_port, _psk := ps
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
-		
+
 		if timeout_time > timeout:
 			had_timeout = true
 			break
@@ -67,15 +67,15 @@ func connect_to_core( adress := current_adress, port := current_port, _psk := ps
 			yield(get_tree(), "idle_frame")
 			yield(get_tree(), "idle_frame")
 			yield(get_tree(), "idle_frame")
-	
-	
+
+
 	if http.get_status() == HTTPClient.STATUS_CONNECTED:
 		debug_message("Connected!")
 		connected = true
 	else:
 		debug_message("Could not connect - Timeout.")
 		connected = false
-		
+
 	emit_signal("api_connected", had_timeout)
 	psk = _psk if _psk != "" else DEFAULT_PSK
 
@@ -93,33 +93,33 @@ func check_status_and_reconnect():
 func send_request( method := HTTPClient.METHOD_GET, url := "/graph", body := "" ):
 	if jwtlib.token == "" or !jwtlib.token_expired():
 		_e.emit_signal("create_jwt", "", psk)
-	
-	
+
+
 	if http.get_status() != HTTPClient.STATUS_CONNECTED:
 		connected = false
 		debug_message("Problem with connection, trying to reconnect...")
 		if http.get_status() == HTTPClient.STATUS_DISCONNECTED:
 			connect_to_core()
 			yield(self, "api_connected")
-	
+
 	if !connected:
 		debug_message("Problem with connection, cancelling.")
 		return
-	
-	var ckui_via = "Web" if OS.has_feature("web") else "Desktop"
-	
+
+	var resotoui_via = "Web" if OS.has_feature("web") else "Desktop"
+
 	var headers = [
-		"User-Agent: Cloudkeeper UI",
+		"User-Agent: resoto UI",
 		"Accept: application/x-ndjson",
-		"Ckui-via: " + ckui_via,
+		"Resotoui-via: " + resotoui_via,
 		"Authorization: Bearer " + jwtlib.token,
 		"Content-Type: text/plain",
 #		"Accept-Encoding: gzip"
 	]
-	
+
 	if http.get_status() != HTTPClient.STATUS_CONNECTED:
 		return
-	
+
 	err = http.request(method, url, headers, body)
 
 	if err != OK:
@@ -138,7 +138,7 @@ func send_request( method := HTTPClient.METHOD_GET, url := "/graph", body := "" 
 			yield(get_tree(), "idle_frame")
 			yield(get_tree(), "idle_frame")
 			yield(get_tree(), "idle_frame")
-	
+
 	# Make sure request finished well.
 	if !(
 		http.get_status() == HTTPClient.STATUS_BODY
@@ -147,9 +147,9 @@ func send_request( method := HTTPClient.METHOD_GET, url := "/graph", body := "" 
 		debug_message("Request error! Something went wrong after the request.")
 
 	var has_response = (
-		"ckcore has a response."
+		"resotocore has a response."
 		if http.has_response()
-		else "ckcore has no response."
+		else "resotocore has no response."
 	)
 	debug_message(has_response + "\n###########")
 
@@ -163,10 +163,10 @@ func send_request( method := HTTPClient.METHOD_GET, url := "/graph", body := "" 
 
 		if "Ck-Element-Count" in headers:
 			emit_signal("api_response_total_elements", int( headers["Ck-Element-Count"] ) )
-		
+
 		var _gzip = "Content-Encoding" in headers and headers["Content-Encoding"] == "gzip"
 		var _deflate = "Content-Encoding" in headers and headers["Content-Encoding"] == "deflate"
-		
+
 		# Getting the response body
 		if http.is_response_chunked():
 			# Does it use chunks?
@@ -196,20 +196,20 @@ func send_request( method := HTTPClient.METHOD_GET, url := "/graph", body := "" 
 			else:
 				emit_signal("api_response", chunk.get_string_from_ascii())
 				read_buffer += chunk # Append to read buffer.
-			
+
 			index += 1
 			if index % 100 == 0:
 				# Eventually it would be time saving to use a different approach for
 				# bigger requests, eg. only yielding every x results.
 				# Yielding here allows the UI to react to the received response
 				yield(get_tree(), "idle_frame")
-		
-	
+
+
 		yield(get_tree(), "idle_frame")
 		emit_signal( "api_response_finished" )
 		debug_message("###########\nRequest finished - Bytes received: " + str( read_buffer.size() ) )
 
-		# The following part is not neccessary at the moment as 
+		# The following part is not neccessary at the moment as
 		# the result will be handled while receiving the response.
 
 
