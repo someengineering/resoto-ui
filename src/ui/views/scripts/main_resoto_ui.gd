@@ -21,7 +21,7 @@ func _ready() -> void:
 
 	ui_graph = $UIGraph if _g.use_2d_graph else $UIGraph3DViewport/Viewport/UIGraph3D
 
-	# The new default is to connect to ckcore
+	# The new default is to connect to resotocore
 	_e.emit_signal("connect_popup")
 
 	_e.connect("go_to_graph_node_3d", self, "go_to_graph_node")
