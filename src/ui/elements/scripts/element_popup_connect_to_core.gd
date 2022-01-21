@@ -3,8 +3,8 @@ extends Popup
 signal create_graph
 signal use_example_data
 
-const TEXT_ERROR_CONNECTION = "Can't connect to Cloudkeeper Core!\nPlease check if adress is correct, ports are open and ckcore is running."
-const CONNECT_TEXT = "Connecting to Cloudkeeper Core. ({0}s)\n{1}:{2}"
+const TEXT_ERROR_CONNECTION = "Can't connect to resoto Core!\nPlease check if adress is correct, ports are open and resotocore is running."
+const CONNECT_TEXT = "Connecting to resoto Core. ({0}s)\n{1}:{2}"
 
 var graph_id := "example"
 var api_response_data : String
@@ -130,14 +130,14 @@ func api_response( chunk:String ):
 
 func api_response_finished():
 	var graph_results : Array = parse_json(api_response_data)
-	
+
 	if api_response_data.empty():
 		status.text = "No Graphs found!"
 		return
 	graph_dropdown.show()
 	graph_mode.show()
 	status.text = "Select Graph"
-	
+
 	for i in graph_results:
 		graph_dropdown.add_item(i)
 	ok_btn.show()
