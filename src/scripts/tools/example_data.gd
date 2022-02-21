@@ -4,7 +4,7 @@ var graph_data: Dictionary = {
 	0:
 	{
 		"id": "61c43fa83a7027b9036c1a4b9df579033ffedfa0d7470d43fb379eec3eac84b4",
-		"reported": {"kind": "graph_root", "id": "root", "tags": {}, "name": "example_root"},
+		"reported": {"kind": "graph_root", "id": "root", "tags": {}, "name": "root"},
 		"metadata": {"python_type": "resoto.baseresources.GraphRoot"},
 		"ancestors": {},
 		"kinds": ["root"],
@@ -15,7 +15,6 @@ var graph_data: Dictionary = {
 		"id": "e368f0676555c60f685cf4a9f99589aac8ec51f5c48d4dd2e8c7db9c1454aec0",
 		"reported": {"kind": "cloud", "id": "aws", "tags": {}, "name": "example_aws"},
 		"metadata": {"python_type": "resoto.baseresources.Cloud"},
-		"kinds": ["cloud"],
 		"desired": {},
 		"merge": true
 	},
@@ -43,7 +42,6 @@ var graph_data: Dictionary = {
 					}
 				}
 		},
-		"kinds": ["account"],
 		"desired": {}
 	},
 	3:
@@ -70,7 +68,6 @@ var graph_data: Dictionary = {
 					}
 				}
 		},
-		"kinds": ["region"],
 		"desired": {}
 	},
 	4:
@@ -97,7 +94,6 @@ var graph_data: Dictionary = {
 					}
 				}
 		},
-		"kinds": ["region"],
 		"desired": {}
 	},
 	5:
@@ -131,7 +127,6 @@ var graph_data: Dictionary = {
 					}
 				}
 		},
-		"kinds": ["snapshot"],
 		"desired": {}
 	},
 	6:
@@ -158,7 +153,6 @@ var graph_data: Dictionary = {
 					}
 				}
 		},
-		"kinds": ["bucket"],
 		"desired": {}
 	},
 	7:
@@ -185,7 +179,6 @@ var graph_data: Dictionary = {
 					}
 				}
 		},
-		"kinds": ["quota"],
 		"desired": {}
 	},
 	8:
@@ -216,7 +209,6 @@ var graph_data: Dictionary = {
 					}
 				}
 		},
-		"kinds": ["instance"],
 		"desired": {}
 	},
 	9:
@@ -246,7 +238,6 @@ var graph_data: Dictionary = {
 					}
 				}
 		},
-		"kinds": ["instancetype"],
 		"desired": {}
 	},
 	10:

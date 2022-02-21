@@ -237,14 +237,14 @@ func create_new_graph_node(data: Dictionary):
 	var _parent_node = node_group
 
 	if "metadata" in data:
-		if "cloud" in data.kinds:
+		if "cloud" in data.reported.kind:
 			new_graph_node.name = "Cloud_" + data.reported.name
 			new_graph_node.line_length = 1500
 			add_new_node_group(data.reported.name, new_graph_node, new_graph_node)
 			graph_node_groups["root"].add(data.id)
 			_parent_node = graph_node_groups["root"].node_group_object
 
-		elif "account" in data.kinds:
+		elif "account" in data.reported.kind:
 			new_graph_node.name = "Account_" + data.reported.name
 			new_graph_node.line_length = 500
 			_parent_node = graph_node_groups[data.ancestors.cloud.reported.id].node_group_object
@@ -258,7 +258,7 @@ func create_new_graph_node(data: Dictionary):
 			graph_node_groups[data.ancestors.account.reported.name].add(data.id)
 #
 		else:
-			new_graph_node.name = "Root_Node"
+			new_graph_node.name = "root"
 			new_graph_node.line_length = 2000
 			add_new_node_group("root", new_graph_node, new_graph_node)
 			graph_node_groups["root"].add(data.id)
