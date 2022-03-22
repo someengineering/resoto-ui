@@ -28,19 +28,19 @@ func load_settings() -> void:
 	if disabled:
 		return
 	var settings = load_settings_file()
-	API.psk = settings.psk
-	_g.ui_shrink = settings.ui_shrink
-	emit_signal("settings_loaded")
+	API.psk = settings[0].psk
+	_g.ui_shrink = settings[0].ui_shrink
+	emit_signal("settings_loaded", settings[1])
 
 
-func load_settings_file() ->Dictionary:
+func load_settings_file() -> Array:
 	if disabled:
-		return clear_settings()
+		return [clear_settings(), false]
 	var settings = File.new()
 	var settings_path = SETTINGS_FILE_NAME
 	
 	if not settings.file_exists(settings_path):
-		return clear_settings()
+		return [clear_settings(), false]
 	
 	settings.open_encrypted_with_pass(settings_path, File.READ, ENC)
 	var settings_data = clear_settings()
@@ -50,7 +50,7 @@ func load_settings_file() ->Dictionary:
 			if settings_var.has(key):
 				settings_data[key] = settings_var[key]
 	settings.close()
-	return settings_data
+	return [settings_data, true]
 
 
 func save_settings() -> void:
