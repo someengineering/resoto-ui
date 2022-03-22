@@ -1,0 +1,371 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
+[ext_resource path="res://assets/Resoto_logo_and_text.svg" type="Texture" id=4]
+[ext_resource path="res://scripts/ui_main.gd" type="Script" id=5]
+[ext_resource path="res://scripts/ui_menu.gd" type="Script" id=6]
+[ext_resource path="res://scripts/ui_popup_manager.gd" type="Script" id=7]
+[ext_resource path="res://scripts/ui_terminal_manager.gd" type="Script" id=9]
+
+[sub_resource type="DynamicFontData" id=13]
+font_path = "res://assets/theme/Barlow-Light.ttf"
+
+[sub_resource type="DynamicFont" id=11]
+size = 33
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = -25
+extra_spacing_bottom = -20
+font_data = SubResource( 13 )
+
+[sub_resource type="StyleBoxFlat" id=14]
+bg_color = Color( 0.313726, 0.223529, 0.435294, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_detail = 1
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+
+[sub_resource type="StyleBoxFlat" id=15]
+bg_color = Color( 0.0470588, 0.0392157, 0.0509804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_detail = 1
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+
+[sub_resource type="StyleBoxFlat" id=16]
+bg_color = Color( 0.0470588, 0.0392157, 0.0509804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_detail = 1
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+
+[sub_resource type="StyleBoxFlat" id=12]
+bg_color = Color( 0.0470588, 0.0392157, 0.0509804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_detail = 1
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+
+[sub_resource type="StyleBoxFlat" id=17]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.0470588, 0.0392157, 0.0509804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.113725 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 6 )
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.161705, 0.119476, 0.175781, 1 )
+
+[node name="Main" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 2 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Content" type="CanvasLayer" parent="."]
+
+[node name="Content" type="MarginContainer" parent="Content"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+theme = ExtResource( 2 )
+custom_constants/margin_right = 10
+custom_constants/margin_top = 40
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TerminalManager" type="VBoxContainer" parent="Content/Content"]
+margin_left = 10.0
+margin_top = 40.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+custom_constants/separation = -1
+script = ExtResource( 9 )
+
+[node name="TabsBar" type="HBoxContainer" parent="Content/Content/TerminalManager"]
+margin_right = 1900.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="StartSpacer" type="MarginContainer" parent="Content/Content/TerminalManager/TabsBar"]
+margin_right = 8.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 8, 0 )
+
+[node name="TerminalTabs" type="Tabs" parent="Content/Content/TerminalManager/TabsBar"]
+margin_left = 8.0
+margin_right = 8.0
+margin_bottom = 24.0
+size_flags_horizontal = 13
+size_flags_vertical = 3
+custom_constants/label_valign_fg = 0
+custom_constants/hseparation = 50
+custom_constants/label_valign_bg = 0
+custom_constants/top_margin = 0
+tab_align = 0
+tab_close_display_policy = 2
+scrolling_enabled = false
+drag_to_rearrange_enabled = true
+
+[node name="NewTabButton" type="Button" parent="Content/Content/TerminalManager/TabsBar"]
+margin_left = 8.0
+margin_right = 32.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_colors/font_color_disabled = Color( 0.705882, 0.454902, 0.745098, 1 )
+custom_colors/font_color_focus = Color( 0.705882, 0.454902, 0.745098, 1 )
+custom_colors/font_color = Color( 0.705882, 0.454902, 0.745098, 1 )
+custom_colors/font_color_hover = Color( 0.913725, 0.552941, 0.968627, 1 )
+custom_colors/font_color_pressed = Color( 0.705882, 0.454902, 0.745098, 1 )
+custom_fonts/font = SubResource( 11 )
+custom_styles/hover = SubResource( 14 )
+custom_styles/pressed = SubResource( 14 )
+custom_styles/focus = SubResource( 15 )
+custom_styles/disabled = SubResource( 16 )
+custom_styles/normal = SubResource( 12 )
+text = "+"
+
+[node name="TerminalContainer" type="PanelContainer" parent="Content/Content/TerminalManager"]
+show_behind_parent = true
+margin_top = 23.0
+margin_right = 1900.0
+margin_bottom = 1030.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 17 )
+
+[node name="Popups" type="CanvasLayer" parent="."]
+layer = 30
+script = ExtResource( 7 )
+
+[node name="BG" type="ColorRect" parent="Popups"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.0745098, 0.0352941, 0.0901961, 0.866667 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConnectPopup" type="PopupDialog" parent="Popups"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1920.0
+margin_bottom = -1080.0
+rect_min_size = Vector2( 400, 150 )
+theme = ExtResource( 2 )
+custom_styles/panel = SubResource( 7 )
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Content" type="VBoxContainer" parent="Popups/ConnectPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Popups/ConnectPopup/Content"]
+margin_right = 400.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
+custom_styles/normal = SubResource( 8 )
+text = "Connect to Resoto Core"
+align = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Popups/ConnectPopup/Content"]
+margin_top = 20.0
+margin_right = 400.0
+margin_bottom = 158.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 10
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Connect" type="VBoxContainer" parent="Popups/ConnectPopup/Content/MarginContainer"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 380.0
+margin_bottom = 118.0
+size_flags_horizontal = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConnectStatusLabel" type="Label" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
+margin_right = 360.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_vertical = 7
+text = "Connecting"
+align = 1
+autowrap = true
+
+[node name="HSeparator" type="HSeparator" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
+modulate = Color( 1, 1, 1, 0.415686 )
+margin_top = 24.0
+margin_right = 360.0
+margin_bottom = 28.0
+
+[node name="Label" type="Label" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
+margin_top = 32.0
+margin_right = 360.0
+margin_bottom = 52.0
+rect_min_size = Vector2( 100, 0 )
+text = "PSK:"
+
+[node name="PSKLineEdit" type="LineEdit" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
+margin_top = 56.0
+margin_right = 360.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="ButtonConnect" type="Button" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
+margin_top = 84.0
+margin_right = 360.0
+margin_bottom = 108.0
+text = "Connect"
+
+[node name="MenuBar" type="CanvasLayer" parent="."]
+layer = 20
+follow_viewport_enable = true
+
+[node name="MenuContainer" type="VBoxContainer" parent="MenuBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Menu" type="PanelContainer" parent="MenuBar/MenuContainer"]
+margin_right = 1920.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 3 )
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu"]
+margin_right = 1920.0
+margin_bottom = 32.0
+custom_constants/separation = 0
+
+[node name="Spacer2" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_right = 10.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 10.0
+margin_right = 74.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="Spacer" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 74.0
+margin_right = 1870.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="SideMenu" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 1870.0
+margin_right = 1920.0
+margin_bottom = 32.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="ButtonDocs" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 28.0
+text = "docs"
+
+[connection signal="reposition_active_tab_request" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_reposition_active_tab_request"]
+[connection signal="tab_changed" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_changed"]
+[connection signal="tab_close" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_close"]
+[connection signal="pressed" from="Content/Content/TerminalManager/TabsBar/NewTabButton" to="Content/Content/TerminalManager" method="_on_NewTabButton_pressed"]
+[connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
+[connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
+[connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
+[connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]

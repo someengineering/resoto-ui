@@ -1,0 +1,110 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://components/terminal/component_terminal.gd" type="Script" id=1]
+[ext_resource path="res://components/terminal/terminal_loading.tscn" type="PackedScene" id=2]
+
+[sub_resource type="DynamicFontData" id=19]
+font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=20]
+size = 14
+font_data = SubResource( 19 )
+
+[sub_resource type="DynamicFontData" id=21]
+font_path = "res://assets/theme/SourceCodePro-Black.ttf"
+
+[sub_resource type="DynamicFont" id=22]
+size = 14
+font_data = SubResource( 21 )
+
+[sub_resource type="StyleBoxEmpty" id=24]
+
+[sub_resource type="StyleBoxEmpty" id=25]
+
+[sub_resource type="StyleBoxEmpty" id=13]
+
+[sub_resource type="StyleBoxEmpty" id=14]
+
+[sub_resource type="StyleBoxEmpty" id=15]
+
+[node name="Terminal" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 38.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichResponseText" type="RichTextLabel" parent="."]
+margin_right = 1912.0
+margin_bottom = 1016.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/default_color = Color( 0.85098, 0.721569, 1, 1 )
+custom_colors/selection_color = Color( 0.313726, 0.223529, 0.435294, 1 )
+custom_fonts/mono_font = SubResource( 20 )
+custom_fonts/bold_italics_font = SubResource( 20 )
+custom_fonts/italics_font = SubResource( 20 )
+custom_fonts/bold_font = SubResource( 22 )
+custom_fonts/normal_font = SubResource( 20 )
+custom_styles/focus = SubResource( 24 )
+custom_styles/normal = SubResource( 25 )
+bbcode_enabled = true
+selection_enabled = true
+
+[node name="CenterContainer" type="CenterContainer" parent="RichResponseText"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Loading" parent="RichResponseText/CenterContainer" instance=ExtResource( 2 )]
+margin_left = 956.0
+margin_top = 508.0
+margin_right = 956.0
+margin_bottom = 508.0
+
+[node name="Command" type="HBoxContainer" parent="."]
+margin_top = 1020.0
+margin_right = 1912.0
+margin_bottom = 1038.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="Begin" type="Label" parent="Command"]
+margin_right = 16.0
+margin_bottom = 18.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 22 )
+text = "> "
+
+[node name="CommandEdit" type="LineEdit" parent="Command"]
+margin_left = 16.0
+margin_right = 1912.0
+margin_bottom = 18.0
+focus_neighbour_left = NodePath(".")
+focus_neighbour_top = NodePath(".")
+focus_neighbour_right = NodePath(".")
+focus_neighbour_bottom = NodePath(".")
+focus_next = NodePath(".")
+focus_previous = NodePath(".")
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 22 )
+custom_styles/read_only = SubResource( 13 )
+custom_styles/focus = SubResource( 14 )
+custom_styles/normal = SubResource( 15 )
+caret_blink = true
+caret_blink_speed = 0.5
+
+[connection signal="text_entered" from="Command/CommandEdit" to="." method="_on_CommandEdit_text_entered"]

@@ -1,7 +1,3 @@
-
 # Godot-specific ignores
 .import/
 export.cfg
-
-# Ignore data (exported json)
-data/
