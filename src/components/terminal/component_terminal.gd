@@ -3,13 +3,14 @@ class_name TerminalComponent
 
 signal RenameTerminal
 
-const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK]
+const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META]
 const UI_RENAME_COMMAND:String = "ui name "
 
 var terminal_active: bool = false
 var last_commands: Array  = []
 var last_command_id: int  = 0
 var active_request: ResotoAPI.Request
+var just_grabbed_focus:bool = false
 
 onready var console = find_node("RichResponseText")
 onready var command = find_node("CommandEdit")
@@ -21,13 +22,15 @@ func _ready() -> void:
 	loading.console = console
 	console_v_scroll.connect("changed", self, "on_scroll_changed")
 	var image = load("res://assets/Resoto-Logo_bigger.svg")
-	console.newline()
-	console.newline()
-	console.newline()
+	
+	for i in 5:
+		console.newline()
 	console.push_align(RichTextLabel.ALIGN_CENTER)
 	console.add_image(image, 200, 200)
 	console.newline()
 	console.add_text("Resoto UI")
+	for i in 5:
+		console.newline()
 	console.pop()
 
 
@@ -35,17 +38,25 @@ func _input(event:InputEvent) -> void:
 	if !terminal_active or _g.popup_manager.popup_active():
 		return
 	
-	if event is InputEventKey and event.scancode == KEY_C and event.pressed and Input.is_key_pressed(KEY_CONTROL):
-		new_line("^C")
-		active_request.abort()
-		return
-	
-	if !command.has_focus() and event is InputEventKey and !MODIFIER_KEYS.has(event.scancode) and event.pressed:
+	if !command.has_focus() and event is InputEventKey and event.pressed and !MODIFIER_KEYS.has(event.scancode):
+		just_grabbed_focus = true
 		yield(get_tree(), "idle_frame")
 		console.selection_enabled = false
 		console.set_deferred("selection_enabled", true)
 		command.grab_focus()
 		Input.parse_input_event(event)
+		return
+	
+	if !just_grabbed_focus and command.has_focus() and event is InputEventKey and event.scancode == KEY_C and event.pressed and Input.is_key_pressed(KEY_CONTROL):
+		if command.text == "":
+			new_line("^C")
+		else:
+			new_line(command.text, true)
+			command.text = ""
+		active_request.abort()
+		return
+	
+	just_grabbed_focus = false
 	
 	if command.has_focus() and (event is InputEventKey and event.scancode == KEY_UP and event.pressed):
 		command.text = last_commands[last_command_id]
@@ -103,5 +114,6 @@ func execute_command(_command:String) -> void:
 	loading.start()
 
 
-func new_line(_command:String = "") -> void:
-	console.append_bbcode("\n[b][color=white]> " + _command + "[/color][/b]")
+func new_line(_command:String = "", greyed:bool=false) -> void:
+	var line_color:String = "[color=white]" if !greyed else "[color=gray]"
+	console.append_bbcode("\n[b]"+ line_color +"> " + _command + "[/color][/b]")
