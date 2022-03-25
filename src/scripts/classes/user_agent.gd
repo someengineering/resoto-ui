@@ -64,19 +64,23 @@ class Request:
 		return true
 	
 	func request_(_method:int = method, _path:String = path, _headers:Array = headers, _body:String = body) -> void:
+		var http_status:int= http_.get_status()
 		match state_:
 			states.CHECK_CONNECTION:
-				if http_.get_status() == HTTPClient.STATUS_CONNECTING or http_.get_status() == HTTPClient.STATUS_RESOLVING:
+				if http_status == HTTPClient.STATUS_CONNECTING or http_status == HTTPClient.STATUS_RESOLVING:
 					if not poll_():
 						return
 					else:
 						state_ = states.CONNECTING
 			
 			states.CONNECTING:
-				if http_.get_status() != HTTPClient.STATUS_CONNECTED:
-					emit_signal("done", -1, null)
-					state_ = states.DONE
-				else:
+				if http_status != HTTPClient.STATUS_CONNECTED:
+					if not poll_():
+						return
+					elif http_status == HTTPClient.STATUS_CONNECTION_ERROR or http_status == HTTPClient.STATUS_SSL_HANDSHAKE_ERROR:
+						emit_signal("done", -1, null)
+						state_ = states.DONE
+				elif http_status == HTTPClient.STATUS_CONNECTED:
 					state_ = states.CONNECTED
 		
 			states.CONNECTED:
@@ -88,14 +92,14 @@ class Request:
 					state_ = states.REQUESTING
 			
 			states.REQUESTING:
-				if http_.get_status() == HTTPClient.STATUS_REQUESTING:
+				if http_status == HTTPClient.STATUS_REQUESTING:
 					if not poll_():
 						return
-				else:
+				elif http_status == HTTPClient.STATUS_BODY:
 					state_ = states.RECEIVE
 	
 			states.RECEIVE:
-				if http_.get_status() != HTTPClient.STATUS_BODY and http_.get_status() != HTTPClient.STATUS_CONNECTED:
+				if http_status != HTTPClient.STATUS_BODY and http_status != HTTPClient.STATUS_CONNECTED:
 					emit_signal("done", -1, null)
 					state_ = states.DONE
 				else:
@@ -107,14 +111,14 @@ class Request:
 					state_ = states.DONE
 				else:
 					response_              = Response.new()
-					response_.status_code  = http_.get_status()
+					response_.status_code  = http_status
 					response_.headers      = http_.get_response_headers_as_dictionary()
 					response_.body = PoolByteArray()
 					state_ = states.RESPONSE
 
 			states.RESPONSE:
 				for i in 20:
-					if http_.get_status() == HTTPClient.STATUS_BODY:
+					if http_status == HTTPClient.STATUS_BODY:
 						if not poll_():
 							return
 						
