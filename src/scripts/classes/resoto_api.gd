@@ -50,12 +50,21 @@ func _transform_nd_json(_chunk:PoolByteArray, response:ResotoAPI.Response, reque
 		request.emit_signal("data", parsed_chunk.result)
 
 
+func _transform_string_chunk(_chunk:PoolByteArray, _response:ResotoAPI.Response, request:ResotoAPI.Request) -> void:
+	request.emit_signal("data", _chunk.get_string_from_utf8())
+
+
+func _transform_string(error:int, response:ResotoAPI.Response) -> void:
+	if error == OK:
+		response.transformed["result"] = response.body.get_string_from_utf8()
+
+
 class Chunk:
 	var error: int
 	var result: Dictionary
 
 
-static func parse_chunk( _chunk:PoolByteArray ) ->Chunk:
+static func parse_chunk( _chunk:PoolByteArray ) -> Chunk:
 	var resulting_chunk = Chunk.new()
 	var chunk:String = _chunk.get_string_from_ascii()
 	if ["", "[", "\n]", ",\n"].has(chunk) or chunk.begins_with("Error:"):
@@ -80,16 +89,19 @@ static func parse_chunk( _chunk:PoolByteArray ) ->Chunk:
 	return resulting_chunk
 
 
-func _transform_string(error:int, response:ResotoAPI.Response) -> void:
-	if error == OK:
-		response.transformed["result"] = response.body.get_string_from_utf8()
-
-
 func post_cli_execute(body:String, graph:String=default_graph) -> ResotoAPI.Request:
 	refresh_jwt_header(accept_text_headers)
 	var path: String = "/cli/execute?graph=" + graph
 	var request = req_post(path, body, accept_text_headers)
 	request.connect("pre_done", self, "_transform_string")
+	return request
+
+
+func post_cli_execute_streamed(body:String, graph:String=default_graph) -> ResotoAPI.Request:
+	refresh_jwt_header(accept_text_headers)
+	var path: String = "/cli/execute?graph=" + graph
+	var request = req_post(path, body, accept_text_headers)
+	request.connect("pre_data", self, "_transform_string_chunk")
 	return request
 
 

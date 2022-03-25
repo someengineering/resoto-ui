@@ -16,7 +16,7 @@ func ui_scale_down() -> void:
 
 
 func ui_scale_up() -> void:
-	var new_shrink = min(_g.ui_shrink+0.25, 3)
+	var new_shrink = min(_g.ui_shrink+0.25, 4)
 	_g.ui_shrink = new_shrink
 	SaveLoadSettings.save_settings()
 

@@ -117,8 +117,8 @@ class Request:
 					state_ = states.RESPONSE
 
 			states.RESPONSE:
-				for i in 20:
-					if http_status == HTTPClient.STATUS_BODY:
+				for i in 100:
+					if http_.get_status() == HTTPClient.STATUS_BODY:
 						if not poll_():
 							return
 						
