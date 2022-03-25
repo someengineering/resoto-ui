@@ -48,23 +48,31 @@ func connection_config(_adress:String = adress, _port:int = port, _psk:String = 
 	_resoto_api.options.port = port
 
 
-func cli_info(_connect_to:Node) -> void:
-	_req_res = _resoto_api.get_cli_info()
-	_req_res.connect("done", _connect_to, "_on_cli_info_done")
-
-
-func cli_execute(_command:String, _connect_to:Node) ->ResotoAPI.Request:
-	_req_res = _resoto_api.post_cli_execute(_command, graph_id)
-	_req_res.connect("done", _connect_to, "_on_cli_execute_done")
-	return _req_res
-
-
 func get_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_model()
 	_req_res.connect("done", _connect_to, "_on_get_model_done")
 
 
-func cli_execute_json(_command:String, _connect_to:Node) -> void:
+func cli_info(_connect_to:Node) -> void:
+	_req_res = _resoto_api.get_cli_info()
+	_req_res.connect("done", _connect_to, "_on_cli_info_done")
+
+
+func cli_execute(_command:String, _connect_to:Node) -> ResotoAPI.Request:
+	_req_res = _resoto_api.post_cli_execute(_command, graph_id)
+	_req_res.connect("done", _connect_to, "_on_cli_execute_done")
+	return _req_res
+
+
+func cli_execute_streamed(_command:String, _connect_to:Node) -> ResotoAPI.Request:
+	_req_res = _resoto_api.post_cli_execute_streamed(_command, graph_id)
+	_req_res.connect("data", _connect_to, "_on_cli_execute_streamed_data")
+	_req_res.connect("done", _connect_to, "_on_cli_execute_streamed_done")
+	return _req_res
+
+
+func cli_execute_json(_command:String, _connect_to:Node) -> ResotoAPI.Request:
 	_req_res = _resoto_api.post_cli_execute_nd_chunks(_command, graph_id)
 	_req_res.connect("data", _connect_to, "_on_cli_execute_json_data")
 	_req_res.connect("done", _connect_to, "_on_cli_execute_json_done")
+	return _req_res

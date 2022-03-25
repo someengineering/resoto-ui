@@ -74,15 +74,18 @@ func _input(event:InputEvent) -> void:
 		command.set_deferred("caret_position", command.text.length())
 
 
-func _on_cli_execute_done(error:int, response:UserAgent.Response) -> void:
+func _on_cli_execute_streamed_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
-		console.append_bbcode("[color=red]" + str(error) + "[/color]")
+		console.append_bbcode("\nError: [color=red]" + Utils.err_enum_to_string(error) + "[/color]")
 		loading.stop()
 	else:
-		if response.transformed["result"].left(3) == "401":
-			_g.popup_manager.open_popup("ConnectPopup")
-		console.append_bbcode("\n" + response.transformed["result"])
 		loading.stop()
+
+
+func _on_cli_execute_streamed_data(data:String) -> void:
+	if data.left(3) == "401":
+		_g.popup_manager.open_popup("ConnectPopup")
+	console.append_bbcode(str(data))
 
 
 func on_scroll_changed() -> void:
@@ -110,7 +113,7 @@ func execute_command(_command:String) -> void:
 		return
 	if !terminal_active:
 		return
-	active_request = API.cli_execute(_command, self)
+	active_request = API.cli_execute_streamed(_command, self)
 	loading.start()
 
 
