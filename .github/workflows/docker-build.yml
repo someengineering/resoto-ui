@@ -7,10 +7,8 @@ on:
         branches:
             - main
     pull_request:
-        paths:
-            - 'Dockerfile'
-            - 'docker/**'
-            - '.github/workflows/docker-build.yml'
+        branches:
+            - main
     workflow_dispatch:
 
 jobs:
