@@ -33,6 +33,8 @@ func connect_to_core() -> void:
 	
 	if OS.has_feature("HTML5"):
 		API.adress = JavaScript.eval("getURL()")
+		var protocol = JavaScript.eval("getProtocol()")
+		API.use_ssl = protocol == "https:"
 		
 	status.text = CONNECT_TEXT.format(["0", API.adress, API.port])
 	yield(VisualServer, "frame_post_draw")
