@@ -96,6 +96,7 @@ func _on_CommandEdit_text_entered(_new_command:String) -> void:
 	if !terminal_active:
 		return
 	new_line(_new_command)
+	console.append_bbcode("\n")
 	if _new_command == "":
 		return
 	execute_command(_new_command)
