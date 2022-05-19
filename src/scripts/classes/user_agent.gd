@@ -65,6 +65,12 @@ class Request:
 	
 	func request_(_method:int = method, _path:String = path, _headers:Array = headers, _body:String = body) -> void:
 		var http_status:int= http_.get_status()
+		
+		if false:
+			print("######## HEADERS ########")
+			for i in _headers:
+				print(i)
+		
 		match state_:
 			states.CHECK_CONNECTION:
 				if http_status == HTTPClient.STATUS_CONNECTING or http_status == HTTPClient.STATUS_RESOLVING:
@@ -147,12 +153,13 @@ func _on_request_done_(_err:int, _response:Response) -> void:
 
 func request_(method:int, path:String, headers:Array = [], body:String = "") ->Request:
 	var http_ :HTTPClient = HTTPClient.new()
-
+	
+	#prints("\nConnecting:\n",options.host, options.port, options.use_ssl)
 	var err = http_.connect_to_host(options.host, options.port, options.use_ssl)
 	if err != OK:
 		debug_message("Error in connection! Check adress and port!")
 		return null
-
+	
 	var req:Request = Request.new(method, path, headers, body)
 	req.http_		= http_
 	
@@ -178,6 +185,10 @@ func req_get(path:String, req_headers:RequestHeaders) -> Request:
 
 func req_post(path:String, body:String, req_headers:RequestHeaders) -> Request:
 	return request_(HTTPClient.METHOD_POST, path, create_headers(req_headers), body)
+
+
+func req_put(path:String, body:String, req_headers:RequestHeaders) -> Request:
+	return request_(HTTPClient.METHOD_PUT, path, create_headers(req_headers), body)
 
 
 func poll() -> void:

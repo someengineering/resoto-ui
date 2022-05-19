@@ -14,14 +14,17 @@ class Headers extends UserAgent.RequestHeaders:
 	var User_Agent = "resoto UI"
 	var Color_System = "monochrome"
 	var Content_Type = "text/plain"
-	var Accept = "application/x-ndjson" # application/x-ndjson
+	var Accept = "application/json"
 	var Accept_Encoding = ""
 	var Resotoui_via = ""
 	var Authorization = ""
+	
 
 var default_graph:String = "resoto"
 var default_options:Options = Options.new()
 var accept_json_headers:Headers = Headers.new()
+var accept_json_put_headers:Headers = Headers.new()
+var accept_json_nd_headers:Headers = Headers.new()
 var accept_text_headers:Headers = Headers.new()
 
 
@@ -37,7 +40,11 @@ func refresh_jwt_header(header:Headers) -> void:
 
 func _transform_json(error:int, response:ResotoAPI.Response) -> void:
 	if error == OK:
-		response.transformed["result"] = parse_json(response.body.get_string_from_utf8())
+		var json_result:JSONParseResult = JSON.parse(response.body.get_string_from_utf8())
+		if json_result.error == OK:
+			response.transformed["result"] = parse_json(response.body.get_string_from_utf8())
+		else:
+			response.transformed["result"] = response.body.get_string_from_utf8()
 
 
 func _transform_nd_json(_chunk:PoolByteArray, response:ResotoAPI.Response, request:ResotoAPI.Request) -> void:
@@ -106,7 +113,7 @@ func post_cli_execute_streamed(body:String, graph:String=default_graph) -> Resot
 
 
 func post_cli_execute_nd_chunks(body:String, graph:String=default_graph) -> ResotoAPI.Request:
-	refresh_jwt_header(accept_json_headers)
+	refresh_jwt_header(accept_json_nd_headers)
 	var path: String = "/cli/execute?graph=" + graph
 	var request = req_post(path, body, accept_json_headers)
 	request.connect("pre_data", self, "_transform_nd_json")
@@ -123,6 +130,29 @@ func get_cli_info() -> ResotoAPI.Request:
 func get_model() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
 	var request = req_get("/model", accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func get_config_model() -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var request = req_get("/configs/model", accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func get_config_id(_config_id:String="resoto.core") -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var config_id = "/config/" + _config_id
+	var request = req_get(config_id, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func put_config_id(_config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_put_headers)
+	var config_id = "/config/" + _config_id
+	var request = req_put(config_id, _config_body, accept_json_put_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
 

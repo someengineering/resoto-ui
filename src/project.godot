@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/autoloads/jwt.gd"
 }, {
+"base": "LineEdit",
+"class": "LineEditInt",
+"language": "GDScript",
+"path": "res://components/config/component_config_line_edit_int.gd"
+}, {
 "base": "UserAgent",
 "class": "ResotoAPI",
 "language": "GDScript",
@@ -36,6 +41,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "JWTGenerator": "",
+"LineEditInt": "",
 "ResotoAPI": "",
 "TerminalComponent": "",
 "UserAgent": "",

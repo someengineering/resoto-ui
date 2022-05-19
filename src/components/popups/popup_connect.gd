@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+signal connected
+
 const CONNECT_TEXT = "Connecting to Resoto Core...\n({0}s) {1}:{2}"
 const TEXT_ERROR_CONNECTION = "Could not connect to Resoto Core!\nConnection timed out\nPlease check if adress is correct, ports are open and resotocore is running."
 
@@ -57,6 +59,7 @@ func connected(status_text:String) -> void:
 	status.text = status_text
 	SaveLoadSettings.save_settings()
 	_g.popup_manager.on_popup_close()
+	emit_signal("connected")
 
 
 func not_connected(status_text:String) -> void:

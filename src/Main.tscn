@@ -1,14 +1,16 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
+[ext_resource path="res://components/config/component_config.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/Resoto_logo_and_text.svg" type="Texture" id=4]
 [ext_resource path="res://scripts/ui_main.gd" type="Script" id=5]
 [ext_resource path="res://scripts/ui_menu.gd" type="Script" id=6]
 [ext_resource path="res://scripts/ui_popup_manager.gd" type="Script" id=7]
+[ext_resource path="res://scripts/ui_content.gd" type="Script" id=8]
 [ext_resource path="res://scripts/ui_terminal_manager.gd" type="Script" id=9]
 
-[sub_resource type="DynamicFontData" id=13]
+[sub_resource type="DynamicFontData" id=18]
 font_path = "res://assets/theme/Barlow-Light.ttf"
 
 [sub_resource type="DynamicFont" id=11]
@@ -17,7 +19,7 @@ use_mipmaps = true
 use_filter = true
 extra_spacing_top = -25
 extra_spacing_bottom = -20
-font_data = SubResource( 13 )
+font_data = SubResource( 18 )
 
 [sub_resource type="StyleBoxFlat" id=14]
 bg_color = Color( 0.313726, 0.223529, 0.435294, 1 )
@@ -113,11 +115,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 2 )
 script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Content" type="CanvasLayer" parent="."]
+script = ExtResource( 8 )
 
 [node name="Content" type="MarginContainer" parent="Content"]
 anchor_right = 1.0
@@ -128,9 +128,6 @@ custom_constants/margin_right = 10
 custom_constants/margin_top = 40
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TerminalManager" type="VBoxContainer" parent="Content/Content"]
 margin_left = 10.0
@@ -194,6 +191,9 @@ margin_bottom = 1030.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 17 )
+
+[node name="Config" parent="Content" instance=ExtResource( 3 )]
+visible = false
 
 [node name="Popups" type="CanvasLayer" parent="."]
 layer = 30
@@ -305,9 +305,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 theme = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Menu" type="PanelContainer" parent="MenuBar/MenuContainer"]
 margin_right = 1920.0
@@ -341,31 +338,46 @@ stretch_mode = 6
 
 [node name="Spacer" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
 margin_left = 74.0
-margin_right = 1870.0
+margin_right = 1813.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="SideMenu" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
-margin_left = 1870.0
+margin_left = 1813.0
 margin_right = 1920.0
 margin_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 0
 custom_constants/margin_right = 4
 custom_constants/margin_top = 4
 custom_constants/margin_left = 4
 custom_constants/margin_bottom = 4
 
-[node name="ButtonDocs" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 46.0
+margin_right = 103.0
 margin_bottom = 28.0
+
+[node name="ButtonConfig" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
+margin_right = 53.0
+margin_bottom = 24.0
+text = "config"
+
+[node name="ButtonDocs" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
+margin_left = 57.0
+margin_right = 99.0
+margin_bottom = 24.0
 text = "docs"
 
 [connection signal="reposition_active_tab_request" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_reposition_active_tab_request"]
 [connection signal="tab_changed" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_changed"]
 [connection signal="tab_close" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_close"]
 [connection signal="pressed" from="Content/Content/TerminalManager/TabsBar/NewTabButton" to="Content/Content/TerminalManager" method="_on_NewTabButton_pressed"]
+[connection signal="CloseConfig" from="Content/Config" to="Content" method="_on_Config_CloseConfig"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
+[connection signal="connected" from="Popups/ConnectPopup/Content/MarginContainer/Connect" to="Content/Config" method="_on_Connect_connected"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
-[connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]
+[connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonConfig" to="Content" method="_on_ButtonConfig_pressed"]
+[connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]
