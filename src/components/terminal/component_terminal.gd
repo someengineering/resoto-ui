@@ -1,7 +1,7 @@
 extends VBoxContainer
 class_name TerminalComponent
 
-signal RenameTerminal
+signal rename_terminal
 
 const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META, KEY_MASK_META, KEY_MASK_CMD]
 const UI_RENAME_COMMAND:String = "ui name "
@@ -112,7 +112,7 @@ func _on_CommandEdit_text_entered(_new_command:String) -> void:
 func execute_command(_command:String) -> void:
 	if _command.left(8).to_lower() == UI_RENAME_COMMAND:
 		var new_terminal_name = _command.split(UI_RENAME_COMMAND)[1]
-		emit_signal("RenameTerminal", new_terminal_name)
+		emit_signal("rename_terminal", new_terminal_name)
 		return
 	if !terminal_active:
 		return

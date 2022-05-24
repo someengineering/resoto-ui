@@ -12,6 +12,6 @@ func _on_ButtonConfig_pressed():
 	show_config(config_active)
 
 
-func _on_Config_CloseConfig():
+func _on_Config_close_config():
 	config_active = false
 	show_config(false)

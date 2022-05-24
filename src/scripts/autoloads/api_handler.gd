@@ -68,14 +68,20 @@ func get_model(_connect_to:Node) -> void:
 	_req_res.connect("done", _connect_to, "_on_get_model_done")
 
 
+func get_configs(_connect_to:Node):
+	_req_res = _resoto_api.get_configs()
+	_req_res.connect("done", _connect_to, "_on_get_configs_done")
+
+
 func get_config_id(_connect_to:Node, _config_id:String="resoto.core"):
 	_req_res = _resoto_api.get_config_id(_config_id)
-	_req_res.connect("done", _connect_to, "_on_get_config_id_done")
+	_req_res.connect("done", _connect_to, "_on_get_config_id_done", [_config_id])
 
 
-func put_config_id(_connect_to:Node, _config_id:String="resoto.core", _config_body:String=""):
+func put_config_id(_connect_to:Node, _config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
 	_req_res = _resoto_api.put_config_id(_config_id, _config_body)
 	_req_res.connect("done", _connect_to, "_on_put_config_id_done")
+	return _req_res
 
 
 func get_config_model(_connect_to:Node) -> void:

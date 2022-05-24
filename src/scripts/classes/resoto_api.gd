@@ -40,11 +40,14 @@ func refresh_jwt_header(header:Headers) -> void:
 
 func _transform_json(error:int, response:ResotoAPI.Response) -> void:
 	if error == OK:
-		var json_result:JSONParseResult = JSON.parse(response.body.get_string_from_utf8())
-		if json_result.error == OK:
-			response.transformed["result"] = parse_json(response.body.get_string_from_utf8())
-		else:
-			response.transformed["result"] = response.body.get_string_from_utf8()
+		var string_to_parse:String = response.body.get_string_from_utf8()
+		if not string_to_parse.begins_with("Error"):
+			var json_result:JSONParseResult = JSON.parse(string_to_parse)
+			if json_result.error == OK:
+				response.transformed["result"] = json_result.result
+				return
+
+		response.transformed["result"] = string_to_parse
 
 
 func _transform_nd_json(_chunk:PoolByteArray, response:ResotoAPI.Response, request:ResotoAPI.Request) -> void:
@@ -137,6 +140,13 @@ func get_model() -> ResotoAPI.Request:
 func get_config_model() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
 	var request = req_get("/configs/model", accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func get_configs() -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var request = req_get("/configs", accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
 

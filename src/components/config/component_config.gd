@@ -1,18 +1,34 @@
 extends Control
 
-const SIMPLE_KINDS:Array = ["string", "int64", "boolean"]
+# This configuration UI still needs a lot of clean up and testing!
 
-signal ModelReady
-signal CloseConfig
+const BASE_KINDS:Array = [
+	"string",
+	"int32",
+	"int64",
+	"float",
+	"double",
+	"any",
+	"boolean",
+	"date",
+	"datetime",
+	"duration",
+	"trafo.duration_to_datetime",
+	]
 
-var config_model_req: ResotoAPI.Request
-var core_config_req: ResotoAPI.Request
-var core_config_put_req: ResotoAPI.Request
+signal model_ready
+signal close_config
+signal config_received
+
+var config_req: ResotoAPI.Request
+var config_put_req: ResotoAPI.Request
 
 var model:Dictionary
+var config_keys:Array
 var model_top_level:Array
 var config:Dictionary
-var ui_config:Dictionary
+var config_tabs:Array = []
+var selected_config:String
 
 var tabs_content: Dictionary = {}
 var tabs_content_keys: Array = []
@@ -22,56 +38,107 @@ onready var tabs: Tabs = find_node("Tabs")
 onready var content = find_node("Content")
 
 # Template Elements
-onready var TemplateConfigTab = find_node("ElementConfigTab")
-onready var TemplateMainLevel = find_node("ElementMainLevel")
-onready var TemplateComplex = find_node("ElementComplex")
-onready var TemplateSimple = find_node("ElementSimple")
-onready var TemplateArray = find_node("ElementArray")
-onready var TemplateDict = find_node("ElementDict")
+onready var TemplateConfigTab = find_node("TemplateConfigTab")
+onready var TemplateMainLevel = find_node("TemplateMainLevel")
+onready var TemplateComplex = find_node("TemplateComplex")
+onready var TemplateSimple = find_node("TemplateSimple")
+onready var TemplateEnum = find_node("TemplateEnum")
+onready var TemplateElementsContainer = find_node("TemplateElementsContainer")
+onready var TemplateArrayElement = find_node("TemplateArrayElement")
+onready var TemplateDict = find_node("TemplateDict")
 
 
 func load_config():
-	config_model_req = API.get_config_model(self)
-	yield(self, "ModelReady")
-	core_config_req = API.get_config_id(self)
+	API.get_configs(self)
+
+
+func _on_get_configs_done(_error, _response):
+	config_keys = _response.transformed.result
+	API.get_config_model(self)
+	yield(self, "model_ready")
+	for ck in config_keys:
+		config_req = API.get_config_id(self, ck)
+		yield(self, "config_received")
+	build_config_pages()
 
 
 func _on_get_config_model_done(_error, _response):
 	model = _response.transformed.result.kinds
-	emit_signal("ModelReady")
+	emit_signal("model_ready")
 
 
-func _on_get_config_id_done(_error, _response):
-	config = _response.transformed.result.resotocore
-	build_config_pages()
-	change_active_tab(0, true)
+func _on_get_config_id_done(_error, _response, config_key):
+	config[config_key] = _response.transformed.result
+	emit_signal("config_received")
 
 
 func build_config_pages():
-	ui_config["resotocore"] = {}
-	for key in config.keys():
+	tabs_content.clear()
+	config_tabs.clear()
+	for i in tabs.get_tab_count():
+		tabs.remove_tab(0)
+	
+	for c in content.get_children():
+		c.queue_free()
+	
+	
+	for key in config_keys:
 		var new_tab = add_new_tab(key)
 		new_tab.set_meta("main_level", true)
-		add_element(key, config[key], new_tab, ui_config["resotocore"])
+		new_tab.key = key
+		new_tab.config_component = self
+		new_tab.kind = key
+		new_tab.value = config[key]
+		var new_elements = []
+		var dict_key = config[key].keys()[0]
+		var new_element = add_element(dict_key, dict_key, config[key], new_tab, false)
+		if typeof(new_element) == TYPE_ARRAY:
+			new_elements.append_array(new_element)
+		else:
+			new_elements.append(new_element)
+		new_tab.content_elements = new_elements
+		config_tabs.append(new_tab)
+	
 	tabs_content_keys = tabs_content.keys()
 	update_size()
+	change_active_tab(0, true)
 
 
 func construct_config_json():
-	var new_config = ui_config.duplicate(true)
-	collect_values(new_config)
-	var json_config = JSON.print(new_config)
+	var new_config:Dictionary = {}
+	
+	for config_tab in config_tabs:
+		for config_element in config_tab.content_elements:
+#			print(config_element.key)
+			new_config[config_element.key] = config_element.value
+	
+	print(JSON.print(new_config))
+	
+#	var new_config = ui_config.duplicate(true)
+#	collect_values(new_config)
 #	print_dict(new_config, 0)
-	core_config_put_req = API.put_config_id(self, "resoto.core", json_config)
+#	var json_config = JSON.print(new_config)
+#	config_put_req = API.put_config_id(self, selected_config, json_config)
 
 
 func _on_put_config_id_done(_error, _response):
-	pass
-#	prints(_error, _response.transformed, _response.headers)
-#	var status_code:int
-#	var headers:Dictionary
-#	var body:PoolByteArray
-#	var transformed:Dictionary
+	if _error != 0:
+		_g.emit_signal("add_toast", "Error saving configuration.", "", 1)
+		return
+	
+	if typeof(_response.transformed.result) == TYPE_STRING and _response.transformed.result.begins_with("Error"):
+		var error_total:Array = _response.transformed.result.split("\n")
+		var error_title = error_total[0]
+		var error_description = _response.transformed.result.lstrip(error_total[0] + "\n").rstrip("\n")
+		_g.emit_signal("add_toast", error_title, error_description, 1, 10)
+		return
+	
+	
+	var config_revision:String = ""
+	if "Resoto-Config-Revision" in _response.headers:
+		config_revision = "Revision: " + _response.headers["Resoto-Config-Revision"]
+	_g.emit_signal("add_toast", "Configuration updated successfully.", config_revision, 0)
+	emit_signal("close_config")
 
 
 func collect_values(dict:Dictionary):
@@ -94,159 +161,280 @@ func print_dict(_dict:Dictionary, _depth:int):
 			prints(_spacing + "   ", _dict[d])
 
 
-func find_in_model(_id:String):
-	for model_cat in model.values():
-		if "properties" in model_cat:
-			for prop in model_cat["properties"]:
-				if prop.name == _id:
-					return prop
-
-func find_in_model_dict(_id:String):
-	for model_cat in model.values():
-		if model_cat.has("fqn"):
-			if model_cat.fqn == _id:
-				return model_cat.properties[0]
+# first element in array is true if it is a fqn element.
+func find_in_model(_id:String) -> Array:
+	for model_key in model.keys():
+		if model_key == _id:
+			return [true, model[model_key]]
+	return [false, null]
 
 
-func add_element(_name:String, _property_value, _parent:Control, _parent_dict:Dictionary):
-	var properties = find_in_model(_name)
+func is_fqn(_id:String) -> bool:
+	return model.keys().has(_id) and model[_id].has("properties")
+	# old variant, top is shorter and should result the same
+#	return model.keys().has(_id) and not BASE_KINDS.has(_id) and not model[_id].has("enum")
+
+
+func find_in_properties(_properties:Array, _id:String) -> Dictionary:
+	for prop in _properties:
+		if prop.name == _id:
+			return prop
+	return {}
+
+
+func add_element(_name:String, kind:String, _property_value, _parent:Control, default:bool):
+	var model_search = find_in_model(kind)
+	var fqn:bool = model_search[0]
+	var model = model_search[1]
 	
-	if properties:
-		var kind = properties.kind
-		if SIMPLE_KINDS.has(kind):
-			# The element is a simple field
-			create_simple(_name, _property_value, kind, properties, _parent, _parent_dict)
-			return
-		elif "[]" in properties.kind:
-			# The element is an array of dictionary
-			create_array(_name, _property_value, kind, properties, _parent, _parent_dict)
-			return
-		elif "[" in properties.kind:
-			create_dict(_name, _property_value, kind, properties, _parent, _parent_dict)
-			return
+	if BASE_KINDS.has(kind):
+		# Create a new "Simple"
+		var simple_property = null
+		if _parent.model and _parent.model.has("properties"):
+			simple_property = find_in_properties(_parent.model.properties, _name)
+		return create_simple(_name, _property_value, kind, simple_property, _parent, default)
 	
-	if _parent.has_meta("model"):
-		# The element is a complex type
-		var parent_kind = find_in_model(_parent.get_meta("model").kind)
-		create_complex(_name, _property_value, parent_kind, _parent, _parent_dict)
-
-
-func create_complex(_name:String, _property_value, _parent_kind, _parent:Control, _parent_dict:Dictionary):
-	_parent_dict[_name] = {}
-	var new_complex = TemplateComplex.duplicate()
-	var category_model = find_in_model(_name)
+	elif kind.begins_with("dictionary"):
+		# Create a new Dictionary 
+#		print("=> Dict :", _name, ">", kind)
+		var simple_property = null
+		if _parent.model and _parent.model.has("properties"):
+			simple_property = find_in_properties(_parent.model.properties, _name)
+		return create_dict(_name, kind, _property_value, simple_property, _parent, default)
 	
-	if category_model:
-		if _parent.has_meta("main_level"):
-			new_complex = TemplateMainLevel.duplicate()
-#			new_complex.set_meta("children_expanded", true)
+	elif "[]" in kind:
+		# Create a new Array
+		var simple_property = null
+		if _parent.model and _parent.model.has("properties"):
+			simple_property = find_in_properties(_parent.model.properties, _name)
+		return create_array(_name, _property_value, kind, simple_property, _parent, default)
+	
+	elif model and model.has("enum"):
+		# Create a new Enum selection field
+		var simple_property = null
+		if _parent.model and _parent.model.has("properties"):
+			simple_property = find_in_properties(_parent.model.properties, _name)
+		return create_enum(_name, _property_value, kind, simple_property, model.enum, _parent, default)
+	
+	elif model and model.has("properties"):
+		# Create a new Complex, either by scratch or with values.
+		var new_elements:Array = []
+		if not default:
+			# the new element has values, it's not a blank new value.
+			for key in _property_value.keys():
+
+				var element = _property_value[key]
+				var element_property = find_in_properties(model.properties, key)
+				
+				if element_property.empty():
+					var element_model_search = find_in_model(key)
+					var element_model = element_model_search[1].properties
+					var element_kind:String = key if not (element_model and element_model.has("kind")) else element_model.kind
+					new_elements.append( create_complex(key, element_kind, element, element_model, _parent, default) )
+				else:
+					if is_fqn(element_property.kind):
+						new_elements.append( create_complex(key, element_property.kind, element, element_property, _parent, default) )
+					else:
+						new_elements.append( add_element(key, element_property.kind, element, _parent, default) )
 		else:
-			new_complex.set_meta("attach", new_complex.get_node("Margin/Content"))
-			new_complex.get_node("Header/Top/Name").text = _name.capitalize()
-			new_complex.get_node("Header/Description").text = category_model.description
-		new_complex.name = "Complex_" + _name
-		new_complex.set_meta("model", category_model)
+			# the element is "default = true", meaning it needs to be created from scratch.
+			for element_property in model.properties:
+				if is_fqn(element_property.kind):
+					new_elements.append( create_complex(element_property.name, element_property.kind, null, element_property, _parent, default) )
+				else:
+					new_elements.append( add_element(element_property.name, element_property.kind, null, _parent, default) )
+			pass
+		return new_elements
+	else:
+		print("=> WTF :", _name, ">", kind)
+		return
+
+
+func get_kind_type(kind:String):
+	if BASE_KINDS.has(kind):
+		return "simple"
+	elif kind.begins_with("dictionary"):
+		return "dict"
+	elif "[]" in kind:
+		return "array"
+	else:
+		return "complex"
+
+
+func create_complex(_name:String, kind:String, _property_value, properties, _parent:Control, default:bool):
+	if properties == null:
+		prints("ERROR: Complex not found in model:", _name)
+		return
+	
+	var complex_model_search = find_in_model(kind)
+	var complex_properties = complex_model_search[1]
+	
+	var new_complex = TemplateComplex.duplicate()
+	
+	if _parent.has_signal("key_update"):
+		_parent.connect("key_update", new_complex, "_on_key_update")
 	
 	if _parent.has_meta("attach"):
 		_parent.get_meta("attach").add_child(new_complex)
 	else:
 		_parent.add_child(new_complex)
 	
-	if typeof(_property_value) == TYPE_DICTIONARY:
-		for sub_key in _property_value.keys():
-			add_element(sub_key, _property_value[sub_key], new_complex, _parent_dict[_name])
-	else:
-		for sub_key in _property_value:
-			add_element(sub_key, sub_key, new_complex, _parent_dict[_name])
-
-
-func create_simple(_name:String, _value, _kind, _properties, _parent:Control, _parent_dict:Dictionary):
-	var new_value = TemplateSimple.duplicate()
+	new_complex.get_node("HeaderBG/Header/Top/Name").text = _name.capitalize()
 	
+	if properties.has("description"):
+		new_complex.description = properties.description
+		new_complex.required = properties.required
+	else:
+		new_complex.description = ""
+		
+	new_complex.set_meta("attach", new_complex.get_node("Margin/Content"))
+	new_complex.config_component = self
+	new_complex.name = "Complex_" + _name
+	new_complex.key = _name
+	new_complex.model = complex_properties
+	new_complex.kind = kind
+	new_complex.kind_type = get_kind_type(kind)
+	new_complex.value = _property_value
+	
+	return new_complex
+
+
+func create_simple(_name:String, _value, _kind, _properties, _parent:Control, default:bool):
+#	prints("===> Create simple element:", _name, "| Parent:", _parent.name)#, _properties)
+	var new_value = TemplateSimple.duplicate()
 	if _parent.has_meta("attach"):
 		_parent.get_meta("attach").add_child(new_value)
 	else:
 		_parent.add_child(new_value)
-	new_value.required = _properties.required
+	
+	if _parent.has_signal("key_update"):
+		_parent.connect("key_update", new_value, "_on_key_update")
+	
 	new_value.kind = _kind
-	new_value.description = _properties.description
 	new_value.value = _value
-	new_value.var_name = _name
-	_parent_dict[_name] = new_value
+	new_value.name = "Simple_" + _name
+	new_value.set_default(default)
+	
+	
+	# if _properties is null, the created node represents a array element.
+	if _properties:
+		new_value.key = _properties.name
+		new_value.description = _properties.description
+		new_value.required = _properties.required
+	else:
+		new_value.key = _name
+		new_value.description = ""
+		new_value.required = false
+	
+	return new_value
 
 
-func create_array(_name:String, _value, _kind, _properties, _parent:Control, _parent_dict:Dictionary):
-	var array_model = find_in_model(_name)
-	var new_array_wrapper = TemplateComplex.duplicate()
-	new_array_wrapper.get_node("Header/Top/Name").text = _name.capitalize()
-	new_array_wrapper.get_node("Header/Description").text = array_model.description
-	new_array_wrapper.name = "ArrayWrapper_" + _name
-	new_array_wrapper.start_expanded = _parent.has_meta("children_expanded")
+func create_enum(_name:String, _value, _kind, _properties, _enum_values, _parent:Control, default:bool):
+#	prints("===> Create simple element:", _name, "| Parent:", _parent.name)#, _properties)
+	var new_value = TemplateEnum.duplicate()
+	if _parent.has_meta("attach"):
+		_parent.get_meta("attach").add_child(new_value)
+	else:
+		_parent.add_child(new_value)
+	
+	new_value.enum_values = _enum_values
+	new_value.kind = _kind
+	new_value.value = _value
+	new_value.name = "Enum_" + _name
+	new_value.set_default(default)
+	
+	
+	# if _properties is null, the created node represents a array element.
+	if _properties:
+		new_value.key = _properties.name
+		new_value.description = _properties.description
+		new_value.required = _properties.required
+	else:
+		new_value.key = _name
+		new_value.description = ""
+		new_value.required = false
+	
+	return new_value
+
+
+func create_array(_name:String, _value, _kind, _properties, _parent:Control, default:bool):
+	var kind = _kind.replace("[]", "")
+	var new_array_container = TemplateElementsContainer.duplicate()
+	if _parent.has_meta("attach"):
+		_parent.get_meta("attach").add_child(new_array_container)
+	else:
+		_parent.add_child(new_array_container)
+	
+	if _parent.has_signal("key_update"):
+		_parent.connect("key_update", new_array_container, "_on_key_update")
+	
+	new_array_container.default = default
+	new_array_container.title = _name.capitalize()
+	new_array_container.kind = kind
+	new_array_container.name = "Array_" + _name
+	new_array_container.config_component = self
+	new_array_container.key = _name
+	
+	var complex_model_search = find_in_model(kind)
+	var complex_properties = complex_model_search[1]
+	if complex_properties:
+		new_array_container.model = complex_properties
+	
+	
+	# if _properties is null, the created node represents a array element.
+	if _properties:
+		new_array_container.key = _properties.name
+		if _properties.has("description"):
+			new_array_container.description = _properties.description
+		new_array_container.required = _properties.required
+	else:
+		new_array_container.description = ""
+		new_array_container.required = false
+	
+	if _value == null:
+		new_array_container.is_null = true
+	new_array_container.value = _value
+	
+	return new_array_container
+
+
+func create_dict(_name:String, _kind, _value, _properties, _parent:Control, default:bool):
+	var new_dict_container = TemplateElementsContainer.duplicate()
 	
 	if _parent.has_meta("attach"):
-		_parent.get_meta("attach").add_child(new_array_wrapper)
+		_parent.get_meta("attach").add_child(new_dict_container)
 	else:
-		_parent.add_child(new_array_wrapper)
+		_parent.add_child(new_dict_container)
 	
-	var new_array = TemplateArray.duplicate()
-	new_array_wrapper.get_node("Margin/Content").add_child(new_array)
+	if _parent.has_signal("key_update"):
+		_parent.connect("key_update", new_dict_container, "_on_key_update")
 	
-	new_array.title = _name.capitalize()
-	new_array.title_node = new_array_wrapper.get_node("Header/Top/Name")
-	new_array.kind = _kind.replace("[]", "")
-	new_array.value = _value
-	_parent_dict[_name] = new_array
-
-
-func create_dict(_name:String, _value, _kind, _properties, _parent:Control, _parent_dict:Dictionary):
-	var dictionary_element_kind:String = _kind.trim_prefix("dictionary[").trim_suffix("]").split(",")[1].dedent()
-	var dict_wrapper_model = find_in_model(_name)
-	var new_dict_wrapper = null
+	var dict_element_kind = _kind.trim_prefix("dictionary[string,").trim_suffix("]").dedent()
 	
-	if not _parent.has_meta("main_level"):
-		new_dict_wrapper = TemplateComplex.duplicate()
-		new_dict_wrapper.get_node("Header/Top/Name").text = _name.capitalize()
-		new_dict_wrapper.get_node("Header/Description").text = dict_wrapper_model.description.capitalize()
-		new_dict_wrapper.name = "ArrayWrapper_" + _name
-		new_dict_wrapper.start_expanded = _parent.has_meta("children_expanded")
+	new_dict_container.default = default
+	new_dict_container.kind_type = "dict"
+	new_dict_container.model = {"fqn": dict_element_kind}
+	new_dict_container.title = _name
+	new_dict_container.kind = "dict"
+	new_dict_container.name = "Dict_" + _name
+	new_dict_container.config_component = self
+	new_dict_container.key = _name
+	
+	# if _properties is null, the created node represents a array element.
+	if _properties:
+		new_dict_container.key = _properties.name
+		if _properties.has("description"):
+			new_dict_container.description = _properties.description
+		new_dict_container.required = _properties.required
 	else:
-		new_dict_wrapper = TemplateMainLevel.duplicate()
-		
-	if _parent.has_meta("attach"):
-		_parent.get_meta("attach").add_child(new_dict_wrapper)
-	else:
-		_parent.add_child(new_dict_wrapper)
+		new_dict_container.description = ""
+		new_dict_container.required = false
 	
+	if _value == null:
+		new_dict_container.is_null = true
+	new_dict_container.value = _value
 	
-	var dict_model = find_in_model_dict(dictionary_element_kind)
-	_parent_dict[_name] = {}
-	
-	
-	for key in _value.keys():
-		var element_value:String
-		if typeof(_value[key]) == TYPE_DICTIONARY:
-			for i in _value[key].values():
-				element_value = i
-		else:
-			element_value = _value[key]
-		
-		var new_dict = TemplateDict.duplicate()
-		if not _parent.has_meta("main_level"):
-			new_dict_wrapper.get_node("Margin/Content").add_child(new_dict)
-		else:
-			new_dict_wrapper.add_child(new_dict)
-		new_dict.get_node("Key").text = key.capitalize()
-		
-		var new_value = TemplateSimple.duplicate()
-		new_value.required = dict_model.required
-		new_value.kind = dict_model.kind
-		new_value.description = dict_model.description
-		new_value.value = element_value
-		new_value.var_name = dict_model.name.capitalize()
-		
-		new_dict.get_node("Container").add_child(new_value)
-		
-		_parent_dict[_name][key] = { dict_model.name : new_value }
+	return new_dict_container
 
 
 func update_size() -> void:
@@ -268,15 +456,11 @@ func change_tab_name(_new_name:String) -> void:
 
 func add_new_tab(_title:String):
 	var new_element = null
-	tabs.add_tab(_title.capitalize())
-	var category_model = find_in_model(_title)
-	if category_model:
-		var new_config_tab = TemplateConfigTab.duplicate()
-		new_config_tab.get_node("Description").text = category_model.description
-		new_config_tab.set_meta("model", category_model)
-		content.add_child(new_config_tab)
-		
-		new_element = new_config_tab
+	tabs.add_tab(_title)
+	var new_config_tab = TemplateConfigTab.duplicate()
+	new_config_tab.name = "Tab_" + _title
+	content.add_child(new_config_tab)
+	new_element = new_config_tab
 	tabs_content[_title] = new_element
 	return new_element
 
@@ -296,6 +480,29 @@ func hide_all_tabs():
 		tab.hide()
 
 
+func build_simple(elements):
+	if elements.empty():
+		return null
+	return elements[0].value
+
+
+func build_array(elements):
+	var new_array = []
+	for element in elements:
+		if typeof(element.value) == TYPE_ARRAY:
+			new_array.append_array(element.value)
+		else:
+			new_array.append(element.value)
+	return new_array
+
+
+func build_dict(elements):
+	var new_dict = {}
+	for element in elements:
+		new_dict[element.key] = element.value
+	return new_dict
+
+
 func _on_Tabs_tab_changed(tab:int) -> void:
 	change_active_tab(tab)
 
@@ -304,9 +511,14 @@ func _on_SaveConfigButton_pressed():
 	construct_config_json()
 
 
-func _on_CloseConfigButton_pressed():
-	emit_signal("CloseConfig")
+func _on_close_configButton_pressed():
+	emit_signal("close_config")
 
 
 func _on_Connect_connected():
+	load_config()
+
+
+func _on_LoadConfigFromCoreButton_pressed():
+	_g.emit_signal("add_toast", "Configs received from Core.", "", 0)
 	load_config()

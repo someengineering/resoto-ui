@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://scripts/ui_popup_manager.gd" type="Script" id=7]
 [ext_resource path="res://scripts/ui_content.gd" type="Script" id=8]
 [ext_resource path="res://scripts/ui_terminal_manager.gd" type="Script" id=9]
+[ext_resource path="res://components/toast/ToastManager.tscn" type="PackedScene" id=10]
 
 [sub_resource type="DynamicFontData" id=18]
 font_path = "res://assets/theme/Barlow-Light.ttf"
@@ -296,6 +297,8 @@ margin_right = 360.0
 margin_bottom = 108.0
 text = "Connect"
 
+[node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
+
 [node name="MenuBar" type="CanvasLayer" parent="."]
 layer = 20
 follow_viewport_enable = true
@@ -374,7 +377,7 @@ text = "docs"
 [connection signal="tab_changed" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_changed"]
 [connection signal="tab_close" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_close"]
 [connection signal="pressed" from="Content/Content/TerminalManager/TabsBar/NewTabButton" to="Content/Content/TerminalManager" method="_on_NewTabButton_pressed"]
-[connection signal="CloseConfig" from="Content/Config" to="Content" method="_on_Config_CloseConfig"]
+[connection signal="close_config" from="Content/Config" to="Content" method="_on_Config_close_config"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
 [connection signal="connected" from="Popups/ConnectPopup/Content/MarginContainer/Connect" to="Content/Config" method="_on_Connect_connected"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]

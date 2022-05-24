@@ -1,5 +1,7 @@
 extends Node
 
+signal add_toast
+
 var popup_manager: CanvasLayer = null
 var ui_shrink: float = 1.0 setget set_ui_shrink
 

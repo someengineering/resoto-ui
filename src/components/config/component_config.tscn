@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://components/config/component_config.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -6,9 +6,14 @@
 [ext_resource path="res://assets/icon_expand.png" type="Texture" id=4]
 [ext_resource path="res://assets/icon_collapse.png" type="Texture" id=5]
 [ext_resource path="res://components/config/component_config_complex.gd" type="Script" id=6]
-[ext_resource path="res://components/config/component_config_array.gd" type="Script" id=7]
+[ext_resource path="res://components/config/component_config_enum.gd" type="Script" id=7]
 [ext_resource path="res://scripts/tools/scroll_container_scrollbar_claim_space.gd" type="Script" id=8]
 [ext_resource path="res://components/config/component_config_line_edit_int.gd" type="Script" id=9]
+[ext_resource path="res://components/config/component_config_line_edit_float.gd" type="Script" id=10]
+[ext_resource path="res://components/config/component_config_template_array_element.tscn" type="PackedScene" id=11]
+[ext_resource path="res://components/config/component_config_tab.gd" type="Script" id=12]
+[ext_resource path="res://components/config/component_config_array_container.gd" type="Script" id=13]
+[ext_resource path="res://components/config/component_config_template_dict_element.tscn" type="PackedScene" id=14]
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 10.0
@@ -26,7 +31,17 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 corner_detail = 1
 
-[sub_resource type="StyleBoxEmpty" id=6]
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.462745, 0.176471, 0.843137, 0.14902 )
+border_width_left = 4
+border_width_top = 1
+border_width_right = 1
+border_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 8.0
 
 [sub_resource type="DynamicFontData" id=2]
 font_path = "res://assets/theme/Barlow-Regular.ttf"
@@ -37,24 +52,28 @@ use_mipmaps = true
 use_filter = true
 font_data = SubResource( 2 )
 
+[sub_resource type="StyleBoxEmpty" id=7]
+content_margin_left = 10.0
+
 [sub_resource type="StyleBoxFlat" id=5]
 content_margin_left = 10.0
 content_margin_right = 5.0
-content_margin_top = 5.0
-content_margin_bottom = 5.0
+content_margin_top = 10.0
+content_margin_bottom = 20.0
 bg_color = Color( 0, 0.0509804, 0.0980392, 0.196078 )
-border_width_left = 4
-border_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+border_width_left = 5
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 expand_margin_left = 8.0
-expand_margin_top = 40.0
+expand_margin_top = 4.0
 
-[sub_resource type="StyleBoxEmpty" id=7]
-content_margin_left = 10.0
-content_margin_bottom = 20.0
+[sub_resource type="StyleBoxEmpty" id=6]
 
 [node name="Config" type="MarginContainer"]
 anchor_right = 1.0
@@ -138,18 +157,27 @@ custom_constants/separation = 10
 alignment = 1
 
 [node name="CloseConfigButton" type="Button" parent="TabManager/HBoxContainer"]
-margin_left = 875.0
+margin_left = 782.0
 margin_top = 10.0
-margin_right = 923.0
+margin_right = 830.0
 margin_bottom = 34.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Close"
 
-[node name="SaveConfigButton" type="Button" parent="TabManager/HBoxContainer"]
-margin_left = 933.0
+[node name="LoadConfigFromCoreButton" type="Button" parent="TabManager/HBoxContainer"]
+margin_left = 840.0
 margin_top = 10.0
-margin_right = 1025.0
+margin_right = 1015.0
+margin_bottom = 34.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Load Configs from Core"
+
+[node name="SaveConfigButton" type="Button" parent="TabManager/HBoxContainer"]
+margin_left = 1025.0
+margin_top = 10.0
+margin_right = 1117.0
 margin_bottom = 34.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
@@ -162,27 +190,304 @@ margin_top = 40.0
 margin_right = 1910.0
 margin_bottom = 1070.0
 
-[node name="ElementSimple" type="VBoxContainer" parent="Templates"]
+[node name="TemplateConfigTab" type="VBoxContainer" parent="Templates"]
 margin_right = 1900.0
-margin_bottom = 37.0
+margin_bottom = 4.0
+custom_constants/separation = 5
+script = ExtResource( 12 )
+
+[node name="Description" type="Label" parent="Templates/TemplateConfigTab"]
+visible = false
+margin_right = 1900.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Test"
+
+[node name="HSeparator" type="HSeparator" parent="Templates/TemplateConfigTab"]
+visible = false
+modulate = Color( 1, 1, 1, 0.501961 )
+margin_top = 24.0
+margin_right = 1900.0
+margin_bottom = 28.0
+
+[node name="Spacer" type="Control" parent="Templates/TemplateConfigTab"]
+margin_right = 1900.0
+margin_bottom = 4.0
+rect_min_size = Vector2( 0, 4 )
+
+[node name="TemplateMainLevel" type="VBoxContainer" parent="Templates"]
+margin_top = 8.0
+margin_right = 1900.0
+margin_bottom = 8.0
+custom_constants/separation = 20
+
+[node name="TemplateComplex" type="VBoxContainer" parent="Templates"]
+margin_top = 12.0
+margin_right = 1900.0
+margin_bottom = 82.0
+script = ExtResource( 6 )
+
+[node name="HeaderBG" type="PanelContainer" parent="Templates/TemplateComplex"]
+margin_right = 10.0
+margin_bottom = 10.0
+custom_styles/panel = SubResource( 8 )
+
+[node name="Header" type="VBoxContainer" parent="Templates/TemplateComplex/HeaderBG"]
+margin_right = 1900.0
+margin_bottom = 36.0
+custom_constants/separation = 0
+
+[node name="Top" type="HBoxContainer" parent="Templates/TemplateComplex/HeaderBG/Header"]
+margin_right = 1900.0
+margin_bottom = 20.0
+
+[node name="Expand" type="TextureButton" parent="Templates/TemplateComplex/HeaderBG/Header/Top"]
+margin_right = 10.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 10, 10 )
+toggle_mode = true
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 4 )
+expand = true
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Templates/TemplateComplex/HeaderBG/Header/Top"]
+margin_left = 14.0
+margin_right = 314.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 300, 0 )
+mouse_filter = 1
+text = "Test"
+
+[node name="VarValueIsNull" type="Label" parent="Templates/TemplateComplex/HeaderBG/Header/Top"]
+visible = false
+modulate = Color( 1, 1, 1, 0.439216 )
+margin_left = 50.0
+margin_right = 1900.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 3
+text = "= null"
+
+[node name="ButtonSetToNull" type="Button" parent="Templates/TemplateComplex/HeaderBG/Header/Top"]
+visible = false
+margin_left = 1848.0
+margin_right = 1900.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+focus_mode = 0
+size_flags_horizontal = 10
+enabled_focus_mode = 0
+text = "set null"
+flat = true
+
+[node name="ButtonAddValue" type="Button" parent="Templates/TemplateComplex/HeaderBG/Header/Top"]
+visible = false
+margin_left = 1866.0
+margin_right = 1900.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+focus_mode = 0
+size_flags_horizontal = 10
+enabled_focus_mode = 0
+text = "add"
+flat = true
+
+[node name="Description" type="Label" parent="Templates/TemplateComplex/HeaderBG/Header"]
+modulate = Color( 1, 1, 1, 0.54902 )
+margin_top = 20.0
+margin_right = 1900.0
+margin_bottom = 36.0
+mouse_filter = 1
+custom_fonts/font = SubResource( 3 )
+custom_styles/normal = SubResource( 7 )
+text = "Description"
+
+[node name="HSeparator" type="HSeparator" parent="Templates/TemplateComplex/HeaderBG/Header"]
+visible = false
+modulate = Color( 1, 1, 1, 0.352941 )
+margin_top = 36.0
+margin_right = 1900.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="Margin" type="PanelContainer" parent="Templates/TemplateComplex"]
+show_behind_parent = true
+margin_top = 40.0
+margin_right = 1900.0
+margin_bottom = 70.0
+custom_styles/panel = SubResource( 5 )
+
+[node name="Content" type="VBoxContainer" parent="Templates/TemplateComplex/Margin"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1895.0
+margin_bottom = 10.0
+custom_constants/separation = 10
+
+[node name="TemplateElementsContainer" type="VBoxContainer" parent="Templates"]
+margin_top = 86.0
+margin_right = 1900.0
+margin_bottom = 194.0
+script = ExtResource( 13 )
+
+[node name="HeaderBG" type="PanelContainer" parent="Templates/TemplateElementsContainer"]
+margin_right = 10.0
+margin_bottom = 10.0
+custom_styles/panel = SubResource( 8 )
+
+[node name="Header" type="VBoxContainer" parent="Templates/TemplateElementsContainer/HeaderBG"]
+margin_right = 1900.0
+margin_bottom = 36.0
+custom_constants/separation = 0
+
+[node name="Top" type="HBoxContainer" parent="Templates/TemplateElementsContainer/HeaderBG/Header"]
+margin_right = 1900.0
+margin_bottom = 20.0
+
+[node name="Expand" type="TextureButton" parent="Templates/TemplateElementsContainer/HeaderBG/Header/Top"]
+margin_right = 10.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 10, 20 )
+toggle_mode = true
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 4 )
+expand = true
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Templates/TemplateElementsContainer/HeaderBG/Header/Top"]
+margin_left = 14.0
+margin_right = 314.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 300, 0 )
+mouse_filter = 1
+text = "Test"
+
+[node name="VarValueIsNull" type="Label" parent="Templates/TemplateElementsContainer/HeaderBG/Header/Top"]
+visible = false
+modulate = Color( 1, 1, 1, 0.439216 )
+margin_left = 50.0
+margin_right = 1900.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 3
+text = "= null"
+
+[node name="ButtonSetToNull" type="Button" parent="Templates/TemplateElementsContainer/HeaderBG/Header/Top"]
+visible = false
+margin_left = 1848.0
+margin_right = 1900.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+focus_mode = 0
+size_flags_horizontal = 10
+enabled_focus_mode = 0
+text = "set null"
+flat = true
+
+[node name="ButtonAddValue" type="Button" parent="Templates/TemplateElementsContainer/HeaderBG/Header/Top"]
+visible = false
+margin_left = 1866.0
+margin_right = 1900.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+focus_mode = 0
+size_flags_horizontal = 10
+enabled_focus_mode = 0
+text = "add"
+flat = true
+
+[node name="Description" type="Label" parent="Templates/TemplateElementsContainer/HeaderBG/Header"]
+modulate = Color( 1, 1, 1, 0.54902 )
+margin_top = 20.0
+margin_right = 1900.0
+margin_bottom = 36.0
+mouse_filter = 1
+custom_fonts/font = SubResource( 3 )
+custom_styles/normal = SubResource( 7 )
+text = "Description"
+
+[node name="HSeparator" type="HSeparator" parent="Templates/TemplateElementsContainer/HeaderBG/Header"]
+visible = false
+modulate = Color( 1, 1, 1, 0.352941 )
+margin_top = 36.0
+margin_right = 1900.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="Margin" type="PanelContainer" parent="Templates/TemplateElementsContainer"]
+show_behind_parent = true
+margin_top = 40.0
+margin_right = 1900.0
+margin_bottom = 108.0
+custom_styles/panel = SubResource( 5 )
+
+[node name="Content" type="VBoxContainer" parent="Templates/TemplateElementsContainer/Margin"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1895.0
+margin_bottom = 48.0
+custom_constants/separation = 5
+
+[node name="Elements" type="VBoxContainer" parent="Templates/TemplateElementsContainer/Margin/Content"]
+margin_right = 1885.0
+custom_constants/separation = 8
+
+[node name="HSeparator" type="HSeparator" parent="Templates/TemplateElementsContainer/Margin/Content"]
+modulate = Color( 1, 1, 1, 0.501961 )
+margin_top = 5.0
+margin_right = 1885.0
+margin_bottom = 9.0
+
+[node name="AddButton" type="Button" parent="Templates/TemplateElementsContainer/Margin/Content"]
+margin_top = 14.0
+margin_right = 1885.0
+margin_bottom = 38.0
+text = "Add element"
+
+[node name="TemplateArrayElement" parent="Templates" instance=ExtResource( 11 )]
+margin_top = 254.0
+margin_bottom = 300.0
+
+[node name="TemplateDictElement" parent="Templates" instance=ExtResource( 14 )]
+
+[node name="TemplateSimple" type="VBoxContainer" parent="Templates"]
+margin_top = 304.0
+margin_right = 1900.0
+margin_bottom = 341.0
 custom_constants/separation = 1
 script = ExtResource( 3 )
 
-[node name="VarContent" type="HBoxContainer" parent="Templates/ElementSimple"]
+[node name="VarContent" type="HBoxContainer" parent="Templates/TemplateSimple"]
 margin_right = 1900.0
 margin_bottom = 20.0
 
-[node name="VarName" type="Label" parent="Templates/ElementSimple/VarContent"]
+[node name="VarName" type="Label" parent="Templates/TemplateSimple/VarContent"]
 margin_right = 300.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 300, 0 )
+size_flags_vertical = 0
 text = "Description"
 
-[node name="VarValueBool" type="CheckBox" parent="Templates/ElementSimple/VarContent"]
+[node name="VarValueIsNull" type="Label" parent="Templates/TemplateSimple/VarContent"]
 visible = false
-margin_left = 254.0
-margin_right = 278.0
+modulate = Color( 1, 1, 1, 0.439216 )
+margin_left = 304.0
+margin_right = 1900.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "= null"
+
+[node name="VarValueBool" type="CheckBox" parent="Templates/TemplateSimple/VarContent"]
+visible = false
+margin_left = 304.0
+margin_right = 1836.0
 margin_bottom = 24.0
+size_flags_horizontal = 3
 custom_styles/hover = SubResource( 6 )
 custom_styles/pressed = SubResource( 6 )
 custom_styles/focus = SubResource( 6 )
@@ -191,186 +496,150 @@ custom_styles/hover_pressed = SubResource( 6 )
 custom_styles/normal = SubResource( 6 )
 flat = true
 
-[node name="VarValueString" type="LineEdit" parent="Templates/ElementSimple/VarContent"]
+[node name="VarValueTextbox" type="LineEdit" parent="Templates/TemplateSimple/VarContent"]
 visible = false
-margin_left = 254.0
-margin_right = 1920.0
+margin_left = 304.0
+margin_right = 1900.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 caret_blink = true
 caret_blink_speed = 0.5
 
-[node name="VarValueInt" type="LineEdit" parent="Templates/ElementSimple/VarContent"]
+[node name="VarValueInt" type="LineEdit" parent="Templates/TemplateSimple/VarContent"]
 visible = false
-margin_left = 254.0
-margin_right = 1920.0
+margin_left = 324.0
+margin_right = 1900.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 script = ExtResource( 9 )
 
-[node name="Description" type="Label" parent="Templates/ElementSimple"]
+[node name="VarValueFloat" type="LineEdit" parent="Templates/TemplateSimple/VarContent"]
+visible = false
+margin_left = 324.0
+margin_right = 1900.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+script = ExtResource( 10 )
+
+[node name="ButtonSetToNull" type="Button" parent="Templates/TemplateSimple/VarContent"]
+visible = false
+margin_left = 304.0
+margin_right = 364.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+focus_mode = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+enabled_focus_mode = 0
+text = "set null"
+flat = true
+
+[node name="ButtonAddValue" type="Button" parent="Templates/TemplateSimple/VarContent"]
+visible = false
+margin_left = 1840.0
+margin_right = 1900.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+focus_mode = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+enabled_focus_mode = 0
+text = "add"
+flat = true
+
+[node name="Description" type="Label" parent="Templates/TemplateSimple"]
 modulate = Color( 1, 1, 1, 0.54902 )
 margin_top = 21.0
 margin_right = 1900.0
 margin_bottom = 37.0
 custom_fonts/font = SubResource( 3 )
+custom_styles/normal = SubResource( 7 )
 text = "Description"
 
-[node name="ElementComplex" type="VBoxContainer" parent="Templates"]
-margin_top = 41.0
+[node name="TemplateEnum" type="VBoxContainer" parent="Templates"]
+margin_top = 345.0
 margin_right = 1900.0
-margin_bottom = 91.0
-script = ExtResource( 6 )
-
-[node name="Header" type="VBoxContainer" parent="Templates/ElementComplex"]
-margin_right = 1900.0
-margin_bottom = 36.0
-custom_constants/separation = 0
-
-[node name="Top" type="HBoxContainer" parent="Templates/ElementComplex/Header"]
-margin_right = 1900.0
-margin_bottom = 20.0
-
-[node name="Name" type="Label" parent="Templates/ElementComplex/Header/Top"]
-margin_right = 1876.0
-margin_bottom = 20.0
-mouse_filter = 1
-size_flags_horizontal = 3
-text = "Test"
-
-[node name="Expand" type="TextureButton" parent="Templates/ElementComplex/Header/Top"]
-margin_left = 1880.0
-margin_right = 1900.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 20, 20 )
-toggle_mode = true
-texture_normal = ExtResource( 4 )
-texture_pressed = ExtResource( 5 )
-expand = true
-stretch_mode = 5
-
-[node name="Description" type="Label" parent="Templates/ElementComplex/Header"]
-modulate = Color( 1, 1, 1, 0.54902 )
-margin_top = 20.0
-margin_right = 1900.0
-margin_bottom = 36.0
-mouse_filter = 1
-custom_fonts/font = SubResource( 3 )
-text = "Description"
-
-[node name="Margin" type="PanelContainer" parent="Templates/ElementComplex"]
-show_behind_parent = true
-margin_top = 40.0
-margin_right = 1900.0
-margin_bottom = 50.0
-custom_styles/panel = SubResource( 5 )
-
-[node name="Content" type="VBoxContainer" parent="Templates/ElementComplex/Margin"]
-margin_left = 10.0
-margin_top = 5.0
-margin_right = 1895.0
-margin_bottom = 5.0
-rect_clip_content = true
-
-[node name="ExpandTween" type="Tween" parent="Templates/ElementComplex"]
-
-[node name="ElementMainLevel" type="VBoxContainer" parent="Templates"]
-margin_top = 95.0
-margin_right = 1900.0
-margin_bottom = 95.0
-custom_constants/separation = 20
-
-[node name="ElementConfigTab" type="VBoxContainer" parent="Templates"]
-margin_top = 99.0
-margin_right = 1900.0
-margin_bottom = 147.0
-
-[node name="Description" type="Label" parent="Templates/ElementConfigTab"]
-margin_right = 1900.0
-margin_bottom = 20.0
-size_flags_horizontal = 3
-text = "Test"
-
-[node name="HSeparator" type="HSeparator" parent="Templates/ElementConfigTab"]
-modulate = Color( 1, 1, 1, 0.501961 )
-margin_top = 24.0
-margin_right = 1900.0
-margin_bottom = 28.0
-
-[node name="Spacer" type="Control" parent="Templates/ElementConfigTab"]
-margin_top = 32.0
-margin_right = 1900.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 0, 16 )
-
-[node name="ElementArray" type="VBoxContainer" parent="Templates"]
-margin_top = 151.0
-margin_right = 1900.0
-margin_bottom = 179.0
+margin_bottom = 386.0
+custom_constants/separation = 1
 script = ExtResource( 7 )
 
-[node name="Content" type="VBoxContainer" parent="Templates/ElementArray"]
-margin_right = 1900.0
-
-[node name="ArrayElement" type="HBoxContainer" parent="Templates/ElementArray"]
-visible = false
-margin_top = 4.0
-margin_right = 1900.0
-margin_bottom = 28.0
-
-[node name="VarValueString" type="LineEdit" parent="Templates/ElementArray/ArrayElement"]
-margin_right = 1842.0
-margin_bottom = 24.0
-size_flags_horizontal = 3
-caret_blink = true
-caret_blink_speed = 0.5
-
-[node name="VarValueInt" type="LineEdit" parent="Templates/ElementArray/ArrayElement"]
-visible = false
-margin_left = 254.0
-margin_right = 1920.0
-margin_bottom = 24.0
-size_flags_horizontal = 3
-script = ExtResource( 9 )
-
-[node name="DeleteButton" type="Button" parent="Templates/ElementArray/ArrayElement"]
-margin_left = 1846.0
+[node name="VarContent" type="HBoxContainer" parent="Templates/TemplateEnum"]
 margin_right = 1900.0
 margin_bottom = 24.0
-text = "delete"
 
-[node name="AddButton" type="Button" parent="Templates/ElementArray"]
-margin_top = 4.0
-margin_right = 1900.0
-margin_bottom = 28.0
-text = "add"
-
-[node name="ElementDict" type="VBoxContainer" parent="Templates"]
-margin_top = 183.0
-margin_right = 1900.0
-margin_bottom = 203.0
-
-[node name="Key" type="Label" parent="Templates/ElementDict"]
+[node name="VarName" type="Label" parent="Templates/TemplateEnum/VarContent"]
+margin_top = 2.0
 margin_right = 300.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 300, 0 )
+text = "Description"
+
+[node name="VarValueIsNull" type="Label" parent="Templates/TemplateEnum/VarContent"]
+visible = false
+modulate = Color( 1, 1, 1, 0.439216 )
+margin_left = 304.0
+margin_right = 1900.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 300, 0 )
-text = "Test"
+size_flags_horizontal = 3
+text = "= null"
 
-[node name="HSeparator" type="HSeparator" parent="Templates/ElementDict"]
-modulate = Color( 1, 1, 1, 0.501961 )
-margin_right = 40.0
-margin_bottom = 4.0
+[node name="VarValueEnum" type="OptionButton" parent="Templates/TemplateEnum/VarContent"]
+margin_left = 304.0
+margin_right = 1772.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "Item 0"
+items = [ "Item 0", null, false, 0, null, "Item 1", null, false, 1, null, "Item 2", null, false, 2, null ]
+selected = 0
 
-[node name="Container" type="PanelContainer" parent="Templates/ElementDict"]
-margin_right = 10.0
-margin_bottom = 10.0
-custom_styles/panel = SubResource( 7 )
+[node name="ButtonSetToNull" type="Button" parent="Templates/TemplateEnum/VarContent"]
+margin_left = 1776.0
+margin_right = 1836.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+focus_mode = 0
+size_flags_horizontal = 8
+enabled_focus_mode = 0
+text = "set null"
+flat = true
+
+[node name="ButtonAddValue" type="Button" parent="Templates/TemplateEnum/VarContent"]
+visible = false
+margin_left = 1840.0
+margin_right = 1900.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+focus_mode = 0
+size_flags_horizontal = 8
+enabled_focus_mode = 0
+text = "add"
+flat = true
+
+[node name="Description" type="Label" parent="Templates/TemplateEnum"]
+modulate = Color( 1, 1, 1, 0.54902 )
+margin_top = 25.0
+margin_right = 1900.0
+margin_bottom = 41.0
+custom_fonts/font = SubResource( 3 )
+custom_styles/normal = SubResource( 7 )
+text = "Description"
 
 [connection signal="tab_changed" from="TabManager/TabsBar/Tabs" to="." method="_on_Tabs_tab_changed"]
 [connection signal="pressed" from="TabManager/HBoxContainer/CloseConfigButton" to="." method="_on_CloseConfigButton_pressed"]
+[connection signal="pressed" from="TabManager/HBoxContainer/LoadConfigFromCoreButton" to="." method="_on_LoadConfigFromCoreButton_pressed"]
 [connection signal="pressed" from="TabManager/HBoxContainer/SaveConfigButton" to="." method="_on_SaveConfigButton_pressed"]
-[connection signal="gui_input" from="Templates/ElementComplex/Header/Top/Name" to="Templates/ElementComplex" method="_on_Name_gui_input"]
-[connection signal="toggled" from="Templates/ElementComplex/Header/Top/Expand" to="Templates/ElementComplex" method="_on_Expand_toggled"]
-[connection signal="gui_input" from="Templates/ElementComplex/Header/Description" to="Templates/ElementComplex" method="_on_Name_gui_input"]
-[connection signal="tween_all_completed" from="Templates/ElementComplex/ExpandTween" to="Templates/ElementComplex" method="_on_ExpandTween_tween_all_completed"]
-[connection signal="pressed" from="Templates/ElementArray/AddButton" to="Templates/ElementArray" method="_on_AddButton_pressed"]
+[connection signal="gui_input" from="Templates/TemplateComplex/HeaderBG/Header" to="Templates/TemplateComplex" method="_on_Header_gui_input"]
+[connection signal="toggled" from="Templates/TemplateComplex/HeaderBG/Header/Top/Expand" to="Templates/TemplateComplex" method="_on_Expand_toggled"]
+[connection signal="pressed" from="Templates/TemplateComplex/HeaderBG/Header/Top/ButtonSetToNull" to="Templates/TemplateComplex" method="_on_ButtonSetToNull_pressed"]
+[connection signal="pressed" from="Templates/TemplateComplex/HeaderBG/Header/Top/ButtonAddValue" to="Templates/TemplateComplex" method="_on_ButtonAddValue_pressed"]
+[connection signal="gui_input" from="Templates/TemplateElementsContainer/HeaderBG/Header" to="Templates/TemplateElementsContainer" method="_on_Header_gui_input"]
+[connection signal="toggled" from="Templates/TemplateElementsContainer/HeaderBG/Header/Top/Expand" to="Templates/TemplateElementsContainer" method="_on_Expand_toggled"]
+[connection signal="pressed" from="Templates/TemplateElementsContainer/HeaderBG/Header/Top/ButtonSetToNull" to="Templates/TemplateElementsContainer" method="_on_ButtonSetToNull_pressed"]
+[connection signal="pressed" from="Templates/TemplateElementsContainer/HeaderBG/Header/Top/ButtonAddValue" to="Templates/TemplateElementsContainer" method="_on_ButtonAddValue_pressed"]
+[connection signal="pressed" from="Templates/TemplateElementsContainer/Margin/Content/AddButton" to="Templates/TemplateElementsContainer" method="_on_AddButton_pressed"]
+[connection signal="pressed" from="Templates/TemplateSimple/VarContent/ButtonSetToNull" to="Templates/TemplateSimple" method="_on_ButtonSetToNull_pressed"]
+[connection signal="pressed" from="Templates/TemplateSimple/VarContent/ButtonAddValue" to="Templates/TemplateSimple" method="_on_ButtonAddValue_pressed"]
+[connection signal="item_selected" from="Templates/TemplateEnum/VarContent/VarValueEnum" to="Templates/TemplateEnum" method="_on_VarValueEnum_item_selected"]
+[connection signal="pressed" from="Templates/TemplateEnum/VarContent/ButtonSetToNull" to="Templates/TemplateEnum" method="_on_ButtonSetToNull_pressed"]
+[connection signal="pressed" from="Templates/TemplateEnum/VarContent/ButtonAddValue" to="Templates/TemplateEnum" method="_on_ButtonAddValue_pressed"]
