@@ -65,6 +65,10 @@ func connection_config(_adress:String = adress, _port:int = port, _psk:String = 
 func get_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_model()
 	_req_res.connect("done", _connect_to, "_on_get_model_done")
+	
+func patch_model(_body:String, _connect_to:Node) -> void:
+	_req_res = _resoto_api.patch_model(_body)
+	_req_res.connect("done", _connect_to, "_on_patch_model_done")
 
 
 func get_configs(_connect_to:Node):
