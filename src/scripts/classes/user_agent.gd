@@ -198,6 +198,10 @@ func req_put(path:String, body:String, req_headers:RequestHeaders) -> Request:
 	return request_(HTTPClient.METHOD_PUT, path, create_headers(req_headers), body)
 
 
+func req_patch(path:String, body:String, req_headers:RequestHeaders) -> Request:
+	return request_(HTTPClient.METHOD_PATCH, path, create_headers(req_headers), body)
+
+
 func poll() -> void:
 	var requests: Array = requests_
 	requests_           = []

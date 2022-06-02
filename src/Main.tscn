@@ -236,11 +236,95 @@ margin_right = 360.0
 margin_bottom = 108.0
 text = "Connect"
 
+
 [node name="ConnectDelay" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
 wait_time = 0.1
 one_shot = true
 
 [node name="ConnectTimeoutTimer" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
+
+[node name="MenuBar" type="CanvasLayer" parent="."]
+layer = 20
+follow_viewport_enable = true
+
+[node name="MenuContainer" type="VBoxContainer" parent="MenuBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Menu" type="PanelContainer" parent="MenuBar/MenuContainer"]
+margin_right = 1920.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 3 )
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu"]
+margin_right = 1920.0
+margin_bottom = 32.0
+custom_constants/separation = 0
+
+[node name="Spacer2" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_right = 10.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 10.0
+margin_right = 74.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="Spacer" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 74.0
+margin_right = 1838.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="SideMenu" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 1838.0
+margin_right = 1888.0
+margin_bottom = 32.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="ButtonDocs" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 28.0
+text = "docs"
+
+[node name="SideMenu2" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 1888.0
+margin_right = 1920.0
+margin_bottom = 32.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="Config" type="MenuButton" parent="MenuBar/MenuContainer/Menu/Title/SideMenu2"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 28.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 24, 24 )
+expand_icon = true
+items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false ]
 
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 

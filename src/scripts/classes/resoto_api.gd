@@ -27,10 +27,12 @@ var accept_json_put_headers:Headers = Headers.new()
 var config_put_headers:Headers = Headers.new()
 var accept_json_nd_headers:Headers = Headers.new()
 var accept_text_headers:Headers = Headers.new()
+var content_json_headers:Headers = Headers.new()
 
 
 func _init().(default_options) -> void:
 	accept_text_headers.Accept = "text/plain"
+	content_json_headers.Content_Type = "application/json"
 
 
 func refresh_jwt_header(header:Headers) -> void:
@@ -137,6 +139,10 @@ func get_model() -> ResotoAPI.Request:
 	request.connect("pre_done", self, "_transform_json")
 	return request
 
+func patch_model(body : String) -> ResotoAPI.Request:
+	refresh_jwt_header(content_json_headers)
+	var request = req_patch("/model", body, content_json_headers)
+	return request
 
 func get_config_model() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
