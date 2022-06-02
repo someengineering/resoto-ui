@@ -25,7 +25,7 @@ At the moment, this is just a prototype with no functionality except the visual 
 
 
 ## How to get the UI running
-The UI ships as part of the Resoto Docker image and will be available at `<resotocore-address>:8090/ui/`.
+The UI ships as part of the Resoto Docker image and will be available at `<resotocore-address>:8900/ui/`.
 
 **To build the standalone version follow these steps:**
 - Download [Godot 3.4](https://godotengine.org/download) (standard version).
