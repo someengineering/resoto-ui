@@ -149,6 +149,7 @@ __meta__ = {
 }
 
 [node name="ConnectPopup" type="PopupDialog" parent="Popups"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1920.0
@@ -165,9 +166,6 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="Popups/ConnectPopup/Content"]
 margin_right = 400.0
@@ -265,7 +263,7 @@ margin_bottom = 28.0
 rect_min_size = Vector2( 24, 24 )
 icon = ExtResource( 3 )
 expand_icon = true
-items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false ]
+items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false, "Merge Graph", null, 0, false, false, 3, 0, null, "", false ]
 
 [connection signal="reposition_active_tab_request" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_reposition_active_tab_request"]
 [connection signal="tab_changed" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_changed"]
