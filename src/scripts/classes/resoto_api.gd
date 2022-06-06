@@ -28,11 +28,13 @@ var config_put_headers:Headers = Headers.new()
 var accept_json_nd_headers:Headers = Headers.new()
 var accept_text_headers:Headers = Headers.new()
 var content_json_headers:Headers = Headers.new()
+var content_ndjson_headers:Headers = Headers.new()
 
 
 func _init().(default_options) -> void:
 	accept_text_headers.Accept = "text/plain"
 	content_json_headers.Content_Type = "application/json"
+	content_ndjson_headers.Content_Type = "application/x-ndjson"
 
 
 func refresh_jwt_header(header:Headers) -> void:
@@ -139,6 +141,7 @@ func get_model() -> ResotoAPI.Request:
 	request.connect("pre_done", self, "_transform_json")
 	return request
 
+
 func patch_model(body : String) -> ResotoAPI.Request:
 	refresh_jwt_header(content_json_headers)
 	var request = req_patch("/model", body, content_json_headers)
@@ -166,10 +169,24 @@ func get_config_id(_config_id:String="resoto.core") -> ResotoAPI.Request:
 	return request
 
 
+func get_graph() -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var request = req_get("/graph", accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
 func put_config_id(_config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
 	refresh_jwt_header(config_put_headers)
 	var config_id = "/config/" + _config_id
 	var request = req_put(config_id, _config_body, config_put_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func merge_graph(graph_root:String, body:String) -> ResotoAPI.Request:
+	refresh_jwt_header(content_ndjson_headers)
+	var request = req_post("/graph/%s/merge" % graph_root, body, content_ndjson_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
 

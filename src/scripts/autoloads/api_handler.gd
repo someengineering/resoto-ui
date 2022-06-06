@@ -65,7 +65,8 @@ func connection_config(_adress:String = adress, _port:int = port, _psk:String = 
 func get_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_model()
 	_req_res.connect("done", _connect_to, "_on_get_model_done")
-	
+
+
 func patch_model(_body:String, _connect_to:Node) -> void:
 	_req_res = _resoto_api.patch_model(_body)
 	_req_res.connect("done", _connect_to, "_on_patch_model_done")
@@ -90,6 +91,15 @@ func put_config_id(_connect_to:Node, _config_id:String="resoto.core", _config_bo
 func get_config_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_config_model()
 	_req_res.connect("done", _connect_to, "_on_get_config_model_done")
+
+func get_graph(_connect_to:Node) -> void:
+	_req_res = _resoto_api.get_graph()
+	_req_res.connect("done", _connect_to, "_on_get_graph_done")
+
+
+func merge_graph(graph_root:String, body:String, _connect_to:Node) -> void:
+	_req_res = _resoto_api.merge_graph(graph_root, body)
+	_req_res.connect("done", _connect_to, "_on_merge_graph_done")
 
 
 func cli_info(_connect_to:Node) -> ResotoAPI.Request:
