@@ -9,6 +9,7 @@ var required:bool = false setget set_required
 var is_null:bool = false
 var kind:String = ""
 var kind_type = ""
+var default:bool = false
 var model:Dictionary = {}
 var key:String = ""
 var description:String = "" setget set_description
@@ -19,12 +20,12 @@ onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
 onready var content = $Margin/Content
 
 
-func _ready():
+func _ready() -> void:
 	_on_Expand_toggled(start_expanded)
 	orig_size = $Margin.rect_size.y
 
 
-func set_required(_value:bool):
+func set_required(_value:bool) -> void:
 	required = _value
 	if is_null:
 		$HeaderBG/Header/Top/ButtonAddValue.show()
@@ -32,7 +33,7 @@ func set_required(_value:bool):
 		$HeaderBG/Header/Top/ButtonSetToNull.show()
 
 
-func set_value(_value):
+func set_value(_value) -> void:
 	value = _value
 	if value == null:
 		_on_ButtonSetToNull_pressed()
@@ -47,8 +48,8 @@ func get_value():
 	if not self.is_inside_tree():
 		yield(self, "ready")
 	
-	var kind_type = config_component.get_kind_type(model.fqn)
-	match kind_type:
+	var found_kind_type = config_component.get_kind_type(model.fqn)
+	match found_kind_type:
 		"simple":
 			return config_component.build_simple(content_elements)
 		"array":
@@ -62,12 +63,12 @@ func get_value():
 			return new_value
 
 
-func set_description(_value:String):
+func set_description(_value:String) -> void:
 	description = _value
 	$HeaderBG/Header/Description.text =  description
 
 
-func set_to_null(to_null:bool):
+func set_to_null(to_null:bool) -> void:
 	if to_null:
 		_on_Expand_toggled(false)
 		value = null
@@ -83,11 +84,11 @@ func set_to_null(to_null:bool):
 		$HeaderBG/Header/Top/ButtonSetToNull.visible = !is_null
 
 
-func _on_ButtonSetToNull_pressed():
+func _on_ButtonSetToNull_pressed() -> void:
 	set_to_null(true)
 
 
-func _on_ButtonAddValue_pressed():
+func _on_ButtonAddValue_pressed() -> void:
 	set_to_null(false)
 	var new_content_elements = config_component.add_element(key, kind, value, self, true)
 	if typeof(new_content_elements) == TYPE_ARRAY:
@@ -97,20 +98,19 @@ func _on_ButtonAddValue_pressed():
 	value = get_value()
 
 
-func _on_key_update(_new_key:String):
-	prints("Complex, key update of parent:", _new_key)
+func _on_key_update(_new_key:String) -> void:
+	pass
 
 
-func _on_Expand_toggled(button_pressed):
+func _on_Expand_toggled(button_pressed) -> void:
 	if button_pressed == expanded:
 		return
 	expanded = button_pressed
 	$HeaderBG.self_modulate.a = 0.3 if not expanded else 1.0
-#	$HeaderBG/Header/HSeparator.visible = expanded
 	$HeaderBG/Header/Top/Expand.pressed = expanded
 	$Margin.visible = expanded
 
 
-func _on_Header_gui_input(event):
+func _on_Header_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		_on_Expand_toggled(!$HeaderBG/Header/Top/Expand.pressed)

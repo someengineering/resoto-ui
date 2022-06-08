@@ -23,12 +23,11 @@ signal config_received
 var config_req: ResotoAPI.Request
 var config_put_req: ResotoAPI.Request
 
-var model:Dictionary
+var config_model:Dictionary
 var config_keys:Array
 var model_top_level:Array
 var config:Dictionary
 var config_tabs:Array = []
-var selected_config:String
 
 var tabs_content: Dictionary = {}
 var tabs_content_keys: Array = []
@@ -48,31 +47,33 @@ onready var TemplateArrayElement = find_node("TemplateArrayElement")
 onready var TemplateDict = find_node("TemplateDict")
 
 
-func load_config():
+func load_config() -> void:
 	API.get_configs(self)
 
 
-func _on_get_configs_done(_error, _response):
+func _on_get_configs_done(_error, _response) -> void:
 	config_keys = _response.transformed.result
 	API.get_config_model(self)
 	yield(self, "model_ready")
 	for ck in config_keys:
 		config_req = API.get_config_id(self, ck)
 		yield(self, "config_received")
+	
+	_g.emit_signal("add_toast", "Configs received from Resoto Core.", str(config_keys), 0)
 	build_config_pages()
 
 
-func _on_get_config_model_done(_error, _response):
-	model = _response.transformed.result.kinds
+func _on_get_config_model_done(_error, _response) -> void:
+	config_model = _response.transformed.result.kinds
 	emit_signal("model_ready")
 
 
-func _on_get_config_id_done(_error, _response, config_key):
+func _on_get_config_id_done(_error, _response, config_key) -> void:
 	config[config_key] = _response.transformed.result
 	emit_signal("config_received")
 
 
-func build_config_pages():
+func build_config_pages() -> void:
 	tabs_content.clear()
 	config_tabs.clear()
 	for i in tabs.get_tab_count():
@@ -104,24 +105,18 @@ func build_config_pages():
 	change_active_tab(0, true)
 
 
-func construct_config_json():
+func save_config() -> void:
 	var new_config:Dictionary = {}
+
+	for config_element in config_tabs[_active_tab_id].content_elements:
+		new_config[config_element.key] = config_element.value
 	
-	for config_tab in config_tabs:
-		for config_element in config_tab.content_elements:
-#			print(config_element.key)
-			new_config[config_element.key] = config_element.value
-	
-	print(JSON.print(new_config))
-	
-#	var new_config = ui_config.duplicate(true)
-#	collect_values(new_config)
-#	print_dict(new_config, 0)
-#	var json_config = JSON.print(new_config)
-#	config_put_req = API.put_config_id(self, selected_config, json_config)
+	var selected_config = config_keys[_active_tab_id]
+	var json_config = JSON.print(new_config)
+	config_put_req = API.put_config_id(self, selected_config, json_config)
 
 
-func _on_put_config_id_done(_error, _response):
+func _on_put_config_id_done(_error, _response) -> void:
 	if _error != 0:
 		_g.emit_signal("add_toast", "Error saving configuration.", "", 1)
 		return
@@ -141,36 +136,16 @@ func _on_put_config_id_done(_error, _response):
 	emit_signal("close_config")
 
 
-func collect_values(dict:Dictionary):
-	for key in dict.keys():
-		if typeof(dict[key]) == TYPE_DICTIONARY:
-			collect_values(dict[key])
-		elif dict[key].has_method("get_value"):
-			dict[key] = dict[key].get_value()
-
-
-func print_dict(_dict:Dictionary, _depth:int):
-	var _spacing = ""
-	for i in _depth:
-		_spacing += "  "
-	for d in _dict.keys():
-		prints(_spacing, d)
-		if typeof(_dict[d]) == TYPE_DICTIONARY:
-			print_dict(_dict[d], _depth+1)
-		else:
-			prints(_spacing + "   ", _dict[d])
-
-
 # first element in array is true if it is a fqn element.
 func find_in_model(_id:String) -> Array:
-	for model_key in model.keys():
+	for model_key in config_model.keys():
 		if model_key == _id:
-			return [true, model[model_key]]
+			return [true, config_model[model_key]]
 	return [false, null]
 
 
 func is_fqn(_id:String) -> bool:
-	return model.keys().has(_id) and model[_id].has("properties")
+	return config_model.keys().has(_id) and config_model[_id].has("properties")
 	# old variant, top is shorter and should result the same
 #	return model.keys().has(_id) and not BASE_KINDS.has(_id) and not model[_id].has("enum")
 
@@ -184,7 +159,6 @@ func find_in_properties(_properties:Array, _id:String) -> Dictionary:
 
 func add_element(_name:String, kind:String, _property_value, _parent:Control, default:bool):
 	var model_search = find_in_model(kind)
-	var fqn:bool = model_search[0]
 	var model = model_search[1]
 	
 	if BASE_KINDS.has(kind):
@@ -246,11 +220,13 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			pass
 		return new_elements
 	else:
-		print("=> WTF :", _name, ">", kind)
+		var error_message = str(_name) + " > " + str(kind)
+		_g.emit_signal("add_toast", "Error on config creation.", error_message, 1)
+		print("=> Error on Config creation :", error_message)
 		return
 
 
-func get_kind_type(kind:String):
+func get_kind_type(kind:String) -> String:
 	if BASE_KINDS.has(kind):
 		return "simple"
 	elif kind.begins_with("dictionary"):
@@ -263,6 +239,7 @@ func get_kind_type(kind:String):
 
 func create_complex(_name:String, kind:String, _property_value, properties, _parent:Control, default:bool):
 	if properties == null:
+		_g.emit_signal("add_toast", "Error on config creation.", "Complex not found in model: "+ str(_name), 1)
 		prints("ERROR: Complex not found in model:", _name)
 		return
 	
@@ -291,6 +268,7 @@ func create_complex(_name:String, kind:String, _property_value, properties, _par
 	new_complex.config_component = self
 	new_complex.name = "Complex_" + _name
 	new_complex.key = _name
+	new_complex.default = default
 	new_complex.model = complex_properties
 	new_complex.kind = kind
 	new_complex.kind_type = get_kind_type(kind)
@@ -454,7 +432,7 @@ func change_tab_name(_new_name:String) -> void:
 	update_size()
 
 
-func add_new_tab(_title:String):
+func add_new_tab(_title:String) -> Node:
 	var new_element = null
 	tabs.add_tab(_title)
 	var new_config_tab = TemplateConfigTab.duplicate()
@@ -475,7 +453,7 @@ func change_active_tab(tab:int, update_tab:bool =false) -> void:
 	tabs_content[ tabs_content_keys[tab] ].show()
 
 
-func hide_all_tabs():
+func hide_all_tabs() -> void:
 	for tab in tabs_content.values():
 		tab.hide()
 
@@ -507,18 +485,13 @@ func _on_Tabs_tab_changed(tab:int) -> void:
 	change_active_tab(tab)
 
 
-func _on_SaveConfigButton_pressed():
-	construct_config_json()
+func _on_SaveConfigButton_pressed() -> void:
+	save_config()
 
 
-func _on_close_configButton_pressed():
+func _on_close_configButton_pressed() -> void:
 	emit_signal("close_config")
 
 
-func _on_Connect_connected():
-	load_config()
-
-
-func _on_LoadConfigFromCoreButton_pressed():
-	_g.emit_signal("add_toast", "Configs received from Core.", "", 0)
+func _on_LoadConfigFromCoreButton_pressed() -> void:
 	load_config()

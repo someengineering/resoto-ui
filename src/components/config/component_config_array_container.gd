@@ -24,7 +24,12 @@ onready var content = $Margin/Content/Elements
 onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
 
 
-func set_required(_value:bool):
+func _ready() -> void:
+	_on_Expand_toggled(start_expanded)
+	orig_size = $Margin.rect_size.y
+
+
+func set_required(_value:bool) -> void:
 	required = _value
 	if is_null:
 		$HeaderBG/Header/Top/ButtonAddValue.show()
@@ -32,7 +37,7 @@ func set_required(_value:bool):
 		$HeaderBG/Header/Top/ButtonSetToNull.show()
 
 
-func set_value(_value):
+func set_value(_value) -> void:
 	value = _value
 	if value == null:
 		if default:
@@ -43,7 +48,7 @@ func set_value(_value):
 		refresh_elements()
 
 
-func set_title(_new_title:String):
+func set_title(_new_title:String) -> void:
 	title = _new_title
 	$HeaderBG/Header/Top/Name.text = title
 	if kind == "dict":
@@ -52,7 +57,7 @@ func set_title(_new_title:String):
 		$Margin/Content/AddButton.text = "Add element ("+ key.capitalize() +")"
 
 
-func refresh_elements():
+func refresh_elements() -> void:
 	if not self.is_inside_tree():
 		yield(self, "ready")
 	
@@ -73,7 +78,6 @@ func refresh_elements():
 			c.queue_free()
 	
 	if kind == "dict":
-		var new_elem_index:int = 0
 		for dict_key in value.keys():
 			var new_dict_element = TemplateDictElement.instance()
 			content.add_child(new_dict_element)
@@ -87,7 +91,6 @@ func refresh_elements():
 			new_dict_element.value = value[dict_key]
 			new_dict_element.default = false
 			content_elements.append(new_dict_element)
-			new_elem_index += 1
 	
 	else:
 		var new_elem_index:int = 0
@@ -108,7 +111,7 @@ func refresh_elements():
 	update_title()
 
 
-func update_title():
+func update_title() -> void:
 	if value != null:
 		if kind == "dict":
 			set_title(key + ": {" + str(value.size()) + "}")
@@ -125,12 +128,10 @@ func get_value():
 		return null
 	else:
 		if kind == "dict":
-#			prints("old val:", value)
 			var new_value:Dictionary = {}
 			for i in content_elements.size():
 				var element = content_elements[i]
 				new_value[element.key] = element.value
-#			prints("new val:", new_value)
 			return new_value
 		else:
 			var new_value:Array = []
@@ -138,34 +139,27 @@ func get_value():
 				var element = content_elements[i]
 				new_value.append(element.value)
 			return new_value
-	return null
 
 
-func set_description(_value:String):
+func set_description(_value:String) -> void:
 	description = _value
 	$HeaderBG/Header/Description.text =  description
 
 
-func _ready():
-	_on_Expand_toggled(start_expanded)
-	orig_size = $Margin.rect_size.y
-
-
-func _on_Expand_toggled(button_pressed):
+func _on_Expand_toggled(button_pressed) -> void:
 	if is_null:
 		return
 	expanded = button_pressed
 	$HeaderBG.self_modulate.a = 0.3 if not expanded else 1.0
-#	$HeaderBG/Header/HSeparator.visible = expanded
 	$HeaderBG/Header/Top/Expand.pressed = expanded
 	$Margin.visible = expanded
 
 
-func _on_ButtonSetToNull_pressed():
+func _on_ButtonSetToNull_pressed() -> void:
 	set_to_null(true)
 
 
-func set_to_null(to_null:bool):
+func set_to_null(to_null:bool) -> void:
 	if to_null:
 		_on_Expand_toggled(false)
 		value = null
@@ -182,7 +176,7 @@ func set_to_null(to_null:bool):
 		$HeaderBG/Header/Top/ButtonSetToNull.visible = !is_null
 
 
-func _on_ButtonAddValue_pressed():
+func _on_ButtonAddValue_pressed() -> void:
 	set_to_null(false)
 	if kind == "dict":
 		value = {}
@@ -191,12 +185,12 @@ func _on_ButtonAddValue_pressed():
 	_on_AddButton_pressed()
 
 
-func _on_Header_gui_input(event):
+func _on_Header_gui_input(event:InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		_on_Expand_toggled(!$HeaderBG/Header/Top/Expand.pressed)
 
 
-func _on_AddButton_pressed():
+func _on_AddButton_pressed() -> void:
 	value = get_value()
 	_on_Expand_toggled(true)
 	
@@ -211,7 +205,6 @@ func _on_AddButton_pressed():
 		content.add_child(new_dict_element)
 		new_dict_element.model = model
 		new_dict_element.name = "Dict_Element_" + str(size)
-		var new_key = "key_" + str(size)
 		var new_index = size
 		while value.has("key_" + str(new_index)):
 			new_index += 1
@@ -221,7 +214,6 @@ func _on_AddButton_pressed():
 		new_dict_element.default = true
 		new_dict_element.value = null
 		content_elements.append(new_dict_element)
-		
 		
 	else:
 		var new_array_element = TemplateArrayElement.instance()
@@ -241,26 +233,26 @@ func _on_AddButton_pressed():
 	update_title()
 
 
-func _on_array_element_delete(_array_pos:int):
+func _on_array_element_delete(_array_pos:int) -> void:
 	value = get_value()
 	value.remove(_array_pos)
 	refresh_elements()
 
 
-func _on_array_element_duplicate(_array_pos:int):
+func _on_array_element_duplicate(_array_pos:int) -> void:
 	value = get_value()
 	var duplicate = value[_array_pos]
 	value.insert(_array_pos, duplicate)
 	refresh_elements()
 
 
-func _on_dict_element_delete(_array_key:String):
+func _on_dict_element_delete(_array_key:String) -> void:
 	value = get_value()
 	value.erase(_array_key)
 	refresh_elements()
 
 
-func _on_dict_element_duplicate(_array_key:String):
+func _on_dict_element_duplicate(_array_key:String) -> void:
 	value = get_value()
 	var duplicate = value[_array_key].duplicate(true)
 	var new_key = _array_key + "_copy"
@@ -271,6 +263,6 @@ func _on_dict_element_duplicate(_array_key:String):
 	refresh_elements()
 
 
-func _on_key_update(_new_key:String):
+func _on_key_update(_new_key:String) -> void:
 	key = _new_key
 	update_title()

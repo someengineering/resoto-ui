@@ -379,7 +379,6 @@ text = "docs"
 [connection signal="pressed" from="Content/Content/TerminalManager/TabsBar/NewTabButton" to="Content/Content/TerminalManager" method="_on_NewTabButton_pressed"]
 [connection signal="close_config" from="Content/Config" to="Content" method="_on_Config_close_config"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
-[connection signal="connected" from="Popups/ConnectPopup/Content/MarginContainer/Connect" to="Content/Config" method="_on_Connect_connected"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
 [connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonConfig" to="Content" method="_on_ButtonConfig_pressed"]

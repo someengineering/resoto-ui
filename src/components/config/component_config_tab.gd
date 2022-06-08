@@ -13,8 +13,8 @@ func get_value():
 	if not self.is_inside_tree():
 		yield(self, "ready")
 	
-	var kind_type = config_component.get_kind_type(model.fqn)
-	match kind_type:
+	var found_kind_type = config_component.get_kind_type(model.fqn)
+	match found_kind_type:
 		"simple":
 			return config_component.build_simple(content_elements)
 		"array":

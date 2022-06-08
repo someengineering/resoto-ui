@@ -3,6 +3,8 @@ extends CanvasLayer
 var config_active:bool = false
 
 func show_config(show:bool):
+	if show:
+		$Config.load_config()
 	$Content.visible = !show
 	$Config.visible = show
 

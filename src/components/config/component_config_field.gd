@@ -13,7 +13,7 @@ var required:bool = false setget set_required
 onready var null_value = $VarContent/VarValueIsNull
 
 
-func set_default(_value:bool):
+func set_default(_value:bool) -> void:
 	if not _value:
 		return
 	match kind:
@@ -27,7 +27,7 @@ func set_default(_value:bool):
 			set_value(false)
 
 
-func set_required(_value:bool):
+func set_required(_value:bool) -> void:
 	required = _value
 	if required:
 		$VarContent/ButtonAddValue.hide()
@@ -37,7 +37,7 @@ func set_required(_value:bool):
 	set_to_null(value==null)
 
 
-func set_kind(_kind:String):
+func set_kind(_kind:String) -> void:
 	kind = _kind
 	match kind:
 		"string", "any", "date", "datetime", "duration", "trafo.duration_to_datetime":
@@ -52,7 +52,7 @@ func set_kind(_kind:String):
 	emit_signal("value_field_selected")
 
 
-func set_value(_value):
+func set_value(_value) -> void:
 	value = _value
 	if not self.is_inside_tree():
 		yield(self, "ready")
@@ -95,25 +95,25 @@ func get_value():
 				return str(value_field.text)
 
 
-func set_description(_value:String):
+func set_description(_value:String) -> void:
 	description = _value
 	if _value == "":
 		$Description.hide()
 	$Description.text = _value
 
 
-func set_key(_value:String):
+func set_key(_value:String) -> void:
 	key = _value
 	if _value == "":
 		$VarContent/VarName.hide()
 	$VarContent/VarName.text = key.capitalize()
 
 
-func _on_ButtonSetToNull_pressed():
+func _on_ButtonSetToNull_pressed() -> void:
 	set_to_null(true)
 
 
-func set_to_null(to_null:bool):
+func set_to_null(to_null:bool) -> void:
 	if to_null:
 		value = null
 	
@@ -130,11 +130,11 @@ func set_to_null(to_null:bool):
 		$VarContent/ButtonSetToNull.visible = !to_null
 
 
-func _on_key_update(_new_key:String):
+func _on_key_update(_new_key:String) -> void:
 	set_key(_new_key)
 
 
-func _on_ButtonAddValue_pressed():
+func _on_ButtonAddValue_pressed() -> void:
 	var new_value = null
 	set_to_null(false)
 	

@@ -16,20 +16,20 @@ onready var null_value = $Box/Header/VarValueIsNull
 onready var content = $Box/Content
 
 
-func _on_DuplicateButton_pressed():
+func _on_DuplicateButton_pressed() -> void:
 	emit_signal("duplicate", key)
 
 
-func _on_DeleteButton_pressed():
+func _on_DeleteButton_pressed() -> void:
 	emit_signal("delete", key)
 
 
-func set_key(_key:String):
+func set_key(_key:String) -> void:
 	key = _key
 	$Box/Header/VarKey.text = key
 
 
-func set_value(_value):
+func set_value(_value) -> void:
 	value = _value
 	content_elements.clear()
 	for c in content.get_children():
@@ -50,7 +50,7 @@ func set_value(_value):
 		content_elements = [new_element]
 
 
-func get_value():
+func get_value() -> void:
 	if not self.is_inside_tree():
 		yield(self, "ready")
 	
@@ -74,7 +74,7 @@ func get_value():
 			return new_value
 
 
-func set_to_null(to_null:bool):
+func set_to_null(to_null:bool) -> void:
 	is_null = to_null
 	content.visible = !to_null
 	null_value.visible = to_null
@@ -82,12 +82,12 @@ func set_to_null(to_null:bool):
 	$Box/Header/ButtonSetToNull.visible = !to_null
 
 
-func _on_ButtonSetToNull_pressed():
+func _on_ButtonSetToNull_pressed() -> void:
 	set_value(null)
 	set_to_null(true)
 
 
-func _on_ButtonAddValue_pressed():
+func _on_ButtonAddValue_pressed() -> void:
 	set_to_null(false)
 	var new_element = config_component.add_element(key, model.fqn, null, self, true)
 	if typeof(new_element) == TYPE_ARRAY:
@@ -97,10 +97,10 @@ func _on_ButtonAddValue_pressed():
 	value = get_value()
 
 
-func _on_VarKey_text_changed(new_text):
+func _on_VarKey_text_changed(new_text:String) -> void:
 	key = new_text
 	emit_signal("key_update", key)
 
 
-func _on_key_update(_new_key:String):
-	prints("Dict Element, key update of parent:", _new_key)
+func _on_key_update(_new_key:String) -> void:
+	pass

@@ -16,7 +16,7 @@ onready var enum_button:OptionButton = $VarContent/VarValueEnum
 onready var null_value = $VarContent/VarValueIsNull
 
 
-func set_required(_value:bool):
+func set_required(_value:bool) -> void:
 	required = _value
 	if required:
 		$VarContent/ButtonAddValue.hide()
@@ -26,11 +26,11 @@ func set_required(_value:bool):
 	set_to_null(value==null)
 
 
-func set_kind(_kind:String):
+func set_kind(_kind:String) -> void:
 	kind = _kind
 
 
-func set_enum_values(_enum_values:Array):
+func set_enum_values(_enum_values:Array) -> void:
 	enum_values = _enum_values
 	if not self.is_inside_tree():
 		yield(self, "ready")
@@ -39,11 +39,11 @@ func set_enum_values(_enum_values:Array):
 		enum_button.add_item(ev)
 
 
-func _on_VarValueEnum_item_selected(index):
+func _on_VarValueEnum_item_selected(index:int) -> void:
 	value = enum_button.get_item_text(index)
 
 
-func set_value(_value):
+func set_value(_value) -> void:
 	value = _value
 	if not self.is_inside_tree():
 		yield(self, "ready")
@@ -59,25 +59,25 @@ func get_value():
 	return value
 
 
-func set_description(_value:String):
+func set_description(_value:String) -> void:
 	description = _value
 	if _value == "":
 		$Description.hide()
 	$Description.text = _value
 
 
-func set_key(_value:String):
+func set_key(_value:String) -> void:
 	key = _value
 	if _value == "":
 		$VarContent/VarName.hide()
 	$VarContent/VarName.text = key.capitalize()
 
 
-func _on_ButtonSetToNull_pressed():
+func _on_ButtonSetToNull_pressed() -> void:
 	set_to_null(true)
 
 
-func set_to_null(to_null:bool):
+func set_to_null(to_null:bool) -> void:
 	is_null = to_null
 	
 	if not self.is_inside_tree():
@@ -91,11 +91,11 @@ func set_to_null(to_null:bool):
 		$VarContent/ButtonSetToNull.visible = !is_null
 
 
-func set_default(_default:bool):
+func set_default(_default:bool) -> void:
 	if _default:
 		_on_ButtonAddValue_pressed()
 
 
-func _on_ButtonAddValue_pressed():
+func _on_ButtonAddValue_pressed() -> void:
 	set_to_null(false)
 	value = enum_button.get_item_text(0)
