@@ -86,6 +86,9 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 corner_detail = 1
 
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.161705, 0.119476, 0.175781, 1 )
+
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
 border_width_left = 2
@@ -105,9 +108,6 @@ shadow_offset = Vector2( 0, 6 )
 bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
-
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.161705, 0.119476, 0.175781, 1 )
 
 [node name="Main" type="Control"]
 anchor_right = 1.0
@@ -195,6 +195,80 @@ custom_styles/panel = SubResource( 17 )
 
 [node name="Config" parent="Content" instance=ExtResource( 3 )]
 visible = false
+
+[node name="MenuBar" type="CanvasLayer" parent="."]
+layer = 20
+follow_viewport_enable = true
+
+[node name="MenuContainer" type="VBoxContainer" parent="MenuBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 2 )
+
+[node name="Menu" type="PanelContainer" parent="MenuBar/MenuContainer"]
+margin_right = 1920.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 3 )
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu"]
+margin_right = 1920.0
+margin_bottom = 32.0
+custom_constants/separation = 0
+
+[node name="Spacer2" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_right = 10.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 10.0
+margin_right = 74.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 64, 32 )
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="Spacer" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 74.0
+margin_right = 1813.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="SideMenu" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 1813.0
+margin_right = 1920.0
+margin_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 103.0
+margin_bottom = 28.0
+
+[node name="ButtonConfig" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
+margin_right = 53.0
+margin_bottom = 24.0
+text = "config"
+
+[node name="ButtonDocs" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
+margin_left = 57.0
+margin_right = 99.0
+margin_bottom = 24.0
+text = "docs"
 
 [node name="Popups" type="CanvasLayer" parent="."]
 layer = 30
@@ -299,87 +373,13 @@ text = "Connect"
 
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
-[node name="MenuBar" type="CanvasLayer" parent="."]
-layer = 20
-follow_viewport_enable = true
-
-[node name="MenuContainer" type="VBoxContainer" parent="MenuBar"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-theme = ExtResource( 2 )
-
-[node name="Menu" type="PanelContainer" parent="MenuBar/MenuContainer"]
-margin_right = 1920.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 0, 30 )
-size_flags_horizontal = 3
-custom_styles/panel = SubResource( 3 )
-script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Title" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu"]
-margin_right = 1920.0
-margin_bottom = 32.0
-custom_constants/separation = 0
-
-[node name="Spacer2" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
-margin_right = 10.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 10, 0 )
-
-[node name="TextureRect" type="TextureRect" parent="MenuBar/MenuContainer/Menu/Title"]
-margin_left = 10.0
-margin_right = 74.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 64, 32 )
-texture = ExtResource( 4 )
-expand = true
-stretch_mode = 6
-
-[node name="Spacer" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
-margin_left = 74.0
-margin_right = 1813.0
-margin_bottom = 32.0
-size_flags_horizontal = 3
-
-[node name="SideMenu" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
-margin_left = 1813.0
-margin_right = 1920.0
-margin_bottom = 32.0
-grow_horizontal = 0
-grow_vertical = 0
-custom_constants/margin_right = 4
-custom_constants/margin_top = 4
-custom_constants/margin_left = 4
-custom_constants/margin_bottom = 4
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 103.0
-margin_bottom = 28.0
-
-[node name="ButtonConfig" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
-margin_right = 53.0
-margin_bottom = 24.0
-text = "config"
-
-[node name="ButtonDocs" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
-margin_left = 57.0
-margin_right = 99.0
-margin_bottom = 24.0
-text = "docs"
-
 [connection signal="reposition_active_tab_request" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_reposition_active_tab_request"]
 [connection signal="tab_changed" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_changed"]
 [connection signal="tab_close" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_close"]
 [connection signal="pressed" from="Content/Content/TerminalManager/TabsBar/NewTabButton" to="Content/Content/TerminalManager" method="_on_NewTabButton_pressed"]
 [connection signal="close_config" from="Content/Config" to="Content" method="_on_Config_close_config"]
+[connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonConfig" to="Content" method="_on_ButtonConfig_pressed"]
+[connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
-[connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonConfig" to="Content" method="_on_ButtonConfig_pressed"]
-[connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]

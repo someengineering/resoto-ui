@@ -124,6 +124,7 @@ func update_title() -> void:
 func get_value():
 	if not self.is_inside_tree():
 		yield(self, "ready")
+	
 	if is_null:
 		return null
 	else:
