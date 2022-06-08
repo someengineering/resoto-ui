@@ -38,7 +38,7 @@ func change_name(_new_name:String) -> void:
 func add_new_terminal_tab() -> void:
 	tabs.add_tab("Terminal " + str(tabs.get_tab_count()+1))
 	var new_terminal = TerminalScene.instance()
-	new_terminal.connect("RenameTerminal", self, "on_rename_terminal", [new_terminal])
+	new_terminal.connect("rename_terminal", self, "on_rename_terminal", [new_terminal])
 	terminals.append(new_terminal)
 	container.add_child(new_terminal)
 	update_size()

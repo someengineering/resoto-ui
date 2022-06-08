@@ -5,7 +5,7 @@ onready var graph = $GraphEdit
 var nodes:Dictionary = {}
 
 func _ready() -> void:
-	API.cli_execute_json("search --with-edges id=root -[0:1]->", self)
+	API.cli_execute_json("search --with-edges id=root -[0:2]->", self)
 
 
 func _on_cli_execute_json_data(data) -> void:

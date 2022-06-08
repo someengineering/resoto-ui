@@ -28,3 +28,4 @@ docs/_build/
 .coverage
 resotoshell/backup_*
 
+/webassembly_debug.zip

@@ -9,10 +9,45 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "VBoxContainer",
+"class": "ConfigComponentArray",
+"language": "GDScript",
+"path": "res://components/config/component_config_array_container.gd"
+}, {
+"base": "VBoxContainer",
+"class": "ConfigComponentComplex",
+"language": "GDScript",
+"path": "res://components/config/component_config_complex.gd"
+}, {
+"base": "VBoxContainer",
+"class": "ConfigComponentDict",
+"language": "GDScript",
+"path": "res://components/config/component_config_dict.gd"
+}, {
+"base": "Control",
+"class": "ConfigComponentEnum",
+"language": "GDScript",
+"path": "res://components/config/component_config_enum.gd"
+}, {
+"base": "Control",
+"class": "ConfigComponentSimple",
+"language": "GDScript",
+"path": "res://components/config/component_config_field.gd"
+}, {
 "base": "Node",
 "class": "JWTGenerator",
 "language": "GDScript",
 "path": "res://scripts/autoloads/jwt.gd"
+}, {
+"base": "LineEdit",
+"class": "LineEditFloat",
+"language": "GDScript",
+"path": "res://components/config/component_config_line_edit_float.gd"
+}, {
+"base": "LineEdit",
+"class": "LineEditInt",
+"language": "GDScript",
+"path": "res://components/config/component_config_line_edit_int.gd"
 }, {
 "base": "UserAgent",
 "class": "ResotoAPI",
@@ -35,7 +70,14 @@ _global_script_classes=[ {
 "path": "res://scripts/classes/utils.gd"
 } ]
 _global_script_class_icons={
+"ConfigComponentArray": "",
+"ConfigComponentComplex": "",
+"ConfigComponentDict": "",
+"ConfigComponentEnum": "",
+"ConfigComponentSimple": "",
 "JWTGenerator": "",
+"LineEditFloat": "",
+"LineEditInt": "",
 "ResotoAPI": "",
 "TerminalComponent": "",
 "UserAgent": "",
@@ -72,6 +114,11 @@ window/stretch/aspect="expand"
 [editor_plugins]
 
 enabled=PoolStringArray(  )
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=8192
+limits/debugger_stdout/max_messages_per_frame=100
 
 [physics]
 

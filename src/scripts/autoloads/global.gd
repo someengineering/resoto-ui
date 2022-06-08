@@ -1,7 +1,10 @@
 extends Node
 
+signal add_toast
+
 var popup_manager: CanvasLayer = null
 var ui_shrink: float = 1.0 setget set_ui_shrink
+
 
 const TERMINAL_COLORS: Array = [
 	Color(0,0,0,1),

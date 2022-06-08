@@ -1,9 +1,9 @@
 extends VBoxContainer
 class_name TerminalComponent
 
-signal RenameTerminal
+signal rename_terminal
 
-const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META]
+const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META, KEY_MASK_META, KEY_MASK_CMD]
 const UI_RENAME_COMMAND:String = "ui name "
 
 var terminal_active: bool = false
@@ -35,10 +35,10 @@ func _ready() -> void:
 
 
 func _input(event:InputEvent) -> void:
-	if !terminal_active or _g.popup_manager.popup_active():
+	if not is_visible_in_tree() or !terminal_active or _g.popup_manager.popup_active() or not event is InputEventKey:
 		return
 	
-	if !command.has_focus() and event is InputEventKey and event.pressed and !MODIFIER_KEYS.has(event.scancode):
+	if !command.has_focus() and event.pressed and !MODIFIER_KEYS.has(event.scancode):
 		just_grabbed_focus = true
 		yield(get_tree(), "idle_frame")
 		console.selection_enabled = false
@@ -47,28 +47,30 @@ func _input(event:InputEvent) -> void:
 		Input.parse_input_event(event)
 		return
 	
-	if !just_grabbed_focus and command.has_focus() and event is InputEventKey and event.scancode == KEY_C and event.pressed and Input.is_key_pressed(KEY_CONTROL):
+	if (!just_grabbed_focus and command.has_focus() and event.scancode == KEY_C and event.pressed
+	and (Input.is_key_pressed(KEY_META) or Input.is_key_pressed(KEY_CONTROL))):
 		if command.text == "":
 			new_line("^C")
 		else:
 			new_line(command.text, true)
 			command.text = ""
-		active_request.abort()
+		if active_request:
+			active_request.abort()
 		return
 	
 	just_grabbed_focus = false
 	
-	if command.has_focus() and (event is InputEventKey and event.scancode == KEY_UP and event.pressed):
+	if command.has_focus() and (event.scancode == KEY_UP and event.pressed):
 		command.text = last_commands[last_command_id]
 		last_command_id = wrapi(last_command_id+1, 0, last_commands.size())
 		command.set_deferred("caret_position", command.text.length())
 	
-	if command.has_focus() and (event is InputEventKey and event.scancode == KEY_DOWN and event.pressed):
+	if command.has_focus() and (event.scancode == KEY_DOWN and event.pressed):
 		command.text = last_commands[last_command_id]
 		last_command_id = wrapi(last_command_id-1, 0, last_commands.size())
 		command.set_deferred("caret_position", command.text.length())
 	
-	if command.has_focus() and (event is InputEventKey and event.scancode == KEY_TAB and event.pressed):
+	if command.has_focus() and (event.scancode == KEY_TAB and event.pressed):
 		if "se" in command.text.left(5):
 			command.text = "search "
 		command.set_deferred("caret_position", command.text.length())
@@ -110,7 +112,7 @@ func _on_CommandEdit_text_entered(_new_command:String) -> void:
 func execute_command(_command:String) -> void:
 	if _command.left(8).to_lower() == UI_RENAME_COMMAND:
 		var new_terminal_name = _command.split(UI_RENAME_COMMAND)[1]
-		emit_signal("RenameTerminal", new_terminal_name)
+		emit_signal("rename_terminal", new_terminal_name)
 		return
 	if !terminal_active:
 		return

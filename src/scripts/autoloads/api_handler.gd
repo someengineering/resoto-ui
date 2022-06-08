@@ -13,10 +13,12 @@ var use_ssl: bool		= false setget set_use_ssl
 
 
 func _ready() -> void:
+	_resoto_api.accept_json_nd_headers.Accept = "application/x-ndjson"
+	_resoto_api.accept_json_put_headers.Content_Type = "application/json"
 	_resoto_api.accept_json_headers.Accept_Encoding = "gzip" if OS.has_feature("web") else ""
 	_resoto_api.accept_text_headers.Accept_Encoding = "gzip" if OS.has_feature("web") else ""
 	_resoto_api.accept_json_headers.Resotoui_via = "Web" if OS.has_feature("web") else "Desktop"
-	_resoto_api.accept_text_headers.Resotoui_via = "Web" if OS.has_feature("web") else "Desktop"#
+	_resoto_api.accept_text_headers.Resotoui_via = "Web" if OS.has_feature("web") else "Desktop"
 	
 	Engine.get_main_loop().connect("idle_frame", self, "poll")
 
@@ -64,6 +66,27 @@ func connection_config(_adress:String = adress, _port:int = port, _psk:String = 
 func get_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_model()
 	_req_res.connect("done", _connect_to, "_on_get_model_done")
+
+
+func get_configs(_connect_to:Node):
+	_req_res = _resoto_api.get_configs()
+	_req_res.connect("done", _connect_to, "_on_get_configs_done")
+
+
+func get_config_id(_connect_to:Node, _config_id:String="resoto.core"):
+	_req_res = _resoto_api.get_config_id(_config_id)
+	_req_res.connect("done", _connect_to, "_on_get_config_id_done", [_config_id])
+
+
+func put_config_id(_connect_to:Node, _config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
+	_req_res = _resoto_api.put_config_id(_config_id, _config_body)
+	_req_res.connect("done", _connect_to, "_on_put_config_id_done")
+	return _req_res
+
+
+func get_config_model(_connect_to:Node) -> void:
+	_req_res = _resoto_api.get_config_model()
+	_req_res.connect("done", _connect_to, "_on_get_config_model_done")
 
 
 func cli_info(_connect_to:Node) -> void:

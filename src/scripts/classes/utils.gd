@@ -69,3 +69,15 @@ static func err_enum_to_string(_status_code:int) -> String:
 		"Bug error.",
 		"Printer on fire error."]
 	return _error_messages[_status_code]
+
+
+static func print_dict(_dict:Dictionary, _depth:int) -> void:
+	var _spacing = ""
+	for i in _depth:
+		_spacing += ">  "
+	for d in _dict.keys():
+		prints(_spacing, d)
+		if typeof(_dict[d]) == TYPE_DICTIONARY:
+			print_dict(_dict[d], _depth+1)
+		else:
+			prints(_spacing + ">   ", _dict[d])
