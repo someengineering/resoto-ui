@@ -16,7 +16,7 @@ border_color = Color( 0.639216, 0.54902, 0.764706, 1 )
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 61, 1, 18, 18 )
+region = Rect2( 60, 0, 20, 20 )
 
 [sub_resource type="AtlasTexture" id=16]
 flags = 4
@@ -36,12 +36,12 @@ region = Rect2( 20, 0, 20, 20 )
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 101, 1, 18, 18 )
+region = Rect2( 100, 0, 20, 20 )
 
 [sub_resource type="AtlasTexture" id=4]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 41, 1, 18, 18 )
+region = Rect2( 40, 0, 20, 20 )
 
 [sub_resource type="AtlasTexture" id=10]
 flags = 4
@@ -66,12 +66,12 @@ region = Rect2( 40, 20, 20, 20 )
 [sub_resource type="AtlasTexture" id=5]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 61, 41, 18, 18 )
+region = Rect2( 60, 40, 20, 20 )
 
 [sub_resource type="AtlasTexture" id=6]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 1, 41, 18, 18 )
+region = Rect2( 0, 40, 20, 20 )
 
 [sub_resource type="AtlasTexture" id=14]
 flags = 4
@@ -86,12 +86,12 @@ region = Rect2( 20, 40, 20, 20 )
 [sub_resource type="AtlasTexture" id=7]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 101, 41, 18, 18 )
+region = Rect2( 100, 40, 20, 20 )
 
 [sub_resource type="AtlasTexture" id=8]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 41, 41, 18, 18 )
+region = Rect2( 40, 40, 20, 20 )
 
 [node name="WidgetResizer" type="Control"]
 anchor_right = 1.0
@@ -105,12 +105,17 @@ anchor_bottom = 1.0
 [node name="MidCenter" type="Button" parent="ResizeButtons"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -5.0
+margin_top = -5.0
+margin_right = 5.0
+margin_bottom = 5.0
 mouse_default_cursor_shape = 13
 custom_styles/hover = SubResource( 17 )
 custom_styles/pressed = SubResource( 18 )
 custom_styles/focus = SubResource( 17 )
 custom_styles/normal = SubResource( 17 )
 keep_pressed_outside = true
+flat = true
 
 [node name="TopLeft" type="TextureButton" parent="ResizeButtons"]
 margin_right = 20.0
@@ -201,3 +206,5 @@ texture_normal = SubResource( 7 )
 texture_pressed = SubResource( 8 )
 
 [node name="ResizeTween" type="Tween" parent="."]
+
+[connection signal="tween_all_completed" from="ResizeTween" to="." method="_on_ResizeTween_tween_all_completed"]
