@@ -1,20 +1,19 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://components/widgets/WidgetResizer.tscn" type="PackedScene" id=1]
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=2]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
-uniform float grid_x_ratio = 10.0;
-uniform float grid_y_size = 100.0;
+uniform vec2 grid_size = vec2(100.0);
 uniform vec2 margin_size = vec2(5.0);
 uniform vec4 grid_color :  hint_color = vec4(0.14,0.14,0.2, 1.0);
+uniform vec2 dashboard_size;
 
 void fragment(){
-	vec2 grid_px_size = vec2(1.0 / SCREEN_PIXEL_SIZE.x / grid_x_ratio, grid_y_size);
+	vec2 grid_px_size = grid_size;
 	vec4 color = COLOR;
-	vec2 coord_px = mod(UV / SCREEN_PIXEL_SIZE, grid_px_size);
+	vec2 coord_px = mod(UV *dashboard_size, grid_px_size);
 	
 	if (coord_px.x > grid_px_size.x - 1.0 || coord_px.y > grid_px_size.y - 1.0){
 		COLOR = grid_color;
@@ -31,89 +30,37 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
-shader_param/grid_x_ratio = 10.0
-shader_param/grid_y_size = 100.0
+shader_param/grid_size = Vector2( 100, 100 )
 shader_param/margin_size = Vector2( 5, 5 )
 shader_param/grid_color = Color( 0.14, 0.14, 0.2, 1 )
+shader_param/dashboard_size = null
 
-[node name="Dashboard" type="Control"]
+[node name="TabContainer" type="TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="Dashboard" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+rect_clip_content = true
 script = ExtResource( 2 )
 
-[node name="Grid" type="ColorRect" parent="."]
+[node name="Grid" type="ColorRect" parent="Dashboard"]
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 1, 1, 1, 0 )
+color = Color( 0.12549, 0.0941176, 0.160784, 1 )
 
-[node name="Widgets" type="Control" parent="."]
+[node name="Widgets" type="Control" parent="Dashboard"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="ColorRect" type="ColorRect" parent="Widgets"]
-margin_left = 62.0
-margin_top = 162.0
-margin_right = 218.0
-margin_bottom = 318.0
-color = Color( 0, 0, 0, 1 )
+[node name="References" type="Control" parent="Dashboard"]
+margin_right = 40.0
+margin_bottom = 40.0
 
-[node name="WidgetResizer" parent="Widgets/ColorRect" instance=ExtResource( 1 )]
-margin_left = -5.0
-margin_top = -5.0
-margin_right = 5.0
-margin_bottom = 5.0
-
-[node name="ColorRect3" type="ColorRect" parent="Widgets"]
-margin_left = 279.0
-margin_top = 35.0
-margin_right = 456.0
-margin_bottom = 209.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="WidgetResizer" parent="Widgets/ColorRect3" instance=ExtResource( 1 )]
-margin_left = -5.0
-margin_top = -5.0
-margin_right = 5.0
-margin_bottom = 5.0
-
-[node name="ColorRect4" type="ColorRect" parent="Widgets"]
-margin_left = 270.0
-margin_top = 250.0
-margin_right = 453.0
-margin_bottom = 411.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="WidgetResizer" parent="Widgets/ColorRect4" instance=ExtResource( 1 )]
-margin_left = -5.0
-margin_top = -5.0
-margin_right = 5.0
-margin_bottom = 5.0
-
-[node name="ColorRect5" type="ColorRect" parent="Widgets"]
-margin_left = 501.0
-margin_top = 167.0
-margin_right = 684.0
-margin_bottom = 328.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="WidgetResizer" parent="Widgets/ColorRect5" instance=ExtResource( 1 )]
-margin_left = -5.0
-margin_top = -5.0
-margin_right = 5.0
-margin_bottom = 5.0
-
-[node name="ColorRect6" type="ColorRect" parent="Widgets"]
-margin_left = 270.0
-margin_top = 481.0
-margin_right = 453.0
-margin_bottom = 642.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="WidgetResizer" parent="Widgets/ColorRect6" instance=ExtResource( 1 )]
-margin_left = -5.0
-margin_top = -5.0
-margin_right = 5.0
-margin_bottom = 5.0
-
-[connection signal="resized" from="Grid" to="." method="_on_Grid_resized"]
+[connection signal="resized" from="Dashboard/Grid" to="Dashboard" method="_on_Grid_resized"]
