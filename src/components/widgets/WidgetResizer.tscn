@@ -96,6 +96,10 @@ region = Rect2( 40, 40, 20, 20 )
 [node name="WidgetResizer" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -5.0
+margin_top = -5.0
+margin_right = 5.0
+margin_bottom = 5.0
 script = ExtResource( 2 )
 
 [node name="ResizeButtons" type="Control" parent="."]
@@ -206,5 +210,3 @@ texture_normal = SubResource( 7 )
 texture_pressed = SubResource( 8 )
 
 [node name="ResizeTween" type="Tween" parent="."]
-
-[connection signal="tween_all_completed" from="ResizeTween" to="." method="_on_ResizeTween_tween_all_completed"]
