@@ -1,0 +1,131 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
+[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
+[ext_resource path="res://assets/gear.png" type="Texture" id=4]
+[ext_resource path="res://assets/lock.png" type="Texture" id=5]
+
+[sub_resource type="DynamicFont" id=3]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec2 grid_size = vec2(100.0);
+uniform vec2 margin_size = vec2(5.0);
+uniform vec4 grid_color :  hint_color = vec4(0.14,0.14,0.2, 1.0);
+uniform vec2 dashboard_size;
+
+void fragment(){
+	vec2 grid_px_size = grid_size;
+	vec4 color = COLOR;
+	vec2 coord_px = mod(UV *dashboard_size, grid_px_size);
+	
+	if (coord_px.x > grid_px_size.x - 1.0 || coord_px.y > grid_px_size.y - 1.0){
+		COLOR = grid_color;
+	}
+	if (coord_px.x > margin_size.x - 1.0 && coord_px.x < margin_size.x  || coord_px.y > margin_size.y - 1.0 && coord_px.y < margin_size.y ){
+		COLOR = grid_color;
+		COLOR.a *= 0.5;
+	}
+	if (coord_px.x > grid_px_size.x - margin_size.x - 1.0 && coord_px.x < grid_px_size.x - margin_size.x || coord_px.y > grid_px_size.y - margin_size.y - 1.0 &&  coord_px.y < grid_px_size.y - margin_size.y){
+		COLOR = grid_color;
+		COLOR.a *= 0.5;
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/grid_size = Vector2( 100, 100 )
+shader_param/margin_size = Vector2( 5, 5 )
+shader_param/grid_color = Color( 0.12549, 0.105882, 0.14902, 1 )
+shader_param/dashboard_size = null
+
+[node name="DashboardContainer" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 39.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 1915.0
+margin_bottom = 34.0
+
+[node name="DashboardNameLabel" type="Label" parent="PanelContainer/HBoxContainer"]
+margin_right = 1588.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 3 )
+text = "Dashboard 1"
+
+[node name="AddWidgetButton" type="Button" parent="PanelContainer/HBoxContainer"]
+margin_left = 1592.0
+margin_right = 1621.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 29, 29 )
+text = "+"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer"]
+margin_left = 1625.0
+margin_right = 1775.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 150, 0 )
+text = "06/13/2022"
+context_menu_enabled = false
+
+[node name="OptionButton" type="OptionButton" parent="PanelContainer/HBoxContainer"]
+margin_left = 1779.0
+margin_right = 1844.0
+margin_bottom = 29.0
+text = "15 min"
+items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hrs", null, false, 3, null, "12 hrs", null, false, 4, null, "24 hrs", null, false, 5, null ]
+selected = 0
+
+[node name="LockButton" type="Button" parent="PanelContainer/HBoxContainer"]
+margin_left = 1848.0
+margin_right = 1877.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 29, 29 )
+icon = ExtResource( 5 )
+expand_icon = true
+
+[node name="SettingsButton" type="Button" parent="PanelContainer/HBoxContainer"]
+margin_left = 1881.0
+margin_right = 1910.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 29, 29 )
+icon = ExtResource( 4 )
+expand_icon = true
+
+[node name="Dashboard" type="Control" parent="."]
+margin_top = 43.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[node name="Grid" type="ColorRect" parent="Dashboard"]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.12549, 0.0941176, 0.160784, 0 )
+
+[node name="Widgets" type="Control" parent="Dashboard"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="References" type="Control" parent="Dashboard"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[connection signal="pressed" from="PanelContainer/HBoxContainer/AddWidgetButton" to="Dashboard" method="add_widget"]
+[connection signal="resized" from="Dashboard/Grid" to="Dashboard" method="_on_Grid_resized"]

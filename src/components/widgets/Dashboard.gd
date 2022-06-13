@@ -8,24 +8,19 @@ export var y_grid_size := 100.0
 export var grid_margin := Vector2(5,5)
 
 onready var _x_grid_size := rect_size.x / x_grid_ratio
-onready var widget_resizer_scene := preload("res://components/widgets/WidgetResizer.tscn")
+onready var widget_container_scene := preload("res://components/widgets/WidgetContainer.tscn")
 
-func _input(event):
-	if event.is_action_pressed("ui_cancel"):
-		add_widget()
 
-func add_widget():
+func add_widget() -> void:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
 	var widget = ColorRect.new()
-	widget.rect_size = Vector2(256,256)
-	widgets.add_child(widget)
-	var resizer = widget_resizer_scene.instance()
+	var resizer = widget_container_scene.instance()
 	resizer.name = "WidgetResizer"
 	resizer.dashboard = self
-	widget.call_deferred("add_child", resizer)
+	widgets.call_deferred("add_child", resizer)
 	resizer.grid_size = grid_size
-	widget.rect_position = widget.rect_position.snapped(grid_size) + grid_margin
-	widget.rect_size = widget.rect_size.snapped(grid_size) - 2*grid_margin
+	resizer.rect_position = widget.rect_position.snapped(grid_size) 
+	resizer.rect_size = 2*grid_size
 	var reference = ReferenceRect.new()
 	resizer.parent_reference = reference
 	$References.add_child(reference)
@@ -41,8 +36,8 @@ func add_widget():
 	reference.visible = false
 	
 	resizer.set_anchors()
-	
-		
+
+
 func _on_Grid_resized() -> void:
 	_x_grid_size = rect_size.x / x_grid_ratio
 
@@ -51,13 +46,10 @@ func _on_Grid_resized() -> void:
 	$Grid.material.set_shader_param("grid_size", grid_size)
 	$Grid.material.set_shader_param("dashboard_size", rect_size)
 	for widget in $Widgets.get_children():
-		var widget_resizer = widget.get_node("WidgetResizer")
-		widget_resizer.grid_size.x = _x_grid_size
+		widget.grid_size.x = _x_grid_size
 		
 	yield(VisualServer, "frame_post_draw")
 	for widget in $Widgets.get_children():
-		var widget_resizer = widget.get_node("WidgetResizer")
-		widget_resizer.parent_reference.set_deferred("rect_global_position" , widget_resizer.rect_global_position)
-		widget_resizer.parent_reference.set_deferred("rect_size", widget_resizer.rect_size)
-		
+		widget.parent_reference.set_deferred("rect_global_position" , widget.rect_global_position)
+		widget.parent_reference.set_deferred("rect_size", widget.rect_size)
 
