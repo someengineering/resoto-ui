@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://components/config/component_config.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://components/config/component_config_tab.gd" type="Script" id=12]
 [ext_resource path="res://components/config/component_config_array_container.gd" type="Script" id=13]
 [ext_resource path="res://components/config/component_config_template_dict_element.tscn" type="PackedScene" id=14]
+[ext_resource path="res://components/config/component_config_customconfig.gd" type="Script" id=15]
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 10.0
@@ -224,21 +225,23 @@ custom_constants/separation = 20
 [node name="TemplateComplex" type="VBoxContainer" parent="Templates"]
 margin_top = 12.0
 margin_right = 1900.0
-margin_bottom = 82.0
+margin_bottom = 83.0
 script = ExtResource( 6 )
 
 [node name="HeaderBG" type="PanelContainer" parent="Templates/TemplateComplex"]
-margin_right = 10.0
-margin_bottom = 10.0
+margin_right = 1900.0
+margin_bottom = 37.0
 custom_styles/panel = SubResource( 8 )
 
 [node name="Header" type="VBoxContainer" parent="Templates/TemplateComplex/HeaderBG"]
-margin_right = 1900.0
-margin_bottom = 36.0
+margin_left = 4.0
+margin_top = 1.0
+margin_right = 1899.0
+margin_bottom = 37.0
 custom_constants/separation = 0
 
 [node name="Top" type="HBoxContainer" parent="Templates/TemplateComplex/HeaderBG/Header"]
-margin_right = 1900.0
+margin_right = 1895.0
 margin_bottom = 20.0
 
 [node name="Expand" type="TextureButton" parent="Templates/TemplateComplex/HeaderBG/Header/Top"]
@@ -296,7 +299,7 @@ flat = true
 [node name="Description" type="Label" parent="Templates/TemplateComplex/HeaderBG/Header"]
 modulate = Color( 1, 1, 1, 0.54902 )
 margin_top = 20.0
-margin_right = 1900.0
+margin_right = 1895.0
 margin_bottom = 36.0
 mouse_filter = 1
 custom_fonts/font = SubResource( 3 )
@@ -314,9 +317,9 @@ custom_constants/separation = 0
 
 [node name="Margin" type="PanelContainer" parent="Templates/TemplateComplex"]
 show_behind_parent = true
-margin_top = 40.0
+margin_top = 41.0
 margin_right = 1900.0
-margin_bottom = 70.0
+margin_bottom = 71.0
 custom_styles/panel = SubResource( 5 )
 
 [node name="Content" type="VBoxContainer" parent="Templates/TemplateComplex/Margin"]
@@ -327,23 +330,25 @@ margin_bottom = 10.0
 custom_constants/separation = 10
 
 [node name="TemplateElementsContainer" type="VBoxContainer" parent="Templates"]
-margin_top = 86.0
+margin_top = 87.0
 margin_right = 1900.0
-margin_bottom = 194.0
+margin_bottom = 196.0
 script = ExtResource( 13 )
 
 [node name="HeaderBG" type="PanelContainer" parent="Templates/TemplateElementsContainer"]
-margin_right = 10.0
-margin_bottom = 10.0
+margin_right = 1900.0
+margin_bottom = 37.0
 custom_styles/panel = SubResource( 8 )
 
 [node name="Header" type="VBoxContainer" parent="Templates/TemplateElementsContainer/HeaderBG"]
-margin_right = 1900.0
-margin_bottom = 36.0
+margin_left = 4.0
+margin_top = 1.0
+margin_right = 1899.0
+margin_bottom = 37.0
 custom_constants/separation = 0
 
 [node name="Top" type="HBoxContainer" parent="Templates/TemplateElementsContainer/HeaderBG/Header"]
-margin_right = 1900.0
+margin_right = 1895.0
 margin_bottom = 20.0
 
 [node name="Expand" type="TextureButton" parent="Templates/TemplateElementsContainer/HeaderBG/Header/Top"]
@@ -401,7 +406,7 @@ flat = true
 [node name="Description" type="Label" parent="Templates/TemplateElementsContainer/HeaderBG/Header"]
 modulate = Color( 1, 1, 1, 0.54902 )
 margin_top = 20.0
-margin_right = 1900.0
+margin_right = 1895.0
 margin_bottom = 36.0
 mouse_filter = 1
 custom_fonts/font = SubResource( 3 )
@@ -419,9 +424,9 @@ custom_constants/separation = 0
 
 [node name="Margin" type="PanelContainer" parent="Templates/TemplateElementsContainer"]
 show_behind_parent = true
-margin_top = 40.0
+margin_top = 41.0
 margin_right = 1900.0
-margin_bottom = 108.0
+margin_bottom = 109.0
 custom_styles/panel = SubResource( 5 )
 
 [node name="Content" type="VBoxContainer" parent="Templates/TemplateElementsContainer/Margin"]
@@ -448,15 +453,17 @@ margin_bottom = 38.0
 text = "Add element"
 
 [node name="TemplateArrayElement" parent="Templates" instance=ExtResource( 11 )]
-margin_top = 254.0
-margin_bottom = 300.0
+margin_top = 200.0
+margin_bottom = 246.0
 
 [node name="TemplateDictElement" parent="Templates" instance=ExtResource( 14 )]
+margin_top = 250.0
+margin_bottom = 296.0
 
 [node name="TemplateSimple" type="VBoxContainer" parent="Templates"]
-margin_top = 304.0
+margin_top = 300.0
 margin_right = 1900.0
-margin_bottom = 341.0
+margin_bottom = 337.0
 custom_constants/separation = 1
 script = ExtResource( 3 )
 
@@ -556,10 +563,37 @@ custom_fonts/font = SubResource( 3 )
 custom_styles/normal = SubResource( 7 )
 text = "Description"
 
-[node name="TemplateEnum" type="VBoxContainer" parent="Templates"]
-margin_top = 345.0
+[node name="TemplateCustomConfig" type="VBoxContainer" parent="Templates"]
+margin_top = 341.0
 margin_right = 1900.0
-margin_bottom = 386.0
+margin_bottom = 366.0
+size_flags_vertical = 3
+custom_constants/separation = 1
+script = ExtResource( 15 )
+
+[node name="MessageLabel" type="Label" parent="Templates/TemplateCustomConfig"]
+margin_right = 1900.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_vertical = 0
+text = "Description"
+
+[node name="CustomConfigValue" type="TextEdit" parent="Templates/TemplateCustomConfig"]
+margin_top = 21.0
+margin_right = 1900.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_vertical = 3
+text = "test"
+highlight_current_line = true
+show_line_numbers = true
+draw_tabs = true
+draw_spaces = true
+
+[node name="TemplateEnum" type="VBoxContainer" parent="Templates"]
+margin_top = 370.0
+margin_right = 1900.0
+margin_bottom = 411.0
 custom_constants/separation = 1
 script = ExtResource( 7 )
 
@@ -586,7 +620,7 @@ text = "= null"
 
 [node name="VarValueEnum" type="OptionButton" parent="Templates/TemplateEnum/VarContent"]
 margin_left = 304.0
-margin_right = 1772.0
+margin_right = 1836.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 text = "Item 0"
@@ -594,8 +628,8 @@ items = [ "Item 0", null, false, 0, null, "Item 1", null, false, 1, null, "Item 
 selected = 0
 
 [node name="ButtonSetToNull" type="Button" parent="Templates/TemplateEnum/VarContent"]
-margin_left = 1776.0
-margin_right = 1836.0
+margin_left = 1840.0
+margin_right = 1900.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 60, 0 )
 focus_mode = 0

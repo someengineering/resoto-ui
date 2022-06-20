@@ -45,6 +45,7 @@ onready var TemplateEnum = find_node("TemplateEnum")
 onready var TemplateElementsContainer = find_node("TemplateElementsContainer")
 onready var TemplateArrayElement = find_node("TemplateArrayElement")
 onready var TemplateDict = find_node("TemplateDict")
+onready var TemplateCustomConfig = find_node("TemplateCustomConfig")
 
 
 func load_config() -> void:
@@ -55,11 +56,16 @@ func _on_get_configs_done(_error, _response) -> void:
 	config_keys = _response.transformed.result
 	API.get_config_model(self)
 	yield(self, "model_ready")
+	
+	var config_key_list:String = ""
 	for ck in config_keys:
 		config_req = API.get_config_id(self, ck)
 		yield(self, "config_received")
+		config_key_list += ck + "\n"
 	
-	_g.emit_signal("add_toast", "Configs received from Resoto Core.", str(config_keys), 0)
+	config_key_list = config_key_list.trim_suffix("\n")
+	
+	_g.emit_signal("add_toast", "Configs received from Resoto Core.", config_key_list, 0)
 	build_config_pages()
 
 
@@ -109,10 +115,20 @@ func save_config() -> void:
 	var new_config:Dictionary = {}
 
 	for config_element in config_tabs[_active_tab_id].content_elements:
-		new_config[config_element.key] = config_element.value
+		if "key" in config_element:
+			new_config[config_element.key] = config_element.value
+		else:
+			new_config = config_element.value
+			
+		if "value_creation_error" in config_element:
+			if config_element.value_creation_error:
+				_g.emit_signal("add_toast", "Error saving configuration.", "", 1)
+				return
 	
 	var selected_config = config_keys[_active_tab_id]
 	var json_config = JSON.print(new_config)
+	json_config = json_config.trim_prefix("{\"\":").trim_suffix("}")
+	print(json_config)
 	config_put_req = API.put_config_id(self, selected_config, json_config)
 
 
@@ -220,10 +236,10 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			pass
 		return new_elements
 	else:
-		var error_message = str(_name) + " > " + str(kind)
-		_g.emit_signal("add_toast", "Error on config creation.", error_message, 1)
-		print("=> Error on Config creation :", error_message)
-		return
+		var error_message = "Configuration was not found in Model."
+		error_message += "\nCustom Configurations are not renderable."
+		error_message += "\n\nRaw JSON:\n"
+		return create_custom(error_message, _property_value, _parent)
 
 
 func get_kind_type(kind:String) -> String:
@@ -236,6 +252,20 @@ func get_kind_type(kind:String) -> String:
 	else:
 		return "complex"
 
+
+func create_custom(_text:String, _property_value, _parent:Control):
+	var new_custom = TemplateCustomConfig.duplicate()
+		
+	if _parent.has_meta("attach"):
+		_parent.get_meta("attach").add_child(new_custom)
+	else:
+		_parent.add_child(new_custom)
+	
+	new_custom.value = _property_value
+	new_custom.get_node("MessageLabel").text = _text
+	
+	return new_custom
+	
 
 func create_complex(_name:String, kind:String, _property_value, properties, _parent:Control, default:bool):
 	if properties == null:
@@ -489,9 +519,9 @@ func _on_SaveConfigButton_pressed() -> void:
 	save_config()
 
 
-func _on_close_configButton_pressed() -> void:
-	emit_signal("close_config")
-
-
 func _on_LoadConfigFromCoreButton_pressed() -> void:
 	load_config()
+
+
+func _on_CloseConfigButton_pressed():
+	emit_signal("close_config")
