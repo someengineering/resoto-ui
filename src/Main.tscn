@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -11,7 +11,8 @@
 [ext_resource path="res://components/terminal/component_terminal_manager.tscn" type="PackedScene" id=9]
 [ext_resource path="res://components/toast/ToastManager.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scripts/tools/browser_copy_paste_fix.gd" type="Script" id=11]
-[ext_resource path="res://graph_popup.gd" type="Script" id=12]
+[ext_resource path="res://components/popups/graph_popup.gd" type="Script" id=12]
+[ext_resource path="res://assets/gear.png" type="Texture" id=13]
 
 [sub_resource type="DynamicFontData" id=18]
 font_path = "res://assets/theme/Barlow-Light.ttf"
@@ -187,12 +188,12 @@ stretch_mode = 6
 
 [node name="Spacer" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
 margin_left = 74.0
-margin_right = 1813.0
+margin_right = 1785.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="SideMenu" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
-margin_left = 1813.0
+margin_left = 1785.0
 margin_right = 1920.0
 margin_bottom = 32.0
 grow_horizontal = 0
@@ -205,7 +206,7 @@ custom_constants/margin_bottom = 4
 [node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 103.0
+margin_right = 131.0
 margin_bottom = 28.0
 
 [node name="ButtonConfig" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
@@ -218,6 +219,21 @@ margin_left = 57.0
 margin_right = 99.0
 margin_bottom = 24.0
 text = "docs"
+
+[node name="Config" type="MenuButton" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
+margin_left = 103.0
+margin_right = 127.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+icon = ExtResource( 13 )
+expand_icon = true
+items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false, "Merge Graph", null, 0, false, false, 3, 0, null, "", false ]
+
+[node name="MenuContainer" type="VBoxContainer" parent="MenuBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 2 )
 
 [node name="Popups" type="CanvasLayer" parent="."]
 layer = 30
@@ -233,7 +249,6 @@ __meta__ = {
 }
 
 [node name="ConnectPopup" type="PopupDialog" parent="Popups"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1920.0
@@ -327,7 +342,6 @@ one_shot = true
 [node name="ConnectTimeoutTimer" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
 
 [node name="GraphPopup" type="PopupDialog" parent="Popups"]
-visible = true
 margin_top = 163.0
 margin_right = 400.0
 margin_bottom = 384.0
@@ -423,6 +437,8 @@ margin_bottom = -40.0
 mouse_filter = 2
 custom_styles/normal = SubResource( 19 )
 
+[node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
+
 [node name="MenuBar" type="CanvasLayer" parent="."]
 layer = 20
 follow_viewport_enable = true
@@ -508,6 +524,10 @@ items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup
 [node name="BrowserCopyPasteWatcher" type="Node" parent="."]
 script = ExtResource( 11 )
 
+[connection signal="reposition_active_tab_request" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_reposition_active_tab_request"]
+[connection signal="tab_changed" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_changed"]
+[connection signal="tab_close" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_close"]
+[connection signal="pressed" from="Content/Content/TerminalManager/TabsBar/NewTabButton" to="Content/Content/TerminalManager" method="_on_NewTabButton_pressed"]
 [connection signal="close_config" from="Content/Config" to="Content" method="_on_Config_close_config"]
 [connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonConfig" to="Content" method="_on_ButtonConfig_pressed"]
 [connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]
@@ -521,4 +541,3 @@ script = ExtResource( 11 )
 [connection signal="pressed" from="Popups/GraphPopup/MergeButton" to="Popups/GraphPopup" method="_on_MergeButton_pressed"]
 [connection signal="pressed" from="Popups/GraphPopup/CloseButton" to="Popups/GraphPopup" method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]
-

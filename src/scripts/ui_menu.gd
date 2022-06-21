@@ -1,6 +1,6 @@
 extends PanelContainer
 
-onready var config_menu : PopupMenu = $Title/SideMenu2/Config.get_popup()
+onready var config_menu : PopupMenu = $Title/SideMenu/HBoxContainer/Config.get_popup()
 
 func _ready() -> void:
 	config_menu.connect("id_pressed", self, "_on_config_menu_id_pressed")
