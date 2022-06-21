@@ -227,7 +227,7 @@ extra_spacing_top = -7
 extra_spacing_bottom = -5
 font_data = SubResource( 25 )
 
-[sub_resource type="StyleBoxFlat" id=22]
+[sub_resource type="StyleBoxFlat" id=33]
 content_margin_left = 15.0
 content_margin_right = 15.0
 bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
@@ -290,6 +290,17 @@ expand_margin_left = 4.0
 expand_margin_right = 4.0
 expand_margin_top = 4.0
 expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id=22]
+bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
+border_width_left = 1
+border_width_top = 4
+border_width_right = 1
+border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_detail = 1
+expand_margin_top = 2.0
 
 [sub_resource type="DynamicFontData" id=19]
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
@@ -392,7 +403,7 @@ ProgressBar/styles/fg = SubResource( 9 )
 TabContainer/colors/font_color_bg = Color( 0.686275, 0.384314, 0.945098, 1 )
 TabContainer/colors/font_color_fg = Color( 0.913725, 0.552941, 0.968627, 1 )
 TabContainer/fonts/font = SubResource( 26 )
-TabContainer/styles/panel = SubResource( 22 )
+TabContainer/styles/panel = SubResource( 33 )
 TabContainer/styles/tab_bg = SubResource( 24 )
 TabContainer/styles/tab_fg = SubResource( 23 )
 Tabs/colors/font_color_bg = Color( 0.572549, 0.415686, 0.709804, 1 )
