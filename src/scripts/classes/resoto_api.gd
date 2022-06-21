@@ -145,6 +145,7 @@ func get_model() -> ResotoAPI.Request:
 func patch_model(body : String) -> ResotoAPI.Request:
 	refresh_jwt_header(content_json_headers)
 	var request = req_patch("/model", body, content_json_headers)
+	request.connect("pre_done", self, "_transform_json")
 	return request
 
 func get_config_model() -> ResotoAPI.Request:

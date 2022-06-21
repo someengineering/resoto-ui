@@ -34,6 +34,8 @@ func _on_upload_file_done(_filename:String, data) -> void:
 	file_name_label.text = _filename
 	set_busy(false)
 	graph_data = data
+	if _filename != "":
+		_g.emit_signal("add_toast", "File Uploaded!", "Graph file was uploaded correctly!", 0)
 
 
 func _on_MergeButton_pressed() -> void:
@@ -43,7 +45,17 @@ func _on_MergeButton_pressed() -> void:
 
 
 func _on_merge_graph_done(error:int, response) -> void:
-	info_label.text = JSON.print(response.transformed["result"],"\t")
+	if error != 0:
+		_g.emit_signal("add_toast", "Failed to merge graph...", "Request failed with error " + str(error), 1)
+		info_label.text = "Failed!"
+	else:
+		if typeof(response.transformed.result) == TYPE_STRING and response.transformed.result.begins_with("Error"):
+			_g.emit_signal("add_toast", "Failed to merge graph...", "", 1)
+			info_label.text = "Failed...\n" + response.transformed.result
+		else:
+			info_label.text = JSON.print(response.transformed["result"],"\t")
+			_g.emit_signal("add_toast", "Graph Merged!", "Graph was merged correctly!", 0)
+	
 	set_busy(false)
 
 

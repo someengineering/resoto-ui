@@ -49,8 +49,13 @@ func _on_get_model_done(error:int, response) -> void:
 
 func _on_upload_file_done(_filename:String, data) -> void:
 	API.patch_model(data, self)
+	if _filename != "":
+		_g.emit_signal("add_toast", "Model Uploaded!", "Correctly uploaded model!", 0)
 
 
 func _on_patch_model_done(error:int, response) -> void:
-	print("Done patching model")
+	if typeof(response.transformed.result) == TYPE_STRING and response.transformed.result.begins_with("Error"):
+		_g.emit_signal("add_toast", "Failed to patch model...", response.transformed.result, 1)
+	else:
+		_g.emit_signal("add_toast", "Model Patched!", "Correctly patched model!", 0)
 	
