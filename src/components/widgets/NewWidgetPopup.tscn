@@ -1,10 +1,358 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/icon_tabs_increment.png" type="Texture" id=2]
+[ext_resource path="res://components/widgets/NewWidgetPopup.gd" type="Script" id=3]
+[ext_resource path="res://components/widgets/DatasourceContainer.gd" type="Script" id=4]
 
-[node name="WindowDialog" type="WindowDialog"]
+[node name="NewWidgetPopup" type="WindowDialog"]
 visible = true
-margin_right = 640.0
-margin_bottom = 517.0
+margin_right = 912.0
+margin_bottom = 656.0
 theme = ExtResource( 1 )
+popup_exclusive = true
 window_title = "Add Widget"
+script = ExtResource( 3 )
+
+[node name="WidgetOptions" type="MarginContainer" parent="."]
+anchor_right = 0.6
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = 16.0
+margin_right = -8.20001
+margin_bottom = -48.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions"]
+margin_right = 523.0
+margin_bottom = 592.0
+custom_constants/separation = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer"]
+margin_right = 523.0
+margin_bottom = 45.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/VBoxContainer"]
+margin_right = 523.0
+margin_bottom = 20.0
+text = "Widget Name"
+
+[node name="NameEdit" type="LineEdit" parent="WidgetOptions/VBoxContainer/VBoxContainer"]
+margin_top = 21.0
+margin_right = 523.0
+margin_bottom = 45.0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="WidgetOptions/VBoxContainer"]
+margin_top = 50.0
+margin_right = 523.0
+margin_bottom = 95.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/VBoxContainer2"]
+margin_right = 523.0
+margin_bottom = 20.0
+text = "Widget Type"
+
+[node name="WidgetType" type="OptionButton" parent="WidgetOptions/VBoxContainer/VBoxContainer2"]
+margin_top = 21.0
+margin_right = 523.0
+margin_bottom = 45.0
+
+[node name="HSeparator" type="HSeparator" parent="WidgetOptions/VBoxContainer"]
+margin_top = 100.0
+margin_right = 523.0
+margin_bottom = 104.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer"]
+margin_top = 109.0
+margin_right = 523.0
+margin_bottom = 133.0
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
+margin_top = 2.0
+margin_right = 93.0
+margin_bottom = 22.0
+text = "Data Sources"
+
+[node name="Button" type="Button" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
+margin_left = 499.0
+margin_right = 523.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+size_flags_horizontal = 10
+text = "+"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="WidgetOptions/VBoxContainer"]
+margin_top = 138.0
+margin_right = 523.0
+margin_bottom = 592.0
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer"]
+margin_right = 523.0
+margin_bottom = 279.0
+size_flags_horizontal = 3
+
+[node name="DatasourceContainer" type="PanelContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 523.0
+margin_bottom = 279.0
+script = ExtResource( 4 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 518.0
+margin_bottom = 274.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer"]
+margin_right = 513.0
+margin_bottom = 24.0
+
+[node name="Button" type="Button" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer"]
+margin_right = 22.0
+margin_bottom = 24.0
+toggle_mode = true
+icon = ExtResource( 2 )
+flat = true
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer"]
+margin_left = 26.0
+margin_top = 2.0
+margin_right = 120.0
+margin_bottom = 22.0
+text = "Data Source 1"
+
+[node name="Button2" type="Button" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer"]
+margin_left = 391.0
+margin_right = 454.0
+margin_bottom = 24.0
+size_flags_horizontal = 10
+text = "Custom"
+
+[node name="Button3" type="Button" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer"]
+margin_left = 458.0
+margin_right = 513.0
+margin_bottom = 24.0
+size_flags_horizontal = 0
+text = "Delete"
+
+[node name="DatasourceSettings" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 513.0
+margin_bottom = 269.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
+margin_right = 513.0
+margin_bottom = 45.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Metric"
+
+[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2"]
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
+margin_top = 49.0
+margin_right = 513.0
+margin_bottom = 94.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer3"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Function"
+
+[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer3"]
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
+margin_top = 98.0
+margin_right = 513.0
+margin_bottom = 143.0
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer"]
+margin_right = 168.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3"]
+margin_right = 168.0
+margin_bottom = 20.0
+text = "Cloud"
+
+[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3"]
+margin_top = 21.0
+margin_right = 168.0
+margin_bottom = 45.0
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer"]
+margin_left = 172.0
+margin_right = 340.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer4"]
+margin_right = 168.0
+margin_bottom = 20.0
+text = "Account"
+
+[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer4"]
+margin_top = 21.0
+margin_right = 168.0
+margin_bottom = 45.0
+
+[node name="VBoxContainer5" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer"]
+margin_left = 344.0
+margin_right = 513.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer5"]
+margin_right = 169.0
+margin_bottom = 20.0
+text = "Region"
+
+[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer5"]
+margin_top = 21.0
+margin_right = 169.0
+margin_bottom = 45.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
+margin_top = 147.0
+margin_right = 513.0
+margin_bottom = 192.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Date Offset"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer"]
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+
+[node name="SpinBox" type="SpinBox" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer/HBoxContainer"]
+margin_right = 60.0
+margin_bottom = 24.0
+
+[node name="OptionButton" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer/HBoxContainer"]
+margin_left = 64.0
+margin_right = 513.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
+margin_top = 196.0
+margin_right = 513.0
+margin_bottom = 241.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer4"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Sum by"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer4"]
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer"]
+margin_right = 513.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+scroll_vertical_enabled = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer/ScrollContainer"]
+margin_right = 24.0
+margin_bottom = 24.0
+
+[node name="Button" type="Button" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer/ScrollContainer/HBoxContainer"]
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+text = "+"
+
+[node name="WidgetPreview" type="MarginContainer" parent="."]
+anchor_left = 0.6
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.79999
+margin_top = 16.0
+margin_right = -16.0
+margin_bottom = -48.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetPreview"]
+margin_right = 341.0
+margin_bottom = 592.0
+custom_constants/separation = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WidgetPreview/VBoxContainer"]
+margin_right = 341.0
+margin_bottom = 543.0
+size_flags_vertical = 3
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="WidgetPreview/VBoxContainer/VBoxContainer"]
+margin_right = 341.0
+margin_bottom = 20.0
+text = "Widget Preview"
+
+[node name="PreviewContainer" type="PanelContainer" parent="WidgetPreview/VBoxContainer/VBoxContainer"]
+margin_top = 21.0
+margin_right = 341.0
+margin_bottom = 543.0
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="WidgetPreview/VBoxContainer"]
+margin_top = 548.0
+margin_right = 341.0
+margin_bottom = 552.0
+
+[node name="Label" type="Label" parent="WidgetPreview/VBoxContainer"]
+margin_top = 557.0
+margin_right = 341.0
+margin_bottom = 577.0
+text = "Widget Options"
+
+[node name="PanelContainer" type="PanelContainer" parent="WidgetPreview/VBoxContainer"]
+margin_top = 582.0
+margin_right = 341.0
+margin_bottom = 592.0
+
+[node name="Options" type="GridContainer" parent="WidgetPreview/VBoxContainer/PanelContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 336.0
+margin_bottom = 5.0
+columns = 2
+
+[node name="AddWidgetButton" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -104.0
+margin_top = -32.0
+margin_right = -14.0
+margin_bottom = -8.0
+text = "Add Widget"
+
+[connection signal="text_changed" from="WidgetOptions/VBoxContainer/VBoxContainer/NameEdit" to="." method="_on_NameEdit_text_changed"]
+[connection signal="item_selected" from="WidgetOptions/VBoxContainer/VBoxContainer2/WidgetType" to="." method="_on_WidgetType_item_selected"]
+[connection signal="toggled" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer/Button" to="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer" method="_on_Button_toggled"]
+[connection signal="pressed" from="AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]

@@ -22,6 +22,7 @@ var limits : Dictionary = {}
 var dashboard : Control
 
 var check_rect : Rect2
+var title : String = "" setget set_title
 
 onready var parent_reference : ReferenceRect
 onready var resize_buttons := $ResizeButtons
@@ -38,6 +39,8 @@ func _ready() -> void:
 	
 	set_process(false)
 
+func add_widget(widget):
+	$MarginContainer.add_child(widget)
 
 func _on_resize_button_released() -> void:
 	
@@ -76,7 +79,6 @@ func _on_resize_button_pressed( mode : int) -> void:
 
 
 func _process(_delta : float) -> void:
-	var global_mouse_position = get_global_mouse_position()
 	var local_mouse_position = dashboard.get_local_mouse_position()
 	var new_position : Vector2 = local_mouse_position.snapped(grid_size) 
 	
@@ -191,7 +193,7 @@ func _process(_delta : float) -> void:
 			var test_rect = parent_reference.get_rect()
 			test_rect.position = new_position
 			test_rect = test_rect.grow_individual(-1,-1,-1,-1)
-			test_rect = find_rect_intersection(test_rect)
+			test_rect = dashboard.find_rect_intersection(test_rect, [self])
 			
 			if test_rect != null:
 				return
@@ -211,7 +213,7 @@ func animate_reference_rect():
 	resize_tween.start()
 			
 func get_limits() -> Dictionary:
-	var limits := {
+	var _limits := {
 		"left" : 0,
 		"right" : dashboard.rect_size.x,
 		"top" : 0,
@@ -220,50 +222,43 @@ func get_limits() -> Dictionary:
 
 	var rect = find_next_rect(Vector2.LEFT)
 	if rect != null:
-		limits.left = rect.end.x
+		_limits.left = rect.end.x
 		
 	rect = find_next_rect(Vector2.UP)
 	if rect != null:
-		limits.top = rect.end.y
+		_limits.top = rect.end.y
 		
 	rect = find_next_rect(Vector2.RIGHT)
 	if rect != null:
-		limits.right = rect.position.x
+		_limits.right = rect.position.x
 		
 	rect = find_next_rect(Vector2.DOWN)
 	if rect != null:
-		limits.bottom = rect.position.y
-	return limits
-
-func segment_overlap(a_min,a_max,b_min,b_max):
-	return ( (a_min >= b_min and a_min <= b_max) or 
-		( a_max <= b_max and a_max >= b_min ) or (a_min <= b_min and a_max >= b_max) )
+		_limits.bottom = rect.position.y
+		
+	return _limits
 	
 func find_next_rect(direction : Vector2, N=10):
 	var rect : Rect2 = check_rect
 	direction *= grid_size
 	for i in N:
-		rect = rect.grow_individual(-direction.x if direction.x < 0 else 0,
-							-direction.y if direction.y < 0 else 0,
-							direction.x if direction.x > 0 else 0,
-							direction.y if direction.y > 0 else 0)
-		var other_rect = find_rect_intersection(rect)
+		rect = rect.grow_individual(-direction.x if direction.x < 0.0 else 0.0,
+							-direction.y if direction.y < 0.0 else 0.0,
+							direction.x if direction.x > 0.0 else 0.0,
+							direction.y if direction.y > 0.0 else 0.0)
+		var other_rect = dashboard.find_rect_intersection(rect, [self])
 		if other_rect != null:
 			return other_rect
 			
-	return null
-
-func find_rect_intersection(rect : Rect2 = parent_reference.get_global_rect()):
-	var all_widgets : Array = dashboard.widgets.get_children()
-	for widget in all_widgets:
-		if widget == self:
-			continue
-		var other_rect : Rect2 = widget.parent_reference.get_rect()
-
-		if other_rect.intersects(rect):
-			return other_rect
 	return null
 	
 
 func _on_ResizeTween_tween_all_completed():
 	limits = get_limits()
+
+func lock(locked : bool) -> void:
+	resize_buttons.visible = !locked
+
+func set_title(new_title : String) -> void:
+	title = new_title
+	$PanelContainer/Title.text = title
