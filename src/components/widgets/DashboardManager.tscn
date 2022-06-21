@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
+[ext_resource path="res://components/widgets/DashboardManager.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
 
 [node name="DashBoardManager" type="TabContainer"]
@@ -8,6 +9,7 @@ anchor_bottom = 1.0
 margin_top = 4.0
 theme = ExtResource( 2 )
 tab_align = 0
+script = ExtResource( 1 )
 
 [node name="+" type="Control" parent="."]
 anchor_right = 1.0
@@ -15,3 +17,5 @@ anchor_bottom = 1.0
 margin_left = 15.0
 margin_top = 23.0
 margin_right = -15.0
+
+[connection signal="tab_selected" from="." to="." method="_on_DashBoardManager_tab_selected"]
