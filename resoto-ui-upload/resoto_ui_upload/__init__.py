@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import glob
 import logging
 import time
@@ -45,18 +46,21 @@ def upload_ui(args: Namespace) -> None:
     local_ui_path = os.path.abspath(args.ui_path)
 
     # github_ref format:
+    # refs/pull/14/merge
     # refs/tags/v0.0.1
     # refs/heads/master
     destinations = ["edge"]
     if not None in (args.github_ref, args.github_ref_type, args.github_event_name):
         log.debug(f"GitHub ref: {args.github_ref}, type: {args.github_ref_type}, event: {args.github_event_name}")
+
         if str(args.github_event_name) == "pull_request":
-            exit("Not uploading for PRs")
-        m = re.search(r"^refs/(heads|tags)/(.+)$", str(args.github_ref))
-        if m:
-            destination = m.group(2)
-            if args.github_ref_type == "tag":
-                destinations = ["latest", destination]
+            log.info("Not uploading for PR")
+            sys.exit(0)
+
+        m = re.search(r"^refs/tags/(.+)$", str(args.github_ref))
+        if m and args.github_ref_type == "tag":
+            destination = m.group(1)
+            destinations = ["latest", destination]
 
     purge_keys = []
     for destination in destinations:
