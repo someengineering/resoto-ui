@@ -5,6 +5,7 @@ import glob
 import boto3
 import requests
 import time
+import magic
 from botocore.client import BaseClient
 from functools import lru_cache
 from argparse import Namespace
@@ -42,8 +43,9 @@ def upload_ui(args: Namespace) -> None:
                 continue
             basename = filename[len(local_ui_path) + 1 :]
             key_name = f"{args.spaces_path}{destination}/{basename}"
-            log.debug(f"Uploading {filename} to {key_name}")
-            upload_file(client, filename, key_name, args.spaces_name)
+            content_type = content_type(filename)
+            log.debug(f"Uploading {filename} to {key_name}, type: {content_type}")
+            upload_file(client, filename=filename, key=key_name, spaces_name=args.spaces_name, content_type=content_type)
             purge_keys.append(key_name)
     purge_cdn(purge_keys, args.api_token, args.spaces_name, args.spaces_region)
 
@@ -59,9 +61,13 @@ def s3_client(region: str, key: str, secret: str) -> BaseClient:
     )
 
 
-def upload_file(client: BaseClient, filename: str, key: str, spaces_name: str, acl: str = "public-read") -> None:
+def upload_file(client: BaseClient, filename: str, key: str, spaces_name: str, acl: str = "public-read", content_type: str = "binary/octet-stream") -> None:
     with open(filename, "rb") as f:
-        client.upload_fileobj(f, spaces_name, key, ExtraArgs={"ACL": acl})
+        client.upload_fileobj(f, spaces_name, key, ExtraArgs={"ACL": acl, "ContentType": content_type})
+
+
+def content_type(filename: str) -> str:
+    return magic.from_file(filename, mime=True)
 
 
 def purge_cdn(files: list, api_token: str, spaces_name: str, region: str) -> None:
