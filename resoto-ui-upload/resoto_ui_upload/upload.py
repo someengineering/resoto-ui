@@ -5,6 +5,7 @@ import glob
 import boto3
 import requests
 import time
+import mimetypes
 import magic
 from botocore.client import BaseClient
 from functools import lru_cache
@@ -12,6 +13,8 @@ from argparse import Namespace
 from typing import Optional
 from . import log
 
+
+mimetypes.init()
 mime = magic.Magic(mime=True)
 
 
@@ -77,7 +80,9 @@ def upload_file(
 
 @lru_cache
 def content_type(filename: str, ttl_hash: Optional[int] = None) -> str:
-    ctype = mime.from_file(filename)
+    ctype = mimetypes.guess_type(filename)[0]
+    if ctype is None:
+        ctype = mime.from_file(filename)
     if ctype in ("inode/x-empty"):
         ctype = "binary/octet-stream"
     return ctype
