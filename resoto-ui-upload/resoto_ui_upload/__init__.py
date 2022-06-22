@@ -2,12 +2,16 @@ import os
 import glob
 import logging
 import time
-import boto3
-import requests
 from functools import lru_cache
-from botocore.client import BaseClient
 from argparse import ArgumentParser, Namespace
-from typing import Optional
+from typing import Optional, Any
+
+try:
+    import boto3
+    import requests
+    from botocore.client import BaseClient
+except ImportError:
+    BaseClient = Any
 
 """
 Resoto UI upload

@@ -79,7 +79,15 @@ jobs:
                     push: ${{ github.event_name != 'pull_request' }}
                     build-args: |
                         SOURCE_COMMIT=${{ github.sha }}
+                        GITHUB_REF=${{ github.ref }}
+                        GITHUB_REF_TYPE=${{ github.ref_type }}
                         TESTS=false
+                        RESOTO_UI_DO_API_TOKEN=${{ secrets.RESOTO_UI_DO_API_TOKEN }}
+                        RESOTO_UI_SPACES_KEY=${{ secrets.RESOTO_UI_SPACES_KEY }}
+                        RESOTO_UI_SPACES_SECRET=${{ secrets.RESOTO_UI_SPACES_SECRET }}
+                        RESOTO_UI_SPACES_NAME=${{ secrets.RESOTO_UI_SPACES_NAME }}
+                        RESOTO_UI_SPACES_PATH=${{ secrets.RESOTO_UI_SPACES_PATH }}
+                        RESOTO_UI_SPACES_REGION=${{ secrets.RESOTO_UI_SPACES_REGION }}
                     tags: ${{ steps.meta.outputs.tags }}
                     labels: ${{ steps.meta.outputs.labels }}
                     cache-from: type=local,src=/tmp/.buildx-cache

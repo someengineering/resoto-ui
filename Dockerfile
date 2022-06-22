@@ -3,8 +3,23 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG TESTS
 ARG SOURCE_COMMIT
 ARG GODOT_VERSION=3.4.2
+ARG GITHUB_REF
+ARG GITHUB_REF_TYPE
 ARG CRYPTO_EXPORT_TEMPLATES_DEBUG_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.1/webassembly_debug.zip
 ARG CRYPTO_EXPORT_TEMPLATES_RELEASE_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.1/webassembly_release.zip
+ARG RESOTO_UI_DO_API_TOKEN
+ARG RESOTO_UI_SPACES_KEY
+ARG RESOTO_UI_SPACES_SECRET
+ARG RESOTO_UI_SPACES_NAME
+ARG RESOTO_UI_SPACES_REGION
+ARG RESOTO_UI_SPACES_PATH
+ENV API_TOKEN=$RESOTO_UI_DO_API_TOKEN
+ENV SPACES_KEY=$RESOTO_UI_SPACES_KEY
+ENV SPACES_SECRET=$RESOTO_UI_SPACES_SECRET
+ENV SPACES_NAME=$RESOTO_UI_SPACES_NAME
+ENV SPACES_REGION=$RESOTO_UI_SPACES_REGION
+ENV SPACES_PATH=$RESOTO_UI_SPACES_PATH
+ENV UI_PATH=/usr/local/resoto/ui
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # Install Build dependencies
@@ -13,7 +28,14 @@ RUN apt-get -y dist-upgrade
 RUN apt-get -y install apt-utils
 RUN apt-get -y install \
         curl \
-        unzip
+        unzip \
+        python3 \
+        python3-pip
+
+# Install Resoto UI uploader
+COPY resoto-ui-upload /build/resoto-ui-upload
+WORKDIR /build/resoto-ui-upload
+RUN pip install .
 
 # Download and install Godot
 WORKDIR /build/godot
@@ -32,6 +54,9 @@ RUN mv -f /tmp/webassembly_release.zip /root/.local/share/godot/templates/${GODO
 WORKDIR /usr/local/resoto/ui
 COPY src /usr/src/ui
 RUN /build/godot/Godot_v${GODOT_VERSION}-stable_linux_headless.64 --path /usr/src/ui --export HTML5 /usr/local/resoto/ui/index.html
+
+# Upload resotoui
+RUN if [ -n "$SPACES_NAME" ]; then resoto-ui-upload; else echo "No spaces name specified"; fi
 
 RUN echo "${SOURCE_COMMIT:-unknown}" > /usr/local/etc/git-commit.HEAD
 
