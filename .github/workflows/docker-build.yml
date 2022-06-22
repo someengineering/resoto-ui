@@ -81,6 +81,7 @@ jobs:
                         SOURCE_COMMIT=${{ github.sha }}
                         GITHUB_REF=${{ github.ref }}
                         GITHUB_REF_TYPE=${{ github.ref_type }}
+                        GITHUB_EVENT_NAME=${{ github.event_name }}
                         TESTS=false
                         RESOTO_UI_DO_API_TOKEN=${{ secrets.RESOTO_UI_DO_API_TOKEN }}
                         RESOTO_UI_SPACES_KEY=${{ secrets.RESOTO_UI_SPACES_KEY }}
