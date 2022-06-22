@@ -12,6 +12,8 @@ from argparse import Namespace
 from typing import Optional
 from . import log
 
+mime = magic.Magic(mime=True)
+
 
 def upload_ui(args: Namespace) -> None:
     """Upload the Resoto UI to the CDN."""
@@ -43,9 +45,9 @@ def upload_ui(args: Namespace) -> None:
                 continue
             basename = filename[len(local_ui_path) + 1 :]
             key_name = f"{args.spaces_path}{destination}/{basename}"
-            content_type = content_type(filename)
-            log.debug(f"Uploading {filename} to {key_name}, type: {content_type}")
-            upload_file(client, filename=filename, key=key_name, spaces_name=args.spaces_name, content_type=content_type)
+            ctype = content_type(filename, ttl_hash=ttl_hash())
+            log.debug(f"Uploading {filename} to {key_name}, type: {ctype}")
+            upload_file(client, filename=filename, key=key_name, spaces_name=args.spaces_name, ctype=ctype)
             purge_keys.append(key_name)
     purge_cdn(purge_keys, args.api_token, args.spaces_name, args.spaces_region)
 
@@ -61,13 +63,24 @@ def s3_client(region: str, key: str, secret: str) -> BaseClient:
     )
 
 
-def upload_file(client: BaseClient, filename: str, key: str, spaces_name: str, acl: str = "public-read", content_type: str = "binary/octet-stream") -> None:
+def upload_file(
+    client: BaseClient,
+    filename: str,
+    key: str,
+    spaces_name: str,
+    acl: str = "public-read",
+    ctype: str = "binary/octet-stream",
+) -> None:
     with open(filename, "rb") as f:
-        client.upload_fileobj(f, spaces_name, key, ExtraArgs={"ACL": acl, "ContentType": content_type})
+        client.upload_fileobj(f, spaces_name, key, ExtraArgs={"ACL": acl, "ContentType": ctype})
 
 
-def content_type(filename: str) -> str:
-    return magic.from_file(filename, mime=True)
+@lru_cache
+def content_type(filename: str, ttl_hash: Optional[int] = None) -> str:
+    ctype = mime.from_file(filename)
+    if ctype in ("inode/x-empty"):
+        ctype = "binary/octet-stream"
+    return ctype
 
 
 def purge_cdn(files: list, api_token: str, spaces_name: str, region: str) -> None:

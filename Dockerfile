@@ -34,7 +34,8 @@ RUN apt-get -y install \
         curl \
         unzip \
         python3 \
-        python3-pip
+        python3-pip \
+        libmagic1
 
 # Install Resoto UI uploader
 COPY resoto-ui-upload /build/resoto-ui-upload
