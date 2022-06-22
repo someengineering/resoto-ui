@@ -4,9 +4,9 @@ from . import (
     log,
     get_arg_parser,
     add_args,
-    upload_ui,
     verify_args,
 )
+from .upload import upload_ui
 
 
 def main() -> None:
