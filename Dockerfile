@@ -13,6 +13,8 @@ ARG RESOTO_UI_SPACES_SECRET
 ARG RESOTO_UI_SPACES_NAME
 ARG RESOTO_UI_SPACES_REGION
 ARG RESOTO_UI_SPACES_PATH
+ENV GITHUB_REF=$GITHUB_REF
+ENV GITHUB_REF_TYPE=$GITHUB_REF_TYPE
 ENV API_TOKEN=$RESOTO_UI_DO_API_TOKEN
 ENV SPACES_KEY=$RESOTO_UI_SPACES_KEY
 ENV SPACES_SECRET=$RESOTO_UI_SPACES_SECRET
@@ -56,7 +58,7 @@ COPY src /usr/src/ui
 RUN /build/godot/Godot_v${GODOT_VERSION}-stable_linux_headless.64 --path /usr/src/ui --export HTML5 /usr/local/resoto/ui/index.html
 
 # Upload resotoui
-RUN if [ -n "$SPACES_NAME" ]; then resoto-ui-upload; else echo "No spaces name specified"; fi
+RUN if [ -n "$SPACES_NAME" ]; then resoto-ui-upload --verbose; fi
 
 RUN echo "${SOURCE_COMMIT:-unknown}" > /usr/local/etc/git-commit.HEAD
 

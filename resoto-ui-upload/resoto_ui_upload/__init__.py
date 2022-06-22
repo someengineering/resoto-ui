@@ -1,4 +1,5 @@
 import os
+import re
 import glob
 import logging
 import time
@@ -43,14 +44,27 @@ def upload_ui(args: Namespace) -> None:
     client = s3_client(args.spaces_region, args.spaces_key, args.spaces_secret)
     local_ui_path = os.path.abspath(args.ui_path)
 
+    # github_ref format:
+    # refs/tags/v0.0.1
+    # refs/heads/master
+    destinations = ["edge"]
+    if not None in (args.github_ref, args.github_ref_type):
+        m = re.search(r"^refs/(heads|tags)/(.+)$", str(args.github_ref))
+        if m:
+            destination = m.group(2)
+            if args.github_ref_type == "tag":
+                destinations = ["latest", destination]
+
     purge_keys = []
-    for filename in glob.iglob(local_ui_path + "**/**", recursive=True):
-        if not os.path.isfile(filename):
-            continue
-        key_name = args.spaces_path + filename[len(local_ui_path) + 1 :]
-        log.debug(f"Uploading {filename} to {key_name}")
-        upload_file(client, filename, key_name, args.spaces_name)
-        purge_keys.append(key_name)
+    for destination in destinations:
+        for filename in glob.iglob(local_ui_path + "**/**", recursive=True):
+            if not os.path.isfile(filename):
+                continue
+            basename = filename[len(local_ui_path) + 1 :]
+            key_name = f"{args.spaces_path}{destination}/{basename}"
+            log.debug(f"Uploading {filename} to {key_name}")
+            upload_file(client, filename, key_name, args.spaces_name)
+            purge_keys.append(key_name)
     purge_cdn(purge_keys, args.api_token, args.spaces_name, args.spaces_region)
 
 
@@ -169,6 +183,18 @@ def add_args(arg_parser: ArgumentParser) -> None:
         help="DigitalOcean Spaces UI path - path where the UI is stored",
         dest="spaces_path",
         default=os.getenv("SPACES_PATH", None),
+    )
+    arg_parser.add_argument(
+        "--github-ref",
+        help="Github Ref",
+        dest="github_ref",
+        default=os.getenv("GITHUB_REF", None),
+    )
+    arg_parser.add_argument(
+        "--github-ref-type",
+        help="Github Ref Type",
+        dest="github_ref_type",
+        default=os.getenv("GITHUB_REF_TYPE", None),
     )
 
 
