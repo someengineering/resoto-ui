@@ -49,6 +49,7 @@ def upload_ui(args: Namespace) -> None:
     # refs/heads/master
     destinations = ["edge"]
     if not None in (args.github_ref, args.github_ref_type):
+        log.debug(f"github ref: {args.github_ref}, type: {args.github_ref_type}")
         m = re.search(r"^refs/(heads|tags)/(.+)$", str(args.github_ref))
         if m:
             destination = m.group(2)
