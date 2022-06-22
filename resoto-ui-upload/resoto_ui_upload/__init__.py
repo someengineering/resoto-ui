@@ -1,8 +1,13 @@
 import os
-import logging
-import boto3
 import glob
+import logging
+import time
+import boto3
+import requests
+from functools import lru_cache
+from botocore.client import BaseClient
 from argparse import ArgumentParser, Namespace
+from typing import Optional
 
 """
 Resoto UI upload
@@ -31,28 +36,78 @@ log.setLevel(logging.INFO)
 def upload_ui(args: Namespace) -> None:
     """Upload the Resoto UI to the CDN."""
     log.info("Uploading Resoto UI to the CDN")
-    session = boto3.session.Session()
-    client = session.client(
-        "s3",
-        region_name=args.spaces_region,
-        endpoint_url=f"https://{args.spaces_region}.digitaloceanspaces.com",
-        aws_access_key_id=args.spaces_key,
-        aws_secret_access_key=args.spaces_secret,
-    )
+    client = s3_client(args.spaces_region, args.spaces_key, args.spaces_secret)
     local_ui_path = os.path.abspath(args.ui_path)
+
+    purge_keys = []
     for filename in glob.iglob(local_ui_path + "**/**", recursive=True):
         if not os.path.isfile(filename):
             continue
         key_name = args.spaces_path + filename[len(local_ui_path) + 1 :]
         log.debug(f"Uploading {filename} to {key_name}")
         upload_file(client, filename, key_name, args.spaces_name)
+        purge_keys.append(key_name)
+    purge_cdn(purge_keys, args.api_token, args.spaces_name, args.spaces_region)
 
 
-def upload_file(
-    client: "botocore.client.S3", filename: str, key: str, spaces_name: str, acl: str = "public-read"
-) -> None:
+def s3_client(region: str, key: str, secret: str) -> BaseClient:
+    session = boto3.session.Session()
+    return session.client(
+        "s3",
+        region_name=region,
+        endpoint_url=f"https://{region}.digitaloceanspaces.com",
+        aws_access_key_id=key,
+        aws_secret_access_key=secret,
+    )
+
+
+def upload_file(client: BaseClient, filename: str, key: str, spaces_name: str, acl: str = "public-read") -> None:
     with open(filename, "rb") as f:
         client.upload_fileobj(f, spaces_name, key, ExtraArgs={"ACL": acl})
+
+
+def purge_cdn(files: list, api_token: str, spaces_name: str, region: str) -> None:
+    """Purge the CDN cache for the given files."""
+    endpoints = cdn_endpoints(api_token, ttl_hash=ttl_hash())
+    log.info(f"Purging CDN cache for {len(files)} files")
+    endpoint_key = f"{spaces_name}.{region}.digitaloceanspaces.com"
+    if endpoint_key not in endpoints:
+        raise RuntimeError(f"No CDN endpoint for {endpoint_key}")
+    endpoint_id = endpoints[endpoint_key]
+    headers = {"Authorization": f"Bearer {api_token}", "Content-Type": "application/json"}
+    data = {"files": files}
+    response = requests.delete(
+        f"https://api.digitalocean.com/v2/cdn/endpoints/{endpoint_id}/cache", json=data, headers=headers
+    )
+    if response.status_code != 204:
+        raise RuntimeError(f"failed to purge CDN cache: {response.status_code} {response.text}")
+
+
+@lru_cache(maxsize=1)
+def cdn_endpoints(api_token: str, ttl_hash: Optional[int] = None) -> dict:
+    """Get the CDN endpoint from the DigitalOcean API."""
+    log.debug("Getting all CDN endpoints from the DigitalOcean API")
+    headers = {"Authorization": f"Bearer {api_token}", "Content-Type": "application/json"}
+
+    endpoints = {}
+    next_uri = "https://api.digitalocean.com/v2/cdn/endpoints?per_page=200"
+    while True:
+        response = requests.get(next_uri, headers=headers)
+        if response.status_code != 200:
+            raise RuntimeError(f"failed to get CDN endpoint: {response.text}")
+        data = response.json()
+        if not "endpoints" in data:
+            raise ValueError(f"no CDN endpoint in response: {response.text}")
+        for endpoint in data["endpoints"]:
+            endpoints[endpoint["origin"]] = endpoint["id"]
+        if data.get("links", {}).get("pages", {}).get("next", None) is None:
+            break
+        next_uri = data["links"]["pages"]["next"]
+    return endpoints
+
+
+def ttl_hash(ttl: int = 3600) -> int:
+    return round(time.time() / ttl)
 
 
 def get_arg_parser() -> ArgumentParser:
@@ -111,3 +166,22 @@ def add_args(arg_parser: ArgumentParser) -> None:
         dest="spaces_path",
         default=os.getenv("SPACES_PATH", None),
     )
+
+
+def verify_args(args: Namespace) -> None:
+    if None in (
+        args.api_token,
+        args.spaces_key,
+        args.spaces_secret,
+        args.spaces_name,
+        args.spaces_path,
+        args.ui_path,
+        args.spaces_region,
+    ):
+        raise ValueError("missing required argument")
+    if not str(args.spaces_path).endswith("/"):
+        raise ValueError(f"spaces path {args.spaces_path} must end with a slash")
+    if str(args.spaces_path).startswith("/"):
+        raise ValueError(f"spaces path {args.spaces_path} must not start with a slash")
+    if not os.path.isdir(args.ui_path):
+        raise ValueError(f"UI path {args.ui_path} does not exist")
