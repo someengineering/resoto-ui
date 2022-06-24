@@ -2,6 +2,7 @@ extends PanelContainer
 
 onready var config_menu : PopupMenu = $Title/SideMenu/HBoxContainer/Config.get_popup()
 
+
 func _ready() -> void:
 	config_menu.connect("id_pressed", self, "_on_config_menu_id_pressed")
 
@@ -35,13 +36,12 @@ func _on_ButtonDocs_pressed() -> void:
 func _on_config_menu_id_pressed(id : int) -> void:
 	match id:
 		0:
-			pass
-		1:
 			API.get_model(self)
-		2:
+		1:
 			HtmlFiles.upload_file(self)
-		3:
+		2:
 			_g.popup_manager.open_popup("GraphPopup")
+
 
 func _on_get_model_done(error:int, response) -> void:
 	JavaScript.download_buffer(response.body,"model.json")
@@ -59,3 +59,4 @@ func _on_patch_model_done(error:int, response) -> void:
 	else:
 		_g.emit_signal("add_toast", "Model Patched!", "Correctly patched model!", 0)
 	
+

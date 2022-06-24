@@ -7,6 +7,11 @@ onready var load_button : Button = $GridContainer/HBoxContainer/LoadButton
 onready var info_label : RichTextLabel = $Information
 
 var graph_data
+var graph_query_limit = 10000
+var graph_query_count = 0
+var graph_jsons_recieved = 0
+
+var aux_file : File
 
 func _on_GraphPopup_about_to_show() -> void:
 	API.get_graph(self)
@@ -66,3 +71,32 @@ func set_busy(busy:bool):
 	merge_button.disabled = busy
 	load_button.disabled = busy
 	graph_option.disabled = busy
+
+
+func _on_BackupButton_pressed():
+	API.cli_execute("search --with-edges id=root -[0:]-> | count", self)
+	aux_file = File.new()
+	aux_file.open("./graph.ndjson", File.WRITE_READ)
+
+
+func _on_cli_execute_done(error:int, response):
+	print(response.transformed.result.split("\n")[0].replace("total matched: ", ""))
+	API.cli_execute_json("search --with-edges id=root -[0:]-> limit %d" % graph_query_limit, self, false)
+	
+
+func _on_cli_execute_json_data(data):
+	graph_jsons_recieved += data.size()
+	aux_file.store_line(JSON.print(data))
+	
+func _on_cli_execute_json_done(error:int, response):
+	if "result" in response.transformed and response.transformed.result.size() > 0:
+		print(graph_jsons_recieved)
+		graph_query_count += graph_query_limit
+		API.cli_execute_json("search --with-edges id=root -[0:]-> limit %d, %d" % [graph_query_count, graph_query_limit], self, false)
+	else:
+		aux_file.close()
+		print("finished")
+
+func _on_get_full_graph_done(error:int, response):
+	print(response.transformed.size())
+	print(response.transformed)

@@ -102,6 +102,11 @@ func merge_graph(graph_root:String, body:String, _connect_to:Node) -> void:
 	_req_res.connect("done", _connect_to, "_on_merge_graph_done")
 
 
+func get_full_graph(graph_root:String, _connect_to:Node) -> void:
+	_req_res = _resoto_api.get_full_graph(graph_root, "is(graph_root) -[0:]->")
+	_req_res.connect("done", _connect_to, "_on_get_full_graph_done")
+
+
 func cli_info(_connect_to:Node) -> ResotoAPI.Request:
 	_req_res = _resoto_api.get_cli_info()
 	_req_res.connect("done", _connect_to, "_on_cli_info_done")
@@ -121,8 +126,9 @@ func cli_execute_streamed(_command:String, _connect_to:Node) -> ResotoAPI.Reques
 	return _req_res
 
 
-func cli_execute_json(_command:String, _connect_to:Node) -> ResotoAPI.Request:
+func cli_execute_json(_command:String, _connect_to:Node, ensamble_chunks : bool = true) -> ResotoAPI.Request:
 	_req_res = _resoto_api.post_cli_execute_nd_chunks(_command, graph_id)
+	_req_res.ensamble_chunks = ensamble_chunks
 	_req_res.connect("data", _connect_to, "_on_cli_execute_json_data")
 	_req_res.connect("done", _connect_to, "_on_cli_execute_json_done")
 	return _req_res

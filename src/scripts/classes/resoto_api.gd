@@ -56,12 +56,20 @@ func _transform_json(error:int, response:ResotoAPI.Response) -> void:
 
 
 func _transform_nd_json(_chunk:PoolByteArray, response:ResotoAPI.Response, request:ResotoAPI.Request) -> void:
-	var parsed_chunk:Chunk = parse_chunk(_chunk)
+	var full_chunk : PoolByteArray = []
+	full_chunk = response.chunk_reminder
+	full_chunk.append_array(_chunk)
+	
+	var parsed_chunk:Chunk = parse_chunk(full_chunk)
 	if parsed_chunk.error == 0:
 		if response.transformed.has("result"):
-			response.transformed["result"].append(parsed_chunk.result)
+			response.transformed["result"].append_array(parsed_chunk.result)
 		else:
-			response.transformed["result"] = [parsed_chunk.result]
+			response.transformed["result"] = parsed_chunk.result
+	
+	response.chunk_reminder = parsed_chunk.reminder
+		
+	if parsed_chunk.result.size() > 0:
 		request.emit_signal("data", parsed_chunk.result)
 
 
@@ -76,28 +84,38 @@ func _transform_string(error:int, response:ResotoAPI.Response) -> void:
 
 class Chunk:
 	var error: int
-	var result: Dictionary
+	var result: Array
+	var reminder: PoolByteArray = []
 
 
 static func parse_chunk( _chunk:PoolByteArray ) -> Chunk:
 	var resulting_chunk = Chunk.new()
+	resulting_chunk.result = []
+	resulting_chunk.reminder = []
 	var chunk:String = _chunk.get_string_from_ascii()
-	if ["", "[", "\n]", ",\n"].has(chunk) or chunk.begins_with("Error:"):
+	if ["", "[", "]\n", "[\n", "\n]", ",\n"].has(chunk) or chunk.begins_with("Error:"):
 		if chunk.begins_with("Error:"):
 			resulting_chunk.error = FAILED
 		resulting_chunk.error = ERR_SKIP
+		return resulting_chunk
 	
 	var splitted_chunk = chunk.split("\n", false)
 	
 	if splitted_chunk.empty():
 		resulting_chunk.error = ERR_SKIP
+		
+	if not chunk.ends_with("\n"):
+		resulting_chunk.reminder = splitted_chunk[splitted_chunk.size()-1].to_ascii()
+		splitted_chunk.remove(splitted_chunk.size()-1)
 	
 	for element in splitted_chunk:
+		if ["", "[", "]", ","].has(element):
+			continue
 		var parse_result : JSONParseResult = JSON.parse( element )
 		if parse_result.error == OK:
 			if typeof(parse_result.result) == TYPE_DICTIONARY:
 				resulting_chunk.error = OK
-				resulting_chunk.result = parse_result.result
+				resulting_chunk.result.append(parse_result.result)
 		else:
 			resulting_chunk.error = FAILED
 			
@@ -176,7 +194,6 @@ func get_graph() -> ResotoAPI.Request:
 	request.connect("pre_done", self, "_transform_json")
 	return request
 
-
 func put_config_id(_config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
 	refresh_jwt_header(config_put_headers)
 	var config_id = "/config/" + _config_id
@@ -189,6 +206,15 @@ func merge_graph(graph_root:String, body:String) -> ResotoAPI.Request:
 	refresh_jwt_header(content_ndjson_headers)
 	var request = req_post("/graph/%s/merge" % graph_root, body, content_ndjson_headers)
 	request.connect("pre_done", self, "_transform_json")
+	return request
+	
+func get_full_graph(graph_root:String, body:String) -> ResotoAPI.Request:
+	var headers = Headers.new()
+	headers.Accept = "Application/x-ndjson"
+	headers.Content_Type = "text/plain"
+	refresh_jwt_header(content_ndjson_headers)
+	var request = req_post("/graph/%s/search/graph" % graph_root, body, content_ndjson_headers)
+	
 	return request
 
 

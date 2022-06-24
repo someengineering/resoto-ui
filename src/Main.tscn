@@ -227,7 +227,7 @@ margin_bottom = 24.0
 rect_min_size = Vector2( 24, 24 )
 icon = ExtResource( 13 )
 expand_icon = true
-items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false, "Merge Graph", null, 0, false, false, 3, 0, null, "", false ]
+items = [ "Backup Model", null, 0, false, false, 0, 0, null, "", false, "Restore Model", null, 0, false, false, 1, 0, null, "", false, "Graph", null, 0, false, false, 2, 0, null, "", false ]
 
 [node name="MenuContainer" type="VBoxContainer" parent="MenuBar"]
 anchor_right = 1.0
@@ -342,6 +342,7 @@ one_shot = true
 [node name="ConnectTimeoutTimer" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
 
 [node name="GraphPopup" type="PopupDialog" parent="Popups"]
+visible = true
 margin_top = 163.0
 margin_right = 400.0
 margin_bottom = 384.0
@@ -355,7 +356,7 @@ anchor_right = 1.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 100, 0 )
 custom_styles/normal = SubResource( 8 )
-text = "Merge Graph"
+text = "Graph"
 align = 1
 
 [node name="GridContainer" type="GridContainer" parent="Popups/GraphPopup"]
@@ -416,7 +417,18 @@ margin_top = -32.0
 margin_right = -16.0
 margin_bottom = -8.0
 disabled = true
-text = "Merge Graph"
+text = "Restore Graph"
+
+[node name="BackupButton" type="Button" parent="Popups/GraphPopup"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -248.0
+margin_top = -32.0
+margin_right = -136.0
+margin_bottom = -8.0
+text = "Backup Graph"
 
 [node name="CloseButton" type="Button" parent="Popups/GraphPopup"]
 anchor_top = 1.0
@@ -539,5 +551,6 @@ script = ExtResource( 11 )
 [connection signal="about_to_show" from="Popups/GraphPopup" to="Popups/GraphPopup" method="_on_GraphPopup_about_to_show"]
 [connection signal="pressed" from="Popups/GraphPopup/GridContainer/HBoxContainer/LoadButton" to="Popups/GraphPopup" method="_on_LoadButton_pressed"]
 [connection signal="pressed" from="Popups/GraphPopup/MergeButton" to="Popups/GraphPopup" method="_on_MergeButton_pressed"]
+[connection signal="pressed" from="Popups/GraphPopup/BackupButton" to="Popups/GraphPopup" method="_on_BackupButton_pressed"]
 [connection signal="pressed" from="Popups/GraphPopup/CloseButton" to="Popups/GraphPopup" method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]
