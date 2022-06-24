@@ -88,7 +88,7 @@ class Request:
 						state_ = states.DONE
 				elif http_status == HTTPClient.STATUS_CONNECTED:
 					state_ = states.CONNECTED
-		
+			
 			states.CONNECTED:
 				var err = http_.request(method, path, headers, body)
 				if err != OK:
@@ -103,7 +103,7 @@ class Request:
 						return
 				elif http_status == HTTPClient.STATUS_BODY:
 					state_ = states.RECEIVE
-	
+			
 			states.RECEIVE:
 				if http_status != HTTPClient.STATUS_BODY and http_status != HTTPClient.STATUS_CONNECTED:
 					emit_signal("done", -1, null)
@@ -116,12 +116,12 @@ class Request:
 					emit_signal("done", -1, null)
 					state_ = states.DONE
 				else:
-					response_              = Response.new()
-					response_.status_code  = http_status
-					response_.headers      = http_.get_response_headers_as_dictionary()
-					response_.body = PoolByteArray()
-					state_ = states.RESPONSE
-
+					response_				= Response.new()
+					response_.status_code	= http_status
+					response_.headers		= http_.get_response_headers_as_dictionary()
+					response_.body			= PoolByteArray()
+					state_					= states.RESPONSE
+			
 			states.RESPONSE:
 				for i in 100:
 					if http_.get_status() == HTTPClient.STATUS_BODY:
@@ -135,7 +135,7 @@ class Request:
 					else:
 						state_ = states.RESPONSE_READY
 						break
-						
+			
 			states.RESPONSE_READY:
 				emit_signal("pre_done", OK, response_)
 				emit_signal("done", OK, response_)
@@ -151,7 +151,7 @@ func _on_request_done_(_err:int, _response:Response) -> void:
 	pass
 
 
-func request_(method:int, path:String, headers:Array = [], body:String = "") ->Request:
+func request_(method:int, path:String, headers:Array = [], body:String = "") -> Request:
 	var http_ :HTTPClient = HTTPClient.new()
 	
 	#prints("\nConnecting:\n",options.host, options.port, options.use_ssl)
