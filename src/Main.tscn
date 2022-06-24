@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://scripts/ui_content.gd" type="Script" id=8]
 [ext_resource path="res://scripts/ui_terminal_manager.gd" type="Script" id=9]
 [ext_resource path="res://components/toast/ToastManager.tscn" type="PackedScene" id=10]
+[ext_resource path="res://components/popups/graph_popup.gd" type="Script" id=11]
+[ext_resource path="res://assets/gear.png" type="Texture" id=12]
 
 [sub_resource type="DynamicFontData" id=18]
 font_path = "res://assets/theme/Barlow-Light.ttf"
@@ -108,6 +110,14 @@ shadow_offset = Vector2( 0, 6 )
 bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
+
+[sub_resource type="StyleBoxFlat" id=20]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_bottom = 1
+border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
+
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0.0669491, 0.0597887, 0.0693359, 1 )
 
 [node name="Main" type="Control"]
 anchor_right = 1.0
@@ -238,12 +248,12 @@ stretch_mode = 6
 
 [node name="Spacer" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
 margin_left = 74.0
-margin_right = 1813.0
+margin_right = 1785.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="SideMenu" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
-margin_left = 1813.0
+margin_left = 1785.0
 margin_right = 1920.0
 margin_bottom = 32.0
 grow_horizontal = 0
@@ -256,7 +266,7 @@ custom_constants/margin_bottom = 4
 [node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 103.0
+margin_right = 131.0
 margin_bottom = 28.0
 
 [node name="ButtonConfig" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
@@ -269,6 +279,21 @@ margin_left = 57.0
 margin_right = 99.0
 margin_bottom = 24.0
 text = "docs"
+
+[node name="Config" type="MenuButton" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
+margin_left = 103.0
+margin_right = 127.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+icon = ExtResource( 12 )
+expand_icon = true
+items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false, "Merge Graph", null, 0, false, false, 3, 0, null, "", false ]
+
+[node name="MenuContainer" type="VBoxContainer" parent="MenuBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 2 )
 
 [node name="Popups" type="CanvasLayer" parent="."]
 layer = 30
@@ -300,9 +325,6 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="Popups/ConnectPopup/Content"]
 margin_right = 400.0
@@ -371,7 +393,107 @@ margin_right = 360.0
 margin_bottom = 108.0
 text = "Connect"
 
+[node name="GraphPopup" type="PopupDialog" parent="Popups"]
+margin_top = 163.0
+margin_right = 400.0
+margin_bottom = 384.0
+theme = ExtResource( 2 )
+custom_styles/panel = SubResource( 7 )
+popup_exclusive = true
+script = ExtResource( 11 )
+
+[node name="Label" type="Label" parent="Popups/GraphPopup"]
+anchor_right = 1.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
+custom_styles/normal = SubResource( 8 )
+text = "Merge Graph"
+align = 1
+
+[node name="GridContainer" type="GridContainer" parent="Popups/GraphPopup"]
+anchor_right = 1.0
+margin_left = 16.0
+margin_top = 29.0
+margin_right = -16.0
+margin_bottom = 93.0
+custom_constants/vseparation = 6
+columns = 2
+
+[node name="Label" type="Label" parent="Popups/GraphPopup/GridContainer"]
+margin_top = 2.0
+margin_right = 84.0
+margin_bottom = 22.0
+text = "Graph Root:"
+
+[node name="GraphsOptionButton" type="OptionButton" parent="Popups/GraphPopup/GridContainer"]
+margin_left = 88.0
+margin_right = 368.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="Popups/GraphPopup/GridContainer"]
+margin_top = 32.0
+margin_right = 84.0
+margin_bottom = 52.0
+text = "Graph File:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popups/GraphPopup/GridContainer"]
+margin_left = 88.0
+margin_top = 30.0
+margin_right = 368.0
+margin_bottom = 54.0
+
+[node name="FileNameLabel" type="Label" parent="Popups/GraphPopup/GridContainer/HBoxContainer"]
+margin_top = 1.0
+margin_right = 138.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.394368, 0.339131, 0.459961, 1 )
+custom_styles/normal = SubResource( 20 )
+
+[node name="LoadButton" type="Button" parent="Popups/GraphPopup/GridContainer/HBoxContainer"]
+margin_left = 142.0
+margin_right = 280.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "Load File"
+
+[node name="MergeButton" type="Button" parent="Popups/GraphPopup"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -32.0
+margin_right = -16.0
+margin_bottom = -8.0
+disabled = true
+text = "Merge Graph"
+
+[node name="CloseButton" type="Button" parent="Popups/GraphPopup"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = -32.0
+margin_right = 80.0
+margin_bottom = -8.0
+text = "Close"
+
+[node name="Information" type="RichTextLabel" parent="Popups/GraphPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = 93.0
+margin_right = -16.0
+margin_bottom = -40.0
+mouse_filter = 2
+custom_styles/normal = SubResource( 19 )
+
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
+
+[node name="MenuBar" type="CanvasLayer" parent="."]
+layer = 20
+follow_viewport_enable = true
 
 [connection signal="reposition_active_tab_request" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_reposition_active_tab_request"]
 [connection signal="tab_changed" from="Content/Content/TerminalManager/TabsBar/TerminalTabs" to="Content/Content/TerminalManager" method="_on_TerminalTabs_tab_changed"]
@@ -383,3 +505,7 @@ text = "Connect"
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
+[connection signal="about_to_show" from="Popups/GraphPopup" to="Popups/GraphPopup" method="_on_GraphPopup_about_to_show"]
+[connection signal="pressed" from="Popups/GraphPopup/GridContainer/HBoxContainer/LoadButton" to="Popups/GraphPopup" method="_on_LoadButton_pressed"]
+[connection signal="pressed" from="Popups/GraphPopup/MergeButton" to="Popups/GraphPopup" method="_on_MergeButton_pressed"]
+[connection signal="pressed" from="Popups/GraphPopup/CloseButton" to="Popups/GraphPopup" method="_on_CloseButton_pressed"]
