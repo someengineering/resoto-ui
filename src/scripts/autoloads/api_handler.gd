@@ -19,6 +19,8 @@ func _ready() -> void:
 	_resoto_api.accept_text_headers.Accept_Encoding = "gzip" if OS.has_feature("web") else ""
 	_resoto_api.accept_json_headers.Resotoui_via = "Web" if OS.has_feature("web") else "Desktop"
 	_resoto_api.accept_text_headers.Resotoui_via = "Web" if OS.has_feature("web") else "Desktop"
+	_resoto_api.config_put_headers.Accept = "application/json"
+	_resoto_api.config_put_headers.Content_Type = "application/json"
 	
 	Engine.get_main_loop().connect("idle_frame", self, "poll")
 
@@ -57,10 +59,7 @@ func connection_config(_adress:String = adress, _port:int = port, _psk:String = 
 	_resoto_api.options.port = port
 	_resoto_api.options.use_ssl = use_ssl
 	# For debug purposes
-	print("Resoto UI - Config:")
-	prints("host:", adress)
-	prints("port:", port)
-	prints("use_ssl:", use_ssl)
+	prints("Resoto UI: Connection Settings to Core | Host:", adress, "- Port:", port, "- SSL:", use_ssl)
 
 
 func get_model(_connect_to:Node) -> void:

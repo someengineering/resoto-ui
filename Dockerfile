@@ -2,12 +2,14 @@ FROM ubuntu:20.04 as build-env
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TESTS
 ARG SOURCE_COMMIT
-ARG GODOT_VERSION=3.4.2
+ARG GODOT_DOWNLOAD_FOLDER=3.5/rc4/
+ARG GODOT_VERSION=3.5
+ARG GODOT_RELEASE=rc4
 ARG GITHUB_REF
 ARG GITHUB_REF_TYPE
 ARG GITHUB_EVENT_NAME
-ARG CRYPTO_EXPORT_TEMPLATES_DEBUG_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.1/webassembly_debug.zip
-ARG CRYPTO_EXPORT_TEMPLATES_RELEASE_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.1/webassembly_release.zip
+ARG CRYPTO_EXPORT_TEMPLATES_DEBUG_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.2/webassembly_debug.zip
+ARG CRYPTO_EXPORT_TEMPLATES_RELEASE_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.2/webassembly_release.zip
 ARG RESOTO_UI_DO_API_TOKEN
 ARG RESOTO_UI_SPACES_KEY
 ARG RESOTO_UI_SPACES_SECRET
@@ -45,20 +47,20 @@ RUN pip install .
 # Download and install Godot
 WORKDIR /build/godot
 RUN mkdir -p /root/.local/share/godot/templates
-RUN curl -L -o /tmp/godot.zip https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
-RUN curl -L -o /tmp/godot.tpz https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+RUN curl -L -o /tmp/godot.zip https://downloads.tuxfamily.org/godotengine/${GODOT_DOWNLOAD_FOLDER}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux_headless.64.zip
+RUN curl -L -o /tmp/godot.tpz https://downloads.tuxfamily.org/godotengine/${GODOT_DOWNLOAD_FOLDER}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz
 RUN curl -L -o /tmp/webassembly_debug.zip ${CRYPTO_EXPORT_TEMPLATES_DEBUG_URI}
 RUN curl -L -o /tmp/webassembly_release.zip ${CRYPTO_EXPORT_TEMPLATES_RELEASE_URI}
 RUN unzip /tmp/godot.zip -d /build/godot
 RUN unzip /tmp/godot.tpz -d /root/.local/share/godot/templates
-RUN mv /root/.local/share/godot/templates/templates /root/.local/share/godot/templates/${GODOT_VERSION}.stable
-RUN mv -f /tmp/webassembly_debug.zip /root/.local/share/godot/templates/${GODOT_VERSION}.stable/webassembly_debug.zip
-RUN mv -f /tmp/webassembly_release.zip /root/.local/share/godot/templates/${GODOT_VERSION}.stable/webassembly_release.zip
+RUN mv /root/.local/share/godot/templates/templates /root/.local/share/godot/templates/${GODOT_VERSION}.${GODOT_RELEASE}
+RUN mv -f /tmp/webassembly_debug.zip /root/.local/share/godot/templates/${GODOT_VERSION}.${GODOT_RELEASE}/webassembly_debug.zip
+RUN mv -f /tmp/webassembly_release.zip /root/.local/share/godot/templates/${GODOT_VERSION}.${GODOT_RELEASE}/webassembly_release.zip
 
 # Build resotoui
 WORKDIR /usr/local/resoto/ui
 COPY src /usr/src/ui
-RUN /build/godot/Godot_v${GODOT_VERSION}-stable_linux_headless.64 --path /usr/src/ui --export HTML5 /usr/local/resoto/ui/index.html
+RUN /build/godot/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux_headless.64 --path /usr/src/ui --export HTML5 /usr/local/resoto/ui/index.html
 
 # Upload resotoui
 RUN if [ -n "$SPACES_NAME" ]; then resoto-ui-upload --verbose; fi

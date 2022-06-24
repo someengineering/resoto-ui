@@ -57,15 +57,11 @@ func _on_get_configs_done(_error, _response) -> void:
 	API.get_config_model(self)
 	yield(self, "model_ready")
 	
-	var config_key_list:String = ""
 	for ck in config_keys:
 		config_req = API.get_config_id(self, ck)
 		yield(self, "config_received")
-		config_key_list += ck + "\n"
 	
-	config_key_list = config_key_list.trim_suffix("\n")
-	
-	_g.emit_signal("add_toast", "Configs received from Resoto Core.", config_key_list, 0)
+	_g.emit_signal("add_toast", "Configs received from Resoto Core.", "", 0)
 	build_config_pages()
 
 
@@ -127,8 +123,8 @@ func save_config() -> void:
 	
 	var selected_config = config_keys[_active_tab_id]
 	var json_config = JSON.print(new_config)
-	json_config = json_config.trim_prefix("{\"\":").trim_suffix("}")
-	print(json_config)
+	if json_config.begins_with("{\"\":"):
+		json_config = json_config.trim_prefix("{\"\":").trim_suffix("}")
 	config_put_req = API.put_config_id(self, selected_config, json_config)
 
 

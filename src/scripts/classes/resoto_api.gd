@@ -18,12 +18,13 @@ class Headers extends UserAgent.RequestHeaders:
 	var Accept_Encoding = ""
 	var Resotoui_via = ""
 	var Authorization = ""
-	
+
 
 var default_graph:String = "resoto"
 var default_options:Options = Options.new()
 var accept_json_headers:Headers = Headers.new()
 var accept_json_put_headers:Headers = Headers.new()
+var config_put_headers:Headers = Headers.new()
 var accept_json_nd_headers:Headers = Headers.new()
 var accept_text_headers:Headers = Headers.new()
 
@@ -160,9 +161,9 @@ func get_config_id(_config_id:String="resoto.core") -> ResotoAPI.Request:
 
 
 func put_config_id(_config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
-	refresh_jwt_header(accept_json_put_headers)
+	refresh_jwt_header(config_put_headers)
 	var config_id = "/config/" + _config_id
-	var request = req_put(config_id, _config_body, accept_json_put_headers)
+	var request = req_put(config_id, _config_body, config_put_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
 

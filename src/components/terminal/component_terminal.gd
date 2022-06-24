@@ -28,7 +28,7 @@ func _ready() -> void:
 	console.push_align(RichTextLabel.ALIGN_CENTER)
 	console.add_image(image, 200, 200)
 	console.newline()
-	console.add_text("Resoto UI")
+	console.add_text("Resoto UI - " + _g.ui_version)
 	for i in 5:
 		console.newline()
 	console.pop()
