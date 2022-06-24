@@ -6,8 +6,8 @@ ARG GODOT_VERSION=3.4.2
 ARG GITHUB_REF
 ARG GITHUB_REF_TYPE
 ARG GITHUB_EVENT_NAME
-ARG CRYPTO_EXPORT_TEMPLATES_DEBUG_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.1/webassembly_debug.zip
-ARG CRYPTO_EXPORT_TEMPLATES_RELEASE_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.1/webassembly_release.zip
+ARG CRYPTO_EXPORT_TEMPLATES_DEBUG_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.2/webassembly_debug.zip
+ARG CRYPTO_EXPORT_TEMPLATES_RELEASE_URI=https://github.com/someengineering/godot-webassembly-export-templates/releases/download/v0.2/webassembly_release.zip
 ARG RESOTO_UI_DO_API_TOKEN
 ARG RESOTO_UI_SPACES_KEY
 ARG RESOTO_UI_SPACES_SECRET
