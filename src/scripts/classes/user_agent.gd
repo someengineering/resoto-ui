@@ -25,6 +25,7 @@ class Response:
 	var chunk_reminder:PoolByteArray = []
 	var chunks : Array = []
 	var chunks_size : int = 0
+	
 	func to_string() -> String:
 		if not body:
 			return ""

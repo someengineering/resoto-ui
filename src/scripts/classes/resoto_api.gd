@@ -64,13 +64,15 @@ func _transform_nd_json(_chunk:PoolByteArray, response:ResotoAPI.Response, reque
 	if parsed_chunk.error == 0:
 		if response.transformed.has("result"):
 			response.transformed["result"].append_array(parsed_chunk.result)
+			response.transformed["strings"].append_array(parsed_chunk.result_string)
 		else:
 			response.transformed["result"] = parsed_chunk.result
+			response.transformed["strings"] = parsed_chunk.result_string
 	
 	response.chunk_reminder = parsed_chunk.reminder
 		
 	if parsed_chunk.result.size() > 0:
-		request.emit_signal("data", parsed_chunk.result)
+		request.emit_signal("data", parsed_chunk.result_string)
 
 
 func _transform_string_chunk(_chunk:PoolByteArray, _response:ResotoAPI.Response, request:ResotoAPI.Request) -> void:
@@ -85,12 +87,14 @@ func _transform_string(error:int, response:ResotoAPI.Response) -> void:
 class Chunk:
 	var error: int
 	var result: Array
+	var result_string : PoolStringArray = []
 	var reminder: PoolByteArray = []
 
 
 static func parse_chunk( _chunk:PoolByteArray ) -> Chunk:
 	var resulting_chunk = Chunk.new()
 	resulting_chunk.result = []
+	resulting_chunk.result_string = []
 	resulting_chunk.reminder = []
 	var chunk:String = _chunk.get_string_from_ascii()
 	if ["", "[", "]\n", "[\n", "\n]", ",\n"].has(chunk) or chunk.begins_with("Error:"):
@@ -108,6 +112,8 @@ static func parse_chunk( _chunk:PoolByteArray ) -> Chunk:
 		resulting_chunk.reminder = splitted_chunk[splitted_chunk.size()-1].to_ascii()
 		splitted_chunk.remove(splitted_chunk.size()-1)
 	
+	var aux_string_array : PoolStringArray = []
+	
 	for element in splitted_chunk:
 		if ["", "[", "]", ","].has(element):
 			continue
@@ -116,9 +122,11 @@ static func parse_chunk( _chunk:PoolByteArray ) -> Chunk:
 			if typeof(parse_result.result) == TYPE_DICTIONARY:
 				resulting_chunk.error = OK
 				resulting_chunk.result.append(parse_result.result)
+				aux_string_array.append(element)
 		else:
 			resulting_chunk.error = FAILED
-			
+	
+	resulting_chunk.result_string = aux_string_array
 	return resulting_chunk
 
 

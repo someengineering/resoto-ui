@@ -7,7 +7,7 @@ onready var load_button : Button = $GridContainer/HBoxContainer/LoadButton
 onready var info_label : RichTextLabel = $Information
 
 var graph_data
-var graph_query_limit = 10000
+var graph_query_limit = 50000
 var graph_query_count = 0
 var graph_jsons_recieved = 0
 
@@ -77,6 +77,7 @@ func _on_BackupButton_pressed():
 	API.cli_execute("search --with-edges id=root -[0:]-> | count", self)
 	aux_file = File.new()
 	aux_file.open("./graph.ndjson", File.WRITE_READ)
+	info_label.text = "Staring graph download..."
 
 
 func _on_cli_execute_done(error:int, response):
@@ -86,16 +87,19 @@ func _on_cli_execute_done(error:int, response):
 
 func _on_cli_execute_json_data(data):
 	graph_jsons_recieved += data.size()
-	aux_file.store_line(JSON.print(data))
+	aux_file.store_string(data.join("\n"))
 	
 func _on_cli_execute_json_done(error:int, response):
 	if "result" in response.transformed and response.transformed.result.size() > 0:
-		print(graph_jsons_recieved)
 		graph_query_count += graph_query_limit
+		info_label.text += "\nRecieved: %d" % graph_jsons_recieved
 		API.cli_execute_json("search --with-edges id=root -[0:]-> limit %d, %d" % [graph_query_count, graph_query_limit], self, false)
 	else:
 		aux_file.close()
-		print("finished")
+		aux_file.open("./graph.ndjson", File.READ)
+		JavaScript.download_buffer(aux_file.get_buffer(aux_file.get_len()), "graph.ndjson")
+
+		info_label.text += "\nFinished!"
 
 func _on_get_full_graph_done(error:int, response):
 	print(response.transformed.size())
