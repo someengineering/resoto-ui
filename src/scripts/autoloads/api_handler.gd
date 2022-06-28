@@ -5,11 +5,13 @@ const DEFAULT_PSK: String = "changeme"
 var _req_res: ResotoAPI.Request
 var _resoto_api: ResotoAPI = ResotoAPI.new()
 
-var adress: String		= "http://127.0.0.1" setget set_adress
+var adress: String		= "https://127.0.0.1" setget set_adress
 var port: int			= 8900 setget set_port
 var psk: String			= DEFAULT_PSK setget set_psk
 var graph_id: String	= "resoto"
 var use_ssl: bool		= false setget set_use_ssl
+
+var infra_info : Array = []
 
 
 func _ready() -> void:
@@ -23,7 +25,8 @@ func _ready() -> void:
 	_resoto_api.config_put_headers.Content_Type = "application/json"
 	
 	Engine.get_main_loop().connect("idle_frame", self, "poll")
-
+	
+	_get_infra_info()
 
 func poll() -> void:
 	_resoto_api.poll()
@@ -91,7 +94,7 @@ func put_config_id(_connect_to:Node, _config_id:String="resoto.core", _config_bo
 func get_config_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_config_model()
 	_req_res.connect("done", _connect_to, "_on_get_config_model_done")
-
+	
 
 func cli_info(_connect_to:Node) -> ResotoAPI.Request:
 	_req_res = _resoto_api.get_cli_info()
@@ -117,3 +120,12 @@ func cli_execute_json(_command:String, _connect_to:Node) -> ResotoAPI.Request:
 	_req_res.connect("data", _connect_to, "_on_cli_execute_json_data")
 	_req_res.connect("done", _connect_to, "_on_cli_execute_json_done")
 	return _req_res
+
+
+func _get_infra_info(_connect_to:Node = self) -> void:
+	_req_res = _resoto_api.get_infra_info()
+	_req_res.connect("done", _connect_to, "_on_get_infra_info_done")
+	
+
+func _on_get_infra_info_done(error:int, response):
+	infra_info = response.transformed.result

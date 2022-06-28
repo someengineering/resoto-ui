@@ -5,6 +5,15 @@ signal widget_added(widget_data)
 var current_widget_preview_name : String = "Indicator"
 var preview_widget : Control = null
 
+var cloud_filters : Array = []
+var account_filters : Array = []
+var region_filters : Array = []
+
+onready var metrics_options := find_node("MetricsOptions")
+onready var cloud_options := find_node("CloudOptions")
+onready var account_options := find_node("AccountOptions")
+onready var region_options := find_node("RegionOptions")
+
 const widgets := {
 	"Indicator" : preload("res://components/widgets/Indicator.tscn")
 }
@@ -92,3 +101,51 @@ func _on_NameEdit_text_changed(new_text):
 func _on_SuffixLabel_text_changed(new_text):
 	if preview_container.get_child_count() > 0:
 		preview_container.get_child(0).unit = new_text
+
+
+func _on_get_config_id_done(_error, _response, config_key) -> void:
+	for metric in _response.transformed.result["resotometrics"]["metrics"]:
+		metrics_options.add_item(metric)
+
+
+func _on_NewWidgetPopup_about_to_show():
+	metrics_options.clear()
+	cloud_filters.clear()
+	region_filters.clear()
+	cloud_options.clear()
+	cloud_options.add_item("All")
+	API.get_config_id(self, "resoto.metrics")
+	
+	for info in API.infra_info:
+		if "reported" in info:
+			if info.reported.kind == "cloud":
+				cloud_filters.append(info.reported.name)
+				cloud_options.add_item(info.reported.name)
+			if "account" in info.reported.kind:
+				account_filters.append({
+					"name":info.reported.name,
+					"cloud":info.ancestors.cloud.reported.name
+				})
+			if "region" in info.reported.kind:
+				region_filters.append({
+					"name":info.reported.name,
+					"cloud":info.ancestors.cloud.reported.name
+				})
+	_on_CloudOptions_item_selected(cloud_options.selected)
+	
+	
+
+
+func _on_CloudOptions_item_selected(_index):
+	var text = cloud_options.text
+	account_options.clear()
+	account_options.add_item("All")
+	for account in account_filters:
+		if text == "All" or text == account.cloud:
+			account_options.add_item(account.name)
+			
+	region_options.clear()
+	region_options.add_item("All")
+	for region in region_filters:
+		if text == "All" or text == region.cloud:
+			region_options.add_item(region.name)
