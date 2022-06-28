@@ -27,14 +27,10 @@ var accept_json_put_headers:Headers = Headers.new()
 var config_put_headers:Headers = Headers.new()
 var accept_json_nd_headers:Headers = Headers.new()
 var accept_text_headers:Headers = Headers.new()
-var content_json_headers:Headers = Headers.new()
-var content_ndjson_headers:Headers = Headers.new()
 
 
 func _init().(default_options) -> void:
 	accept_text_headers.Accept = "text/plain"
-	content_json_headers.Content_Type = "application/json"
-	content_ndjson_headers.Content_Type = "application/x-ndjson"
 
 
 func refresh_jwt_header(header:Headers) -> void:
@@ -142,11 +138,6 @@ func get_model() -> ResotoAPI.Request:
 	return request
 
 
-func patch_model(body : String) -> ResotoAPI.Request:
-	refresh_jwt_header(content_json_headers)
-	var request = req_patch("/model", body, content_json_headers)
-	return request
-
 func get_config_model() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
 	var request = req_get("/configs/model", accept_json_headers)
@@ -180,5 +171,13 @@ func put_config_id(_config_id:String="resoto.core", _config_body:String="") -> R
 func get_subscribers() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
 	var request = req_get("/subscribers", accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+func get_infra_info() -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var request = req_post("/graph/resoto/search/graph", 
+							"is(cloud) -[0:2]-> is(cloud, account, region)",
+							 accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request

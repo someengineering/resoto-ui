@@ -34,6 +34,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/config/component_config_field.gd"
 }, {
+"base": "Label",
+"class": "DynamicLabel",
+"language": "GDScript",
+"path": "res://components/widgets/DynamicLabel.gd"
+}, {
 "base": "Node",
 "class": "JWTGenerator",
 "language": "GDScript",
@@ -48,6 +53,11 @@ _global_script_classes=[ {
 "class": "LineEditInt",
 "language": "GDScript",
 "path": "res://components/config/component_config_line_edit_int.gd"
+}, {
+"base": "Control",
+"class": "MeanIndicator",
+"language": "GDScript",
+"path": "res://components/widgets/Indicator.gd"
 }, {
 "base": "UserAgent",
 "class": "ResotoAPI",
@@ -75,9 +85,11 @@ _global_script_class_icons={
 "ConfigComponentDict": "",
 "ConfigComponentEnum": "",
 "ConfigComponentSimple": "",
+"DynamicLabel": "",
 "JWTGenerator": "",
 "LineEditFloat": "",
 "LineEditInt": "",
+"MeanIndicator": "",
 "ResotoAPI": "",
 "TerminalComponent": "",
 "UserAgent": "",
@@ -107,8 +119,8 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1920
 window/size/height=1080
-window/size/test_width=960
-window/size/test_height=540
+window/size/test_width=1280
+window/size/test_height=720
 window/dpi/allow_hidpi=true
 window/stretch/aspect="expand"
 

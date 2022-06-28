@@ -6,6 +6,7 @@
 [ext_resource path="res://components/widgets/DatasourceContainer.gd" type="Script" id=4]
 
 [node name="NewWidgetPopup" type="WindowDialog"]
+visible = true
 margin_right = 912.0
 margin_bottom = 656.0
 theme = ExtResource( 1 )
@@ -90,7 +91,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer"]
 margin_right = 523.0
-margin_bottom = 10.0
+margin_bottom = 279.0
 size_flags_horizontal = 3
 
 [node name="DatasourceContainer" type="PanelContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer"]
@@ -152,7 +153,7 @@ margin_right = 513.0
 margin_bottom = 20.0
 text = "Metric"
 
-[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2"]
+[node name="MetricsOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2"]
 margin_top = 21.0
 margin_right = 513.0
 margin_bottom = 45.0
@@ -189,7 +190,7 @@ margin_right = 168.0
 margin_bottom = 20.0
 text = "Cloud"
 
-[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3"]
+[node name="CloudOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3"]
 margin_top = 21.0
 margin_right = 168.0
 margin_bottom = 45.0
@@ -206,7 +207,7 @@ margin_right = 168.0
 margin_bottom = 20.0
 text = "Account"
 
-[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer4"]
+[node name="AccountOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer4"]
 margin_top = 21.0
 margin_right = 168.0
 margin_bottom = 45.0
@@ -223,7 +224,7 @@ margin_right = 169.0
 margin_bottom = 20.0
 text = "Region"
 
-[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer5"]
+[node name="RegionOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer5"]
 margin_top = 21.0
 margin_right = 169.0
 margin_bottom = 45.0
@@ -351,7 +352,9 @@ margin_right = -14.0
 margin_bottom = -8.0
 text = "Add Widget"
 
+[connection signal="about_to_show" from="." to="." method="_on_NewWidgetPopup_about_to_show"]
 [connection signal="text_changed" from="WidgetOptions/VBoxContainer/VBoxContainer/NameEdit" to="." method="_on_NameEdit_text_changed"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/VBoxContainer2/WidgetType" to="." method="_on_WidgetType_item_selected"]
 [connection signal="toggled" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer/Button" to="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer" method="_on_Button_toggled"]
+[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3/CloudOptions" to="." method="_on_CloudOptions_item_selected"]
 [connection signal="pressed" from="AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
