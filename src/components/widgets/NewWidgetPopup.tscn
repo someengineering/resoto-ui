@@ -169,10 +169,12 @@ margin_right = 513.0
 margin_bottom = 20.0
 text = "Function"
 
-[node name="LineEdit" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer3"]
+[node name="FunctionOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer3"]
 margin_top = 21.0
 margin_right = 513.0
 margin_bottom = 45.0
+items = [ "", null, false, 0, null, "sum", null, false, 1, null, "avg_over_time", null, false, 2, null ]
+selected = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
 margin_top = 98.0
@@ -356,5 +358,9 @@ text = "Add Widget"
 [connection signal="text_changed" from="WidgetOptions/VBoxContainer/VBoxContainer/NameEdit" to="." method="_on_NameEdit_text_changed"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/VBoxContainer2/WidgetType" to="." method="_on_WidgetType_item_selected"]
 [connection signal="toggled" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer/Button" to="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer" method="_on_Button_toggled"]
+[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions" to="." method="_on_MetricsOptions_item_selected"]
+[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer3/FunctionOptions" to="." method="_on_FunctionOptions_item_selected"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3/CloudOptions" to="." method="_on_CloudOptions_item_selected"]
+[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer4/AccountOptions" to="." method="_on_AccountOptions_item_selected"]
+[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer5/RegionOptions" to="." method="_on_RegionOptions_item_selected"]
 [connection signal="pressed" from="AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]

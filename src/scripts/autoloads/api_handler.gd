@@ -5,7 +5,7 @@ const DEFAULT_PSK: String = "changeme"
 var _req_res: ResotoAPI.Request
 var _resoto_api: ResotoAPI = ResotoAPI.new()
 
-var adress: String		= "https://127.0.0.1" setget set_adress
+var adress: String		= "http://127.0.0.1" setget set_adress
 var port: int			= 8900 setget set_port
 var psk: String			= DEFAULT_PSK setget set_psk
 var graph_id: String	= "resoto"
@@ -26,7 +26,7 @@ func _ready() -> void:
 	
 	Engine.get_main_loop().connect("idle_frame", self, "poll")
 	
-	_get_infra_info()
+
 
 func poll() -> void:
 	_resoto_api.poll()
@@ -64,7 +64,6 @@ func connection_config(_adress:String = adress, _port:int = port, _psk:String = 
 	# For debug purposes
 	prints("Resoto UI: Connection Settings to Core | Host:", adress, "- Port:", port, "- SSL:", use_ssl)
 
-
 func get_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_model()
 	_req_res.connect("done", _connect_to, "_on_get_model_done")
@@ -96,7 +95,12 @@ func get_config_model(_connect_to:Node) -> void:
 	_req_res.connect("done", _connect_to, "_on_get_config_model_done")
 	
 
-func cli_info(_connect_to:Node) -> ResotoAPI.Request:
+func query_tsdb(_query:String, _connect_to:Node) -> void:
+	_req_res = _resoto_api.query_tsdb(_query)
+	_req_res.connect("done", _connect_to, "_on_query_tsdb_done")
+
+
+func cli_info(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_cli_info()
 	_req_res.connect("done", _connect_to, "_on_cli_info_done")
 	return _req_res
@@ -129,3 +133,4 @@ func _get_infra_info(_connect_to:Node = self) -> void:
 
 func _on_get_infra_info_done(error:int, response):
 	infra_info = response.transformed.result
+

@@ -20,3 +20,7 @@ func show_connect_popup(_found_settings:bool) -> void:
 	
 	# If we ever need Godot to receive URL parameters:
 #	var custom_parameter = JavaScript.eval("getParameter('custom_parameter')")
+
+
+func _on_Connect_connected():
+	API._get_infra_info()

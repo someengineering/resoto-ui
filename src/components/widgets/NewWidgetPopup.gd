@@ -8,6 +8,7 @@ var preview_widget : Control = null
 var cloud_filters : Array = []
 var account_filters : Array = []
 var region_filters : Array = []
+var query : String = ""
 
 onready var metrics_options := find_node("MetricsOptions")
 onready var cloud_options := find_node("CloudOptions")
@@ -22,6 +23,7 @@ onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("NameEdit")
 onready var options_container := find_node("Options")
+onready var function_options := find_node("FunctionOptions")
 
 func _ready():
 	for key in widgets:
@@ -31,7 +33,8 @@ func _ready():
 func _on_AddWidgetButton_pressed():
 	var widget_data := {
 		"scene" : preview_widget.duplicate(),
-		"title" : widget_name_label.text
+		"title" : widget_name_label.text,
+		"query" : query
 	}
 	emit_signal("widget_added", widget_data)
 	
@@ -141,7 +144,7 @@ func _on_CloudOptions_item_selected(_index):
 	account_options.clear()
 	account_options.add_item("All")
 	for account in account_filters:
-		if text == "All" or text == account.cloud:
+		if text == "*" or text == account.cloud:
 			account_options.add_item(account.name)
 			
 	region_options.clear()
@@ -149,3 +152,44 @@ func _on_CloudOptions_item_selected(_index):
 	for region in region_filters:
 		if text == "All" or text == region.cloud:
 			region_options.add_item(region.name)
+			
+	update_preview()
+
+
+func _on_MetricsOptions_item_selected(_index):
+	update_preview()
+	
+func update_preview():
+	if is_instance_valid(preview_widget):
+		query = function_options.text+"(resoto_"+metrics_options.text + "{%s})"
+		var filters : String = ""
+		if cloud_options.text != "All":
+			filters+='cloud="%s"' % cloud_options.text
+		if region_options.text != "All":
+			filters+=', region="%s"' % region_options.text
+		if account_options.text != "All":
+			filters+=', account="%s"' % account_options.text
+			
+		query = query % filters
+		print(query)
+		API.query_tsdb(query, self)
+		
+func _on_query_tsdb_done(_error:int, response):
+	var data = response.transformed.result
+	if data["status"] == "success":
+		if data["data"]["result"].size() > 0:
+			preview_widget.value = data["data"]["result"][0]["value"][1]
+	else:
+		_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
+		preview_widget.value = "NaN"
+
+func _on_FunctionOptions_item_selected(index):
+	update_preview()
+
+
+func _on_AccountOptions_item_selected(index):
+	update_preview()
+
+
+func _on_RegionOptions_item_selected(index):
+	update_preview()
