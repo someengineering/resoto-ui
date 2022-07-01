@@ -9,7 +9,7 @@ class Options extends UserAgent.Options:
 
 class Headers extends UserAgent.RequestHeaders:
 	var Resoto_Shell_Terminal = true
-	var Resoto_Shell_Columns = 80
+	var Resoto_Shell_Columns = 100
 	var Resoto_Shell_Rows = 40
 	var User_Agent = "resoto UI"
 	var Color_System = "monochrome"

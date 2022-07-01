@@ -30,6 +30,7 @@ func load_settings() -> void:
 	var settings = load_settings_file()
 	API.psk = settings[0].psk
 	_g.ui_shrink = settings[0].ui_shrink
+	_g.terminal_scrollback = settings[0].terminal_scrollback
 	emit_signal("settings_loaded", settings[1])
 
 
@@ -61,6 +62,7 @@ func save_settings() -> void:
 	
 	settings_data.psk = API.psk
 	settings_data.ui_shrink = _g.ui_shrink
+	settings_data.terminal_scrollback = _g.terminal_scrollback
 	
 	var settings = File.new()
 	settings.open_encrypted_with_pass(settings_path, File.WRITE, ENC)
@@ -72,6 +74,7 @@ func clear_settings() -> Dictionary:
 	var game_save_struct:Dictionary = {
 		"psk" : "changeme",
 		"ui_shrink" : 1.0,
+		"terminal_scrollback" : []
 	}
 	return game_save_struct
 

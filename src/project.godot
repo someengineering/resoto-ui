@@ -54,7 +54,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/classes/resoto_api.gd"
 }, {
-"base": "VBoxContainer",
+"base": "Control",
 "class": "TerminalComponent",
 "language": "GDScript",
 "path": "res://components/terminal/component_terminal.gd"
@@ -86,7 +86,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="resoto-ui"
+config/name="Resoto UI"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
