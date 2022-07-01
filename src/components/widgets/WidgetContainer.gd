@@ -24,6 +24,8 @@ var dashboard : Control
 var check_rect : Rect2
 var title : String = "" setget set_title
 
+var query : String = ""
+
 onready var parent_reference : ReferenceRect
 onready var resize_buttons := $ResizeButtons
 onready var resize_tween := $ResizeTween
@@ -38,6 +40,7 @@ func _ready() -> void:
 		button.connect("button_down", self, "_on_resize_button_pressed", [i])
 	
 	set_process(false)
+	execute_query()
 
 func add_widget(widget):
 	$MarginContainer.add_child(widget)
@@ -262,3 +265,11 @@ func lock(locked : bool) -> void:
 func set_title(new_title : String) -> void:
 	title = new_title
 	$PanelContainer/Title.text = title
+
+func execute_query():
+	API.query_tsdb(query, self)
+
+
+func _on_query_tsdb_done(error:int, response):
+	var data = response.transformed.result
+	$MarginContainer.get_child(0).value = data["data"]["result"][0]["value"][1]

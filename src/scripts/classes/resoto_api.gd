@@ -27,10 +27,12 @@ var accept_json_put_headers:Headers = Headers.new()
 var config_put_headers:Headers = Headers.new()
 var accept_json_nd_headers:Headers = Headers.new()
 var accept_text_headers:Headers = Headers.new()
+var content_urlencoded_headers:Headers = Headers.new()
 
 
 func _init().(default_options) -> void:
 	accept_text_headers.Accept = "text/plain"
+	content_urlencoded_headers.Content_Type = "Application/x-www-form-urlencoded"
 
 
 func refresh_jwt_header(header:Headers) -> void:
@@ -179,5 +181,13 @@ func get_infra_info() -> ResotoAPI.Request:
 	var request = req_post("/graph/resoto/search/graph", 
 							"is(cloud) -[0:2]-> is(cloud, account, region)",
 							 accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func query_tsdb(_query:String):
+	refresh_jwt_header(content_urlencoded_headers)
+	var body = "query=" + _query
+	var request = req_post("/tsdb/api/v1/query?"+body,"",content_urlencoded_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
