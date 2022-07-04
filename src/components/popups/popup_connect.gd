@@ -5,6 +5,10 @@ signal connected
 const CONNECT_TEXT = "Connecting to Resoto Core...\n({0}s) {1}:{2}"
 const TEXT_ERROR_CONNECTION = "Could not connect to Resoto Core!\nConnection timed out\nPlease check if adress is correct, ports are open and resotocore is running."
 
+var timeout_timer:= 0.0
+var timeout_limit:= 5.0
+var info_request : ResotoAPI.Request
+
 onready var status = $ConnectStatusLabel
 onready var psk_line_edit = $PSKLineEdit
 
@@ -22,7 +26,7 @@ func _on_ButtonConnect_pressed() -> void:
 
 func _on_ConnectPopup_about_to_show() -> void:
 	psk_line_edit.text = API.psk
-	connect_to_core()
+	$ConnectDelay.start()
 
 
 func connect_to_core() -> void:
@@ -40,13 +44,14 @@ func connect_to_core() -> void:
 		
 	status.text = CONNECT_TEXT.format(["0", API.adress, API.port])
 	yield(VisualServer, "frame_post_draw")
+	$ConnectTimeoutTimer.start()
 	
-	API.cli_info(self)
+	info_request = API.cli_info(self)
 
 
 func _on_cli_info_done(error:int, response:UserAgent.Response) -> void:
 	if error:
-		not_connected("")
+		not_connected(Utils.err_enum_to_string(error))
 	else:
 		if response.status_code == 7:
 			if response.transformed["result"].left(3) == "401":
@@ -63,7 +68,25 @@ func connected(status_text:String) -> void:
 
 
 func not_connected(status_text:String) -> void:
+	reset_timer()
 	status.text = status_text
 	$Label.show()
 	$PSKLineEdit.show()
 	$ButtonConnect.show()
+
+
+func _on_ConnectDelay_timeout():
+	connect_to_core()
+
+
+func reset_timer():
+	$ConnectTimeoutTimer.stop()
+	timeout_timer = 0.0
+
+
+func _on_ConnectTimeoutTimer_timeout():
+	timeout_timer += 1.0
+	status.text = CONNECT_TEXT.format([timeout_timer, API.adress, API.port])
+	if timeout_timer >= timeout_limit:
+		info_request.cancel(24)
+	

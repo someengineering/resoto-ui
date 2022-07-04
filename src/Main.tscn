@@ -372,6 +372,12 @@ margin_right = 360.0
 margin_bottom = 108.0
 text = "Connect"
 
+[node name="ConnectDelay" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
+wait_time = 0.1
+one_shot = true
+
+[node name="ConnectTimeoutTimer" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
+
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
 [node name="BrowserCopyPasteWatcher" type="Node" parent="."]
@@ -387,3 +393,5 @@ script = ExtResource( 11 )
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
+[connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectDelay" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectDelay_timeout"]
+[connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectTimeoutTimer" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectTimeoutTimer_timeout"]
