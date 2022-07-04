@@ -191,3 +191,9 @@ func query_tsdb(_query:String):
 	var request = req_post("/tsdb/api/v1/query?"+body,"",content_urlencoded_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
+	
+func tsdb_label_values(label:String):
+	refresh_jwt_header(content_urlencoded_headers)
+	var request = req_get("/tsdb/api/v1/label/%s/values"%label,content_urlencoded_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request

@@ -1,12 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
 [ext_resource path="res://assets/icon_tabs_increment.png" type="Texture" id=2]
 [ext_resource path="res://components/widgets/NewWidgetPopup.gd" type="Script" id=3]
 [ext_resource path="res://components/widgets/DatasourceContainer.gd" type="Script" id=4]
+[ext_resource path="res://components/widgets/FilterWidget.tscn" type="PackedScene" id=5]
 
 [node name="NewWidgetPopup" type="WindowDialog"]
-visible = true
 margin_right = 912.0
 margin_bottom = 656.0
 theme = ExtResource( 1 )
@@ -91,19 +91,19 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer"]
 margin_right = 523.0
-margin_bottom = 279.0
+margin_bottom = 10.0
 size_flags_horizontal = 3
 
 [node name="DatasourceContainer" type="PanelContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_right = 523.0
-margin_bottom = 279.0
+margin_bottom = 306.0
 script = ExtResource( 4 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 518.0
-margin_bottom = 274.0
+margin_bottom = 301.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer"]
 margin_right = 513.0
@@ -140,7 +140,7 @@ text = "Delete"
 [node name="DatasourceSettings" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer"]
 margin_top = 28.0
 margin_right = 513.0
-margin_bottom = 269.0
+margin_bottom = 296.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
@@ -179,62 +179,19 @@ selected = 0
 [node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
 margin_top = 98.0
 margin_right = 513.0
-margin_bottom = 143.0
+margin_bottom = 170.0
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer"]
-margin_right = 168.0
-margin_bottom = 45.0
-size_flags_horizontal = 3
-custom_constants/separation = 1
-
-[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3"]
-margin_right = 168.0
-margin_bottom = 20.0
-text = "Cloud"
-
-[node name="CloudOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3"]
-margin_top = 21.0
-margin_right = 168.0
-margin_bottom = 45.0
-
-[node name="VBoxContainer4" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer"]
-margin_left = 172.0
-margin_right = 340.0
-margin_bottom = 45.0
-size_flags_horizontal = 3
-custom_constants/separation = 1
-
-[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer4"]
-margin_right = 168.0
-margin_bottom = 20.0
-text = "Account"
-
-[node name="AccountOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer4"]
-margin_top = 21.0
-margin_right = 168.0
-margin_bottom = 45.0
-
-[node name="VBoxContainer5" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer"]
-margin_left = 344.0
+[node name="FilterWidget" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_right = 513.0
-margin_bottom = 45.0
+margin_bottom = 72.0
 size_flags_horizontal = 3
-custom_constants/separation = 1
-
-[node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer5"]
-margin_right = 169.0
-margin_bottom = 20.0
-text = "Region"
-
-[node name="RegionOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer5"]
-margin_top = 21.0
-margin_right = 169.0
-margin_bottom = 45.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
-margin_top = 147.0
+margin_top = 174.0
 margin_right = 513.0
-margin_bottom = 192.0
+margin_bottom = 219.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer"]
@@ -258,9 +215,9 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer4" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
-margin_top = 196.0
+margin_top = 223.0
 margin_right = 513.0
-margin_bottom = 241.0
+margin_bottom = 268.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer4"]
@@ -360,7 +317,5 @@ text = "Add Widget"
 [connection signal="toggled" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer/Button" to="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer" method="_on_Button_toggled"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions" to="." method="_on_MetricsOptions_item_selected"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer3/FunctionOptions" to="." method="_on_FunctionOptions_item_selected"]
-[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer3/CloudOptions" to="." method="_on_CloudOptions_item_selected"]
-[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer4/AccountOptions" to="." method="_on_AccountOptions_item_selected"]
-[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/VBoxContainer5/RegionOptions" to="." method="_on_RegionOptions_item_selected"]
+[connection signal="filter_changed" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/FilterWidget" to="." method="_on_FilterWidget_filter_changed"]
 [connection signal="pressed" from="AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
