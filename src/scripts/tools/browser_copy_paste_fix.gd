@@ -53,11 +53,9 @@ func _input(event):
 		if os != "MacOS":
 			# Handling default Inputs (Windows)
 			if event.scancode == KEY_V and not copied:
-				get_tree().set_input_as_handled()
 				copied = true
 				var obj = navigator.clipboard.readText().then(_clipboard_callback)
 				get_tree().set_input_as_handled()
-		
 		else:
 			# Handling Mac Input
 			if event.is_action_pressed("mac_copy"):

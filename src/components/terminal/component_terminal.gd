@@ -65,6 +65,7 @@ func _input(event:InputEvent) -> void:
 	if (not just_grabbed_focus and command.has_focus() and event.scancode == KEY_C and event.pressed
 	and (Input.is_key_pressed(KEY_META) or Input.is_key_pressed(KEY_CONTROL))):
 		if command.get_selection_text() != "":
+			yield(get_tree(), "idle_frame")
 			command.deselect()
 			return
 		
