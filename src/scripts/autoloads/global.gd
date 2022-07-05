@@ -1,6 +1,7 @@
 extends Node
 
 signal add_toast
+signal ui_shrink_changed
 
 var ui_version:String = "2.0.0a23"
 var popup_manager: CanvasLayer = null

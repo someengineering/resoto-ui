@@ -10,14 +10,16 @@ func _input(event:InputEvent) -> void:
 
 
 func ui_scale_down() -> void:
-	var new_shrink = max(_g.ui_shrink-0.25, 0.5)
+	var new_shrink = max(_g.ui_shrink-0.1, 0.5)
 	_g.ui_shrink = new_shrink
+	_g.emit_signal("ui_shrink_changed")
 	SaveLoadSettings.save_settings()
 
 
 func ui_scale_up() -> void:
-	var new_shrink = min(_g.ui_shrink+0.25, 4)
+	var new_shrink = min(_g.ui_shrink+0.1, 4)
 	_g.ui_shrink = new_shrink
+	_g.emit_signal("ui_shrink_changed")
 	SaveLoadSettings.save_settings()
 
 
