@@ -52,6 +52,12 @@ class Request:
 		headers = _headers
 		body = _body
 	
+	
+	func cancel(err_code:int=1) -> void:
+		emit_signal("done", err_code, null)
+		state_ = states.DONE
+	
+	
 	func abort() -> void:
 		state_ = states.RESPONSE_READY
 	
@@ -60,6 +66,7 @@ class Request:
 		var err = http_.poll()
 		if err != OK:
 			emit_signal("done", err, null)
+			state_ = states.DONE
 			return false
 		return true
 	
