@@ -20,6 +20,7 @@ var last_pressed_position : Vector2
 var press_offset : Vector2
 var limits : Dictionary = {}
 var dashboard : Control
+var widget : BaseWidget
 
 var check_rect : Rect2
 var title : String = "" setget set_title
@@ -40,10 +41,12 @@ func _ready() -> void:
 		button.connect("button_down", self, "_on_resize_button_pressed", [i])
 	
 	set_process(false)
-	execute_query()
 
-func add_widget(widget):
-	$MarginContainer.add_child(widget)
+func add_widget(_widget):
+	$MarginContainer.add_child(_widget)
+	widget = _widget
+	
+	execute_query()
 
 func _on_resize_button_released() -> void:
 	
@@ -267,9 +270,39 @@ func set_title(new_title : String) -> void:
 	$PanelContainer/Title.text = title
 
 func execute_query():
-	API.query_tsdb(query, self)
+	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
+		API.query_tsdb(query, self)
+	else:
+		API.query_range_tsdb(query, self)
+		
+func _on_query_range_tsdb_done(error:int, response):
+	var data = response.transformed.result
+	if data.data.result.size() == 0:
+		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
+		return
+		
+	if data["status"] == "success":
+		widget.clear_series()
+		
+		var data_size = data.data.result[0].values.size()
+		widget.x_origin = data.data.result[0].values[0][0]
+		widget.x_range = data.data.result[0].values[data_size-1][0] - widget.x_origin
 
+		var maxy = -INF
+		
+		for serie in data.data.result:
+			var array : PoolVector2Array = []
+			array.resize(serie.values.size())
+			for i in array.size():
+				array[i] = Vector2(serie.values[i][0], serie.values[i][1])
+				if float(serie.values[i][1]) > maxy:
+					maxy = float(serie.values[i][1])
+					
+			widget.add_serie(array)
+		
 
 func _on_query_tsdb_done(error:int, response):
 	var data = response.transformed.result
-	$MarginContainer.get_child(0).value = data["data"]["result"][0]["value"][1]
+	if data.status == "error":
+		return
+	widget.value = data["data"]["result"][0]["value"][1]

@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
 [ext_resource path="res://assets/icon_tabs_increment.png" type="Texture" id=2]
 [ext_resource path="res://components/widgets/NewWidgetPopup.gd" type="Script" id=3]
 [ext_resource path="res://components/widgets/DatasourceContainer.gd" type="Script" id=4]
 [ext_resource path="res://components/widgets/FilterWidget.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=6]
 
 [node name="NewWidgetPopup" type="WindowDialog"]
 margin_right = 912.0
@@ -153,7 +154,8 @@ margin_right = 513.0
 margin_bottom = 20.0
 text = "Metric"
 
-[node name="MetricsOptions" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2"]
+[node name="MetricsOptions" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2" instance=ExtResource( 6 )]
+margin_left = 0.0
 margin_top = 21.0
 margin_right = 513.0
 margin_bottom = 45.0
@@ -199,20 +201,10 @@ margin_right = 513.0
 margin_bottom = 20.0
 text = "Date Offset"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer"]
+[node name="DateOffsetLineEdit" type="LineEdit" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer"]
 margin_top = 21.0
 margin_right = 513.0
 margin_bottom = 45.0
-
-[node name="SpinBox" type="SpinBox" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer/HBoxContainer"]
-margin_right = 60.0
-margin_bottom = 24.0
-
-[node name="OptionButton" type="OptionButton" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer/HBoxContainer"]
-margin_left = 64.0
-margin_right = 513.0
-margin_bottom = 24.0
-size_flags_horizontal = 3
 
 [node name="VBoxContainer4" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings"]
 margin_top = 223.0
@@ -315,7 +307,8 @@ text = "Add Widget"
 [connection signal="text_changed" from="WidgetOptions/VBoxContainer/VBoxContainer/NameEdit" to="." method="_on_NameEdit_text_changed"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/VBoxContainer2/WidgetType" to="." method="_on_WidgetType_item_selected"]
 [connection signal="toggled" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/HBoxContainer/Button" to="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer" method="_on_Button_toggled"]
-[connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions" to="." method="_on_MetricsOptions_item_selected"]
+[connection signal="option_changed" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions" to="." method="_on_ComboBox_option_changed"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer3/FunctionOptions" to="." method="_on_FunctionOptions_item_selected"]
 [connection signal="filter_changed" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/HBoxContainer/FilterWidget" to="." method="_on_FilterWidget_filter_changed"]
+[connection signal="text_entered" from="WidgetOptions/VBoxContainer/ScrollContainer/VBoxContainer/DatasourceContainer/VBoxContainer/DatasourceSettings/VBoxContainer/DateOffsetLineEdit" to="." method="_on_DateOffsetLineEdit_text_entered"]
 [connection signal="pressed" from="AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]

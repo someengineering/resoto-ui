@@ -67,9 +67,15 @@ func show_options():
 
 func set_items(new_items : Array):
 	items.clear()
+	line_edit.text = ""
 	for item in new_items:
 		items.append(item)
-
+		
+func add_item(new_item):
+	items.append(new_item)
+	
+func clear():
+	items.clear()
 
 func _on_LineEdit_text_entered(new_text):
 	emit_signal("option_changed", new_text)

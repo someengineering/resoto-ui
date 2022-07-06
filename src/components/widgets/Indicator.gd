@@ -1,6 +1,6 @@
 tool
-class_name MeanIndicator
-extends Control
+class_name Indicator
+extends BaseWidget
 
 export (float) var value : float setget set_value
 export (String) var variable_name := "" setget set_variable_name

@@ -192,6 +192,13 @@ func query_tsdb(_query:String):
 	request.connect("pre_done", self, "_transform_json")
 	return request
 	
+func query_range_tsdb(_query:String, start_ts:int=1656422693, end_ts:int=1657025493, step:int=3600):
+	refresh_jwt_header(content_urlencoded_headers)
+	var body = "query=" + _query + "&start=%d&end=%d&step=%d" % [start_ts, end_ts, step]
+	var request = req_post("/tsdb/api/v1/query_range?"+body,"",content_urlencoded_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+	
 func tsdb_label_values(label:String):
 	refresh_jwt_header(content_urlencoded_headers)
 	var request = req_get("/tsdb/api/v1/label/%s/values"%label,content_urlencoded_headers)

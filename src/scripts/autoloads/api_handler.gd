@@ -95,9 +95,13 @@ func get_config_model(_connect_to:Node) -> void:
 	_req_res.connect("done", _connect_to, "_on_get_config_model_done")
 	
 
-func query_tsdb(_query:String, _connect_to:Node) -> void:
+func query_tsdb(_query:String, _connect_to:Node, _connect_function :String = "_on_query_tsdb_done") -> void:
 	_req_res = _resoto_api.query_tsdb(_query)
-	_req_res.connect("done", _connect_to, "_on_query_tsdb_done")
+	_req_res.connect("done", _connect_to, _connect_function)
+	
+func query_range_tsdb(_query:String, _connect_to:Node, start_ts:int=1656422693, end_ts:int=1657025493, step:int=3600):
+	_req_res = _resoto_api.query_range_tsdb(_query)
+	_req_res.connect("done", _connect_to, "_on_query_range_tsdb_done")
 	
 func tsdb_label_values(_label:String, _connect_to:Node):
 	_req_res = _resoto_api.tsdb_label_values(_label)
