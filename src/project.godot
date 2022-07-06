@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Control",
+"class": "BaseWidget",
+"language": "GDScript",
+"path": "res://components/widgets/BaseWidget.gd"
+}, {
 "base": "VBoxContainer",
 "class": "ConfigComponentArray",
 "language": "GDScript",
@@ -39,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/widgets/DynamicLabel.gd"
 }, {
+"base": "BaseWidget",
+"class": "Indicator",
+"language": "GDScript",
+"path": "res://components/widgets/Indicator.gd"
+}, {
 "base": "Node",
 "class": "JWTGenerator",
 "language": "GDScript",
@@ -53,11 +63,6 @@ _global_script_classes=[ {
 "class": "LineEditInt",
 "language": "GDScript",
 "path": "res://components/config/component_config_line_edit_int.gd"
-}, {
-"base": "Control",
-"class": "MeanIndicator",
-"language": "GDScript",
-"path": "res://components/widgets/Indicator.gd"
 }, {
 "base": "UserAgent",
 "class": "ResotoAPI",
@@ -80,16 +85,17 @@ _global_script_classes=[ {
 "path": "res://scripts/classes/utils.gd"
 } ]
 _global_script_class_icons={
+"BaseWidget": "",
 "ConfigComponentArray": "",
 "ConfigComponentComplex": "",
 "ConfigComponentDict": "",
 "ConfigComponentEnum": "",
 "ConfigComponentSimple": "",
 "DynamicLabel": "",
+"Indicator": "",
 "JWTGenerator": "",
 "LineEditFloat": "",
 "LineEditInt": "",
-"MeanIndicator": "",
 "ResotoAPI": "",
 "TerminalComponent": "",
 "UserAgent": "",

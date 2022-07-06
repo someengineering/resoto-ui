@@ -11,9 +11,11 @@ var query : String = ""
 
 onready var metrics_options := find_node("MetricsOptions")
 onready var filters_widget := find_node("FilterWidget")
+onready var date_offset_edit := find_node("DateOffsetLineEdit")
 
 const widgets := {
-	"Indicator" : preload("res://components/widgets/Indicator.tscn")
+	"Indicator" : preload("res://components/widgets/Indicator.tscn"),
+	"Chart" : preload("res://components/widgets/Chart.tscn")
 }
 
 onready var widget_type_options := find_node("WidgetType")
@@ -130,47 +132,96 @@ func _on_NewWidgetPopup_about_to_show():
 	metrics_options.clear()
 	API.get_config_id(self, "resoto.metrics")
 
-
-func _on_MetricsOptions_item_selected(_index):
-	update_preview()
 	
-func update_preview():
-	if is_instance_valid(preview_widget):
-		query = function_options.text+"(resoto_"+metrics_options.text + "{%s})"
-		var filters : String = filters_widget.get_node("VBoxContainer/LineEdit").text
-		query = query % filters
-		print(query)
-		API.query_tsdb(query, self)
-		
-func _on_query_tsdb_done(_error:int, response):
-	var data = response.transformed.result
+func _on_metrics_query_finished(error:int, response):
 	var labels := []
-	if data.data.result.size() == 0:
-		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
-		return
+	var data = response.transformed.result
+	
 	for label in data.data.result[0].metric:
 		if not label.begins_with("__"):
 			labels.append(label)
-			
+	
 	filters_widget.labels.set_items(labels)
+	
+	filters_widget.value.set_items([])
+	
+	
+func update_preview():
+	if is_instance_valid(preview_widget):
+		query = function_options.text+"(resoto_"+metrics_options.text + "{%s} %s)"
+		var filters : String = filters_widget.get_node("VBoxContainer/LineEdit").text
+		var offset : String = date_offset_edit.text
+		if offset != "":
+			offset = "offset " + offset
+		query = query % [filters, offset]
+		if preview_widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
+			API.query_tsdb(query, self)
+		else:
+			API.query_range_tsdb(query, self)
+			
+func _on_query_range_tsdb_done(_error:int, response):
+	var data = response.transformed.result
+	if data.data.result.size() == 0:
+		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
+		return
+		
 	if data["status"] == "success":
-		if data["data"]["result"].size() > 0:
-			preview_widget.value = data["data"]["result"][0]["value"][1]
-	else:
-		_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
-		preview_widget.value = "NaN"
+		preview_widget.clear_series()
+		
+		var data_size = data.data.result[0].values.size()
+		preview_widget.x_origin = data.data.result[0].values[0][0]
+		preview_widget.x_range = data.data.result[0].values[data_size-1][0] - preview_widget.x_origin
+		
+		var maxy = -INF
+		
+		for serie in data.data.result:
+			var array : PoolVector2Array = []
+			array.resize(serie.values.size())
+			for i in array.size():
+				array[i] = Vector2(serie.values[i][0], serie.values[i][1])
+				if float(serie.values[i][1]) > maxy:
+					maxy = float(serie.values[i][1])
+					
+			preview_widget.add_serie(array)
+		
+		
+			
+		
+func _on_query_tsdb_done(_error:int, response):
+	var data = response.transformed.result
+	if data.data.result.size() == 0:
+		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
+		return
+	
+	if preview_widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
+		if data["status"] == "success":
+			if data["data"]["result"].size() > 0:
+				preview_widget.value = data["data"]["result"][0]["value"][1]
+		else:
+			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
+			preview_widget.value = "NaN"
 
-func _on_FunctionOptions_item_selected(index):
+
+func _on_FunctionOptions_item_selected(_index):
 	update_preview()
 
 
-func _on_AccountOptions_item_selected(index):
+func _on_AccountOptions_item_selected(_index):
 	update_preview()
 
 
-func _on_RegionOptions_item_selected(index):
+func _on_RegionOptions_item_selected(_index):
 	update_preview()
 
 
 func _on_FilterWidget_filter_changed(_filter):
 	update_preview()
+
+
+func _on_DateOffsetLineEdit_text_entered(new_text):
+	update_preview()
+
+
+func _on_ComboBox_option_changed(option):
+	update_preview()
+	API.query_tsdb("resoto_"+option, self, "_on_metrics_query_finished")
