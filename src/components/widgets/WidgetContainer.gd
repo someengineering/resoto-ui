@@ -24,7 +24,7 @@ var widget : BaseWidget
 
 var check_rect : Rect2
 var title : String = "" setget set_title
-
+var legend : String = ""
 var query : String = ""
 
 onready var parent_reference : ReferenceRect
@@ -284,6 +284,10 @@ func _on_query_range_tsdb_done(error:int, response):
 	if data["status"] == "success":
 		widget.clear_series()
 		
+		var regex = RegEx.new()
+		regex.compile("(?<={)(.*?)(?=})")
+		var legend_labels : Array = regex.search_all(legend)
+		
 		var data_size = data.data.result[0].values.size()
 		widget.x_origin = data.data.result[0].values[0][0]
 		widget.x_range = data.data.result[0].values[data_size-1][0] - widget.x_origin
@@ -298,7 +302,13 @@ func _on_query_range_tsdb_done(error:int, response):
 				if float(serie.values[i][1]) > maxy:
 					maxy = float(serie.values[i][1])
 					
-			widget.add_serie(array)
+			var l : String = legend
+			for label in legend_labels:
+				var replace := ""
+				if label.strings[0] in serie.metric:
+					replace =serie.metric[label.strings[0]]
+				l = l.replace("{%s}"%label.strings[0], replace)
+			widget.add_serie(array, null, l)
 		
 
 func _on_query_tsdb_done(error:int, response):

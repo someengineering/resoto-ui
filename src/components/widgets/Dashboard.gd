@@ -26,6 +26,7 @@ func add_widget(widget_data) -> void:
 	
 	var widget = widget_data["scene"]
 	container.query = widget_data["query"]
+	container.legend = widget_data["legend"]
 	container.call_deferred("add_widget", widget)
 	
 	yield(VisualServer,"frame_post_draw")

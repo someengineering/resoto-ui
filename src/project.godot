@@ -134,6 +134,10 @@ window/stretch/aspect="expand"
 
 enabled=PoolStringArray(  )
 
+[gui]
+
+common/snap_controls_to_pixels=false
+
 [network]
 
 limits/debugger_stdout/max_chars_per_second=8192
