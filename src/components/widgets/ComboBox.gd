@@ -79,3 +79,18 @@ func clear():
 
 func _on_LineEdit_text_entered(new_text):
 	emit_signal("option_changed", new_text)
+
+
+
+func _on_LineEdit_gui_input(event):
+	if event is InputEventMouseButton :
+		if event.button_index == BUTTON_LEFT and event.is_pressed():
+			populate_options(line_edit.text)
+			show_options()
+			line_edit.grab_focus()
+	if event is InputEventKey:
+		if event.scancode == KEY_DOWN and event.is_pressed():
+			yield(VisualServer,"frame_post_draw")
+			if options_container.get_child_count() > 0:
+				options_container.get_child(0).grab_focus()
+		

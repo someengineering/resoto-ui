@@ -21,6 +21,7 @@ const widgets := {
 onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("NameEdit")
+onready var widget_legend_label := find_node("LegendEdit")
 onready var options_container := find_node("Options")
 onready var function_options := find_node("FunctionOptions")
 
@@ -37,7 +38,8 @@ func _on_AddWidgetButton_pressed():
 	var widget_data := {
 		"scene" : widget,
 		"title" : widget_name_label.text,
-		"query" : query
+		"query" : query,
+		"legend" : widget_legend_label.text
 	}
 	emit_signal("widget_added", widget_data)
 	
@@ -184,9 +186,7 @@ func _on_query_range_tsdb_done(_error:int, response):
 					
 			preview_widget.add_serie(array)
 		
-		
-			
-		
+
 func _on_query_tsdb_done(_error:int, response):
 	var data = response.transformed.result
 	if data.data.result.size() == 0:

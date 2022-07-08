@@ -6,6 +6,8 @@
 [sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
 size = 11
+use_mipmaps = true
+use_filter = true
 font_data = ExtResource( 2 )
 
 [node name="DynamicLabel" type="Label"]
