@@ -25,8 +25,9 @@ func add_widget(widget_data) -> void:
 	$References.add_child(reference)
 	
 	var widget = widget_data["scene"]
-	container.query = widget_data["query"]
-	container.legend = widget_data["legend"]
+	container.data_sources = widget_data["data_sources"]
+	for ds in container.data_sources:
+		ds.widget = widget
 	container.call_deferred("add_widget", widget)
 	
 	yield(VisualServer,"frame_post_draw")

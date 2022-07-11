@@ -29,6 +29,7 @@ offset = Vector2( 468, -371 )
 antialiased = true
 
 [node name="Indicator" type="Polygon2D" parent="."]
+visible = false
 color = Color( 0, 1, 0.576471, 1 )
 polygon = PoolVector2Array( -4, -4, -4, 4, 4, 4, 4, -4 )
 
