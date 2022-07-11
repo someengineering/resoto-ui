@@ -40,27 +40,37 @@ func _input(event):
 		data.resize(100)
 
 		for i in data.size():
-			data[i] = Vector2(i,10*sin(i/10.0))
+			data[i] = Vector2(i,2)
 
 		clear_series()
 		add_serie(data)
 		
 		for i in data.size():
-			data[i] = Vector2(i,-10*cos(i/10.0))
+			data[i] = Vector2(i,1+int(i/10))
+		add_serie(data)
+		
+		for i in data.size():
+			data[i] = Vector2(i,int(i/5))
 		add_serie(data)
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
 		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x + x_origin
 		for label in legend_container.get_children():
 			legend_container.remove_child(label)
 			label.queue_free()
+			
+		var stacked = 0
 		for i in series.size():
+			var index = series.size() - i - 1
 			var l := Label.new()
-			var line : Line2D = graph_area.get_child(i)
-			var closest_point = find_closest_at_x(x, series[i])
+			var line : Line2D = graph_area.get_child(index)
+			var closest_point = find_closest_at_x(x, series[index])
+			
 			l.text = line.name + ": " + str(closest_point.y)
 			l.set("custom_colors/font_color", line.default_color)
 			legend_container.add_child(l)
 			legend.rect_global_position = get_global_mouse_position()
+			closest_point.y += stacked
+			stacked = closest_point.y
 			line.show_indicator(transform_point(closest_point))
 			
 
@@ -84,17 +94,25 @@ func _on_GraphArea_resized():
 	$Grid.material.set_shader_param("size", $Grid.rect_size)
 	
 func update_series():
+	if not is_instance_valid(graph_area):
+		return
 	if $GraphArea.rect_size.x == 0 or $GraphArea.rect_size.y == 0:
 		return
 	var origin : Vector2 = $GraphArea.rect_global_position + Vector2(0, $GraphArea.rect_size.y)
+	var stacked : PoolVector2Array = []
+	stacked.resize(series[0].size())
+	stacked.fill(Vector2.ZERO)
 	for i in $GraphArea.get_child_count():
-		var line : Line2D = $GraphArea.get_child(i)
-		var serie : PoolVector2Array = series[i]
+		var index = $GraphArea.get_child_count() - i -1
+		var line : Line2D = $GraphArea.get_child(index)
+		var serie : PoolVector2Array = series[index]
 		var values : PoolVector2Array = []
-		for point in serie:
-			point = transform_point(point)
+		for j in serie.size():
+			var point = transform_point(serie[j]) + stacked[j]
 			if $GraphArea.get_global_rect().grow(1).has_point(point + origin):
 				values.append(point)
+				stacked[j].y = point.y
+				
 
 		line.points = values
 		line.global_position = origin
@@ -170,8 +188,16 @@ func clear_series():
 func set_scale_from_series():
 	var maxy = -INF
 	var miny = INF
-	for serie in series:
-		for value in serie:
+	
+	var stacked := []
+	stacked.resize(series[0].size())
+	stacked.fill(0)
+	for j in series.size():
+		var serie = series[series.size() -j -1]
+		for i in serie.size():
+			var value = serie[i]
+			value.y += stacked[i]
+			stacked[i] = value.y
 			if maxy < value.y:
 				maxy = value.y
 			if miny > value.y:

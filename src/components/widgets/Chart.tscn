@@ -81,6 +81,7 @@ margin_bottom = -56.0
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PopupLegend" type="PanelContainer" parent="CanvasLayer"]
+visible = false
 self_modulate = Color( 1, 1, 1, 0.717647 )
 margin_right = 14.0
 margin_bottom = 14.0

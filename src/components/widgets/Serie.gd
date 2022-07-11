@@ -29,15 +29,15 @@ func _on_Serie_draw():
 		
 		$Polygon2D.polygon = poly
 		$Polygon2D.color = default_color
-		$Polygon2D.color.a = 0.05
-		
-		var vertex_colors : PoolColorArray = []
-		vertex_colors.resize(poly.size())
-			
-		vertex_colors.fill($Polygon2D.color)
-		vertex_colors[0] = Color(0,0,0,0)
-		vertex_colors[vertex_colors.size()-1] = Color(0,0,0,0)
-		$Polygon2D.vertex_colors = vertex_colors
+#		$Polygon2D.color.a = 0.05
+#
+#		var vertex_colors : PoolColorArray = []
+#		vertex_colors.resize(poly.size())
+#
+#		vertex_colors.fill($Polygon2D.color)
+#		vertex_colors[0] = Color(0,0,0,0)
+#		vertex_colors[vertex_colors.size()-1] = Color(0,0,0,0)
+#		$Polygon2D.vertex_colors = vertex_colors
 	else:
 		$Polygon2D.polygon = []
 		
