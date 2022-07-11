@@ -129,33 +129,10 @@ margin_right = 513.0
 margin_bottom = 20.0
 text = "Sum by"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
+[node name="ByLineEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
 margin_top = 21.0
 margin_right = 513.0
 margin_bottom = 45.0
-
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer"]
-margin_right = 513.0
-margin_bottom = 24.0
-size_flags_horizontal = 3
-scroll_vertical_enabled = false
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer/ScrollContainer"]
-margin_right = 128.0
-margin_bottom = 24.0
-
-[node name="ComboBox" parent="VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer/ScrollContainer/HBoxContainer" instance=ExtResource( 5 )]
-margin_left = 0.0
-margin_top = 0.0
-margin_right = 100.0
-margin_bottom = 24.0
-
-[node name="Button" type="Button" parent="VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer/ScrollContainer/HBoxContainer"]
-margin_left = 104.0
-margin_right = 128.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
-text = "+"
 
 [node name="VBoxContainer5" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
 margin_top = 272.0
