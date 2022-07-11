@@ -71,26 +71,25 @@ margin_right = 1915.0
 margin_bottom = 34.0
 
 [node name="DashboardNameLabel" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_right = 1588.0
+margin_right = 1552.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
 custom_fonts/font = SubResource( 3 )
 text = "Dashboard 1"
 
 [node name="AddWidgetButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1592.0
-margin_right = 1621.0
+margin_left = 1556.0
+margin_right = 1585.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 text = "+"
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1625.0
+[node name="LineEdit" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+margin_left = 1589.0
 margin_right = 1775.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-text = "06/13/2022"
-context_menu_enabled = false
+text = "2022-07-11 to 2022-07-10"
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
 margin_left = 1779.0

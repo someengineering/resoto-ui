@@ -11,6 +11,7 @@ onready var function_options := $VBoxContainer/DatasourceSettings/VBoxContainer3
 onready var date_offset_edit := $VBoxContainer/DatasourceSettings/VBoxContainer/DateOffsetLineEdit
 onready var data_source := DataSource.new()
 onready var stacked_check_box := $VBoxContainer/DatasourceSettings/StackedCheckBox
+onready var by_line_edit := $VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit
 
 class DataSource extends Node:
 	var query : String
@@ -111,6 +112,8 @@ func update_query():
 	if offset != "":
 		offset = "offset " + offset
 	query = query % [filters, offset]
+	if function_options.text != "" and by_line_edit.text != "":
+		query += " by %s" % by_line_edit.text
 	data_source.query = query
 	emit_signal("source_changed")
 	
