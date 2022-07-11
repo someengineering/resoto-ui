@@ -4,14 +4,15 @@ signal widget_added(widget_data)
 
 var current_widget_preview_name : String = "Indicator"
 var current_wdiget_properties : Dictionary = {}
-var preview_widget : Control = null
+var preview_widget : BaseWidget = null
+var data_sources : Array = []
+var metrics : Dictionary = {}
 
+var data_source_widget := preload("res://components/widgets/DatasourceContainer.tscn")
 
 var query : String = ""
 
-onready var metrics_options := find_node("MetricsOptions")
-onready var filters_widget := find_node("FilterWidget")
-onready var date_offset_edit := find_node("DateOffsetLineEdit")
+onready var data_source_container := find_node("DataSources")
 
 const widgets := {
 	"Indicator" : preload("res://components/widgets/Indicator.tscn"),
@@ -21,9 +22,7 @@ const widgets := {
 onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("NameEdit")
-onready var widget_legend_label := find_node("LegendEdit")
 onready var options_container := find_node("Options")
-onready var function_options := find_node("FunctionOptions")
 
 func _ready():
 	for key in widgets:
@@ -35,13 +34,16 @@ func _on_AddWidgetButton_pressed():
 	var properties = get_preview_widget_properties()
 	for key in get_preview_widget_properties():
 		widget[key] = properties[key]
+	var data_sources : Array = []
+	for datasource in data_source_container.get_children():
+		data_sources.append(datasource.data_source)
 	var widget_data := {
 		"scene" : widget,
 		"title" : widget_name_label.text,
-		"query" : query,
-		"legend" : widget_legend_label.text
+		"data_sources" : data_sources
 	}
 	emit_signal("widget_added", widget_data)
+	
 	
 	hide()
 
@@ -78,6 +80,9 @@ func create_preview(widget_type : String) -> void:
 			
 	preview_container.add_child(preview_widget)
 	current_widget_preview_name = widget_type
+	
+	for datasource in data_source_container.get_children():
+		datasource.widget = preview_widget
 
 func get_control_for_property(property : Dictionary):
 	var control : Control
@@ -112,7 +117,6 @@ func get_preview_widget_properties():
 			properties[property.name] = preview_widget[property.name]
 		elif property.name == "Widget Settings":
 			 found_settings = true
-			
 	return properties
 
 func _on_NameEdit_text_changed(new_text):
@@ -120,108 +124,26 @@ func _on_NameEdit_text_changed(new_text):
 		preview_container.get_child(0).variable_name = new_text
 
 
-func _on_SuffixLabel_text_changed(new_text):
-	if preview_container.get_child_count() > 0:
-		preview_container.get_child(0).unit = new_text
-
-
 func _on_get_config_id_done(_error, _response, config_key) -> void:
-	for metric in _response.transformed.result["resotometrics"]["metrics"]:
-		metrics_options.add_item(metric)
+	metrics =  _response.transformed.result["resotometrics"]["metrics"]
 
 
 func _on_NewWidgetPopup_about_to_show():
-	metrics_options.clear()
 	API.get_config_id(self, "resoto.metrics")
 
-	
-func _on_metrics_query_finished(error:int, response):
-	var labels := []
-	var data = response.transformed.result
-	
-	for label in data.data.result[0].metric:
-		if not label.begins_with("__"):
-			labels.append(label)
-	
-	filters_widget.labels.set_items(labels)
-	
-	filters_widget.value.set_items([])
+
+func _on_AddDataSource_pressed():
+	var ds = data_source_widget.instance()
+	data_source_container.add_child(ds)
+	ds.widget = preview_widget
+	ds.connect("source_changed", self, "update_preview")
+	ds.connect("tree_exited", self, "update_preview")
+	ds.set_metrics(metrics)
 	
 	
 func update_preview():
-	if is_instance_valid(preview_widget):
-		query = function_options.text+"(resoto_"+metrics_options.text + "{%s} %s)"
-		var filters : String = filters_widget.get_node("VBoxContainer/LineEdit").text
-		var offset : String = date_offset_edit.text
-		if offset != "":
-			offset = "offset " + offset
-		query = query % [filters, offset]
-		if preview_widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
-			API.query_tsdb(query, self)
-		else:
-			API.query_range_tsdb(query, self)
-			
-func _on_query_range_tsdb_done(_error:int, response):
-	var data = response.transformed.result
-	if data.data.result.size() == 0:
-		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
-		return
-		
-	if data["status"] == "success":
+	if preview_widget.has_method("clear_series"):
+		print("cleared")
 		preview_widget.clear_series()
-		
-		var data_size = data.data.result[0].values.size()
-		preview_widget.x_origin = data.data.result[0].values[0][0]
-		preview_widget.x_range = data.data.result[0].values[data_size-1][0] - preview_widget.x_origin
-		
-		var maxy = -INF
-		
-		for serie in data.data.result:
-			var array : PoolVector2Array = []
-			array.resize(serie.values.size())
-			for i in array.size():
-				array[i] = Vector2(serie.values[i][0], serie.values[i][1])
-				if float(serie.values[i][1]) > maxy:
-					maxy = float(serie.values[i][1])
-					
-			preview_widget.add_serie(array)
-		
-
-func _on_query_tsdb_done(_error:int, response):
-	var data = response.transformed.result
-	if data.data.result.size() == 0:
-		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
-		return
-	
-	if preview_widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
-		if data["status"] == "success":
-			if data["data"]["result"].size() > 0:
-				preview_widget.value = data["data"]["result"][0]["value"][1]
-		else:
-			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
-			preview_widget.value = "NaN"
-
-
-func _on_FunctionOptions_item_selected(_index):
-	update_preview()
-
-
-func _on_AccountOptions_item_selected(_index):
-	update_preview()
-
-
-func _on_RegionOptions_item_selected(_index):
-	update_preview()
-
-
-func _on_FilterWidget_filter_changed(_filter):
-	update_preview()
-
-
-func _on_DateOffsetLineEdit_text_entered(new_text):
-	update_preview()
-
-
-func _on_ComboBox_option_changed(option):
-	update_preview()
-	API.query_tsdb("resoto_"+option, self, "_on_metrics_query_finished")
+	for datasource in data_source_container.get_children():
+		datasource.data_source.make_query()

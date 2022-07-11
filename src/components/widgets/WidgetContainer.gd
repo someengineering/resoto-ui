@@ -24,8 +24,7 @@ var widget : BaseWidget
 
 var check_rect : Rect2
 var title : String = "" setget set_title
-var legend : String = ""
-var query : String = ""
+var data_sources : Array
 
 onready var parent_reference : ReferenceRect
 onready var resize_buttons := $ResizeButtons
@@ -270,49 +269,7 @@ func set_title(new_title : String) -> void:
 	$PanelContainer/Title.text = title
 
 func execute_query():
-	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
-		API.query_tsdb(query, self)
-	else:
-		API.query_range_tsdb(query, self)
-		
-func _on_query_range_tsdb_done(error:int, response):
-	var data = response.transformed.result
-	if data.data.result.size() == 0:
-		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
-		return
-		
-	if data["status"] == "success":
+	if widget.has_method("clear_series"):
 		widget.clear_series()
-		
-		var regex = RegEx.new()
-		regex.compile("(?<={)(.*?)(?=})")
-		var legend_labels : Array = regex.search_all(legend)
-		
-		var data_size = data.data.result[0].values.size()
-		widget.x_origin = data.data.result[0].values[0][0]
-		widget.x_range = data.data.result[0].values[data_size-1][0] - widget.x_origin
-
-		var maxy = -INF
-		
-		for serie in data.data.result:
-			var array : PoolVector2Array = []
-			array.resize(serie.values.size())
-			for i in array.size():
-				array[i] = Vector2(serie.values[i][0], serie.values[i][1])
-				if float(serie.values[i][1]) > maxy:
-					maxy = float(serie.values[i][1])
-					
-			var l : String = legend
-			for label in legend_labels:
-				var replace := ""
-				if label.strings[0] in serie.metric:
-					replace =serie.metric[label.strings[0]]
-				l = l.replace("{%s}"%label.strings[0], replace)
-			widget.add_serie(array, null, l)
-		
-
-func _on_query_tsdb_done(error:int, response):
-	var data = response.transformed.result
-	if data.status == "error":
-		return
-	widget.value = data["data"]["result"][0]["value"][1]
+	for datasource in data_sources:
+		datasource.make_query()

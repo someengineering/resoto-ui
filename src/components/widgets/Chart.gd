@@ -69,8 +69,9 @@ func _input(event):
 			l.set("custom_colors/font_color", line.default_color)
 			legend_container.add_child(l)
 			legend.rect_global_position = get_global_mouse_position()
-			closest_point.y += stacked
-			stacked = closest_point.y
+			if line.get_meta("stack"):
+				closest_point.y += stacked
+				stacked = closest_point.y
 			line.show_indicator(transform_point(closest_point))
 			
 
@@ -98,6 +99,8 @@ func update_series():
 		return
 	if $GraphArea.rect_size.x == 0 or $GraphArea.rect_size.y == 0:
 		return
+	if series.size() == 0:
+		return
 	var origin : Vector2 = $GraphArea.rect_global_position + Vector2(0, $GraphArea.rect_size.y)
 	var stacked : PoolVector2Array = []
 	stacked.resize(series[0].size())
@@ -108,12 +111,14 @@ func update_series():
 		var serie : PoolVector2Array = series[index]
 		var values : PoolVector2Array = []
 		for j in serie.size():
-			var point = transform_point(serie[j]) + stacked[j]
+			var point = transform_point(serie[j])
+			if line.get_meta("stack"):
+				point += stacked[j]
 			if $GraphArea.get_global_rect().grow(1).has_point(point + origin):
 				values.append(point)
-				stacked[j].y = point.y
+				if line.get_meta("stack"):
+					stacked[j].y = point.y
 				
-
 		line.points = values
 		line.global_position = origin
 
@@ -159,8 +164,10 @@ func update_graph_area():
 		l.valign = Label.VALIGN_BOTTOM
 		$YLabels.add_child(l)
 		
-func add_serie(data : PoolVector2Array, color = null, serie_name := ""):
+func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack := false):
 	var serie := series_scene.instance()
+	serie.set_meta("stack", stack)
+	serie.get_node("Polygon2D").visible = stack
 	$GraphArea.add_child(serie)
 	serie.points = data
 	series.append(data)
@@ -186,18 +193,26 @@ func clear_series():
 	series.clear()
 
 func set_scale_from_series():
+	
+	if series.size() == 0:
+		return
+	
 	var maxy = -INF
 	var miny = INF
 	
 	var stacked := []
+	
 	stacked.resize(series[0].size())
 	stacked.fill(0)
 	for j in series.size():
-		var serie = series[series.size() -j -1]
+		var index = series.size() -j -1
+		var serie = series[index]
+		var line = graph_area.get_child(index)
 		for i in serie.size():
 			var value = serie[i]
-			value.y += stacked[i]
-			stacked[i] = value.y
+			if line.get_meta("stack"):
+				value.y += stacked[i]
+				stacked[i] = value.y
 			if maxy < value.y:
 				maxy = value.y
 			if miny > value.y:

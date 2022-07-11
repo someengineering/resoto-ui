@@ -1,0 +1,188 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/icon_tabs_increment.png" type="Texture" id=2]
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
+[ext_resource path="res://components/widgets/DatasourceContainer.gd" type="Script" id=4]
+[ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/widgets/FilterWidget.tscn" type="PackedScene" id=6]
+
+[node name="DatasourceContainer" type="PanelContainer"]
+margin_right = 523.0
+margin_bottom = 355.0
+theme = ExtResource( 3 )
+script = ExtResource( 4 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 518.0
+margin_bottom = 378.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 513.0
+margin_bottom = 24.0
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_right = 22.0
+margin_bottom = 24.0
+toggle_mode = true
+icon = ExtResource( 2 )
+flat = true
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 26.0
+margin_top = 2.0
+margin_right = 120.0
+margin_bottom = 22.0
+text = "Data Source 1"
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 391.0
+margin_right = 454.0
+margin_bottom = 24.0
+size_flags_horizontal = 10
+text = "Custom"
+
+[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 458.0
+margin_right = 513.0
+margin_bottom = 24.0
+size_flags_horizontal = 0
+text = "Delete"
+
+[node name="DatasourceSettings" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 28.0
+margin_right = 513.0
+margin_bottom = 373.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
+margin_right = 513.0
+margin_bottom = 45.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer2"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Metric"
+
+[node name="MetricsOptions" parent="VBoxContainer/DatasourceSettings/VBoxContainer2" instance=ExtResource( 5 )]
+margin_left = 0.0
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
+margin_top = 49.0
+margin_right = 513.0
+margin_bottom = 94.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer3"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Function"
+
+[node name="FunctionComboBox" parent="VBoxContainer/DatasourceSettings/VBoxContainer3" instance=ExtResource( 5 )]
+margin_left = 0.0
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+items = [ "", "sum" ]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings"]
+margin_top = 98.0
+margin_right = 513.0
+margin_bottom = 170.0
+
+[node name="FilterWidget" parent="VBoxContainer/DatasourceSettings/HBoxContainer" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 513.0
+margin_bottom = 72.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
+margin_top = 174.0
+margin_right = 513.0
+margin_bottom = 219.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Date Offset"
+
+[node name="DateOffsetLineEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer"]
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
+margin_top = 223.0
+margin_right = 513.0
+margin_bottom = 268.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Sum by"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer"]
+margin_right = 513.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+scroll_vertical_enabled = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer/ScrollContainer"]
+margin_right = 128.0
+margin_bottom = 24.0
+
+[node name="ComboBox" parent="VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer/ScrollContainer/HBoxContainer" instance=ExtResource( 5 )]
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 100.0
+margin_bottom = 24.0
+
+[node name="Button" type="Button" parent="VBoxContainer/DatasourceSettings/VBoxContainer4/HBoxContainer/ScrollContainer/HBoxContainer"]
+margin_left = 104.0
+margin_right = 128.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+text = "+"
+
+[node name="VBoxContainer5" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
+margin_top = 272.0
+margin_right = 513.0
+margin_bottom = 317.0
+custom_constants/separation = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer5"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Legend"
+
+[node name="LegendEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer5"]
+margin_top = 21.0
+margin_right = 513.0
+margin_bottom = 45.0
+
+[node name="StackedCheckBox" type="CheckBox" parent="VBoxContainer/DatasourceSettings"]
+margin_top = 321.0
+margin_right = 513.0
+margin_bottom = 345.0
+pressed = true
+text = "Stacked"
+
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_Button_toggled"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
+[connection signal="option_changed" from="VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions" to="." method="_on_MetricsOptions_option_changed"]
+[connection signal="option_changed" from="VBoxContainer/DatasourceSettings/VBoxContainer3/FunctionComboBox" to="." method="_on_FunctionComboBox_option_changed"]
+[connection signal="text_entered" from="VBoxContainer/DatasourceSettings/VBoxContainer5/LegendEdit" to="." method="_on_LegendEdit_text_entered"]
+[connection signal="toggled" from="VBoxContainer/DatasourceSettings/StackedCheckBox" to="." method="_on_StackedCheckBox_toggled"]
