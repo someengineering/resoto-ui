@@ -7,11 +7,15 @@ const days := ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 const months := ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "Nombember", "December"]
 
 onready var date_label := $VBoxContainer/CurrentDateContainer/Label
-onready var current_date_dict := Time.get_date_dict_from_system()
+onready var current_date_dict := Time.get_datetime_dict_from_system()
 onready var current_date := Time.get_unix_time_from_system()
 onready var grid_container := $VBoxContainer/GridContainer
+onready var hour_edit := $VBoxContainer/TimePicker/Hour
+onready var minute_edit := $VBoxContainer/TimePicker/Minute
 
 func _ready():
+	hour_edit.value = current_date_dict["hour"]
+	minute_edit.value =  current_date_dict["minute"]
 	refresh_calendar()
 	
 func refresh_calendar(date_dict := current_date_dict):
@@ -34,7 +38,7 @@ func refresh_calendar(date_dict := current_date_dict):
 		l.text = d
 		grid_container.add_child(l)
 	
-	var first = Time.get_unix_time_from_datetime_string("%d-%d-01" % [year, month])
+	var first = Time.get_unix_time_from_datetime_string("%d-%d-01T%d:%d:00" % [year, month, current_date_dict["hour"], current_date_dict["minute"]])
 	var first_dict = Time.get_date_dict_from_unix_time(first)
 	
 	var previous = first - 3600*24*first_dict["weekday"]
@@ -69,7 +73,7 @@ func refresh_calendar(date_dict := current_date_dict):
 		first_dict = Time.get_date_dict_from_unix_time(first)
 		
 func pick_date(date : int):
-	var new_date_dict = Time.get_date_dict_from_unix_time(date)
+	var new_date_dict = Time.get_datetime_dict_from_unix_time(date)
 	if new_date_dict["month"] != current_date_dict["month"] or new_date_dict["year"] != current_date_dict["year"]:
 		refresh_calendar(new_date_dict)
 	current_date = date
@@ -95,3 +99,14 @@ func _on_NextMonth_pressed():
 func _on_NextYear_pressed():
 	current_date_dict["year"] += 1
 	refresh_calendar()
+
+func _on_Hour_value_changed(value):
+	current_date_dict["hour"] = value
+	current_date = Time.get_unix_time_from_datetime_dict(current_date_dict)
+	emit_signal("date_picked", current_date)
+
+
+func _on_Minute_value_changed(value):
+	current_date_dict["minute"] = value
+	current_date = Time.get_unix_time_from_datetime_dict(current_date_dict)
+	emit_signal("date_picked", current_date)

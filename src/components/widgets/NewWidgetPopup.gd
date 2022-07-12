@@ -27,7 +27,6 @@ onready var options_container := find_node("Options")
 func _ready():
 	for key in widgets:
 		widget_type_options.add_item(key)
-	create_preview(current_widget_preview_name)
 
 func _on_AddWidgetButton_pressed():
 	var widget = widgets[widget_type_options.text].instance()
@@ -35,8 +34,15 @@ func _on_AddWidgetButton_pressed():
 	for key in get_preview_widget_properties():
 		widget[key] = properties[key]
 	var data_sources : Array = []
+
 	for datasource in data_source_container.get_children():
-		data_sources.append(datasource.data_source)
+		var ds = datasource.data_source.duplicate()
+		ds.query = datasource.data_source.query
+		ds.legend = datasource.data_source.legend
+		ds.widget = widget
+		ds.stacked = datasource.data_source.stacked
+		data_sources.append(ds)
+		
 	var widget_data := {
 		"scene" : widget,
 		"title" : widget_name_label.text,
@@ -53,7 +59,7 @@ func _on_WidgetType_item_selected(_index):
 		return
 	create_preview(widget_type_options.text)
 	
-func create_preview(widget_type : String) -> void:
+func create_preview(widget_type : String = "Indicator") -> void:
 	if is_instance_valid(preview_widget):
 		preview_widget.queue_free()
 		
@@ -129,6 +135,9 @@ func _on_get_config_id_done(_error, _response, config_key) -> void:
 
 
 func _on_NewWidgetPopup_about_to_show():
+	create_preview(current_widget_preview_name)
+	for data_source in data_source_container.get_children():
+		data_source.queue_free()
 	API.get_config_id(self, "resoto.metrics")
 
 

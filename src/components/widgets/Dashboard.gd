@@ -26,8 +26,6 @@ func add_widget(widget_data) -> void:
 	
 	var widget = widget_data["scene"]
 	container.data_sources = widget_data["data_sources"]
-	for ds in container.data_sources:
-		ds.widget = widget
 	container.call_deferred("add_widget", widget)
 	
 	yield(VisualServer,"frame_post_draw")
@@ -91,3 +89,12 @@ func find_empty_slot(rect : Rect2) -> Vector2:
 		j += 1
 	return position
 
+
+func refresh(from : int, to : int):
+	for widget in widgets.get_children():
+		print(widget.data_sources[0].query)
+		for datasource in widget.data_sources:
+			datasource.from = from
+			datasource.to = to
+		widget.execute_query()
+	

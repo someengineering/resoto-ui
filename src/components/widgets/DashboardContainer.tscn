@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/lock.png" type="Texture" id=5]
 [ext_resource path="res://components/widgets/DashboardContainer.gd" type="Script" id=6]
 [ext_resource path="res://components/widgets/NewWidgetPopup.tscn" type="PackedScene" id=7]
+[ext_resource path="res://components/widgets/DateRangeSelector.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=3]
 size = 24
@@ -71,25 +72,26 @@ margin_right = 1915.0
 margin_bottom = 34.0
 
 [node name="DashboardNameLabel" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_right = 1552.0
+margin_right = 125.0
 margin_bottom = 29.0
-size_flags_horizontal = 3
 custom_fonts/font = SubResource( 3 )
 text = "Dashboard 1"
 
+[node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+margin_left = 842.0
+margin_right = 1028.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 6
+text = "2022-07-11 to 2022-07-10"
+flat = true
+
 [node name="AddWidgetButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1556.0
-margin_right = 1585.0
+margin_left = 1746.0
+margin_right = 1775.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 text = "+"
-
-[node name="LineEdit" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1589.0
-margin_right = 1775.0
-margin_bottom = 29.0
-rect_min_size = Vector2( 150, 0 )
-text = "2022-07-11 to 2022-07-10"
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
 margin_left = 1779.0
@@ -149,7 +151,15 @@ margin_top = -260.0
 margin_right = 382.5
 margin_bottom = 260.0
 
+[node name="DateRangeSelector" parent="." instance=ExtResource( 8 )]
+margin_left = 806.0
+margin_top = 53.0
+margin_right = 1094.0
+margin_bottom = 285.0
+
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/DateButton" to="." method="_on_DateButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer/LockButton" to="VBoxContainer/Dashboard" method="lock"]
 [connection signal="resized" from="VBoxContainer/Dashboard/Grid" to="VBoxContainer/Dashboard" method="_on_Grid_resized"]
 [connection signal="widget_added" from="WindowDialog" to="VBoxContainer/Dashboard" method="add_widget"]
+[connection signal="range_selected" from="DateRangeSelector" to="." method="_on_DateRangeSelector_range_selected"]

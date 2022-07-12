@@ -23,7 +23,6 @@ flat = true
 expand_icon = true
 
 [node name="Popup" type="Popup" parent="."]
-visible = true
 margin_top = 24.0
 margin_right = 40.0
 margin_bottom = 64.0

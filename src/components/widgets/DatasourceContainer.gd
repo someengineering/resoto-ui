@@ -3,27 +3,30 @@ extends PanelContainer
 signal source_changed
 
 var widget : BaseWidget setget set_widget
+var data_source
 
 onready var metrics_options := $VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions
 onready var filters_widget := $VBoxContainer/DatasourceSettings/HBoxContainer/FilterWidget
 onready var legend_edit := $VBoxContainer/DatasourceSettings/VBoxContainer5/LegendEdit
 onready var function_options := $VBoxContainer/DatasourceSettings/VBoxContainer3/FunctionComboBox
 onready var date_offset_edit := $VBoxContainer/DatasourceSettings/VBoxContainer/DateOffsetLineEdit
-onready var data_source := DataSource.new()
 onready var stacked_check_box := $VBoxContainer/DatasourceSettings/StackedCheckBox
 onready var by_line_edit := $VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit
+
 
 class DataSource extends Node:
 	var query : String
 	var legend : String
 	var widget : BaseWidget
 	var stacked : bool = true
+	var from : int = Time.get_unix_time_from_system() - 3600 * 24
+	var to : int = Time.get_unix_time_from_system()
 	
 	func make_query():
 		if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 			API.query_tsdb(query, self)
 		else:
-			API.query_range_tsdb(query, self)
+			API.query_range_tsdb(query, self, from, to)
 			
 	func _on_query_tsdb_done(error: int, response):
 		var data = response.transformed.result
@@ -72,6 +75,7 @@ class DataSource extends Node:
 				widget.add_serie(array, null, l, stacked)
 
 func _ready():
+	data_source = DataSource.new()
 	data_source.widget = widget
 
 func _on_Button_toggled(button_pressed):
@@ -122,7 +126,7 @@ func set_widget(new_widget):
 	data_source.widget = new_widget
 	var ranged : bool = widget.data_type == BaseWidget.DATA_TYPE.RANGE
 	stacked_check_box.visible = ranged
-	$Vboxcontainer5.visible = ranged
+	legend_edit.get_parent().visible = ranged
 
 
 func _on_StackedCheckBox_toggled(button_pressed):
