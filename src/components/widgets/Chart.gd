@@ -35,24 +35,25 @@ func _ready():
 	legend.visible = false
 
 func _input(event):
-	if event.is_action_pressed("ui_accept"):
-		var data : PoolVector2Array = []
-		data.resize(100)
-
-		for i in data.size():
-			data[i] = Vector2(i,2)
-
-		clear_series()
-		add_serie(data)
-		
-		for i in data.size():
-			data[i] = Vector2(i,1+int(i/10))
-		add_serie(data)
-		
-		for i in data.size():
-			data[i] = Vector2(i,int(i/5))
-		add_serie(data)
+#	if event.is_action_pressed("ui_accept"):
+#		var data : PoolVector2Array = []
+#		data.resize(100)
+#
+#		for i in data.size():
+#			data[i] = Vector2(i,2)
+#
+#		clear_series()
+#		add_serie(data)
+#
+#		for i in data.size():
+#			data[i] = Vector2(i,1+int(i/10))
+#		add_serie(data)
+#
+#		for i in data.size():
+#			data[i] = Vector2(i,int(i/5))
+#		add_serie(data)
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
+		print(series.size())
 		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x + x_origin
 		for label in legend_container.get_children():
 			legend_container.remove_child(label)
@@ -223,6 +224,8 @@ func set_scale_from_series():
 	if miny == INF:
 		miny = 0
 	max_y_value = maxy * 1.2
+	x_origin = series[0][0].x
+	x_range = series[0][series[0].size() -1].x - x_origin
 	
 func _process(_delta):
 	var origin : Vector2 = $GraphArea.rect_global_position + Vector2(0, $GraphArea.rect_size.y)

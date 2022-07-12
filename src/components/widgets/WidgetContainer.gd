@@ -44,7 +44,6 @@ func _ready() -> void:
 func add_widget(_widget):
 	$MarginContainer.add_child(_widget)
 	widget = _widget
-	
 	execute_query()
 
 func _on_resize_button_released() -> void:

@@ -33,11 +33,17 @@ func populate_options(filter : String = ""):
 	else:
 		matching_items.clear()
 		for item in items:
-			if item.begins_with(line_edit.text) and not item in matching_items:
+			var item_text = item.to_lower()
+			var edit_text = line_edit.text.to_lower()
+			if item_text.begins_with(edit_text) and not item in matching_items:
 				matching_items.append(item)
+				
 		for item in items:
-			if line_edit.text in item and not item in matching_items:
+			var item_text = item.to_lower()
+			var edit_text = line_edit.text.to_lower()
+			if edit_text in item_text and not item in matching_items:
 				matching_items.append(item)
+				
 		for item in matching_items:
 			add_option(item)
 			
@@ -84,13 +90,28 @@ func _on_LineEdit_text_entered(new_text):
 
 func _on_LineEdit_gui_input(event):
 	if event is InputEventMouseButton :
-		if event.button_index == BUTTON_LEFT and event.is_pressed():
+		if event.button_index == BUTTON_LEFT and not event.is_pressed():
 			populate_options(line_edit.text)
 			show_options()
 			line_edit.grab_focus()
+			
 	if event is InputEventKey:
 		if event.scancode == KEY_DOWN and event.is_pressed():
 			yield(VisualServer,"frame_post_draw")
 			if options_container.get_child_count() > 0:
 				options_container.get_child(0).grab_focus()
+
+
+
+
+func _on_LineEdit_focus_exited():
+	yield(VisualServer,"frame_post_draw")
+	var focus = line_edit.has_focus()
+	for button in options_container.get_children():
+		if focus:
+			break
+		focus = focus or button.has_focus()
 		
+	if not focus:
+		options_popup.hide()
+		emit_signal("option_changed", line_edit.text)
