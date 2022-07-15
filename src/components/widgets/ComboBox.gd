@@ -1,3 +1,4 @@
+tool
 extends Control
 
 signal option_changed(option)
@@ -5,7 +6,7 @@ signal option_changed(option)
 export (Array, String) var items
 
 var matching_items : Array
-var text : String setget set_text, get_text
+export (String) var text : String setget set_text, get_text
 
 onready var options_container := $PopupPanel/ScrollContainer/VBoxContainer
 onready var options_popup := $PopupPanel
@@ -15,10 +16,11 @@ onready var line_edit := $LineEdit
 func _on_Button_pressed():
 	populate_options()
 	show_options()
+	line_edit.grab_focus()
 
 func set_text(new_text:String):
 	text = new_text
-	line_edit.text = new_text
+	$LineEdit.text = new_text
 	
 func get_text() -> String:
 	return $LineEdit.text
@@ -87,21 +89,26 @@ func _on_LineEdit_text_entered(new_text):
 	emit_signal("option_changed", new_text)
 
 
-
 func _on_LineEdit_gui_input(event):
 	if event is InputEventMouseButton :
-		if event.button_index == BUTTON_LEFT and not event.is_pressed():
+		if event.button_index == BUTTON_LEFT:
+			if event.is_pressed():
+				line_edit.deselect()
 			populate_options(line_edit.text)
-			show_options()
-			line_edit.grab_focus()
+			if line_edit.has_selection():
+				var to = line_edit.get_selection_to_column()
+				var from = line_edit.get_selection_from_column()
+				show_options()
+				line_edit.grab_focus()
+				if from != -1 and to != -1:
+					yield(VisualServer,"frame_post_draw")
+					line_edit.select(from, to)
 			
 	if event is InputEventKey:
 		if event.scancode == KEY_DOWN and event.is_pressed():
 			yield(VisualServer,"frame_post_draw")
 			if options_container.get_child_count() > 0:
 				options_container.get_child(0).grab_focus()
-
-
 
 
 func _on_LineEdit_focus_exited():

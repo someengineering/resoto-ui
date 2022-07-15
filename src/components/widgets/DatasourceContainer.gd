@@ -12,6 +12,7 @@ onready var function_options := $VBoxContainer/DatasourceSettings/VBoxContainer3
 onready var date_offset_edit := $VBoxContainer/DatasourceSettings/VBoxContainer/DateOffsetLineEdit
 onready var stacked_check_box := $VBoxContainer/DatasourceSettings/StackedCheckBox
 onready var by_line_edit := $VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit
+onready var query_edit := $VBoxContainer/VBoxContainer/QueryEdit
 
 
 class DataSource extends Node:
@@ -27,38 +28,43 @@ class DataSource extends Node:
 			API.query_tsdb(query, self)
 		else:
 			API.query_range_tsdb(query, self, from, to)
+			widget.x_origin = from
+			widget.x_range = to - from
 			
-	func _on_query_tsdb_done(error: int, response):
+	func _on_query_tsdb_done(_error: int, response):
 		var data = response.transformed.result
+		
+		if _error != 0 or typeof(data) == TYPE_STRING:
+			_g.emit_signal("add_toast", "Request Error", data, 1)
+			
 		if data.data.result.size() == 0:
 			_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
 			return
 	
-		if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
-			if data["status"] == "success":
-				if data["data"]["result"].size() > 0:
-					widget.value = data["data"]["result"][0]["value"][1]
-			else:
-				_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
-				widget.value = "NaN"
+		if data["status"] == "success":
+			if data["data"]["result"].size() > 0:
+				widget.value = data["data"]["result"][0]["value"][1]
+		else:
+			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
+			widget.value = "NaN"
 	
 	func _on_query_range_tsdb_done(_error:int, response):
 		var data = response.transformed.result
+		
+		if _error != 0 or typeof(data) == TYPE_STRING:
+			_g.emit_signal("add_toast", "Request Error", data, 1)
+			
 		if data.data.result.size() == 0:
 			_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
 			return
 			
 		if data["status"] == "success":
-			
 			var regex = RegEx.new()
 			regex.compile("(?<={)(.*?)(?=})")
 			var legend_labels : Array = regex.search_all(legend)
 			
 			var data_size = data.data.result[0].values.size()
-			widget.x_origin = data.data.result[0].values[0][0]
-			widget.x_range = data.data.result[0].values[data_size-1][0] - widget.x_origin
 			
-			var maxy = -INF
 			
 			for serie in data.data.result:
 				var array : PoolVector2Array = []
@@ -73,6 +79,9 @@ class DataSource extends Node:
 						replace =serie.metric[label.strings[0]]
 					l = l.replace("{%s}"%label.strings[0], replace)
 				widget.add_serie(array, null, l, stacked)
+		else:
+				_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
+				widget.value = "NaN"
 
 func _ready():
 	data_source = DataSource.new()
@@ -99,7 +108,6 @@ func _on_MetricsOptions_option_changed(option):
 func _on_metrics_query_finished(error:int, response):
 	var labels := []
 	var data = response.transformed.result
-	
 	for label in data.data.result[0].metric:
 		if not label.begins_with("__"):
 			labels.append(label)
@@ -118,8 +126,11 @@ func update_query():
 	query = query % [filters, offset]
 	if function_options.text != "" and by_line_edit.text != "":
 		query += " by %s" % by_line_edit.text
-	data_source.query = query
-	emit_signal("source_changed")
+		
+	if data_source.query != query:
+		data_source.query = query
+		query_edit.text = query
+		emit_signal("source_changed")
 	
 func set_widget(new_widget):
 	widget = new_widget
@@ -141,3 +152,20 @@ func _on_LegendEdit_text_entered(new_text):
 
 func _on_FunctionComboBox_option_changed(_option):
 	update_query()
+
+
+func _on_FilterWidget_filter_changed(_filter):
+	update_query()
+
+
+func _on_DateOffsetLineEdit_text_entered(_new_text):
+	update_query()
+
+
+func _on_ByLineEdit_text_entered(_new_text):
+	update_query()
+
+
+func _on_QueryEdit_text_entered(new_text):
+	data_source.query = new_text
+	emit_signal("source_changed")

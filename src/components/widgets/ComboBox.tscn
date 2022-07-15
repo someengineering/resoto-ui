@@ -12,6 +12,7 @@ margin_bottom = 88.0
 rect_min_size = Vector2( 100, 24 )
 theme = ExtResource( 3 )
 script = ExtResource( 2 )
+items = [ "asdf", "xzcv", "dfa" ]
 
 [node name="LineEdit" type="LineEdit" parent="."]
 anchor_right = 1.0

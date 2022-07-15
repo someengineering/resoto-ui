@@ -78,12 +78,12 @@ custom_fonts/font = SubResource( 3 )
 text = "Dashboard 1"
 
 [node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 842.0
-margin_right = 1028.0
+margin_left = 860.0
+margin_right = 1010.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 6
-text = "2022-07-11 to 2022-07-10"
+text = "Last 24 hours"
 flat = true
 
 [node name="AddWidgetButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
@@ -152,6 +152,7 @@ margin_right = 382.5
 margin_bottom = 260.0
 
 [node name="DateRangeSelector" parent="." instance=ExtResource( 8 )]
+visible = true
 margin_left = 806.0
 margin_top = 53.0
 margin_right = 1094.0
@@ -159,6 +160,7 @@ margin_bottom = 285.0
 
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/DateButton" to="." method="_on_DateButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
+[connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer/LockButton" to="VBoxContainer/Dashboard" method="lock"]
 [connection signal="resized" from="VBoxContainer/Dashboard/Grid" to="VBoxContainer/Dashboard" method="_on_Grid_resized"]
 [connection signal="widget_added" from="WindowDialog" to="VBoxContainer/Dashboard" method="add_widget"]

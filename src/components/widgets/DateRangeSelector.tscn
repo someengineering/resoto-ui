@@ -30,6 +30,7 @@ text = "From:"
 margin_top = 24.0
 margin_right = 278.0
 margin_bottom = 48.0
+text = "now - 24h"
 
 [node name="Label2" type="Label" parent="PanelContainer/VBoxContainer"]
 margin_top = 52.0
@@ -41,6 +42,7 @@ text = "To:"
 margin_top = 76.0
 margin_right = 278.0
 margin_bottom = 100.0
+text = "now"
 
 [node name="Label3" type="Label" parent="PanelContainer/VBoxContainer"]
 margin_top = 104.0
@@ -54,6 +56,7 @@ margin_top = 128.0
 margin_right = 278.0
 margin_bottom = 152.0
 items = [ "Last 5 minutes", "Last 15 minutes", "Last 30 minutes", "Last 1 hour", "Last 3 hours", "Last 6 hours", "Last 12 hours", "Last 24 hours", "Last 2 days", "Last 7 days" ]
+text = "Last 24 hours"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
 margin_left = 160.0

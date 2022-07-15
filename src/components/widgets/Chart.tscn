@@ -9,6 +9,7 @@ code = "shader_type canvas_item;
 uniform vec2 grid_divisions = vec2(5.0);
 uniform vec4 grid_color :  hint_color = vec4(0.14,0.14,0.2, 1.0);
 uniform vec2 size = vec2(1832.0, 1000.0);
+uniform float line_width = 3.0;
 
 void fragment(){
 	vec2 px_size = 2.0/size;
@@ -16,8 +17,8 @@ void fragment(){
 //	if (coord.x >= 1.0 -  2.0* px_size.x || coord.x <= 2.0*px_size.x || coord.y >= 1.0 - 2.0*px_size.y || coord.y <= 2.0*px_size.y){
 //		COLOR = grid_color;
 //	}
-	COLOR =grid_color*clamp( smoothstep(1.0 - 3.0*px_size.x, 1.0, coord.x) + (1.0-smoothstep(0.0, 3.0*px_size.x, coord.x)) + 
-	smoothstep(1.0 - 3.0*px_size.y, 1.0, coord.y) + (1.0-smoothstep(0.0, 3.0*px_size.y, coord.y)), 0.0, 1.0);
+	COLOR =grid_color*clamp( smoothstep(1.0 - line_width*px_size.x, 1.0, coord.x) + (1.0-smoothstep(0.0, line_width*px_size.x, coord.x)) + 
+	smoothstep(1.0 - line_width*px_size.y, 1.0, coord.y) + (1.0-smoothstep(0.0, line_width*px_size.y, coord.y)), 0.0, 1.0);
 }"
 
 [sub_resource type="ShaderMaterial" id=6]
@@ -26,16 +27,16 @@ shader = SubResource( 5 )
 shader_param/grid_divisions = Vector2( 5, 5 )
 shader_param/grid_color = Color( 0.85098, 0.721569, 1, 0.168627 )
 shader_param/size = Vector2( 1832, 1000 )
+shader_param/line_width = 3.0
 
 [node name="Chart" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+rect_clip_content = true
 script = ExtResource( 1 )
 data_type = 1
 x_origin = 0.0
 x_range = 100.0
-max_y_value = 100
-min_y_value = 0
 divisions = Vector2( 4, 8 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -43,41 +44,60 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
 
-[node name="Grid" type="ColorRect" parent="."]
+[node name="GridContainer" type="GridContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 10
+columns = 2
+
+[node name="YLabels" type="VBoxContainer" parent="GridContainer"]
+margin_bottom = 1060.0
+custom_constants/separation = 0
+
+[node name="Grid" type="ColorRect" parent="GridContainer"]
 material = SubResource( 6 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 64.0
-margin_top = 24.0
-margin_right = -24.0
-margin_bottom = -56.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1060.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
-[node name="XLabels" type="HBoxContainer" parent="."]
-anchor_top = 1.0
+[node name="BackBufferCopy" type="BackBufferCopy" parent="GridContainer/Grid"]
+copy_mode = 2
+
+[node name="ReferenceRect" type="ReferenceRect" parent="GridContainer/Grid"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 64.0
-margin_top = -56.0
-margin_right = -24.0
-margin_bottom = -7.0
-custom_constants/separation = 0
+mouse_filter = 2
+border_color = Color( 0.85098, 0.721569, 1, 0.168627 )
+editor_only = false
 
-[node name="YLabels" type="VBoxContainer" parent="."]
-anchor_bottom = 1.0
-margin_left = 24.0
-margin_top = 24.0
-margin_right = 48.0
-margin_bottom = -56.0
-custom_constants/separation = 0
-
-[node name="GraphArea" type="Control" parent="."]
+[node name="GraphArea" type="Control" parent="GridContainer/Grid"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 64.0
-margin_top = 24.0
-margin_right = -24.0
-margin_bottom = -56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Spacer" type="Control" parent="GridContainer"]
+margin_top = 1070.0
+margin_bottom = 1070.0
+
+[node name="XLabels" type="HBoxContainer" parent="GridContainer"]
+margin_left = 10.0
+margin_top = 1070.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+custom_constants/separation = 0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -96,6 +116,6 @@ margin_right = 9.0
 margin_bottom = 9.0
 mouse_filter = 2
 
-[connection signal="mouse_entered" from="GraphArea" to="." method="_on_GraphArea_mouse_entered"]
-[connection signal="mouse_exited" from="GraphArea" to="." method="_on_GraphArea_mouse_exited"]
-[connection signal="resized" from="GraphArea" to="." method="_on_GraphArea_resized"]
+[connection signal="mouse_entered" from="GridContainer/Grid/GraphArea" to="." method="_on_GraphArea_mouse_entered"]
+[connection signal="mouse_exited" from="GridContainer/Grid/GraphArea" to="." method="_on_GraphArea_mouse_exited"]
+[connection signal="resized" from="GridContainer/Grid/GraphArea" to="." method="_on_GraphArea_resized"]

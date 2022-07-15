@@ -26,6 +26,7 @@ func add_widget(widget_data) -> void:
 	
 	var widget = widget_data["scene"]
 	container.data_sources = widget_data["data_sources"]
+	container.set_deferred("widget_title", widget_data["title"])
 	container.call_deferred("add_widget", widget)
 	
 	yield(VisualServer,"frame_post_draw")
@@ -42,6 +43,7 @@ func add_widget(widget_data) -> void:
 	
 func lock(locked : bool) -> void:
 	grid_background.visible = !locked
+	
 	for widget in widgets.get_children():
 		widget.lock(locked)
 

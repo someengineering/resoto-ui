@@ -16,7 +16,7 @@ script = ExtResource( 4 )
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 518.0
-margin_bottom = 378.0
+margin_bottom = 438.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 513.0
@@ -36,18 +36,11 @@ margin_right = 120.0
 margin_bottom = 22.0
 text = "Data Source 1"
 
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 391.0
-margin_right = 454.0
-margin_bottom = 24.0
-size_flags_horizontal = 10
-text = "Custom"
-
 [node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 margin_left = 458.0
 margin_right = 513.0
 margin_bottom = 24.0
-size_flags_horizontal = 0
+size_flags_horizontal = 10
 text = "Delete"
 
 [node name="DatasourceSettings" type="VBoxContainer" parent="VBoxContainer"]
@@ -157,9 +150,33 @@ margin_bottom = 345.0
 pressed = true
 text = "Stacked"
 
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 377.0
+margin_right = 513.0
+margin_bottom = 381.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 385.0
+margin_right = 513.0
+margin_bottom = 433.0
+
+[node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer"]
+margin_right = 513.0
+margin_bottom = 20.0
+text = "Query"
+
+[node name="QueryEdit" type="LineEdit" parent="VBoxContainer/VBoxContainer"]
+margin_top = 24.0
+margin_right = 513.0
+margin_bottom = 48.0
+
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_Button_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
 [connection signal="option_changed" from="VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions" to="." method="_on_MetricsOptions_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/DatasourceSettings/VBoxContainer3/FunctionComboBox" to="." method="_on_FunctionComboBox_option_changed"]
+[connection signal="filter_changed" from="VBoxContainer/DatasourceSettings/HBoxContainer/FilterWidget" to="." method="_on_FilterWidget_filter_changed"]
+[connection signal="text_entered" from="VBoxContainer/DatasourceSettings/VBoxContainer/DateOffsetLineEdit" to="." method="_on_DateOffsetLineEdit_text_entered"]
+[connection signal="text_entered" from="VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit" to="." method="_on_ByLineEdit_text_entered"]
 [connection signal="text_entered" from="VBoxContainer/DatasourceSettings/VBoxContainer5/LegendEdit" to="." method="_on_LegendEdit_text_entered"]
 [connection signal="toggled" from="VBoxContainer/DatasourceSettings/StackedCheckBox" to="." method="_on_StackedCheckBox_toggled"]
+[connection signal="text_entered" from="VBoxContainer/VBoxContainer/QueryEdit" to="." method="_on_QueryEdit_text_entered"]

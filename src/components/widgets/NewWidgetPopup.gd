@@ -8,6 +8,9 @@ var preview_widget : BaseWidget = null
 var data_sources : Array = []
 var metrics : Dictionary = {}
 
+var from_date : int
+var to_date : int
+
 var data_source_widget := preload("res://components/widgets/DatasourceContainer.tscn")
 
 var query : String = ""
@@ -31,9 +34,11 @@ func _ready():
 func _on_AddWidgetButton_pressed():
 	var widget = widgets[widget_type_options.text].instance()
 	var properties = get_preview_widget_properties()
+	
 	for key in get_preview_widget_properties():
 		widget[key] = properties[key]
-	var data_sources : Array = []
+		
+	var new_data_sources : Array = []
 
 	for datasource in data_source_container.get_children():
 		var ds = datasource.data_source.duplicate()
@@ -41,17 +46,20 @@ func _on_AddWidgetButton_pressed():
 		ds.legend = datasource.data_source.legend
 		ds.widget = widget
 		ds.stacked = datasource.data_source.stacked
-		data_sources.append(ds)
+		ds.from = datasource.data_source.from
+		ds.to = datasource.data_source.to
+		new_data_sources.append(ds)
 		
 	var widget_data := {
 		"scene" : widget,
 		"title" : widget_name_label.text,
-		"data_sources" : data_sources
+		"data_sources" : new_data_sources
 	}
 	emit_signal("widget_added", widget_data)
 	
 	
 	hide()
+	preview_widget.queue_free()
 
 
 func _on_WidgetType_item_selected(_index):
@@ -64,7 +72,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		preview_widget.queue_free()
 		
 	preview_widget = widgets[widget_type].instance()
-	
+	preview_widget.size_flags_vertical = SIZE_EXPAND_FILL
 	for option in options_container.get_children():
 		option.queue_free()
 	
@@ -89,6 +97,8 @@ func create_preview(widget_type : String = "Indicator") -> void:
 	
 	for datasource in data_source_container.get_children():
 		datasource.widget = preview_widget
+		datasource.data_source.from = from_date
+		datasource.data_source.to = to_date
 
 func get_control_for_property(property : Dictionary):
 	var control : Control
@@ -127,10 +137,10 @@ func get_preview_widget_properties():
 
 func _on_NameEdit_text_changed(new_text):
 	if preview_container.get_child_count() > 0:
-		preview_container.get_child(0).variable_name = new_text
+		$WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer/PanelContainer/Title.text = new_text
 
 
-func _on_get_config_id_done(_error, _response, config_key) -> void:
+func _on_get_config_id_done(_error, _response, _config_key) -> void:
 	metrics =  _response.transformed.result["resotometrics"]["metrics"]
 
 

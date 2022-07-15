@@ -1,7 +1,8 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://components/widgets/WidgetContainer.gd" type="Script" id=1]
 [ext_resource path="res://assets/resize_buttons.svg" type="Texture" id=2]
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=17]
 
@@ -93,33 +94,26 @@ flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 40, 40, 20, 20 )
 
+[sub_resource type="StyleBoxFlat" id=19]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+
 [node name="WidgetContainer" type="Control"]
 margin_right = 256.0
 margin_bottom = 256.0
 script = ExtResource( 1 )
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-visible = false
-anchor_right = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = 33.0
-
-[node name="Title" type="Label" parent="PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 239.0
-margin_bottom = 21.0
-text = "Title"
-
 [node name="MarginContainer" type="MarginContainer" parent="."]
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 32.0
 mouse_filter = 2
+theme = ExtResource( 3 )
 custom_constants/margin_right = 5
-custom_constants/margin_top = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
 
@@ -129,11 +123,10 @@ anchor_bottom = 1.0
 
 [node name="MidCenter" type="Button" parent="ResizeButtons"]
 anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -5.0
-margin_top = -5.0
-margin_right = 5.0
-margin_bottom = 5.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = 248.0
 mouse_default_cursor_shape = 13
 custom_styles/hover = SubResource( 17 )
 custom_styles/pressed = SubResource( 18 )
@@ -230,4 +223,34 @@ keep_pressed_outside = true
 texture_normal = SubResource( 7 )
 texture_pressed = SubResource( 8 )
 
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchor_right = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = 29.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 19 )
+
+[node name="Title" type="Label" parent="PanelContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 241.0
+margin_bottom = 19.0
+text = "Title"
+
+[node name="DeleteButton" type="Button" parent="PanelContainer/Title"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -10.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 20, 20 )
+text = "x"
+flat = true
+
 [node name="ResizeTween" type="Tween" parent="."]
+
+[connection signal="pressed" from="PanelContainer/Title/DeleteButton" to="." method="_on_DeleteButton_pressed"]
