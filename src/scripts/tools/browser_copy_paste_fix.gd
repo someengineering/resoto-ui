@@ -29,8 +29,8 @@ onready var navigator:JavaScriptObject		= JavaScript.get_interface("navigator")
 func _ready():
 	if not is_web:
 		return
-	os = JavaScript.eval("getOS()")
-	if os == "MacOS":
+	_g.platform = JavaScript.eval("getOS()")
+	if _g.platform == "MacOS":
 		add_mac_actions()
 
 

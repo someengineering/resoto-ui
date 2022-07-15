@@ -2,6 +2,7 @@ extends Node
 
 signal add_toast
 
+var platform:String = "Windows"
 var ui_version:String = "2.0.0a24"
 var popup_manager: CanvasLayer = null
 var ui_shrink: float = 1.0 setget set_ui_shrink
