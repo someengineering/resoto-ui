@@ -3,23 +3,19 @@ class_name Indicator
 extends BaseWidget
 
 export (float) var value : float setget set_value
-export (String) var variable_name := "" setget set_variable_name
 export (String) var unit := "" setget set_unit
 
 var decimal_digits := 2 setget set_decimal_digits
 var color := Color.white setget set_color
-var background_color := Color("#282828") setget set_background_color
+var background_color := Color("#1b141d") setget set_background_color
 
-onready var name_label := $IndicatorBackground/VariableName
 onready var value_label := $IndicatorBackground/ValueLabel
 onready var unit_label := $IndicatorBackground/UnitLabel
 onready var color_rect := $IndicatorBackground
 onready var value_font : DynamicFont = value_label.get("custom_fonts/font")
-onready var variable_font : DynamicFont = name_label.get("custom_fonts/font")
 onready var unit_font : DynamicFont = unit_label.get("custom_fonts/font")
 
 func _ready():
-	set_variable_name(variable_name)
 	set_unit(unit)
 	set_background_color(background_color)
 	set_decimal_digits(decimal_digits)
@@ -28,7 +24,6 @@ func _ready():
 func get_settings() -> Dictionary:
 	var data := {
 		"background_color" : background_color.to_html(),
-		"variable_name" : variable_name,
 		"unit" : unit
 	}
 	return data
@@ -39,12 +34,6 @@ func set_settings(data : Dictionary):
 			self.background_color = Color(data[key])
 		else:
 			set(key, data[key])
-	
-func set_variable_name(new_name : String):
-	variable_name = new_name
-	if is_instance_valid(name_label):
-		name_label.text = new_name
-		name_label._on_DynamicLabel_resized()
 	
 func set_unit(new_unit : String):
 	unit = new_unit

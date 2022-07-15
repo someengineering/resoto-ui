@@ -13,7 +13,7 @@ var resizeing := false
 var prev_size := Vector2.ZERO
 
 func _on_DynamicLabel_resized():
-	if not resizeing and rect_size.distance_to(prev_size) > 5:
+	if not resizeing and rect_size.distance_to(prev_size) > 10:
 		resizeing = true
 		set_process(true)
 		prev_size = rect_size

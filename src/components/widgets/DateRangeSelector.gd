@@ -7,8 +7,9 @@ onready var to := $PanelContainer/VBoxContainer/ToLineEdit
 onready var relative := $PanelContainer/VBoxContainer/ComboBox
 
 func _ready():
-	from.connect("date_changed", self, "_on_date_changed")
-	to.connect("date_changed", self, "_on_date_changed")
+	var success = from.process_date(from.text)
+	success = success and to.process_date(to.text)
+
 
 func _on_ComboBox_option_changed(option : String):
 	var text = option.to_lower()
@@ -19,12 +20,6 @@ func _on_ComboBox_option_changed(option : String):
 	
 	if not success:
 		relative.text = ""
-	else:
-		yield(VisualServer, "frame_post_draw")
-		relative.text = option
-	
-func _on_date_changed(_date):
-	relative.text = ""
 
 
 func _on_CancelButton_pressed():

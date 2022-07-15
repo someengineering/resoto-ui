@@ -26,11 +26,15 @@ var check_rect : Rect2
 var title : String = "" setget set_title
 var data_sources : Array
 
+var widget_title := "" setget set_widget_title
+
 onready var parent_reference : ReferenceRect
 onready var resize_buttons := $ResizeButtons
 onready var resize_tween := $ResizeTween
 onready var last_good_position : Vector2
 onready var last_good_size : Vector2
+onready var title_label := $PanelContainer/Title
+onready var delete_button := $PanelContainer/Title/DeleteButton
 
 
 func _ready() -> void:
@@ -45,9 +49,12 @@ func add_widget(_widget):
 	$MarginContainer.add_child(_widget)
 	widget = _widget
 	execute_query()
+	
+func set_widget_title(new_title : String):
+	widget_title = new_title
+	title_label.text = widget_title
 
 func _on_resize_button_released() -> void:
-	
 	set_process(false)
 	if resize_tween.is_active():
 		yield(resize_tween,"tween_all_completed")
@@ -262,6 +269,7 @@ func _on_ResizeTween_tween_all_completed():
 
 func lock(locked : bool) -> void:
 	resize_buttons.visible = !locked
+	delete_button.visible = !locked
 
 func set_title(new_title : String) -> void:
 	title = new_title
@@ -272,3 +280,7 @@ func execute_query():
 		widget.clear_series()
 	for datasource in data_sources:
 		datasource.make_query()
+
+
+func _on_DeleteButton_pressed():
+	queue_free()

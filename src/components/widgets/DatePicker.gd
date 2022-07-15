@@ -15,7 +15,9 @@ onready var minute_edit := $VBoxContainer/TimePicker/Minute
 
 func _ready():
 	hour_edit.value = current_date_dict["hour"]
+	hour_edit.connect("value_changed", self, "_on_Hour_value_changed")
 	minute_edit.value =  current_date_dict["minute"]
+	minute_edit.connect("value_changed", self, "_on_Minute_value_changed")
 	refresh_calendar()
 	
 func refresh_calendar(date_dict := current_date_dict):

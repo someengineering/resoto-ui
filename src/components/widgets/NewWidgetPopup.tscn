@@ -1,9 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
 [ext_resource path="res://components/widgets/NewWidgetPopup.gd" type="Script" id=3]
 
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+
 [node name="NewWidgetPopup" type="WindowDialog"]
+visible = true
 margin_right = 912.0
 margin_bottom = 656.0
 theme = ExtResource( 1 )
@@ -90,6 +98,9 @@ scroll_horizontal_enabled = false
 margin_right = 523.0
 size_flags_horizontal = 3
 
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+copy_mode = 2
+
 [node name="WidgetPreview" type="MarginContainer" parent="."]
 anchor_left = 0.6
 anchor_right = 1.0
@@ -115,11 +126,23 @@ margin_right = 341.0
 margin_bottom = 20.0
 text = "Widget Preview"
 
-[node name="PreviewContainer" type="PanelContainer" parent="WidgetPreview/VBoxContainer/VBoxContainer"]
+[node name="PreviewContainer" type="VBoxContainer" parent="WidgetPreview/VBoxContainer/VBoxContainer"]
 margin_top = 21.0
 margin_right = 341.0
 margin_bottom = 543.0
 size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer"]
+margin_right = 341.0
+margin_bottom = 30.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="Title" type="Label" parent="WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer/PanelContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 336.0
+margin_bottom = 25.0
+text = "Title"
 
 [node name="HSeparator" type="HSeparator" parent="WidgetPreview/VBoxContainer"]
 margin_top = 548.0

@@ -94,5 +94,3 @@ maximum = 59
 [connection signal="pressed" from="VBoxContainer/CurrentDateContainer/PrevMonth" to="." method="_on_PrevMonth_pressed"]
 [connection signal="pressed" from="VBoxContainer/CurrentDateContainer/NextMonth" to="." method="_on_NextMonth_pressed"]
 [connection signal="pressed" from="VBoxContainer/CurrentDateContainer/NextYear" to="." method="_on_NextYear_pressed"]
-[connection signal="value_changed" from="VBoxContainer/TimePicker/Hour" to="." method="_on_Hour_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/TimePicker/Minute" to="." method="_on_Minute_value_changed"]
