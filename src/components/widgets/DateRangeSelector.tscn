@@ -77,6 +77,8 @@ margin_right = 118.0
 margin_bottom = 24.0
 text = "Accept"
 
+[connection signal="date_changed" from="PanelContainer/VBoxContainer/FromLineEdit" to="." method="_on_FromLineEdit_date_changed"]
+[connection signal="date_changed" from="PanelContainer/VBoxContainer/ToLineEdit" to="." method="_on_ToLineEdit_date_changed"]
 [connection signal="option_changed" from="PanelContainer/VBoxContainer/ComboBox" to="." method="_on_ComboBox_option_changed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_CancelButton_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/AcceptButton" to="." method="_on_AcceptButton_pressed"]

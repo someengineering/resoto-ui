@@ -93,12 +93,12 @@ margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 text = "+"
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="RefreshOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
 margin_left = 1779.0
 margin_right = 1844.0
 margin_bottom = 29.0
 text = "15 min"
-items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hrs", null, false, 3, null, "12 hrs", null, false, 4, null, "24 hrs", null, false, 5, null ]
+items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hr", null, false, 3, null, "12 hr", null, false, 4, null, "24 hr", null, false, 5, null ]
 selected = 0
 
 [node name="LockButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
@@ -152,16 +152,21 @@ margin_right = 382.5
 margin_bottom = 260.0
 
 [node name="DateRangeSelector" parent="." instance=ExtResource( 8 )]
-visible = true
 margin_left = 806.0
 margin_top = 53.0
 margin_right = 1094.0
 margin_bottom = 285.0
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 900.0
+autostart = true
+
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/DateButton" to="." method="_on_DateButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
+[connection signal="item_selected" from="VBoxContainer/PanelContainer/HBoxContainer/RefreshOptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer/LockButton" to="VBoxContainer/Dashboard" method="lock"]
 [connection signal="resized" from="VBoxContainer/Dashboard/Grid" to="VBoxContainer/Dashboard" method="_on_Grid_resized"]
 [connection signal="widget_added" from="WindowDialog" to="VBoxContainer/Dashboard" method="add_widget"]
 [connection signal="range_selected" from="DateRangeSelector" to="." method="_on_DateRangeSelector_range_selected"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

@@ -1,7 +1,7 @@
 tool
 extends BaseWidget
 
-export (float) var x_origin := -100.0 setget set_x_origin
+export (float) var x_origin := 0.0 setget set_x_origin
 export (float) var x_range := 200.0 setget set_x_range
 export (bool) var auto_x := true
 export (float) var max_y_value := 100.0
@@ -16,7 +16,7 @@ var dynamic_label_scene := preload("res://components/widgets/DynamicLabel.tscn")
 var series_scene := preload("res://components/widgets/Serie.tscn")
 var mouse_on_graph := false
 
-var previous_closest_index := 0
+var step := 1
 
 var colors := [
 	Color.aquamarine,
@@ -40,34 +40,33 @@ func _ready():
 	legend.visible = false
 
 func _input(event):
-	if event.is_action_pressed("ui_accept"):
-		var data : PoolVector2Array = []
-		data.resize(100)
+#	if event.is_action_pressed("ui_accept"):
+#		var data : PoolVector2Array = []
+#		data.resize(100)
+#
+#		for i in data.size():
+#			data[i] = Vector2(i,2)
+#
+#		clear_series()
+#		add_serie(data, null, "", true)
+#
+#		for i in data.size():
+#			data[i] = Vector2(i+20,1+int(i/10))
+#		add_serie(data, null, "", true)
+#
+#		for i in data.size():
+#			data[i] = Vector2(i,int(i/5))
+#		add_serie(data, null, "", true)
+#
+#		complete_update()
 
-		for i in data.size():
-			data[i] = Vector2(i+10,2)
-
-		clear_series()
-		add_serie(data, null, "", true)
-
-		for i in data.size():
-			data[i] = Vector2(i+10,1+int(i/10))
-		add_serie(data, null, "", true)
-
-		for i in data.size():
-			data[i] = Vector2(i+10,int(i/5))
-		add_serie(data, null, "", true)
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
 		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x + x_origin
 		
 		legend.rect_global_position = get_global_mouse_position()
-		
-		var closest_index = series[0].find(find_closest_at_x(x, series[0]))
-		if previous_closest_index == closest_index:
-			return
 			
 		var stacked = 0
-		previous_closest_index = closest_index
+		
 		for label in legend_container.get_children():
 			legend_container.remove_child(label)
 			label.queue_free()
@@ -76,7 +75,7 @@ func _input(event):
 			var index = series.size() - i - 1
 			var l := Label.new()
 			var line : Line2D = graph_area.get_child(index)
-			var closest_point = series[index][closest_index]
+			var closest_point = find_value_at_x(x, series[index])
 			
 			l.text = line.name + ": " + str(closest_point.y)
 			l.set_meta("value", closest_point.y)
@@ -98,15 +97,12 @@ func _input(event):
 
 func set_x_origin(origin : float):
 	x_origin = origin
-	if is_inside_tree():
-		update_series()
 	
 func set_x_range(r : float):
 	x_range = r
-	if is_inside_tree():
-		update_series()
 
 func _on_GraphArea_resized():
+	print("resize")
 	if not is_instance_valid(x_labels):
 		return
 	var n = x_labels.get_child_count()
@@ -114,9 +110,7 @@ func _on_GraphArea_resized():
 		x_labels.get_child(0).rect_min_size.x = grid.rect_size.x / divisions.x / 2
 		x_labels.get_child(n - 1).rect_min_size.x = grid.rect_size.x / divisions.x / 2
 	grid.material.set_shader_param("size", grid.rect_size)
-	update_series()
-	yield(VisualServer,"frame_post_draw")
-	update_graph_area()
+	complete_update()
 	
 func update_series():
 	if not is_instance_valid(graph_area):
@@ -126,37 +120,37 @@ func update_series():
 	if series.size() == 0:
 		return
 	var origin : Vector2 = graph_area.rect_global_position + Vector2(0, graph_area.rect_size.y)
-	var stacked : PoolVector2Array = []
-	stacked.resize(series[0].size())
-	stacked.fill(Vector2.ZERO)
-	for i in graph_area.get_child_count():
-		var index = graph_area.get_child_count() - i -1
+	var n = graph_area.get_child_count()
+	var stacked : PoolRealArray = []
+	stacked.resize(range(x_origin, x_origin+x_range, step).size())
+	stacked.fill(0)
+	for i in n:
+		var index = n - i - 1
 		var line : Line2D = graph_area.get_child(index)
 		var serie : PoolVector2Array = series[index]
 		var values : PoolVector2Array = []
-		for j in serie.size():
-			var point = transform_point(serie[j])
+		
+		for j in range(x_origin, x_origin+x_range, step):
+			var point = find_value_at_x(j,series[index])
+			var pos = int((j - x_origin) / step)
 			if line.get_meta("stack"):
-				point += stacked[j]
-			if graph_area.get_global_rect().grow(1).has_point(point + origin):
-				values.append(point)
-				if line.get_meta("stack"):
-					stacked[j].y = point.y
-				
+				point.y += stacked[pos]
+				stacked[pos] = point.y
+#			if graph_area.get_global_rect().grow(1).has_point(point + origin):
+			values.append(transform_point(point))
 		line.points = values
 		line.global_position = origin
 
-func update_graph_area():
+func update_graph_area(force := false):
 	if not is_instance_valid(graph_area):
 		return
-		
 	var new_divisions = (graph_area.rect_size / 100).snapped(Vector2.ONE)
 	new_divisions.x = max(2, new_divisions.x)
 	new_divisions.y = max(2, new_divisions.y)
 
 	grid.material.set_shader_param("grid_divisions", divisions)
 	
-	if divisions.x != new_divisions.x:
+	if divisions.x != new_divisions.x or force:
 		divisions.x = new_divisions.x
 		var nx = divisions.x
 	
@@ -184,7 +178,7 @@ func update_graph_area():
 
 		x_labels.add_child(dummy_label.duplicate())
 		
-	if divisions.y != new_divisions.y:
+	if divisions.y != new_divisions.y or force:
 		divisions.y = new_divisions.y
 		var ny = divisions.y
 		for l in y_labels.get_children():
@@ -207,7 +201,6 @@ func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack :=
 	graph_area.add_child(serie)
 	serie.points = data
 	series.append(data)
-	complete_update()
 	
 	if color != null:
 		serie.default_color = color
@@ -268,11 +261,11 @@ func _process(_delta):
 			line.global_position = origin
 
 
-func complete_update():
+func complete_update(force_update_graph_area := false):
 	if auto_scale:
 		set_scale_from_series()
 	update_series()
-	update_graph_area()
+	update_graph_area(force_update_graph_area)
 	
 	
 func find_closest_at_x(target_x, serie):
@@ -288,7 +281,23 @@ func find_closest_at_x(target_x, serie):
 		result = value
 		
 	return result
-
+	
+func find_value_at_x(target_x, serie):
+	var prev = null
+	var next = null
+	for value in serie:
+		if value.x == target_x:
+			return value
+		elif value.x < target_x:
+			prev = value
+		else:
+			next = value
+			break
+	
+	if prev == null or next == null:
+		return Vector2(target_x, 0)
+	else:
+		return Vector2(target_x, lerp(prev.y, next.y ,(target_x - prev.x) / (next.x - prev.x)))
 
 func _on_GraphArea_mouse_entered():
 	for line in graph_area.get_children():

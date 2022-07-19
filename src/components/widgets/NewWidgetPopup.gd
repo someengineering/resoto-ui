@@ -10,6 +10,7 @@ var metrics : Dictionary = {}
 
 var from_date : int
 var to_date : int
+var interval : int
 
 var data_source_widget := preload("res://components/widgets/DatasourceContainer.tscn")
 
@@ -48,6 +49,7 @@ func _on_AddWidgetButton_pressed():
 		ds.stacked = datasource.data_source.stacked
 		ds.from = datasource.data_source.from
 		ds.to = datasource.data_source.to
+		ds.interval = datasource.data_source.interval
 		new_data_sources.append(ds)
 		
 	var widget_data := {
@@ -99,6 +101,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		datasource.widget = preview_widget
 		datasource.data_source.from = from_date
 		datasource.data_source.to = to_date
+		datasource.data_source.interval = interval
 
 func get_control_for_property(property : Dictionary):
 	var control : Control
@@ -145,16 +148,21 @@ func _on_get_config_id_done(_error, _response, _config_key) -> void:
 
 
 func _on_NewWidgetPopup_about_to_show():
-	create_preview(current_widget_preview_name)
 	for data_source in data_source_container.get_children():
 		data_source.queue_free()
+	create_preview(current_widget_preview_name)
 	API.get_config_id(self, "resoto.metrics")
 
 
 func _on_AddDataSource_pressed():
 	var ds = data_source_widget.instance()
+	print(interval)
+	ds.interval = interval
+	
 	data_source_container.add_child(ds)
 	ds.widget = preview_widget
+	ds.data_source.from = from_date
+	ds.data_source.to = to_date
 	ds.connect("source_changed", self, "update_preview")
 	ds.connect("tree_exited", self, "update_preview")
 	ds.set_metrics(metrics)
