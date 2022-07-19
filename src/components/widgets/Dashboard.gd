@@ -92,11 +92,12 @@ func find_empty_slot(rect : Rect2) -> Vector2:
 	return position
 
 
-func refresh(from : int, to : int):
+func refresh(from : int, to : int, interval : int):
 	for widget in widgets.get_children():
 		print(widget.data_sources[0].query)
 		for datasource in widget.data_sources:
 			datasource.from = from
 			datasource.to = to
+			datasource.interval = interval
 		widget.execute_query()
 	

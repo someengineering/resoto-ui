@@ -74,14 +74,14 @@ custom_constants/separation = 1
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer3"]
 margin_right = 513.0
 margin_bottom = 20.0
-text = "Function"
+text = "Aggregator"
 
 [node name="FunctionComboBox" parent="VBoxContainer/DatasourceSettings/VBoxContainer3" instance=ExtResource( 5 )]
 margin_left = 0.0
 margin_top = 21.0
 margin_right = 513.0
 margin_bottom = 45.0
-items = [ "", "sum" ]
+items = [ "", "sum", "min", "max", "avg", "count", "sum_over_time", "min_over_time", "max_over_time", "avg_over_time", "count_over_time" ]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings"]
 margin_top = 98.0

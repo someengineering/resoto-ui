@@ -15,8 +15,8 @@ func _on_ComboBox_option_changed(option : String):
 	var text = option.to_lower()
 	text = text.replace("last", "now -")
 	
-	var success = from.process_date(text)
-	success = success and to.process_date("now")
+	var success = from.process_date(text, false)
+	success = success and to.process_date("now", false)
 	
 	if not success:
 		relative.text = ""
@@ -36,3 +36,11 @@ func _on_AcceptButton_pressed():
 		text = relative.text
 	emit_signal("range_selected", start, end, text)
 	hide()
+
+
+func _on_FromLineEdit_date_changed(timestamp):
+	relative.text = ""
+
+
+func _on_ToLineEdit_date_changed(timestamp):
+	relative.text = ""

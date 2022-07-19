@@ -21,7 +21,7 @@ func _on_DatePicker_date_picked(date):
 	unix_time = date
 	text = Time.get_datetime_string_from_unix_time(date, true)
 
-func process_date(new_text := text) -> bool:
+func process_date(new_text := text, notify := true) -> bool:
 	text = new_text
 	new_text = new_text.to_lower()
 	if "now" in new_text:
@@ -43,7 +43,8 @@ func process_date(new_text := text) -> bool:
 			else:
 				unix_time = result
 				previous_text = text
-				emit_signal("date_changed", unix_time)
+				if notify:
+					emit_signal("date_changed", unix_time)
 				return true
 	else:
 		text = new_text.replace("/", "-")
@@ -56,7 +57,8 @@ func process_date(new_text := text) -> bool:
 		else:
 			text = Time.get_datetime_string_from_datetime_dict(date_dict, true)
 			previous_text = text
-			emit_signal("date_changed", unix_time)
+			if notify:
+				emit_signal("date_changed", unix_time)
 			return true
 
 

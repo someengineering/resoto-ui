@@ -11,7 +11,6 @@ content_margin_bottom = 5.0
 bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
 
 [node name="NewWidgetPopup" type="WindowDialog"]
-visible = true
 margin_right = 912.0
 margin_bottom = 656.0
 theme = ExtResource( 1 )

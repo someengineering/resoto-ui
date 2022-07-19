@@ -26,7 +26,7 @@ resource_local_to_scene = true
 shader = SubResource( 5 )
 shader_param/grid_divisions = Vector2( 5, 5 )
 shader_param/grid_color = Color( 0.85098, 0.721569, 1, 0.168627 )
-shader_param/size = Vector2( 1832, 1000 )
+shader_param/size = Vector2( 1859, 1003 )
 shader_param/line_width = 3.0
 
 [node name="Chart" type="Control"]
@@ -35,7 +35,6 @@ anchor_bottom = 1.0
 rect_clip_content = true
 script = ExtResource( 1 )
 data_type = 1
-x_origin = 0.0
 x_range = 100.0
 divisions = Vector2( 4, 8 )
 
@@ -44,33 +43,30 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
 margin_top = 5.0
 margin_right = -5.0
 margin_bottom = -5.0
-custom_constants/vseparation = 10
-custom_constants/hseparation = 10
-columns = 2
 
 [node name="YLabels" type="VBoxContainer" parent="GridContainer"]
-margin_bottom = 1060.0
+anchor_bottom = 1.0
+margin_right = 43.0
+margin_bottom = -59.0
 custom_constants/separation = 0
 
 [node name="Grid" type="ColorRect" parent="GridContainer"]
 material = SubResource( 6 )
-margin_left = 10.0
-margin_right = 1910.0
-margin_bottom = 1060.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 51.0
+margin_bottom = -67.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="GridContainer/Grid"]
 copy_mode = 2
@@ -88,15 +84,12 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Spacer" type="Control" parent="GridContainer"]
-margin_top = 1070.0
-margin_bottom = 1070.0
-
 [node name="XLabels" type="HBoxContainer" parent="GridContainer"]
-margin_left = 10.0
-margin_top = 1070.0
-margin_right = 1910.0
-margin_bottom = 1070.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 51.0
+margin_top = -59.0
 custom_constants/separation = 0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
