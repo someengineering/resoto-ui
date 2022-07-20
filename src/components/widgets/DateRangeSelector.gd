@@ -6,12 +6,12 @@ onready var from := $PanelContainer/VBoxContainer/FromLineEdit
 onready var to := $PanelContainer/VBoxContainer/ToLineEdit
 onready var relative := $PanelContainer/VBoxContainer/ComboBox
 
-func _ready():
+func _ready() -> void:
 	var success = from.process_date(from.text)
 	success = success and to.process_date(to.text)
 
 
-func _on_ComboBox_option_changed(option : String):
+func _on_ComboBox_option_changed(option : String) -> void:
 	var text = option.to_lower()
 	text = text.replace("last", "now -")
 	
@@ -22,11 +22,11 @@ func _on_ComboBox_option_changed(option : String):
 		relative.text = ""
 
 
-func _on_CancelButton_pressed():
+func _on_CancelButton_pressed() -> void:
 	hide()
 
 
-func _on_AcceptButton_pressed():
+func _on_AcceptButton_pressed() -> void:
 	var start = from.unix_time
 	var end = to.unix_time
 	var text = ""
@@ -38,9 +38,9 @@ func _on_AcceptButton_pressed():
 	hide()
 
 
-func _on_FromLineEdit_date_changed(timestamp):
+func _on_FromLineEdit_date_changed(_timestamp : int) -> void:
 	relative.text = ""
 
 
-func _on_ToLineEdit_date_changed(timestamp):
+func _on_ToLineEdit_date_changed(_timestamp : int) -> void:
 	relative.text = ""

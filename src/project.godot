@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/config/component_config_field.gd"
 }, {
+"base": "Node",
+"class": "DataSource",
+"language": "GDScript",
+"path": "res://components/widgets/DataSource.gd"
+}, {
 "base": "Label",
 "class": "DynamicLabel",
 "language": "GDScript",
@@ -91,6 +96,7 @@ _global_script_class_icons={
 "ConfigComponentDict": "",
 "ConfigComponentEnum": "",
 "ConfigComponentSimple": "",
+"DataSource": "",
 "DynamicLabel": "",
 "Indicator": "",
 "JWTGenerator": "",

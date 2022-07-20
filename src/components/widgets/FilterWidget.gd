@@ -7,7 +7,7 @@ onready var labels := $VBoxContainer/GridContainer/Labels
 onready var operators := $VBoxContainer/GridContainer/Operators
 onready var value := $VBoxContainer/GridContainer/Value
 
-func _on_Button_pressed():
+func _on_Button_pressed() -> void:
 	var filter = '%s%s"%s"' % [labels.text, operators.text, value.text]
 	if filter in line_edit.text:
 		return
@@ -17,11 +17,11 @@ func _on_Button_pressed():
 	emit_signal("filter_changed", line_edit.text)
 
 
-func _on_LineEdit_text_entered(new_text):
+func _on_LineEdit_text_entered(new_text : String) -> void:
 	emit_signal("filter_changed", new_text)
 
 
-func _on_Labels_option_changed(option):
+func _on_Labels_option_changed(option : String) -> void:
 	API.tsdb_label_values(option, self)
 	
 func _on_tsdb_label_values_done(error:int, response):
@@ -34,5 +34,5 @@ func _on_tsdb_label_values_done(error:int, response):
 	value.set_items(array)
 
 
-func _on_LineEdit_focus_exited():
+func _on_LineEdit_focus_exited() -> void:
 	emit_signal("filter_changed", line_edit.text)

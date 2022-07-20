@@ -8,6 +8,8 @@ var preview_widget : BaseWidget = null
 var data_sources : Array = []
 var metrics : Dictionary = {}
 
+var widget_to_edit = null
+
 var from_date : int
 var to_date : int
 var interval : int
@@ -28,12 +30,12 @@ onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("NameEdit")
 onready var options_container := find_node("Options")
 
-func _ready():
+func _ready() -> void:
 	for key in widgets:
 		widget_type_options.add_item(key)
 
-func _on_AddWidgetButton_pressed():
-	var widget = widgets[widget_type_options.text].instance()
+func _on_AddWidgetButton_pressed() -> void:
+	var widget = widgets[widget_type_options.text].instance() if widget_to_edit == null else widget_to_edit
 	var properties = get_preview_widget_properties()
 	
 	for key in get_preview_widget_properties():
@@ -52,19 +54,25 @@ func _on_AddWidgetButton_pressed():
 		ds.interval = datasource.data_source.interval
 		new_data_sources.append(ds)
 		
-	var widget_data := {
-		"scene" : widget,
-		"title" : widget_name_label.text,
-		"data_sources" : new_data_sources
-	}
-	emit_signal("widget_added", widget_data)
+	if widget_to_edit == null:
+		var widget_data := {
+			"scene" : widget,
+			"title" : widget_name_label.text,
+			"data_sources" : new_data_sources
+		}
+		emit_signal("widget_added", widget_data)
+	else:
+		widget.title = widget_name_label.text
+		widget.data_sources.clear()
+		widget.data_sources = new_data_sources
+		widget_to_edit = null
 	
 	
 	hide()
 	preview_widget.queue_free()
 
 
-func _on_WidgetType_item_selected(_index):
+func _on_WidgetType_item_selected(_index : int) -> void:
 	if widget_type_options.text == current_widget_preview_name:
 		return
 	create_preview(widget_type_options.text)
@@ -103,7 +111,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		datasource.data_source.to = to_date
 		datasource.data_source.interval = interval
 
-func get_control_for_property(property : Dictionary):
+func get_control_for_property(property : Dictionary) -> Control:
 	var control : Control
 	var control_signal := ""
 	
@@ -126,7 +134,7 @@ func get_control_for_property(property : Dictionary):
 			
 	return control
 	
-func get_preview_widget_properties():
+func get_preview_widget_properties() -> Dictionary:
 	var found_settings := false
 	var properties := {}
 	for property in preview_widget.get_property_list():
@@ -138,7 +146,7 @@ func get_preview_widget_properties():
 			 found_settings = true
 	return properties
 
-func _on_NameEdit_text_changed(new_text):
+func _on_NameEdit_text_changed(new_text : String) -> void:
 	if preview_container.get_child_count() > 0:
 		$WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer/PanelContainer/Title.text = new_text
 
@@ -147,16 +155,23 @@ func _on_get_config_id_done(_error, _response, _config_key) -> void:
 	metrics =  _response.transformed.result["resotometrics"]["metrics"]
 
 
-func _on_NewWidgetPopup_about_to_show():
+func _on_NewWidgetPopup_about_to_show() -> void:
 	for data_source in data_source_container.get_children():
 		data_source.queue_free()
+	if widget_to_edit != null:
+		for data_source in widget_to_edit.data_sources:
+			var ds = data_source_widget.instance()
+			data_source_container.add_child(ds)
+			ds.data_source.query = data_source.query
+			ds.data_source.legend = data_source.legend
+			ds.data_source.stacked = data_source.stacked
+		
 	create_preview(current_widget_preview_name)
 	API.get_config_id(self, "resoto.metrics")
 
 
-func _on_AddDataSource_pressed():
+func _on_AddDataSource_pressed() -> void:
 	var ds = data_source_widget.instance()
-	print(interval)
 	ds.interval = interval
 	
 	data_source_container.add_child(ds)
@@ -168,9 +183,14 @@ func _on_AddDataSource_pressed():
 	ds.set_metrics(metrics)
 	
 	
-func update_preview():
+func update_preview() -> void:
 	if preview_widget.has_method("clear_series"):
 		print("cleared")
 		preview_widget.clear_series()
 	for datasource in data_source_container.get_children():
 		datasource.data_source.make_query()
+
+func edit_widget(widget) -> void:
+	widget_to_edit = widget
+	popup_centered()
+	

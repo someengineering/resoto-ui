@@ -1,8 +1,9 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://components/widgets/WidgetContainer.gd" type="Script" id=1]
 [ext_resource path="res://assets/resize_buttons.svg" type="Texture" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
+[ext_resource path="res://assets/gear.png" type="Texture" id=4]
 
 [sub_resource type="StyleBoxEmpty" id=17]
 
@@ -237,7 +238,22 @@ margin_left = 5.0
 margin_top = 5.0
 margin_right = 241.0
 margin_bottom = 19.0
+size_flags_horizontal = 3
 text = "Title"
+
+[node name="ConfigButton" type="Button" parent="PanelContainer/Title"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -37.0
+margin_top = -10.0
+margin_right = -17.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 20, 20 )
+icon = ExtResource( 4 )
+flat = true
+expand_icon = true
 
 [node name="DeleteButton" type="Button" parent="PanelContainer/Title"]
 anchor_left = 1.0
@@ -253,4 +269,5 @@ flat = true
 
 [node name="ResizeTween" type="Tween" parent="."]
 
+[connection signal="pressed" from="PanelContainer/Title/ConfigButton" to="." method="_on_ConfigButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Title/DeleteButton" to="." method="_on_DeleteButton_pressed"]

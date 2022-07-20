@@ -13,14 +13,14 @@ onready var grid_container := $VBoxContainer/GridContainer
 onready var hour_edit := $VBoxContainer/TimePicker/Hour
 onready var minute_edit := $VBoxContainer/TimePicker/Minute
 
-func _ready():
+func _ready() -> void:
 	hour_edit.value = current_date_dict["hour"]
 	hour_edit.connect("value_changed", self, "_on_Hour_value_changed")
 	minute_edit.value =  current_date_dict["minute"]
 	minute_edit.connect("value_changed", self, "_on_Minute_value_changed")
 	refresh_calendar()
 	
-func refresh_calendar(date_dict := current_date_dict):
+func refresh_calendar(date_dict : Dictionary = current_date_dict) -> void:
 	
 	date_label.text = Time.get_date_string_from_unix_time(Time.get_unix_time_from_datetime_dict(date_dict))
 	
@@ -74,7 +74,7 @@ func refresh_calendar(date_dict := current_date_dict):
 		first += 3600*24
 		first_dict = Time.get_date_dict_from_unix_time(first)
 		
-func pick_date(date : int):
+func pick_date(date : int) -> void:
 	var new_date_dict = Time.get_datetime_dict_from_unix_time(date)
 	if new_date_dict["month"] != current_date_dict["month"] or new_date_dict["year"] != current_date_dict["year"]:
 		refresh_calendar(new_date_dict)
@@ -83,32 +83,32 @@ func pick_date(date : int):
 	date_label.text = Time.get_date_string_from_unix_time(date)
 	emit_signal("date_picked", date)
 
-func _on_PrevYear_pressed():
+func _on_PrevYear_pressed() -> void:
 	current_date_dict["year"] -= 1
 	refresh_calendar()
 
 
-func _on_PrevMonth_pressed():
+func _on_PrevMonth_pressed() -> void:
 	current_date_dict["month"] -= 1
 	refresh_calendar()
 
 
-func _on_NextMonth_pressed():
+func _on_NextMonth_pressed() -> void:
 	current_date_dict["month"] += 1
 	refresh_calendar()
 
 
-func _on_NextYear_pressed():
+func _on_NextYear_pressed() -> void:
 	current_date_dict["year"] += 1
 	refresh_calendar()
 
-func _on_Hour_value_changed(value):
+func _on_Hour_value_changed(value : int) -> void:
 	current_date_dict["hour"] = value
 	current_date = Time.get_unix_time_from_datetime_dict(current_date_dict)
 	emit_signal("date_picked", current_date)
 
 
-func _on_Minute_value_changed(value):
+func _on_Minute_value_changed(value : int) -> void:
 	current_date_dict["minute"] = value
 	current_date = Time.get_unix_time_from_datetime_dict(current_date_dict)
 	emit_signal("date_picked", current_date)

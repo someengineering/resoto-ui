@@ -7,18 +7,18 @@ var minimum_y = INF
 
 onready var indicator := $Indicator
 
-func _ready():
+func _ready() -> void:
 	set_as_toplevel(true)
 	get_parent().connect("visibility_changed", self, "change_visible")
 	indicator.visible = false
 	
-func change_visible():
+func change_visible() -> void:
 	visible = get_parent().is_visible_in_tree()
 
-func show_indicator(point : Vector2):
+func show_indicator(point : Vector2) -> void:
 	indicator.position = point
 
-func _on_Serie_draw():
+func _on_Serie_draw() -> void:
 	indicator.color = default_color
 	self_modulate = default_color
 	if points.size() > 0:
@@ -36,9 +36,9 @@ func _on_Serie_draw():
 		vertex_colors.resize(poly.size())
 		vertex_colors.fill(default_color)
 	
-		
-		for i in points.size():
-			vertex_colors[i+1].a = 0.2 * points[i].y /(- maximum_y)
+		if maximum_y != 0:
+			for i in points.size():
+				vertex_colors[i+1].a = 0.2 * points[i].y /(- maximum_y)
 		
 		vertex_colors[0] = Color(0,0,0,0)
 		vertex_colors[vertex_colors.size()-1] = Color(0,0,0,0)
@@ -46,7 +46,7 @@ func _on_Serie_draw():
 	else:
 		$Polygon2D.polygon = []
 		
-func update_min_max():
+func update_min_max() -> void:
 	var maxy = -INF
 	var miny = INF
 	for point in points:

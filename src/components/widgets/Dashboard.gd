@@ -10,7 +10,7 @@ export var grid_margin := Vector2(5,5)
 onready var _x_grid_size := rect_size.x / x_grid_ratio
 onready var widget_container_scene := preload("res://components/widgets/WidgetContainer.tscn")
 
-func add_widget(widget_data) -> void:
+func add_widget(widget_data : Dictionary) -> void:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
 	var container = widget_container_scene.instance()
 	container.name = "WidgetContainer"
@@ -28,6 +28,8 @@ func add_widget(widget_data) -> void:
 	container.data_sources = widget_data["data_sources"]
 	container.set_deferred("widget_title", widget_data["title"])
 	container.call_deferred("add_widget", widget)
+	
+	container.connect("config_pressed", owner, "_on_WidgetContainer_config_pressed")
 	
 	yield(VisualServer,"frame_post_draw")
 	
@@ -92,7 +94,7 @@ func find_empty_slot(rect : Rect2) -> Vector2:
 	return position
 
 
-func refresh(from : int, to : int, interval : int):
+func refresh(from : int, to : int, interval : int) -> void:
 	for widget in widgets.get_children():
 		print(widget.data_sources[0].query)
 		for datasource in widget.data_sources:
