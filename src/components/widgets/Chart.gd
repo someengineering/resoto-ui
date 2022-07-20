@@ -287,6 +287,7 @@ func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	var next = null
 	for value in serie:
 		if value.x == target_x:
+			print("found")
 			return value
 		elif value.x < target_x:
 			prev = value

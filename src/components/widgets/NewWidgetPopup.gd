@@ -35,7 +35,7 @@ func _ready() -> void:
 		widget_type_options.add_item(key)
 
 func _on_AddWidgetButton_pressed() -> void:
-	var widget = widgets[widget_type_options.text].instance() if widget_to_edit == null else widget_to_edit
+	var widget = widgets[widget_type_options.text].instance() if widget_to_edit == null else widget_to_edit.widget
 	var properties = get_preview_widget_properties()
 	
 	for key in get_preview_widget_properties():
@@ -62,9 +62,9 @@ func _on_AddWidgetButton_pressed() -> void:
 		}
 		emit_signal("widget_added", widget_data)
 	else:
-		widget.title = widget_name_label.text
-		widget.data_sources.clear()
-		widget.data_sources = new_data_sources
+		widget_to_edit.title = widget_name_label.text
+		widget_to_edit.data_sources.clear()
+		widget_to_edit.data_sources = new_data_sources
 		widget_to_edit = null
 	
 	
@@ -162,6 +162,7 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 		for data_source in widget_to_edit.data_sources:
 			var ds = data_source_widget.instance()
 			data_source_container.add_child(ds)
+			ds.connect("source_changed", self, "update_preview")
 			ds.data_source.query = data_source.query
 			ds.data_source.legend = data_source.legend
 			ds.data_source.stacked = data_source.stacked
