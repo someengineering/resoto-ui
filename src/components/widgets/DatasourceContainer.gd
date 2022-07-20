@@ -41,6 +41,9 @@ func _on_MetricsOptions_option_changed(option : String) -> void:
 func _on_metrics_query_finished(error:int, response) -> void:
 	var labels := []
 	var data = response.transformed.result
+	if data.data.result.size() == 0:
+		_g.emit_signal("add_toast", "Can't find Labels", "Can't find labels for the selected metric", 1)
+		return
 	for label in data.data.result[0].metric:
 		if not label.begins_with("__"):
 			labels.append(label)
