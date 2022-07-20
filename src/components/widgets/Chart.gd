@@ -1,4 +1,3 @@
-tool
 extends BaseWidget
 
 export (float) var x_origin := 0.0 setget set_x_origin
@@ -17,6 +16,7 @@ var series_scene := preload("res://components/widgets/Serie.tscn")
 var mouse_on_graph := false
 
 var step := 1
+var prev_origin : Vector2
 
 var colors := [
 	Color.aquamarine,
@@ -36,10 +36,10 @@ onready var x_labels := $GridContainer/XLabels
 onready var y_labels := $GridContainer/YLabels
 onready var grid := $GridContainer/Grid
 
-func _ready():
+func _ready() -> void:
 	legend.visible = false
 
-func _input(event):
+func _input(event) -> void:
 #	if event.is_action_pressed("ui_accept"):
 #		var data : PoolVector2Array = []
 #		data.resize(100)
@@ -95,14 +95,13 @@ func _input(event):
 					legend_container.move_child(legend_container.get_child(j), i)
 					legend_container.move_child(label, j)
 
-func set_x_origin(origin : float):
+func set_x_origin(origin : float) -> void:
 	x_origin = origin
 	
-func set_x_range(r : float):
+func set_x_range(r : float) -> void:
 	x_range = r
 
-func _on_GraphArea_resized():
-	print("resize")
+func _on_GraphArea_resized() -> void:
 	if not is_instance_valid(x_labels):
 		return
 	var n = x_labels.get_child_count()
@@ -112,7 +111,7 @@ func _on_GraphArea_resized():
 	grid.material.set_shader_param("size", grid.rect_size)
 	complete_update()
 	
-func update_series():
+func update_series() -> void:
 	if not is_instance_valid(graph_area):
 		return
 	if graph_area.rect_size.x == 0 or graph_area.rect_size.y == 0:
@@ -141,7 +140,7 @@ func update_series():
 		line.points = values
 		line.global_position = origin
 
-func update_graph_area(force := false):
+func update_graph_area(force := false) -> void:
 	if not is_instance_valid(graph_area):
 		return
 	var new_divisions = (graph_area.rect_size / 100).snapped(Vector2.ONE)
@@ -194,7 +193,7 @@ func update_graph_area(force := false):
 			l.valign = Label.VALIGN_BOTTOM
 			y_labels.add_child(l)
 		
-func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack := false):
+func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack := false) -> void:
 	var serie := series_scene.instance()
 	serie.set_meta("stack", stack)
 	serie.get_node("Polygon2D").visible = stack
@@ -214,7 +213,7 @@ func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack :=
 	serie.name = serie_name
 	
 	
-func clear_series():
+func clear_series() -> void:
 	for serie in graph_area.get_children():
 		if serie is Line2D:
 			graph_area.remove_child(serie)
@@ -222,8 +221,7 @@ func clear_series():
 	
 	series.clear()
 
-func set_scale_from_series():
-	
+func set_scale_from_series() -> void:
 	if series.size() == 0:
 		return
 	
@@ -254,22 +252,24 @@ func set_scale_from_series():
 		miny = 0
 	max_y_value = maxy * 1.2
 	
-func _process(_delta):
+func _process(_delta : float) -> void:
 	var origin : Vector2 = graph_area.rect_global_position + Vector2(0, graph_area.rect_size.y)
-	for line in graph_area.get_children():
-		if line is Line2D:
-			line.global_position = origin
+	
+	if prev_origin != origin:
+		prev_origin = origin
+		for line in graph_area.get_children():
+			if line is Line2D:
+				line.global_position = origin
 
 
-func complete_update(force_update_graph_area := false):
+func complete_update(force_update_graph_area := false) -> void:
 	if auto_scale:
 		set_scale_from_series()
 	update_series()
 	update_graph_area(force_update_graph_area)
 	
 	
-func find_closest_at_x(target_x, serie):
-
+func find_closest_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	var distance = INF
 	var result = null
 	
@@ -282,7 +282,7 @@ func find_closest_at_x(target_x, serie):
 		
 	return result
 	
-func find_value_at_x(target_x, serie):
+func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	var prev = null
 	var next = null
 	for value in serie:
@@ -299,20 +299,20 @@ func find_value_at_x(target_x, serie):
 	else:
 		return Vector2(target_x, lerp(prev.y, next.y ,(target_x - prev.x) / (next.x - prev.x)))
 
-func _on_GraphArea_mouse_entered():
+func _on_GraphArea_mouse_entered() -> void:
 	for line in graph_area.get_children():
 		line.indicator.visible = true
 	legend.visible = true
 	mouse_on_graph = true
 
 
-func _on_GraphArea_mouse_exited():
+func _on_GraphArea_mouse_exited() -> void:
 	for line in graph_area.get_children():
 		line.indicator.visible = false
 	legend.visible = false
 	mouse_on_graph = false
 
-func transform_point(point : Vector2):
+func transform_point(point : Vector2) -> Vector2:
 	var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
 	point += Vector2(-x_origin, -min_y_value)
 	point /= ratio

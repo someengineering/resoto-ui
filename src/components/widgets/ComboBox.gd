@@ -18,7 +18,7 @@ func _on_Button_pressed():
 	show_options()
 	line_edit.grab_focus()
 
-func set_text(new_text:String):
+func set_text(new_text:String) -> void:
 	text = new_text
 	$LineEdit.text = new_text
 	
@@ -26,7 +26,7 @@ func get_text() -> String:
 	return $LineEdit.text
 	
 
-func populate_options(filter : String = ""):
+func populate_options(filter : String = "") -> void:
 	for option in options_container.get_children():
 		option.queue_free()
 	if filter == "":
@@ -49,31 +49,31 @@ func populate_options(filter : String = ""):
 		for item in matching_items:
 			add_option(item)
 			
-func add_option(option_name : String):
+func add_option(option_name : String) -> void:
 	var button := Button.new()
 	button.size_flags_horizontal = SIZE_EXPAND_FILL
 	button.text = option_name
 	button.connect("pressed", self, "_on_option_pressed", [option_name])
 	options_container.add_child(button)
 
-func _on_LineEdit_text_changed(new_text):
+func _on_LineEdit_text_changed(new_text : String) -> void:
 	populate_options(new_text)
 	show_options()
 	line_edit.grab_focus()
 
-func _on_option_pressed(option_name : String):
+func _on_option_pressed(option_name : String) -> void:
 	line_edit.text = option_name
 	options_popup.hide()
 	emit_signal("option_changed", option_name)
 	
-func show_options():
+func show_options() -> void:
 	options_popup.popup()
 	options_popup.rect_global_position = rect_global_position + Vector2(0, rect_size.y+10)
 	options_popup.rect_size.x = rect_size.x
 	yield(VisualServer,"frame_post_draw")
 	options_popup.rect_size.y = min(400, options_container.rect_size.y + 10)
 
-func set_items(new_items : Array):
+func set_items(new_items : Array) -> void:
 	items.clear()
 	line_edit.text = ""
 	for item in new_items:
@@ -82,14 +82,14 @@ func set_items(new_items : Array):
 func add_item(new_item):
 	items.append(new_item)
 	
-func clear():
+func clear() -> void:
 	items.clear()
 
-func _on_LineEdit_text_entered(new_text):
+func _on_LineEdit_text_entered(new_text: String) -> void:
 	emit_signal("option_changed", new_text)
 
 
-func _on_LineEdit_gui_input(event):
+func _on_LineEdit_gui_input(event) -> void:
 	if event is InputEventMouseButton :
 		if event.button_index == BUTTON_LEFT:
 			if event.is_pressed():
@@ -111,7 +111,7 @@ func _on_LineEdit_gui_input(event):
 				options_container.get_child(0).grab_focus()
 
 
-func _on_LineEdit_focus_exited():
+func _on_LineEdit_focus_exited() -> void:
 	yield(VisualServer,"frame_post_draw")
 	var focus = line_edit.has_focus()
 	for button in options_container.get_children():

@@ -12,13 +12,13 @@ onready var font : DynamicFont = get("custom_fonts/font")
 var resizeing := false
 var prev_size := Vector2.ZERO
 
-func _on_DynamicLabel_resized():
+func _on_DynamicLabel_resized() -> void:
 	if not resizeing and rect_size.distance_to(prev_size) > 10:
 		resizeing = true
 		set_process(true)
 		prev_size = rect_size
 
-func _process(_delta):
+func _process(_delta : float) -> void:
 	if is_instance_valid(font) and resizeing:
 		resizeing = false
 		var size : Vector2
@@ -28,7 +28,7 @@ func _process(_delta):
 			font.size = int(clamp(min(size.x, size.y), min_font_size, max_font_size))
 	set_process(false)
 
-func get_text_size(_text := ""):
+func get_text_size(_text := "") -> Vector2:
 	if _text == "":
 		_text = text
 	return font.get_string_size(_text)

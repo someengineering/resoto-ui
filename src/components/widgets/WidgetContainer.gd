@@ -1,5 +1,7 @@
 extends Control
 
+signal config_pressed(widget_container)
+
 enum RESIZE_MODES {
 	MOVE,
 	TOP_LEFT,
@@ -23,7 +25,7 @@ var dashboard : Control
 var widget : BaseWidget
 
 var check_rect : Rect2
-var title : String = "" setget set_title
+export var title : String = "" setget set_title
 var data_sources : Array
 
 var widget_title := "" setget set_widget_title
@@ -45,12 +47,12 @@ func _ready() -> void:
 	
 	set_process(false)
 
-func add_widget(_widget):
+func add_widget(_widget : BaseWidget) -> void:
 	$MarginContainer.add_child(_widget)
 	widget = _widget
 	execute_query()
 	
-func set_widget_title(new_title : String):
+func set_widget_title(new_title : String) -> void:
 	widget_title = new_title
 	title_label.text = widget_title
 
@@ -68,7 +70,7 @@ func _on_resize_button_released() -> void:
 	set_anchors()
 
 
-func set_anchors():
+func set_anchors() -> void:
 	var dashboard_size = dashboard.rect_size
 	margin_left = 0
 	margin_right = 0
@@ -218,7 +220,7 @@ func _process(_delta : float) -> void:
 		
 	last_pressed_position = new_position
 	
-func animate_reference_rect():
+func animate_reference_rect() -> void:
 	resize_tween.interpolate_property(parent_reference, "rect_position", parent_reference.rect_position, check_rect.position, 0.2)
 	resize_tween.interpolate_property(parent_reference, "rect_size", parent_reference.rect_size, check_rect.size, 0.2)
 	resize_tween.start()
@@ -264,7 +266,7 @@ func find_next_rect(direction : Vector2, N=10):
 	return null
 	
 
-func _on_ResizeTween_tween_all_completed():
+func _on_ResizeTween_tween_all_completed() -> void:
 	limits = get_limits()
 
 func lock(locked : bool) -> void:
@@ -275,12 +277,16 @@ func set_title(new_title : String) -> void:
 	title = new_title
 	$PanelContainer/Title.text = title
 
-func execute_query():
+func execute_query() -> void:
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	for datasource in data_sources:
 		datasource.make_query()
 
 
-func _on_DeleteButton_pressed():
+func _on_DeleteButton_pressed() -> void:
 	queue_free()
+
+
+func _on_ConfigButton_pressed():
+	emit_signal("config_pressed", self)
