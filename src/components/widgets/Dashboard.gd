@@ -10,6 +10,10 @@ export var grid_margin := Vector2(5,5)
 onready var _x_grid_size := rect_size.x / x_grid_ratio
 onready var widget_container_scene := preload("res://components/widgets/WidgetContainer.tscn")
 
+var ts_start : int
+var ts_end : int
+var step : int
+
 func add_widget(widget_data : Dictionary) -> void:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
 	var container = widget_container_scene.instance()
@@ -23,6 +27,8 @@ func add_widget(widget_data : Dictionary) -> void:
 	var reference = ReferenceRect.new()
 	container.parent_reference = reference
 	$References.add_child(reference)
+	
+	container.connect("moved_or_resized", self, "_on_widget_moved_or_resized")
 	
 	var widget = widget_data["scene"]
 	container.data_sources = widget_data["data_sources"]
@@ -95,11 +101,16 @@ func find_empty_slot(rect : Rect2) -> Vector2:
 
 
 func refresh(from : int, to : int, interval : int) -> void:
+	ts_start = from
+	ts_end = to
+	step = interval
 	for widget in widgets.get_children():
-		print(widget.data_sources[0].query)
-		for datasource in widget.data_sources:
-			datasource.from = from
-			datasource.to = to
-			datasource.interval = interval
 		widget.execute_query()
 	
+func _on_widget_moved_or_resized():
+	var max_y : float = -INF
+	for widget in widgets.get_children():
+		if widget.rect_size.y + widget.rect_position.y > max_y:
+			max_y = widget.rect_size.y + widget.rect_position.y
+			
+	rect_min_size.y = max(max_y, get_parent().rect_size.y)

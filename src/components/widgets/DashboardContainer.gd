@@ -1,7 +1,7 @@
 extends Control
 
 onready var date_button := $VBoxContainer/PanelContainer/HBoxContainer/DateButton
-onready var dashboard := $VBoxContainer/Dashboard
+onready var dashboard := $VBoxContainer/ScrollContainer/Dashboard
 onready var add_widget_popup := $WindowDialog
 onready var range_selector := $DateRangeSelector
 onready var refresh_option := $VBoxContainer/PanelContainer/HBoxContainer/RefreshOptionButton
@@ -9,7 +9,11 @@ onready var refresh_option := $VBoxContainer/PanelContainer/HBoxContainer/Refres
 func _ready() -> void:
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
-	add_widget_popup.interval = 3600
+	add_widget_popup.interval = 864 # 100 points in a day
+	dashboard.ts_start = $DateRangeSelector.from.unix_time
+	dashboard.ts_end = $DateRangeSelector.to.unix_time
+	dashboard.step = 864
+	
 
 func _on_AddWidgetButton_pressed() -> void:
 	$WindowDialog.popup_centered()
@@ -19,7 +23,7 @@ func _on_WidgetContainer_config_pressed(widget_container) -> void:
 
 
 func _on_DateButton_pressed() -> void:
-	$DateRangeSelector.rect_position = $VBoxContainer/Dashboard.rect_position
+	$DateRangeSelector.rect_position = dashboard.rect_position
 	$DateRangeSelector.rect_position.x = rect_size.x / 2 - $DateRangeSelector.rect_size.x / 26
 	
 	$DateRangeSelector.popup()
@@ -30,6 +34,7 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	add_widget_popup.from_date = start
 	add_widget_popup.to_date = end
 	add_widget_popup.interval = (end-start)/100
+	print("refresh: ", end-start)
 	dashboard.refresh(start, end, (end-start)/100)
 
 

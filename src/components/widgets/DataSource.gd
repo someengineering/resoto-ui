@@ -5,11 +5,8 @@ var query : String
 var legend : String
 var widget : BaseWidget
 var stacked : bool = true
-var interval : int = 3600
-var from : int = Time.get_unix_time_from_system() - 3600 * 24
-var to : int = Time.get_unix_time_from_system()
 
-func make_query() -> void:
+func make_query(from, to, interval) -> void:
 	var q = query.replace("$interval", "%ds" % (interval*2))
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 		API.query_tsdb(q, self)

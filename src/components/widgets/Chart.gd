@@ -226,30 +226,23 @@ func set_scale_from_series() -> void:
 		return
 	
 	var maxy = -INF
-	var miny = INF
-	
-	var stacked := []
-	
-	stacked.resize(series[0].size())
+
+	var stacked : PoolRealArray = []
+	stacked.resize(range(x_origin, x_origin+x_range, step).size())
 	stacked.fill(0)
-	for j in series.size():
-		var index = series.size() -j -1
-		var serie = series[index]
-		var line = graph_area.get_child(index)
-		for i in serie.size():
-			var value = serie[i]
-			if line.get_meta("stack"):
-				value.y += stacked[i]
-				stacked[i] = value.y
+
+	for j in range(x_origin, x_range + x_origin, step):
+		for serie in series:
+			var value = find_value_at_x(j, serie)
+			
+			if stacked:
+				var pos = int((j - x_origin) / step)
+				value.y += stacked[pos]
+				stacked[pos] = value.y
 			if maxy < value.y:
 				maxy = value.y
-			if miny > value.y:
-				miny = value.y
 				
-	if maxy == -INF:
-		maxy = 100
-	if miny == INF:
-		miny = 0
+	print(maxy)
 	max_y_value = maxy * 1.2
 	
 func _process(_delta : float) -> void:
@@ -287,7 +280,6 @@ func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	var next = null
 	for value in serie:
 		if value.x == target_x:
-			print("found")
 			return value
 		elif value.x < target_x:
 			prev = value

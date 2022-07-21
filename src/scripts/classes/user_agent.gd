@@ -160,8 +160,6 @@ func _on_request_done_(_err:int, _response:Response) -> void:
 
 func request_(method:int, path:String, headers:Array = [], body:String = "") -> Request:
 	var http_ :HTTPClient = HTTPClient.new()
-	print("Host = " + options.host)
-	#prints("\nConnecting:\n",options.host, options.port, options.use_ssl)
 	var err = http_.connect_to_host(options.host, options.port, options.use_ssl)
 	if err != OK:
 		debug_message("Error in connection! Check adress and port!")
