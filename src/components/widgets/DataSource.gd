@@ -38,6 +38,7 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 	
 	if _error != 0 or typeof(data) == TYPE_STRING:
 		_g.emit_signal("add_toast", "Request Error", data, 1)
+		return
 		
 	if data.data.result.size() == 0:
 		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
