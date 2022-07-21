@@ -17,7 +17,6 @@ onready var query_edit := $VBoxContainer/VBoxContainer/QueryEdit
 var interval : int = 3600
 
 func _ready() -> void:
-	data_source.interval = interval
 	data_source.widget = widget
 
 func _on_Button_toggled(button_pressed : bool) -> void:

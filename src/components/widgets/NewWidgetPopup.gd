@@ -49,9 +49,6 @@ func _on_AddWidgetButton_pressed() -> void:
 		ds.legend = datasource.data_source.legend
 		ds.widget = widget
 		ds.stacked = datasource.data_source.stacked
-		ds.from = datasource.data_source.from
-		ds.to = datasource.data_source.to
-		ds.interval = datasource.data_source.interval
 		new_data_sources.append(ds)
 		
 	if widget_to_edit == null:
@@ -80,8 +77,14 @@ func _on_WidgetType_item_selected(_index : int) -> void:
 func create_preview(widget_type : String = "Indicator") -> void:
 	if is_instance_valid(preview_widget):
 		preview_widget.queue_free()
+	
+	if widget_to_edit == null:
+		preview_widget = widgets[widget_type].instance()
+	else:
+		preview_widget = load(widget_to_edit.widget.filename).instance()
+		for key in get_preview_widget_properties():
+			preview_widget[key] = widget_to_edit.widget[key]
 		
-	preview_widget = widgets[widget_type].instance()
 	preview_widget.size_flags_vertical = SIZE_EXPAND_FILL
 	for option in options_container.get_children():
 		option.queue_free()
@@ -107,9 +110,9 @@ func create_preview(widget_type : String = "Indicator") -> void:
 	
 	for datasource in data_source_container.get_children():
 		datasource.widget = preview_widget
-		datasource.data_source.from = from_date
-		datasource.data_source.to = to_date
-		datasource.data_source.interval = interval
+		
+	if widget_to_edit != null:
+		update_preview()
 
 func get_control_for_property(property : Dictionary) -> Control:
 	var control : Control
@@ -166,7 +169,8 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 			ds.data_source.query = data_source.query
 			ds.data_source.legend = data_source.legend
 			ds.data_source.stacked = data_source.stacked
-		
+			
+	$WidgetOptions/VBoxContainer/VBoxContainer2.visible = widget_to_edit == null
 	create_preview(current_widget_preview_name)
 	API.get_config_id(self, "resoto.metrics")
 
@@ -177,8 +181,6 @@ func _on_AddDataSource_pressed() -> void:
 	
 	data_source_container.add_child(ds)
 	ds.widget = preview_widget
-	ds.data_source.from = from_date
-	ds.data_source.to = to_date
 	ds.connect("source_changed", self, "update_preview")
 	ds.connect("tree_exited", self, "update_preview")
 	ds.set_metrics(metrics)
@@ -186,10 +188,9 @@ func _on_AddDataSource_pressed() -> void:
 	
 func update_preview() -> void:
 	if preview_widget.has_method("clear_series"):
-		print("cleared")
 		preview_widget.clear_series()
 	for datasource in data_source_container.get_children():
-		datasource.data_source.make_query()
+		datasource.data_source.make_query(from_date, to_date, interval)
 
 func edit_widget(widget) -> void:
 	widget_to_edit = widget

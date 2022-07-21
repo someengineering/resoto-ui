@@ -1,5 +1,6 @@
 extends Control
 
+signal moved_or_resized
 signal config_pressed(widget_container)
 
 enum RESIZE_MODES {
@@ -76,6 +77,7 @@ func set_anchors() -> void:
 	margin_right = 0
 	anchor_left = (parent_reference.rect_position.x) / dashboard_size.x
 	anchor_right = (parent_reference.rect_position + parent_reference.rect_size).x / dashboard_size.x
+	emit_signal("moved_or_resized")
 
 func _on_resize_button_pressed( mode : int) -> void:
 	limits = get_limits()
@@ -281,7 +283,8 @@ func execute_query() -> void:
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	for datasource in data_sources:
-		datasource.make_query()
+		print(dashboard.step)
+		datasource.make_query(dashboard.ts_start, dashboard.ts_end, dashboard.step)
 
 
 func _on_DeleteButton_pressed() -> void:
