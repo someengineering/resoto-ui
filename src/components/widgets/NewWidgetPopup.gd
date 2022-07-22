@@ -157,18 +157,21 @@ func _on_get_config_id_done(_error, _response, _config_key) -> void:
 
 func _on_NewWidgetPopup_about_to_show() -> void:
 	for data_source in data_source_container.get_children():
+		data_source_container.remove_child(data_source)
 		data_source.queue_free()
 	if widget_to_edit != null:
 		for data_source in widget_to_edit.data_sources:
 			var ds = data_source_widget.instance()
 			data_source_container.add_child(ds)
-			ds.connect("source_changed", self, "update_preview")
 			ds.data_source = data_source
+			ds.connect("source_changed", self, "update_preview")
 			
 	$WidgetOptions/VBoxContainer/VBoxContainer2.visible = widget_to_edit == null
 	create_preview(current_widget_preview_name)
 	API.get_config_id(self, "resoto.metrics")
-	print("show")
+	
+	if widget_to_edit != null:
+		update_preview()
 
 
 func _on_AddDataSource_pressed() -> void:
@@ -178,7 +181,7 @@ func _on_AddDataSource_pressed() -> void:
 	data_source_container.add_child(ds)
 	ds.widget = preview_widget
 	ds.connect("source_changed", self, "update_preview")
-	ds.connect("tree_exited", self, "update_preview")
+#	ds.connect("tree_exited", self, "update_preview")
 	ds.set_metrics(metrics)
 	
 	

@@ -23,6 +23,7 @@ func _on_Button_toggled(button_pressed : bool) -> void:
 	$VBoxContainer/DatasourceSettings.visible = not button_pressed
 
 func _on_DeleteButton_pressed() -> void:
+	emit_signal("source_changed")
 	queue_free()
 
 
