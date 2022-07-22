@@ -285,7 +285,6 @@ func execute_query() -> void:
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	for datasource in data_sources:
-		print(dashboard.step)
 		datasource.make_query(dashboard.ts_start, dashboard.ts_end, dashboard.step)
 
 
