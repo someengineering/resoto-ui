@@ -33,6 +33,7 @@ func set_metrics(metrics : Dictionary) -> void:
 
 
 func _on_MetricsOptions_option_changed(option : String) -> void:
+	data_source.metric = option
 	update_query()
 	API.query_tsdb("resoto_"+option, self, "_on_metrics_query_finished")
 
@@ -91,19 +92,23 @@ func _on_LegendEdit_text_entered(new_text : String) -> void:
 	update_query()
 
 
-func _on_FunctionComboBox_option_changed(_option) -> void:
+func _on_FunctionComboBox_option_changed(option) -> void:
+	data_source.aggregator = option
 	update_query()
 
 
-func _on_FilterWidget_filter_changed(_filter) -> void:
+func _on_FilterWidget_filter_changed(filter) -> void:
+	data_source.filters = filter
 	update_query()
 
 
-func _on_DateOffsetLineEdit_text_entered(_new_text) -> void:
+func _on_DateOffsetLineEdit_text_entered(offset) -> void:
+	data_source.offset = offset
 	update_query()
 
 
-func _on_ByLineEdit_text_entered(_new_text) -> void:
+func _on_ByLineEdit_text_entered(sum_by) -> void:
+	data_source.sum_by = sum_by
 	update_query()
 
 
@@ -112,8 +117,14 @@ func _on_QueryEdit_text_entered(new_text : String) -> void:
 	emit_signal("source_changed")
 
 func set_data_source(new_data_source : DataSource) -> void:
+	data_source.copy_data_source(new_data_source)
+	metrics_options.text = new_data_source.metric
+	filters_widget.line_edit.text = new_data_source.filters
+	date_offset_edit.text = new_data_source.offset
+	by_line_edit.text = new_data_source.sum_by
+	function_options.text = new_data_source.aggregator
 	query_edit.text = new_data_source.query
 	data_source.query = new_data_source.query
 	legend_edit.text = new_data_source.legend
-	data_source.legend = new_data_source.legend
+	stacked_check_box.pressed = new_data_source.stacked
 	

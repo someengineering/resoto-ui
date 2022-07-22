@@ -45,10 +45,8 @@ func _on_AddWidgetButton_pressed() -> void:
 
 	for datasource in data_source_container.get_children():
 		var ds = datasource.data_source.duplicate()
-		ds.query = datasource.data_source.query
-		ds.legend = datasource.data_source.legend
+		ds.copy_data_source(datasource.data_source)
 		ds.widget = widget
-		ds.stacked = datasource.data_source.stacked
 		new_data_sources.append(ds)
 		
 	if widget_to_edit == null:
@@ -111,8 +109,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 	for datasource in data_source_container.get_children():
 		datasource.widget = preview_widget
 		
-	if widget_to_edit != null:
-		update_preview()
+
 
 func get_control_for_property(property : Dictionary) -> Control:
 	var control : Control
@@ -166,13 +163,12 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 			var ds = data_source_widget.instance()
 			data_source_container.add_child(ds)
 			ds.connect("source_changed", self, "update_preview")
-			ds.data_source.query = data_source.query
-			ds.data_source.legend = data_source.legend
-			ds.data_source.stacked = data_source.stacked
+			ds.data_source = data_source
 			
 	$WidgetOptions/VBoxContainer/VBoxContainer2.visible = widget_to_edit == null
 	create_preview(current_widget_preview_name)
 	API.get_config_id(self, "resoto.metrics")
+	print("show")
 
 
 func _on_AddDataSource_pressed() -> void:
@@ -187,8 +183,12 @@ func _on_AddDataSource_pressed() -> void:
 	
 	
 func update_preview() -> void:
+	if not is_instance_valid(preview_widget):
+		return
+		
 	if preview_widget.has_method("clear_series"):
 		preview_widget.clear_series()
+		
 	for datasource in data_source_container.get_children():
 		datasource.data_source.make_query(from_date, to_date, interval)
 

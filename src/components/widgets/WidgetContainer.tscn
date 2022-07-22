@@ -1,9 +1,10 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://components/widgets/WidgetContainer.gd" type="Script" id=1]
 [ext_resource path="res://assets/resize_buttons.svg" type="Texture" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
 [ext_resource path="res://assets/gear.png" type="Texture" id=4]
+[ext_resource path="res://assets/icon_delete.png" type="Texture" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=17]
 
@@ -246,11 +247,11 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -37.0
-margin_top = -10.0
-margin_right = -17.0
-margin_bottom = 10.0
-rect_min_size = Vector2( 20, 20 )
+margin_left = -48.0
+margin_top = -12.0
+margin_right = -24.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 24, 24 )
 icon = ExtResource( 4 )
 flat = true
 expand_icon = true
@@ -260,12 +261,13 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -10.0
-margin_bottom = 10.0
-rect_min_size = Vector2( 20, 20 )
-text = "x"
+margin_left = -24.0
+margin_top = -12.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 24, 24 )
+icon = ExtResource( 5 )
 flat = true
+expand_icon = true
 
 [node name="ResizeTween" type="Tween" parent="."]
 

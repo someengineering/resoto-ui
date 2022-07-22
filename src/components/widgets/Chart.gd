@@ -131,7 +131,7 @@ func update_series() -> void:
 		
 		for j in range(x_origin, x_origin+x_range, step):
 			var point = find_value_at_x(j,series[index])
-			var pos = int((j - x_origin) / step)
+			var pos = round((j - x_origin) / step)
 			if line.get_meta("stack"):
 				point.y += stacked[pos]
 				stacked[pos] = point.y
@@ -218,7 +218,7 @@ func clear_series() -> void:
 		if serie is Line2D:
 			graph_area.remove_child(serie)
 			serie.queue_free()
-	
+	current_color = 0
 	series.clear()
 
 func set_scale_from_series() -> void:
@@ -242,7 +242,6 @@ func set_scale_from_series() -> void:
 			if maxy < value.y:
 				maxy = value.y
 				
-	print(maxy)
 	max_y_value = maxy * 1.2
 	
 func _process(_delta : float) -> void:

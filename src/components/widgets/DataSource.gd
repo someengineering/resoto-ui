@@ -2,12 +2,20 @@ class_name DataSource
 extends Node
 
 var query : String
-var legend : String
 var widget : BaseWidget
+
+# Variables for data source container
+
+var metric : String = ""
+var aggregator : String = ""
+var filters : String = ""
+var offset : String = ""
+var legend : String = ""
+var sum_by : String = ""
 var stacked : bool = true
 
 func make_query(from, to, interval) -> void:
-	var q = query.replace("$interval", "%ds" % (interval*2))
+	var q = query.replace("$interval", "%ds" % (interval))
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 		API.query_tsdb(q, self)
 	else:
@@ -69,3 +77,14 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 	else:
 			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
 			widget.value = "NaN"
+			
+
+func copy_data_source(other : DataSource):
+	metric = other.metric
+	aggregator = other.aggregator
+	filters = other.filters
+	query = other.query
+	stacked = other.stacked
+	offset = other.offset
+	sum_by = other.sum_by
+	legend = other.legend

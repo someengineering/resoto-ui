@@ -2,7 +2,7 @@ extends LineEdit
 
 signal date_changed(timestamp)
 
-var unix_time : int
+var unix_time : int setget , get_unix_time
 
 var previous_text
 
@@ -85,3 +85,7 @@ func replaces_tokens(new_text : String) -> String:
 	new_text = new_text.replace("s", "")
 	return new_text
 	
+	
+func get_unix_time():
+	process_date(text, false)
+	return unix_time

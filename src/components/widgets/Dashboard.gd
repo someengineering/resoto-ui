@@ -100,7 +100,7 @@ func find_empty_slot(rect : Rect2) -> Vector2:
 	return position
 
 
-func refresh(from : int, to : int, interval : int) -> void:
+func refresh(from : int = ts_start, to : int = ts_end, interval : int = step) -> void:
 	ts_start = from
 	ts_end = to
 	step = interval
