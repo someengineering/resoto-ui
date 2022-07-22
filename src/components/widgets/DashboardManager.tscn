@@ -18,4 +18,4 @@ margin_left = 15.0
 margin_top = 23.0
 margin_right = -15.0
 
-[connection signal="tab_selected" from="." to="." method="_on_DashBoardManager_tab_selected"]
+[connection signal="gui_input" from="." to="." method="_on_DashBoardManager_gui_input"]

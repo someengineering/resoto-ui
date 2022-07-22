@@ -1,9 +1,9 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
-[ext_resource path="res://assets/gear.png" type="Texture" id=4]
+[ext_resource path="res://assets/icon_delete.png" type="Texture" id=4]
 [ext_resource path="res://assets/lock.png" type="Texture" id=5]
 [ext_resource path="res://components/widgets/DashboardContainer.gd" type="Script" id=6]
 [ext_resource path="res://components/widgets/NewWidgetPopup.tscn" type="PackedScene" id=7]
@@ -12,6 +12,10 @@
 [sub_resource type="DynamicFont" id=3]
 size = 24
 font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -71,26 +75,22 @@ margin_top = 5.0
 margin_right = 1915.0
 margin_bottom = 34.0
 
-[node name="DashboardNameLabel" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_right = 125.0
+[node name="DashboardNameLabel" type="LineEdit" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+margin_right = 885.0
 margin_bottom = 29.0
+size_flags_horizontal = 3
+custom_colors/font_color_uneditable = Color( 0.85098, 0.721569, 1, 1 )
 custom_fonts/font = SubResource( 3 )
-text = "Dashboard 1"
-
-[node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 860.0
-margin_right = 1010.0
-margin_bottom = 29.0
-rect_min_size = Vector2( 150, 0 )
-size_flags_horizontal = 6
-text = "Last 24 hours"
-flat = true
+custom_styles/read_only = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+text = "Dashboard"
 
 [node name="AddWidgetButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
 margin_left = 1746.0
 margin_right = 1775.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
+size_flags_horizontal = 10
 text = "+"
 
 [node name="RefreshOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
@@ -110,13 +110,23 @@ toggle_mode = true
 icon = ExtResource( 5 )
 expand_icon = true
 
-[node name="SettingsButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="DeleteButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
 margin_left = 1881.0
 margin_right = 1910.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 icon = ExtResource( 4 )
 expand_icon = true
+
+[node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer"]
+margin_left = 885.0
+margin_top = 5.0
+margin_right = 1035.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 6
+text = "Last 24 hours"
+flat = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 margin_top = 43.0
@@ -149,7 +159,6 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="WindowDialog" parent="." instance=ExtResource( 7 )]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -165,16 +174,13 @@ margin_top = 53.0
 margin_right = 1094.0
 margin_bottom = 285.0
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 900.0
-autostart = true
-
-[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/DateButton" to="." method="_on_DateButton_pressed"]
+[connection signal="text_entered" from="VBoxContainer/PanelContainer/HBoxContainer/DashboardNameLabel" to="." method="_on_DashboardNameLabel_text_entered"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
 [connection signal="item_selected" from="VBoxContainer/PanelContainer/HBoxContainer/RefreshOptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer/LockButton" to="VBoxContainer/ScrollContainer/Dashboard" method="lock"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/DateButton" to="." method="_on_DateButton_pressed"]
 [connection signal="resized" from="VBoxContainer/ScrollContainer/Dashboard/Grid" to="VBoxContainer/ScrollContainer/Dashboard" method="_on_Grid_resized"]
 [connection signal="widget_added" from="WindowDialog" to="VBoxContainer/ScrollContainer/Dashboard" method="add_widget"]
 [connection signal="range_selected" from="DateRangeSelector" to="." method="_on_DateRangeSelector_range_selected"]
-[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

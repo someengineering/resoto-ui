@@ -27,7 +27,7 @@ var widget : BaseWidget
 
 var check_rect : Rect2
 export var title : String = "" setget set_title
-var data_sources : Array
+var data_sources : Array setget set_data_sources
 
 var widget_title := "" setget set_widget_title
 
@@ -38,6 +38,7 @@ onready var last_good_position : Vector2
 onready var last_good_size : Vector2
 onready var title_label := $PanelContainer/Title
 onready var delete_button := $PanelContainer/Title/DeleteButton
+onready var config_button := $PanelContainer/Title/ConfigButton
 
 
 func _ready() -> void:
@@ -274,6 +275,7 @@ func _on_ResizeTween_tween_all_completed() -> void:
 func lock(locked : bool) -> void:
 	resize_buttons.visible = !locked
 	delete_button.visible = !locked
+	config_button.visible = !locked
 
 func set_title(new_title : String) -> void:
 	title = new_title
@@ -291,5 +293,9 @@ func _on_DeleteButton_pressed() -> void:
 	queue_free()
 
 
-func _on_ConfigButton_pressed():
+func _on_ConfigButton_pressed() -> void:
 	emit_signal("config_pressed", self)
+
+func set_data_sources(new_data_sources : Array) -> void:
+	data_sources = new_data_sources
+	execute_query()
