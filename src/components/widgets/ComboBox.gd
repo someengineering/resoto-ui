@@ -70,8 +70,7 @@ func show_options() -> void:
 	options_popup.popup()
 	options_popup.rect_global_position = rect_global_position + Vector2(0, rect_size.y+10)
 	options_popup.rect_size.x = rect_size.x
-	yield(VisualServer,"frame_post_draw")
-	options_popup.rect_size.y = min(400, options_container.rect_size.y + 10)
+	options_popup.rect_size.y = min(400, items.size()*(29) + 5)
 
 func set_items(new_items : Array) -> void:
 	items.clear()

@@ -5,10 +5,8 @@
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
 
 [node name="ComboBox" type="Control"]
-margin_left = 64.0
-margin_top = 64.0
-margin_right = 376.0
-margin_bottom = 88.0
+margin_right = 312.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 100, 24 )
 theme = ExtResource( 3 )
 script = ExtResource( 2 )

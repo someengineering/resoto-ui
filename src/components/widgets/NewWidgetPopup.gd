@@ -13,6 +13,11 @@ var widget_to_edit = null
 var from_date : int
 var to_date : int
 var interval : int
+var dashboard_filters : Dictionary = {
+	"cloud" : "",
+	"region" : "",
+	"account" : ""
+}
 
 var data_source_widget := preload("res://components/widgets/DatasourceContainer.tscn")
 
@@ -193,7 +198,7 @@ func update_preview() -> void:
 		preview_widget.clear_series()
 		
 	for datasource in data_source_container.get_children():
-		datasource.data_source.make_query(from_date, to_date, interval)
+		datasource.data_source.make_query(from_date, to_date, interval, dashboard_filters)
 
 func edit_widget(widget) -> void:
 	widget_to_edit = widget

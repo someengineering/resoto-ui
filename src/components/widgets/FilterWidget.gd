@@ -26,7 +26,9 @@ func _on_Labels_option_changed(option : String) -> void:
 	
 func _on_tsdb_label_values_done(error:int, response):
 	var data = response.transformed.result
-	print(data)
+	if typeof(data) != TYPE_DICTIONARY:
+		_g.emit_signal("add_toast", "No labels found", "Couldn't find labels for this filters.", 1)
+		return
 	var array := []
 	for item in data.data:
 		array.append(item)
