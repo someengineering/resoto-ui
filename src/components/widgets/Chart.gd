@@ -131,7 +131,7 @@ func update_series() -> void:
 		
 		for j in range(x_origin, x_origin+x_range, step):
 			var point = find_value_at_x(j,series[index])
-			var pos = round((j - x_origin) / step)
+			var pos = int((j - x_origin) / step)
 			if line.get_meta("stack"):
 				point.y += stacked[pos]
 				stacked[pos] = point.y

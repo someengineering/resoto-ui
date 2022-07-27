@@ -11,8 +11,6 @@ var psk: String			= DEFAULT_PSK setget set_psk
 var graph_id: String	= "resoto"
 var use_ssl: bool		= false setget set_use_ssl
 
-var infra_info : Array = []
-
 
 func _ready() -> void:
 	_resoto_api.accept_json_nd_headers.Accept = "application/x-ndjson"
@@ -25,7 +23,6 @@ func _ready() -> void:
 	_resoto_api.config_put_headers.Content_Type = "application/json"
 	
 	Engine.get_main_loop().connect("idle_frame", self, "poll")
-	
 
 
 func poll() -> void:
@@ -140,5 +137,5 @@ func _get_infra_info(_connect_to:Node = self) -> void:
 	
 
 func _on_get_infra_info_done(_error:int, response):
-	infra_info = response.transformed.result
+	InfrastructureInformation.infra_info = response.transformed.result
 

@@ -46,8 +46,10 @@ func _on_metrics_query_finished(error:int, response) -> void:
 		_g.emit_signal("add_toast", "Can't find Labels", "Can't find labels for the selected metric", 1)
 		return
 	for label in data.data.result[0].metric:
-		if not label.begins_with("__"):
+		if not label.begins_with("__") and not label == "cloud" and not label == "region" and not label == "account":
 			labels.append(label)
+			
+	data_source.labels = data.data.result[0].metric.keys()
 	
 	filters_widget.labels.set_items(labels)
 	
@@ -55,24 +57,17 @@ func _on_metrics_query_finished(error:int, response) -> void:
 
 
 func update_query() -> void:
-	var query = "resoto_"+metrics_options.text
-	var filters : String = filters_widget.get_node("VBoxContainer/LineEdit").text
-	var offset : String = date_offset_edit.text
-	if filters != "":
-		query = "%s{%s}" % [query, filters]
-	if offset != "":
-		offset = "offset " + offset
-		query = "%s %s" % [query, offset]
-	if function_options.text != "":
-		if "_over_time" in function_options.text:
-			query = "%s[$interval]" % [query]
-		query = "%s(%s)" % [function_options.text, query]
-	if by_line_edit.text != "":
-		query = "sum(%s) by %s" % [query, by_line_edit.text]
-		
+	var query = data_source.query
+	data_source.metric = metrics_options.text
+	data_source.filters = filters_widget.get_node("VBoxContainer/LineEdit").text
+	data_source.offset = date_offset_edit.text
+	data_source.aggregator = function_options.text
+	data_source.sum_by = by_line_edit.text
+	
+	data_source.update_query()
+	print(data_source.query)
 	if data_source.query != query:
-		data_source.query = query
-		query_edit.text = query
+		query_edit.text = data_source.query
 		emit_signal("source_changed")
 	
 func set_widget(new_widget : BaseWidget) -> void:

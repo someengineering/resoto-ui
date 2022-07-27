@@ -13,6 +13,11 @@ onready var widget_container_scene := preload("res://components/widgets/WidgetCo
 var ts_start : int
 var ts_end : int
 var step : int
+var filters : Dictionary = {
+	"cloud" : "",
+	"region" : "",
+	"account" : ""
+}
 
 func add_widget(widget_data : Dictionary) -> void:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
@@ -31,9 +36,9 @@ func add_widget(widget_data : Dictionary) -> void:
 	container.connect("moved_or_resized", self, "_on_widget_moved_or_resized")
 	
 	var widget = widget_data["scene"]
-	container.data_sources = widget_data["data_sources"]
-	container.set_deferred("widget_title", widget_data["title"])
 	container.call_deferred("add_widget", widget)
+	container.call_deferred("set_data_sources", widget_data["data_sources"])
+	container.set_deferred("widget_title", widget_data["title"])
 	
 	container.connect("config_pressed", owner, "_on_WidgetContainer_config_pressed")
 	

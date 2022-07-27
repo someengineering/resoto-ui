@@ -52,7 +52,6 @@ func _ready() -> void:
 func add_widget(_widget : BaseWidget) -> void:
 	$MarginContainer.add_child(_widget)
 	widget = _widget
-	execute_query()
 	
 func set_widget_title(new_title : String) -> void:
 	widget_title = new_title
@@ -282,10 +281,11 @@ func set_title(new_title : String) -> void:
 	$PanelContainer/Title.text = title
 
 func execute_query() -> void:
+	print(dashboard.filters)
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	for datasource in data_sources:
-		datasource.make_query(dashboard.ts_start, dashboard.ts_end, dashboard.step)
+		datasource.make_query(dashboard.ts_start, dashboard.ts_end, dashboard.step, dashboard.filters)
 
 
 func _on_DeleteButton_pressed() -> void:

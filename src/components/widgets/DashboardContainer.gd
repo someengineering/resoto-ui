@@ -14,6 +14,10 @@ onready var range_selector := $DateRangeSelector
 onready var refresh_option := $VBoxContainer/PanelContainer/HBoxContainer/RefreshOptionButton
 onready var name_label := $VBoxContainer/PanelContainer/HBoxContainer/DashboardNameLabel
 
+onready var clouds_combo := $VBoxContainer/HBoxContainer2/CloudsCombo
+onready var accounts_combo := $VBoxContainer/HBoxContainer2/AccountsCombo
+onready var regions_combo := $VBoxContainer/HBoxContainer2/RegionsCombo
+
 func _ready() -> void:
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
@@ -24,8 +28,12 @@ func _ready() -> void:
 	
 	self.dashboard_name = name
 	
+	if InfrastructureInformation.infra_info != []:
+		_on_infra_info_updated()
+	InfrastructureInformation.connect("infra_info_updated", self, "_on_infra_info_updated")
 	
-func _process(_delta):
+	
+func _process(_delta : float) -> void:
 	var current_time := Time.get_unix_time_from_system()
 	if current_time - last_refresh > refresh_time:
 		range_selector._on_AcceptButton_pressed()
@@ -39,8 +47,8 @@ func _on_WidgetContainer_config_pressed(widget_container) -> void:
 
 
 func _on_DateButton_pressed() -> void:
-	$DateRangeSelector.rect_position = dashboard.rect_position
-	$DateRangeSelector.rect_position.x = rect_size.x / 2 - $DateRangeSelector.rect_size.x / 26
+	$DateRangeSelector.rect_global_position.y = date_button.rect_global_position.y + date_button.rect_size.y
+	$DateRangeSelector.rect_position.x = rect_size.x / 2 - $DateRangeSelector.rect_size.x / 2
 	
 	$DateRangeSelector.popup()
 
@@ -50,6 +58,7 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	add_widget_popup.from_date = start
 	add_widget_popup.to_date = end
 	add_widget_popup.interval = (end-start)/100
+	
 	dashboard.refresh(start, end, (end-start)/100)
 	last_refresh = Time.get_unix_time_from_system()
 	print("refresh: ", Time.get_datetime_string_from_unix_time(last_refresh))
@@ -80,3 +89,61 @@ func set_dashboard_name(new_name : String) -> void:
 
 func _on_DashboardNameLabel_text_entered(new_text):
 	set_dashboard_name(new_text)
+
+func _on_infra_info_updated() -> void:
+	var clouds_filters = ["All"]
+	clouds_filters.append_array(InfrastructureInformation.clouds)
+	var regions_filters = ["All"]
+	for cloud in InfrastructureInformation.regions:
+		regions_filters.append_array(InfrastructureInformation.regions[cloud])
+	var accounts_filters = ["All"]
+	for cloud in InfrastructureInformation.accounts:
+		accounts_filters.append_array(InfrastructureInformation.accounts[cloud])
+		
+	clouds_combo.set_items(clouds_filters)
+	regions_combo.set_items(regions_filters)
+	accounts_combo.set_items(accounts_filters)
+	
+	
+
+
+func _on_CloudsCombo_option_changed(option):
+	if option == "All" or option == "":
+		var regions_filters = ["All"]
+		for cloud in InfrastructureInformation.regions:
+			regions_filters.append_array(InfrastructureInformation.regions[cloud])
+		var accounts_filters = ["All"]
+		for cloud in InfrastructureInformation.accounts:
+			accounts_filters.append_array(InfrastructureInformation.accounts[cloud])
+			
+		regions_combo.set_items(regions_filters)
+		accounts_combo.set_items(accounts_filters)
+		
+		dashboard.filters["cloud"] = ""
+	else:
+		accounts_combo.clear()
+		if option in InfrastructureInformation.accounts:
+			accounts_combo.set_items(InfrastructureInformation.accounts[option])
+			
+		regions_combo.clear()
+		if option in InfrastructureInformation.regions:
+			regions_combo.set_items(InfrastructureInformation.regions[option])
+			
+		dashboard.filters["cloud"] = option
+		
+	dashboard.filters["region"] = ""
+	dashboard.filters["account"] = ""
+	add_widget_popup.dashboard_filters = dashboard.filters
+	dashboard.refresh()
+
+func _on_AccountsCombo_option_changed(option):
+	dashboard.filters["account"] = option
+	add_widget_popup.dashboard_filters["account"] = option
+	dashboard.refresh()
+
+func _on_RegionsCombo_option_changed(option):
+	dashboard.filters["region"] = option
+	add_widget_popup.dashboard_filters["region"] = option
+	dashboard.refresh()
+
+	

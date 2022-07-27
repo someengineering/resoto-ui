@@ -13,9 +13,26 @@ var offset : String = ""
 var legend : String = ""
 var sum_by : String = ""
 var stacked : bool = true
+var labels : Array = []
 
-func make_query(from, to, interval) -> void:
+
+
+func make_query(from, to, interval, dashboard_filters : Dictionary = {}) -> void:
 	var q = query.replace("$interval", "%ds" % (interval))
+	if dashboard_filters == {}:
+		q = q.replace("$dashboard_filters,", "")
+		q = q.replace("$dashboard_filters", "")
+	else:
+		var d_filters : PoolStringArray = []
+		for key in dashboard_filters:
+			if key in labels and dashboard_filters[key] != "":
+				d_filters.append('%s=~"%s"' % [key, dashboard_filters[key]])
+
+		var filters_str = d_filters.join(",")
+		if filters_str == "":
+			q = q.replace("$dashboard_filters,", "")
+		q = q.replace("$dashboard_filters", filters_str)
+		
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 		API.query_tsdb(q, self)
 	else:
@@ -32,6 +49,7 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 		
 	if data.data.result.size() == 0:
 		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
+		widget.value = 0
 		return
 
 	if data["status"] == "success":
@@ -49,6 +67,7 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 		return
 		
 	if data.data.result.size() == 0:
+		widget.clear_series()
 		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
 		return
 		
@@ -79,7 +98,7 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 			widget.value = "NaN"
 			
 
-func copy_data_source(other : DataSource):
+func copy_data_source(other : DataSource) -> void:
 	metric = other.metric
 	aggregator = other.aggregator
 	filters = other.filters
@@ -88,3 +107,38 @@ func copy_data_source(other : DataSource):
 	offset = other.offset
 	sum_by = other.sum_by
 	legend = other.legend
+	labels = other.labels
+	
+func update_query() -> void:
+	query = "resoto_" + metric
+	
+	if filters != "":
+		query = "%s{$dashboard_filters, %s}" % [query, filters]
+	else:
+		query = "%s{$dashboard_filters}" % query
+	if offset != "":
+		offset = "offset " + offset
+		query = "%s %s" % [query, offset]
+	if aggregator != "":
+		if "_over_time" in aggregator:
+			query = "%s[$interval]" % [query]
+		query = "%s(%s)" % [aggregator, query]
+	if sum_by != "":
+		query = "sum(%s) by %s" % [query, sum_by]
+		
+
+func save_data() -> Dictionary:
+	var data : Dictionary = {
+		"metric" : metric,
+		"aggregator" : aggregator,
+		"filters" : filters,
+		"query" : query,
+		"stacked" : stacked,
+		"offset" : offset,
+		"sum_by" : sum_by,
+		"legend" : legend,
+		"labels" : labels
+	}
+	
+	return data
+	
