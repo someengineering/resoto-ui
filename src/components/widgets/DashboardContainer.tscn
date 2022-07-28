@@ -144,9 +144,7 @@ text = "Cloud"
 
 [node name="CloudsCombo" parent="VBoxContainer/HBoxContainer2" instance=ExtResource( 9 )]
 margin_left = 770.0
-margin_top = 0.0
 margin_right = 870.0
-margin_bottom = 24.0
 items = [  ]
 
 [node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer2"]
@@ -158,9 +156,7 @@ text = "Account"
 
 [node name="AccountsCombo" parent="VBoxContainer/HBoxContainer2" instance=ExtResource( 9 )]
 margin_left = 937.0
-margin_top = 0.0
 margin_right = 1037.0
-margin_bottom = 24.0
 items = [  ]
 
 [node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer2"]
@@ -172,9 +168,7 @@ text = "Region"
 
 [node name="RegionsCombo" parent="VBoxContainer/HBoxContainer2" instance=ExtResource( 9 )]
 margin_left = 1095.0
-margin_top = 0.0
 margin_right = 1195.0
-margin_bottom = 24.0
 items = [  ]
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]

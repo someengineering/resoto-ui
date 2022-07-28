@@ -60,7 +60,6 @@ margin_bottom = 20.0
 text = "Metric"
 
 [node name="MetricsOptions" parent="VBoxContainer/DatasourceSettings/VBoxContainer2" instance=ExtResource( 5 )]
-margin_left = 0.0
 margin_top = 21.0
 margin_right = 513.0
 margin_bottom = 45.0
@@ -77,7 +76,6 @@ margin_bottom = 20.0
 text = "Aggregator"
 
 [node name="FunctionComboBox" parent="VBoxContainer/DatasourceSettings/VBoxContainer3" instance=ExtResource( 5 )]
-margin_left = 0.0
 margin_top = 21.0
 margin_right = 513.0
 margin_bottom = 45.0

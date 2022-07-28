@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/config/component_config_field.gd"
 }, {
+"base": "Control",
+"class": "DashboardContainer",
+"language": "GDScript",
+"path": "res://components/widgets/DashboardContainer.gd"
+}, {
 "base": "Node",
 "class": "DataSource",
 "language": "GDScript",
@@ -88,6 +93,11 @@ _global_script_classes=[ {
 "class": "Utils",
 "language": "GDScript",
 "path": "res://scripts/classes/utils.gd"
+}, {
+"base": "Control",
+"class": "WidgetContainer",
+"language": "GDScript",
+"path": "res://components/widgets/WidgetContainer.gd"
 } ]
 _global_script_class_icons={
 "BaseWidget": "",
@@ -96,6 +106,7 @@ _global_script_class_icons={
 "ConfigComponentDict": "",
 "ConfigComponentEnum": "",
 "ConfigComponentSimple": "",
+"DashboardContainer": "",
 "DataSource": "",
 "DynamicLabel": "",
 "Indicator": "",
@@ -105,7 +116,8 @@ _global_script_class_icons={
 "ResotoAPI": "",
 "TerminalComponent": "",
 "UserAgent": "",
-"Utils": ""
+"Utils": "",
+"WidgetContainer": ""
 }
 
 [application]

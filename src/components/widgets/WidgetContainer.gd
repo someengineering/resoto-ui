@@ -1,3 +1,4 @@
+class_name WidgetContainer
 extends Control
 
 signal moved_or_resized
@@ -28,8 +29,10 @@ var widget : BaseWidget
 var check_rect : Rect2
 export var title : String = "" setget set_title
 var data_sources : Array setget set_data_sources
-
 var widget_title := "" setget set_widget_title
+
+# just for load
+var data_sources_data : Array setget set_data_sources_data, get_data_sources_data
 
 onready var parent_reference : ReferenceRect
 onready var resize_buttons := $ResizeButtons
@@ -42,7 +45,7 @@ onready var config_button := $PanelContainer/Title/ConfigButton
 
 
 func _ready() -> void:
-	for i in resize_buttons.get_child_count():
+	for i in $ResizeButtons.get_child_count():
 		var button : BaseButton = resize_buttons.get_child(i)
 		button.connect("button_up", self, "_on_resize_button_released")
 		button.connect("button_down", self, "_on_resize_button_pressed", [i])
@@ -298,3 +301,55 @@ func _on_ConfigButton_pressed() -> void:
 func set_data_sources(new_data_sources : Array) -> void:
 	data_sources = new_data_sources
 	execute_query()
+
+func get_data() -> Dictionary:
+	var widget_settings : Dictionary = {}
+	for setting in get_widget_properties():
+		widget_settings[setting] = widget[setting]
+		
+	var data_sources_data : Array = []
+	for data_source in data_sources:
+		data_sources_data.append(data_source.get_data())
+		
+	var widget_data : Dictionary = {
+		"filename" : widget.filename,
+		"settings" : widget_settings,
+		"title" : title
+	}
+	
+	var data : Dictionary = {
+		"rect_position:x" : rect_position.x,
+		"rect_position:y" : rect_position.y,
+		"rect_size:x" : rect_size.x,
+		"rect_size:y" : rect_size.y,
+		"widget_data" : widget_data,
+		"data_sources_data" : data_sources_data
+	}
+	
+	return data
+	
+func get_widget_properties() -> Dictionary:
+	var found_settings := false
+	var properties := {}
+	for property in widget.get_property_list():
+		if found_settings:
+			if property.type == TYPE_NIL:
+				break
+			properties[property.name] = widget[property.name]
+		elif property.name == "Widget Settings":
+			 found_settings = true
+	return properties
+
+func set_data_sources_data(data : Array) -> void:
+	data_sources.clear()
+	for settings in data:
+		var ds = DataSource.new()
+		for key in settings:
+			ds.set(key, settings[key])
+		data_sources.append(ds)
+	
+func get_data_sources_data() -> Array:
+	var data : Array
+	for data_source in data_sources:
+		data.append(data_source.get_data())
+	return data

@@ -1,3 +1,4 @@
+class_name DashboardContainer
 extends Control
 
 signal deleted
@@ -6,6 +7,11 @@ var dashboard_name : String = "" setget set_dashboard_name
 
 var last_refresh := 0
 var refresh_time := 900
+
+# just for load
+var refresh_time_option : String setget set_refresh_time_option
+var time_range : String setget set_range
+var widgets : Array setget set_widgets
 
 onready var date_button := $VBoxContainer/PanelContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Dashboard
@@ -84,7 +90,7 @@ func _on_DeleteButton_pressed():
 func set_dashboard_name(new_name : String) -> void:
 	name = new_name
 	dashboard_name = new_name
-	name_label.text = new_name
+	$VBoxContainer/PanelContainer/HBoxContainer/DashboardNameLabel.text = new_name
 
 
 func _on_DashboardNameLabel_text_entered(new_text):
@@ -103,8 +109,6 @@ func _on_infra_info_updated() -> void:
 	clouds_combo.set_items(clouds_filters)
 	regions_combo.set_items(regions_filters)
 	accounts_combo.set_items(accounts_filters)
-	
-	
 
 
 func _on_CloudsCombo_option_changed(option):
@@ -146,4 +150,43 @@ func _on_RegionsCombo_option_changed(option):
 	add_widget_popup.dashboard_filters["region"] = option
 	dashboard.refresh()
 
+func get_data() -> Dictionary:
+	var _widgets : Array = []
+	for widget in dashboard.widgets.get_children():
+		_widgets.append(widget.get_data())
 	
+	var data = {
+		"dashboard_name" : dashboard_name,
+		"refresh_time_option" : refresh_option.selected,
+		"time_range" : date_button.text,
+		"widgets" : _widgets
+	}
+	
+	return data
+
+func set_refresh_time_option(option : String) -> void:
+	for i in refresh_option.get_item_count():
+		if refresh_option.get_item_text(i) == option:
+			refresh_option.select(i)
+			break
+	
+func set_range(new_range : String) -> void:
+	new_range = new_range.to_lower()
+	if "last" in new_range:
+		new_range.replace("last", "now - ")
+		new_range += " to now"
+		
+	var range_parts := new_range.split("to")
+	range_selector.from.process_date(range_parts[0])
+	range_selector.to.process_date(range_parts[1])
+	
+func set_widgets(new_widgets : Array) -> void:
+	for settings in new_widgets:
+		var container = WidgetContainer.new()
+		dashboard.add_widget()
+		container.dashboard = dashboard
+		for key in settings:
+			if key == "widget_data":
+				pass
+			else:
+				container.set(key, settings[key])

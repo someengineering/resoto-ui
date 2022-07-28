@@ -126,7 +126,6 @@ func update_series() -> void:
 	for i in n:
 		var index = n - i - 1
 		var line : Line2D = graph_area.get_child(index)
-		var serie : PoolVector2Array = series[index]
 		var values : PoolVector2Array = []
 		
 		for j in range(x_origin, x_origin+x_range, step):
