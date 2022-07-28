@@ -43,13 +43,11 @@ func _on_metrics_query_finished(error:int, response) -> void:
 	var labels := []
 	var data = response.transformed.result
 	if data.data.result.size() == 0:
-		_g.emit_signal("add_toast", "Can't find Labels", "Can't find labels for the selected metric", 1)
+		_g.emit_signal("add_toast", "Can't find Labels", "Can't find labels for the selected metric", 2)
 		return
 	for label in data.data.result[0].metric:
 		if not label.begins_with("__") and not label == "cloud" and not label == "region" and not label == "account":
 			labels.append(label)
-			
-	data_source.labels = data.data.result[0].metric.keys()
 	
 	filters_widget.labels.set_items(labels)
 	

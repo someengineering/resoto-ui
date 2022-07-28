@@ -13,7 +13,6 @@ var offset : String = ""
 var legend : String = ""
 var sum_by : String = ""
 var stacked : bool = true
-var labels : Array = []
 
 
 
@@ -25,7 +24,7 @@ func make_query(from, to, interval, dashboard_filters : Dictionary = {}) -> void
 	else:
 		var d_filters : PoolStringArray = []
 		for key in dashboard_filters:
-			if key in labels and dashboard_filters[key] != "":
+			if dashboard_filters[key] != "":
 				d_filters.append('%s=~"%s"' % [key, dashboard_filters[key]])
 
 		var filters_str = d_filters.join(",")
@@ -48,7 +47,7 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 		_g.emit_signal("add_toast", "Request Error", data, 1)
 		
 	if data.data.result.size() == 0:
-		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
+		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 2)
 		widget.value = 0
 		return
 
@@ -68,7 +67,7 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 		
 	if data.data.result.size() == 0:
 		widget.clear_series()
-		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 1)
+		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 2)
 		return
 		
 	if data["status"] == "success":
@@ -94,7 +93,7 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 			widget.add_serie(array, null, l, stacked)
 		widget.complete_update(true)
 	else:
-			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
+			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],2)
 			widget.value = "NaN"
 			
 
@@ -107,7 +106,6 @@ func copy_data_source(other : DataSource) -> void:
 	offset = other.offset
 	sum_by = other.sum_by
 	legend = other.legend
-	labels = other.labels
 	
 func update_query() -> void:
 	query = "resoto_" + metric
@@ -127,7 +125,7 @@ func update_query() -> void:
 		query = "sum(%s) by %s" % [query, sum_by]
 		
 
-func save_data() -> Dictionary:
+func get_data() -> Dictionary:
 	var data : Dictionary = {
 		"metric" : metric,
 		"aggregator" : aggregator,
@@ -137,7 +135,6 @@ func save_data() -> Dictionary:
 		"offset" : offset,
 		"sum_by" : sum_by,
 		"legend" : legend,
-		"labels" : labels
 	}
 	
 	return data

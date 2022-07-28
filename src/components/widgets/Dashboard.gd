@@ -27,15 +27,22 @@ func add_widget(widget_data : Dictionary) -> void:
 	widgets.call_deferred("add_child", container)
 	container.grid_size = grid_size
 	container.rect_size = 2*grid_size
+	
 	var empty_slot = find_empty_slot(container.get_rect())
 	container.rect_position = empty_slot.snapped(grid_size) 
+	
 	var reference = ReferenceRect.new()
 	container.parent_reference = reference
 	$References.add_child(reference)
 	
 	container.connect("moved_or_resized", self, "_on_widget_moved_or_resized")
 	
-	var widget = widget_data["scene"]
+	var widget : BaseWidget
+	if "scene" in widget_data:
+		widget = widget_data["scene"]
+	elif "filename" in widget_data:
+		widget = load(widget_data.filename).instance()
+		
 	container.call_deferred("add_widget", widget)
 	container.call_deferred("set_data_sources", widget_data["data_sources"])
 	container.set_deferred("widget_title", widget_data["title"])

@@ -51,7 +51,6 @@ margin_bottom = 124.0
 text = "Relative Range:"
 
 [node name="ComboBox" parent="PanelContainer/VBoxContainer" instance=ExtResource( 3 )]
-margin_left = 0.0
 margin_top = 128.0
 margin_right = 278.0
 margin_bottom = 152.0
