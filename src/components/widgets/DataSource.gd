@@ -15,7 +15,6 @@ var sum_by : String = ""
 var stacked : bool = true
 
 
-
 func make_query(from, to, interval, dashboard_filters : Dictionary = {}) -> void:
 	var q = query.replace("$interval", "%ds" % (interval))
 	if dashboard_filters == {}:
@@ -41,10 +40,13 @@ func make_query(from, to, interval, dashboard_filters : Dictionary = {}) -> void
 		API.query_range_tsdb(q, self, from, to, interval)
 		
 func _on_query_tsdb_done(_error: int, response) -> void:
+	if not is_instance_valid(widget):
+		return
 	var data = response.transformed.result
 	
 	if _error != 0 or typeof(data) == TYPE_STRING:
 		_g.emit_signal("add_toast", "Request Error", data, 1)
+		return
 		
 	if data.data.result.size() == 0:
 		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 2)

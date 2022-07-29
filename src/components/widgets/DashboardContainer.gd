@@ -11,7 +11,11 @@ var refresh_time := 900
 # just for load
 var refresh_time_option : String setget set_refresh_time_option
 var time_range : String setget set_range
+var force_refresh := false
 var widgets : Array setget set_widgets
+var cloud : String setget set_cloud
+var account : String setget set_account
+var region : String setget set_region
 
 onready var date_button := $VBoxContainer/PanelContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Dashboard
@@ -41,9 +45,10 @@ func _ready() -> void:
 	
 func _process(_delta : float) -> void:
 	var current_time := Time.get_unix_time_from_system()
-	if current_time - last_refresh > refresh_time:
-		range_selector._on_AcceptButton_pressed()
+	if current_time - last_refresh > refresh_time or force_refresh:
+		force_refresh = false
 		last_refresh = current_time
+		range_selector._on_AcceptButton_pressed()
 
 func _on_AddWidgetButton_pressed() -> void:
 	$WindowDialog.popup_centered()
@@ -64,10 +69,8 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	add_widget_popup.from_date = start
 	add_widget_popup.to_date = end
 	add_widget_popup.interval = (end-start)/100
-	
 	dashboard.refresh(start, end, (end-start)/100)
 	last_refresh = Time.get_unix_time_from_system()
-	print("refresh: ", Time.get_datetime_string_from_unix_time(last_refresh))
 
 
 func _on_LockButton_toggled(button_pressed : bool) -> void:
@@ -124,6 +127,7 @@ func _on_CloudsCombo_option_changed(option):
 		accounts_combo.set_items(accounts_filters)
 		
 		dashboard.filters["cloud"] = ""
+		cloud = ""
 	else:
 		accounts_combo.clear()
 		if option in InfrastructureInformation.accounts:
@@ -134,21 +138,26 @@ func _on_CloudsCombo_option_changed(option):
 			regions_combo.set_items(InfrastructureInformation.regions[option])
 			
 		dashboard.filters["cloud"] = option
+		cloud = option
 		
 	dashboard.filters["region"] = ""
+	region = ""
 	dashboard.filters["account"] = ""
+	account = ""
 	add_widget_popup.dashboard_filters = dashboard.filters
-	dashboard.refresh()
+	force_refresh = true
 
 func _on_AccountsCombo_option_changed(option):
 	dashboard.filters["account"] = option
+	account = option
 	add_widget_popup.dashboard_filters["account"] = option
-	dashboard.refresh()
+	force_refresh = true
 
 func _on_RegionsCombo_option_changed(option):
 	dashboard.filters["region"] = option
+	region = option
 	add_widget_popup.dashboard_filters["region"] = option
-	dashboard.refresh()
+	force_refresh = true
 
 func get_data() -> Dictionary:
 	var _widgets : Array = []
@@ -159,6 +168,9 @@ func get_data() -> Dictionary:
 		"dashboard_name" : dashboard_name,
 		"refresh_time_option" : refresh_option.selected,
 		"time_range" : date_button.text,
+		"cloud" : cloud,
+		"account" : account,
+		"region" : region,
 		"widgets" : _widgets
 	}
 	
@@ -173,20 +185,37 @@ func set_refresh_time_option(option : String) -> void:
 func set_range(new_range : String) -> void:
 	new_range = new_range.to_lower()
 	if "last" in new_range:
-		new_range.replace("last", "now - ")
+		new_range = new_range.replace("last", "now - ")
 		new_range += " to now"
 		
-	var range_parts := new_range.split("to")
-	range_selector.from.process_date(range_parts[0])
+	var range_parts := new_range.split(" to ")
+	range_selector.from.process_date(range_parts[0], false)
 	range_selector.to.process_date(range_parts[1])
+	
+
+func set_cloud(new_cloud : String):
+	cloud = new_cloud
+	clouds_combo.text = cloud
+	
+func set_account(new_account : String):
+	account = new_account
+	accounts_combo.text = account
+	
+func set_region(new_region : String):
+	region = new_region
+	regions_combo.text = region
 	
 func set_widgets(new_widgets : Array) -> void:
 	for settings in new_widgets:
-		var container = WidgetContainer.new()
-		dashboard.add_widget()
-		container.dashboard = dashboard
-		for key in settings:
-			if key == "widget_data":
-				pass
-			else:
-				container.set(key, settings[key])
+		var widget_data = settings["widget_data"]
+		widget_data["data_sources"] = settings["data_sources_data"]
+		var container : WidgetContainer = yield(dashboard.add_widget(widget_data), "completed")
+		container.rect_position = Vector2(settings["rect_position:x"], settings["rect_position:y"])
+		container.rect_size = Vector2(settings["rect_size:x"], settings["rect_size:y"])
+		container.parent_reference.rect_size = container.rect_size
+		container.parent_reference.rect_position = container.rect_position
+		container.set_anchors()
+
+
+func _on_WindowDialog_widget_added(_widget_data):
+	force_refresh = true

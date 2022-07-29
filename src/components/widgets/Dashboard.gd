@@ -19,7 +19,7 @@ var filters : Dictionary = {
 	"account" : ""
 }
 
-func add_widget(widget_data : Dictionary) -> void:
+func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
 	var container = widget_container_scene.instance()
 	container.name = "WidgetContainer"
@@ -38,18 +38,27 @@ func add_widget(widget_data : Dictionary) -> void:
 	container.connect("moved_or_resized", self, "_on_widget_moved_or_resized")
 	
 	var widget : BaseWidget
-	if "scene" in widget_data:
+	
+	if widget_data["scene"] is BaseWidget:
 		widget = widget_data["scene"]
-	elif "filename" in widget_data:
-		widget = load(widget_data.filename).instance()
+	elif widget_data["scene"] is String:
+		widget = load(widget_data["scene"]).instance()
 		
-	container.call_deferred("add_widget", widget)
+	container.call_deferred("set_widget", widget)
 	container.call_deferred("set_data_sources", widget_data["data_sources"])
-	container.set_deferred("widget_title", widget_data["title"])
+	container.set_deferred("title", widget_data["title"])
+	
+	if "settings" in widget_data:
+		for key in widget_data["settings"]:
+			if "color" in key:
+				# asume it was passed as string
+				widget_data["settings"][key] = str2var(widget_data["settings"][key])
+			widget.set(key, widget_data["settings"][key])
 	
 	container.connect("config_pressed", owner, "_on_WidgetContainer_config_pressed")
 	
-	yield(VisualServer,"frame_post_draw")
+	if not container.is_inside_tree():
+		yield(container, "tree_entered")
 	
 	reference.rect_global_position = container.rect_global_position
 	reference.rect_size = container.rect_size
@@ -60,6 +69,8 @@ func add_widget(widget_data : Dictionary) -> void:
 	reference.visible = false
 	
 	container.set_anchors()
+	
+	return container
 	
 func lock(locked : bool) -> void:
 	grid_background.visible = !locked

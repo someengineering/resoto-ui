@@ -147,6 +147,7 @@ func get_preview_widget_properties() -> Dictionary:
 			if property.type == TYPE_NIL:
 				break
 			properties[property.name] = preview_widget[property.name]
+			print(property.name)
 		elif property.name == "Widget Settings":
 			 found_settings = true
 	return properties

@@ -228,5 +228,6 @@ margin_bottom = 285.0
 [connection signal="option_changed" from="VBoxContainer/HBoxContainer2/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/HBoxContainer2/RegionsCombo" to="." method="_on_RegionsCombo_option_changed"]
 [connection signal="resized" from="VBoxContainer/ScrollContainer/Dashboard/Grid" to="VBoxContainer/ScrollContainer/Dashboard" method="_on_Grid_resized"]
+[connection signal="widget_added" from="WindowDialog" to="." method="_on_WindowDialog_widget_added"]
 [connection signal="widget_added" from="WindowDialog" to="VBoxContainer/ScrollContainer/Dashboard" method="add_widget"]
 [connection signal="range_selected" from="DateRangeSelector" to="." method="_on_DateRangeSelector_range_selected"]

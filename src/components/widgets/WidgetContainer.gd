@@ -29,7 +29,6 @@ var widget : BaseWidget
 var check_rect : Rect2
 export var title : String = "" setget set_title
 var data_sources : Array setget set_data_sources
-var widget_title := "" setget set_widget_title
 
 # just for load
 var data_sources_data : Array setget set_data_sources_data, get_data_sources_data
@@ -52,13 +51,9 @@ func _ready() -> void:
 	
 	set_process(false)
 
-func add_widget(_widget : BaseWidget) -> void:
+func set_widget(_widget : BaseWidget) -> void:
 	$MarginContainer.add_child(_widget)
 	widget = _widget
-	
-func set_widget_title(new_title : String) -> void:
-	widget_title = new_title
-	title_label.text = widget_title
 
 func _on_resize_button_released() -> void:
 	set_process(false)
@@ -284,7 +279,6 @@ func set_title(new_title : String) -> void:
 	$PanelContainer/Title.text = title
 
 func execute_query() -> void:
-	print(dashboard.filters)
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	for datasource in data_sources:
@@ -299,20 +293,26 @@ func _on_ConfigButton_pressed() -> void:
 	emit_signal("config_pressed", self)
 
 func set_data_sources(new_data_sources : Array) -> void:
-	data_sources = new_data_sources
-	execute_query()
+	if new_data_sources.size() > 0:
+		if new_data_sources[0] is DataSource:
+			data_sources = new_data_sources
+		else:
+			set_data_sources_data(new_data_sources)
 
 func get_data() -> Dictionary:
 	var widget_settings : Dictionary = {}
 	for setting in get_widget_properties():
-		widget_settings[setting] = widget[setting]
+		if "color" in setting:
+			widget_settings[setting] = var2str(widget[setting])
+		else:
+			widget_settings[setting] = widget[setting]
 		
 	var data_sources_data : Array = []
 	for data_source in data_sources:
 		data_sources_data.append(data_source.get_data())
 		
 	var widget_data : Dictionary = {
-		"filename" : widget.filename,
+		"scene" : widget.filename,
 		"settings" : widget_settings,
 		"title" : title
 	}
@@ -336,6 +336,7 @@ func get_widget_properties() -> Dictionary:
 			if property.type == TYPE_NIL:
 				break
 			properties[property.name] = widget[property.name]
+			print(property.name)
 		elif property.name == "Widget Settings":
 			 found_settings = true
 	return properties
@@ -346,6 +347,7 @@ func set_data_sources_data(data : Array) -> void:
 		var ds = DataSource.new()
 		for key in settings:
 			ds.set(key, settings[key])
+		ds.widget = widget
 		data_sources.append(ds)
 	
 func get_data_sources_data() -> Array:

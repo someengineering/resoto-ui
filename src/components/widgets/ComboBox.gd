@@ -19,8 +19,10 @@ func _on_Button_pressed():
 	line_edit.grab_focus()
 
 func set_text(new_text:String) -> void:
-	text = new_text
-	$LineEdit.text = new_text
+	if text != new_text:
+		text = new_text
+		$LineEdit.text = new_text
+		emit_signal("option_changed", text)
 	
 func get_text() -> String:
 	return $LineEdit.text

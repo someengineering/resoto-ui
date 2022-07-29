@@ -7,13 +7,6 @@ var minimum_y = INF
 
 onready var indicator := $Indicator
 
-func _ready() -> void:
-	set_as_toplevel(true)
-	get_parent().connect("visibility_changed", self, "change_visible")
-	indicator.visible = false
-	
-func change_visible() -> void:
-	visible = get_parent().is_visible_in_tree()
 
 func show_indicator(point : Vector2) -> void:
 	indicator.position = point

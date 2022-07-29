@@ -29,15 +29,16 @@ var colors := [
 
 var current_color := 0
 
-onready var graph_area := $GridContainer/Grid/GraphArea
+onready var graph_area := $Viewport/Grid/GraphArea
 onready var legend := $CanvasLayer/PopupLegend
 onready var legend_container := $CanvasLayer/PopupLegend/VBoxContainer
 onready var x_labels := $GridContainer/XLabels
 onready var y_labels := $GridContainer/YLabels
-onready var grid := $GridContainer/Grid
+onready var grid := $Viewport/Grid
 
 func _ready() -> void:
 	legend.visible = false
+	$GridContainer/Grid.texture = $Viewport.get_texture()
 
 func _input(event) -> void:
 #	if event.is_action_pressed("ui_accept"):
@@ -61,7 +62,7 @@ func _input(event) -> void:
 #		complete_update()
 
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
-		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x + x_origin
+		var x = x_range * $GridContainer/Grid.get_local_mouse_position().x / graph_area.rect_size.x + x_origin
 		
 		legend.rect_global_position = get_global_mouse_position()
 			
@@ -101,7 +102,9 @@ func set_x_origin(origin : float) -> void:
 func set_x_range(r : float) -> void:
 	x_range = r
 
-func _on_GraphArea_resized() -> void:
+func _on_Grid_resized() -> void:
+	$Viewport.size = $GridContainer/Grid.rect_size
+	$Viewport/Grid.rect_size = $GridContainer/Grid.rect_size
 	if not is_instance_valid(x_labels):
 		return
 	var n = x_labels.get_child_count()
@@ -118,7 +121,7 @@ func update_series() -> void:
 		return
 	if series.size() == 0:
 		return
-	var origin : Vector2 = graph_area.rect_global_position + Vector2(0, graph_area.rect_size.y)
+	var origin : Vector2 = Vector2(0, graph_area.rect_size.y)
 	var n = graph_area.get_child_count()
 	var stacked : PoolRealArray = []
 	stacked.resize(range(x_origin, x_origin+x_range, step).size())
@@ -290,14 +293,14 @@ func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	else:
 		return Vector2(target_x, lerp(prev.y, next.y ,(target_x - prev.x) / (next.x - prev.x)))
 
-func _on_GraphArea_mouse_entered() -> void:
+func _on_Grid_mouse_entered() -> void:
 	for line in graph_area.get_children():
 		line.indicator.visible = true
 	legend.visible = true
 	mouse_on_graph = true
 
 
-func _on_GraphArea_mouse_exited() -> void:
+func _on_Grid_mouse_exited() -> void:
 	for line in graph_area.get_children():
 		line.indicator.visible = false
 	legend.visible = false
