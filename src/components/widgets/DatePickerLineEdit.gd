@@ -22,6 +22,8 @@ func _on_DatePicker_date_picked(date : int) -> void:
 	text = Time.get_datetime_string_from_unix_time(date, true)
 
 func process_date(new_text : String = text, notify := true) -> bool:
+	if new_text == "":
+		return false
 	text = new_text
 	new_text = new_text.to_lower()
 	if "now" in new_text:

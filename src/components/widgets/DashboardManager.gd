@@ -11,6 +11,8 @@ func _on_DashBoardManager_gui_input(event) -> void:
 					add_dashboard()
 		if event.button_index == BUTTON_RIGHT and event.is_pressed():
 			load_data()
+		if event.button_index == BUTTON_MIDDLE and event.is_pressed():
+			save_data()
 
 func add_dashboard(dashboard_name : String = ""):
 	var new_tab = dashboard_container_scene.instance()
@@ -39,6 +41,7 @@ func save_data():
 func load_data():
 	for dashboard in get_children():
 		if dashboard.has_method("get_data"):
+			remove_child(dashboard)
 			dashboard.queue_free()
 			
 	var file : File = File.new()
@@ -46,9 +49,12 @@ func load_data():
 	var data : Array = JSON.parse(file.get_as_text()).result
 	for dashboard in data:
 		add_dashboard(dashboard.dashboard_name)
+		yield(get_tree(),"idle_frame")
 		var d = get_node(dashboard.dashboard_name)
 		for key in dashboard:
 			d.set(key, dashboard[key])
+			
+
 		
 	
 	
