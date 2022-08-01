@@ -76,7 +76,6 @@ func show_options() -> void:
 
 func set_items(new_items : Array) -> void:
 	items.clear()
-	line_edit.text = ""
 	for item in new_items:
 		items.append(item)
 		

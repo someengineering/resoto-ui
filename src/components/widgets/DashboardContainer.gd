@@ -210,11 +210,13 @@ func set_widgets(new_widgets : Array) -> void:
 		var widget_data = settings["widget_data"]
 		widget_data["data_sources"] = settings["data_sources_data"]
 		var container : WidgetContainer = yield(dashboard.add_widget(widget_data), "completed")
-		container.rect_position = Vector2(settings["rect_position:x"], settings["rect_position:y"])
-		container.rect_size = Vector2(settings["rect_size:x"], settings["rect_size:y"])
+		container.rect_position = Vector2(settings["position:x"], settings["position:y"]) * container.grid_size
+		container.rect_size = Vector2(settings["size:x"], settings["size:y"]) * container.grid_size
 		container.parent_reference.rect_size = container.rect_size
 		container.parent_reference.rect_position = container.rect_position
 		container.set_anchors()
+		
+	dashboard.call_deferred("refresh")
 
 
 func _on_WindowDialog_widget_added(_widget_data):

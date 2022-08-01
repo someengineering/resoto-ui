@@ -406,6 +406,7 @@ items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup
 [connection signal="toggled" from="MenuBar/HBoxContainer/TerminalsButton" to="Content" method="_on_TerminalsButton_toggled"]
 [connection signal="toggled" from="MenuBar/HBoxContainer/DashboardsButton" to="Content" method="_on_DashboardsButton_toggled"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
+[connection signal="connected" from="Popups/ConnectPopup/Content/MarginContainer/Connect" to="Content/Content/DashBoardManager" method="load_data"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
 [connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectDelay" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectDelay_timeout"]

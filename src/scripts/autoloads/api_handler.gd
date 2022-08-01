@@ -136,6 +136,4 @@ func _get_infra_info(_connect_to:Node = self) -> void:
 	_req_res.connect("done", _connect_to, "_on_get_infra_info_done")
 	
 
-func _on_get_infra_info_done(_error:int, response):
-	InfrastructureInformation.infra_info = response.transformed.result
 
