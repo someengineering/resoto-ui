@@ -103,16 +103,23 @@ func set_x_range(r : float) -> void:
 	x_range = r
 
 func _on_Grid_resized() -> void:
-	$Viewport.size = $GridContainer/Grid.rect_size
-	$Viewport/Grid.rect_size = $GridContainer/Grid.rect_size
 	if not is_instance_valid(x_labels):
 		return
+
+	$Viewport.size = $GridContainer/Grid.rect_size
+	$Viewport/Grid.rect_size = $GridContainer/Grid.rect_size
+	
+	yield(VisualServer,"frame_post_draw")
+	
+	
+	complete_update()
 	var n = x_labels.get_child_count()
 	if n > 0:
 		x_labels.get_child(0).rect_min_size.x = grid.rect_size.x / divisions.x / 2
 		x_labels.get_child(n - 1).rect_min_size.x = grid.rect_size.x / divisions.x / 2
+	
+	grid.material.set_shader_param("grid_divisions", divisions)
 	grid.material.set_shader_param("size", grid.rect_size)
-	complete_update()
 	
 func update_series() -> void:
 	if not is_instance_valid(graph_area):
@@ -149,7 +156,6 @@ func update_graph_area(force := false) -> void:
 	new_divisions.x = max(2, new_divisions.x)
 	new_divisions.y = max(2, new_divisions.y)
 
-	grid.material.set_shader_param("grid_divisions", divisions)
 	
 	if divisions.x != new_divisions.x or force:
 		divisions.x = new_divisions.x
@@ -243,7 +249,6 @@ func set_scale_from_series() -> void:
 				stacked[pos] = value.y
 			if maxy < value.y:
 				maxy = value.y
-				
 	max_y_value = maxy * 1.2
 	
 func _process(_delta : float) -> void:
@@ -313,5 +318,6 @@ func transform_point(point : Vector2) -> Vector2:
 	point.y *= -1
 	if point.y >= 0.0:
 		point.y = -0.0001
+		
 	return point
 

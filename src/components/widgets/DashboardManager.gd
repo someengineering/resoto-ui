@@ -3,6 +3,7 @@ extends TabContainer
 var dashboard_container_scene := preload("res://components/widgets/DashboardContainer.tscn")
 
 
+
 func _on_DashBoardManager_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
@@ -32,29 +33,34 @@ func save_data():
 	for dashboard in get_children():
 		if dashboard.has_method("get_data"):
 			data.append(dashboard.get_data())
-			
-	var file := File.new()
-	file.open("/home/pablo/test-dashboard", File.WRITE)
-	file.store_string(JSON.print(data, "\t"))
-	file.close()
+	
+	if OS.has_feature("HTML5"):
+		HtmlFiles.save_on_local_storage("resoto-dashboards", JSON.print(data))
+	else:
+		var file := File.new()
+		file.open("/home/pablo/test-dashboard", File.WRITE)
+		file.store_string(JSON.print(data, "\t"))
+		file.close()
 	
 func load_data():
 	for dashboard in get_children():
 		if dashboard.has_method("get_data"):
 			remove_child(dashboard)
 			dashboard.queue_free()
-			
-	var file : File = File.new()
-	file.open("/home/pablo/test-dashboard", File.READ)
-	var data : Array = JSON.parse(file.get_as_text()).result
+	
+	var data : Array
+	if OS.has_feature("HTML5"):
+		data = HtmlFiles.load_from_local_storage("resoto-dashboards")
+	else:
+		var file : File = File.new()
+		file.open("/home/pablo/test-dashboard", File.READ)
+		data = JSON.parse(file.get_as_text()).result
+		
+	data.invert()
 	for dashboard in data:
 		add_dashboard(dashboard.dashboard_name)
 		yield(get_tree(),"idle_frame")
 		var d = get_node(dashboard.dashboard_name)
 		for key in dashboard:
 			d.set(key, dashboard[key])
-			
-
-		
-	
 	

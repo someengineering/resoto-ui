@@ -29,6 +29,17 @@ func upload_file(_connect_to:Node, _file_types:String = ".json, .txt", _slot:Str
 		connect("file_uploaded", _connect_to, _slot, [], CONNECT_ONESHOT)
 
 
+func save_on_local_storage(item_name : String, data : String) -> void:
+	var local_storage = JavaScript.get_interface("localStorage")
+	local_storage.setItem(item_name, data)
+
+
+func load_from_local_storage(item_name : String):
+	var local_storage = JavaScript.get_interface("localStorage")
+	var data
+	data = JSON.parse(local_storage.getItem(item_name)).result
+	return data
+
 func _on_file_read_done(args):
 	var event = args[0]
 	if event.target.readyState == 2:

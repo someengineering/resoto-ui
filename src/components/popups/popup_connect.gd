@@ -50,6 +50,10 @@ func connect_to_core() -> void:
 	API._get_infra_info(API)
 
 
+func _on_get_infra_info_done(_error:int, response):
+	InfrastructureInformation.infra_info = response.transformed.result
+
+
 func _on_cli_info_done(error:int, response:UserAgent.Response) -> void:
 	if error:
 		not_connected(Utils.err_enum_to_string(error))

@@ -318,10 +318,10 @@ func get_data() -> Dictionary:
 	}
 	
 	var data : Dictionary = {
-		"rect_position:x" : rect_position.x,
-		"rect_position:y" : rect_position.y,
-		"rect_size:x" : rect_size.x,
-		"rect_size:y" : rect_size.y,
+		"position:x" : rect_position.x / grid_size.x,
+		"position:y" : rect_position.y / grid_size.y,
+		"size:x" : rect_size.x / grid_size.x,
+		"size:y" : rect_size.y / grid_size.y,
 		"widget_data" : widget_data,
 		"data_sources_data" : data_sources_data
 	}
