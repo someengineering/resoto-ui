@@ -29,16 +29,17 @@ var colors := [
 
 var current_color := 0
 
-onready var graph_area := $Viewport/Grid/GraphArea
+onready var graph_area := $Viewport/GridContainer/Grid/GraphArea
 onready var legend := $CanvasLayer/PopupLegend
 onready var legend_container := $CanvasLayer/PopupLegend/VBoxContainer
-onready var x_labels := $GridContainer/XLabels
-onready var y_labels := $GridContainer/YLabels
-onready var grid := $Viewport/Grid
+onready var x_labels := $Viewport/GridContainer/XLabels
+onready var y_labels := $Viewport/GridContainer/YLabels
+onready var grid := $Viewport/GridContainer/Grid
 
 func _ready() -> void:
 	legend.visible = false
-	$GridContainer/Grid.texture = $Viewport.get_texture()
+	get_parent().get_parent().connect("moved_or_resized", self, "_on_Grid_resized")
+#	_on_Grid_resized()
 
 func _input(event) -> void:
 #	if event.is_action_pressed("ui_accept"):
@@ -62,9 +63,9 @@ func _input(event) -> void:
 #		complete_update()
 
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
-		var x = x_range * $GridContainer/Grid.get_local_mouse_position().x / graph_area.rect_size.x + x_origin
-		
+		var x = x_range * $Grid/LegendPosition.get_local_mouse_position().x / graph_area.rect_size.x
 		legend.rect_global_position = get_global_mouse_position()
+		legend.rect_size.y = 0
 			
 		var stacked = 0
 		
@@ -106,11 +107,8 @@ func _on_Grid_resized() -> void:
 	if not is_instance_valid(x_labels):
 		return
 
-	$Viewport.size = $GridContainer/Grid.rect_size
-	$Viewport/Grid.rect_size = $GridContainer/Grid.rect_size
-	
-	yield(VisualServer,"frame_post_draw")
-	
+	$Viewport.size = rect_size
+	$Viewport/GridContainer.rect_size = rect_size
 	
 	complete_update()
 	var n = x_labels.get_child_count()
@@ -128,26 +126,26 @@ func update_series() -> void:
 		return
 	if series.size() == 0:
 		return
-	var origin : Vector2 = Vector2(0, graph_area.rect_size.y)
+	var origin : Vector2 = Vector2(grid.rect_global_position.x, grid.rect_global_position.y + graph_area.rect_size.y)
 	var n = graph_area.get_child_count()
 	var stacked : PoolRealArray = []
-	stacked.resize(range(x_origin, x_origin+x_range, step).size())
+	stacked.resize(range(0, x_range, step).size())
 	stacked.fill(0)
 	for i in n:
 		var index = n - i - 1
 		var line : Line2D = graph_area.get_child(index)
 		var values : PoolVector2Array = []
 		
-		for j in range(x_origin, x_origin+x_range, step):
-			var point = find_value_at_x(j,series[index])
-			var pos = int((j - x_origin) / step)
+		for j in stacked.size():
+			var point = find_value_at_x(j * step ,series[index])
 			if line.get_meta("stack"):
-				point.y += stacked[pos]
-				stacked[pos] = point.y
+				point.y += stacked[j]
+				stacked[j] = point.y
 #			if graph_area.get_global_rect().grow(1).has_point(point + origin):
 			values.append(transform_point(point))
 		line.points = values
 		line.global_position = origin
+
 
 func update_graph_area(force := false) -> void:
 	if not is_instance_valid(graph_area):
@@ -162,6 +160,7 @@ func update_graph_area(force := false) -> void:
 		var nx = divisions.x
 	
 		for l in x_labels.get_children():
+			x_labels.remove_child(l)
 			l.queue_free()
 			
 		
@@ -175,7 +174,7 @@ func update_graph_area(force := false) -> void:
 			if x_axis_date:
 				x_value = Time.get_datetime_string_from_unix_time(x_value).replace("T", "\n")
 			l.max_font_size = 18
-			l.min_font_size = 8
+			l.min_font_size = 12
 			l.text = str(x_value)
 			l.size_flags_horizontal = SIZE_EXPAND_FILL
 			l.size_flags_vertical = 0
@@ -236,17 +235,16 @@ func set_scale_from_series() -> void:
 	var maxy = -INF
 
 	var stacked : PoolRealArray = []
-	stacked.resize(range(x_origin, x_origin+x_range, step).size())
+	stacked.resize(range(0, x_range, step).size())
 	stacked.fill(0)
 
-	for j in range(x_origin, x_range + x_origin, step):
+	for j in stacked.size():
 		for serie in series:
-			var value = find_value_at_x(j, serie)
+			var value = find_value_at_x(j*step, serie)
 			
 			if stacked:
-				var pos = int((j - x_origin) / step)
-				value.y += stacked[pos]
-				stacked[pos] = value.y
+				value.y += stacked[j]
+				stacked[j] = value.y
 			if maxy < value.y:
 				maxy = value.y
 	max_y_value = maxy * 1.2
@@ -292,7 +290,7 @@ func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 		else:
 			next = value
 			break
-	
+			
 	if prev == null or next == null:
 		return Vector2(target_x, 0)
 	else:
@@ -301,8 +299,9 @@ func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 func _on_Grid_mouse_entered() -> void:
 	for line in graph_area.get_children():
 		line.indicator.visible = true
-	legend.visible = true
 	mouse_on_graph = true
+	yield(VisualServer,"frame_post_draw")
+	legend.visible = true
 
 
 func _on_Grid_mouse_exited() -> void:
@@ -313,7 +312,7 @@ func _on_Grid_mouse_exited() -> void:
 
 func transform_point(point : Vector2) -> Vector2:
 	var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
-	point += Vector2(-x_origin, -min_y_value)
+	point += Vector2(0, -min_y_value)
 	point /= ratio
 	point.y *= -1
 	if point.y >= 0.0:

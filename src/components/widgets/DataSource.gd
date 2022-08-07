@@ -14,8 +14,12 @@ var legend : String = ""
 var sum_by : String = ""
 var stacked : bool = true
 
+var making_query := false
+
 
 func make_query(from, to, interval, dashboard_filters : Dictionary = {}) -> void:
+	if making_query:
+		return
 	var q = query.replace("$interval", "%ds" % (interval))
 	if dashboard_filters == {}:
 		q = q.replace("$dashboard_filters,", "")
@@ -32,14 +36,17 @@ func make_query(from, to, interval, dashboard_filters : Dictionary = {}) -> void
 		q = q.replace("$dashboard_filters", filters_str)
 		
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
+		making_query = true
 		API.query_tsdb(q, self)
 	else:
 		widget.step = interval
 		widget.x_origin = from
 		widget.x_range = to - from
+		making_query = true
 		API.query_range_tsdb(q, self, from, to, interval)
 		
 func _on_query_tsdb_done(_error: int, response) -> void:
+	making_query = false
 	if not is_instance_valid(widget):
 		return
 	var data = response.transformed.result
@@ -61,6 +68,7 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 		widget.value = "NaN"
 
 func _on_query_range_tsdb_done(_error:int, response) -> void:
+	making_query = false
 	var data = response.transformed.result
 	
 	if _error != 0 or typeof(data) == TYPE_STRING:
@@ -83,9 +91,10 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 		for serie in data.data.result:
 			var array : PoolVector2Array = []
 			array.resize(serie.values.size())
+			var origin : int = serie.values[0][0]
 			for i in array.size():
-				array[i] = Vector2(serie.values[i][0], serie.values[i][1])
-				
+				array[i] = Vector2(serie.values[i][0] - origin, serie.values[i][1])
+			
 			var l : String = legend
 			for label in legend_labels:
 				var replace := ""
@@ -93,6 +102,7 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 					replace =serie.metric[label.strings[0]]
 				l = l.replace("{%s}"%label.strings[0], replace)
 			widget.add_serie(array, null, l, stacked)
+			
 		widget.complete_update(true)
 	else:
 			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],2)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://components/widgets/Chart.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -29,6 +29,10 @@ shader_param/grid_color = Color( 0.85098, 0.721569, 1, 0.168627 )
 shader_param/size = Vector2( 1859, 1003 )
 shader_param/line_width = 3.0
 
+[sub_resource type="ViewportTexture" id=7]
+flags = 4
+viewport_path = NodePath("Viewport")
+
 [node name="Chart" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -43,7 +47,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
 
-[node name="GridContainer" type="Control" parent="."]
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 1859, 1003 )
+usage = 0
+render_target_v_flip = true
+
+[node name="GridContainer" type="Control" parent="Viewport"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -51,28 +60,65 @@ margin_top = 5.0
 margin_right = -5.0
 margin_bottom = -5.0
 
-[node name="YLabels" type="VBoxContainer" parent="GridContainer"]
+[node name="YLabels" type="VBoxContainer" parent="Viewport/GridContainer"]
 anchor_bottom = 1.0
 margin_right = 43.0
 margin_bottom = -59.0
 custom_constants/separation = 0
 
-[node name="Grid" type="TextureRect" parent="GridContainer"]
+[node name="Grid" type="ColorRect" parent="Viewport/GridContainer"]
+material = SubResource( 6 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 51.0
-margin_bottom = -67.0
+margin_left = 59.0
+margin_right = -11.0
+margin_bottom = -59.0
+mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-expand = true
+color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
 
-[node name="XLabels" type="HBoxContainer" parent="GridContainer"]
+[node name="BackBufferCopy" type="BackBufferCopy" parent="Viewport/GridContainer/Grid"]
+copy_mode = 2
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Viewport/GridContainer/Grid"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+border_color = Color( 0.85098, 0.721569, 1, 0.168627 )
+editor_only = false
+
+[node name="GraphArea" type="Control" parent="Viewport/GridContainer/Grid"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="XLabels" type="HBoxContainer" parent="Viewport/GridContainer"]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 51.0
+margin_left = 59.0
 margin_top = -59.0
+margin_right = -3.0
 custom_constants/separation = 0
+
+[node name="Grid" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 7 )
+expand = true
+
+[node name="LegendPosition" type="Control" parent="Grid"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 59.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -88,39 +134,9 @@ theme = ExtResource( 2 )
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 9.0
-margin_bottom = 9.0
+margin_bottom = 5.0
 mouse_filter = 2
+size_flags_vertical = 0
 
-[node name="Viewport" type="Viewport" parent="."]
-size = Vector2( 1859, 1003 )
-usage = 0
-render_target_v_flip = true
-
-[node name="Grid" type="ColorRect" parent="Viewport"]
-material = SubResource( 6 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
-
-[node name="BackBufferCopy" type="BackBufferCopy" parent="Viewport/Grid"]
-copy_mode = 2
-
-[node name="ReferenceRect" type="ReferenceRect" parent="Viewport/Grid"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-border_color = Color( 0.85098, 0.721569, 1, 0.168627 )
-editor_only = false
-
-[node name="GraphArea" type="Control" parent="Viewport/Grid"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[connection signal="mouse_entered" from="GridContainer/Grid" to="." method="_on_Grid_mouse_entered"]
-[connection signal="mouse_exited" from="GridContainer/Grid" to="." method="_on_Grid_mouse_exited"]
-[connection signal="resized" from="GridContainer/Grid" to="." method="_on_Grid_resized"]
+[connection signal="mouse_entered" from="Grid/LegendPosition" to="." method="_on_Grid_mouse_entered"]
+[connection signal="mouse_exited" from="Grid/LegendPosition" to="." method="_on_Grid_mouse_exited"]
