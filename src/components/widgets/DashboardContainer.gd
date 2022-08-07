@@ -5,7 +5,7 @@ signal deleted
 
 var dashboard_name : String = "" setget set_dashboard_name
 
-var last_refresh := 0
+onready var last_refresh := Time.get_unix_time_from_system()
 var refresh_time := 900
 
 # just for load
@@ -23,10 +23,11 @@ onready var add_widget_popup := $WindowDialog
 onready var range_selector := $DateRangeSelector
 onready var refresh_option := $VBoxContainer/PanelContainer/HBoxContainer/RefreshOptionButton
 onready var name_label := $VBoxContainer/PanelContainer/HBoxContainer/DashboardNameLabel
+onready var lock_button := $VBoxContainer/PanelContainer/HBoxContainer/LockButton
 
-onready var clouds_combo := $VBoxContainer/HBoxContainer2/CloudsCombo
-onready var accounts_combo := $VBoxContainer/HBoxContainer2/AccountsCombo
-onready var regions_combo := $VBoxContainer/HBoxContainer2/RegionsCombo
+onready var clouds_combo := $VBoxContainer/FiltersContainer/CloudsCombo
+onready var accounts_combo := $VBoxContainer/FiltersContainer/AccountsCombo
+onready var regions_combo := $VBoxContainer/FiltersContainer/RegionsCombo
 
 func _ready() -> void:
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
@@ -42,10 +43,13 @@ func _ready() -> void:
 		_on_infra_info_updated()
 	InfrastructureInformation.connect("infra_info_updated", self, "_on_infra_info_updated")
 	
+	dashboard.lock(true)
+	
 	
 func _process(_delta : float) -> void:
 	var current_time := Time.get_unix_time_from_system()
 	if current_time - last_refresh > refresh_time or force_refresh:
+		print("refresh")
 		force_refresh = false
 		last_refresh = current_time
 		range_selector._on_AcceptButton_pressed()
@@ -71,11 +75,14 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	add_widget_popup.interval = (end-start)/100
 	dashboard.refresh(start, end, (end-start)/100)
 	last_refresh = Time.get_unix_time_from_system()
+	
 
 
 func _on_LockButton_toggled(button_pressed : bool) -> void:
-	$VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton.visible = !button_pressed
-
+	$VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton.visible = button_pressed
+	dashboard.lock(!button_pressed)
+	if !button_pressed:
+		get_parent().save_data()
 
 func _on_OptionButton_item_selected(_index : int) -> void:
 	var text : String = refresh_option.text
@@ -171,7 +178,7 @@ func get_data() -> Dictionary:
 		"cloud" : cloud,
 		"account" : account,
 		"region" : region,
-		"widgets" : _widgets
+		"widgets" : _widgets,
 	}
 	
 	return data
@@ -190,7 +197,8 @@ func set_range(new_range : String) -> void:
 		
 	var range_parts := new_range.split(" to ")
 	range_selector.from.process_date(range_parts[0], false)
-	range_selector.to.process_date(range_parts[1])
+	range_selector.to.process_date(range_parts[1], false)
+	force_refresh = true
 	
 
 func set_cloud(new_cloud : String):
@@ -216,7 +224,7 @@ func set_widgets(new_widgets : Array) -> void:
 		container.parent_reference.rect_position = container.rect_position
 		container.set_anchors()
 		
-	dashboard.call_deferred("refresh")
+#	dashboard.call_deferred("refresh")
 
 
 func _on_WindowDialog_widget_added(_widget_data):

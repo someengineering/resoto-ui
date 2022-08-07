@@ -18,7 +18,7 @@ enum RESIZE_MODES {
 	}
 
 var resize_mode = RESIZE_MODES.NONE
-var grid_size : Vector2 = Vector2(100, 100)
+var grid_size : Vector2 = Vector2(100, 100) setget set_grid_size
 var grid_margin : Vector2 = Vector2(5, 5)
 var last_pressed_position : Vector2
 var press_offset : Vector2
@@ -50,6 +50,12 @@ func _ready() -> void:
 		button.connect("button_down", self, "_on_resize_button_pressed", [i])
 	
 	set_process(false)
+
+
+func set_grid_size(new_grid_size : Vector2) -> void:
+		grid_size = new_grid_size
+		emit_signal("moved_or_resized")
+
 
 func set_widget(_widget : BaseWidget) -> void:
 	$MarginContainer.add_child(_widget)

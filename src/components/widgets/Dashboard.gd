@@ -10,6 +10,8 @@ export var grid_margin := Vector2(5,5)
 onready var _x_grid_size := rect_size.x / x_grid_ratio
 onready var widget_container_scene := preload("res://components/widgets/WidgetContainer.tscn")
 
+var locked := true
+
 var ts_start : int
 var ts_end : int
 var step : int
@@ -47,6 +49,7 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	container.call_deferred("set_widget", widget)
 	container.call_deferred("set_data_sources", widget_data["data_sources"])
 	container.set_deferred("title", widget_data["title"])
+	container.call_deferred("lock", locked)
 	
 	if "settings" in widget_data:
 		for key in widget_data["settings"]:
@@ -68,17 +71,19 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	reference.editor_only = false
 	reference.visible = false
 	
-	container.set_anchors()
+#	container.set_anchors()
 	
 	return container
 	
-func lock(locked : bool) -> void:
+func lock(_locked : bool) -> void:
+	locked = _locked
 	grid_background.visible = !locked
 	
 	for widget in widgets.get_children():
 		widget.lock(locked)
 
 func _on_Grid_resized() -> void:
+	
 	_x_grid_size = rect_size.x / x_grid_ratio
 
 	var grid_size := Vector2(_x_grid_size, y_grid_size)

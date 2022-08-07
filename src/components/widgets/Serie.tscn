@@ -16,7 +16,7 @@ shader = SubResource( 1 )
 [node name="Serie" type="Line2D"]
 self_modulate = Color( 0, 1, 0.576471, 1 )
 show_behind_parent = true
-width = 2.0
+width = 1.0
 default_color = Color( 0, 1, 0.576471, 1 )
 texture = ExtResource( 2 )
 texture_mode = 2
