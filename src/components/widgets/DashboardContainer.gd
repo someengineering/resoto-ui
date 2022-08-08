@@ -17,6 +17,8 @@ var cloud : String setget set_cloud
 var account : String setget set_account
 var region : String setget set_region
 
+var initial_load : bool = true
+
 onready var date_button := $VBoxContainer/PanelContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Dashboard
 onready var add_widget_popup := $WindowDialog
@@ -49,10 +51,10 @@ func _ready() -> void:
 func _process(_delta : float) -> void:
 	var current_time := Time.get_unix_time_from_system()
 	if current_time - last_refresh > refresh_time or force_refresh:
-		print("refresh")
+		print("refresh: %s" % Time.get_datetime_string_from_system(false,true))
 		force_refresh = false
 		last_refresh = current_time
-		range_selector._on_AcceptButton_pressed()
+		dashboard.refresh()
 
 func _on_AddWidgetButton_pressed() -> void:
 	$WindowDialog.popup_centered()
@@ -64,7 +66,6 @@ func _on_WidgetContainer_config_pressed(widget_container) -> void:
 func _on_DateButton_pressed() -> void:
 	$DateRangeSelector.rect_global_position.y = date_button.rect_global_position.y + date_button.rect_size.y
 	$DateRangeSelector.rect_position.x = rect_size.x / 2 - $DateRangeSelector.rect_size.x / 2
-	
 	$DateRangeSelector.popup()
 
 
@@ -73,10 +74,13 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	add_widget_popup.from_date = start
 	add_widget_popup.to_date = end
 	add_widget_popup.interval = (end-start)/100
-	dashboard.refresh(start, end, (end-start)/100)
-	last_refresh = Time.get_unix_time_from_system()
+	dashboard.ts_end = end
+	dashboard.ts_start = start
+	dashboard.step = (end-start)/100
+	force_refresh = true
+	if initial_load:
+		get_parent().save_data()
 	
-
 
 func _on_LockButton_toggled(button_pressed : bool) -> void:
 	$VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton.visible = button_pressed
@@ -93,7 +97,7 @@ func _on_OptionButton_item_selected(_index : int) -> void:
 	refresh_time = expression.execute()
 
 
-func _on_DeleteButton_pressed():
+func _on_DeleteButton_pressed() -> void:
 	emit_signal("deleted", get_position_in_parent())
 	queue_free()
 
@@ -103,7 +107,7 @@ func set_dashboard_name(new_name : String) -> void:
 	$VBoxContainer/PanelContainer/HBoxContainer/DashboardNameLabel.text = new_name
 
 
-func _on_DashboardNameLabel_text_entered(new_text):
+func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
 	set_dashboard_name(new_text)
 
 func _on_infra_info_updated() -> void:
@@ -138,11 +142,15 @@ func _on_CloudsCombo_option_changed(option):
 	else:
 		accounts_combo.clear()
 		if option in InfrastructureInformation.accounts:
-			accounts_combo.set_items(InfrastructureInformation.accounts[option])
+			var acc : Array = InfrastructureInformation.accounts[option].duplicate()
+			acc.push_front("All")
+			accounts_combo.set_items(acc)
 			
 		regions_combo.clear()
 		if option in InfrastructureInformation.regions:
-			regions_combo.set_items(InfrastructureInformation.regions[option])
+			var reg : Array = InfrastructureInformation.regions[option].duplicate()
+			reg.push_front("All")
+			regions_combo.set_items(reg)
 			
 		dashboard.filters["cloud"] = option
 		cloud = option
@@ -153,18 +161,29 @@ func _on_CloudsCombo_option_changed(option):
 	account = ""
 	add_widget_popup.dashboard_filters = dashboard.filters
 	force_refresh = true
+	
+	if initial_load:
+		get_parent().save_data()
 
 func _on_AccountsCombo_option_changed(option):
+	if option == "All": option = ""
 	dashboard.filters["account"] = option
 	account = option
 	add_widget_popup.dashboard_filters["account"] = option
 	force_refresh = true
+	
+	if initial_load:
+		get_parent().save_data()
 
 func _on_RegionsCombo_option_changed(option):
+	if option == "All": option = ""
 	dashboard.filters["region"] = option
 	region = option
 	add_widget_popup.dashboard_filters["region"] = option
 	force_refresh = true
+	
+	if initial_load:
+		get_parent().save_data()
 
 func get_data() -> Dictionary:
 	var _widgets : Array = []
@@ -198,7 +217,7 @@ func set_range(new_range : String) -> void:
 	var range_parts := new_range.split(" to ")
 	range_selector.from.process_date(range_parts[0], false)
 	range_selector.to.process_date(range_parts[1], false)
-	force_refresh = true
+	range_selector._on_AcceptButton_pressed()
 	
 
 func set_cloud(new_cloud : String):
@@ -224,7 +243,6 @@ func set_widgets(new_widgets : Array) -> void:
 		container.parent_reference.rect_position = container.rect_position
 		container.set_anchors()
 		
-#	dashboard.call_deferred("refresh")
 
 
 func _on_WindowDialog_widget_added(_widget_data):

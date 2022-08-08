@@ -54,17 +54,11 @@ func _on_metrics_query_finished(error:int, response) -> void:
 	filters_widget.value.set_items([])
 
 
-func update_query() -> void:
+func update_query(force_query := false) -> void:
 	var query = data_source.query
-	data_source.metric = metrics_options.text
-	data_source.filters = filters_widget.get_node("VBoxContainer/LineEdit").text
-	data_source.offset = date_offset_edit.text
-	data_source.aggregator = function_options.text
-	data_source.sum_by = by_line_edit.text
 	
 	data_source.update_query()
-	print(data_source.query)
-	if data_source.query != query:
+	if data_source.query != query or force_query:
 		query_edit.text = data_source.query
 		emit_signal("source_changed")
 	
@@ -78,12 +72,12 @@ func set_widget(new_widget : BaseWidget) -> void:
 
 func _on_StackedCheckBox_toggled(button_pressed : bool) -> void:
 	data_source.stacked = button_pressed
-	update_query()
+	update_query(true)
 
 
 func _on_LegendEdit_text_entered(new_text : String) -> void:
 	data_source.legend = new_text
-	update_query()
+	update_query(true)
 
 
 func _on_FunctionComboBox_option_changed(option) -> void:

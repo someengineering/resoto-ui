@@ -38,8 +38,9 @@ onready var grid := $Viewport/GridContainer/Grid
 
 func _ready() -> void:
 	legend.visible = false
-	get_parent().get_parent().connect("moved_or_resized", self, "_on_Grid_resized")
-#	_on_Grid_resized()
+	if get_parent().get_parent() is WidgetContainer:
+		get_parent().get_parent().connect("moved_or_resized", self, "_on_Grid_resized")
+	_on_Grid_resized()
 
 func _input(event) -> void:
 #	if event.is_action_pressed("ui_accept"):

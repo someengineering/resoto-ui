@@ -175,7 +175,7 @@ margin_left = -104.0
 margin_top = -32.0
 margin_right = -14.0
 margin_bottom = -8.0
-text = "Add Widget"
+text = "Accept"
 
 [connection signal="about_to_show" from="." to="." method="_on_NewWidgetPopup_about_to_show"]
 [connection signal="text_changed" from="WidgetOptions/VBoxContainer/VBoxContainer/NameEdit" to="." method="_on_NameEdit_text_changed"]

@@ -65,7 +65,9 @@ func _on_AddWidgetButton_pressed() -> void:
 		widget_to_edit.title = widget_name_label.text
 		widget_to_edit.data_sources.clear()
 		widget_to_edit.data_sources = new_data_sources
+		widget_to_edit.call_deferred("execute_query")
 		widget_to_edit = null
+		
 	
 	
 	hide()
@@ -159,6 +161,8 @@ func _on_NameEdit_text_changed(new_text : String) -> void:
 
 func _on_get_config_id_done(_error, _response, _config_key) -> void:
 	metrics =  _response.transformed.result["resotometrics"]["metrics"]
+	for ds in data_source_container.get_children():
+		ds.set_metrics(metrics)
 
 
 func _on_NewWidgetPopup_about_to_show() -> void:
@@ -170,6 +174,7 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 			var ds = data_source_widget.instance()
 			data_source_container.add_child(ds)
 			ds.data_source = data_source
+			ds.set_metrics(metrics)
 			ds.connect("source_changed", self, "update_preview")
 			
 	$WidgetOptions/VBoxContainer/VBoxContainer2.visible = widget_to_edit == null
