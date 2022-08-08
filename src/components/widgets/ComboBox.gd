@@ -6,6 +6,10 @@ signal option_changed(option)
 export (Array, String) var items
 
 var matching_items : Array
+var previous_option : String = ""
+
+var focus := false
+
 export (String) var text : String setget set_text, get_text
 
 onready var options_container := $PopupPanel/ScrollContainer/VBoxContainer
@@ -100,6 +104,7 @@ func _on_LineEdit_gui_input(event) -> void:
 				var from = line_edit.get_selection_from_column()
 				show_options()
 				line_edit.grab_focus()
+				
 				if from != -1 and to != -1:
 					yield(VisualServer,"frame_post_draw")
 					line_edit.select(from, to)
@@ -109,11 +114,13 @@ func _on_LineEdit_gui_input(event) -> void:
 			yield(VisualServer,"frame_post_draw")
 			if options_container.get_child_count() > 0:
 				options_container.get_child(0).grab_focus()
+		if event.scancode == KEY_TAB:
+			options_popup.hide()
 
 
 func _on_LineEdit_focus_exited() -> void:
 	yield(VisualServer,"frame_post_draw")
-	var focus = line_edit.has_focus()
+	focus = line_edit.has_focus()
 	for button in options_container.get_children():
 		if focus:
 			break
@@ -121,4 +128,10 @@ func _on_LineEdit_focus_exited() -> void:
 		
 	if not focus:
 		options_popup.hide()
-		emit_signal("option_changed", line_edit.text)
+		if line_edit.text != previous_option:
+			emit_signal("option_changed", line_edit.text)
+
+
+func _on_LineEdit_focus_entered():
+	if not focus:
+		previous_option = line_edit.text
