@@ -43,7 +43,7 @@ func _on_config_menu_id_pressed(id : int) -> void:
 			_g.popup_manager.open_popup("GraphPopup")
 
 
-func _on_get_model_done(error:int, response) -> void:
+func _on_get_model_done(_error:int, response) -> void:
 	JavaScript.download_buffer(response.body,"model.json")
 
 
@@ -53,7 +53,7 @@ func _on_upload_file_done(_filename:String, data) -> void:
 		_g.emit_signal("add_toast", "Model Uploaded!", "Correctly uploaded model!", 0)
 
 
-func _on_patch_model_done(error:int, response) -> void:
+func _on_patch_model_done(_error:int, response) -> void:
 	if typeof(response.transformed.result) == TYPE_STRING and response.transformed.result.begins_with("Error"):
 		_g.emit_signal("add_toast", "Failed to patch model...", response.transformed.result, 1)
 	else:

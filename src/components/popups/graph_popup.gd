@@ -21,7 +21,7 @@ func _on_GraphPopup_about_to_show() -> void:
 	info_label.text = ""
 
 
-func _on_get_graph_done(error: int, response) -> void:
+func _on_get_graph_done(_error: int, response) -> void:
 	var graphs : Array = response.transformed["result"]
 	graph_option.clear()
 	for graph in graphs:
@@ -80,7 +80,7 @@ func _on_BackupButton_pressed():
 	info_label.text = "Staring graph download..."
 
 
-func _on_cli_execute_done(error:int, response):
+func _on_cli_execute_done(_error:int, response):
 	print(response.transformed.result.split("\n")[0].replace("total matched: ", ""))
 	API.cli_execute_json("search --with-edges id=root -[0:]-> limit %d" % graph_query_limit, self, false)
 	
@@ -89,7 +89,7 @@ func _on_cli_execute_json_data(data):
 	graph_jsons_recieved += data.size()
 	aux_file.store_string(data.join("\n"))
 	
-func _on_cli_execute_json_done(error:int, response):
+func _on_cli_execute_json_done(_error:int, response):
 	if "result" in response.transformed and response.transformed.result.size() > 0:
 		graph_query_count += graph_query_limit
 		info_label.text += "\nRecieved: %d" % graph_jsons_recieved
@@ -101,6 +101,6 @@ func _on_cli_execute_json_done(error:int, response):
 
 		info_label.text += "\nFinished!"
 
-func _on_get_full_graph_done(error:int, response):
+func _on_get_full_graph_done(_error:int, response):
 	print(response.transformed.size())
 	print(response.transformed)
