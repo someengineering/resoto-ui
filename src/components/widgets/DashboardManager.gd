@@ -1,5 +1,7 @@
 extends TabContainer
 
+const number_keys : Array = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
+
 var dashboard_container_scene := preload("res://components/widgets/DashboardContainer.tscn")
 
 func _on_DashBoardManager_gui_input(event) -> void:
@@ -8,6 +10,15 @@ func _on_DashBoardManager_gui_input(event) -> void:
 			if not event.is_pressed():
 				if get_tab_title(current_tab) == "+":
 					add_dashboard()
+
+func _unhandled_input(event):
+	if event is InputEventKey and event.alt and event.is_pressed():
+		if event.scancode == KEY_LEFT:
+			current_tab = wrapi(current_tab - 1, 0, get_child_count() - 1)
+		elif event.scancode == KEY_RIGHT:
+			current_tab = wrapi(current_tab + 1, 0, get_child_count() - 1)
+		elif event.scancode in number_keys:
+			current_tab = min(number_keys.find(event.scancode), get_child_count() - 2)
 
 func add_dashboard(dashboard_name : String = "", uuid : String = ""):
 	var new_tab = dashboard_container_scene.instance()
