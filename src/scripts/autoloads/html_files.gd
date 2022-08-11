@@ -7,6 +7,8 @@ var _on_input_change_ref : JavaScriptObject
 var file_reader : JavaScriptObject
 var file_input : JavaScriptObject 
 
+onready var local_storage : JavaScriptObject = JavaScript.get_interface("localStorage")
+
 var last_file : String = ""
 
 var loading : bool = false
@@ -19,6 +21,8 @@ func _ready() -> void:
 		file_input = JavaScript.get_interface("input")
 		file_reader.onloadend = _on_read_ref
 		file_input.onchange = _on_input_change_ref
+		
+		print(get_uuid())
 
 
 func upload_file(_connect_to:Node, _file_types:String = ".json, .txt", _slot:String = "_on_upload_file_done") -> void:
@@ -30,12 +34,23 @@ func upload_file(_connect_to:Node, _file_types:String = ".json, .txt", _slot:Str
 
 
 func save_on_local_storage(item_name : String, data : String) -> void:
-	var local_storage = JavaScript.get_interface("localStorage")
 	local_storage.setItem(item_name, data)
+	
+
+func delete_from_local_storage(item_name : String):
+	local_storage.removeItem(item_name)
+	
+
+func get_local_storage_keys() -> Array:
+	var js_object = JavaScript.get_interface("Object")
+	var keys = js_object.keys(local_storage)
+	var keys_array : Array = []
+	for i in keys.length:
+		keys_array.append(keys[i])
+	return keys_array
 
 
 func load_from_local_storage(item_name : String):
-	var local_storage = JavaScript.get_interface("localStorage")
 	var data
 	data = JSON.parse(local_storage.getItem(item_name)).result
 	return data
@@ -58,3 +73,7 @@ func _notification(notification:int) -> void:
 	if notification == MainLoop.NOTIFICATION_WM_FOCUS_IN and loading and last_file == "":
 		emit_signal("file_uploaded", "", [])
 		loading = false
+
+func get_uuid():
+	var js_crypto := JavaScript.get_interface("crypto")
+	return js_crypto.randomUUID()
