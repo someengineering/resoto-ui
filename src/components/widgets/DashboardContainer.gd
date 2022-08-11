@@ -4,6 +4,7 @@ extends Control
 signal deleted
 
 var dashboard_name : String = "" setget set_dashboard_name
+var uuid : String = ""
 
 onready var last_refresh := Time.get_unix_time_from_system()
 var refresh_time := 900
@@ -79,14 +80,14 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	dashboard.step = (end-start)/100
 	force_refresh = true
 	if initial_load:
-		get_parent().save_data()
+		get_parent().save_dashboard(self)
 	
 
 func _on_LockButton_toggled(button_pressed : bool) -> void:
 	$VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton.visible = button_pressed
 	dashboard.lock(!button_pressed)
 	if !button_pressed:
-		get_parent().save_data()
+		get_parent().save_dashboard(self)
 
 func _on_OptionButton_item_selected(_index : int) -> void:
 	var text : String = refresh_option.text
@@ -109,6 +110,8 @@ func set_dashboard_name(new_name : String) -> void:
 
 func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
 	set_dashboard_name(new_text)
+	if initial_load:
+		get_parent().save_dashboard(self)
 
 func _on_infra_info_updated() -> void:
 	var clouds_filters = ["All"]
@@ -163,7 +166,7 @@ func _on_CloudsCombo_option_changed(option):
 	force_refresh = true
 	
 	if initial_load:
-		get_parent().save_data()
+		get_parent().save_dashboard(self)
 
 func _on_AccountsCombo_option_changed(option):
 	if option == "All": option = ""
@@ -173,7 +176,7 @@ func _on_AccountsCombo_option_changed(option):
 	force_refresh = true
 	
 	if initial_load:
-		get_parent().save_data()
+		get_parent().save_dashboard(self)
 
 func _on_RegionsCombo_option_changed(option):
 	if option == "All": option = ""
@@ -183,7 +186,7 @@ func _on_RegionsCombo_option_changed(option):
 	force_refresh = true
 	
 	if initial_load:
-		get_parent().save_data()
+		get_parent().save_dashboard(self)
 
 func get_data() -> Dictionary:
 	var _widgets : Array = []
@@ -198,6 +201,7 @@ func get_data() -> Dictionary:
 		"account" : account,
 		"region" : region,
 		"widgets" : _widgets,
+		"uuid" : uuid
 	}
 	
 	return data
@@ -209,6 +213,7 @@ func set_refresh_time_option(option : String) -> void:
 			break
 	
 func set_range(new_range : String) -> void:
+	var range_text = new_range
 	new_range = new_range.to_lower()
 	if "last" in new_range:
 		new_range = new_range.replace("last", "now - ")
@@ -218,6 +223,7 @@ func set_range(new_range : String) -> void:
 	range_selector.from.process_date(range_parts[0], false)
 	range_selector.to.process_date(range_parts[1], false)
 	range_selector._on_AcceptButton_pressed()
+	date_button.text = range_text
 	
 
 func set_cloud(new_cloud : String):
