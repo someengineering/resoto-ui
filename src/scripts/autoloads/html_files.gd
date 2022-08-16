@@ -22,7 +22,6 @@ func _ready() -> void:
 		file_reader.onloadend = _on_read_ref
 		file_input.onchange = _on_input_change_ref
 		
-		print(get_uuid())
 
 
 func upload_file(_connect_to:Node, _file_types:String = ".json, .txt", _slot:String = "_on_upload_file_done") -> void:
@@ -74,6 +73,3 @@ func _notification(notification:int) -> void:
 		emit_signal("file_uploaded", "", [])
 		loading = false
 
-func get_uuid():
-	var js_crypto := JavaScript.get_interface("crypto")
-	return js_crypto.randomUUID()

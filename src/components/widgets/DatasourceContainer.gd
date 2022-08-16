@@ -39,7 +39,7 @@ func _on_MetricsOptions_option_changed(option : String) -> void:
 	API.query_tsdb("resoto_"+option, self, "_on_metrics_query_finished")
 
 
-func _on_metrics_query_finished(error:int, response) -> void:
+func _on_metrics_query_finished(_error:int, response) -> void:
 	var labels := []
 	var data = response.transformed.result
 	if data.data.result.size() == 0:

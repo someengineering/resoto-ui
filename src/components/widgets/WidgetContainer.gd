@@ -26,9 +26,15 @@ var limits : Dictionary = {}
 var dashboard : Control
 var widget : BaseWidget
 
+var position_on_grid : Vector2
+var size_on_grid : Vector2
+
 var check_rect : Rect2
 export var title : String = "" setget set_title
 var data_sources : Array setget set_data_sources
+
+var is_locked : bool = true
+var is_maximized : bool = false
 
 # just for load
 var data_sources_data : Array setget set_data_sources_data, get_data_sources_data
@@ -38,9 +44,10 @@ onready var resize_buttons := $ResizeButtons
 onready var resize_tween := $ResizeTween
 onready var last_good_position : Vector2
 onready var last_good_size : Vector2
-onready var title_label := $PanelContainer/Title
+onready var title_label := $PanelContainer/Title/TitleLabel
 onready var delete_button := $PanelContainer/Title/DeleteButton
 onready var config_button := $PanelContainer/Title/ConfigButton
+onready var maximize_button := $PanelContainer/Title/MaximizeButton
 
 
 func _ready() -> void:
@@ -54,6 +61,7 @@ func _ready() -> void:
 
 func set_grid_size(new_grid_size : Vector2) -> void:
 		grid_size = new_grid_size
+		
 		emit_signal("moved_or_resized")
 
 
@@ -77,10 +85,14 @@ func _on_resize_button_released() -> void:
 
 func set_anchors() -> void:
 	var dashboard_size = dashboard.rect_size
+	rect_size = rect_size.snapped(grid_size)
+	rect_position = rect_position.snapped(grid_size)
 	margin_left = 0
 	margin_right = 0
 	anchor_left = (parent_reference.rect_position.x) / dashboard_size.x
 	anchor_right = (parent_reference.rect_position + parent_reference.rect_size).x / dashboard_size.x
+	position_on_grid = (rect_position / grid_size).snapped(Vector2.ONE)
+	size_on_grid = (rect_size / grid_size).snapped(Vector2.ONE)
 	emit_signal("moved_or_resized")
 
 func _on_resize_button_pressed( mode : int) -> void:
@@ -276,13 +288,14 @@ func _on_ResizeTween_tween_all_completed() -> void:
 	limits = get_limits()
 
 func lock(locked : bool) -> void:
-	resize_buttons.visible = !locked
+	is_locked = locked
+	resize_buttons.visible = not (is_locked or is_maximized)
 	delete_button.visible = !locked
 	config_button.visible = !locked
 
 func set_title(new_title : String) -> void:
 	title = new_title
-	$PanelContainer/Title.text = title
+	$PanelContainer/Title/TitleLabel.text = title
 
 func execute_query() -> void:
 	if widget.has_method("clear_series"):
@@ -313,9 +326,9 @@ func get_data() -> Dictionary:
 		else:
 			widget_settings[setting] = widget[setting]
 		
-	var data_sources_data : Array = []
+	var _data_sources_data : Array = []
 	for data_source in data_sources:
-		data_sources_data.append(data_source.get_data())
+		_data_sources_data.append(data_source.get_data())
 		
 	var widget_data : Dictionary = {
 		"scene" : widget.filename,
@@ -324,14 +337,14 @@ func get_data() -> Dictionary:
 	}
 	
 	var data : Dictionary = {
-		"position:x" : rect_position.x / grid_size.x,
-		"position:y" : rect_position.y / grid_size.y,
-		"size:x" : rect_size.x / grid_size.x,
-		"size:y" : rect_size.y / grid_size.y,
+		"position:x" : position_on_grid.x,
+		"position:y" : position_on_grid.y,
+		"size:x" : size_on_grid.x,
+		"size:y" : size_on_grid.y,
 		"widget_data" : widget_data,
-		"data_sources_data" : data_sources_data
+		"data_sources_data" : _data_sources_data
 	}
-	
+	print(grid_size)
 	return data
 	
 func get_widget_properties() -> Dictionary:
@@ -357,7 +370,24 @@ func set_data_sources_data(data : Array) -> void:
 		data_sources.append(ds)
 	
 func get_data_sources_data() -> Array:
-	var data : Array
+	var data : Array = []
 	for data_source in data_sources:
 		data.append(data_source.get_data())
 	return data
+
+
+func _on_MaximizeButton_toggled(button_pressed):
+	is_maximized = button_pressed
+	set_as_toplevel(button_pressed)
+	resize_buttons.visible = not (is_maximized or is_locked)
+	emit_signal("moved_or_resized")
+		
+
+
+func _on_WidgetContainer_moved_or_resized():
+	if is_maximized:
+		rect_global_position = get_parent().get_parent().get_parent().rect_global_position
+		rect_size = get_parent().get_parent().get_parent().rect_size
+	else:
+		rect_position = position_on_grid * grid_size
+		rect_size = size_on_grid * grid_size

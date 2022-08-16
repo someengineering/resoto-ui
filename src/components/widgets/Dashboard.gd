@@ -91,12 +91,13 @@ func _on_Grid_resized() -> void:
 	$Grid.material.set_shader_param("grid_size", grid_size)
 	$Grid.material.set_shader_param("dashboard_size", rect_size)
 	for widget in $Widgets.get_children():
-		widget.grid_size.x = _x_grid_size
+		widget.grid_size = grid_size
 		
 	yield(VisualServer, "frame_post_draw")
 	for widget in $Widgets.get_children():
-		widget.parent_reference.set_deferred("rect_global_position" , widget.rect_global_position)
-		widget.parent_reference.set_deferred("rect_size", widget.rect_size)
+		widget.parent_reference.set_deferred("rect_global_position" , widget.rect_global_position.snapped(grid_size))
+		widget.parent_reference.set_deferred("rect_size", widget.rect_size.snapped(grid_size))
+		widget.call_deferred("set_anchors")
 
 func find_rect_intersection(rect : Rect2, exclude_widgets := []):
 	var all_widgets : Array = widgets.get_children()
@@ -138,7 +139,11 @@ func refresh(from : int = ts_start, to : int = ts_end, interval : int = step) ->
 func _on_widget_moved_or_resized():
 	var max_y : float = -INF
 	for widget in widgets.get_children():
+		if widget.is_maximized:
+			max_y = get_parent().rect_size.y
+			break
 		if widget.rect_size.y + widget.rect_position.y > max_y:
 			max_y = widget.rect_size.y + widget.rect_position.y
-			
+	yield(VisualServer,"frame_post_draw")
 	rect_min_size.y = max(max_y, get_parent().rect_size.y)
+	rect_size.y = max(max_y, get_parent().rect_size.y)
