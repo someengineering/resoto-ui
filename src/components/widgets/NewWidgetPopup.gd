@@ -186,6 +186,9 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 
 
 func _on_AddDataSource_pressed() -> void:
+	if data_source_container.get_child_count() >= preview_widget.max_data_sources:
+		_g.emit_signal("add_toast", "Max Data Sources Exceeded", "Can't add more data sources to this kind of widget.", 1)
+		return
 	var ds = data_source_widget.instance()
 	ds.interval = interval
 	
@@ -210,3 +213,9 @@ func edit_widget(widget) -> void:
 	widget_to_edit = widget
 	popup_centered()
 	
+
+
+func _on_NewWidgetPopup_popup_hide():
+	widget_to_edit = null
+	hide()
+	preview_widget.queue_free()

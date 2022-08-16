@@ -178,6 +178,7 @@ margin_bottom = -8.0
 text = "Accept"
 
 [connection signal="about_to_show" from="." to="." method="_on_NewWidgetPopup_about_to_show"]
+[connection signal="popup_hide" from="." to="." method="_on_NewWidgetPopup_popup_hide"]
 [connection signal="text_changed" from="WidgetOptions/VBoxContainer/VBoxContainer/NameEdit" to="." method="_on_NameEdit_text_changed"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/VBoxContainer2/WidgetType" to="." method="_on_WidgetType_item_selected"]
 [connection signal="pressed" from="WidgetOptions/VBoxContainer/HBoxContainer/AddDataSource" to="." method="_on_AddDataSource_pressed"]

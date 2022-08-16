@@ -34,6 +34,8 @@ func add_dashboard(dashboard_name : String = ""):
 	add_child(new_tab,true)
 	move_child(new_tab, get_tab_control(current_tab).get_position_in_parent())
 	
+	new_tab.connect("dashboard_changed", self, "save_dashboard")
+	
 
 func _on_tab_deleted(tab) -> void:
 	if tab > 0:
@@ -43,6 +45,7 @@ func save_dashboard(dashboard : DashboardContainer):
 	var data = dashboard.get_data()
 	API.cli_execute("configs delete resoto.ui.dashboard."+dashboard.last_saved_name.replace(" ", "_"), self)
 	API.patch_config_id(self, "resoto.ui.dashboard."+dashboard.name.replace(" ","_"), JSON.print(data))
+	dashboard.last_saved_name = dashboard.dashboard_name
 
 func _con_cli_execute_done(_error : int, _response):
 	pass
