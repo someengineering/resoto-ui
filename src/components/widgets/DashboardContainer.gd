@@ -2,6 +2,7 @@ class_name DashboardContainer
 extends Control
 
 signal deleted
+signal dashboard_changed(dashboard)
 
 var dashboard_name : String = "" setget set_dashboard_name
 var last_saved_name : String = ""
@@ -81,14 +82,14 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	dashboard.step = (end-start)/100
 	force_refresh = true
 	if initial_load:
-		get_parent().save_dashboard(self)
+		emit_signal("dashboard_changed", self)
 	
 
 func _on_LockButton_toggled(button_pressed : bool) -> void:
 	$VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton.visible = button_pressed
 	dashboard.lock(!button_pressed)
 	if !button_pressed:
-		get_parent().save_dashboard(self)
+		emit_signal("dashboard_changed", self)
 
 func _on_OptionButton_item_selected(_index : int) -> void:
 	var text : String = refresh_option.text
@@ -112,7 +113,7 @@ func set_dashboard_name(new_name : String) -> void:
 func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
 	set_dashboard_name(new_text)
 	if initial_load:
-		get_parent().save_dashboard(self)
+		emit_signal("dashboard_changed", self)
 		
 	last_saved_name = new_text
 
@@ -169,7 +170,7 @@ func _on_CloudsCombo_option_changed(option):
 	force_refresh = true
 	
 	if initial_load:
-		get_parent().save_dashboard(self)
+		emit_signal("dashboard_changed", self)
 
 func _on_AccountsCombo_option_changed(option):
 	if option == "All": option = ""
@@ -179,7 +180,7 @@ func _on_AccountsCombo_option_changed(option):
 	force_refresh = true
 	
 	if initial_load:
-		get_parent().save_dashboard(self)
+		emit_signal("dashboard_changed", self)
 
 func _on_RegionsCombo_option_changed(option):
 	if option == "All": option = ""
@@ -189,7 +190,7 @@ func _on_RegionsCombo_option_changed(option):
 	force_refresh = true
 	
 	if initial_load:
-		get_parent().save_dashboard(self)
+		emit_signal("dashboard_changed", self)
 
 func get_data() -> Dictionary:
 	var _widgets : Array = []
