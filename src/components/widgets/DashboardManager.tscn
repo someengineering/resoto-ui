@@ -18,4 +18,5 @@ margin_left = 15.0
 margin_top = 23.0
 margin_right = -15.0
 
+[connection signal="all_dashboards_loaded" from="." to="." method="_on_DashBoardManager_all_dashboards_loaded"]
 [connection signal="gui_input" from="." to="." method="_on_DashBoardManager_gui_input"]

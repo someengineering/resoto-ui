@@ -108,6 +108,7 @@ func _on_Grid_resized() -> void:
 	if not is_instance_valid(x_labels):
 		return
 
+	yield(VisualServer,"frame_post_draw")
 	$Viewport.size = rect_size
 	$Viewport/GridContainer.rect_size = rect_size
 	

@@ -1,8 +1,13 @@
 extends TabContainer
 
+signal all_dashboards_loaded
+
 const number_keys : Array = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
 
 var dashboard_container_scene := preload("res://components/widgets/DashboardContainer.tscn")
+var available_dashboards : Dictionary = {}
+var total_saved_dashboards : int = 0
+var dashboards_loaded : int = 0
 
 func _on_DashBoardManager_gui_input(event) -> void:
 	if event is InputEventMouseButton:
@@ -18,17 +23,17 @@ func _unhandled_input(event):
 		elif event.scancode == KEY_RIGHT:
 			current_tab = wrapi(current_tab + 1, 0, get_child_count() - 1)
 		elif event.scancode in number_keys:
-			current_tab = min(number_keys.find(event.scancode), get_child_count() - 2)
+			current_tab = int(min(number_keys.find(event.scancode), get_child_count() - 2))
 
-func add_dashboard(dashboard_name : String = "", uuid : String = ""):
+func add_dashboard(dashboard_name : String = ""):
 	var new_tab = dashboard_container_scene.instance()
 	if dashboard_name != "":
 		new_tab.dashboard_name = dashboard_name
-	if uuid == "":
-		new_tab.uuid = generate_uuid()
+
 	new_tab.connect("deleted", self, "_on_tab_deleted")
 	add_child(new_tab,true)
 	move_child(new_tab, get_tab_control(current_tab).get_position_in_parent())
+	
 
 func _on_tab_deleted(tab) -> void:
 	if tab > 0:
@@ -36,71 +41,77 @@ func _on_tab_deleted(tab) -> void:
 
 func save_dashboard(dashboard : DashboardContainer):
 	var data = dashboard.get_data()
-	
-	if OS.has_feature("HTML5"):
-		for dashboard_key in HtmlFiles.get_local_storage_keys():
-			if dashboard.uuid in dashboard_key:
-				HtmlFiles.delete_from_local_storage(dashboard_key)
-				break
+	API.cli_execute("configs delete resoto.ui.dashboard."+dashboard.last_saved_name.replace(" ", "_"), self)
+	API.patch_config_id(self, "resoto.ui.dashboard."+dashboard.name.replace(" ","_"), JSON.print(data))
 
-		HtmlFiles.save_on_local_storage("resoto.ui.dashboard.%s.%s" % [dashboard.name, dashboard.uuid], JSON.print(data))
+func _con_cli_execute_done(_error : int, _response):
+	pass
+
+func _on_patch_config_id_done(_error : int, _response):
+	_g.emit_signal("add_toast", "Your Dashboard has been saved!", "")
+
+
+func request_saved_dashboards() -> void:
+	API.get_configs(self)
+	
+
+func _on_get_configs_done(_error: int, response):
+	available_dashboards.clear()
+	total_saved_dashboards = 0
+	for config in response.transformed.result:
+		config = config as String
+		if config.begins_with("resoto.ui.dashboard"):
+			API.get_config_id(self, config)
+			total_saved_dashboards += 1
+
+func _on_get_config_id_done(_error : int, _response, _config):
+	var dashboard = _response.transformed.result
+	if dashboard is Dictionary:
+		available_dashboards[dashboard["dashboard_name"].replace(" ", "_")] = dashboard
+		dashboards_loaded += 1
+		if total_saved_dashboards <= dashboards_loaded:
+			emit_signal("all_dashboards_loaded")
+
+
+func _on_DashBoardManager_all_dashboards_loaded():
+	for dashboard_name in get_user_dashboards():
+		load_dashboard(dashboard_name)
+	
+
+func load_dashboard(dashboard_name : String):
+	var data : Dictionary = available_dashboards[dashboard_name]
+	add_dashboard(dashboard_name)
+	var dashboard = get_node(dashboard_name)
+	dashboard.initial_load = false
+	for key in data:
+		dashboard.set(key, data[key])
+	dashboard.initial_load = true
+	dashboard.last_saved_name = dashboard.name
+
+
+func get_user_dashboards() -> PoolStringArray:
+	var dashboards_names : PoolStringArray = []
+	if OS.has_feature("HTML5"):
+		dashboards_names = HtmlFiles.load_from_local_storage("dashboards")
 	else:
 		var file := File.new()
-		file.open("user://resoto.ui.dashboard.%s.%s" % [dashboard.name, dashboard.uuid], File.WRITE)
-		file.store_string(JSON.print(data, "\t"))
-		file.close()
+		if not file.open("user://dashboards", File.READ):
+			dashboards_names = JSON.parse(file.get_as_text()).result
+			file.close()
+	return dashboards_names
 	
-	_g.emit_signal("add_toast", "Your Dashboard was saved!", "")
-
-func load_all_dashboards():
-	for dashboard in get_children():
-		if dashboard.has_method("get_data"):
-			remove_child(dashboard)
-			dashboard.queue_free()
-			
-	var dashboards_data = get_saved_dashboards()
-	for dashboard_name in dashboards_data:
-		var data : Dictionary = dashboards_data[dashboard_name]
-		add_dashboard(dashboard_name, data["uuid"])
-		var dashboard = get_node(dashboard_name)
-		dashboard.initial_load = false
-		for key in data:
-			dashboard.set(key, data[key])
-		dashboard.initial_load = true
-
-func get_saved_dashboards() -> Dictionary:
-	var dashboards : Dictionary = {}
 	
-	if OS.has_feature("HTML5"):
-		var names = HtmlFiles.get_local_storage_keys()
-		for n in names:
-			if n.begins_with("resoto.ui.dashboard"):
-				var data = HtmlFiles.load_from_local_storage(n)
-				dashboards[data["dashboard_name"]] = data
-	else:
-		var dir := Directory.new()
-		dir.open("user://")
-		dir.list_dir_begin()
-		while true:
-			var file_name : String = dir.get_next()
-			if file_name == "":
-				break
-			if file_name.begins_with("resoto.ui.dashboard"):
-				var file = File.new()
-				print(file.open("user://"+file_name, File.READ))
-				var data : Dictionary = JSON.parse(file.get_as_text()).result
-				dashboards[data["dashboard_name"]] = data
-	
-	return dashboards
-
-func generate_uuid() -> String:
-	var uuid : String
-	if OS.has_feature("HTML5"):
-		uuid =  HtmlFiles.get_uuid()
-	else:
-		# from here https://www.cryptosys.net/pki/uuid-rfc4122.html
-		var data = Crypto.new().generate_random_bytes(16)
-		data[6] = (data[6] & 0x0f) | 0x40
-		data[8] = (data[8] & 0x3f) | 0x80
-		uuid = '%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x' % (data as Array)
-	return uuid
+func _notification(what):
+	if what == NOTIFICATION_WM_QUIT_REQUEST:
+		var dashboards_names : Array = []
+		for dashboard in get_children():
+			if dashboard is DashboardContainer:
+				dashboards_names.append(dashboard.name.replace(" ","_"))
+				
+		if OS.has_feature("HTML5"):
+			HtmlFiles.save_on_local_storage("dashboards", JSON.print(dashboards_names))
+		else:
+			var file := File.new()
+			file.open("user://dashboards", File.WRITE)
+			file.store_string(JSON.print(dashboards_names))
+			file.close()

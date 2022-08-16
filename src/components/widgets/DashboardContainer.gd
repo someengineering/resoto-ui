@@ -4,6 +4,7 @@ extends Control
 signal deleted
 
 var dashboard_name : String = "" setget set_dashboard_name
+var last_saved_name : String = ""
 var uuid : String = ""
 
 onready var last_refresh := Time.get_unix_time_from_system()
@@ -112,16 +113,18 @@ func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
 	set_dashboard_name(new_text)
 	if initial_load:
 		get_parent().save_dashboard(self)
+		
+	last_saved_name = new_text
 
 func _on_infra_info_updated() -> void:
 	var clouds_filters = ["All"]
 	clouds_filters.append_array(InfrastructureInformation.clouds)
 	var regions_filters = ["All"]
-	for cloud in InfrastructureInformation.regions:
-		regions_filters.append_array(InfrastructureInformation.regions[cloud])
+	for _cloud in InfrastructureInformation.regions:
+		regions_filters.append_array(InfrastructureInformation.regions[_cloud])
 	var accounts_filters = ["All"]
-	for cloud in InfrastructureInformation.accounts:
-		accounts_filters.append_array(InfrastructureInformation.accounts[cloud])
+	for _cloud in InfrastructureInformation.accounts:
+		accounts_filters.append_array(InfrastructureInformation.accounts[_cloud])
 		
 	clouds_combo.set_items(clouds_filters)
 	regions_combo.set_items(regions_filters)
@@ -131,11 +134,11 @@ func _on_infra_info_updated() -> void:
 func _on_CloudsCombo_option_changed(option):
 	if option == "All" or option == "":
 		var regions_filters = ["All"]
-		for cloud in InfrastructureInformation.regions:
-			regions_filters.append_array(InfrastructureInformation.regions[cloud])
+		for _cloud in InfrastructureInformation.regions:
+			regions_filters.append_array(InfrastructureInformation.regions[_cloud])
 		var accounts_filters = ["All"]
-		for cloud in InfrastructureInformation.accounts:
-			accounts_filters.append_array(InfrastructureInformation.accounts[cloud])
+		for _cloud in InfrastructureInformation.accounts:
+			accounts_filters.append_array(InfrastructureInformation.accounts[_cloud])
 			
 		regions_combo.set_items(regions_filters)
 		accounts_combo.set_items(accounts_filters)
@@ -249,7 +252,6 @@ func set_widgets(new_widgets : Array) -> void:
 		container.parent_reference.rect_position = container.rect_position
 		container.set_anchors()
 		
-
 
 func _on_WindowDialog_widget_added(_widget_data):
 	force_refresh = true

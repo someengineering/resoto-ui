@@ -19,11 +19,11 @@ func _on_Config_close_config():
 	show_config(false)
 
 
-func _on_TerminalsButton_toggled(button_pressed):
+func _on_TerminalsButton_toggled(_button_pressed : bool):
 	$Content/TerminalManager.show()
 	$Content/DashBoardManager.hide()
 
 
-func _on_DashboardsButton_toggled(button_pressed):
+func _on_DashboardsButton_toggled(_button_pressed : bool):
 	$Content/TerminalManager.hide()
 	$Content/DashBoardManager.show()

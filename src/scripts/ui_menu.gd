@@ -43,7 +43,7 @@ func _on_config_menu_id_pressed(id : int) -> void:
 		3:
 			_g.popup_manager.open_popup("GraphPopup")
 
-func _on_get_model_done(error:int, response) -> void:
+func _on_get_model_done(_error:int, response) -> void:
 	JavaScript.download_buffer(response.body,"model.json")
 
 
@@ -51,6 +51,6 @@ func _on_upload_file_done(_filename:String, data) -> void:
 	API.patch_model(data, self)
 
 
-func _on_patch_model_done(error:int, response) -> void:
+func _on_patch_model_done(_error:int, _response) -> void:
 	print("Done patching model")
 	
