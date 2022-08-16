@@ -247,6 +247,10 @@ func set_widgets(new_widgets : Array) -> void:
 		var widget_data = settings["widget_data"]
 		widget_data["data_sources"] = settings["data_sources_data"]
 		var container : WidgetContainer = yield(dashboard.add_widget(widget_data), "completed")
+		container.position_on_grid.x = settings["position:x"]
+		container.position_on_grid.y = settings["position:y"]
+		container.size_on_grid.x = settings["size:x"]
+		container.size_on_grid.y = settings["size:y"]
 		container.rect_position = Vector2(settings["position:x"], settings["position:y"]) * container.grid_size
 		container.rect_size = Vector2(settings["size:x"], settings["size:y"]) * container.grid_size
 		container.parent_reference.rect_size = container.rect_size

@@ -80,8 +80,11 @@ func _on_resize_button_released() -> void:
 	
 	resize_mode = RESIZE_MODES.NONE
 	yield(resize_tween, "tween_all_completed")
+	
+	position_on_grid = (rect_position / grid_size).snapped(Vector2.ONE)
+	size_on_grid = (rect_size / grid_size).snapped(Vector2.ONE)
+	
 	set_anchors()
-
 
 func set_anchors() -> void:
 	var dashboard_size = dashboard.rect_size
@@ -91,8 +94,6 @@ func set_anchors() -> void:
 	margin_right = 0
 	anchor_left = (parent_reference.rect_position.x) / dashboard_size.x
 	anchor_right = (parent_reference.rect_position + parent_reference.rect_size).x / dashboard_size.x
-	position_on_grid = (rect_position / grid_size).snapped(Vector2.ONE)
-	size_on_grid = (rect_size / grid_size).snapped(Vector2.ONE)
 	emit_signal("moved_or_resized")
 
 func _on_resize_button_pressed( mode : int) -> void:
@@ -381,10 +382,9 @@ func _on_MaximizeButton_toggled(button_pressed):
 	set_as_toplevel(button_pressed)
 	resize_buttons.visible = not (is_maximized or is_locked)
 	emit_signal("moved_or_resized")
-		
 
 
-func _on_WidgetContainer_moved_or_resized():
+func _on_WidgetContainer_moved_or_resized():  
 	if is_maximized:
 		rect_global_position = get_parent().get_parent().get_parent().rect_global_position
 		rect_size = get_parent().get_parent().get_parent().rect_size

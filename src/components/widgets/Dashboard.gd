@@ -53,7 +53,7 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	
 	if "settings" in widget_data:
 		for key in widget_data["settings"]:
-			if "color" in key:
+			if "color" in key and not widget_data["settings"][key] is Color:
 				# asume it was passed as string
 				widget_data["settings"][key] = str2var(widget_data["settings"][key])
 			widget.set(key, widget_data["settings"][key])
@@ -90,6 +90,8 @@ func _on_Grid_resized() -> void:
 	
 	$Grid.material.set_shader_param("grid_size", grid_size)
 	$Grid.material.set_shader_param("dashboard_size", rect_size)
+	
+	print(grid_size)
 	for widget in $Widgets.get_children():
 		widget.grid_size = grid_size
 		
