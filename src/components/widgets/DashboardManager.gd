@@ -9,6 +9,8 @@ var available_dashboards : Dictionary = {}
 var total_saved_dashboards : int = 0
 var dashboards_loaded : int = 0
 
+onready var dashboards_list = $"+/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/ItemList"
+
 func _on_DashBoardManager_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
@@ -36,6 +38,10 @@ func add_dashboard(dashboard_name : String = ""):
 	
 	new_tab.connect("dashboard_changed", self, "save_dashboard")
 	
+	yield(VisualServer,"frame_post_draw")
+	
+	new_tab.dashboard._on_Grid_resized()
+	
 
 func _on_tab_deleted(tab) -> void:
 	if tab > 0:
@@ -47,7 +53,7 @@ func save_dashboard(dashboard : DashboardContainer):
 	API.patch_config_id(self, "resoto.ui.dashboard."+dashboard.name.replace(" ","_"), JSON.print(data))
 	dashboard.last_saved_name = dashboard.dashboard_name
 
-func _con_cli_execute_done(_error : int, _response):
+func _on_cli_execute_done(_error : int, _response):
 	pass
 
 func _on_patch_config_id_done(_error : int, _response):
@@ -77,6 +83,8 @@ func _on_get_config_id_done(_error : int, _response, _config):
 
 
 func _on_DashBoardManager_all_dashboards_loaded():
+	for dashboard in available_dashboards:
+		dashboards_list.add_item(dashboard)
 	for dashboard_name in get_user_dashboards():
 		load_dashboard(dashboard_name)
 	
@@ -118,3 +126,12 @@ func _notification(what):
 			file.open("user://dashboards", File.WRITE)
 			file.store_string(JSON.print(dashboards_names))
 			file.close()
+
+
+func _on_OpenDashboard_pressed():
+	for item in dashboards_list.get_selected_items():
+		load_dashboard(dashboards_list.get_item_text(item))
+
+
+func _on_AddDashboard_pressed():
+	add_dashboard()
