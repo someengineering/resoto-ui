@@ -24,6 +24,7 @@ var data_source_widget := preload("res://components/widgets/DatasourceContainer.
 var query : String = ""
 
 onready var data_source_container := find_node("DataSources")
+onready var color_controller_ui_scene := preload("res://components/widgets/ColorControllerUI.tscn")
 
 const widgets := {
 	"Indicator" : preload("res://components/widgets/Indicator.tscn"),
@@ -34,6 +35,7 @@ onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("NameEdit")
 onready var options_container := find_node("Options")
+onready var controller_container := $WidgetPreview/VBoxContainer/PanelContainer/ColorControllersContainer
 
 func _ready() -> void:
 	for key in widgets:
@@ -53,6 +55,11 @@ func _on_AddWidgetButton_pressed() -> void:
 		ds.copy_data_source(datasource.data_source)
 		ds.widget = widget
 		new_data_sources.append(ds)
+		
+	# Look for color controllers
+	for child in preview_widget.get_children():
+		if child is ColorController:
+			widget.get_node(child.name).conditions = child.conditions.duplicate(true)
 		
 	if widget_to_edit == null:
 		var widget_data := {
@@ -89,10 +96,17 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		preview_widget = load(widget_to_edit.widget.filename).instance()
 		for key in get_preview_widget_properties():
 			preview_widget[key] = widget_to_edit.widget[key]
+			
+		for child in widget_to_edit.widget.get_children():
+			if child is ColorController:
+				preview_widget.get_node(child.name).conditions = child.conditions.duplicate()
 		
 	preview_widget.size_flags_vertical = SIZE_EXPAND_FILL
 	for option in options_container.get_children():
 		option.queue_free()
+		
+	for controller in controller_container.get_children():
+		controller.queue_free()
 	
 	# create properties options
 	var found_settings := false
@@ -101,7 +115,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 			if property.type == TYPE_NIL:
 				break
 			var label = Label.new()
-			label.text = property.name
+			label.text = property.name.capitalize()
 			var value = get_control_for_property(property)
 			options_container.add_child(label)
 			options_container.add_child(value)
@@ -110,6 +124,19 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		elif property.name == "Widget Settings":
 			 found_settings = true
 			
+	for child in preview_widget.get_children():
+		if child is ColorController:
+			var controller_ui := color_controller_ui_scene.instance()
+			controller_ui.color_controller = child
+			controller_ui.size_flags_horizontal |= SIZE_EXPAND
+			controller_container.add_child(controller_ui)
+			
+			print(child.conditions)
+			for i in child.conditions.size():
+				var condition = child.conditions[i]
+				print(condition)
+				controller_ui.add_condition(condition[0], condition[1])
+
 	preview_container.add_child(preview_widget)
 	current_widget_preview_name = widget_type
 	

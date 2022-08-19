@@ -14,6 +14,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/widgets/BaseWidget.gd"
 }, {
+"base": "MarginContainer",
+"class": "ColorCondition",
+"language": "GDScript",
+"path": "res://components/widgets/ColorCondition.gd"
+}, {
+"base": "Node",
+"class": "ColorController",
+"language": "GDScript",
+"path": "res://components/widgets/ColorController.gd"
+}, {
+"base": "MarginContainer",
+"class": "ColorControllerUi",
+"language": "GDScript",
+"path": "res://components/widgets/ColorControllerUI.gd"
+}, {
 "base": "VBoxContainer",
 "class": "ConfigComponentArray",
 "language": "GDScript",
@@ -101,6 +116,9 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "BaseWidget": "",
+"ColorCondition": "",
+"ColorController": "",
+"ColorControllerUi": "",
 "ConfigComponentArray": "",
 "ConfigComponentComplex": "",
 "ConfigComponentDict": "",

@@ -331,10 +331,19 @@ func get_data() -> Dictionary:
 	for data_source in data_sources:
 		_data_sources_data.append(data_source.get_data())
 		
+	var color_controllers_data : Array = []
+	
+	for child in widget.get_children():
+		if child is ColorController:
+			color_controllers_data.append(
+				var2str(child.conditions)
+			)
+		
 	var widget_data : Dictionary = {
 		"scene" : widget.filename,
 		"settings" : widget_settings,
-		"title" : title
+		"title" : title,
+		"color_controllers_data" : color_controllers_data
 	}
 	
 	var data : Dictionary = {
@@ -343,7 +352,7 @@ func get_data() -> Dictionary:
 		"size:x" : size_on_grid.x,
 		"size:y" : size_on_grid.y,
 		"widget_data" : widget_data,
-		"data_sources_data" : _data_sources_data
+		"data_sources_data" : _data_sources_data,
 	}
 	print(grid_size)
 	return data

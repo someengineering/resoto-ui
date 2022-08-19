@@ -154,7 +154,7 @@ margin_right = 341.0
 margin_bottom = 577.0
 text = "Widget Options"
 
-[node name="PanelContainer" type="PanelContainer" parent="WidgetPreview/VBoxContainer"]
+[node name="PanelContainer" type="VBoxContainer" parent="WidgetPreview/VBoxContainer"]
 margin_top = 582.0
 margin_right = 341.0
 margin_bottom = 592.0
@@ -165,6 +165,10 @@ margin_top = 5.0
 margin_right = 336.0
 margin_bottom = 5.0
 columns = 2
+
+[node name="ColorControllersContainer" type="HBoxContainer" parent="WidgetPreview/VBoxContainer/PanelContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
 
 [node name="AddWidgetButton" type="Button" parent="."]
 anchor_left = 1.0
