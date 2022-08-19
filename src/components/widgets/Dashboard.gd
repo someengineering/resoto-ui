@@ -58,6 +58,9 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 				widget_data["settings"][key] = str2var(widget_data["settings"][key])
 			widget.set(key, widget_data["settings"][key])
 	
+	if "color_controllers_data" in widget_data:
+		widget.color_controllers_data = widget_data["color_controllers_data"]
+	
 	container.connect("config_pressed", owner, "_on_WidgetContainer_config_pressed")
 	
 	if not container.is_inside_tree():

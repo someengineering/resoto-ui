@@ -91,4 +91,9 @@ func _get_property_list() -> Array:
 		"type" : TYPE_COLOR
 	})
 	
+	properties.append({
+		"name" : "color",
+		"type" : TYPE_COLOR
+	})
+	
 	return properties
