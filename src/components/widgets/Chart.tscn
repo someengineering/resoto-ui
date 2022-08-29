@@ -40,6 +40,7 @@ rect_clip_content = true
 script = ExtResource( 1 )
 data_type = 1
 max_data_sources = 10
+supported_types = [ 0 ]
 x_range = 100.0
 divisions = Vector2( 4, 8 )
 

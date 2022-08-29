@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://components/widgets/WidgetContainer.gd" type="Script" id=1]
 [ext_resource path="res://assets/resize_buttons.svg" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/gear.png" type="Texture" id=4]
 [ext_resource path="res://assets/icon_delete.png" type="Texture" id=5]
 [ext_resource path="res://assets/icon_maximize.png" type="Texture" id=6]
+[ext_resource path="res://components/widgets/AggregateSearchDataSource.gd" type="Script" id=7]
 
 [sub_resource type="StyleBoxEmpty" id=17]
 
@@ -113,7 +114,7 @@ script = ExtResource( 1 )
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 32.0
+margin_top = 40.0
 mouse_filter = 2
 theme = ExtResource( 3 )
 custom_constants/margin_right = 5
@@ -278,6 +279,9 @@ flat = true
 expand_icon = true
 
 [node name="ResizeTween" type="Tween" parent="."]
+
+[node name="AggregateSearchDataSource" type="Node" parent="."]
+script = ExtResource( 7 )
 
 [connection signal="moved_or_resized" from="." to="." method="_on_WidgetContainer_moved_or_resized"]
 [connection signal="toggled" from="PanelContainer/Title/MaximizeButton" to="." method="_on_MaximizeButton_toggled"]

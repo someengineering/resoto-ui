@@ -302,7 +302,13 @@ func execute_query() -> void:
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	for datasource in data_sources:
-		datasource.make_query(dashboard.ts_start, dashboard.ts_end, dashboard.step, dashboard.filters)
+		var attr := {}
+		match datasource.type:
+			DataSource.TYPES.TIME_SERIES:
+				attr["interval"] = dashboard.step
+				attr["from"] = dashboard.ts_start
+				attr["to"] = dashboard.ts_end
+		datasource.make_query(dashboard.filters, attr)
 
 
 func _on_DeleteButton_pressed() -> void:
@@ -354,7 +360,6 @@ func get_data() -> Dictionary:
 		"widget_data" : widget_data,
 		"data_sources_data" : _data_sources_data,
 	}
-	print(grid_size)
 	return data
 	
 func get_widget_properties() -> Dictionary:
@@ -365,7 +370,6 @@ func get_widget_properties() -> Dictionary:
 			if property.type == TYPE_NIL:
 				break
 			properties[property.name] = widget[property.name]
-			print(property.name)
 		elif property.name == "Widget Settings":
 			 found_settings = true
 	return properties
@@ -373,7 +377,13 @@ func get_widget_properties() -> Dictionary:
 func set_data_sources_data(data : Array) -> void:
 	data_sources.clear()
 	for settings in data:
-		var ds = DataSource.new()
+		var ds
+		match int(settings["type"]):
+			DataSource.TYPES.TIME_SERIES:
+				ds = TimeSeriesDataSource.new()
+			DataSource.TYPES.AGGREGATE_SEARCH:
+				ds = AggregateSearchDataSource.new()
+				
 		for key in settings:
 			ds.set(key, settings[key])
 		ds.widget = widget

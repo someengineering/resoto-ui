@@ -28,7 +28,8 @@ onready var color_controller_ui_scene := preload("res://components/widgets/Color
 
 const widgets := {
 	"Indicator" : preload("res://components/widgets/Indicator.tscn"),
-	"Chart" : preload("res://components/widgets/Chart.tscn")
+	"Chart" : preload("res://components/widgets/Chart.tscn"),
+	"Table" : preload("res://components/widgets/TableWidget.tscn")
 }
 
 onready var widget_type_options := find_node("WidgetType")
@@ -36,6 +37,7 @@ onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("NameEdit")
 onready var options_container := find_node("Options")
 onready var controller_container := $WidgetPreview/VBoxContainer/PanelContainer/ColorControllersContainer
+onready var data_source_types := $WidgetOptions/VBoxContainer/HBoxContainer/DataSourceTypeOptionButton
 
 func _ready() -> void:
 	for key in widgets:
@@ -84,6 +86,7 @@ func _on_AddWidgetButton_pressed() -> void:
 func _on_WidgetType_item_selected(_index : int) -> void:
 	if widget_type_options.text == current_widget_preview_name:
 		return
+		
 	create_preview(widget_type_options.text)
 	
 func create_preview(widget_type : String = "Indicator") -> void:
@@ -131,18 +134,23 @@ func create_preview(widget_type : String = "Indicator") -> void:
 			controller_ui.size_flags_horizontal |= SIZE_EXPAND
 			controller_container.add_child(controller_ui)
 			
-			print(child.conditions)
 			for i in child.conditions.size():
 				var condition = child.conditions[i]
-				print(condition)
 				controller_ui.add_condition(condition[0], condition[1])
 
 	preview_container.add_child(preview_widget)
 	current_widget_preview_name = widget_type
 	
 	for datasource in data_source_container.get_children():
-		datasource.widget = preview_widget
+		if datasource.data_source.type in preview_widget.supported_types:
+			datasource.widget = preview_widget
+		else:
+			datasource.queue_free()
 		
+		
+	data_source_types.clear()
+	for i in preview_widget.supported_types:
+		data_source_types.add_item(DataSource.TYPES.keys()[i].capitalize(), i)
 
 
 func get_control_for_property(property : Dictionary) -> Control:
@@ -176,7 +184,6 @@ func get_preview_widget_properties() -> Dictionary:
 			if property.type == TYPE_NIL:
 				break
 			properties[property.name] = preview_widget[property.name]
-			print(property.name)
 		elif property.name == "Widget Settings":
 			 found_settings = true
 	return properties
@@ -193,12 +200,15 @@ func _on_get_config_id_done(_error, _response, _config_key) -> void:
 
 
 func _on_NewWidgetPopup_about_to_show() -> void:
+	widget_name_label.text = ""
 	for data_source in data_source_container.get_children():
 		data_source_container.remove_child(data_source)
 		data_source.queue_free()
 	if widget_to_edit != null:
+		widget_name_label.text = widget_to_edit.title
 		for data_source in widget_to_edit.data_sources:
 			var ds = data_source_widget.instance()
+			ds.datasource_type = data_source.type
 			data_source_container.add_child(ds)
 			ds.data_source = data_source
 			ds.set_metrics(metrics)
@@ -216,15 +226,18 @@ func _on_AddDataSource_pressed() -> void:
 	if data_source_container.get_child_count() >= preview_widget.max_data_sources:
 		_g.emit_signal("add_toast", "Max Data Sources Exceeded", "Can't add more data sources to this kind of widget.", 1)
 		return
+		
 	var ds = data_source_widget.instance()
-	ds.interval = interval
+	ds.datasource_type = data_source_types.get_selected_id()
 	
 	data_source_container.add_child(ds)
 	ds.widget = preview_widget
 	ds.connect("source_changed", self, "update_preview")
-#	ds.connect("tree_exited", self, "update_preview")
-	ds.set_metrics(metrics)
-	
+
+	match ds.datasource_type:
+		DataSource.TYPES.TIME_SERIES:
+			ds.interval = interval
+			ds.set_metrics(metrics)
 	
 func update_preview() -> void:
 	if not is_instance_valid(preview_widget):
@@ -234,7 +247,15 @@ func update_preview() -> void:
 		preview_widget.clear_series()
 		
 	for datasource in data_source_container.get_children():
-		datasource.data_source.make_query(from_date, to_date, interval, dashboard_filters)
+		var attr := {}
+		match datasource.data_source.type:
+			DataSource.TYPES.TIME_SERIES:
+				attr["interval"] = interval
+				attr["from"] = from_date
+				attr["to"] = to_date
+			
+		datasource.data_source.make_query(dashboard_filters, attr)
+		
 
 func edit_widget(widget) -> void:
 	widget_to_edit = widget

@@ -16,7 +16,7 @@ script = ExtResource( 4 )
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 518.0
-margin_bottom = 438.0
+margin_bottom = 462.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 513.0
@@ -156,7 +156,7 @@ margin_bottom = 381.0
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 margin_top = 385.0
 margin_right = 513.0
-margin_bottom = 433.0
+margin_bottom = 457.0
 
 [node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer"]
 margin_right = 513.0
@@ -166,7 +166,10 @@ text = "Query"
 [node name="QueryEdit" type="LineEdit" parent="VBoxContainer/VBoxContainer"]
 margin_top = 24.0
 margin_right = 513.0
-margin_bottom = 48.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 48 )
+context_menu_enabled = false
+shortcut_keys_enabled = false
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_Button_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
