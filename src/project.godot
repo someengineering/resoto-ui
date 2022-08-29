@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "DataSource",
+"class": "AggregateSearchDataSource",
+"language": "GDScript",
+"path": "res://components/widgets/AggregateSearchDataSource.gd"
+}, {
 "base": "Control",
 "class": "BaseWidget",
 "language": "GDScript",
@@ -94,10 +99,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/classes/resoto_api.gd"
 }, {
-"base": "Control",
+"base": "BaseWidget",
+"class": "TableWidget",
+"language": "GDScript",
+"path": "res://components/widgets/TableWidget.gd"
+}, {
+"base": "VBoxContainer",
 "class": "TerminalComponent",
 "language": "GDScript",
 "path": "res://components/terminal/component_terminal.gd"
+}, {
+"base": "DataSource",
+"class": "TimeSeriesDataSource",
+"language": "GDScript",
+"path": "res://components/widgets/TimeSeriesDataSource.gd"
 }, {
 "base": "Reference",
 "class": "UserAgent",
@@ -115,6 +130,7 @@ _global_script_classes=[ {
 "path": "res://components/widgets/WidgetContainer.gd"
 } ]
 _global_script_class_icons={
+"AggregateSearchDataSource": "",
 "BaseWidget": "",
 "ColorCondition": "",
 "ColorController": "",
@@ -132,7 +148,9 @@ _global_script_class_icons={
 "LineEditFloat": "",
 "LineEditInt": "",
 "ResotoAPI": "",
+"TableWidget": "",
 "TerminalComponent": "",
+"TimeSeriesDataSource": "",
 "UserAgent": "",
 "Utils": "",
 "WidgetContainer": ""
@@ -140,7 +158,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Resoto UI"
+config/name="resoto-ui"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 

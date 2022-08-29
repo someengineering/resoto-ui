@@ -3,7 +3,8 @@ extends PanelContainer
 signal source_changed
 
 var widget : BaseWidget setget set_widget
-onready var data_source := DataSource.new() setget set_data_source
+var datasource_type : int =  DataSource.TYPES.TIME_SERIES
+onready var data_source : DataSource setget set_data_source
 
 onready var metrics_options := $VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions
 onready var filters_widget := $VBoxContainer/DatasourceSettings/HBoxContainer/FilterWidget
@@ -13,11 +14,20 @@ onready var date_offset_edit := $VBoxContainer/DatasourceSettings/VBoxContainer/
 onready var stacked_check_box := $VBoxContainer/DatasourceSettings/StackedCheckBox
 onready var by_line_edit := $VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit
 onready var query_edit := $VBoxContainer/VBoxContainer/QueryEdit
+onready var expand_button := $VBoxContainer/HBoxContainer/Button
 
 var interval : int = 3600
 
 func _ready() -> void:
+	match datasource_type:
+		DataSource.TYPES.TIME_SERIES:
+			data_source = TimeSeriesDataSource.new()
+		DataSource.TYPES.AGGREGATE_SEARCH:
+			data_source = AggregateSearchDataSource.new()
+			$VBoxContainer/DatasourceSettings.hide()
+			expand_button.hide()
 	data_source.widget = widget
+	
 
 func _on_Button_toggled(button_pressed : bool) -> void:
 	$VBoxContainer/DatasourceSettings.visible = not button_pressed
@@ -106,13 +116,15 @@ func _on_QueryEdit_text_entered(new_text : String) -> void:
 
 func set_data_source(new_data_source : DataSource) -> void:
 	data_source.copy_data_source(new_data_source)
-	metrics_options.text = new_data_source.metric
-	filters_widget.line_edit.text = new_data_source.filters
-	date_offset_edit.text = new_data_source.offset
-	by_line_edit.text = new_data_source.sum_by
-	function_options.text = new_data_source.aggregator
+	match new_data_source.type:
+		DataSource.TYPES.TIME_SERIES:
+			metrics_options.text = new_data_source.metric
+			filters_widget.line_edit.text = new_data_source.filters
+			date_offset_edit.text = new_data_source.offset
+			by_line_edit.text = new_data_source.sum_by
+			function_options.text = new_data_source.aggregator
+			data_source.query = new_data_source.query
+			legend_edit.text = new_data_source.legend
+			stacked_check_box.pressed = new_data_source.stacked
+		
 	query_edit.text = new_data_source.query
-	data_source.query = new_data_source.query
-	legend_edit.text = new_data_source.legend
-	stacked_check_box.pressed = new_data_source.stacked
-	

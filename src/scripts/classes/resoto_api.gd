@@ -212,3 +212,11 @@ func tsdb_label_values(label:String):
 	var request = req_get("/tsdb/api/v1/label/%s/values"%label,content_urlencoded_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
+	
+	
+func aggregate_search(query : String):
+	refresh_jwt_header(accept_json_headers)
+	var body = query
+	var request = req_post("/graph/resoto/search/aggregate", body, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request

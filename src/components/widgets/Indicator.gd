@@ -67,6 +67,8 @@ func set_color(new_color : Color):
 	color = new_color
 	if is_instance_valid(value_label):
 		value_label.set("custom_colors/font_color", new_color)
+		unit_label.set("custom_colors/font_color", new_color)
+		
 	
 func _get_property_list() -> Array:
 	var properties = []

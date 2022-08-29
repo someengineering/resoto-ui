@@ -94,7 +94,6 @@ func _on_Grid_resized() -> void:
 	$Grid.material.set_shader_param("grid_size", grid_size)
 	$Grid.material.set_shader_param("dashboard_size", rect_size)
 	
-	print(grid_size)
 	for widget in $Widgets.get_children():
 		widget.grid_size = grid_size
 		
