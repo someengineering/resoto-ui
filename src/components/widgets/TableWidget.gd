@@ -266,13 +266,30 @@ func sort_by_column(column : int, ascending : bool):
 	update_table()
 
 
-
 func sort_ascending(a, b):
 	if a[sorting_column] < b[sorting_column]:
 		return true
 	return false
-	
+
+
 func sort_descending(a, b):
 	if a[sorting_column] > b[sorting_column]:
 		return true
 	return false
+
+
+func get_csv(sepparator := ",", end_of_line := "\n"):
+	var csv_array : PoolStringArray = []
+	var header_array : PoolStringArray = []
+	for i in range(1, header_row.get_child_count()):
+		header_array.append(header_row.get_child(i).text)
+	
+	csv_array.append(header_array.join(sepparator))
+	
+	for i in range(0, raw_data.size()):
+		var row = raw_data[i] as PoolStringArray
+		row.remove(0)
+		csv_array.append(row.join(sepparator))
+		
+	return csv_array.join(end_of_line)
+		

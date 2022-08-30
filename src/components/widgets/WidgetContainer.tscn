@@ -245,10 +245,19 @@ margin_bottom = 29.0
 
 [node name="TitleLabel" type="Label" parent="PanelContainer/Title"]
 margin_top = 5.0
-margin_right = 152.0
+margin_right = 115.0
 margin_bottom = 19.0
 size_flags_horizontal = 3
 text = "Title"
+
+[node name="ExportButton" type="Button" parent="PanelContainer/Title"]
+margin_left = 119.0
+margin_right = 152.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+text = "csv"
+flat = true
+expand_icon = true
 
 [node name="MaximizeButton" type="Button" parent="PanelContainer/Title"]
 margin_left = 156.0
@@ -284,6 +293,7 @@ expand_icon = true
 script = ExtResource( 7 )
 
 [connection signal="moved_or_resized" from="." to="." method="_on_WidgetContainer_moved_or_resized"]
+[connection signal="pressed" from="PanelContainer/Title/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="toggled" from="PanelContainer/Title/MaximizeButton" to="." method="_on_MaximizeButton_toggled"]
 [connection signal="pressed" from="PanelContainer/Title/ConfigButton" to="." method="_on_ConfigButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Title/DeleteButton" to="." method="_on_DeleteButton_pressed"]

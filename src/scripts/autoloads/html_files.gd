@@ -54,6 +54,7 @@ func load_from_local_storage(item_name : String):
 	data = JSON.parse(local_storage.getItem(item_name)).result
 	return data
 
+
 func _on_file_read_done(args):
 	var event = args[0]
 	if event.target.readyState == 2:
@@ -67,6 +68,7 @@ func _on_input_change(args):
 		var file = event.target.files[0]
 		last_file = file.name
 		file_reader.readAsText(file)
+
 
 func _notification(notification:int) -> void:
 	if notification == MainLoop.NOTIFICATION_WM_FOCUS_IN and loading and last_file == "":
