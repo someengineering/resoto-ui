@@ -68,6 +68,7 @@ func set_grid_size(new_grid_size : Vector2) -> void:
 func set_widget(_widget : BaseWidget) -> void:
 	$MarginContainer.add_child(_widget)
 	widget = _widget
+	$PanelContainer/Title/ExportButton.visible = widget.has_method("get_csv")
 
 func _on_resize_button_released() -> void:
 	set_process(false)
@@ -410,3 +411,7 @@ func _on_WidgetContainer_moved_or_resized():
 	else:
 		rect_position = position_on_grid * grid_size
 		rect_size = size_on_grid * grid_size
+
+
+func _on_ExportButton_pressed():
+	JavaScript.download_buffer(widget.get_csv().to_utf8(), "%s %s.csv" % [title, Time.get_datetime_string_from_system()])
