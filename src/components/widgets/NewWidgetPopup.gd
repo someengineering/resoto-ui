@@ -29,7 +29,8 @@ onready var color_controller_ui_scene := preload("res://components/widgets/Color
 const widgets := {
 	"Indicator" : preload("res://components/widgets/Indicator.tscn"),
 	"Chart" : preload("res://components/widgets/Chart.tscn"),
-	"Table" : preload("res://components/widgets/TableWidget.tscn")
+	"Table" : preload("res://components/widgets/TableWidget.tscn"),
+	"Heatmap" : preload("res://components/widgets/HeatMap.tscn")
 }
 
 onready var widget_type_options := find_node("WidgetType")
