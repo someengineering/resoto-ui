@@ -26,7 +26,7 @@ class RowElement extends Label:
 	var sort_button := SortButton.new()
 	
 	func _init(t, c, sort_enabled := false):
-		text = t
+		text = t.replace('"', "")
 		self.color = c
 		
 		size_flags_horizontal = SIZE_FILL
@@ -163,30 +163,41 @@ func _get_property_list() -> Array:
 	
 	return properties
 
-func set_data(data):
+func set_data(data, type):
 	if raw_data.size() > 0:
 		raw_data.clear()
-	
 	clear_all()
-	var headers : Array = data[0]["group"].keys()
-	var vars : Array = data[0].keys()
-	vars.remove(vars.find("group"))
-	headers.append_array(vars)
-	set_headers(headers)
 	
-	var i : int = 1
-	for data_row in data:
-		var data_array : Array = [" "]
-		for key in data_row["group"]:
-			data_array.append(data_row["group"][key])
-			
-		for key in data_row:
-			if key == "group":
-				continue
-			data_array.append(data_row[key])
+	if type == DataSource.TYPES.AGGREGATE_SEARCH:
 		
-		raw_data.append(data_array)
-		i += 1
+		var headers : Array = data[0]["group"].keys()
+		var vars : Array = data[0].keys()
+		vars.remove(vars.find("group"))
+		headers.append_array(vars)
+		set_headers(headers)
+		
+		var i : int = 1
+		for data_row in data:
+			var data_array : Array = [" "]
+			for key in data_row["group"]:
+				data_array.append(data_row["group"][key])
+				
+			for key in data_row:
+				if key == "group":
+					continue
+				data_array.append(data_row[key])
+			
+			raw_data.append(data_array)
+			i += 1
+	elif type == DataSource.TYPES.SEARCH:
+		var rows : Array = data.split("\n",false)
+		set_headers(rows[0].split(",",false))
+		rows.remove(0)
+		
+		for row in rows:
+			row = " ,"+row
+			raw_data.append(row.split(",",false))
+
 		
 	update_table()
 		
@@ -250,6 +261,7 @@ func autoadjust_table():
 
 func _on_TableWidget_resized():
 	if is_instance_valid(header_row):
+		yield(VisualServer,"frame_post_draw")
 		autoadjust_table()
 		
 

@@ -144,3 +144,8 @@ func aggregate_search(_query : String, _connect_to: Node) -> ResotoAPI.Request:
 	_req_res = _resoto_api.aggregate_search(_query)
 	_req_res.connect("done", _connect_to, "_on_aggregate_search_done")
 	return _req_res
+	
+func search_graph(_query : String, _connect_to: Node) -> ResotoAPI.Request:
+	_req_res = _resoto_api.search_graph(_query)
+	_req_res.connect("done", _connect_to, "_on_search_graph_done")
+	return _req_res

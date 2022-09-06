@@ -260,3 +260,4 @@ func set_widgets(new_widgets : Array) -> void:
 
 func _on_WindowDialog_widget_added(_widget_data):
 	force_refresh = true
+

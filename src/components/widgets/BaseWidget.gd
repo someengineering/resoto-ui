@@ -27,6 +27,6 @@ func set_color_controllers_data(data : Array):
 		var conditions = str2var(data[i])
 		controllers[i].conditions = conditions
 
-func set_data(data):
+func set_data(data, type : int):
 	pass
 
