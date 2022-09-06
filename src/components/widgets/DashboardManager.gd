@@ -46,6 +46,8 @@ func add_dashboard(dashboard_name : String = ""):
 func _on_tab_deleted(tab) -> void:
 	if tab > 0:
 		current_tab = tab-1
+	if get_child_count() <= 2:
+		request_saved_dashboards()
 
 func save_dashboard(dashboard : DashboardContainer):
 	var data = dashboard.get_data()
@@ -83,6 +85,7 @@ func _on_get_config_id_done(_error : int, _response, _config):
 
 
 func _on_DashBoardManager_all_dashboards_loaded():
+	dashboards_list.clear()
 	for dashboard in available_dashboards:
 		dashboards_list.add_item(dashboard)
 	for dashboard_name in get_user_dashboards():
@@ -113,7 +116,8 @@ func get_user_dashboards() -> PoolStringArray:
 	
 	
 func _notification(what):
-	if what == NOTIFICATION_WM_QUIT_REQUEST:
+	if what == NOTIFICATION_WM_FOCUS_OUT:
+		get_tree().paused = true
 		var dashboards_names : Array = []
 		for dashboard in get_children():
 			if dashboard is DashboardContainer:
@@ -126,6 +130,8 @@ func _notification(what):
 			file.open("user://dashboards", File.WRITE)
 			file.store_string(JSON.print(dashboards_names))
 			file.close()
+	elif what == NOTIFICATION_WM_FOCUS_IN:
+		get_tree().paused = false
 
 
 func _on_OpenDashboard_pressed():

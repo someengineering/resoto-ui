@@ -322,3 +322,25 @@ func transform_point(point : Vector2) -> Vector2:
 		
 	return point
 
+func get_csv(separator := ",", end_of_line := "\n") -> String:
+	if series.size() <= 0:
+		return ""
+		
+	var data : PoolStringArray = []
+	var header : PoolStringArray = ["Date"]
+	
+	for line in graph_area.get_children():
+		header.append(line.name)
+		
+	data.append(header.join(separator))
+	
+	for i in series[0].size():
+		var row : PoolStringArray = []
+		row.append(Time.get_datetime_string_from_unix_time(series[0][i].x + x_origin))
+		for serie in series:
+			row.append(serie[i].y)
+			
+		data.append(row.join(separator))
+	
+	return data.join(end_of_line)
+			

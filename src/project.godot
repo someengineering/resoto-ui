@@ -110,6 +110,11 @@ _global_script_classes=[ {
 "path": "res://components/terminal/component_terminal.gd"
 }, {
 "base": "DataSource",
+"class": "TextSearchDataSource",
+"language": "GDScript",
+"path": "res://components/widgets/TextSearchDataSource.gd"
+}, {
+"base": "DataSource",
 "class": "TimeSeriesDataSource",
 "language": "GDScript",
 "path": "res://components/widgets/TimeSeriesDataSource.gd"
@@ -150,6 +155,7 @@ _global_script_class_icons={
 "ResotoAPI": "",
 "TableWidget": "",
 "TerminalComponent": "",
+"TextSearchDataSource": "",
 "TimeSeriesDataSource": "",
 "UserAgent": "",
 "Utils": "",

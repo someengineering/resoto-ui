@@ -70,6 +70,7 @@ func _on_LineEdit_text_changed(new_text : String) -> void:
 func _on_option_pressed(option_name : String) -> void:
 	line_edit.text = option_name
 	options_popup.hide()
+	previous_option = option_name
 	emit_signal("option_changed", option_name)
 	
 func show_options() -> void:

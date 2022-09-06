@@ -99,8 +99,9 @@ func _on_Grid_resized() -> void:
 		
 	yield(VisualServer, "frame_post_draw")
 	for widget in $Widgets.get_children():
-		widget.parent_reference.set_deferred("rect_global_position" , widget.rect_global_position.snapped(grid_size))
-		widget.parent_reference.set_deferred("rect_size", widget.rect_size.snapped(grid_size))
+		
+		widget.parent_reference.rect_global_position = widget.position_on_grid * grid_size + rect_global_position
+		widget.parent_reference.rect_size = widget.size_on_grid * grid_size
 		widget.call_deferred("set_anchors")
 
 func find_rect_intersection(rect : Rect2, exclude_widgets := []):

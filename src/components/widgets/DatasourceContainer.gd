@@ -15,6 +15,11 @@ onready var stacked_check_box := $VBoxContainer/DatasourceSettings/StackedCheckB
 onready var by_line_edit := $VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit
 onready var query_edit := $VBoxContainer/VBoxContainer/QueryEdit
 onready var expand_button := $VBoxContainer/HBoxContainer/Button
+onready var kinds_combo_box := $VBoxContainer/TextSearchSettings/HBoxContainer/KindsComboBox
+onready var kinds_line_edit := $VBoxContainer/TextSearchSettings/LineEditKinds
+onready var text_line_edit := $VBoxContainer/TextSearchSettings/TextLineEdit
+onready var text_filters_line_edit := $VBoxContainer/TextSearchSettings/TextFiltersLineEdit
+onready var list_line_edit := $VBoxContainer/TextSearchSettings/ListLineEdit
 
 var interval : int = 3600
 
@@ -22,15 +27,33 @@ func _ready() -> void:
 	match datasource_type:
 		DataSource.TYPES.TIME_SERIES:
 			data_source = TimeSeriesDataSource.new()
+			$VBoxContainer/DatasourceSettings.show()
+			$VBoxContainer/TextSearchSettings.hide()
 		DataSource.TYPES.AGGREGATE_SEARCH:
 			data_source = AggregateSearchDataSource.new()
 			$VBoxContainer/DatasourceSettings.hide()
+			$VBoxContainer/TextSearchSettings.hide()
 			expand_button.hide()
+		DataSource.TYPES.SEARCH:
+			data_source = TextSearchDataSource.new()
+			$VBoxContainer/DatasourceSettings.hide()
+			$VBoxContainer/TextSearchSettings.show()
+			API.cli_execute("kinds", self)
 	data_source.widget = widget
 	
 
+
+func _on_cli_execute_done(error : int, response):
+	var kinds = response.transformed.result.split("\n")
+	
+	if kinds.size() > 0:
+		$VBoxContainer/TextSearchSettings/HBoxContainer/KindsComboBox.set_items(kinds)
+
+
 func _on_Button_toggled(button_pressed : bool) -> void:
-	$VBoxContainer/DatasourceSettings.visible = not button_pressed
+	$VBoxContainer/DatasourceSettings.visible = not button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
+	$VBoxContainer/TextSearchSettings.visible = not button_pressed and datasource_type == DataSource.TYPES.SEARCH
+	
 
 func _on_DeleteButton_pressed() -> void:
 	emit_signal("source_changed")
@@ -126,5 +149,38 @@ func set_data_source(new_data_source : DataSource) -> void:
 			data_source.query = new_data_source.query
 			legend_edit.text = new_data_source.legend
 			stacked_check_box.pressed = new_data_source.stacked
+		DataSource.TYPES.SEARCH:
+			kinds_line_edit.text = new_data_source.kinds
+			text_line_edit.text = new_data_source.text_to_search
+			text_filters_line_edit.text = new_data_source.filters
+			list_line_edit.text = new_data_source.list
 		
 	query_edit.text = new_data_source.query
+
+
+func _on_LineEdit_text_entered(new_text):
+	data_source.text_to_search = new_text
+	update_query()
+
+
+func _on_LineEdit2_text_entered(new_text):
+	data_source.kinds = new_text
+	update_query()
+
+
+func _on_LineEdit4_text_entered(new_text):
+	data_source.list = new_text
+	update_query()
+
+
+func _on_LineEdit3_text_entered(new_text):
+	data_source.filters = new_text
+	update_query()
+
+
+func _on_KindsComboBox_option_changed(option):
+	if kinds_line_edit.text != "":
+		kinds_line_edit.text += ", "
+	kinds_line_edit.text += option
+	data_source.kinds = kinds_line_edit.text
+	update_query()

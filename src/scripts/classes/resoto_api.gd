@@ -220,3 +220,11 @@ func aggregate_search(query : String):
 	var request = req_post("/graph/resoto/search/aggregate", body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
+
+
+func search_graph(query : String):
+	refresh_jwt_header(accept_json_headers)
+	var body = query
+	var request = req_post("/graph/resoto/search/graph", body, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request

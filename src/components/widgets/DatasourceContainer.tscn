@@ -16,7 +16,7 @@ script = ExtResource( 4 )
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 518.0
-margin_bottom = 462.0
+margin_bottom = 674.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 513.0
@@ -148,15 +148,84 @@ margin_bottom = 345.0
 pressed = true
 text = "Stacked"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="TextSearchSettings" type="VBoxContainer" parent="VBoxContainer"]
 margin_top = 377.0
 margin_right = 513.0
-margin_bottom = 381.0
+margin_bottom = 585.0
+
+[node name="Label" type="Label" parent="VBoxContainer/TextSearchSettings"]
+margin_right = 513.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Text"
+
+[node name="TextLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
+margin_top = 24.0
+margin_right = 513.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TextSearchSettings"]
+margin_top = 52.0
+margin_right = 513.0
+margin_bottom = 76.0
+
+[node name="Label2" type="Label" parent="VBoxContainer/TextSearchSettings/HBoxContainer"]
+margin_top = 2.0
+margin_right = 240.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+text = "Kinds"
+
+[node name="KindsComboBox" parent="VBoxContainer/TextSearchSettings/HBoxContainer" instance=ExtResource( 5 )]
+margin_left = 244.0
+margin_right = 485.0
+size_flags_horizontal = 3
+items = [  ]
+
+[node name="Add" type="Button" parent="VBoxContainer/TextSearchSettings/HBoxContainer"]
+margin_left = 489.0
+margin_right = 513.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+text = "+"
+
+[node name="LineEditKinds" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
+margin_top = 80.0
+margin_right = 513.0
+margin_bottom = 104.0
+
+[node name="Label2" type="Label" parent="VBoxContainer/TextSearchSettings"]
+margin_top = 108.0
+margin_right = 513.0
+margin_bottom = 128.0
+text = "Filters"
+
+[node name="TextFiltersLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
+margin_top = 132.0
+margin_right = 513.0
+margin_bottom = 156.0
+
+[node name="Label3" type="Label" parent="VBoxContainer/TextSearchSettings"]
+margin_top = 160.0
+margin_right = 513.0
+margin_bottom = 180.0
+text = "List"
+
+[node name="ListLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
+margin_top = 184.0
+margin_right = 513.0
+margin_bottom = 208.0
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 589.0
+margin_right = 513.0
+margin_bottom = 593.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 385.0
+margin_top = 597.0
 margin_right = 513.0
-margin_bottom = 457.0
+margin_bottom = 669.0
 
 [node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer"]
 margin_right = 513.0
@@ -180,4 +249,9 @@ shortcut_keys_enabled = false
 [connection signal="text_entered" from="VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit" to="." method="_on_ByLineEdit_text_entered"]
 [connection signal="text_entered" from="VBoxContainer/DatasourceSettings/VBoxContainer5/LegendEdit" to="." method="_on_LegendEdit_text_entered"]
 [connection signal="toggled" from="VBoxContainer/DatasourceSettings/StackedCheckBox" to="." method="_on_StackedCheckBox_toggled"]
+[connection signal="text_entered" from="VBoxContainer/TextSearchSettings/TextLineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="option_changed" from="VBoxContainer/TextSearchSettings/HBoxContainer/KindsComboBox" to="." method="_on_KindsComboBox_option_changed"]
+[connection signal="text_entered" from="VBoxContainer/TextSearchSettings/LineEditKinds" to="." method="_on_LineEdit2_text_entered"]
+[connection signal="text_entered" from="VBoxContainer/TextSearchSettings/TextFiltersLineEdit" to="." method="_on_LineEdit3_text_entered"]
+[connection signal="text_entered" from="VBoxContainer/TextSearchSettings/ListLineEdit" to="." method="_on_LineEdit4_text_entered"]
 [connection signal="text_entered" from="VBoxContainer/VBoxContainer/QueryEdit" to="." method="_on_QueryEdit_text_entered"]

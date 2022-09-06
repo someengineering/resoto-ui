@@ -384,6 +384,8 @@ func set_data_sources_data(data : Array) -> void:
 				ds = TimeSeriesDataSource.new()
 			DataSource.TYPES.AGGREGATE_SEARCH:
 				ds = AggregateSearchDataSource.new()
+			DataSource.TYPES.SEARCH:
+				ds = TextSearchDataSource.new()
 				
 		for key in settings:
 			ds.set(key, settings[key])
