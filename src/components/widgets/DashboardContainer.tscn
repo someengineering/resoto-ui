@@ -18,38 +18,40 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxEmpty" id=5]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id=6]
 code = "shader_type canvas_item;
 
 uniform vec2 grid_size = vec2(100.0);
 uniform vec2 margin_size = vec2(5.0);
 uniform vec4 grid_color :  hint_color = vec4(0.14,0.14,0.2, 1.0);
 uniform vec2 dashboard_size;
+uniform float w = 1.0;
 
 void fragment(){
 	vec2 grid_px_size = grid_size;
 	vec4 color = COLOR;
 	vec2 coord_px = mod(UV *dashboard_size, grid_px_size);
 	
-	if (coord_px.x > grid_px_size.x - 1.0 || coord_px.y > grid_px_size.y - 1.0){
+	if (coord_px.x > grid_px_size.x - w || coord_px.y > grid_px_size.y - w){
 		COLOR = grid_color;
 	}
-	if (coord_px.x > margin_size.x - 1.0 && coord_px.x < margin_size.x  || coord_px.y > margin_size.y - 1.0 && coord_px.y < margin_size.y ){
+	if (coord_px.x > margin_size.x - w && coord_px.x < margin_size.x  || coord_px.y > margin_size.y - w && coord_px.y < margin_size.y ){
 		COLOR = grid_color;
 		COLOR.a *= 0.5;
 	}
-	if (coord_px.x > grid_px_size.x - margin_size.x - 1.0 && coord_px.x < grid_px_size.x - margin_size.x || coord_px.y > grid_px_size.y - margin_size.y - 1.0 &&  coord_px.y < grid_px_size.y - margin_size.y){
+	if (coord_px.x > grid_px_size.x - margin_size.x - w && coord_px.x < grid_px_size.x - margin_size.x || coord_px.y > grid_px_size.y - margin_size.y - w &&  coord_px.y < grid_px_size.y - margin_size.y){
 		COLOR = grid_color;
 		COLOR.a *= 0.5;
 	}
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+shader = SubResource( 6 )
 shader_param/grid_size = Vector2( 100, 100 )
-shader_param/margin_size = Vector2( 5, 5 )
-shader_param/grid_color = Color( 0.12549, 0.105882, 0.14902, 1 )
-shader_param/dashboard_size = null
+shader_param/margin_size = Vector2( 0, 0 )
+shader_param/grid_color = Color( 0.447059, 0.360784, 0.545098, 0.309804 )
+shader_param/dashboard_size = Vector2( 1000, 1000 )
+shader_param/w = 1.0
 
 [node name="DashboardContainer" type="Control"]
 anchor_right = 1.0
