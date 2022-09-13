@@ -41,13 +41,13 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 	else:
 		var from = attr["from"]
 		var to = attr["to"]
-		widget.step = interval / 10
+		widget.step = interval
 		widget.x_origin = from
 		widget.x_range = to - from
 		making_query = true
 		API.query_range_tsdb(q, self, from, to, interval)
 		
-func _on_query_tsdb_done(_error: int, response) -> void:
+func _on_query_tsdb_done(_error: int, response) -> void: 
 	making_query = false
 	if not is_instance_valid(widget):
 		return

@@ -226,6 +226,9 @@ func set_range(new_range : String) -> void:
 	var range_parts := new_range.split(" to ")
 	range_selector.from.process_date(range_parts[0], false)
 	range_selector.to.process_date(range_parts[1], false)
+	dashboard.ts_start = range_selector.from.unix_time
+	dashboard.ts_end = range_selector.to.unix_time
+	print(dashboard.ts_start)
 	range_selector._on_AcceptButton_pressed()
 	date_button.text = range_text
 	
