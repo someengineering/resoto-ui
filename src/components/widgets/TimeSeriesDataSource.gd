@@ -41,7 +41,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 	else:
 		var from = attr["from"]
 		var to = attr["to"]
-		widget.step = interval
+		widget.step = interval / 10
 		widget.x_origin = from
 		widget.x_range = to - from
 		making_query = true

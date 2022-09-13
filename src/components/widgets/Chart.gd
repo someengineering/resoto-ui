@@ -235,6 +235,7 @@ func set_scale_from_series() -> void:
 		return
 	
 	var maxy = -INF
+	var miny = INF
 
 	var stacked : PoolRealArray = []
 	stacked.resize(range(0, x_range, step).size())
@@ -243,13 +244,18 @@ func set_scale_from_series() -> void:
 	for j in stacked.size():
 		for serie in series:
 			var value = find_value_at_x(j*step, serie)
-			
+			if miny > value.y:
+				miny = value.y
 			if stacked:
 				value.y += stacked[j]
 				stacked[j] = value.y
 			if maxy < value.y:
 				maxy = value.y
-	max_y_value = maxy * 1.2
+			
+	
+	max_y_value = maxy + (maxy - miny) * 0.1
+	min_y_value = miny
+	
 	
 func _process(_delta : float) -> void:
 	var origin : Vector2 = graph_area.rect_global_position + Vector2(0, graph_area.rect_size.y)
