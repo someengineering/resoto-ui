@@ -5,11 +5,15 @@ extends Label
 export var raw_text : String setget set_raw_text
 
 func set_raw_text(new_raw_text : String) -> void:
-	text = ""
 	raw_text = new_raw_text
+	update_text()
+	
+func update_text():
+	text = ""
 	var width := rect_size.x
 	var font = get_font("font")
 	var i : int = 0
+	
 	while font.get_string_size(text+"...  ").x < width:
 		if i >= raw_text.length():
 			break
@@ -17,7 +21,9 @@ func set_raw_text(new_raw_text : String) -> void:
 		i += 1
 	if text != raw_text:
 		text += "..."
+		
+	hint_tooltip = raw_text
 
 
 func _on_ClippedLabel_resized():
-	set_raw_text(raw_text)
+	update_text()

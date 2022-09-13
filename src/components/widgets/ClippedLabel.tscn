@@ -3,11 +3,9 @@
 [ext_resource path="res://components/widgets/ClippedLabel.gd" type="Script" id=1]
 
 [node name="ClippedLabel" type="Label"]
-margin_right = 100.0
-margin_bottom = 14.0
-text = "This is a long..."
+anchor_right = 1.0
+anchor_bottom = 1.0
 clip_text = true
 script = ExtResource( 1 )
-raw_text = "This is a long text"
 
 [connection signal="resized" from="." to="." method="_on_ClippedLabel_resized"]

@@ -94,9 +94,8 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 		for serie in data.data.result:
 			var array : PoolVector2Array = []
 			array.resize(serie.values.size())
-			var origin : int = serie.values[0][0]
 			for i in array.size():
-				array[i] = Vector2(serie.values[i][0] - origin, serie.values[i][1])
+				array[i] = Vector2(serie.values[i][0] - widget.x_origin, serie.values[i][1])
 			
 			var l : String = legend
 			for label in legend_labels:

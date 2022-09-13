@@ -89,12 +89,12 @@ func _on_PrevYear_pressed() -> void:
 
 
 func _on_PrevMonth_pressed() -> void:
-	current_date_dict["month"] -= 1
+	current_date_dict["month"] = wrapi(current_date_dict["month"] - 1, 1, 13)
 	refresh_calendar()
 
 
 func _on_NextMonth_pressed() -> void:
-	current_date_dict["month"] += 1
+	current_date_dict["month"] = wrapi(current_date_dict["month"] + 1, 1, 13)
 	refresh_calendar()
 
 
