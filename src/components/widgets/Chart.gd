@@ -254,7 +254,9 @@ func set_scale_from_series() -> void:
 			
 	
 	max_y_value = maxy + (maxy - miny) * 0.1
-	min_y_value = miny
+	min_y_value = miny - (maxy - miny) * 0.1
+	if miny == 0:
+		min_y_value = 0
 	
 	
 func _process(_delta : float) -> void:

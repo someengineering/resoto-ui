@@ -50,6 +50,7 @@ func process_date(new_text : String = text, notify := true) -> bool:
 				return true
 	else:
 		text = new_text.replace("/", "-")
+		print(text)
 		var date_dict : Dictionary = Time.get_datetime_dict_from_datetime_string(text, false)
 		var date_ts : int = Time.get_unix_time_from_datetime_dict(date_dict)
 		if date_dict == {} or date_ts == 0:
@@ -57,6 +58,7 @@ func process_date(new_text : String = text, notify := true) -> bool:
 			text = previous_text
 			return false
 		else:
+			unix_time = Time.get_unix_time_from_datetime_dict(date_dict)
 			text = Time.get_datetime_string_from_datetime_dict(date_dict, true)
 			previous_text = text
 			if notify:
