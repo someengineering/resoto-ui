@@ -69,7 +69,7 @@ func set_metrics(metrics : Dictionary) -> void:
 func _on_MetricsOptions_option_changed(option : String) -> void:
 	data_source.metric = option
 	update_query()
-	API.query_tsdb("resoto_"+option, self, "_on_metrics_query_finished")
+	API.query_tsdb(_g.tsdb_metric_prefix + option, self, "_on_metrics_query_finished")
 
 
 func _on_metrics_query_finished(_error:int, response) -> void:
