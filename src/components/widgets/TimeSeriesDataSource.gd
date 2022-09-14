@@ -122,7 +122,7 @@ func copy_data_source(other : TimeSeriesDataSource) -> void:
 	legend = other.legend
 	
 func update_query() -> void:
-	query = "resoto_" + metric
+	query = _g.tsdb_metric_prefix + metric
 	
 	if filters != "":
 		query = "%s{$dashboard_filters, %s}" % [query, filters]
