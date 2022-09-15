@@ -11,6 +11,12 @@ var dashboards_loaded : int = 0
 
 onready var dashboards_list = $"+/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/ItemList"
 
+
+func _ready():
+	get_tree().connect("files_dropped", self, "_on_files_dropped")
+	connect("all_dashboards_loaded", self, "open_user_dashboards", [], CONNECT_ONESHOT)
+
+
 func _on_DashBoardManager_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
@@ -88,14 +94,28 @@ func _on_DashBoardManager_all_dashboards_loaded():
 	dashboards_list.clear()
 	for dashboard in available_dashboards:
 		dashboards_list.add_item(dashboard)
+		
+		
+func open_user_dashboards():
 	for dashboard_name in get_user_dashboards():
 		load_dashboard(dashboard_name)
 	
 
 func load_dashboard(dashboard_name : String):
 	var data : Dictionary = available_dashboards[dashboard_name]
+	create_dashboard_with_data(data)
+	
+func create_dashboard_with_data(data):
+	if not "dashboard_name" in data:
+		return
+	var dashboard_name = data["dashboard_name"]
+	var dashboard = get_node_or_null(dashboard_name)
+	if dashboard != null:
+		current_tab = get_children().find(dashboard)
+		return
+		
 	add_dashboard(dashboard_name)
-	var dashboard = get_node(dashboard_name)
+	dashboard = get_node(dashboard_name)
 	dashboard.initial_load = false
 	for key in data:
 		dashboard.set(key, data[key])
@@ -141,3 +161,10 @@ func _on_OpenDashboard_pressed():
 
 func _on_AddDashboard_pressed():
 	add_dashboard()
+
+func _on_files_dropped(files, _screen):
+	var file = File.new()
+	if not file.open(files[0], File.READ):
+		var data = parse_json(file.get_as_text())
+		create_dashboard_with_data(data)
+	
