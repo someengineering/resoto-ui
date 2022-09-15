@@ -114,7 +114,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/widgets/TableWidget.gd"
 }, {
-"base": "VBoxContainer",
+"base": "Control",
 "class": "TerminalComponent",
 "language": "GDScript",
 "path": "res://components/terminal/component_terminal.gd"
