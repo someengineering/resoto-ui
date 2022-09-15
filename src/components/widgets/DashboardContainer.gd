@@ -264,3 +264,8 @@ func set_widgets(new_widgets : Array) -> void:
 func _on_WindowDialog_widget_added(_widget_data):
 	force_refresh = true
 
+
+func _on_ExportButton_pressed():
+	if OS.has_feature("HTML5"):
+		JavaScript.download_buffer(JSON.print(get_data(),"\t").to_utf8(), "%s.json" % dashboard_name)
+

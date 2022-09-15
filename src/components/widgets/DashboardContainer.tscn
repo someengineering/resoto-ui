@@ -79,7 +79,7 @@ margin_right = 1915.0
 margin_bottom = 34.0
 
 [node name="DashboardNameLabel" type="LineEdit" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_right = 1775.0
+margin_right = 1715.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
 custom_colors/font_color_uneditable = Color( 0.85098, 0.721569, 1, 1 )
@@ -98,16 +98,16 @@ size_flags_horizontal = 10
 text = "+"
 
 [node name="RefreshOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1779.0
-margin_right = 1844.0
+margin_left = 1719.0
+margin_right = 1784.0
 margin_bottom = 29.0
 text = "15 min"
 items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hr", null, false, 3, null, "12 hr", null, false, 4, null, "24 hr", null, false, 5, null ]
 selected = 0
 
 [node name="LockButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1848.0
-margin_right = 1877.0
+margin_left = 1788.0
+margin_right = 1817.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 toggle_mode = true
@@ -115,12 +115,18 @@ icon = ExtResource( 5 )
 expand_icon = true
 
 [node name="DeleteButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1881.0
-margin_right = 1910.0
+margin_left = 1821.0
+margin_right = 1850.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 icon = ExtResource( 4 )
 expand_icon = true
+
+[node name="ExportButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+margin_left = 1854.0
+margin_right = 1910.0
+margin_bottom = 29.0
+text = "Export"
 
 [node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer"]
 margin_left = 885.0
@@ -225,6 +231,7 @@ margin_bottom = 285.0
 [connection signal="item_selected" from="VBoxContainer/PanelContainer/HBoxContainer/RefreshOptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/DateButton" to="." method="_on_DateButton_pressed"]
 [connection signal="option_changed" from="VBoxContainer/FiltersContainer/CloudsCombo" to="." method="_on_CloudsCombo_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/FiltersContainer/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]

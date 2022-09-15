@@ -21,7 +21,6 @@ func _ready() -> void:
 		file_input = JavaScript.get_interface("input")
 		file_reader.onloadend = _on_read_ref
 		file_input.onchange = _on_input_change_ref
-		
 
 
 func upload_file(_connect_to:Node, _file_types:String = ".json, .txt", _slot:String = "_on_upload_file_done") -> void:
