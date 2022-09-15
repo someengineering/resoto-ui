@@ -47,7 +47,7 @@ func connect_to_core() -> void:
 	$ConnectTimeoutTimer.start()
 	
 	info_request = API.cli_info(self)
-	API._get_infra_info(API)
+	API._get_infra_info(self)
 
 
 func _on_get_infra_info_done(_error:int, response):
