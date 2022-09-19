@@ -19,23 +19,12 @@ func _on_Serie_draw() -> void:
 		
 		poly = [Vector2(points[0].x, 0)]
 		poly.append_array(points)
-		poly.append(Vector2(points[points.size()-1].x, 0))
+		poly.append(Vector2(points[points.size()-1].x, 0)) 
 		
 		$Polygon2D.polygon = poly
 		$Polygon2D.color = default_color
-		$Polygon2D.color.a = 0.05
+		$Polygon2D.color.a = 0.1
 
-		var vertex_colors : PoolColorArray = []
-		vertex_colors.resize(poly.size())
-		vertex_colors.fill(default_color)
-	
-		if maximum_y != 0:
-			for i in points.size():
-				vertex_colors[i+1].a = 0.2 * points[i].y /(- maximum_y)
-		
-		vertex_colors[0] = Color(0,0,0,0)
-		vertex_colors[vertex_colors.size()-1] = Color(0,0,0,0)
-		$Polygon2D.vertex_colors = vertex_colors
 	else:
 		$Polygon2D.polygon = []
 		
