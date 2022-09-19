@@ -37,10 +37,10 @@ onready var regions_combo := $VBoxContainer/FiltersContainer/RegionsCombo
 func _ready() -> void:
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
-	add_widget_popup.interval = 864 # 100 points in a day
+	add_widget_popup.interval = 8.64 # 100 points in a day
 	dashboard.ts_start = $DateRangeSelector.from.unix_time
 	dashboard.ts_end = $DateRangeSelector.to.unix_time
-	dashboard.step = 864
+	dashboard.step = 8640
 	
 	self.dashboard_name = name
 	
@@ -76,10 +76,10 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	date_button.text = text
 	add_widget_popup.from_date = start
 	add_widget_popup.to_date = end
-	add_widget_popup.interval = (end-start)/100
+	add_widget_popup.interval = float(end-start)/500
 	dashboard.ts_end = end
 	dashboard.ts_start = start
-	dashboard.step = (end-start)/100
+	dashboard.step = float(end-start)/500
 	force_refresh = true
 	if initial_load:
 		emit_signal("dashboard_changed", self)
