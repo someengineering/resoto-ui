@@ -238,7 +238,6 @@ margin_right = 513.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 0, 48 )
 context_menu_enabled = false
-shortcut_keys_enabled = false
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_Button_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]

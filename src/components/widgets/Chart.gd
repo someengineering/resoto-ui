@@ -64,7 +64,7 @@ func _input(event) -> void:
 #		complete_update()
 
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
-		var x = x_range * $Grid/LegendPosition.get_local_mouse_position().x / graph_area.rect_size.x
+		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x
 		legend.rect_global_position = get_global_mouse_position()
 		legend.rect_size.y = 0
 			
@@ -79,6 +79,9 @@ func _input(event) -> void:
 			var l := Label.new()
 			var line : Line2D = graph_area.get_child(index)
 			var closest_point = find_value_at_x(x, series[index])
+			
+			if str(closest_point.y) == "nan":
+				continue
 			
 			l.text = line.name + ": " + str(closest_point.y)
 			l.set_meta("value", closest_point.y)
@@ -121,6 +124,8 @@ func _on_Grid_resized() -> void:
 	grid.material.set_shader_param("grid_divisions", divisions)
 	grid.material.set_shader_param("size", grid.rect_size)
 	
+	$Grid/LegendPosition.rect_size = graph_area.rect_size
+	
 func update_series() -> void:
 	if not is_instance_valid(graph_area):
 		return
@@ -140,6 +145,9 @@ func update_series() -> void:
 		
 		for j in stacked.size():
 			var point = find_value_at_x(j * step ,series[index])
+			if str(point.y) == "nan":
+				continue
+				
 			if line.get_meta("stack"):
 				point.y += stacked[j]
 				stacked[j] = point.y
@@ -244,6 +252,8 @@ func set_scale_from_series() -> void:
 	for j in stacked.size():
 		for serie in series:
 			var value = find_value_at_x(j*step, serie)
+			if str(value.y) == "nan":
+				continue
 			if miny > value.y:
 				miny = value.y
 			if stacked:
@@ -267,6 +277,9 @@ func _process(_delta : float) -> void:
 		for line in graph_area.get_children():
 			if line is Line2D:
 				line.global_position = origin
+				
+	$Grid/LegendPosition.rect_size = graph_area.rect_size
+	$Grid/LegendPosition.rect_position = $Viewport/GridContainer/Grid.rect_position
 
 
 func complete_update(force_update_graph_area := false) -> void:
@@ -292,6 +305,10 @@ func find_closest_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	var prev = null
 	var next = null
+	
+	if target_x < serie[0].x or target_x > serie[serie.size() -1].x:
+		return Vector2(target_x, NAN)
+		
 	for value in serie:
 		if value.x == target_x:
 			return value

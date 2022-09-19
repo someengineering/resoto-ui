@@ -57,10 +57,6 @@ render_target_v_flip = true
 [node name="GridContainer" type="Control" parent="Viewport"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = -5.0
 
 [node name="YLabels" type="VBoxContainer" parent="Viewport/GridContainer"]
 anchor_bottom = 1.0
@@ -108,10 +104,6 @@ custom_constants/separation = 0
 [node name="Grid" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 8.0
-margin_top = 8.0
-margin_right = -8.0
-margin_bottom = -8.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = SubResource( 7 )
@@ -120,7 +112,10 @@ expand = true
 [node name="LegendPosition" type="Control" parent="Grid"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 59.0
+margin_left = 56.0
+margin_top = -3.0
+margin_right = 56.0
+margin_bottom = -3.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

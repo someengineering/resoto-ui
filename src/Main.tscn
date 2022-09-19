@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -10,7 +10,6 @@
 [ext_resource path="res://scripts/ui_content.gd" type="Script" id=8]
 [ext_resource path="res://components/terminal/component_terminal_manager.tscn" type="PackedScene" id=9]
 [ext_resource path="res://components/toast/ToastManager.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scripts/tools/browser_copy_paste_fix.gd" type="Script" id=11]
 [ext_resource path="res://components/widgets/DashboardManager.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/elements/HamburgerButton.tscn" type="PackedScene" id=13]
 [ext_resource path="res://ui/elements/FullTextSearch.tscn" type="PackedScene" id=14]
@@ -466,7 +465,6 @@ one_shot = true
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
 [node name="BrowserCopyPasteWatcher" type="Node" parent="."]
-script = ExtResource( 11 )
 
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/MenuItems/ButtonTerminals" to="MenuBar" method="_on_ButtonTerminals_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/MenuItems/ButtonDashboards" to="MenuBar" method="_on_ButtonDashboards_pressed"]
