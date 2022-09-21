@@ -6,7 +6,6 @@ extends DataSource
 func _init():
 	type = TYPES.AGGREGATE_SEARCH
 
-
 func make_query(dashboard_filters : Dictionary, attr : Dictionary):
 	var q : String = query
 
