@@ -99,3 +99,22 @@ func _get_property_list() -> Array:
 	})
 	
 	return properties
+
+func set_data(data, type):
+	
+	if type == DataSource.TYPES.AGGREGATE_SEARCH:
+		if data.size() > 1:
+			_g.emit_signal("add_toast", "Instant query expected.", "This indicator can only show the first result of the query", 2)
+		
+		var row : Dictionary = data[0]
+		var variables : Array = row.keys()
+		variables.remove(variables.find("group"))
+		
+		if variables.size() > 1:
+			_g.emit_signal("add_toast", "Single variable query expected.", "This indicator can only show the first variable of the query", 2)
+		
+		self.value = row[variables[0]]
+		
+		
+	elif type == DataSource.TYPES.SEARCH:
+		pass

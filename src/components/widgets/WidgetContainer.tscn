@@ -245,11 +245,18 @@ margin_bottom = 29.0
 
 [node name="TitleLabel" type="Label" parent="PanelContainer/Title"]
 margin_top = 5.0
-margin_right = 115.0
+margin_right = 111.0
 margin_bottom = 19.0
 size_flags_horizontal = 3
 text = "Title"
 clip_text = true
+
+[node name="DataTimeLabel" type="Label" parent="PanelContainer/Title"]
+modulate = Color( 1, 1, 1, 0.498039 )
+margin_left = 115.0
+margin_top = 5.0
+margin_right = 115.0
+margin_bottom = 19.0
 
 [node name="ExportButton" type="Button" parent="PanelContainer/Title"]
 margin_left = 119.0
