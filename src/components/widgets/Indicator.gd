@@ -88,16 +88,6 @@ func _get_property_list() -> Array:
 		"type" : TYPE_STRING
 	})
 	
-	properties.append({
-		"name" : "background_color",
-		"type" : TYPE_COLOR
-	})
-	
-	properties.append({
-		"name" : "color",
-		"type" : TYPE_COLOR
-	})
-	
 	return properties
 
 func set_data(data, type):

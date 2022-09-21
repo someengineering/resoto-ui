@@ -27,8 +27,6 @@ supported_types = [ 0, 1 ]
 unit = "[unit]"
 decimal_digits = 2
 unit = "[unit]"
-background_color = Color( 0.160784, 0.117647, 0.176471, 1 )
-color = Color( 1, 1, 1, 1 )
 
 [node name="IndicatorBackground" type="ColorRect" parent="."]
 anchor_right = 1.0
