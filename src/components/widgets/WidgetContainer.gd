@@ -302,6 +302,8 @@ func set_title(new_title : String) -> void:
 func execute_query() -> void:
 	if widget.has_method("clear_series"):
 		widget.clear_series()
+	
+	$PanelContainer/Title/DataTimeLabel.text = "Live"
 	for datasource in data_sources:
 		var attr := {}
 		match datasource.type:
@@ -309,6 +311,7 @@ func execute_query() -> void:
 				attr["interval"] = dashboard.step
 				attr["from"] = dashboard.ts_start
 				attr["to"] = dashboard.ts_end
+				$PanelContainer/Title/DataTimeLabel.text = "Historic"
 		datasource.make_query(dashboard.filters, attr)
 
 
