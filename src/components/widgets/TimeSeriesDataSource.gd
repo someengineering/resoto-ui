@@ -39,7 +39,8 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 		
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 		making_query = true
-		API.query_tsdb(q, self)
+		API.query_tsdb(q + "&time=%d" % attr["to"], self)
+		print(q + "&time=%d" % attr["to"])
 	else:
 		var from = attr["from"]
 		var to = attr["to"]
