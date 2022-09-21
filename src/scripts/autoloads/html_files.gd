@@ -33,8 +33,6 @@ func upload_file(_connect_to:Node, _file_types:String = ".json, .txt", _slot:Str
 
 func save_on_local_storage(item_name : String, data : String) -> void:
 	local_storage.setItem(item_name, data)
-	print("saved")
-	
 
 func delete_from_local_storage(item_name : String):
 	local_storage.removeItem(item_name)
