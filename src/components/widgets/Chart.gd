@@ -65,7 +65,7 @@ func _input(event) -> void:
 
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
 		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x
-		legend.rect_global_position = get_global_mouse_position()
+		legend.rect_global_position = get_global_mouse_position() + Vector2(24,0)
 		legend.rect_size.y = 0
 			
 		var stacked = 0
@@ -263,8 +263,8 @@ func set_scale_from_series() -> void:
 				maxy = value.y
 			
 	
-	max_y_value = maxy + (maxy - miny) * 0.1
-	min_y_value = miny - (maxy - miny) * 0.1
+	max_y_value = maxy + (maxy - miny) * 0.1 if maxy != miny else maxy * 1.1
+	min_y_value = miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9
 	if miny == 0:
 		min_y_value = 0
 	
