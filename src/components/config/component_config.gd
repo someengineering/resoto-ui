@@ -52,6 +52,11 @@ func load_config() -> void:
 	API.get_configs(self)
 
 
+func start() -> void:
+	show()
+	load_config()
+
+
 func _on_get_configs_done(_error, _response) -> void:
 	config_keys = _response.transformed.result
 	API.get_config_model(self)
@@ -61,7 +66,7 @@ func _on_get_configs_done(_error, _response) -> void:
 		config_req = API.get_config_id(self, ck)
 		yield(self, "config_received")
 	
-	_g.emit_signal("add_toast", "Configs received from Resoto Core.", "", 0)
+	_g.emit_signal("add_toast", "Configs received from Resoto Core.", "", 0, self)
 	build_config_pages()
 
 
@@ -84,7 +89,8 @@ func build_config_pages() -> void:
 	for c in content.get_children():
 		c.queue_free()
 	
-	
+	var id
+	var config_elements:Array = []
 	for key in config_keys:
 		var new_tab = add_new_tab(key)
 		new_tab.set_meta("main_level", true)
@@ -92,6 +98,7 @@ func build_config_pages() -> void:
 		new_tab.config_component = self
 		new_tab.kind = key
 		new_tab.value = config[key]
+		config_elements.append(key)
 		var new_elements = []
 		var dict_key = config[key].keys()[0]
 		var new_element = add_element(dict_key, dict_key, config[key], new_tab, false)
@@ -104,7 +111,13 @@ func build_config_pages() -> void:
 	
 	tabs_content_keys = tabs_content.keys()
 	update_size()
-	change_active_tab(0, true)
+	var resoto_core_index = config_keys.find("resoto.core")
+	resoto_core_index = resoto_core_index if resoto_core_index >= 0 else 0
+	var default_key = config_keys[resoto_core_index]
+	change_active_tab(resoto_core_index, true)
+	
+	$TabManager/PanelContainer/Box/ConfigCombo.set_items(config_elements)
+	$TabManager/PanelContainer/Box/ConfigCombo.set_text(default_key)
 
 
 func save_config() -> void:
@@ -118,7 +131,7 @@ func save_config() -> void:
 			
 		if "value_creation_error" in config_element:
 			if config_element.value_creation_error:
-				_g.emit_signal("add_toast", "Error saving configuration.", "", 1)
+				_g.emit_signal("add_toast", "Error saving configuration.", "", 1, self)
 				return
 	
 	var selected_config = config_keys[_active_tab_id]
@@ -130,21 +143,21 @@ func save_config() -> void:
 
 func _on_put_config_id_done(_error, _response) -> void:
 	if _error != 0:
-		_g.emit_signal("add_toast", "Error saving configuration.", "", 1)
+		_g.emit_signal("add_toast", "Error saving configuration.", "", 1, self)
 		return
 	
 	if typeof(_response.transformed.result) == TYPE_STRING and _response.transformed.result.begins_with("Error"):
 		var error_total:Array = _response.transformed.result.split("\n")
 		var error_title = error_total[0]
 		var error_description = _response.transformed.result.lstrip(error_total[0] + "\n").rstrip("\n")
-		_g.emit_signal("add_toast", error_title, error_description, 1, 10)
+		_g.emit_signal("add_toast", error_title, error_description, 1, self, 10)
 		return
 	
 	
 	var config_revision:String = ""
 	if "Resoto-Config-Revision" in _response.headers:
 		config_revision = "Revision: " + _response.headers["Resoto-Config-Revision"]
-	_g.emit_signal("add_toast", "Configuration updated successfully.", config_revision, 0)
+	_g.emit_signal("add_toast", "Configuration updated successfully.", config_revision, 0, self)
 	emit_signal("close_config")
 
 
@@ -265,7 +278,7 @@ func create_custom(_text:String, _property_value, _parent:Control):
 
 func create_complex(_name:String, kind:String, _property_value, properties, _parent:Control, default:bool):
 	if properties == null:
-		_g.emit_signal("add_toast", "Error on config creation.", "Complex not found in model: "+ str(_name), 1)
+		_g.emit_signal("add_toast", "Error on config creation.", "Complex not found in model: "+ str(_name), 1, self)
 		prints("ERROR: Complex not found in model:", _name)
 		return
 	
@@ -521,3 +534,10 @@ func _on_LoadConfigFromCoreButton_pressed() -> void:
 
 func _on_CloseConfigButton_pressed():
 	emit_signal("close_config")
+
+
+func _on_ConfigCombo_option_changed(option):
+	var config_index = config_keys.find(option)
+	if config_index == -1:
+		return
+	change_active_tab(config_index, true)

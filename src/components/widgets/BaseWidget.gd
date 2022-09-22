@@ -20,7 +20,7 @@ func set_color_controllers_data(data : Array):
 			controllers.append(child)
 			
 	if controllers.size() != data.size():
-		_g.emit_signal("add_toast","Wrong number of Color controllers", "Widget and saved color controllers number are different.", 1)
+		_g.emit_signal("add_toast","Wrong number of Color controllers", "Widget and saved color controllers number are different.", 1, self)
 		return
 	
 	for i in controllers.size():

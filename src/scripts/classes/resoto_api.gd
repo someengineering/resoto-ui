@@ -126,9 +126,23 @@ func post_cli_execute_nd_chunks(body:String, graph:String=default_graph) -> Reso
 	return request
 
 
+func post_graph_search(body:String, type:String="graph", graph:String=default_graph) -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var request = req_post("/graph/"+ default_graph +"/search/"+ type, body, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
 func get_cli_info() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_text_headers)
 	var request = req_get("/cli/info", accept_text_headers)
+	request.connect("pre_done", self, "_transform_string")
+	return request
+
+
+func get_system_ready() -> ResotoAPI.Request:
+	refresh_jwt_header(accept_text_headers)
+	var request = req_get("/system/ready", accept_text_headers)
 	request.connect("pre_done", self, "_transform_string")
 	return request
 
@@ -192,9 +206,10 @@ func get_subscribers() -> ResotoAPI.Request:
 	request.connect("pre_done", self, "_transform_json")
 	return request
 
+
 func get_infra_info() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
-	var request = req_post("/graph/resoto/search/graph", 
+	var request = req_post("/graph/"+ default_graph +"/search/graph", 
 							"is(cloud) -[0:2]-> is(cloud, account, region)",
 							 accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
@@ -207,13 +222,15 @@ func query_tsdb(_query:String):
 	var request = req_post("/tsdb/api/v1/query?"+body,"",content_urlencoded_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
-	
+
+
 func query_range_tsdb(_query:String, start_ts:int=1656422693, end_ts:int=1657025493, step:int=3600):
 	refresh_jwt_header(content_urlencoded_headers)
 	var body = "query=" + _query + "&start=%d&end=%d&step=%d" % [start_ts, end_ts, step]
 	var request = req_post("/tsdb/api/v1/query_range?"+body,"",content_urlencoded_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
+	
 	
 func tsdb_label_values(label:String):
 	refresh_jwt_header(content_urlencoded_headers)
@@ -226,13 +243,5 @@ func aggregate_search(query : String):
 	refresh_jwt_header(accept_json_headers)
 	var body = query
 	var request = req_post("/graph/resoto/search/aggregate", body, accept_json_headers)
-	request.connect("pre_done", self, "_transform_json")
-	return request
-
-
-func search_graph(query : String):
-	refresh_jwt_header(accept_json_headers)
-	var body = query
-	var request = req_post("/graph/resoto/search/graph", body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request

@@ -207,6 +207,10 @@ window/stretch/aspect="expand"
 
 enabled=PoolStringArray(  )
 
+[global]
+
+default_clear_color=false
+
 [gui]
 
 theme/custom="res://assets/theme/dark_theme.tres"
@@ -223,8 +227,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_clear_color=Color( 0.105882, 0.0941176, 0.109804, 1 )
+environment/default_clear_color=Color( 0.0470588, 0.0941176, 0.133333, 1 )
 environment/default_environment="res://assets/default_env.tres"

@@ -31,7 +31,7 @@ func process_date(new_text : String = text, notify := true) -> bool:
 		var regex = RegEx.new()
 		regex.compile("[^\\*+\\-\\d]")
 		if regex.search_all(new_text) != []:
-			_g.emit_signal("add_toast", "Invalid Date", "Cannot parse date.", 1)
+			_g.emit_signal("add_toast", "Invalid Date", "Cannot parse date.", 1, self)
 			text = previous_text
 			return false
 		else:
@@ -39,7 +39,7 @@ func process_date(new_text : String = text, notify := true) -> bool:
 			expression.parse(new_text)
 			var result = expression.execute()
 			if result == null:
-				_g.emit_signal("add_toast", "Invalid Date", "Cannot parse date.", 1)
+				_g.emit_signal("add_toast", "Invalid Date", "Cannot parse date.", 1, self)
 				text = previous_text
 				return false
 			else:
@@ -53,7 +53,7 @@ func process_date(new_text : String = text, notify := true) -> bool:
 		var date_dict : Dictionary = Time.get_datetime_dict_from_datetime_string(text, false)
 		var date_ts : int = Time.get_unix_time_from_datetime_dict(date_dict)
 		if date_dict == {} or date_ts == 0:
-			_g.emit_signal("add_toast", "Invalid Date", "Invalid ISO8601 date string.", 1)
+			_g.emit_signal("add_toast", "Invalid Date", "Invalid ISO8601 date string.", 1, self)
 			text = previous_text
 			return false
 		else:

@@ -251,7 +251,7 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 
 func _on_AddDataSource_pressed() -> void:
 	if data_source_container.get_child_count() >= preview_widget.max_data_sources:
-		_g.emit_signal("add_toast", "Max Data Sources Exceeded", "Can't add more data sources to this kind of widget.", 1)
+		_g.emit_signal("add_toast", "Max Data Sources Exceeded", "Can't add more data sources to this kind of widget.", 1, self)
 		return
 		
 	var ds = data_source_widget.instance()

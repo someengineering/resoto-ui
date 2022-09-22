@@ -37,7 +37,6 @@ onready var clouds_combo := $VBoxContainer/PanelContainer/Content/FiltersContain
 onready var accounts_combo := $VBoxContainer/PanelContainer/Content/FiltersContainer/AccountsCombo
 onready var regions_combo := $VBoxContainer/PanelContainer/Content/FiltersContainer/RegionsCombo
 
-
 func _ready() -> void:
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time

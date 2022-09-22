@@ -24,5 +24,5 @@ func get_value():
 	else:
 		value_creation_error = true
 		var error_message = "Key: '" + key + "'\nLine: " + str(json_parse_result.error_line + 1) + "\nError: " + json_parse_result.error_string
-		_g.emit_signal("add_toast", "JSON error.", error_message, 1)
+		_g.emit_signal("add_toast", "JSON error.", error_message, 1, self)
 		return value

@@ -9,25 +9,32 @@ var matching_items : Array
 var previous_option : String = ""
 
 var focus := false
+var showing:= false
+var just_hidden:= false
 
 export (String) var text : String setget set_text, get_text
 
 onready var options_container := $PopupPanel/ScrollContainer/VBoxContainer
 onready var options_popup := $PopupPanel
 onready var line_edit := $LineEdit
+onready var icon := $Button/CenterContainer/Label
 
 
 func _on_Button_pressed():
+	if just_hidden:
+		return
 	populate_options()
 	show_options()
 	line_edit.grab_focus()
+
 
 func set_text(new_text:String) -> void:
 	if $LineEdit.text != new_text:
 		text = new_text
 		$LineEdit.text = new_text
 		emit_signal("option_changed", text)
-	
+
+
 func get_text() -> String:
 	return $LineEdit.text
 	
@@ -54,7 +61,8 @@ func populate_options(filter : String = "") -> void:
 				
 		for item in matching_items:
 			add_option(item)
-			
+
+
 func add_option(option_name : String) -> void:
 	var button := Button.new()
 	button.size_flags_horizontal = SIZE_EXPAND_FILL
@@ -62,28 +70,34 @@ func add_option(option_name : String) -> void:
 	button.connect("pressed", self, "_on_option_pressed", [option_name])
 	options_container.add_child(button)
 
+
 func _on_LineEdit_text_changed(new_text : String) -> void:
 	populate_options(new_text)
 	show_options()
 	line_edit.grab_focus()
+
 
 func _on_option_pressed(option_name : String) -> void:
 	line_edit.text = option_name
 	options_popup.hide()
 	previous_option = option_name
 	emit_signal("option_changed", option_name)
-	
+
+
 func show_options() -> void:
+	icon.flip_v = true
 	options_popup.popup()
-	options_popup.rect_global_position = rect_global_position + Vector2(0, rect_size.y+10)
+	options_popup.rect_global_position = rect_global_position + Vector2(0, rect_size.y + 2)
 	options_popup.rect_size.x = rect_size.x
-	options_popup.rect_size.y = min(400, items.size()*(29) + 5)
+	options_popup.rect_size.y = min(400, items.size()*(38) + 5)
+
 
 func set_items(new_items : Array) -> void:
 	items.clear()
 	for item in new_items:
 		items.append(item)
-		
+
+
 func add_item(new_item):
 	items.append(new_item)
 	
@@ -136,3 +150,16 @@ func _on_LineEdit_focus_exited() -> void:
 func _on_LineEdit_focus_entered():
 	if not focus:
 		previous_option = line_edit.text
+
+
+func _on_PopupPanel_popup_hide():
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	if not options_popup.visible:
+		icon.flip_v = false
+		just_hidden = true
+		$JustHiddenTimer.start()
+
+
+func _on_JustHiddenTimer_timeout():
+	just_hidden = false
