@@ -65,7 +65,7 @@ func get_treemap_from_api(_graph_id: String):
 	_g.api.connect("api_response", self, "api_response")
 	_g.api.connect("api_response_finished", self, "api_response_finished")
 
-	var url: String = "/graph/" + _g.main_graph.graph_data.id + "/query/graph"
+	var url: String = "/graph/" + _g.main_graph.graph_data.id + "/search/graph"
 	var query = "is(account)"
 	_e.emit_signal("api_request", HTTPClient.METHOD_POST, url, query)
 

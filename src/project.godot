@@ -67,8 +67,10 @@ _e="*res://scripts/singletons/singleton_events.gd"
 
 [debug]
 
+settings/gdscript/max_call_stack=2048
 gdscript/warnings/unused_signal=false
 gdscript/warnings/return_value_discarded=false
+settings/visual_script/max_call_stack=2048
 
 [display]
 
@@ -123,8 +125,8 @@ right_mouse={
 
 [network]
 
-limits/debugger_stdout/max_chars_per_second=32000
-limits/debugger_stdout/max_messages_per_frame=300
+limits/debugger_stdout/max_chars_per_second=320000
+limits/debugger_stdout/max_messages_per_frame=3000
 
 [physics]
 

@@ -170,7 +170,7 @@ func get_blastradius_from_selection(node_id):
 	_g.api.connect("api_response", self, "api_response")
 	_g.api.connect("api_response_finished", self, "api_response_finished")
 
-	var url: String = "/graph/" + graph_id + "/query/graph"
+	var url: String = "/graph/" + graph_id + "/search/graph"
 	_e.emit_signal("api_request", HTTPClient.METHOD_POST, url, query)
 
 

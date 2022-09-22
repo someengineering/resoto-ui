@@ -3,7 +3,7 @@ extends Spatial
 signal filtering_done
 
 const MIN_ZOOM_3D = 20
-const MAX_ZOOM_3D = 90
+const MAX_ZOOM_3D = 140
 const TOUCH_ZOOM_SPEED = 0.1
 
 var root_node: Object = null
@@ -142,7 +142,7 @@ func get_graph_from_api(graph_id: String, query: String):
 	_g.api.connect("api_response_total_elements", self, "api_response_total_elements")
 	_g.api.connect("api_response_finished", self, "api_response_finished")
 
-	var url: String = "/graph/" + graph_id + "/query/graph"
+	var url: String = "/graph/" + graph_id + "/search/graph"
 	_e.emit_signal("api_request", HTTPClient.METHOD_POST, url, query)
 
 

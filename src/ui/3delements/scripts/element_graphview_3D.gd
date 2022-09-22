@@ -243,25 +243,33 @@ func create_new_graph_node(data: Dictionary):
 			add_new_node_group(data.reported.name, new_graph_node, new_graph_node)
 			graph_node_groups["root"].add(data.id)
 			_parent_node = graph_node_groups["root"].node_group_object
-
-		elif "account" in data.reported.kind:
-			new_graph_node.name = "Account_" + data.reported.name
-			new_graph_node.line_length = 500
-			_parent_node = graph_node_groups[data.ancestors.cloud.reported.id].node_group_object
-			add_new_node_group(data.reported.name, new_graph_node, new_graph_node)
-			graph_node_groups[data.ancestors.cloud.reported.id].add(data.id)
-			#graph_node_groups["root"].add(data.id)
-
-		elif "ancestors" in data and "account" in data.ancestors:
-			new_graph_node.name = "Region_" + data.reported.name
-			_parent_node = graph_node_groups[data.ancestors.account.reported.name].node_group_object
-			graph_node_groups[data.ancestors.account.reported.name].add(data.id)
-#
+		elif data.has("ancestors"):
+			if data.ancestors.has("region"):
+				# Adding a Region / Accounts -->
+				new_graph_node.name = "Node_" + data.reported.name
+				_parent_node = graph_node_groups[data.ancestors.region.reported.name].node_group_object
+				graph_node_groups[data.ancestors.region.reported.name].add(data.id)
+				
+			elif data.ancestors.has("account"):
+				# Adding a Region / Accounts -->
+				new_graph_node.name = "Region_" + data.reported.name
+				_parent_node = graph_node_groups[data.ancestors.account.reported.name].node_group_object
+				add_new_node_group(data.reported.name, new_graph_node, new_graph_node)
+				graph_node_groups[data.ancestors.account.reported.name].add(data.id)
+				
+			elif  data.ancestors.has("cloud"):
+				# Adding Accounts / Cloud -->
+				new_graph_node.name = "Account_" + data.reported.name
+				new_graph_node.line_length = 500
+				_parent_node = graph_node_groups[data.ancestors.cloud.reported.id].node_group_object
+				add_new_node_group(data.reported.name, new_graph_node, new_graph_node)
+				graph_node_groups[data.ancestors.cloud.reported.id].add(data.id)
 		else:
 			new_graph_node.name = "root"
 			new_graph_node.line_length = 2000
 			add_new_node_group("root", new_graph_node, new_graph_node)
 			graph_node_groups["root"].add(data.id)
+			print("root!")
 
 	graph_data.nodes[data.id] = add_node(
 		data, new_graph_node, _parent_node, new_graph_node.line_length
