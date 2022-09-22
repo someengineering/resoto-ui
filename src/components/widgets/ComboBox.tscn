@@ -4,7 +4,7 @@
 [ext_resource path="res://components/widgets/ComboBox.gd" type="Script" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
 
-[node name="ComboBox" type="Control"]
+[node name="ComboBox" type="HBoxContainer"]
 margin_right = 312.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 100, 24 )
@@ -13,37 +13,58 @@ script = ExtResource( 2 )
 items = [ "asdf", "xzcv", "dfa" ]
 
 [node name="LineEdit" type="LineEdit" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = -24.0
+margin_right = 284.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+caret_blink = true
+caret_blink_speed = 0.5
 
 [node name="Button" type="Button" parent="."]
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -24.0
-rect_min_size = Vector2( 24, 24 )
+margin_left = 288.0
+margin_right = 312.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 20, 16 )
+size_flags_vertical = 3
 icon = ExtResource( 1 )
-flat = true
 icon_align = 1
 expand_icon = true
 
+[node name="CenterContainer" type="CenterContainer" parent="Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Label" type="TextureRect" parent="Button/CenterContainer"]
+margin_left = 4.0
+margin_top = 8.0
+margin_right = 20.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 16, 16 )
+mouse_filter = 2
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6
+
 [node name="PopupPanel" type="PopupPanel" parent="."]
-margin_top = 24.0
+margin_left = 290.0
 margin_right = 312.0
-margin_bottom = 34.0
+margin_bottom = 33.0
 focus_mode = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PopupPanel"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 307.0
-margin_bottom = 5.0
+margin_right = 17.0
+margin_bottom = 28.0
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PopupPanel/ScrollContainer"]
-margin_right = 302.0
+margin_right = 12.0
 size_flags_horizontal = 3
+
+[node name="JustHiddenTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
 
 [connection signal="focus_entered" from="LineEdit" to="." method="_on_LineEdit_focus_entered"]
 [connection signal="focus_exited" from="LineEdit" to="." method="_on_LineEdit_focus_exited"]
@@ -51,3 +72,5 @@ size_flags_horizontal = 3
 [connection signal="text_changed" from="LineEdit" to="." method="_on_LineEdit_text_changed"]
 [connection signal="text_entered" from="LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="popup_hide" from="PopupPanel" to="." method="_on_PopupPanel_popup_hide"]
+[connection signal="timeout" from="JustHiddenTimer" to="." method="_on_JustHiddenTimer_timeout"]

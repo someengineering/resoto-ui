@@ -16,6 +16,7 @@ var description:String = ""
 var status:int = STATUS_SUCCESS
 var duration:float = 5.0
 var is_closable:bool = true
+var from_node:Node = null
 
 onready var tween:Tween = $Tween
 

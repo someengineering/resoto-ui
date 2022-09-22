@@ -34,6 +34,9 @@ class UITerminalCommand:
 		
 
 func _ready() -> void:
+	if not _g.is_connected_to_resotocore:
+		yield(_g, "connected_to_resotocore")
+	
 	loading.console = console
 	console_v_scroll.connect("changed", self, "on_scroll_changed")
 	var image = load("res://assets/Resoto-Logo_bigger.svg")
@@ -43,14 +46,18 @@ func _ready() -> void:
 	console.push_align(RichTextLabel.ALIGN_CENTER)
 	console.add_image(image, 200, 200)
 	console.newline()
-	console.add_text("Resoto UI - " + _g.ui_version)
+	console.append_bbcode("[b]Resoto[/b]\nVersion: " + _g.resotocore_version)
 	for i in 5:
 		console.newline()
 	console.pop()
 
 
 func _input(event:InputEvent) -> void:
-	if not is_visible_in_tree() or !terminal_active or _g.popup_manager.popup_active() or not event is InputEventKey:
+	if (not is_visible_in_tree()
+	or !terminal_active
+	or _g.popup_manager.popup_active()
+	or not event is InputEventKey
+	or _g.focus_in_search):
 		return
 	
 	if not command.has_focus() and event.pressed and not MODIFIER_KEYS.has(event.scancode):

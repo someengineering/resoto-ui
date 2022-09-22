@@ -46,7 +46,7 @@ func connect_to_core() -> void:
 	yield(VisualServer, "frame_post_draw")
 	$ConnectTimeoutTimer.start()
 	
-	info_request = API.cli_info(self)
+	info_request = API.system_ready(self)
 	API._get_infra_info(self)
 
 
@@ -54,7 +54,7 @@ func _on_get_infra_info_done(_error:int, response):
 	InfrastructureInformation.infra_info = response.transformed.result
 
 
-func _on_cli_info_done(error:int, response:UserAgent.Response) -> void:
+func _on_system_ready_done(error:int, response:UserAgent.Response) -> void:
 	if error:
 		not_connected(Utils.err_enum_to_string(error))
 	else:
@@ -62,7 +62,26 @@ func _on_cli_info_done(error:int, response:UserAgent.Response) -> void:
 			if response.transformed["result"].left(3) == "401":
 				not_connected("401: Unauthorized")
 				return
+			get_system_info()
 			connected(Utils.http_status_to_string(response.status_code))
+
+
+func get_system_info():
+	API.cli_execute("system info", self)
+
+
+func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
+	if error:
+		_g.emit_signal("add_toast", "Error in Search", Utils.err_enum_to_string(error), 1, self)
+		return
+	var response_text:String = _response.transformed.result
+	var start_index:int = response_text.find("version: ") + 9
+	response_text = response_text.right(start_index)
+	var end_index:int = response_text.find("git_hash: ")
+	response_text = response_text.left(end_index)
+	_g.resotocore_version = response_text
+	_g.is_connected_to_resotocore = true
+	_g.emit_signal("connected_to_resotocore")
 
 
 func connected(status_text:String) -> void:

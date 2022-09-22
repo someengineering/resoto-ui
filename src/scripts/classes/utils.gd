@@ -71,6 +71,20 @@ static func err_enum_to_string(_status_code:int) -> String:
 	return _error_messages[_status_code]
 
 
+static func truncate_string(_string:String, font:Font, _max_size:float=30.0) -> String:
+	var truncated_text = ""
+	var i : int = 0
+	
+	while font.get_string_size(truncated_text+"...  ").x < _max_size:
+		if i >= _string.length():
+			break
+		truncated_text += _string[i]
+		i += 1
+	if truncated_text != _string:
+		truncated_text += "..."
+	return truncated_text
+
+
 static func print_dict(_dict:Dictionary, _depth:int) -> void:
 	var _spacing = ""
 	for i in _depth:

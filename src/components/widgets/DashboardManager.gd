@@ -65,7 +65,7 @@ func _on_cli_execute_done(_error : int, _response):
 	pass
 
 func _on_patch_config_id_done(_error : int, _response):
-	_g.emit_signal("add_toast", "Your Dashboard has been saved!", "")
+	_g.emit_signal("add_toast", "Your Dashboard has been saved!", "", self)
 
 
 func request_saved_dashboards() -> void:

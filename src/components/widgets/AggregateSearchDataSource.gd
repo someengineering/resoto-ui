@@ -19,7 +19,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary):
 	
 func _on_aggregate_search_done(_error : int, response):
 	if not response.transformed.result is Array or response.transformed.result.size() == 0:
-		_g.emit_signal("add_toast", "Invalid Aggregate Search", "There is a problem with the aggregate search query.", 1)
+		_g.emit_signal("add_toast", "Invalid Aggregate Search", "There is a problem with the aggregate search query.", 1, self)
 		return
 	if widget is TableWidget:
 		widget.header_columns_count = response.transformed.result[0]["group"].size()

@@ -10,6 +10,8 @@ var offset : String = ""
 var legend : String = ""
 var sum_by : String = ""
 var stacked : bool = true
+# query, now saved to display correctly in toasts and log
+var q: String
 
 var making_query := false
 
@@ -20,7 +22,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 	var interval = attr["interval"]
 	if making_query:
 		return
-	var q = query.replace("$interval", "%ds" % (interval))
+	q = query.replace("$interval", "%ds" % (interval))
 	if dashboard_filters == {}:
 		q = q.replace("$dashboard_filters,", "")
 		q = q.replace("$dashboard_filters", "")
@@ -54,11 +56,11 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 	var data = response.transformed.result
 	
 	if _error != 0 or typeof(data) == TYPE_STRING:
-		_g.emit_signal("add_toast", "Request Error", data, 1)
+		_g.emit_signal("add_toast", "Request Error", data, 1, self)
 		return
 		
 	if data.data.result.size() == 0:
-		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 2)
+		_g.emit_signal("add_toast", "Empty TSDB query result", q, 2, self)
 		widget.value = 0
 		return
 
@@ -68,22 +70,22 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 			if widget.single_value:
 				widget.value = data["data"]["result"][0]["value"][1]
 				if n > 1:
-					_g.emit_signal("add_toast","Multiple values for single value widget","This widget accept just one value, but the query result has %d" % n, 2)
+					_g.emit_signal("add_toast", "Multiple values for single value widget","This widget accept just one value, but the query result has %d" % n, 2, self)
 	else:
-		_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],1)
+		_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"], 1, self)
 		widget.value = "NaN"
 
-func _on_query_range_tsdb_done(_error:int, response) -> void:
+func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 	making_query = false
 	var data = response.transformed.result
 	
 	if _error != 0 or typeof(data) == TYPE_STRING:
-		_g.emit_signal("add_toast", "Request Error", data, 1)
+		_g.emit_signal("add_toast", "Request Error", data, 1, self)
 		return
 		
 	if data.data.result.size() == 0:
 		widget.clear_series()
-		_g.emit_signal("add_toast", "Empty result", "Your time series query returned an empty result...", 2)
+		_g.emit_signal("add_toast", "Empty TSDB query result", q, 2, self)
 		return
 		
 	if data["status"] == "success":
@@ -107,7 +109,7 @@ func _on_query_range_tsdb_done(_error:int, response) -> void:
 			
 		widget.complete_update(true)
 	else:
-			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],2)
+			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"], 2, self)
 			widget.value = "NaN"
 			
 

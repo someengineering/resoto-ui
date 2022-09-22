@@ -27,7 +27,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary):
 func _on_cli_execute_done(_error : int, response):
 	var message : String = response.transformed.result
 	if "Error: " in response.transformed.result:
-		_g.emit_signal("add_toast", "Invalid query", response.transformed.result, 1)
+		_g.emit_signal("add_toast", "Invalid query", response.transformed.result, 1, self)
 		return
 	widget.set_data(response.transformed.result, type)
 

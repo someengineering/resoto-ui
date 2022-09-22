@@ -1,29 +1,31 @@
 extends CanvasLayer
 
-var config_active:bool = false
+onready var sections = {
+	"terminals": $Content/TerminalManager,
+	"dashboards": $Content/DashBoardManager,
+	"config": $Content/ConfigManager,
+	"message_log": $Content/MessageLog,
+	"node_info": $Content/NodeInfoManager
+}
 
-func show_config(show:bool):
-	if show:
-		$Config.load_config()
-	$Content.visible = !show
-	$Config.visible = show
+var active_section = "terminal"
 
-
-func _on_ButtonConfig_pressed():
-	config_active = !config_active
-	show_config(config_active)
-
-
-func _on_Config_close_config():
-	config_active = false
-	show_config(false)
+onready var content_sections = $Content
 
 
-func _on_TerminalsButton_toggled(_button_pressed : bool):
-	$Content/TerminalManager.show()
-	$Content/DashBoardManager.hide()
+func _enter_tree():
+	_g.content_manager = self
 
 
-func _on_DashboardsButton_toggled(_button_pressed : bool):
-	$Content/TerminalManager.hide()
-	$Content/DashBoardManager.show()
+func change_section(new_section:String):
+	if new_section == active_section or not sections.has(new_section):
+		return
+	
+	active_section = new_section
+	for c in content_sections.get_children():
+		c.hide()
+	
+	if sections[active_section].has_method("start"):
+		sections[active_section].start()
+	else:
+		sections[active_section].show()

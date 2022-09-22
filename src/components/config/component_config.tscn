@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://components/config/component_config.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -15,22 +15,34 @@
 [ext_resource path="res://components/config/component_config_array_container.gd" type="Script" id=13]
 [ext_resource path="res://components/config/component_config_template_dict_element.tscn" type="PackedScene" id=14]
 [ext_resource path="res://components/config/component_config_customconfig.gd" type="Script" id=15]
+[ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=16]
 
-[sub_resource type="StyleBoxFlat" id=4]
-content_margin_left = 10.0
-content_margin_right = 10.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_color = Color( 0.160784, 0.117647, 0.176471, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-corner_detail = 1
+[sub_resource type="StyleBoxFlat" id=18]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id=19]
+content_margin_left = 8.0
+content_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id=17]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.091, 0.11245, 0.13, 1 )
+border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id=8]
 bg_color = Color( 0.462745, 0.176471, 0.843137, 0.14902 )
@@ -96,9 +108,71 @@ margin_right = 1910.0
 margin_bottom = 1070.0
 custom_constants/separation = -1
 
-[node name="TabsBar" type="HBoxContainer" parent="TabManager"]
+[node name="PanelContainer" type="PanelContainer" parent="TabManager"]
 margin_right = 1900.0
-margin_bottom = 30.0
+margin_bottom = 41.0
+custom_styles/panel = SubResource( 18 )
+
+[node name="Box" type="HBoxContainer" parent="TabManager/PanelContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 1896.0
+margin_bottom = 37.0
+
+[node name="ConfigLabel" type="Label" parent="TabManager/PanelContainer/Box"]
+margin_right = 59.0
+margin_bottom = 33.0
+size_flags_vertical = 3
+custom_styles/normal = SubResource( 19 )
+text = "Config"
+align = 2
+valign = 1
+
+[node name="ConfigCombo" parent="TabManager/PanelContainer/Box" instance=ExtResource( 16 )]
+margin_left = 63.0
+margin_right = 463.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 400, 24 )
+items = [  ]
+
+[node name="Spacer" type="Control" parent="TabManager/PanelContainer/Box"]
+margin_left = 467.0
+margin_right = 1547.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 20, 0 )
+size_flags_horizontal = 3
+
+[node name="CloseConfigButton" type="Button" parent="TabManager/PanelContainer/Box"]
+visible = false
+margin_left = 752.0
+margin_top = 993.0
+margin_right = 816.0
+margin_bottom = 1026.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Close"
+
+[node name="LoadConfigFromCoreButton" type="Button" parent="TabManager/PanelContainer/Box"]
+margin_left = 1551.0
+margin_right = 1778.0
+margin_bottom = 33.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Reload all Configs from Core"
+
+[node name="SaveConfigButton" type="Button" parent="TabManager/PanelContainer/Box"]
+margin_left = 1782.0
+margin_right = 1892.0
+margin_bottom = 33.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Save Config"
+
+[node name="TabsBar" type="HBoxContainer" parent="TabManager"]
+visible = false
+margin_top = 40.0
+margin_right = 1900.0
+margin_bottom = 70.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 3
 custom_constants/separation = 0
@@ -122,18 +196,18 @@ tab_align = 0
 
 [node name="MainPanel" type="PanelContainer" parent="TabManager"]
 show_behind_parent = true
-margin_top = 29.0
+margin_top = 40.0
 margin_right = 1900.0
-margin_bottom = 997.0
+margin_bottom = 1021.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 4 )
+custom_styles/panel = SubResource( 17 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabManager/MainPanel"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 1890.0
-margin_bottom = 958.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 1896.0
+margin_bottom = 977.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 follow_focus = true
@@ -142,13 +216,19 @@ script = ExtResource( 8 )
 
 [node name="Content" type="MarginContainer" parent="TabManager/MainPanel/ScrollContainer"]
 margin_right = 1880.0
-margin_bottom = 948.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 10
 custom_constants/margin_left = 10
 
+[node name="Spacer" type="Control" parent="TabManager"]
+margin_top = 1020.0
+margin_right = 1900.0
+margin_bottom = 1030.0
+rect_min_size = Vector2( 0, 10 )
+
 [node name="HBoxContainer" type="HBoxContainer" parent="TabManager"]
+visible = false
 margin_top = 996.0
 margin_right = 1900.0
 margin_bottom = 1030.0
@@ -156,33 +236,6 @@ rect_min_size = Vector2( 0, 34 )
 size_flags_vertical = 8
 custom_constants/separation = 10
 alignment = 1
-
-[node name="CloseConfigButton" type="Button" parent="TabManager/HBoxContainer"]
-margin_left = 782.0
-margin_top = 10.0
-margin_right = 830.0
-margin_bottom = 34.0
-size_flags_horizontal = 4
-size_flags_vertical = 8
-text = "Close"
-
-[node name="LoadConfigFromCoreButton" type="Button" parent="TabManager/HBoxContainer"]
-margin_left = 840.0
-margin_top = 10.0
-margin_right = 1015.0
-margin_bottom = 34.0
-size_flags_horizontal = 4
-size_flags_vertical = 8
-text = "Load Configs from Core"
-
-[node name="SaveConfigButton" type="Button" parent="TabManager/HBoxContainer"]
-margin_left = 1025.0
-margin_top = 10.0
-margin_right = 1117.0
-margin_bottom = 34.0
-size_flags_horizontal = 4
-size_flags_vertical = 8
-text = "Save Config"
 
 [node name="Templates" type="VBoxContainer" parent="."]
 visible = false
@@ -659,10 +712,11 @@ custom_fonts/font = SubResource( 3 )
 custom_styles/normal = SubResource( 7 )
 text = "Description"
 
+[connection signal="option_changed" from="TabManager/PanelContainer/Box/ConfigCombo" to="." method="_on_ConfigCombo_option_changed"]
+[connection signal="pressed" from="TabManager/PanelContainer/Box/CloseConfigButton" to="." method="_on_CloseConfigButton_pressed"]
+[connection signal="pressed" from="TabManager/PanelContainer/Box/LoadConfigFromCoreButton" to="." method="_on_LoadConfigFromCoreButton_pressed"]
+[connection signal="pressed" from="TabManager/PanelContainer/Box/SaveConfigButton" to="." method="_on_SaveConfigButton_pressed"]
 [connection signal="tab_changed" from="TabManager/TabsBar/Tabs" to="." method="_on_Tabs_tab_changed"]
-[connection signal="pressed" from="TabManager/HBoxContainer/CloseConfigButton" to="." method="_on_CloseConfigButton_pressed"]
-[connection signal="pressed" from="TabManager/HBoxContainer/LoadConfigFromCoreButton" to="." method="_on_LoadConfigFromCoreButton_pressed"]
-[connection signal="pressed" from="TabManager/HBoxContainer/SaveConfigButton" to="." method="_on_SaveConfigButton_pressed"]
 [connection signal="gui_input" from="Templates/TemplateComplex/HeaderBG/Header" to="Templates/TemplateComplex" method="_on_Header_gui_input"]
 [connection signal="toggled" from="Templates/TemplateComplex/HeaderBG/Header/Top/Expand" to="Templates/TemplateComplex" method="_on_Expand_toggled"]
 [connection signal="pressed" from="Templates/TemplateComplex/HeaderBG/Header/Top/ButtonSetToNull" to="Templates/TemplateComplex" method="_on_ButtonSetToNull_pressed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
@@ -17,6 +17,21 @@ font_data = ExtResource( 2 )
 [sub_resource type="StyleBoxEmpty" id=4]
 
 [sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="StyleBoxFlat" id=7]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id=8]
+content_margin_left = 8.0
+content_margin_right = 4.0
 
 [sub_resource type="Shader" id=6]
 code = "shader_type canvas_item;
@@ -70,17 +85,17 @@ theme = ExtResource( 3 )
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 margin_right = 1920.0
-margin_bottom = 39.0
+margin_bottom = 43.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 1915.0
-margin_bottom = 34.0
+margin_bottom = 38.0
 
 [node name="DashboardNameLabel" type="LineEdit" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_right = 1715.0
-margin_bottom = 29.0
+margin_right = 1651.0
+margin_bottom = 33.0
 size_flags_horizontal = 3
 custom_colors/font_color_uneditable = Color( 0.85098, 0.721569, 1, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -98,90 +113,130 @@ size_flags_horizontal = 10
 text = "+"
 
 [node name="RefreshOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1719.0
-margin_right = 1784.0
-margin_bottom = 29.0
+margin_left = 1655.0
+margin_right = 1738.0
+margin_bottom = 33.0
 text = "15 min"
 items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hr", null, false, 3, null, "12 hr", null, false, 4, null, "24 hr", null, false, 5, null ]
 selected = 0
 
 [node name="LockButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1788.0
-margin_right = 1817.0
-margin_bottom = 29.0
-rect_min_size = Vector2( 29, 29 )
+margin_left = 1742.0
+margin_right = 1786.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 44, 29 )
 toggle_mode = true
 icon = ExtResource( 5 )
+icon_align = 1
 expand_icon = true
 
 [node name="DeleteButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1821.0
-margin_right = 1850.0
-margin_bottom = 29.0
-rect_min_size = Vector2( 29, 29 )
+margin_left = 1790.0
+margin_right = 1834.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 44, 29 )
 icon = ExtResource( 4 )
+icon_align = 1
 expand_icon = true
 
 [node name="ExportButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1854.0
+margin_left = 1838.0
 margin_right = 1910.0
-margin_bottom = 29.0
+margin_bottom = 33.0
 text = "Export"
 
 [node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer"]
 margin_left = 885.0
 margin_top = 5.0
 margin_right = 1035.0
-margin_bottom = 34.0
+margin_bottom = 38.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 6
 text = "Last 24 hours"
 flat = true
 
 [node name="FiltersContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 43.0
+margin_top = 47.0
 margin_right = 1920.0
-margin_bottom = 67.0
+margin_bottom = 88.0
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/FiltersContainer"]
-margin_left = 725.0
-margin_top = 2.0
-margin_right = 766.0
-margin_bottom = 22.0
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/FiltersContainer"]
+margin_left = 553.0
+margin_right = 1366.0
+margin_bottom = 41.0
+custom_styles/panel = SubResource( 7 )
+
+[node name="Box" type="HBoxContainer" parent="VBoxContainer/FiltersContainer/PanelContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 809.0
+margin_bottom = 37.0
+
+[node name="CloudsLabel" type="Label" parent="VBoxContainer/FiltersContainer/PanelContainer/Box"]
+margin_right = 53.0
+margin_bottom = 33.0
+size_flags_vertical = 3
+custom_styles/normal = SubResource( 8 )
 text = "Cloud"
+align = 2
+valign = 1
 
-[node name="CloudsCombo" parent="VBoxContainer/FiltersContainer" instance=ExtResource( 9 )]
-margin_left = 770.0
-margin_right = 870.0
+[node name="CloudsCombo" parent="VBoxContainer/FiltersContainer/PanelContainer/Box" instance=ExtResource( 9 )]
+margin_left = 57.0
+margin_right = 237.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 180, 24 )
 items = [  ]
 
-[node name="Label2" type="Label" parent="VBoxContainer/FiltersContainer"]
-margin_left = 874.0
-margin_top = 2.0
-margin_right = 933.0
-margin_bottom = 22.0
+[node name="Spacer3" type="Control" parent="VBoxContainer/FiltersContainer/PanelContainer/Box"]
+margin_left = 241.0
+margin_right = 265.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 24, 0 )
+
+[node name="AccountsLabel" type="Label" parent="VBoxContainer/FiltersContainer/PanelContainer/Box"]
+margin_left = 269.0
+margin_right = 343.0
+margin_bottom = 33.0
+size_flags_vertical = 3
+custom_styles/normal = SubResource( 8 )
 text = "Account"
+align = 2
+valign = 1
 
-[node name="AccountsCombo" parent="VBoxContainer/FiltersContainer" instance=ExtResource( 9 )]
-margin_left = 937.0
-margin_right = 1037.0
+[node name="AccountsCombo" parent="VBoxContainer/FiltersContainer/PanelContainer/Box" instance=ExtResource( 9 )]
+margin_left = 347.0
+margin_right = 527.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 180, 24 )
 items = [  ]
 
-[node name="Label3" type="Label" parent="VBoxContainer/FiltersContainer"]
-margin_left = 1041.0
-margin_top = 2.0
-margin_right = 1091.0
-margin_bottom = 22.0
-text = "Region"
+[node name="Spacer2" type="Control" parent="VBoxContainer/FiltersContainer/PanelContainer/Box"]
+margin_left = 531.0
+margin_right = 555.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 24, 0 )
 
-[node name="RegionsCombo" parent="VBoxContainer/FiltersContainer" instance=ExtResource( 9 )]
-margin_left = 1095.0
-margin_right = 1195.0
+[node name="RegionsLabel" type="Label" parent="VBoxContainer/FiltersContainer/PanelContainer/Box"]
+margin_left = 559.0
+margin_right = 621.0
+margin_bottom = 33.0
+size_flags_vertical = 3
+custom_styles/normal = SubResource( 8 )
+text = "Region"
+align = 2
+valign = 1
+
+[node name="RegionsCombo" parent="VBoxContainer/FiltersContainer/PanelContainer/Box" instance=ExtResource( 9 )]
+margin_left = 625.0
+margin_right = 805.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 180, 24 )
 items = [  ]
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
-margin_top = 71.0
+margin_top = 92.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 size_flags_vertical = 3
@@ -189,7 +244,7 @@ scroll_horizontal_enabled = false
 
 [node name="Dashboard" type="Control" parent="VBoxContainer/ScrollContainer"]
 margin_right = 1920.0
-margin_bottom = 1009.0
+margin_bottom = 988.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
@@ -233,9 +288,9 @@ margin_bottom = 285.0
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/DateButton" to="." method="_on_DateButton_pressed"]
-[connection signal="option_changed" from="VBoxContainer/FiltersContainer/CloudsCombo" to="." method="_on_CloudsCombo_option_changed"]
-[connection signal="option_changed" from="VBoxContainer/FiltersContainer/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]
-[connection signal="option_changed" from="VBoxContainer/FiltersContainer/RegionsCombo" to="." method="_on_RegionsCombo_option_changed"]
+[connection signal="option_changed" from="VBoxContainer/FiltersContainer/PanelContainer/Box/CloudsCombo" to="." method="_on_CloudsCombo_option_changed"]
+[connection signal="option_changed" from="VBoxContainer/FiltersContainer/PanelContainer/Box/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]
+[connection signal="option_changed" from="VBoxContainer/FiltersContainer/PanelContainer/Box/RegionsCombo" to="." method="_on_RegionsCombo_option_changed"]
 [connection signal="resized" from="VBoxContainer/ScrollContainer/Dashboard/Grid" to="VBoxContainer/ScrollContainer/Dashboard" method="_on_Grid_resized"]
 [connection signal="widget_added" from="WindowDialog" to="." method="_on_WindowDialog_widget_added"]
 [connection signal="widget_added" from="WindowDialog" to="VBoxContainer/ScrollContainer/Dashboard" method="add_widget"]

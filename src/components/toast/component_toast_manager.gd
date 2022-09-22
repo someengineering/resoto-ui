@@ -21,14 +21,17 @@ func _ready():
 	_g.connect("add_toast", self, "on_add_toast")
 
 
-func on_add_toast(_title:String, _description:String=description, _status:int=status, _duration:float = duration, _is_closable:bool=is_closable):
+func on_add_toast(_title:String, _description:String=description, _status:int=status, _from:Node=null, _duration:float = duration, _is_closable:bool=is_closable):
 	var toast = Toast.instance()
+	toast.from_node = _from
 	toasts.push_front(toast)
 	toast_anchor.add_child(toast)
 	
 	toast.connect("closed", self, "on_toast_closed", [toast], 4)
 	toast.open(_title, _description, _status, _duration, _is_closable)
 	toast.rect_position = Vector2(-toast.rect_size.x - toast_padding, -toast.rect_size.y - toast_padding)
+	
+	_g.emit_signal("toast_created", toast)
 	
 	for i in toasts:
 		move_toasts()
