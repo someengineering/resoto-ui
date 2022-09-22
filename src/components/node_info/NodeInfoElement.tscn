@@ -34,8 +34,107 @@ margin_top = 10.0
 margin_right = 1860.0
 margin_bottom = 952.0
 
-[node name="NodeNameLabel" type="Label" parent="Margin/VBox"]
+[node name="NodeTitle" type="HBoxContainer" parent="Margin/VBox"]
+margin_right = 1850.0
+margin_bottom = 39.0
+
+[node name="NodeNameLabel" type="Label" parent="Margin/VBox/NodeTitle"]
+margin_right = 1702.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 1 )
+text = "Node Name"
+
+[node name="NodeKindLabel" type="Label" parent="Margin/VBox/NodeTitle"]
+margin_left = 1706.0
 margin_right = 1850.0
 margin_bottom = 39.0
 custom_fonts/font = SubResource( 1 )
-text = "Node Name"
+text = "Node Kind"
+
+[node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
+modulate = Color( 1, 1, 1, 0.501961 )
+margin_top = 43.0
+margin_right = 1850.0
+margin_bottom = 47.0
+
+[node name="NodeContent" type="HBoxContainer" parent="Margin/VBox"]
+margin_top = 51.0
+margin_right = 1850.0
+margin_bottom = 175.0
+
+[node name="NodeDetails" type="VBoxContainer" parent="Margin/VBox/NodeContent"]
+margin_right = 400.0
+margin_bottom = 124.0
+rect_min_size = Vector2( 400, 0 )
+custom_constants/separation = 20
+
+[node name="GridContainer" type="GridContainer" parent="Margin/VBox/NodeContent/NodeDetails"]
+margin_right = 400.0
+margin_bottom = 71.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_vertical = 3
+custom_constants/hseparation = 20
+columns = 2
+
+[node name="NodeIdLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
+margin_right = 200.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 200, 0 )
+text = "Node id:"
+
+[node name="NodeIdValueLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
+margin_left = 220.0
+margin_right = 240.0
+margin_bottom = 21.0
+text = "id"
+
+[node name="NodeCtimeLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
+margin_top = 25.0
+margin_right = 200.0
+margin_bottom = 46.0
+text = "Last changed on:"
+
+[node name="NodeCtimeValueLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
+margin_left = 220.0
+margin_top = 25.0
+margin_right = 240.0
+margin_bottom = 46.0
+text = "00"
+
+[node name="NodeAgeLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
+margin_top = 50.0
+margin_right = 200.0
+margin_bottom = 71.0
+text = "Age:"
+
+[node name="NodeAgeValueLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
+margin_left = 220.0
+margin_top = 50.0
+margin_right = 240.0
+margin_bottom = 71.0
+text = "00"
+
+[node name="TagsGroup" type="VBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails"]
+margin_top = 91.0
+margin_right = 400.0
+margin_bottom = 124.0
+
+[node name="NodeTagsLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup"]
+margin_right = 400.0
+margin_bottom = 21.0
+size_flags_vertical = 1
+text = "Tags:"
+
+[node name="HSeparator" type="HSeparator" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup"]
+modulate = Color( 1, 1, 1, 0.25098 )
+margin_top = 25.0
+margin_right = 400.0
+margin_bottom = 29.0
+
+[node name="TagsContent" type="GridContainer" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup"]
+margin_top = 33.0
+margin_right = 400.0
+margin_bottom = 33.0
+custom_constants/hseparation = 20
+columns = 2

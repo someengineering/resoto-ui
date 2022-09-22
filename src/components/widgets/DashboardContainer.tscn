@@ -243,8 +243,7 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Dashboard" type="Control" parent="VBoxContainer/ScrollContainer"]
-margin_right = 1920.0
-margin_bottom = 988.0
+margin_right = 1908.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )

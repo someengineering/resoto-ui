@@ -1,4 +1,8 @@
-[gd_scene load_steps=31 format=2]
+<<<<<<< HEAD
+[gd_scene load_steps=16 format=2]
+=======
+[gd_scene load_steps=32 format=2]
+>>>>>>> 9c8478f (Progress for rebase.)
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]

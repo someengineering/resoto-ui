@@ -24,6 +24,7 @@ func _on_FullTextSearch_text_changed(_command:String) -> void:
 	var count_command = "search \"" + _command + "\" | count"
 	count_request = API.cli_execute(count_command, self)
 	active_request = API.graph_search(search_command, self, "list")
+	grab_focus()
 
 
 func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
@@ -49,6 +50,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 
 
 func show_search_results(results:Array) -> void:
+	grab_focus()
 	# clear old results
 	for c in popup_results.get_children():
 		if c.name == "ResultAmountLabel":
@@ -93,3 +95,11 @@ func show_search_results(results:Array) -> void:
 func on_result_button_clicked(_id:String):
 	_g.content_manager.change_section("node_info")
 	_g.content_manager.get_node("Content/NodeInfoManager/NodeInfoElement").show_node(_id)
+
+
+func _on_FullTextSearch_gui_input(event):
+	if (event is InputEventMouseButton
+	and event.pressed
+	and event.button_index == BUTTON_LEFT
+	and not popup.visible):
+		_on_FullTextSearch_text_changed(text)
