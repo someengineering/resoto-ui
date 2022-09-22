@@ -1,4 +1,8 @@
-[gd_scene load_steps=31 format=2]
+<<<<<<< HEAD
+[gd_scene load_steps=16 format=2]
+=======
+[gd_scene load_steps=32 format=2]
+>>>>>>> 9c8478f (Progress for rebase.)
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -10,7 +14,6 @@
 [ext_resource path="res://scripts/ui_content.gd" type="Script" id=8]
 [ext_resource path="res://components/terminal/component_terminal_manager.tscn" type="PackedScene" id=9]
 [ext_resource path="res://components/toast/ToastManager.tscn" type="PackedScene" id=10]
-[ext_resource path="res://components/popups/popup_generic_confirm.gd" type="Script" id=11]
 [ext_resource path="res://components/widgets/DashboardManager.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/elements/HamburgerButton.tscn" type="PackedScene" id=13]
 [ext_resource path="res://ui/elements/FullTextSearch.tscn" type="PackedScene" id=14]
@@ -289,8 +292,8 @@ custom_constants/separation = 0
 
 [node name="TopMenu" type="PanelContainer" parent="MenuBar/MenuContainer"]
 margin_right = 1920.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 0, 30 )
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 custom_styles/panel = SubResource( 3 )
 __meta__ = {
@@ -463,84 +466,6 @@ one_shot = true
 
 [node name="ConnectTimeoutTimer" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
 
-[node name="ConfirmPopup" type="PopupDialog" parent="Popups"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = -1920.0
-margin_bottom = -1080.0
-rect_min_size = Vector2( 400, 150 )
-theme = ExtResource( 2 )
-custom_styles/panel = SubResource( 7 )
-popup_exclusive = true
-script = ExtResource( 11 )
-
-[node name="Content" type="VBoxContainer" parent="Popups/ConfirmPopup"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_constants/separation = 0
-
-[node name="Label" type="Label" parent="Popups/ConfirmPopup/Content"]
-margin_right = 400.0
-margin_bottom = 21.0
-rect_min_size = Vector2( 100, 0 )
-custom_styles/normal = SubResource( 8 )
-text = "Confirm Dialogue"
-align = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="Popups/ConfirmPopup/Content"]
-margin_top = 21.0
-margin_right = 400.0
-margin_bottom = 150.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_constants/margin_right = 20
-custom_constants/margin_top = 10
-custom_constants/margin_left = 20
-custom_constants/margin_bottom = 20
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Content" type="VBoxContainer" parent="Popups/ConfirmPopup/Content/MarginContainer"]
-margin_left = 20.0
-margin_top = 10.0
-margin_right = 380.0
-margin_bottom = 109.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="Popups/ConfirmPopup/Content/MarginContainer/Content"]
-margin_right = 360.0
-margin_bottom = 70.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Question"
-
-[node name="Buttons" type="HBoxContainer" parent="Popups/ConfirmPopup/Content/MarginContainer/Content"]
-margin_top = 74.0
-margin_right = 360.0
-margin_bottom = 99.0
-custom_constants/separation = 20
-alignment = 1
-
-[node name="LeftButton" type="Button" parent="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons"]
-margin_left = 90.0
-margin_right = 170.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 80, 0 )
-theme_type_variation = "ButtonFlat"
-text = "Yes"
-flat = true
-
-[node name="RightButton" type="Button" parent="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons"]
-margin_left = 190.0
-margin_right = 270.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 80, 0 )
-theme_type_variation = "ButtonFlat"
-text = "Cancel"
-flat = true
-
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
 [node name="BrowserCopyPasteWatcher" type="Node" parent="."]
@@ -552,9 +477,8 @@ flat = true
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/MenuItems/ButtonDocs" to="MenuBar" method="_on_ButtonDocs_pressed"]
 [connection signal="hamburger_button_pressed" from="MenuBar/MenuContainer/TopMenu/Title/HamburgerButton" to="MenuBar" method="_on_HamburgerButton_hamburger_button_pressed"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
+[connection signal="connected" from="Popups/ConnectPopup/Content/MarginContainer/Connect" to="Content/Content/DashBoardManager" method="request_saved_dashboards"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
 [connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectDelay" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectDelay_timeout"]
 [connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectTimeoutTimer" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectTimeoutTimer_timeout"]
-[connection signal="pressed" from="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons/LeftButton" to="Popups/ConfirmPopup" method="_on_LeftButton_pressed"]
-[connection signal="pressed" from="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons/RightButton" to="Popups/ConfirmPopup" method="_on_RightButton_pressed"]
