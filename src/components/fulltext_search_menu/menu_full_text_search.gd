@@ -66,22 +66,23 @@ func show_search_results(results:Array) -> void:
 		new_result.connect("pressed", self, "on_result_button_clicked", [r.id])
 		new_result.hint_tooltip = "id: " + r.id
 		new_result.set_meta("id", r.id)
-		var r_cloud = "n/a"
-		var r_account = "n/a"
-		var r_region = "n/a"
+		var ancestors:String = ""
 		if r.has("ancestors"):
 			if r.ancestors.has("cloud"):
-				r_cloud = r.ancestors.cloud.reported.name
+				ancestors += r.ancestors.cloud.reported.name
 			if r.ancestors.has("account"):
-				r_account = r.ancestors.account.reported.name
+				var r_account = r.ancestors.account.reported.name
 				r_account = Utils.truncate_string(r_account, new_result.get_node("VBox/ResultDetails").get_font("font"), 150.0)
+				ancestors += " > " + r_account
 			if r.ancestors.has("region"):
-				r_region = r.ancestors.region.reported.name
+				ancestors += " > " + r.ancestors.region.reported.name
+			if r.ancestors.has("zone"):
+				ancestors += " > " + r.ancestors.zone.reported.name
 		
 		var r_name = r.reported.name
 		var r_kind = r.reported.kind
 		new_result.get_node("VBox/ResultName").text = "[" + r_kind + "] :: " + r_name
-		new_result.get_node("VBox/ResultDetails").text = r_cloud + " > " + r_account + " > " + r_region
+		new_result.get_node("VBox/ResultDetails").text = ancestors
 		popup_results.add_child(new_result)
 	
 	yield(get_tree(), "idle_frame")
@@ -93,8 +94,8 @@ func show_search_results(results:Array) -> void:
 
 
 func on_result_button_clicked(_id:String):
-	_g.content_manager.change_section("node_info")
-	_g.content_manager.get_node("Content/NodeInfoManager/NodeInfoElement").show_node(_id)
+	_g.content_manager.change_section("node_single_info")
+	_g.content_manager.find_node("NodeSingleInfo").show_node(_id)
 
 
 func _on_FullTextSearch_gui_input(event):

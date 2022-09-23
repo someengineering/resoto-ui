@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/hamburger-menu-icon.svg-b2b4f264f4d38aab75f60ebb59c45f80.stex"
+path="res://.import/search-blue-01.svg-84f14baca451b343e8abeb2ce56ed871.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/hamburger-menu-icon.svg"
-dest_files=[ "res://.import/hamburger-menu-icon.svg-b2b4f264f4d38aab75f60ebb59c45f80.stex" ]
+source_file="res://assets/search-blue-01.svg"
+dest_files=[ "res://.import/search-blue-01.svg-84f14baca451b343e8abeb2ce56ed871.stex" ]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
 flags/filter=true
-flags/mipmaps=true
+flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true
@@ -32,4 +32,4 @@ process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true
-svg/scale=1.0
+svg/scale=0.2
