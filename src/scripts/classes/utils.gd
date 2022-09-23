@@ -85,6 +85,20 @@ static func truncate_string(_string:String, font:Font, _max_size:float=30.0) -> 
 	return truncated_text
 
 
+static func truncate_string_px(_string:String, letter_size:float, _max_size:float=30.0) -> String:
+	var truncated_text = ""
+	var i : int = 0
+	
+	while str(truncated_text+"...  ").length() * letter_size < _max_size:
+		if i >= _string.length():
+			break
+		truncated_text += _string[i]
+		i += 1
+	if truncated_text != _string:
+		truncated_text += "..."
+	return truncated_text
+
+
 static func print_dict(_dict:Dictionary, _depth:int) -> void:
 	var _spacing = ""
 	for i in _depth:

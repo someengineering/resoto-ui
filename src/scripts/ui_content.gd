@@ -5,7 +5,8 @@ onready var sections = {
 	"dashboards": $Content/DashBoardManager,
 	"config": $Content/ConfigManager,
 	"message_log": $Content/MessageLog,
-	"node_info": $Content/NodeInfoManager
+	"node_single_info": $Content/NodeSingleInfo,
+	"node_list_info": $Content/NodeListElement
 }
 
 var active_section = "terminal"

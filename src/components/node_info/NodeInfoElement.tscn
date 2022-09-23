@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://ui/elements/Element_TreeMap.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/element-01.svg" type="Texture" id=5]
+[ext_resource path="res://scripts/tools/right_click_copy.gd" type="Script" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -10,19 +13,32 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 3 )
 
-[node name="NodeInfoElement" type="PanelContainer"]
-margin_left = 10.0
-margin_top = 40.0
-margin_right = 1890.0
-margin_bottom = 1012.0
+[sub_resource type="DynamicFont" id=2]
+size = 26
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="NodeInfoElement" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 theme = ExtResource( 2 )
 script = ExtResource( 1 )
 
 [node name="Margin" type="MarginContainer" parent="."]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 1875.0
-margin_bottom = 967.0
+margin_right = 1920.0
+margin_bottom = 1080.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -31,49 +47,71 @@ custom_constants/margin_bottom = 10
 [node name="VBox" type="VBoxContainer" parent="Margin"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 1860.0
-margin_bottom = 952.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+mouse_filter = 2
 
-[node name="NodeTitle" type="HBoxContainer" parent="Margin/VBox"]
-margin_right = 1850.0
+[node name="TitleBar" type="HBoxContainer" parent="Margin/VBox"]
+margin_right = 1900.0
 margin_bottom = 39.0
+mouse_filter = 2
+custom_constants/separation = 10
 
-[node name="NodeNameLabel" type="Label" parent="Margin/VBox/NodeTitle"]
-margin_right = 1702.0
+[node name="NodeIcon" type="TextureRect" parent="Margin/VBox/TitleBar"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_right = 30.0
 margin_bottom = 39.0
-size_flags_horizontal = 3
+rect_min_size = Vector2( 30, 0 )
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
+
+[node name="NodeNameLabel" type="Label" parent="Margin/VBox/TitleBar"]
+margin_left = 40.0
+margin_right = 203.0
+margin_bottom = 39.0
+mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
 text = "Node Name"
+script = ExtResource( 6 )
 
-[node name="NodeKindLabel" type="Label" parent="Margin/VBox/NodeTitle"]
-margin_left = 1706.0
-margin_right = 1850.0
-margin_bottom = 39.0
-custom_fonts/font = SubResource( 1 )
-text = "Node Kind"
+[node name="BreadcrumbContainer" type="HBoxContainer" parent="Margin/VBox"]
+margin_top = 43.0
+margin_right = 1900.0
+margin_bottom = 43.0
+custom_constants/separation = 10
 
 [node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
 modulate = Color( 1, 1, 1, 0.501961 )
-margin_top = 43.0
-margin_right = 1850.0
-margin_bottom = 47.0
+margin_top = 47.0
+margin_right = 1900.0
+margin_bottom = 51.0
 
 [node name="NodeContent" type="HBoxContainer" parent="Margin/VBox"]
-margin_top = 51.0
-margin_right = 1850.0
-margin_bottom = 175.0
+margin_top = 55.0
+margin_right = 1900.0
+margin_bottom = 1060.0
+size_flags_vertical = 3
+custom_constants/separation = 50
 
 [node name="NodeDetails" type="VBoxContainer" parent="Margin/VBox/NodeContent"]
 margin_right = 400.0
-margin_bottom = 124.0
+margin_bottom = 1005.0
 rect_min_size = Vector2( 400, 0 )
 custom_constants/separation = 20
 
-[node name="GridContainer" type="GridContainer" parent="Margin/VBox/NodeContent/NodeDetails"]
+[node name="NodeKindLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails"]
 margin_right = 400.0
-margin_bottom = 71.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 2 )
+text = "Node Kind"
+
+[node name="GridContainer" type="GridContainer" parent="Margin/VBox/NodeContent/NodeDetails"]
+margin_top = 52.0
+margin_right = 400.0
+margin_bottom = 148.0
 rect_min_size = Vector2( 400, 0 )
-size_flags_vertical = 3
+mouse_filter = 2
 custom_constants/hseparation = 20
 columns = 2
 
@@ -87,7 +125,9 @@ text = "Node id:"
 margin_left = 220.0
 margin_right = 240.0
 margin_bottom = 21.0
+mouse_filter = 1
 text = "id"
+script = ExtResource( 6 )
 
 [node name="NodeCtimeLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
 margin_top = 25.0
@@ -100,7 +140,9 @@ margin_left = 220.0
 margin_top = 25.0
 margin_right = 240.0
 margin_bottom = 46.0
+mouse_filter = 1
 text = "00"
+script = ExtResource( 6 )
 
 [node name="NodeAgeLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
 margin_top = 50.0
@@ -113,12 +155,29 @@ margin_left = 220.0
 margin_top = 50.0
 margin_right = 240.0
 margin_bottom = 71.0
+mouse_filter = 1
 text = "00"
+script = ExtResource( 6 )
+
+[node name="NodeDescendantCountLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
+margin_top = 75.0
+margin_right = 200.0
+margin_bottom = 96.0
+text = "Descendants:"
+
+[node name="NodeDescendantCountValueLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/GridContainer"]
+margin_left = 220.0
+margin_top = 75.0
+margin_right = 240.0
+margin_bottom = 96.0
+mouse_filter = 1
+text = "00"
+script = ExtResource( 6 )
 
 [node name="TagsGroup" type="VBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails"]
-margin_top = 91.0
+margin_top = 168.0
 margin_right = 400.0
-margin_bottom = 124.0
+margin_bottom = 201.0
 
 [node name="NodeTagsLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup"]
 margin_right = 400.0
@@ -138,3 +197,82 @@ margin_right = 400.0
 margin_bottom = 33.0
 custom_constants/hseparation = 20
 columns = 2
+
+[node name="Spacer" type="Control" parent="Margin/VBox/NodeContent/NodeDetails"]
+margin_top = 221.0
+margin_right = 400.0
+margin_bottom = 952.0
+size_flags_vertical = 3
+
+[node name="Actions" type="HBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails"]
+margin_top = 972.0
+margin_right = 400.0
+margin_bottom = 1005.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 0
+custom_constants/separation = 10
+
+[node name="AncestorsButton" type="Button" parent="Margin/VBox/NodeContent/NodeDetails/Actions"]
+margin_right = 195.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+text = "Show Ancestors"
+
+[node name="DescendantsButton" type="Button" parent="Margin/VBox/NodeContent/NodeDetails/Actions"]
+margin_left = 205.0
+margin_right = 400.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+text = "Show Descandants"
+
+[node name="TreeMapContainer" type="PanelContainer" parent="Margin/VBox/NodeContent"]
+margin_left = 450.0
+margin_right = 1900.0
+margin_bottom = 1005.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 3 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin/VBox/NodeContent/TreeMapContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1440.0
+margin_bottom = 995.0
+
+[node name="NodeKindLabel" type="Label" parent="Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer"]
+margin_right = 1430.0
+margin_bottom = 21.0
+text = "Node Descendants Treemap"
+
+[node name="TreeMap" parent="Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 25.0
+margin_right = 1430.0
+margin_bottom = 985.0
+size_flags_horizontal = 11
+size_flags_vertical = 3
+
+[node name="Templates" type="Control" parent="."]
+visible = false
+margin_right = 1920.0
+margin_bottom = 1080.0
+
+[node name="BreadcrumbButton" type="Button" parent="Templates"]
+margin_left = 10.0
+margin_top = 53.0
+margin_right = 75.0
+margin_bottom = 86.0
+text = "Cloud"
+
+[node name="BreadcrumbArrow" type="Label" parent="Templates"]
+margin_left = 85.0
+margin_top = 59.0
+margin_right = 93.0
+margin_bottom = 80.0
+text = ">"
+valign = 1
+
+[connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/Actions/AncestorsButton" to="." method="_on_AncestorsButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/Actions/DescendantsButton" to="." method="_on_DescendantsButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed"]
