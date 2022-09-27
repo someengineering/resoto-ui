@@ -1,0 +1,123 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/search_cards/filter_element_edit.gd" type="Script" id=4]
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0392157, 0.133333, 0.227451, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.156863 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 10 )
+
+[node name="FilterElementWrapper" type="PanelContainer"]
+margin_right = 200.0
+margin_bottom = 248.0
+rect_min_size = Vector2( 200, 0 )
+custom_styles/panel = SubResource( 4 )
+script = ExtResource( 4 )
+
+[node name="FilterEditElement" type="VBoxContainer" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 190.0
+margin_bottom = 238.0
+custom_constants/separation = 5
+
+[node name="DeleteButton" type="Button" parent="FilterEditElement"]
+margin_left = 160.0
+margin_right = 180.0
+margin_bottom = 20.0
+size_flags_horizontal = 8
+text = "X"
+
+[node name="VBoxContainer" type="HBoxContainer" parent="FilterEditElement"]
+margin_top = 25.0
+margin_right = 180.0
+margin_bottom = 25.0
+
+[node name="DescriptionLabel" type="Label" parent="FilterEditElement"]
+margin_top = 30.0
+margin_right = 180.0
+margin_bottom = 44.0
+size_flags_horizontal = 3
+text = "kind"
+
+[node name="ComboBox" parent="FilterEditElement" instance=ExtResource( 3 )]
+margin_top = 49.0
+margin_right = 180.0
+margin_bottom = 82.0
+text = "aws_ec2_instance"
+
+[node name="Spacer" type="Control" parent="FilterEditElement"]
+margin_top = 87.0
+margin_right = 180.0
+margin_bottom = 97.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="PropertiesLabel" type="Label" parent="FilterEditElement"]
+margin_top = 102.0
+margin_right = 180.0
+margin_bottom = 116.0
+text = "properties"
+
+[node name="PropertiesContainer" type="VBoxContainer" parent="FilterEditElement"]
+margin_top = 121.0
+margin_right = 180.0
+margin_bottom = 173.0
+
+[node name="Property" type="HBoxContainer" parent="FilterEditElement/PropertiesContainer"]
+margin_right = 180.0
+margin_bottom = 24.0
+custom_constants/separation = 20
+
+[node name="PropertyLabel" type="Label" parent="FilterEditElement/PropertiesContainer/Property"]
+margin_top = 5.0
+margin_right = 80.0
+margin_bottom = 19.0
+size_flags_horizontal = 3
+text = "age"
+align = 2
+
+[node name="PropertyEdit" type="LineEdit" parent="FilterEditElement/PropertiesContainer/Property"]
+margin_left = 100.0
+margin_right = 180.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "<5d"
+
+[node name="Property2" type="HBoxContainer" parent="FilterEditElement/PropertiesContainer"]
+margin_top = 28.0
+margin_right = 180.0
+margin_bottom = 52.0
+custom_constants/separation = 20
+
+[node name="PropertyLabel" type="Label" parent="FilterEditElement/PropertiesContainer/Property2"]
+margin_top = 5.0
+margin_right = 80.0
+margin_bottom = 19.0
+size_flags_horizontal = 3
+text = "cores"
+align = 2
+
+[node name="PropertyEdit" type="LineEdit" parent="FilterEditElement/PropertiesContainer/Property2"]
+margin_left = 100.0
+margin_right = 180.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "4"
+
+[node name="Spacer2" type="Control" parent="FilterEditElement"]
+margin_top = 178.0
+margin_right = 180.0
+margin_bottom = 188.0
+rect_min_size = Vector2( 0, 10 )
+
+[connection signal="pressed" from="FilterEditElement/DeleteButton" to="." method="_on_DeleteButton_pressed"]
