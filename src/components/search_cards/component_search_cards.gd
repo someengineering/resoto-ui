@@ -108,13 +108,20 @@ class ComplexRoot:
 			return result
 		else:
 			return [Property.new(path+name, kind, prop.synthetic)]
+
+	static func bases(kinds: Dictionary, result: Dictionary, current: Kind) -> Array:
+		for base in current.bases:
+			result[base] = true
+			bases(kinds, result, kinds[base])
+		return result.keys()
+		
 				
 	static func complex_roots(kinds: Dictionary) -> Dictionary:
 		var roots := {}
 		for kind in kinds.values():
 			if kind.aggregate_root:
 				var props = kind.properties.duplicate()
-				for base in kind.bases:
+				for base in bases(kinds, {}, kind):
 					props.append_array(kinds[base].properties)				
 				var resolved = []
 				for prop in props:
