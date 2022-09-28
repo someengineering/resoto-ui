@@ -6,6 +6,8 @@ signal date_picked(date)
 const days := ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 const months := ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "Nombember", "December"]
 
+export (bool) var show_time_picker:bool = true
+
 onready var date_label := $VBoxContainer/CurrentDateContainer/Label
 onready var current_date_dict := Time.get_datetime_dict_from_system()
 onready var current_date := Time.get_unix_time_from_system()
@@ -14,10 +16,16 @@ onready var hour_edit := $VBoxContainer/TimePicker/Hour
 onready var minute_edit := $VBoxContainer/TimePicker/Minute
 
 func _ready() -> void:
-	hour_edit.value = current_date_dict["hour"]
-	hour_edit.connect("value_changed", self, "_on_Hour_value_changed")
-	minute_edit.value =  current_date_dict["minute"]
-	minute_edit.connect("value_changed", self, "_on_Minute_value_changed")
+	if show_time_picker:
+		hour_edit.value = current_date_dict["hour"]
+		hour_edit.connect("value_changed", self, "_on_Hour_value_changed")
+		minute_edit.value =  current_date_dict["minute"]
+		minute_edit.connect("value_changed", self, "_on_Minute_value_changed")
+	else:
+		hour_edit.hide()
+		minute_edit.hide()
+		$VBoxContainer/HSeparator.hide()
+		
 	refresh_calendar()
 	
 func refresh_calendar(date_dict : Dictionary = current_date_dict) -> void:

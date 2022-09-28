@@ -1,0 +1,233 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
+[ext_resource path="res://components/search_cards/navigation_panel.gd" type="Script" id=3]
+[ext_resource path="res://assets/traversal_icon_circle.svg" type="Texture" id=4]
+[ext_resource path="res://assets/traversal_icon_arrow.svg" type="Texture" id=5]
+[ext_resource path="res://assets/traversal_icon_cube.svg" type="Texture" id=6]
+[ext_resource path="res://assets/traversal_icon_d_circle.svg" type="Texture" id=7]
+[ext_resource path="res://assets/traversal_icon_d_arrow.svg" type="Texture" id=8]
+[ext_resource path="res://assets/traversal_icon_d_cube.svg" type="Texture" id=9]
+[ext_resource path="res://assets/edit.png" type="Texture" id=10]
+[ext_resource path="res://assets/theme/SourceCodePro-Bold.ttf" type="DynamicFontData" id=11]
+
+[sub_resource type="StyleBoxFlat" id=12]
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 20.0
+bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="DynamicFont" id=11]
+size = 24
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 20
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = -5
+extra_spacing_bottom = -3
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 28
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 11 )
+
+[node name="NavigationPanel" type="PanelContainer"]
+margin_left = 820.0
+margin_top = 337.0
+margin_right = 1060.0
+margin_bottom = 419.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 4
+theme = ExtResource( 2 )
+custom_styles/panel = SubResource( 12 )
+script = ExtResource( 3 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 380.0
+margin_bottom = 107.0
+custom_constants/separation = 20
+
+[node name="TitleBar" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 360.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 0, 28 )
+custom_constants/separation = 10
+alignment = 2
+
+[node name="Headline" type="Label" parent="VBoxContainer/TitleBar"]
+margin_right = 112.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 11 )
+text = "Navigation"
+
+[node name="Control" type="Control" parent="VBoxContainer/TitleBar"]
+margin_left = 122.0
+margin_right = 268.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+
+[node name="ModeButton" type="Button" parent="VBoxContainer/TitleBar"]
+margin_left = 278.0
+margin_right = 314.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 36, 29 )
+mouse_filter = 1
+size_flags_horizontal = 8
+custom_fonts/font = SubResource( 10 )
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TitleBar/ModeButton"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/TitleBar/ModeButton/MarginContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 32.0
+margin_bottom = 25.0
+mouse_filter = 2
+shortcut_in_tooltip = false
+texture_normal = ExtResource( 10 )
+expand = true
+stretch_mode = 5
+
+[node name="DeleteButton" type="Button" parent="VBoxContainer/TitleBar"]
+margin_left = 324.0
+margin_right = 360.0
+margin_bottom = 29.0
+mouse_filter = 1
+size_flags_horizontal = 8
+custom_fonts/font = SubResource( 10 )
+text = "X"
+
+[node name="Icons" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 49.0
+margin_right = 360.0
+margin_bottom = 97.0
+alignment = 1
+
+[node name="Inbound" type="TextureButton" parent="VBoxContainer/Icons"]
+margin_left = 52.0
+margin_right = 100.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 4 )
+expand = true
+stretch_mode = 5
+
+[node name="ArrowLeft" type="TextureButton" parent="VBoxContainer/Icons"]
+margin_left = 104.0
+margin_right = 152.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 5 )
+texture_hover = ExtResource( 5 )
+expand = true
+stretch_mode = 5
+
+[node name="Result" type="TextureButton" parent="VBoxContainer/Icons"]
+margin_left = 156.0
+margin_right = 204.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 6 )
+expand = true
+stretch_mode = 5
+
+[node name="Connector" type="Line2D" parent="VBoxContainer/Icons/Result"]
+points = PoolVector2Array( 24, 3, 24, -84 )
+default_color = Color( 0, 0.301961, 0.584314, 1 )
+
+[node name="Rectangle" type="Line2D" parent="VBoxContainer/Icons/Result"]
+points = PoolVector2Array( 0, 0, 48, 0, 48, 48, 0, 48, 0, -3 )
+width = 6.0
+default_color = Color( 0, 0.301961, 0.584314, 1 )
+
+[node name="ArrowRight" type="TextureButton" parent="VBoxContainer/Icons"]
+margin_left = 208.0
+margin_right = 256.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 5 )
+texture_hover = ExtResource( 5 )
+expand = true
+stretch_mode = 5
+flip_h = true
+
+[node name="Outbound" type="TextureButton" parent="VBoxContainer/Icons"]
+margin_left = 260.0
+margin_right = 308.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 4 )
+expand = true
+stretch_mode = 5
+
+[node name="ManualEdit" type="LineEdit" parent="VBoxContainer"]
+visible = false
+margin_left = 72.0
+margin_top = 49.0
+margin_right = 288.0
+margin_bottom = 97.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 4
+custom_fonts/font = SubResource( 13 )
+text = "-->"
+align = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/ManualEdit"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/ManualEdit/CenterContainer"]
+margin_left = 108.0
+margin_top = 24.0
+margin_right = 108.0
+margin_bottom = 24.0
+mouse_filter = 2
+
+[node name="Connector" type="Line2D" parent="VBoxContainer/ManualEdit/CenterContainer/Control"]
+position = Vector2( -24, -24 )
+points = PoolVector2Array( 24, 3, 24, -84 )
+default_color = Color( 0, 0.301961, 0.584314, 1 )
+
+[node name="Rectangle" type="Line2D" parent="VBoxContainer/ManualEdit/CenterContainer/Control"]
+position = Vector2( 0, -24 )
+points = PoolVector2Array( -100, 0, 100, 0, 100, 48, -100, 48, -100, -3 )
+width = 6.0
+default_color = Color( 0, 0.301961, 0.584314, 1 )
+
+[connection signal="pressed" from="VBoxContainer/TitleBar/ModeButton" to="." method="_on_ModeButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/TitleBar/DeleteButton" to="." method="_on_DeleteButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/Icons/Inbound" to="." method="_on_Inbound_pressed"]
+[connection signal="pressed" from="VBoxContainer/Icons/ArrowLeft" to="." method="_on_Inbound_pressed"]
+[connection signal="pressed" from="VBoxContainer/Icons/Result" to="." method="_on_Result_pressed"]
+[connection signal="pressed" from="VBoxContainer/Icons/ArrowRight" to="." method="_on_Outbound_pressed"]
+[connection signal="pressed" from="VBoxContainer/Icons/Outbound" to="." method="_on_Outbound_pressed"]

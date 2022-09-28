@@ -73,6 +73,10 @@ func _on_MetricsOptions_option_changed(option : String) -> void:
 
 
 func _on_metrics_query_finished(_error:int, response) -> void:
+	if _error != 0:
+		_g.emit_signal("add_toast", "Metrics Error", "", 1, self)
+		return
+	
 	var labels := []
 	var data = response.transformed.result
 	if data.data.result.size() == 0:

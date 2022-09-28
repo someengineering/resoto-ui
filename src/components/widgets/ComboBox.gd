@@ -2,8 +2,11 @@ tool
 extends Control
 
 signal option_changed(option)
+signal text_changed
 
 export (Array, String) var items
+export (bool) var use_filter = true
+export (bool) var align_elements_left:bool = false
 
 var matching_items : Array
 var previous_option : String = ""
@@ -42,7 +45,7 @@ func get_text() -> String:
 func populate_options(filter : String = "") -> void:
 	for option in options_container.get_children():
 		option.queue_free()
-	if filter == "":
+	if filter == "" or not use_filter:
 		for item in items:
 			add_option(item)
 	else:
@@ -67,11 +70,15 @@ func add_option(option_name : String) -> void:
 	var button := Button.new()
 	button.size_flags_horizontal = SIZE_EXPAND_FILL
 	button.text = option_name
+	if align_elements_left:
+		button.align = Button.ALIGN_LEFT
 	button.connect("pressed", self, "_on_option_pressed", [option_name])
 	options_container.add_child(button)
 
 
 func _on_LineEdit_text_changed(new_text : String) -> void:
+	if not use_filter:
+		emit_signal("text_changed", new_text)
 	populate_options(new_text)
 	show_options()
 	line_edit.grab_focus()

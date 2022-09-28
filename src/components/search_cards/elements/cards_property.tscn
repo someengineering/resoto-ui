@@ -1,0 +1,197 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://components/search_cards/elements/cards_property.gd" type="Script" id=1]
+[ext_resource path="res://components/search_cards/elements/cards_property_operator_popup.gd" type="Script" id=2]
+[ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/theme/Barlow-Bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://components/config/component_config_line_edit_float.gd" type="Script" id=5]
+[ext_resource path="res://components/config/component_config_line_edit_int.gd" type="Script" id=6]
+[ext_resource path="res://components/search_cards/elements/cards_bool_checkbox.gd" type="Script" id=7]
+[ext_resource path="res://components/widgets/DatePickerLineEdit.tscn" type="PackedScene" id=8]
+
+[sub_resource type="DynamicFont" id=8]
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 4 )
+
+[node name="Property" type="HBoxContainer"]
+margin_right = 380.0
+margin_bottom = 33.0
+script = ExtResource( 1 )
+
+[node name="PropertyComboBox" parent="." instance=ExtResource( 3 )]
+margin_right = 154.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+use_filter = false
+align_elements_left = true
+
+[node name="PropertyOperatorButton" type="Button" parent="."]
+margin_left = 158.0
+margin_right = 198.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 40, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "="
+
+[node name="Popup" type="PopupPanel" parent="PropertyOperatorButton"]
+visible = true
+margin_right = 114.0
+margin_bottom = 178.0
+script = ExtResource( 2 )
+
+[node name="Grid" type="GridContainer" parent="PropertyOperatorButton/Popup"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 110.0
+margin_bottom = 174.0
+custom_constants/vseparation = 10
+columns = 2
+
+[node name="EqualBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_right = 50.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "="
+
+[node name="NotEqualBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_left = 54.0
+margin_right = 106.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "!="
+
+[node name="LessEqualBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_top = 36.0
+margin_right = 50.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "<="
+
+[node name="GreaterEqualBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_left = 54.0
+margin_top = 36.0
+margin_right = 106.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = ">="
+
+[node name="LessBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_top = 72.0
+margin_right = 50.0
+margin_bottom = 98.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "<"
+
+[node name="GreaterBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_left = 54.0
+margin_top = 72.0
+margin_right = 106.0
+margin_bottom = 98.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = ">"
+
+[node name="RegexBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_top = 108.0
+margin_right = 50.0
+margin_bottom = 134.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "~="
+
+[node name="RegexNotBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_left = 54.0
+margin_top = 108.0
+margin_right = 106.0
+margin_bottom = 134.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "!~"
+
+[node name="InBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_top = 144.0
+margin_right = 50.0
+margin_bottom = 170.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "in"
+
+[node name="NotInBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
+margin_left = 54.0
+margin_top = 144.0
+margin_right = 106.0
+margin_bottom = 170.0
+rect_min_size = Vector2( 50, 0 )
+custom_fonts/font = SubResource( 8 )
+text = "not in"
+
+[node name="PropertyEdit" type="HBoxContainer" parent="."]
+margin_left = 202.0
+margin_right = 356.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="IntEdit" type="LineEdit" parent="PropertyEdit"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+script = ExtResource( 6 )
+
+[node name="FloatEdit" type="LineEdit" parent="PropertyEdit"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+script = ExtResource( 5 )
+
+[node name="StringEdit" type="LineEdit" parent="PropertyEdit"]
+visible = false
+margin_right = 154.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+
+[node name="DatePickerLineEdit" parent="PropertyEdit" instance=ExtResource( 8 )]
+margin_left = 48.0
+margin_right = 106.0
+margin_bottom = 33.0
+
+[node name="CheckBox" type="CheckBox" parent="PropertyEdit"]
+visible = false
+margin_left = 79.0
+margin_right = 137.0
+margin_bottom = 33.0
+size_flags_horizontal = 0
+text = "false"
+script = ExtResource( 7 )
+
+[node name="PropertyDeleteButton" type="Button" parent="."]
+margin_left = 360.0
+margin_right = 380.0
+margin_bottom = 33.0
+text = "X"
+
+[connection signal="option_changed" from="PropertyComboBox" to="." method="_on_PropertyComboBox_option_changed"]
+[connection signal="text_changed" from="PropertyComboBox" to="." method="_on_PropertyComboBox_text_changed"]
+[connection signal="pressed" from="PropertyOperatorButton" to="." method="_on_PropertyOperatorButton_pressed"]
+[connection signal="about_to_show" from="PropertyOperatorButton/Popup" to="PropertyOperatorButton/Popup" method="_on_Popup_about_to_show"]
+[connection signal="update_operator" from="PropertyOperatorButton/Popup" to="." method="_on_Popup_update_operator"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/EqualBtn" to="PropertyOperatorButton/Popup" method="_on_EqualBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/NotEqualBtn" to="PropertyOperatorButton/Popup" method="_on_NotEqualBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/LessEqualBtn" to="PropertyOperatorButton/Popup" method="_on_LessEqualBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/GreaterEqualBtn" to="PropertyOperatorButton/Popup" method="_on_GreaterEqualBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/LessBtn" to="PropertyOperatorButton/Popup" method="_on_LessBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/GreaterBtn" to="PropertyOperatorButton/Popup" method="_on_GreaterBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/RegexBtn" to="PropertyOperatorButton/Popup" method="_on_RegexBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/RegexNotBtn" to="PropertyOperatorButton/Popup" method="_on_RegexNotBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/InBtn" to="PropertyOperatorButton/Popup" method="_on_InBtn_pressed"]
+[connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/NotInBtn" to="PropertyOperatorButton/Popup" method="_on_NotInBtn_pressed"]
+[connection signal="pressed" from="PropertyEdit/CheckBox" to="PropertyEdit/CheckBox" method="_on_CheckBox_pressed"]
+[connection signal="pressed" from="PropertyDeleteButton" to="." method="_on_PropertyDeleteButton_pressed"]

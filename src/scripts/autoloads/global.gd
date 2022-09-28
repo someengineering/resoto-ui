@@ -20,6 +20,8 @@ var content_manager: Node = null
 var popup_manager: CanvasLayer = null
 
 
+
+
 func set_ui_shrink(new_shrink:float) -> void:
 	ui_shrink = new_shrink
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED,  SceneTree.STRETCH_ASPECT_EXPAND, Vector2(1920,1080), ui_shrink)

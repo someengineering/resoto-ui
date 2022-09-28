@@ -1,4 +1,19 @@
 extends Control
+class_name SearchCards
+
+enum PropertyOperators {equal, not_equal, less, less_equal, 
+	greater, greater_equal, regex, regex_not, in_o, not_in_o}
+
+var PropertyTypes:Dictionary = {
+	"bool":null,
+	"date":null,
+	"datetime":null,
+	"duration":null,
+	"string":null,
+	"int32":null,
+	"int64":null,
+	"float":null,
+	"double":null }
 
 var all_kinds := {}
 var complex_kinds := {}
@@ -188,7 +203,7 @@ func properties(kind: String, name) -> Array: # Array[String]
 		result.append(entry[0])
 	return result
 
-func propery(kind: String, name: String) -> Property:
+func property(kind: String, name: String) -> Property:
 	var cpl: ComplexRoot = complex_kinds.get(kind)
 	if cpl:
 		return cpl.property_by_name.get(name)
