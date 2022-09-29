@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=45 format=2]
+[gd_resource type="Theme" load_steps=53 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -63,6 +63,56 @@ content_margin_left = 12.0
 content_margin_right = 12.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
+bg_color = Color( 0, 0.27176, 0.527344, 1 )
+border_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=43]
+content_margin_left = 3.0
+content_margin_right = 3.0
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
+border_color = Color( 0.462745, 0.25098, 0.737255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id=47]
+
+[sub_resource type="StyleBoxFlat" id=45]
+content_margin_left = 3.0
+content_margin_right = 3.0
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color( 0, 0.329412, 0.639216, 1 )
+border_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=42]
+content_margin_left = 3.0
+content_margin_right = 3.0
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=46]
+content_margin_left = 3.0
+content_margin_right = 3.0
+content_margin_top = 3.0
+content_margin_bottom = 3.0
 bg_color = Color( 0, 0.27176, 0.527344, 1 )
 border_color = Color( 0.913725, 0.552941, 0.968627, 1 )
 corner_radius_top_left = 4
@@ -165,6 +215,51 @@ corner_radius_bottom_left = 4
 [sub_resource type="StyleBoxFlat" id=7]
 content_margin_left = 6.0
 content_margin_right = 6.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
+border_width_top = 5
+border_color = Color( 0, 0.040625, 0.078125, 1 )
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=48]
+content_margin_left = 6.0
+content_margin_right = 36.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=49]
+content_margin_left = 6.0
+content_margin_right = 36.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
+border_width_top = 5
+border_color = Color( 0, 0.040625, 0.078125, 1 )
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=50]
+content_margin_left = 6.0
+content_margin_right = 36.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
 bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
@@ -369,6 +464,11 @@ Button/styles/focus = SubResource( 18 )
 Button/styles/hover = SubResource( 4 )
 Button/styles/normal = SubResource( 5 )
 Button/styles/pressed = SubResource( 38 )
+ButtonIcon/styles/disabled = SubResource( 43 )
+ButtonIcon/styles/focus = SubResource( 47 )
+ButtonIcon/styles/hover = SubResource( 45 )
+ButtonIcon/styles/normal = SubResource( 42 )
+ButtonIcon/styles/pressed = SubResource( 46 )
 CheckBox/icons/checked = ExtResource( 2 )
 CheckBox/icons/unchecked = ExtResource( 4 )
 CheckButton/icons/off = ExtResource( 1 )
@@ -395,6 +495,9 @@ LineEdit/colors/selection_color = Color( 0, 0.329412, 0.639216, 1 )
 LineEdit/styles/focus = SubResource( 6 )
 LineEdit/styles/normal = SubResource( 7 )
 LineEdit/styles/read_only = SubResource( 7 )
+LineEditRightMargin/styles/focus = SubResource( 48 )
+LineEditRightMargin/styles/normal = SubResource( 49 )
+LineEditRightMargin/styles/read_only = SubResource( 50 )
 Panel/styles/panel = SubResource( 36 )
 PanelContainer/styles/panel = SubResource( 21 )
 PopupMenu/styles/panel = SubResource( 21 )

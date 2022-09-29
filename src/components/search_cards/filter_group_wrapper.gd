@@ -14,4 +14,7 @@ func set_main(_main):
 
 func _on_DeleteButton_pressed():
 	emit_signal("delete")
-	
+
+
+func build_string():
+	return $FilterGroup.build_string()

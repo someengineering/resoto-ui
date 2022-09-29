@@ -8,6 +8,8 @@ const months := ["January", "February", "March", "April", "May", "June", "July",
 
 export (bool) var show_time_picker:bool = true
 
+var date_string:= "%d-%d-01T%d:%d:00"
+
 onready var date_label := $VBoxContainer/CurrentDateContainer/Label
 onready var current_date_dict := Time.get_datetime_dict_from_system()
 onready var current_date := Time.get_unix_time_from_system()
@@ -16,14 +18,17 @@ onready var hour_edit := $VBoxContainer/TimePicker/Hour
 onready var minute_edit := $VBoxContainer/TimePicker/Minute
 
 func _ready() -> void:
+	var datepickerline = get_parent().get_parent()
+	if "show_time_picker" in datepickerline:
+		show_time_picker = datepickerline.show_time_picker
+	
 	if show_time_picker:
 		hour_edit.value = current_date_dict["hour"]
 		hour_edit.connect("value_changed", self, "_on_Hour_value_changed")
 		minute_edit.value =  current_date_dict["minute"]
 		minute_edit.connect("value_changed", self, "_on_Minute_value_changed")
 	else:
-		hour_edit.hide()
-		minute_edit.hide()
+		$VBoxContainer/TimePicker.hide()
 		$VBoxContainer/HSeparator.hide()
 		
 	refresh_calendar()
@@ -48,7 +53,7 @@ func refresh_calendar(date_dict : Dictionary = current_date_dict) -> void:
 		l.text = d
 		grid_container.add_child(l)
 	
-	var first = Time.get_unix_time_from_datetime_string("%d-%d-01T%d:%d:00" % [year, month, current_date_dict["hour"], current_date_dict["minute"]])
+	var first = Time.get_unix_time_from_datetime_string(date_string % [year, month, current_date_dict["hour"], current_date_dict["minute"]])
 	var first_dict = Time.get_date_dict_from_unix_time(first)
 	
 	var previous = first - 3600*24*first_dict["weekday"]
@@ -81,7 +86,8 @@ func refresh_calendar(date_dict : Dictionary = current_date_dict) -> void:
 			b.self_modulate.a = 0.2
 		first += 3600*24
 		first_dict = Time.get_date_dict_from_unix_time(first)
-		
+
+
 func pick_date(date : int) -> void:
 	var new_date_dict = Time.get_datetime_dict_from_unix_time(date)
 	if new_date_dict["month"] != current_date_dict["month"] or new_date_dict["year"] != current_date_dict["year"]:
@@ -90,6 +96,7 @@ func pick_date(date : int) -> void:
 	current_date_dict = new_date_dict
 	date_label.text = Time.get_date_string_from_unix_time(date)
 	emit_signal("date_picked", date)
+
 
 func _on_PrevYear_pressed() -> void:
 	current_date_dict["year"] -= 1
@@ -109,6 +116,7 @@ func _on_NextMonth_pressed() -> void:
 func _on_NextYear_pressed() -> void:
 	current_date_dict["year"] += 1
 	refresh_calendar()
+
 
 func _on_Hour_value_changed(value : int) -> void:
 	current_date_dict["hour"] = value

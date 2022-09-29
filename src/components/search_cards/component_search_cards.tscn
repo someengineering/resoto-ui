@@ -92,7 +92,7 @@ margin_right = 1880.0
 margin_bottom = 1040.0
 size_flags_horizontal = 3
 custom_fonts/font = SubResource( 4 )
-text = "Aggregate Result"
+text = "Do"
 
 [node name="AggregationPanel" type="PanelContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
 visible = false
@@ -110,21 +110,22 @@ margin_bottom = 1000.0
 
 [node name="ResultContainer" type="VBoxContainer" parent="Margin/HBox"]
 visible = false
-margin_left = 926.0
-margin_right = 1840.0
-margin_bottom = 1000.0
+margin_left = 942.0
+margin_right = 1880.0
+margin_bottom = 1040.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="Margin/HBox/ResultContainer"]
-margin_right = 914.0
+margin_right = 938.0
 margin_bottom = 21.0
 text = "Result"
 
 [node name="TextEdit" type="TextEdit" parent="Margin/HBox/ResultContainer"]
 margin_top = 25.0
-margin_right = 914.0
-margin_bottom = 1000.0
+margin_right = 938.0
+margin_bottom = 1040.0
 size_flags_vertical = 3
 wrap_enabled = true
 
 [connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AddGroupLayer" to="Margin/HBox/MainContainer/SearchCardBuilder" method="_on_AddGroupLayer_pressed"]
+[connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregateResultButton" to="." method="_on_AggregateResultButton_pressed"]

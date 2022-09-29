@@ -24,7 +24,7 @@ onready var icon_center = 	$VBoxContainer/Icons/Result
 
 func _ready():
 	update_graphics()
-	build_string()
+#	build_string()
 
 
 func build_string():
@@ -39,8 +39,9 @@ func build_string():
 	var depth = "0" if include_result else "1"
 	t_string = t_string.format({"in":depth, "out":"1"})
 	query_string = t_string
-	emit_signal("update_string")
+	#emit_signal("update_string")
 	update_graphics()
+	return query_string
 
 
 func update_graphics():
@@ -64,12 +65,14 @@ func _on_Inbound_pressed():
 		build_string()
 		return
 	inbound = !inbound
-	build_string()
+	update_graphics()
+#	build_string()
 
 
 func _on_Result_pressed():
 	include_result = !include_result
-	build_string()
+	update_graphics()
+#	build_string()
 
 
 func _on_Outbound_pressed():
@@ -79,7 +82,8 @@ func _on_Outbound_pressed():
 		build_string()
 		return
 	outbound = !outbound
-	build_string()
+	update_graphics()
+#	build_string()
 
 
 func set_manual_mode(value:bool):

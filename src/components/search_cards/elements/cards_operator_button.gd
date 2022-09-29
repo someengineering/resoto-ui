@@ -11,3 +11,7 @@ func _on_OperatorButton_pressed():
 	else:
 		mode = Modes.AND
 		text = "and"
+
+
+func build_string():
+	return " " + text + " "

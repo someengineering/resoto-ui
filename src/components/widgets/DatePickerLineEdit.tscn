@@ -7,6 +7,7 @@
 [node name="DatePickerLineEdit" type="LineEdit"]
 margin_right = 232.0
 margin_bottom = 24.0
+theme_type_variation = "LineEditRightMargin"
 caret_blink = true
 caret_blink_speed = 0.5
 script = ExtResource( 2 )
@@ -15,9 +16,9 @@ script = ExtResource( 2 )
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -25.0
-margin_right = -1.0
-rect_min_size = Vector2( 24, 24 )
+margin_left = -33.0
+rect_min_size = Vector2( 33, 33 )
+theme_type_variation = "ButtonIcon"
 icon = ExtResource( 1 )
 flat = true
 expand_icon = true

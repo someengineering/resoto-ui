@@ -8,6 +8,7 @@ var kind:String = ""
 
 onready var delete_button = find_node("DeleteButton")
 onready var combo_box = $FilterEditElement/ComboBox
+onready var properties_container = $FilterEditElement/PropertiesContainer
 onready var property_elements = [
 	$FilterEditElement/PropertiesLabel,
 	$FilterEditElement/PropertiesContainer,
@@ -38,13 +39,12 @@ func _on_FilterElementWrapper_mouse_exited():
 func _on_ComboBox_option_changed(option):
 	kind = option
 	update_properties()
-	for c in $FilterEditElement/PropertiesContainer.get_children():
+	for c in properties_container.get_children():
 		c.update()
 
 
 func update_properties():
 	var properties = main.properties(kind, null)
-	print(properties)
 	for pe in property_elements:
 		pe.visible = kind != "" and properties != null and !properties.empty()
 
@@ -52,3 +52,11 @@ func _on_ComboBox_text_changed(text):
 	kind = text
 	update_properties()
 	combo_box.items = main.kind_names(text)
+
+
+func build_string():
+	var string = "(is(" + kind + ")"
+	for c in properties_container.get_children():
+		string += " and " + c.build_string()
+	string += ")"
+	return string

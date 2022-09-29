@@ -27,14 +27,14 @@ func _on_AddGroupLayer_pressed():
 		filter_elements.append(next_child)
 	elements.add_child(next_child)
 	next_child.connect("update_string", self, "build_string")
-	build_string()
+#	build_string()
 	
 
 func build_string():
-	var query_string:= ""
+	var search_string:= ""
 	for c in elements.get_children():
-		query_string += c.query_string + " "
-	print(query_string)
+		search_string += c.build_string() + " "
+	return search_string
 
 
 func _on_FilterGroupPanel_delete(panel:Node):

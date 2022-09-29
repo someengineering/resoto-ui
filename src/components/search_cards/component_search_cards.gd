@@ -1,20 +1,6 @@
 extends Control
 class_name SearchCards
 
-enum PropertyOperators {equal, not_equal, less, less_equal, 
-	greater, greater_equal, regex, regex_not, in_o, not_in_o}
-
-var PropertyTypes:Dictionary = {
-	"bool":null,
-	"date":null,
-	"datetime":null,
-	"duration":null,
-	"string":null,
-	"int32":null,
-	"int64":null,
-	"float":null,
-	"double":null }
-
 var all_kinds := {}
 var complex_kinds := {}
 
@@ -203,6 +189,7 @@ func properties(kind: String, name) -> Array: # Array[String]
 		result.append(entry[0])
 	return result
 
+
 func property(kind: String, name: String) -> Property:
 	var cpl: ComplexRoot = complex_kinds.get(kind)
 	if cpl:
@@ -220,3 +207,8 @@ func _on_get_model_done(error: int, result: ResotoAPI.Response):
 
 func _on_LineEdit_text_entered(text):
 	print(properties("cloud", text)) # Replace with function body.
+
+
+func _on_AggregateResultButton_pressed():
+	var search_string = "search " + $Margin/HBox/MainContainer/SearchCardBuilder.build_string()
+	print(search_string)

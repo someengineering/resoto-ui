@@ -29,3 +29,12 @@ func on_filter_delete(_element:Node):
 		elem.operator.queue_free()
 	elem.card.queue_free()
 	active_filters.erase(_element)
+
+
+func build_string():
+	var search_string:String = ""
+	for c in filter_group_container.get_children():
+		if c == add_button:
+			continue
+		search_string += c.build_string()
+	return search_string

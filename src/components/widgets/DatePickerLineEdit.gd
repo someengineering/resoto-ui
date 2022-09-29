@@ -2,6 +2,8 @@ extends LineEdit
 
 signal date_changed(timestamp)
 
+export (bool) var show_time_picker:bool = true
+
 var unix_time : int setget , get_unix_time
 
 var previous_text
@@ -11,15 +13,21 @@ func _ready():
 	connect("focus_exited", self, "process_date")
 	previous_text = text
 
+func clear():
+	previous_text = ""
+	text = ""
+
 func _on_Button_pressed() -> void:
 	$Popup.rect_size = $Popup/DatePicker.rect_size
 	$Popup.rect_global_position = rect_global_position + rect_size
 	$Popup.rect_global_position.x -= $Popup.rect_size.x
 	$Popup.popup()
 
+
 func _on_DatePicker_date_picked(date : int) -> void:
 	unix_time = date
-	text = Time.get_datetime_string_from_unix_time(date, true)
+	update_text(unix_time)
+
 
 func process_date(new_text : String = text, notify := true) -> bool:
 	if new_text == "":
@@ -58,11 +66,18 @@ func process_date(new_text : String = text, notify := true) -> bool:
 			return false
 		else:
 			unix_time = Time.get_unix_time_from_datetime_dict(date_dict)
-			text = Time.get_datetime_string_from_datetime_dict(date_dict, true)
+			update_text(unix_time)
 			previous_text = text
 			if notify:
 				emit_signal("date_changed", unix_time)
 			return true
+
+
+func update_text(time):
+	if show_time_picker:
+		text = Time.get_datetime_string_from_unix_time(time, true)
+	else:
+		text = Time.get_datetime_string_from_unix_time(time, false).split("T")[0]
 
 
 func replaces_tokens(new_text : String) -> String:

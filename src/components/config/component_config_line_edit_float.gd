@@ -25,3 +25,6 @@ func on_text_changed(new_text:String):
 		var cursor_pos = clamp(caret_position-1, 0, old_text.length())
 		text = old_text
 		set_cursor_position(cursor_pos)
+
+func clear():
+	text = ""
