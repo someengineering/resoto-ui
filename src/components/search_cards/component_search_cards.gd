@@ -55,13 +55,13 @@ class ComplexRoot:
 			property_by_name[prop.name] = prop
 
 
-	func resolve_synthetic_props() -> ComplexRoot:		
+	func resolve_synthetic_props(kinds: Dictionary) -> ComplexRoot:		
 		var props = []
 		for p in properties:
 			if p.is_synthetic():
-				var real = property_by_name.get(p.synthetic_path())
-				var prop = p.kind if real==null else real.kind
-				props.append(Property.new(p.name, prop, []))
+				var sk = kinds.get(p.kind)
+				var sks = sk.runtime_kind if sk else p.kind			
+				props.append(Property.new(p.name, sks, []))
 			else:
 				props.append(p)
 		return ComplexRoot.new(fqn, props, bases)
@@ -127,7 +127,7 @@ class ComplexRoot:
 				var resolved = []
 				for prop in props:
 					resolved.append_array(prop_path(kinds, prop))
-				roots[kind.fqn] = ComplexRoot.new(kind.fqn, resolved, kind.bases).resolve_synthetic_props()
+				roots[kind.fqn] = ComplexRoot.new(kind.fqn, resolved, kind.bases).resolve_synthetic_props(kinds)
 		return roots
 		
 	static func load_model(json: Array) -> Dictionary:
@@ -199,8 +199,8 @@ func property(kind: String, name: String) -> Property:
 
 func _on_get_model_done(error: int, result: ResotoAPI.Response):
 	if error == 0:
-		all_kinds = ComplexRoot.load_model(result.transformed.result)	
-		complex_kinds = ComplexRoot.complex_roots(all_kinds)		
+		all_kinds = ComplexRoot.load_model(result.transformed.result)
+		complex_kinds = ComplexRoot.complex_roots(all_kinds)
 	else:
 		print("Can not load model from core! ")
 		# TODO: handle this problem
