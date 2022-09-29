@@ -1,6 +1,8 @@
 extends Control
 class_name SearchCards
 
+const NumberKinds = ["int32", "int64", "float", "double"]
+
 var all_kinds := {}
 var complex_kinds := {}
 
@@ -77,8 +79,8 @@ class ComplexRoot:
 		var r_re:RegExMatch = right[1]
 		var l_start = l_re.get_start()
 		var l_end = l_re.get_end(1)
-		var r_start = l_re.get_start()
-		var r_end = l_re.get_end(1)
+		var r_start = r_re.get_start()
+		var r_end = r_re.get_end(1)
 		if l_start < r_start:
 			return true
 		elif l_start > r_start:
@@ -168,14 +170,14 @@ func kind_names(name) -> Array: # Array[String]
 		var res = re.search(name)
 		if res:
 			matches.append([name, res]) 
-	matches.sort_custom(ComplexRoot, "sort_result")
+	matches.sort_custom(ComplexRoot, "sort_match")
 	var result := []
 	for entry in matches:
 		result.append(entry[0])
 	return result
 
 	
-func properties(kind: String, name) -> Array: # Array[String]
+func properties(kind: String, name, filter_number_kinds: bool = false) -> Array: # Array[String]
 	var re = _regexp_from(name)
 	var matches := []
 	var kd: ComplexRoot = complex_kinds.get(kind)
@@ -183,9 +185,9 @@ func properties(kind: String, name) -> Array: # Array[String]
 		return []
 	for prop in kd.properties:
 		var res = re.search(prop.name)
-		if res:
+		if res and (not filter_number_kinds or prop.kind in NumberKinds):
 			matches.append([prop.name, res]) 
-	matches.sort_custom(ComplexRoot, "sort_result")
+	matches.sort_custom(ComplexRoot, "sort_match")
 	var result := []
 	for entry in matches:
 		result.append(entry[0])
@@ -203,12 +205,10 @@ func _on_get_model_done(error: int, result: ResotoAPI.Response):
 	if error == 0:
 		all_kinds = ComplexRoot.load_model(result.transformed.result)
 		complex_kinds = ComplexRoot.complex_roots(all_kinds)
+		print(kind_names("cloud"))
 	else:
 		print("Can not load model from core! ")
 		# TODO: handle this problem
-
-func _on_LineEdit_text_entered(text):
-	print(properties("cloud", text)) # Replace with function body.
 
 
 func _on_send_search():
