@@ -6,7 +6,6 @@
 [ext_resource path="res://components/search_cards/search_card_builder.gd" type="Script" id=5]
 [ext_resource path="res://assets/theme/Barlow-Regular.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://components/search_cards/filter_aggregate.gd" type="Script" id=11]
-[ext_resource path="res://components/search_cards/elements/cards_property.gd" type="Script" id=12]
 
 [sub_resource type="DynamicFont" id=5]
 size = 48
@@ -51,6 +50,12 @@ extra_spacing_top = -5
 extra_spacing_bottom = -3
 font_data = ExtResource( 3 )
 
+[sub_resource type="DynamicFont" id=8]
+size = 32
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 3 )
+
 [node name="SearchCardsComponent" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -72,12 +77,12 @@ margin_right = 1900.0
 margin_bottom = 1060.0
 
 [node name="MainContainer" type="ScrollContainer" parent="Margin/HBox"]
-margin_right = 1880.0
+margin_right = 1376.0
 margin_bottom = 1040.0
 size_flags_horizontal = 3
 
 [node name="SearchCardBuilder" type="VBoxContainer" parent="Margin/HBox/MainContainer"]
-margin_right = 1880.0
+margin_right = 1376.0
 margin_bottom = 1040.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -86,13 +91,13 @@ script = ExtResource( 5 )
 main = NodePath("../../../..")
 
 [node name="Elements" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
-margin_right = 1880.0
+margin_right = 1376.0
 custom_constants/separation = 20
 
 [node name="AddGroupLayer" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
-margin_left = 815.0
+margin_left = 563.0
 margin_top = 20.0
-margin_right = 1065.0
+margin_right = 813.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 250, 0 )
 size_flags_horizontal = 4
@@ -101,9 +106,9 @@ custom_fonts/font = SubResource( 5 )
 text = "+"
 
 [node name="AddAggregation" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
-margin_left = 815.0
+margin_left = 563.0
 margin_top = 92.0
-margin_right = 1065.0
+margin_right = 813.0
 margin_bottom = 144.0
 rect_min_size = Vector2( 250, 0 )
 size_flags_horizontal = 4
@@ -113,24 +118,26 @@ text = "Add Aggregation"
 
 [node name="Control" type="Control" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
 margin_top = 164.0
-margin_right = 1880.0
-margin_bottom = 836.0
+margin_right = 1376.0
+margin_bottom = 1040.0
 size_flags_vertical = 3
 
 [node name="AggregatePanel" type="PanelContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
-margin_top = 856.0
+visible = false
+margin_top = 873.0
 margin_right = 1880.0
 margin_bottom = 1040.0
 custom_styles/panel = SubResource( 7 )
 script = ExtResource( 11 )
 aggregate_button = NodePath("../AddAggregation")
 filter_panel = NodePath("..")
+search_cards = NodePath("../../../../..")
 
 [node name="FilterGroup" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel"]
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1860.0
-margin_bottom = 164.0
+margin_bottom = 147.0
 custom_constants/separation = 20
 
 [node name="TitleBar" type="HBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup"]
@@ -162,12 +169,12 @@ text = "X"
 [node name="Content" type="HBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup"]
 margin_top = 49.0
 margin_right = 1840.0
-margin_bottom = 144.0
+margin_bottom = 74.0
 custom_constants/separation = 40
 
 [node name="Variables" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content"]
 margin_right = 900.0
-margin_bottom = 95.0
+margin_bottom = 25.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -177,13 +184,10 @@ margin_bottom = 21.0
 text = "Variables"
 align = 1
 
-[node name="AddVariable" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Variables"]
+[node name="Variables" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Variables"]
 margin_top = 25.0
 margin_right = 900.0
-margin_bottom = 58.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "+"
+margin_bottom = 25.0
 
 [node name="VSeparator" type="VSeparator" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content"]
 visible = false
@@ -195,7 +199,7 @@ margin_bottom = 62.0
 [node name="Functions" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content"]
 margin_left = 940.0
 margin_right = 1840.0
-margin_bottom = 95.0
+margin_bottom = 25.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -205,31 +209,28 @@ margin_bottom = 21.0
 text = "Functions"
 align = 1
 
-[node name="Function" type="HBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions"]
+[node name="Functions" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions"]
 margin_top = 25.0
 margin_right = 900.0
-margin_bottom = 58.0
-theme = ExtResource( 1 )
-script = ExtResource( 12 )
+margin_bottom = 25.0
 
-[node name="OptionButton" type="OptionButton" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions/Function"]
-margin_right = 80.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 80, 0 )
-text = "sum"
-items = [ "sum", null, false, 0, null, "min", null, false, 1, null, "max", null, false, 2, null, "avg", null, false, 3, null ]
-selected = 0
+[node name="Buttons" type="HBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup"]
+margin_top = 94.0
+margin_right = 1840.0
+margin_bottom = 127.0
+custom_constants/separation = 40
 
-[node name="FunctionDeleteButton" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions/Function"]
-margin_left = 84.0
-margin_right = 118.0
-margin_bottom = 33.0
-text = "X"
-
-[node name="AddFunction" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions"]
-margin_top = 62.0
+[node name="AddVariable" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Buttons"]
 margin_right = 900.0
-margin_bottom = 95.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "+"
+
+[node name="AddFunction" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Buttons"]
+margin_left = 940.0
+margin_right = 1840.0
+margin_bottom = 33.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "+"
@@ -241,20 +242,27 @@ margin_right = 1840.0
 margin_bottom = 1000.0
 
 [node name="ResultContainer" type="VBoxContainer" parent="Margin/HBox"]
-visible = false
-margin_left = 942.0
+margin_left = 1380.0
 margin_right = 1880.0
 margin_bottom = 1040.0
-size_flags_horizontal = 3
+rect_min_size = Vector2( 500, 0 )
+
+[node name="Query" type="Label" parent="Margin/HBox/ResultContainer"]
+margin_right = 500.0
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 8 )
+text = "Result"
+autowrap = true
 
 [node name="Label" type="Label" parent="Margin/HBox/ResultContainer"]
-margin_right = 938.0
-margin_bottom = 21.0
+margin_top = 43.0
+margin_right = 500.0
+margin_bottom = 64.0
 text = "Result"
 
 [node name="TextEdit" type="TextEdit" parent="Margin/HBox/ResultContainer"]
-margin_top = 25.0
-margin_right = 938.0
+margin_top = 68.0
+margin_right = 500.0
 margin_bottom = 1040.0
 size_flags_vertical = 3
 wrap_enabled = true
@@ -263,8 +271,11 @@ wrap_enabled = true
 one_shot = true
 
 [connection signal="update_string" from="Margin/HBox/MainContainer/SearchCardBuilder" to="." method="_on_SearchCardBuilder_update_string"]
+[connection signal="update_string" from="Margin/HBox/MainContainer/SearchCardBuilder" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel" method="_on_SearchCardBuilder_update_string"]
 [connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AddGroupLayer" to="Margin/HBox/MainContainer/SearchCardBuilder" method="_on_AddGroupLayer_pressed"]
 [connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AddAggregation" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel" method="_on_AddAggregation_pressed"]
+[connection signal="update_string" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel" to="." method="_on_AggregatePanel_update_string"]
 [connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/TitleBar/DeleteButton" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel" method="_on_DeleteButton_pressed"]
-[connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions/Function/FunctionDeleteButton" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions/Function" method="_on_PropertyDeleteButton_pressed"]
+[connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Buttons/AddVariable" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel" method="_on_AddVariable_pressed"]
+[connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Buttons/AddFunction" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel" method="_on_AddFunction_pressed"]
 [connection signal="timeout" from="SearchUpdateTimer" to="." method="_on_SearchUpdateTimer_timeout"]

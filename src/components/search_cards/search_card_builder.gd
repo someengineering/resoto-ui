@@ -36,6 +36,7 @@ func build_string():
 	var search_string:= ""
 	for c in elements.get_children():
 		search_string += c.build_string() + " "
+		
 	return search_string
 
 

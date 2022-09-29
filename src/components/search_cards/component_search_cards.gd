@@ -212,12 +212,20 @@ func _on_get_model_done(error: int, result: ResotoAPI.Response):
 
 
 func _on_send_search():
+	var aggregate_string = $Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel.build_string()
 	var built_string = $Margin/HBox/MainContainer/SearchCardBuilder.build_string()
 	if built_string == "":
 		return
-	var search_string = built_string
+	var search_string = ""
+	var endpoint = "list"
+	if aggregate_string != "":
+		endpoint = "aggregate"
+		search_string = aggregate_string + ": " + built_string
+	else:
+		search_string = built_string
 	print(search_string)
-	active_request = API.graph_search(search_string, self, "list", "reported")
+	$Margin/HBox/ResultContainer/Query.text = search_string
+	active_request = API.graph_search(search_string, self, endpoint, "reported")
 
 
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
@@ -225,8 +233,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		_g.emit_signal("add_toast", "Error in Search", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
 		return
 	if _response.transformed.has("result"):
-		pass
-		#$Margin/HBox/ResultContainer/TextEdit.text = str(_response.transformed.result)
+		$Margin/HBox/ResultContainer/TextEdit.text = str(_response.transformed.result)
 
 
 func _on_SearchCardBuilder_update_string():
@@ -235,3 +242,7 @@ func _on_SearchCardBuilder_update_string():
 
 func _on_SearchUpdateTimer_timeout():
 	_on_send_search()
+
+
+func _on_AggregatePanel_update_string():
+	$SearchUpdateTimer.start()

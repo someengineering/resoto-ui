@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
+[ext_resource path="res://components/search_cards/elements/aggregate_variable_element.gd" type="Script" id=2]
+
+[node name="Variable" type="HBoxContainer"]
+margin_top = 29.0
+margin_right = 900.0
+margin_bottom = 62.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="VariableName" type="OptionButton" parent="."]
+margin_right = 412.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 160, 0 )
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="."]
+margin_left = 416.0
+margin_top = 6.0
+margin_right = 446.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 30, 0 )
+text = "as"
+align = 1
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_left = 450.0
+margin_right = 862.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+placeholder_text = "name"
+placeholder_alpha = 0.3
+
+[node name="VariableDeleteButton" type="Button" parent="."]
+margin_left = 866.0
+margin_right = 900.0
+margin_bottom = 33.0
+text = "X"
+
+[connection signal="item_selected" from="VariableName" to="." method="_on_VariableName_item_selected"]
+[connection signal="text_changed" from="LineEdit" to="." method="_on_LineEdit_text_changed"]
+[connection signal="pressed" from="VariableDeleteButton" to="." method="_on_VariableDeleteButton_pressed"]

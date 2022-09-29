@@ -106,6 +106,7 @@ margin_top = 52.0
 margin_right = 430.0
 margin_bottom = 85.0
 use_filter = false
+align_elements_left = true
 
 [node name="Spacer" type="Control" parent="FilterEditElement"]
 margin_top = 90.0

@@ -16,6 +16,14 @@ func get_group_properties():
 	return $FilterGroup/SortLimitBar.properties
 
 
+func get_group_kinds():
+	var elements = $FilterGroup.active_filters
+	var kinds:= []
+	for e in elements:
+		kinds.append(e.kind)
+	return kinds
+
+
 func _on_DeleteButton_pressed():
 	emit_signal("delete")
 
