@@ -143,8 +143,8 @@ func cli_execute_json(_command:String, _connect_to:Node) -> ResotoAPI.Request:
 	return _req_res
 
 
-func graph_search(_command:String, _connect_to:Node, type:String="graph") -> ResotoAPI.Request:
-	_req_res = _resoto_api.post_graph_search(_command, type, graph_id)
+func graph_search(_command:String, _connect_to:Node, type:String="graph", section:String="") -> ResotoAPI.Request:
+	_req_res = _resoto_api.post_graph_search(_command, type, graph_id, section)
 	_req_res.connect("done", _connect_to, "_on_graph_search_done")
 	return _req_res
 

@@ -8,4 +8,3 @@ func _on_AddProperty_pressed():
 	var new_prop = Property.instance()
 	new_prop.parent = parent
 	add_child(new_prop)
-	 

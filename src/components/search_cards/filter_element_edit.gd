@@ -2,9 +2,11 @@ extends Control
 
 signal delete
 signal update_string
+signal update_properties
 
 var main:SearchCards = null
 var kind:String = ""
+var properties:Array = []
 
 onready var delete_button = find_node("DeleteButton")
 onready var combo_box = $FilterEditElement/ComboBox
@@ -15,6 +17,7 @@ onready var property_elements = [
 	$FilterEditElement/AddProperty,
 	$FilterEditElement/Spacer
 	]
+
 
 func _ready():
 	if main == null:
@@ -44,9 +47,12 @@ func _on_ComboBox_option_changed(option):
 
 
 func update_properties():
-	var properties = main.properties(kind, null)
+	properties = main.properties(kind, null)
 	for pe in property_elements:
 		pe.visible = kind != "" and properties != null and !properties.empty()
+	emit_signal("update_string")
+	emit_signal("update_properties")
+
 
 func _on_ComboBox_text_changed(text):
 	kind = text
@@ -55,8 +61,12 @@ func _on_ComboBox_text_changed(text):
 
 
 func build_string():
+	if kind == "":
+		return ""
 	var string = "(is(" + kind + ")"
 	for c in properties_container.get_children():
-		string += " and " + c.build_string()
+		var prop_string = c.build_string()
+		if prop_string != "":
+			string += " and " + c.build_string()
 	string += ")"
 	return string

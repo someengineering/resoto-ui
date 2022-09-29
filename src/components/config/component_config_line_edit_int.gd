@@ -1,7 +1,7 @@
 extends LineEdit
 class_name LineEditInt
 
-var old_text:String = ""
+export var old_text:String = ""
 
 onready var LineEditRegEx = RegEx.new()
 

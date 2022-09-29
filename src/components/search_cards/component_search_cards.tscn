@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
-[ext_resource path="res://assets/theme/Barlow-Light.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://components/search_cards/component_search_cards.gd" type="Script" id=4]
 [ext_resource path="res://components/search_cards/search_card_builder.gd" type="Script" id=5]
+[ext_resource path="res://assets/theme/Barlow-Regular.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://components/search_cards/filter_aggregate.gd" type="Script" id=11]
+[ext_resource path="res://components/search_cards/elements/cards_property.gd" type="Script" id=12]
 
 [sub_resource type="DynamicFont" id=5]
 size = 48
@@ -14,22 +16,40 @@ extra_spacing_top = -13
 extra_spacing_bottom = -5
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=4]
-size = 36
+[sub_resource type="DynamicFont" id=6]
+size = 30
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 2 )
+extra_spacing_top = -1
+extra_spacing_bottom = 5
+font_data = ExtResource( 6 )
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxFlat" id=7]
 content_margin_left = 20.0
 content_margin_right = 20.0
-content_margin_top = 10.0
+content_margin_top = 20.0
 content_margin_bottom = 20.0
 bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
+border_width_top = 6
+border_color = Color( 0, 0.301961, 0.584314, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="DynamicFont" id=3]
+size = 24
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 20
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = -5
+extra_spacing_bottom = -3
+font_data = ExtResource( 3 )
 
 [node name="SearchCardsComponent" type="Control"]
 anchor_right = 1.0
@@ -70,37 +90,149 @@ margin_right = 1880.0
 custom_constants/separation = 20
 
 [node name="AddGroupLayer" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
-margin_left = 840.0
+margin_left = 815.0
 margin_top = 20.0
-margin_right = 1040.0
+margin_right = 1065.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 200, 0 )
+rect_min_size = Vector2( 250, 0 )
 size_flags_horizontal = 4
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 5 )
 text = "+"
 
-[node name="Control" type="Control" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
+[node name="AddAggregation" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
+margin_left = 815.0
 margin_top = 92.0
+margin_right = 1065.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 250, 0 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_fonts/font = SubResource( 6 )
+text = "Add Aggregation"
+
+[node name="Control" type="Control" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
+margin_top = 164.0
 margin_right = 1880.0
-margin_bottom = 964.0
+margin_bottom = 836.0
 size_flags_vertical = 3
 
-[node name="AggregateResultButton" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
-margin_top = 984.0
+[node name="AggregatePanel" type="PanelContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
+margin_top = 856.0
 margin_right = 1880.0
 margin_bottom = 1040.0
-size_flags_horizontal = 3
-custom_fonts/font = SubResource( 4 )
-text = "Do"
+custom_styles/panel = SubResource( 7 )
+script = ExtResource( 11 )
+aggregate_button = NodePath("../AddAggregation")
+filter_panel = NodePath("..")
 
-[node name="AggregationPanel" type="PanelContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder"]
+[node name="FilterGroup" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1860.0
+margin_bottom = 164.0
+custom_constants/separation = 20
+
+[node name="TitleBar" type="HBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup"]
+margin_right = 1840.0
+margin_bottom = 29.0
+custom_constants/separation = 30
+
+[node name="Headline" type="Label" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/TitleBar"]
+margin_right = 110.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 3 )
+text = "Aggregate"
+
+[node name="Control" type="Control" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/TitleBar"]
+margin_left = 140.0
+margin_right = 1774.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+
+[node name="DeleteButton" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/TitleBar"]
+margin_left = 1804.0
+margin_right = 1840.0
+margin_bottom = 29.0
+mouse_filter = 1
+size_flags_horizontal = 8
+custom_fonts/font = SubResource( 4 )
+text = "X"
+
+[node name="Content" type="HBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup"]
+margin_top = 49.0
+margin_right = 1840.0
+margin_bottom = 144.0
+custom_constants/separation = 40
+
+[node name="Variables" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content"]
+margin_right = 900.0
+margin_bottom = 95.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Variables"]
+margin_right = 900.0
+margin_bottom = 21.0
+text = "Variables"
+align = 1
+
+[node name="AddVariable" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Variables"]
+margin_top = 25.0
+margin_right = 900.0
+margin_bottom = 58.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "+"
+
+[node name="VSeparator" type="VSeparator" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content"]
 visible = false
-margin_top = 555.0
-margin_right = 1880.0
-margin_bottom = 585.0
-size_flags_vertical = 8
-custom_styles/panel = SubResource( 1 )
+modulate = Color( 1, 1, 1, 0.501961 )
+margin_left = 918.0
+margin_right = 922.0
+margin_bottom = 62.0
+
+[node name="Functions" type="VBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content"]
+margin_left = 940.0
+margin_right = 1840.0
+margin_bottom = 95.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions"]
+margin_right = 900.0
+margin_bottom = 21.0
+text = "Functions"
+align = 1
+
+[node name="Function" type="HBoxContainer" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions"]
+margin_top = 25.0
+margin_right = 900.0
+margin_bottom = 58.0
+theme = ExtResource( 1 )
+script = ExtResource( 12 )
+
+[node name="OptionButton" type="OptionButton" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions/Function"]
+margin_right = 80.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 80, 0 )
+text = "sum"
+items = [ "sum", null, false, 0, null, "min", null, false, 1, null, "max", null, false, 2, null, "avg", null, false, 3, null ]
+selected = 0
+
+[node name="FunctionDeleteButton" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions/Function"]
+margin_left = 84.0
+margin_right = 118.0
+margin_bottom = 33.0
+text = "X"
+
+[node name="AddFunction" type="Button" parent="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions"]
+margin_top = 62.0
+margin_right = 900.0
+margin_bottom = 95.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "+"
 
 [node name="VSeparator" type="VSeparator" parent="Margin/HBox"]
 visible = false
@@ -127,5 +259,12 @@ margin_bottom = 1040.0
 size_flags_vertical = 3
 wrap_enabled = true
 
+[node name="SearchUpdateTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="update_string" from="Margin/HBox/MainContainer/SearchCardBuilder" to="." method="_on_SearchCardBuilder_update_string"]
 [connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AddGroupLayer" to="Margin/HBox/MainContainer/SearchCardBuilder" method="_on_AddGroupLayer_pressed"]
-[connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregateResultButton" to="." method="_on_AggregateResultButton_pressed"]
+[connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AddAggregation" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel" method="_on_AddAggregation_pressed"]
+[connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/TitleBar/DeleteButton" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel" method="_on_DeleteButton_pressed"]
+[connection signal="pressed" from="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions/Function/FunctionDeleteButton" to="Margin/HBox/MainContainer/SearchCardBuilder/AggregatePanel/FilterGroup/Content/Functions/Function" method="_on_PropertyDeleteButton_pressed"]
+[connection signal="timeout" from="SearchUpdateTimer" to="." method="_on_SearchUpdateTimer_timeout"]

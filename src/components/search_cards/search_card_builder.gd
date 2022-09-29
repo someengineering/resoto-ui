@@ -2,6 +2,8 @@ extends VBoxContainer
 
 export(NodePath) onready var main = get_node(main)
 
+signal update_string
+
 var FilterGroupPanel = preload("res://components/search_cards/elements/cards_filtergroup_panel.tscn")
 var NavigationPanel = preload("res://components/search_cards/elements/cards_navigation_panel.tscn")
 
@@ -26,8 +28,8 @@ func _on_AddGroupLayer_pressed():
 		next_child.connect("delete", self, "_on_FilterGroupPanel_delete", [next_child])
 		filter_elements.append(next_child)
 	elements.add_child(next_child)
-	next_child.connect("update_string", self, "build_string")
-#	build_string()
+	next_child.connect("update_string", self, "_on_update_string")
+	emit_signal("update_string")
 	
 
 func build_string():
@@ -37,6 +39,10 @@ func build_string():
 	return search_string
 
 
+func _on_update_string():
+	emit_signal("update_string")
+
+
 func _on_FilterGroupPanel_delete(panel:Node):
 	var filter_index = filter_elements.find(panel)
 	if nav_elements.size() >= filter_index+1:
@@ -44,6 +50,7 @@ func _on_FilterGroupPanel_delete(panel:Node):
 	
 	filter_elements.erase(panel)
 	panel.queue_free()
+	emit_signal("update_string")
 
 
 func _on_NavigationPanel_delete(panel:Node):
@@ -53,3 +60,4 @@ func _on_NavigationPanel_delete(panel:Node):
 	
 	nav_elements.erase(panel)
 	panel.queue_free()
+	emit_signal("update_string")

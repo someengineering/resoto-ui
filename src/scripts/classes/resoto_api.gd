@@ -126,9 +126,10 @@ func post_cli_execute_nd_chunks(body:String, graph:String=default_graph) -> Reso
 	return request
 
 
-func post_graph_search(body:String, type:String="graph", graph:String=default_graph) -> ResotoAPI.Request:
+func post_graph_search(body:String, type:String="graph", graph:String=default_graph, section:String="") -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
-	var request = req_post("/graph/"+ default_graph +"/search/"+ type, body, accept_json_headers)
+	var section_string = "?section=" + section if section != "" else ""
+	var request = req_post("/graph/"+ default_graph +"/search/"+ type + section_string, body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
 

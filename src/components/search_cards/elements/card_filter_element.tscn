@@ -50,7 +50,7 @@ font_data = ExtResource( 2 )
 [node name="FilterElementWrapper" type="PanelContainer"]
 margin_right = 220.0
 margin_bottom = 189.0
-rect_min_size = Vector2( 400, 0 )
+rect_min_size = Vector2( 450, 0 )
 theme = ExtResource( 1 )
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 4 )
@@ -58,26 +58,26 @@ script = ExtResource( 4 )
 [node name="FilterEditElement" type="VBoxContainer" parent="."]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 390.0
+margin_right = 440.0
 margin_bottom = 179.0
 custom_constants/separation = 5
 
 [node name="Panel" type="PanelContainer" parent="FilterEditElement"]
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 37.0
 rect_min_size = Vector2( 0, 20 )
 mouse_filter = 1
 custom_styles/panel = SubResource( 7 )
 
 [node name="TitleBar" type="HBoxContainer" parent="FilterEditElement/Panel"]
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 28.0
 rect_min_size = Vector2( 0, 28 )
 alignment = 2
 
 [node name="DescriptionLabel" type="Label" parent="FilterEditElement/Panel/TitleBar"]
 margin_top = 3.0
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 24.0
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -96,40 +96,40 @@ text = "X"
 
 [node name="Spacer2" type="Control" parent="FilterEditElement"]
 margin_top = 42.0
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 5 )
 mouse_filter = 1
 
 [node name="ComboBox" parent="FilterEditElement" instance=ExtResource( 3 )]
 margin_top = 52.0
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 85.0
 use_filter = false
 
 [node name="Spacer" type="Control" parent="FilterEditElement"]
 margin_top = 90.0
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 10 )
 mouse_filter = 1
 
 [node name="PropertiesLabel" type="Label" parent="FilterEditElement"]
 margin_top = 105.0
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 126.0
 mouse_filter = 1
 text = "properties"
 
 [node name="PropertiesContainer" type="VBoxContainer" parent="FilterEditElement"]
 margin_top = 131.0
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 131.0
 script = ExtResource( 6 )
 
 [node name="AddProperty" type="Button" parent="FilterEditElement"]
 margin_top = 136.0
-margin_right = 380.0
+margin_right = 430.0
 margin_bottom = 169.0
 size_flags_horizontal = 3
 size_flags_vertical = 0

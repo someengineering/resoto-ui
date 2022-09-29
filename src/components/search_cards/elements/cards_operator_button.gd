@@ -1,5 +1,7 @@
 extends Button
 
+signal update_string
+
 enum Modes {AND, OR}
 
 var mode:int = Modes.AND
@@ -11,6 +13,7 @@ func _on_OperatorButton_pressed():
 	else:
 		mode = Modes.AND
 		text = "and"
+	emit_signal("update_string")
 
 
 func build_string():

@@ -26,7 +26,6 @@ margin_left = 190.0
 margin_right = 250.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 60, 33 )
-theme_type_variation = "ButtonIcon"
 text = "Days"
 expand_icon = true
 
@@ -98,6 +97,7 @@ rect_min_size = Vector2( 50, 0 )
 custom_fonts/font = SubResource( 1 )
 text = "Years"
 
+[connection signal="text_changed" from="IntEdit" to="." method="_on_IntEdit_text_changed"]
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
 [connection signal="update_duration_type" from="Button/Popup" to="." method="_on_Popup_update_duration_type"]
 [connection signal="pressed" from="Button/Popup/Grid/SecondsBtn" to="Button/Popup" method="_on_SecondsBtn_pressed"]

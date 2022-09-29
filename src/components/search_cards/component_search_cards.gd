@@ -4,6 +4,8 @@ class_name SearchCards
 var all_kinds := {}
 var complex_kinds := {}
 
+var active_request: ResotoAPI.Request
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# TODO: load model and provide kinds / 
@@ -209,6 +211,27 @@ func _on_LineEdit_text_entered(text):
 	print(properties("cloud", text)) # Replace with function body.
 
 
-func _on_AggregateResultButton_pressed():
-	var search_string = "search " + $Margin/HBox/MainContainer/SearchCardBuilder.build_string()
+func _on_send_search():
+	var built_string = $Margin/HBox/MainContainer/SearchCardBuilder.build_string()
+	if built_string == "":
+		return
+	var search_string = built_string
 	print(search_string)
+	active_request = API.graph_search(search_string, self, "list", "reported")
+
+
+func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
+	if error:
+		_g.emit_signal("add_toast", "Error in Search", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
+		return
+	if _response.transformed.has("result"):
+		pass
+		#$Margin/HBox/ResultContainer/TextEdit.text = str(_response.transformed.result)
+
+
+func _on_SearchCardBuilder_update_string():
+	$SearchUpdateTimer.start()
+
+
+func _on_SearchUpdateTimer_timeout():
+	_on_send_search()

@@ -39,7 +39,6 @@ func build_string():
 	var depth = "0" if include_result else "1"
 	t_string = t_string.format({"in":depth, "out":"1"})
 	query_string = t_string
-	#emit_signal("update_string")
 	update_graphics()
 	return query_string
 
@@ -66,13 +65,13 @@ func _on_Inbound_pressed():
 		return
 	inbound = !inbound
 	update_graphics()
-#	build_string()
+	emit_signal("update_string")
 
 
 func _on_Result_pressed():
 	include_result = !include_result
 	update_graphics()
-#	build_string()
+	emit_signal("update_string")
 
 
 func _on_Outbound_pressed():
@@ -83,7 +82,7 @@ func _on_Outbound_pressed():
 		return
 	outbound = !outbound
 	update_graphics()
-#	build_string()
+	emit_signal("update_string")
 
 
 func set_manual_mode(value:bool):
@@ -96,6 +95,7 @@ func set_manual_mode(value:bool):
 	else:
 		line_edit.hide()
 		icons.show()
+	emit_signal("update_string")
 
 
 func _on_ModeButton_pressed():

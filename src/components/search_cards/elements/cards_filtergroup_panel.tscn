@@ -1,14 +1,17 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://components/search_cards/filter_group.gd" type="Script" id=2]
 [ext_resource path="res://components/search_cards/filter_group_wrapper.gd" type="Script" id=3]
+[ext_resource path="res://components/config/component_config_line_edit_int.gd" type="Script" id=4]
+[ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/search_cards/elements/filter_group_sort_limit_bar.gd" type="Script" id=6]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 20.0
 content_margin_right = 20.0
 content_margin_top = 10.0
-content_margin_bottom = 20.0
+content_margin_bottom = 0.0
 bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
 border_width_bottom = 6
 border_color = Color( 0, 0.301961, 0.584314, 1 )
@@ -38,6 +41,17 @@ use_filter = true
 extra_spacing_top = -7
 font_data = ExtResource( 1 )
 
+[sub_resource type="StyleBoxFlat" id=8]
+content_margin_top = 5.0
+content_margin_bottom = 11.0
+bg_color = Color( 0.0392157, 0.133333, 0.227451, 1 )
+border_width_bottom = 6
+border_color = Color( 0, 0.301961, 0.584314, 1 )
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 20.0
+expand_margin_right = 20.0
+
 [node name="FilterGroupPanel" type="PanelContainer"]
 margin_right = 1880.0
 margin_bottom = 317.0
@@ -48,8 +62,8 @@ script = ExtResource( 3 )
 margin_left = 20.0
 margin_top = 10.0
 margin_right = 1860.0
-margin_bottom = 297.0
-custom_constants/separation = 10
+margin_bottom = 317.0
+custom_constants/separation = 20
 script = ExtResource( 2 )
 
 [node name="TitleBar" type="HBoxContainer" parent="FilterGroup"]
@@ -65,12 +79,12 @@ text = "Filter"
 
 [node name="Control" type="Control" parent="FilterGroup/TitleBar"]
 margin_left = 87.0
-margin_right = 1786.0
+margin_right = 1774.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
 
 [node name="DeleteButton" type="Button" parent="FilterGroup/TitleBar"]
-margin_left = 1816.0
+margin_left = 1804.0
 margin_right = 1840.0
 margin_bottom = 29.0
 mouse_filter = 1
@@ -79,21 +93,108 @@ custom_fonts/font = SubResource( 4 )
 text = "X"
 
 [node name="FilterContainer" type="HFlowContainer" parent="FilterGroup"]
-margin_top = 39.0
+margin_top = 49.0
 margin_right = 1840.0
-margin_bottom = 287.0
+margin_bottom = 267.0
 size_flags_vertical = 3
 custom_constants/vseparation = 20
 custom_constants/hseparation = 10
 
 [node name="AddFilterElementButton" type="Button" parent="FilterGroup/FilterContainer"]
 margin_right = 60.0
-margin_bottom = 60.0
+margin_bottom = 63.0
 rect_min_size = Vector2( 60, 60 )
 size_flags_horizontal = 5
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 2 )
 text = "+"
 
+[node name="SortLimitBar" type="PanelContainer" parent="FilterGroup"]
+visible = false
+margin_top = 258.0
+margin_right = 1840.0
+margin_bottom = 307.0
+custom_styles/panel = SubResource( 8 )
+script = ExtResource( 6 )
+
+[node name="HBox" type="HBoxContainer" parent="FilterGroup/SortLimitBar"]
+margin_top = 5.0
+margin_right = 1840.0
+margin_bottom = 38.0
+alignment = 1
+
+[node name="Sort" type="HBoxContainer" parent="FilterGroup/SortLimitBar/HBox"]
+visible = false
+margin_right = 194.0
+margin_bottom = 33.0
+
+[node name="Label" type="Label" parent="FilterGroup/SortLimitBar/HBox/Sort"]
+margin_top = 2.0
+margin_right = 90.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 90, 0 )
+theme_type_variation = "LabelMid"
+text = "Sort by"
+
+[node name="ComboBox" parent="FilterGroup/SortLimitBar/HBox/Sort" instance=ExtResource( 5 )]
+margin_left = 94.0
+margin_right = 194.0
+margin_bottom = 33.0
+align_elements_left = true
+
+[node name="DirButton" type="Button" parent="FilterGroup/SortLimitBar/HBox/Sort"]
+visible = false
+margin_left = 198.0
+margin_right = 248.0
+margin_bottom = 33.0
+text = "asc"
+
+[node name="Spacer" type="Control" parent="FilterGroup/SortLimitBar/HBox"]
+margin_left = 198.0
+margin_right = 1658.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+
+[node name="Limit" type="HBoxContainer" parent="FilterGroup/SortLimitBar/HBox"]
+margin_left = 1662.0
+margin_right = 1840.0
+margin_bottom = 33.0
+
+[node name="CheckButton" type="CheckButton" parent="FilterGroup/SortLimitBar/HBox/Limit"]
+margin_right = 52.0
+margin_bottom = 33.0
+pressed = true
+flat = true
+
+[node name="Label" type="Label" parent="FilterGroup/SortLimitBar/HBox/Limit"]
+margin_left = 56.0
+margin_top = 2.0
+margin_right = 126.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 70, 0 )
+theme_type_variation = "LabelMid"
+text = "Limit"
+
+[node name="LineEdit" type="LineEdit" parent="FilterGroup/SortLimitBar/HBox/Limit"]
+margin_left = 130.0
+margin_right = 178.0
+margin_bottom = 33.0
+text = "20"
+script = ExtResource( 4 )
+old_text = "20"
+
+[node name="SortLimitSpacer" type="Control" parent="FilterGroup"]
+margin_top = 287.0
+margin_right = 1840.0
+margin_bottom = 307.0
+rect_min_size = Vector2( 0, 20 )
+
+[connection signal="update_elements" from="FilterGroup" to="FilterGroup/SortLimitBar" method="_on_FilterGroup_update_elements"]
+[connection signal="update_string" from="FilterGroup" to="." method="_on_FilterGroup_update_string"]
 [connection signal="pressed" from="FilterGroup/TitleBar/DeleteButton" to="." method="_on_DeleteButton_pressed"]
 [connection signal="pressed" from="FilterGroup/FilterContainer/AddFilterElementButton" to="FilterGroup" method="_on_AddFilterElementButton_pressed"]
+[connection signal="update_sort_limit" from="FilterGroup/SortLimitBar" to="." method="_on_SortLimitBar_update_sort_limit"]
+[connection signal="option_changed" from="FilterGroup/SortLimitBar/HBox/Sort/ComboBox" to="FilterGroup/SortLimitBar" method="_on_ComboBox_option_changed"]
+[connection signal="pressed" from="FilterGroup/SortLimitBar/HBox/Sort/DirButton" to="FilterGroup/SortLimitBar" method="_on_DirButton_pressed"]
+[connection signal="pressed" from="FilterGroup/SortLimitBar/HBox/Limit/CheckButton" to="FilterGroup/SortLimitBar" method="_on_CheckButton_pressed"]
+[connection signal="text_changed" from="FilterGroup/SortLimitBar/HBox/Limit/LineEdit" to="FilterGroup/SortLimitBar" method="_on_LineEdit_text_changed"]

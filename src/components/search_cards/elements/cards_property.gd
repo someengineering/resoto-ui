@@ -1,7 +1,5 @@
 extends HBoxContainer
 
-signal update_string
-
 onready var property_types:Dictionary = {
 	"bool": $PropertyEdit/BoolEdit,
 	"date": $PropertyEdit/DatePickerLineEdit,
@@ -15,11 +13,11 @@ onready var property_types:Dictionary = {
 
 var property_name:String = ""
 var property_type:String = ""
-var active_edit:Node = null
 var property:SearchCards.Property = null
 var operator
 var parent:Node = null
 
+onready var active_edit:Node = $PropertyEdit/StringEdit
 onready var combo = $PropertyComboBox
 onready var popup = $PropertyOperatorButton/Popup
 onready var op_btn = $PropertyOperatorButton
@@ -37,8 +35,8 @@ func update():
 	
 	
 func _on_PropertyDeleteButton_pressed():
+	update_string()
 	queue_free()
-	emit_signal("update_string")
 
 
 func _on_PropertyOperatorButton_pressed():
@@ -50,6 +48,7 @@ func _on_PropertyOperatorButton_pressed():
 func _on_Popup_update_operator(new_text:String, tooltip:String):
 	$PropertyOperatorButton.hint_tooltip = tooltip
 	$PropertyOperatorButton.text = new_text
+	update_string()
 
 
 func _on_PropertyComboBox_text_changed(new_text):
@@ -76,26 +75,44 @@ func set_property():
 	if property == null:
 		return
 	
-	print(property.kind)
-	property_type = property.kind if property_types.has(property_type) else "string"
+	property_type = property.kind if property_types.has(property.kind) else "string"
 	for c in $PropertyEdit.get_children():
-		c.clear()
 		c.hide()
 	
 	active_edit = property_types[property_type]
 	active_edit.show()
+	active_edit.clear()
+	update_string()
+
+
+func update_string():
+	parent.emit_signal("update_string")
 
 
 func build_string():
+	if property == null:
+		return ""
 	var value
 	match property_type:
 		"bool":
 			value = active_edit.pressed
 		"datetime":
-			value = "%d" % [Time.get_datetime_string_from_unix_time(active_edit.unix_time, false)]
+			value = "\"%s\"" % [Time.get_datetime_string_from_unix_time(active_edit.unix_time, false)]
 		"date":
-			value = "%d" % [Time.get_datetime_string_from_unix_time(active_edit.unix_time, false).split("T")[0]]
+			value = "\"%s\"" % [Time.get_datetime_string_from_unix_time(active_edit.unix_time, false).split("T")[0]]
 		"string":
-			value = "%d" % [active_edit.text]
-	return property.name + "" + op_btn.text + "" + value
+			var str_val = active_edit.text
+			value = "\"%s\"" % [str_val]
+			if str_val.begins_with("[") or str_val.begins_with("{"):
+				value = value.trim_prefix("\"")
+			if str_val.ends_with("]") or str_val.begins_with("}"):
+				value = value.trim_suffix("\"")
+		"duration":
+			value = active_edit.get_value()
+		_:
+			value = active_edit.text
+	return property.name + op_btn.text + str(value)
 
+
+func _on_value_changed(new_text):
+	update_string()

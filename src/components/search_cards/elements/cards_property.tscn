@@ -46,91 +46,92 @@ script = ExtResource( 2 )
 [node name="Grid" type="GridContainer" parent="PropertyOperatorButton/Popup"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 123.0
+margin_right = 145.0
 margin_bottom = 205.0
 custom_constants/vseparation = 10
+custom_constants/hseparation = 10
 columns = 2
 
 [node name="EqualBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_right = 50.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 50, 0 )
+margin_right = 65.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = "="
 
 [node name="NotEqualBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_left = 54.0
-margin_right = 106.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 50, 0 )
+margin_left = 75.0
+margin_right = 140.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = "!="
 
 [node name="LessEqualBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_top = 36.0
-margin_right = 50.0
-margin_bottom = 62.0
-rect_min_size = Vector2( 50, 0 )
+margin_top = 42.0
+margin_right = 65.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = "<="
 
 [node name="GreaterEqualBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_left = 54.0
-margin_top = 36.0
-margin_right = 106.0
-margin_bottom = 62.0
-rect_min_size = Vector2( 50, 0 )
+margin_left = 75.0
+margin_top = 42.0
+margin_right = 140.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = ">="
 
 [node name="LessBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_top = 72.0
-margin_right = 50.0
-margin_bottom = 98.0
-rect_min_size = Vector2( 50, 0 )
+margin_top = 84.0
+margin_right = 65.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = "<"
 
 [node name="GreaterBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_left = 54.0
-margin_top = 72.0
-margin_right = 106.0
-margin_bottom = 98.0
-rect_min_size = Vector2( 50, 0 )
+margin_left = 75.0
+margin_top = 84.0
+margin_right = 140.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = ">"
 
 [node name="RegexBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_top = 108.0
-margin_right = 50.0
-margin_bottom = 134.0
-rect_min_size = Vector2( 50, 0 )
+margin_top = 126.0
+margin_right = 65.0
+margin_bottom = 158.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = "~="
 
 [node name="RegexNotBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_left = 54.0
-margin_top = 108.0
-margin_right = 106.0
-margin_bottom = 134.0
-rect_min_size = Vector2( 50, 0 )
+margin_left = 75.0
+margin_top = 126.0
+margin_right = 140.0
+margin_bottom = 158.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = "!~"
 
 [node name="InBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_top = 144.0
-margin_right = 50.0
-margin_bottom = 170.0
-rect_min_size = Vector2( 50, 0 )
+margin_top = 168.0
+margin_right = 65.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = "in"
 
 [node name="NotInBtn" type="Button" parent="PropertyOperatorButton/Popup/Grid"]
-margin_left = 54.0
-margin_top = 144.0
-margin_right = 106.0
-margin_bottom = 170.0
-rect_min_size = Vector2( 50, 0 )
+margin_left = 75.0
+margin_top = 168.0
+margin_right = 140.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 65, 0 )
 custom_fonts/font = SubResource( 8 )
 text = "not in"
 
@@ -189,6 +190,7 @@ visible = false
 margin_left = 52.0
 margin_right = 164.0
 margin_bottom = 33.0
+size_flags_horizontal = 3
 
 [node name="BoolEdit" type="CheckBox" parent="PropertyEdit"]
 visible = false
@@ -220,5 +222,12 @@ text = "X"
 [connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/RegexNotBtn" to="PropertyOperatorButton/Popup" method="_on_RegexNotBtn_pressed"]
 [connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/InBtn" to="PropertyOperatorButton/Popup" method="_on_InBtn_pressed"]
 [connection signal="pressed" from="PropertyOperatorButton/Popup/Grid/NotInBtn" to="PropertyOperatorButton/Popup" method="_on_NotInBtn_pressed"]
+[connection signal="text_changed" from="PropertyEdit/IntEdit" to="." method="_on_value_changed"]
+[connection signal="text_changed" from="PropertyEdit/FloatEdit" to="." method="_on_value_changed"]
+[connection signal="text_changed" from="PropertyEdit/StringEdit" to="." method="_on_value_changed"]
+[connection signal="date_changed" from="PropertyEdit/DatePickerLineEdit" to="." method="_on_value_changed"]
+[connection signal="date_changed" from="PropertyEdit/DatePickerTimeLineEdit" to="." method="_on_value_changed"]
+[connection signal="update_string" from="PropertyEdit/DurationLineEdit" to="." method="update_string"]
+[connection signal="pressed" from="PropertyEdit/BoolEdit" to="." method="update_string"]
 [connection signal="pressed" from="PropertyEdit/BoolEdit" to="PropertyEdit/BoolEdit" method="_on_CheckBox_pressed"]
 [connection signal="pressed" from="PropertyDeleteButton" to="." method="_on_PropertyDeleteButton_pressed"]
