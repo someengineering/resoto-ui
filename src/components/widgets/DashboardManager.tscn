@@ -23,8 +23,9 @@ script = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 15.0
-margin_top = 23.0
+margin_top = 31.0
 margin_right = -15.0
+margin_bottom = -1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ManageDashboards"]
 anchor_left = 0.5
@@ -62,7 +63,7 @@ size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_right = 354.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 text = "Create New Dashboard"
 align = 1
@@ -90,28 +91,29 @@ size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2"]
 margin_right = 354.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 text = "Open Existing Dashboard"
 align = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 24.0
+margin_top = 25.0
 margin_right = 354.0
-margin_bottom = 346.0
+margin_bottom = 345.0
 size_flags_vertical = 3
 custom_styles/bg = SubResource( 23 )
 
 [node name="DashboardItemList" type="ItemList" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
 margin_right = 354.0
-margin_bottom = 322.0
+margin_bottom = 320.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+items = [ "Item 0", null, false ]
 select_mode = 1
 same_column_width = true
 
 [node name="OpenDashboard" type="Button" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2"]
-margin_left = 309.0
-margin_top = 350.0
+margin_left = 308.0
+margin_top = 349.0
 margin_right = 354.0
 margin_bottom = 374.0
 size_flags_horizontal = 8
@@ -119,4 +121,5 @@ text = "Open"
 
 [connection signal="all_dashboards_loaded" from="." to="." method="_on_DashBoardManager_all_dashboards_loaded"]
 [connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer/AddDashboard" to="." method="_on_AddDashboard_pressed"]
+[connection signal="item_activated" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/DashboardItemList" to="." method="_on_DashboardItemList_item_activated"]
 [connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/OpenDashboard" to="." method="_on_OpenDashboard_pressed"]

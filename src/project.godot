@@ -209,6 +209,7 @@ enabled=PoolStringArray(  )
 
 [gui]
 
+theme/custom="res://assets/theme/dark_theme.tres"
 common/snap_controls_to_pixels=false
 
 [network]
