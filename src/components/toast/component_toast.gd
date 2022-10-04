@@ -14,7 +14,7 @@ var is_closed:bool = false
 var title:String = ""
 var description:String = ""
 var status:int = STATUS_SUCCESS
-var duration:float = 5.0
+var duration:float = 4.0
 var is_closable:bool = true
 
 onready var tween:Tween = $Tween

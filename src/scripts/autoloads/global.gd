@@ -3,12 +3,12 @@ extends Node
 signal add_toast
 signal ui_shrink_changed
 
-var popup_manager: CanvasLayer = null
-var ui_shrink: float = 1.0 setget set_ui_shrink
-
-var ui_version:String = "2.0.0a24"
 const tsdb_metric_prefix:String		= "resoto_"
 
+var popup_manager: CanvasLayer = null
+var ui_shrink: float = 1.0 setget set_ui_shrink
+var ui_version:String = "2.0.0a24"
+var os = "Windows"
 var terminal_scrollback:Array = []
 
 const TERMINAL_COLORS: Array = [
