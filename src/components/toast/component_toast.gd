@@ -37,7 +37,7 @@ func open(_title:String, _description:String=description, _status:int=status, _d
 		STATUS_INFO:
 			self_modulate = INFO_COLOR
 	
-	$DisappearTimer.wait_time = duration
+	$DisappearTimer.wait_time = _duration
 	$DisappearTimer.start()
 	
 	if not _is_closable:
