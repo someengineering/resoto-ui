@@ -20,7 +20,6 @@ var shortcut_list:Dictionary = {
 
 var _clipboard_callback:JavaScriptObject	= JavaScript.create_callback(self, "_on_clipboard")
 var copied:bool								= false
-var os										= "Windows"
 
 var is_web									= OS.has_feature("HTML5")
 onready var navigator:JavaScriptObject		= JavaScript.get_interface("navigator")
@@ -29,8 +28,8 @@ onready var navigator:JavaScriptObject		= JavaScript.get_interface("navigator")
 func _ready():
 	if not is_web:
 		return
-	os = JavaScript.eval("getOS()")
-	if os == "MacOS":
+	_g.os = JavaScript.eval("getOS()")
+	if _g.os == "MacOS":
 		add_mac_actions()
 
 
@@ -50,7 +49,7 @@ func _input(event):
 	if not is_web:
 		return
 	if event is InputEventKey and event.pressed:
-		if os != "MacOS":
+		if _g.os != "MacOS":
 			# Handling default Inputs (Windows)
 			if event.scancode == KEY_V and not copied:
 				copied = true

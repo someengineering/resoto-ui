@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
@@ -9,7 +9,8 @@
 [ext_resource path="res://components/widgets/NewWidgetPopup.tscn" type="PackedScene" id=7]
 [ext_resource path="res://components/widgets/DateRangeSelector.tscn" type="PackedScene" id=8]
 [ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=9]
-[ext_resource path="res://assets/icon_tabs_close.png" type="Texture" id=10]
+[ext_resource path="res://assets/icon_tabs_close_med.png" type="Texture" id=10]
+[ext_resource path="res://assets/icon_refresh.png" type="Texture" id=11]
 
 [sub_resource type="DynamicFont" id=3]
 size = 24
@@ -61,10 +62,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 6 )
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
+color = Color( 0.141176, 0.141176, 0.203922, 1 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -82,7 +83,7 @@ margin_right = 1910.0
 margin_bottom = 39.0
 
 [node name="DashboardNameLabel" type="LineEdit" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_right = 1670.0
+margin_right = 1637.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
 custom_colors/font_color_uneditable = Color( 0.85098, 0.721569, 1, 1 )
@@ -101,12 +102,23 @@ rect_min_size = Vector2( 29, 29 )
 size_flags_horizontal = 10
 text = "+"
 
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+visible = false
+margin_left = 1624.0
+margin_right = 1646.0
+margin_bottom = 29.0
+texture = ExtResource( 11 )
+stretch_mode = 6
+
 [node name="RefreshOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1674.0
+margin_left = 1641.0
 margin_right = 1741.0
 margin_bottom = 29.0
+rect_min_size = Vector2( 100, 0 )
+hint_tooltip = "Refresh interval"
 text = "15 min"
-items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hr", null, false, 3, null, "12 hr", null, false, 4, null, "24 hr", null, false, 5, null ]
+icon = ExtResource( 11 )
+items = [ "15 min", ExtResource( 11 ), false, 0, null, "30 min", ExtResource( 11 ), false, 1, null, "1 hr", ExtResource( 11 ), false, 2, null, "5 hr", ExtResource( 11 ), false, 3, null, "12 hr", ExtResource( 11 ), false, 4, null, "24 hr", ExtResource( 11 ), false, 5, null ]
 selected = 0
 
 [node name="LockButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
@@ -114,6 +126,7 @@ margin_left = 1745.0
 margin_right = 1774.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
+hint_tooltip = "Edit Dashboard"
 toggle_mode = true
 icon = ExtResource( 5 )
 expand_icon = true
@@ -123,6 +136,7 @@ margin_left = 1778.0
 margin_right = 1807.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
+hint_tooltip = "Delete Dashboard"
 icon = ExtResource( 4 )
 expand_icon = true
 
@@ -130,6 +144,7 @@ expand_icon = true
 margin_left = 1811.0
 margin_right = 1867.0
 margin_bottom = 29.0
+hint_tooltip = "Export Dashboard to JSON"
 text = "Export"
 
 [node name="CloseButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
@@ -137,6 +152,7 @@ margin_left = 1871.0
 margin_right = 1900.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
+hint_tooltip = "Close Dashboard"
 icon = ExtResource( 10 )
 icon_align = 1
 expand_icon = true

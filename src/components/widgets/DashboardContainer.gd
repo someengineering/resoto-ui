@@ -106,8 +106,17 @@ func _on_OptionButton_item_selected(_index : int) -> void:
 
 
 func _on_DeleteButton_pressed() -> void:
-	emit_signal("deleted", get_position_in_parent())
-	queue_free()
+	var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
+		"Delete Dashboard?",
+		"Do you want to delete the dashboard \"" + dashboard_name + "\"?",
+		"Yes", "Cancel")
+	delete_confirm_popup.connect("response", self, "_on_delete_confirm_response", [], CONNECT_ONESHOT)
+
+
+func _on_delete_confirm_response(_response:String):
+	if _response == "left":
+		emit_signal("deleted", get_position_in_parent())
+		queue_free()
 
 
 func set_dashboard_name(new_name : String) -> void:
