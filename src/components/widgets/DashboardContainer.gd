@@ -27,13 +27,13 @@ onready var date_button := $VBoxContainer/PanelContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Dashboard
 onready var add_widget_popup := $WindowDialog
 onready var range_selector := $DateRangeSelector
-onready var refresh_option := $VBoxContainer/PanelContainer/HBoxContainer/RefreshOptionButton
-onready var name_label := $VBoxContainer/PanelContainer/HBoxContainer/DashboardNameLabel
-onready var lock_button := $VBoxContainer/PanelContainer/HBoxContainer/LockButton
+onready var refresh_option := $VBoxContainer/PanelContainer/Content/MainBar/RefreshOptionButton
+onready var name_label := $VBoxContainer/PanelContainer/Content/MainBar/DashboardNameLabel
+onready var lock_button := $VBoxContainer/PanelContainer/Content/MainBar/LockButton
 
-onready var clouds_combo := $VBoxContainer/FiltersContainer/CloudsCombo
-onready var accounts_combo := $VBoxContainer/FiltersContainer/AccountsCombo
-onready var regions_combo := $VBoxContainer/FiltersContainer/RegionsCombo
+onready var clouds_combo := $VBoxContainer/PanelContainer/Content/FiltersContainer/CloudsCombo
+onready var accounts_combo := $VBoxContainer/PanelContainer/Content/FiltersContainer/AccountsCombo
+onready var regions_combo := $VBoxContainer/PanelContainer/Content/FiltersContainer/RegionsCombo
 
 
 func _ready() -> void:
@@ -122,7 +122,7 @@ func _on_delete_confirm_response(_response:String):
 func set_dashboard_name(new_name : String) -> void:
 	name = new_name
 	dashboard_name = new_name
-	$VBoxContainer/PanelContainer/HBoxContainer/DashboardNameLabel.text = new_name
+	find_node("DashboardNameLabel").text = new_name
 
 
 func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
