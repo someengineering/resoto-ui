@@ -102,6 +102,8 @@ func open_user_dashboards():
 	
 
 func load_dashboard(dashboard_name : String):
+	if not available_dashboards.has(dashboard_name):
+		return
 	var data : Dictionary = available_dashboards[dashboard_name]
 	create_dashboard_with_data(data)
 	
