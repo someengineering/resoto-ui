@@ -9,20 +9,14 @@ var available_dashboards : Dictionary = {}
 var total_saved_dashboards : int = 0
 var dashboards_loaded : int = 0
 
-onready var dashboards_list = $"+/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/ItemList"
+onready var dashboards_list = find_node("DashboardItemList")
 
 
 func _ready():
+	set_tab_title(0, "Manage Dashboards")
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	connect("all_dashboards_loaded", self, "open_user_dashboards", [], CONNECT_ONESHOT)
 
-
-func _on_DashBoardManager_gui_input(event) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT:
-			if not event.is_pressed():
-				if get_tab_title(current_tab) == "+":
-					add_dashboard()
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.alt and event.is_pressed():
@@ -32,6 +26,7 @@ func _unhandled_input(event):
 			current_tab = wrapi(current_tab + 1, 0, get_child_count() - 1)
 		elif event.scancode in number_keys:
 			current_tab = int(min(number_keys.find(event.scancode), get_child_count() - 2))
+
 
 func add_dashboard(dashboard_name : String = ""):
 	var new_tab = dashboard_container_scene.instance()
@@ -43,11 +38,12 @@ func add_dashboard(dashboard_name : String = ""):
 	move_child(new_tab, get_tab_control(current_tab).get_position_in_parent())
 	
 	new_tab.connect("dashboard_changed", self, "save_dashboard")
+	new_tab.connect("dashboard_closed", self, "close_dashboard")
 	
 	yield(VisualServer,"frame_post_draw")
 	
 	new_tab.dashboard._on_Grid_resized()
-	
+
 
 func _on_tab_deleted(tab) -> void:
 	if tab > 0:
@@ -55,14 +51,21 @@ func _on_tab_deleted(tab) -> void:
 	if get_child_count() <= 2:
 		request_saved_dashboards()
 
+
 func save_dashboard(dashboard : DashboardContainer):
 	var data = dashboard.get_data()
 	API.cli_execute("configs delete resoto.ui.dashboard."+dashboard.last_saved_name.replace(" ", "_"), self)
 	API.patch_config_id(self, "resoto.ui.dashboard."+dashboard.name.replace(" ","_"), JSON.print(data))
 	dashboard.last_saved_name = dashboard.dashboard_name
 
+
+func close_dashboard(dashboard : DashboardContainer):
+	dashboard.queue_free()
+
+
 func _on_cli_execute_done(_error : int, _response):
 	pass
+
 
 func _on_patch_config_id_done(_error : int, _response):
 	_g.emit_signal("add_toast", "Your Dashboard has been saved!", "")
@@ -94,19 +97,20 @@ func _on_DashBoardManager_all_dashboards_loaded():
 	dashboards_list.clear()
 	for dashboard in available_dashboards:
 		dashboards_list.add_item(dashboard)
-		
-		
+
+
 func open_user_dashboards():
 	for dashboard_name in get_user_dashboards():
 		load_dashboard(dashboard_name)
-	
+
 
 func load_dashboard(dashboard_name : String):
 	if not available_dashboards.has(dashboard_name):
 		return
 	var data : Dictionary = available_dashboards[dashboard_name]
 	create_dashboard_with_data(data)
-	
+
+
 func create_dashboard_with_data(data):
 	if not "dashboard_name" in data:
 		return
@@ -135,8 +139,8 @@ func get_user_dashboards() -> PoolStringArray:
 			dashboards_names = JSON.parse(file.get_as_text()).result
 			file.close()
 	return dashboards_names
-	
-	
+
+
 func _notification(what):
 	if what == NOTIFICATION_WM_FOCUS_OUT:
 		get_tree().paused = true
@@ -163,6 +167,7 @@ func _on_OpenDashboard_pressed():
 
 func _on_AddDashboard_pressed():
 	add_dashboard()
+
 
 func _on_files_dropped(files, _screen):
 	var file = File.new()

@@ -16,16 +16,17 @@ anchor_bottom = 1.0
 margin_top = 4.0
 theme = ExtResource( 2 )
 tab_align = 0
+drag_to_rearrange_enabled = true
 script = ExtResource( 1 )
 
-[node name="+" type="Control" parent="."]
+[node name="ManageDashboards" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 15.0
 margin_top = 23.0
 margin_right = -15.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="+"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ManageDashboards"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -36,37 +37,37 @@ margin_right = 360.0
 margin_bottom = 228.5
 custom_constants/separation = 20
 
-[node name="Label" type="Label" parent="+/VBoxContainer"]
+[node name="Label" type="Label" parent="ManageDashboards/VBoxContainer"]
 margin_right = 720.0
 margin_bottom = 39.0
 custom_fonts/font = SubResource( 22 )
 text = "You don't have any dashboards opened!"
 align = 1
 
-[node name="HSeparator" type="HSeparator" parent="+/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="ManageDashboards/VBoxContainer"]
 margin_top = 59.0
 margin_right = 720.0
 margin_bottom = 63.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="+/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ManageDashboards/VBoxContainer"]
 margin_top = 83.0
 margin_right = 720.0
 margin_bottom = 457.0
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="+/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ManageDashboards/VBoxContainer/HBoxContainer"]
 margin_right = 354.0
 margin_bottom = 374.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="+/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_right = 354.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Create New Dashboard"
 align = 1
 
-[node name="AddDashboard" type="Button" parent="+/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="AddDashboard" type="Button" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_left = 129.0
 margin_top = 151.0
 margin_right = 225.0
@@ -76,31 +77,31 @@ size_flags_horizontal = 4
 size_flags_vertical = 6
 text = "+"
 
-[node name="VSeparator" type="VSeparator" parent="+/VBoxContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="ManageDashboards/VBoxContainer/HBoxContainer"]
 margin_left = 358.0
 margin_right = 362.0
 margin_bottom = 374.0
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="+/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="ManageDashboards/VBoxContainer/HBoxContainer"]
 margin_left = 366.0
 margin_right = 720.0
 margin_bottom = 374.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="+/VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="Label" type="Label" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2"]
 margin_right = 354.0
 margin_bottom = 20.0
 text = "Open Existing Dashboard"
 align = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="+/VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2"]
 margin_top = 24.0
 margin_right = 354.0
 margin_bottom = 346.0
 size_flags_vertical = 3
 custom_styles/bg = SubResource( 23 )
 
-[node name="ItemList" type="ItemList" parent="+/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
+[node name="DashboardItemList" type="ItemList" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
 margin_right = 354.0
 margin_bottom = 322.0
 size_flags_horizontal = 3
@@ -108,7 +109,7 @@ size_flags_vertical = 3
 select_mode = 1
 same_column_width = true
 
-[node name="OpenDashboard" type="Button" parent="+/VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="OpenDashboard" type="Button" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2"]
 margin_left = 309.0
 margin_top = 350.0
 margin_right = 354.0
@@ -117,6 +118,5 @@ size_flags_horizontal = 8
 text = "Open"
 
 [connection signal="all_dashboards_loaded" from="." to="." method="_on_DashBoardManager_all_dashboards_loaded"]
-[connection signal="gui_input" from="." to="." method="_on_DashBoardManager_gui_input"]
-[connection signal="pressed" from="+/VBoxContainer/HBoxContainer/VBoxContainer/AddDashboard" to="." method="_on_AddDashboard_pressed"]
-[connection signal="pressed" from="+/VBoxContainer/HBoxContainer/VBoxContainer2/OpenDashboard" to="." method="_on_OpenDashboard_pressed"]
+[connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer/AddDashboard" to="." method="_on_AddDashboard_pressed"]
+[connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/OpenDashboard" to="." method="_on_OpenDashboard_pressed"]
