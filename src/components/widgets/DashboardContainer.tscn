@@ -73,16 +73,16 @@ theme = ExtResource( 3 )
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 margin_right = 1920.0
-margin_bottom = 39.0
+margin_bottom = 49.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 1915.0
-margin_bottom = 34.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1910.0
+margin_bottom = 39.0
 
 [node name="DashboardNameLabel" type="LineEdit" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_right = 1682.0
+margin_right = 1670.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
 custom_colors/font_color_uneditable = Color( 0.85098, 0.721569, 1, 1 )
@@ -102,16 +102,16 @@ size_flags_horizontal = 10
 text = "+"
 
 [node name="RefreshOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1686.0
-margin_right = 1751.0
+margin_left = 1674.0
+margin_right = 1741.0
 margin_bottom = 29.0
 text = "15 min"
 items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hr", null, false, 3, null, "12 hr", null, false, 4, null, "24 hr", null, false, 5, null ]
 selected = 0
 
 [node name="LockButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1755.0
-margin_right = 1784.0
+margin_left = 1745.0
+margin_right = 1774.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 toggle_mode = true
@@ -119,22 +119,22 @@ icon = ExtResource( 5 )
 expand_icon = true
 
 [node name="DeleteButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1788.0
-margin_right = 1817.0
+margin_left = 1778.0
+margin_right = 1807.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 icon = ExtResource( 4 )
 expand_icon = true
 
 [node name="ExportButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1821.0
-margin_right = 1877.0
+margin_left = 1811.0
+margin_right = 1867.0
 margin_bottom = 29.0
 text = "Export"
 
 [node name="CloseButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 1881.0
-margin_right = 1910.0
+margin_left = 1871.0
+margin_right = 1900.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 icon = ExtResource( 10 )
@@ -143,57 +143,57 @@ expand_icon = true
 
 [node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer"]
 margin_left = 885.0
-margin_top = 5.0
+margin_top = 10.0
 margin_right = 1035.0
-margin_bottom = 34.0
+margin_bottom = 39.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 6
 text = "Last 24 hours"
 
 [node name="FiltersContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 43.0
+margin_top = 53.0
 margin_right = 1920.0
-margin_bottom = 67.0
+margin_bottom = 77.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/FiltersContainer"]
-margin_left = 725.0
-margin_top = 2.0
-margin_right = 766.0
+margin_left = 724.0
+margin_top = 1.0
+margin_right = 765.0
 margin_bottom = 22.0
 text = "Cloud"
 
 [node name="CloudsCombo" parent="VBoxContainer/FiltersContainer" instance=ExtResource( 9 )]
-margin_left = 770.0
-margin_right = 870.0
+margin_left = 769.0
+margin_right = 869.0
 items = [  ]
 
 [node name="Label2" type="Label" parent="VBoxContainer/FiltersContainer"]
-margin_left = 874.0
-margin_top = 2.0
-margin_right = 933.0
+margin_left = 873.0
+margin_top = 1.0
+margin_right = 934.0
 margin_bottom = 22.0
 text = "Account"
 
 [node name="AccountsCombo" parent="VBoxContainer/FiltersContainer" instance=ExtResource( 9 )]
-margin_left = 937.0
-margin_right = 1037.0
+margin_left = 938.0
+margin_right = 1038.0
 items = [  ]
 
 [node name="Label3" type="Label" parent="VBoxContainer/FiltersContainer"]
-margin_left = 1041.0
-margin_top = 2.0
-margin_right = 1091.0
+margin_left = 1042.0
+margin_top = 1.0
+margin_right = 1092.0
 margin_bottom = 22.0
 text = "Region"
 
 [node name="RegionsCombo" parent="VBoxContainer/FiltersContainer" instance=ExtResource( 9 )]
-margin_left = 1095.0
-margin_right = 1195.0
+margin_left = 1096.0
+margin_right = 1196.0
 items = [  ]
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
-margin_top = 71.0
+margin_top = 81.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 size_flags_vertical = 3
@@ -201,7 +201,7 @@ scroll_horizontal_enabled = false
 
 [node name="Dashboard" type="Control" parent="VBoxContainer/ScrollContainer"]
 margin_right = 1920.0
-margin_bottom = 1009.0
+margin_bottom = 999.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )

@@ -174,4 +174,7 @@ func _on_files_dropped(files, _screen):
 	if not file.open(files[0], File.READ):
 		var data = parse_json(file.get_as_text())
 		create_dashboard_with_data(data)
-	
+
+
+func _on_DashboardItemList_item_activated(_index):
+	_on_OpenDashboard_pressed()
