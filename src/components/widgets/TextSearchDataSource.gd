@@ -28,8 +28,10 @@ func _on_cli_execute_done(_error : int, response):
 	var message : String = response.transformed.result
 	if "Error: " in response.transformed.result:
 		_g.emit_signal("add_toast", "Invalid query", response.transformed.result, 1)
+		emit_signal("query_status", 0, "Invalid query", response.transformed.result)
 		return
 	widget.set_data(response.transformed.result, type)
+	emit_signal("query_success")
 
 	
 func copy_data_source(other : TextSearchDataSource):
