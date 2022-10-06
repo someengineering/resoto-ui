@@ -316,11 +316,13 @@ func execute_query() -> void:
 
 
 func _on_DeleteButton_pressed() -> void:
+	
 	queue_free()
 
 
 func _on_ConfigButton_pressed() -> void:
 	emit_signal("config_pressed", self)
+
 
 func set_data_sources(new_data_sources : Array) -> void:
 	if new_data_sources.size() > 0:

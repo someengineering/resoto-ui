@@ -11,7 +11,6 @@ content_margin_bottom = 5.0
 bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
 
 [node name="NewWidgetPopup" type="WindowDialog"]
-visible = true
 margin_right = 1193.0
 margin_bottom = 656.0
 theme = ExtResource( 1 )
@@ -31,82 +30,82 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions"]
-margin_right = 624.0
+margin_right = 623.0
 margin_bottom = 592.0
 custom_constants/separation = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="WidgetOptions/VBoxContainer"]
-margin_right = 624.0
-margin_bottom = 45.0
+margin_right = 623.0
+margin_bottom = 47.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/VBoxContainer"]
-margin_right = 624.0
-margin_bottom = 20.0
+margin_right = 623.0
+margin_bottom = 21.0
 text = "Widget Name"
 
 [node name="NameEdit" type="LineEdit" parent="WidgetOptions/VBoxContainer/VBoxContainer"]
-margin_top = 21.0
-margin_right = 624.0
-margin_bottom = 45.0
+margin_top = 22.0
+margin_right = 623.0
+margin_bottom = 47.0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="WidgetOptions/VBoxContainer"]
-margin_top = 50.0
-margin_right = 624.0
-margin_bottom = 95.0
+margin_top = 52.0
+margin_right = 623.0
+margin_bottom = 99.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/VBoxContainer2"]
-margin_right = 624.0
-margin_bottom = 20.0
+margin_right = 623.0
+margin_bottom = 21.0
 text = "Widget Type"
 
 [node name="WidgetType" type="OptionButton" parent="WidgetOptions/VBoxContainer/VBoxContainer2"]
-margin_top = 21.0
-margin_right = 624.0
-margin_bottom = 45.0
+margin_top = 22.0
+margin_right = 623.0
+margin_bottom = 47.0
 
 [node name="HSeparator" type="HSeparator" parent="WidgetOptions/VBoxContainer"]
-margin_top = 100.0
-margin_right = 624.0
-margin_bottom = 104.0
+margin_top = 104.0
+margin_right = 623.0
+margin_bottom = 108.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="WidgetOptions/VBoxContainer"]
-margin_top = 109.0
-margin_right = 624.0
-margin_bottom = 133.0
+margin_top = 113.0
+margin_right = 623.0
+margin_bottom = 138.0
 
 [node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
 margin_top = 2.0
-margin_right = 487.0
-margin_bottom = 22.0
+margin_right = 483.0
+margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "Data Sources"
 
 [node name="DataSourceTypeOptionButton" type="OptionButton" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
-margin_left = 491.0
-margin_right = 596.0
-margin_bottom = 24.0
+margin_left = 487.0
+margin_right = 595.0
+margin_bottom = 25.0
 text = "Time Series"
 items = [ "Time Series", null, false, 0, null, "Aggregate Search", null, false, 1, null, "Resoto Search", null, false, 2, null ]
 selected = 0
 
 [node name="AddDataSource" type="Button" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
-margin_left = 600.0
-margin_right = 624.0
-margin_bottom = 24.0
+margin_left = 599.0
+margin_right = 623.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 24, 24 )
 text = "+"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="WidgetOptions/VBoxContainer"]
-margin_top = 138.0
-margin_right = 624.0
+margin_top = 143.0
+margin_right = 623.0
 margin_bottom = 592.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="DataSources" type="VBoxContainer" parent="WidgetOptions/VBoxContainer/ScrollContainer"]
-margin_right = 624.0
+margin_right = 623.0
 size_flags_horizontal = 3
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="."]
@@ -131,40 +130,40 @@ custom_constants/separation = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="WidgetPreview/VBoxContainer"]
 margin_right = 521.0
-margin_bottom = 549.0
+margin_bottom = 548.0
 size_flags_vertical = 3
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="WidgetPreview/VBoxContainer/VBoxContainer"]
 margin_right = 521.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 text = "Widget Preview"
 
 [node name="PreviewContainer" type="VBoxContainer" parent="WidgetPreview/VBoxContainer/VBoxContainer"]
-margin_top = 21.0
+margin_top = 22.0
 margin_right = 521.0
-margin_bottom = 549.0
+margin_bottom = 548.0
 size_flags_vertical = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer"]
 margin_right = 521.0
-margin_bottom = 30.0
+margin_bottom = 31.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="Title" type="Label" parent="WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer/PanelContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 516.0
-margin_bottom = 25.0
+margin_bottom = 26.0
 text = "Title"
 
 [node name="HSeparator" type="HSeparator" parent="WidgetPreview/VBoxContainer"]
-margin_top = 554.0
+margin_top = 553.0
 margin_right = 521.0
-margin_bottom = 558.0
+margin_bottom = 557.0
 
 [node name="Label" type="Label" parent="WidgetPreview/VBoxContainer"]
-margin_top = 563.0
+margin_top = 562.0
 margin_right = 521.0
 margin_bottom = 583.0
 text = "Widget Options"
