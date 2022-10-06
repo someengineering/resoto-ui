@@ -1,6 +1,9 @@
 class_name DataSource
 extends Node
 
+signal query_status
+signal query_success
+
 enum TYPES {TIME_SERIES, AGGREGATE_SEARCH, SEARCH}
 
 var query : String

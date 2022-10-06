@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://components/widgets/WidgetContainer.gd" type="Script" id=1]
 [ext_resource path="res://assets/resize_buttons.svg" type="Texture" id=2]
@@ -7,6 +7,18 @@
 [ext_resource path="res://assets/icon_delete.png" type="Texture" id=5]
 [ext_resource path="res://assets/icon_maximize.png" type="Texture" id=6]
 [ext_resource path="res://components/widgets/AggregateSearchDataSource.gd" type="Script" id=7]
+[ext_resource path="res://assets/warning-contrast.svg" type="Texture" id=8]
+
+[sub_resource type="StyleBoxFlat" id=20]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxEmpty" id=17]
 
@@ -120,6 +132,88 @@ theme = ExtResource( 3 )
 custom_constants/margin_right = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
+
+[node name="QueryWarning" type="MarginContainer" parent="."]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 40.0
+mouse_filter = 2
+theme = ExtResource( 3 )
+custom_constants/margin_right = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="BG" type="ColorRect" parent="QueryWarning"]
+modulate = Color( 1, 1, 1, 0.901961 )
+margin_left = 5.0
+margin_right = 251.0
+margin_bottom = 211.0
+color = Color( 0.0588235, 0.00392157, 0.0745098, 0.901961 )
+
+[node name="VBox" type="VBoxContainer" parent="QueryWarning"]
+margin_left = 5.0
+margin_right = 251.0
+margin_bottom = 211.0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="QueryWarning/VBox"]
+margin_left = 91.0
+margin_top = 22.0
+margin_right = 155.0
+margin_bottom = 86.0
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 4
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+
+[node name="PanelContainer" type="PanelContainer" parent="QueryWarning/VBox"]
+margin_left = 60.0
+margin_top = 90.0
+margin_right = 185.0
+margin_bottom = 189.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_styles/panel = SubResource( 20 )
+
+[node name="VBox" type="VBoxContainer" parent="QueryWarning/VBox/PanelContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 120.0
+margin_bottom = 94.0
+
+[node name="QueryStatusTitle" type="Label" parent="QueryWarning/VBox/PanelContainer/VBox"]
+margin_right = 115.0
+margin_bottom = 21.0
+text = "Error: Title"
+align = 1
+
+[node name="QueryStatusMessage" type="Label" parent="QueryWarning/VBox/PanelContainer/VBox"]
+margin_top = 25.0
+margin_right = 115.0
+margin_bottom = 46.0
+text = "Error: Message"
+align = 1
+autowrap = true
+
+[node name="Spacer" type="Control" parent="QueryWarning/VBox/PanelContainer/VBox"]
+margin_top = 50.0
+margin_right = 115.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="ConfigButton" type="Button" parent="QueryWarning/VBox/PanelContainer/VBox"]
+margin_top = 64.0
+margin_right = 115.0
+margin_bottom = 89.0
+rect_min_size = Vector2( 115, 24 )
+size_flags_horizontal = 4
+theme_type_variation = "ButtonFlat"
+text = "Edit Widget  "
+icon = ExtResource( 4 )
+icon_align = 2
+expand_icon = true
 
 [node name="ResizeButtons" type="Control" parent="."]
 anchor_right = 1.0
@@ -301,6 +395,7 @@ expand_icon = true
 script = ExtResource( 7 )
 
 [connection signal="moved_or_resized" from="." to="." method="_on_WidgetContainer_moved_or_resized"]
+[connection signal="pressed" from="QueryWarning/VBox/PanelContainer/VBox/ConfigButton" to="." method="_on_ConfigButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Title/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="toggled" from="PanelContainer/Title/MaximizeButton" to="." method="_on_MaximizeButton_toggled"]
 [connection signal="pressed" from="PanelContainer/Title/ConfigButton" to="." method="_on_ConfigButton_pressed"]

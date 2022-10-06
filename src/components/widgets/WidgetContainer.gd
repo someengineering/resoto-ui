@@ -45,9 +45,12 @@ onready var resize_tween := $ResizeTween
 onready var last_good_position : Vector2
 onready var last_good_size : Vector2
 onready var title_label := $PanelContainer/Title/TitleLabel
+onready var datetime_label := $PanelContainer/Title/DataTimeLabel
 onready var delete_button := $PanelContainer/Title/DeleteButton
 onready var config_button := $PanelContainer/Title/ConfigButton
 onready var maximize_button := $PanelContainer/Title/MaximizeButton
+onready var query_warning := $QueryWarning
+onready var widget_content := $MarginContainer
 
 
 func _ready() -> void:
@@ -65,7 +68,7 @@ func set_grid_size(new_grid_size : Vector2) -> void:
 
 
 func set_widget(_widget : BaseWidget) -> void:
-	$MarginContainer.add_child(_widget)
+	widget_content.add_child(_widget)
 	widget = _widget
 	$PanelContainer/Title/ExportButton.visible = widget.has_method("get_csv")
 
@@ -297,13 +300,15 @@ func lock(locked : bool) -> void:
 
 func set_title(new_title : String) -> void:
 	title = new_title
-	$PanelContainer/Title/TitleLabel.text = title
+	title_label.text = title
 
 func execute_query() -> void:
+	widget_content.show()
+	query_warning.hide()
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	
-	$PanelContainer/Title/DataTimeLabel.text = "Live"
+	datetime_label.text = "Live"
 	for datasource in data_sources:
 		var attr := {}
 		match datasource.type:
@@ -311,7 +316,7 @@ func execute_query() -> void:
 				attr["interval"] = dashboard.step
 				attr["from"] = dashboard.ts_start
 				attr["to"] = dashboard.ts_end
-				$PanelContainer/Title/DataTimeLabel.text = "Historic"
+				datetime_label.text = "Historic"
 		datasource.make_query(dashboard.filters, attr)
 
 
@@ -339,11 +344,17 @@ func _on_ConfigButton_pressed() -> void:
 
 
 func set_data_sources(new_data_sources : Array) -> void:
-	if new_data_sources.size() > 0:
-		if new_data_sources[0] is DataSource:
-			data_sources = new_data_sources
-		else:
-			set_data_sources_data(new_data_sources)
+	if new_data_sources.empty():
+		return
+	
+	if new_data_sources[0] is DataSource:
+		data_sources = new_data_sources
+		for ds in data_sources:
+			if not ds.is_connected("query_status", self, "_on_data_source_query_status"):
+				ds.connect("query_status", self, "_on_data_source_query_status")
+	else:
+		set_data_sources_data(new_data_sources)
+
 
 func get_data() -> Dictionary:
 	var widget_settings : Dictionary = {}
@@ -411,6 +422,7 @@ func set_data_sources_data(data : Array) -> void:
 		for key in settings:
 			ds.set(key, settings[key])
 		ds.widget = widget
+		ds.connect("query_status", self, "_on_data_source_query_status")
 		data_sources.append(ds)
 
 
@@ -419,6 +431,14 @@ func get_data_sources_data() -> Array:
 	for data_source in data_sources:
 		data.append(data_source.get_data())
 	return data
+
+
+func _on_data_source_query_status(_type:int=0, _title:="Widget Error", _message:=""):
+	query_warning.find_node("QueryStatusTitle").visible = _title != ""
+	query_warning.find_node("QueryStatusTitle").text = _title
+	query_warning.find_node("QueryStatusMessage").visible = _message != ""
+	query_warning.find_node("QueryStatusMessage").text = _message
+	query_warning.show()
 
 
 func _on_MaximizeButton_toggled(button_pressed):
