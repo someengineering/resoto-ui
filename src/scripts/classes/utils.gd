@@ -81,3 +81,15 @@ static func print_dict(_dict:Dictionary, _depth:int) -> void:
 			print_dict(_dict[d], _depth+1)
 		else:
 			prints(_spacing + ">   ", _dict[d])
+
+
+static func comma_sep(number):
+	var string = str(number)
+	var mod = string.length() % 3
+	var res = ""
+
+	for i in range(0, string.length()):
+		if i != 0 && i % 3 == mod:
+			res += ","
+		res += string[i]
+	return res
