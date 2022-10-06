@@ -56,7 +56,7 @@ func _ready() -> void:
 func _process(_delta : float) -> void:
 	var current_time := Time.get_unix_time_from_system()
 	if current_time - last_refresh > refresh_time or force_refresh:
-		print("refresh: %s" % Time.get_datetime_string_from_system(false,true))
+		print("Refresh dashboard (%s): %s" % [last_saved_name, Time.get_datetime_string_from_system(false,true)])
 		force_refresh = false
 		last_refresh = current_time
 		dashboard.refresh()
@@ -275,8 +275,8 @@ func set_widgets(new_widgets : Array) -> void:
 		var container : WidgetContainer = yield(dashboard.add_widget(widget_data), "completed")
 		container.position_on_grid.x = settings["position:x"]
 		container.position_on_grid.y = settings["position:y"]
-		container.size_on_grid.x = settings["size:x"]
-		container.size_on_grid.y = settings["size:y"]
+		container.size_on_grid.x = max(settings["size:x"], 1)
+		container.size_on_grid.y = max(settings["size:y"], 1)
 		container.rect_position = Vector2(settings["position:x"], settings["position:y"]) * container.grid_size
 		container.rect_size = Vector2(settings["size:x"], settings["size:y"]) * container.grid_size
 		container.parent_reference.rect_size = container.rect_size

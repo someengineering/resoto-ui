@@ -61,7 +61,6 @@ func _ready() -> void:
 
 func set_grid_size(new_grid_size : Vector2) -> void:
 		grid_size = new_grid_size
-		
 		emit_signal("moved_or_resized")
 
 
@@ -86,6 +85,7 @@ func _on_resize_button_released() -> void:
 	size_on_grid = (rect_size / grid_size).snapped(Vector2.ONE)
 	
 	set_anchors()
+
 
 func set_anchors() -> void:
 	var dashboard_size = dashboard.rect_size
@@ -116,6 +116,9 @@ func _process(_delta : float) -> void:
 	var new_position : Vector2 = local_mouse_position.snapped(grid_size) 
 	
 	match resize_mode:
+		RESIZE_MODES.NONE:
+			continue
+		
 		RESIZE_MODES.TOP_LEFT:
 			var right_bot_corner = parent_reference.rect_position + parent_reference.rect_size - grid_size
 			var prev_rect_position : Vector2 = rect_position
@@ -129,7 +132,6 @@ func _process(_delta : float) -> void:
 			if new_position != last_pressed_position:
 				check_rect.position = new_position
 				check_rect.size = parent_reference.rect_size - (new_position - parent_reference.rect_position)
-				
 
 		RESIZE_MODES.BOTTOM_RIGHT:
 			var max_right_corner = parent_reference.rect_position + grid_size
@@ -143,7 +145,6 @@ func _process(_delta : float) -> void:
 			if new_position != last_pressed_position:
 				check_rect.size = new_position - check_rect.position
 		
-			
 		RESIZE_MODES.TOP_RIGHT:
 			var min_right = parent_reference.rect_position.x + grid_size.x
 			var max_top = parent_reference.rect_position.y + parent_reference.rect_size.y  - grid_size.y
@@ -159,8 +160,7 @@ func _process(_delta : float) -> void:
 			if new_position != last_pressed_position:
 				check_rect.position.y = new_position.y
 				check_rect.size = Vector2(new_position.x - parent_reference.rect_position.x, parent_reference.rect_size.y - (new_position.y - parent_reference.rect_position.y))
-
-				
+		
 		RESIZE_MODES.BOTTOM_LEFT:
 			var max_left = parent_reference.rect_position.x + parent_reference.rect_size.x - grid_size.x 
 			var min_bottom = parent_reference.rect_position.y + grid_size.y
@@ -176,7 +176,7 @@ func _process(_delta : float) -> void:
 			if new_position != last_pressed_position:
 				check_rect.position.x = new_position.x
 				check_rect.size = Vector2(parent_reference.rect_size.x - (new_position.x - parent_reference.rect_position.x), new_position.y - parent_reference.rect_position.y)
-				
+		
 		RESIZE_MODES.BOTTOM_CENTER:
 			var min_bottom = parent_reference.rect_position.y  + grid_size.y
 			
@@ -185,7 +185,7 @@ func _process(_delta : float) -> void:
 			
 			if new_position != last_pressed_position:
 				check_rect.size.y = new_position.y - parent_reference.rect_position.y
-				
+		
 		RESIZE_MODES.TOP_CENTER:
 			var max_top = parent_reference.rect_position.y + parent_reference.rect_size.y - grid_size.y 
 			var prev_rect_position = rect_position
@@ -197,7 +197,7 @@ func _process(_delta : float) -> void:
 			if new_position.y != last_pressed_position.y :
 				check_rect.position.y = new_position.y
 				check_rect.size.y = parent_reference.rect_size.y - (new_position - parent_reference.rect_position).y
-				
+		
 		RESIZE_MODES.MID_LEFT:
 			var max_left = parent_reference.rect_position.x + parent_reference.rect_size.x - grid_size.x 
 			var prev_rect_position = rect_position
@@ -208,7 +208,7 @@ func _process(_delta : float) -> void:
 			if new_position.x != last_pressed_position.x:
 				check_rect.position.x = new_position.x
 				check_rect.size.x = parent_reference.rect_size.x - (new_position - parent_reference.rect_position).x
-			
+		
 		RESIZE_MODES.MID_RIGHT:
 			var min_right = parent_reference.rect_position.x + grid_size.x 
 			new_position.x = clamp(new_position.x, min_right, limits.right)
@@ -216,7 +216,7 @@ func _process(_delta : float) -> void:
 			
 			if new_position.x != last_pressed_position.x:
 				check_rect.size.x = new_position.x - parent_reference.rect_position.x
-				
+		
 		RESIZE_MODES.MOVE:
 			rect_position = local_mouse_position - press_offset
 			rect_position.x = clamp(rect_position.x , 0, dashboard.rect_size.x - rect_size.x)
@@ -233,11 +233,11 @@ func _process(_delta : float) -> void:
 			
 			if new_position != last_pressed_position:
 				check_rect.position = new_position
-			
+	
 	if last_pressed_position != new_position:
 		animate_reference_rect()
 		limits = get_limits()
-		
+	
 	last_pressed_position = new_position
 	
 func animate_reference_rect() -> void:
@@ -367,7 +367,8 @@ func get_data() -> Dictionary:
 		"data_sources_data" : _data_sources_data,
 	}
 	return data
-	
+
+
 func get_widget_properties() -> Dictionary:
 	var found_settings := false
 	var properties := {}
@@ -379,6 +380,7 @@ func get_widget_properties() -> Dictionary:
 		elif property.name == "Widget Settings":
 			 found_settings = true
 	return properties
+
 
 func set_data_sources_data(data : Array) -> void:
 	data_sources.clear()
@@ -396,7 +398,8 @@ func set_data_sources_data(data : Array) -> void:
 			ds.set(key, settings[key])
 		ds.widget = widget
 		data_sources.append(ds)
-	
+
+
 func get_data_sources_data() -> Array:
 	var data : Array = []
 	for data_source in data_sources:
@@ -405,6 +408,9 @@ func get_data_sources_data() -> Array:
 
 
 func _on_MaximizeButton_toggled(button_pressed):
+	if position_on_grid == Vector2.ZERO and size_on_grid == Vector2.ZERO:
+		position_on_grid = (rect_position / grid_size).snapped(Vector2.ONE)
+		size_on_grid = (rect_size / grid_size).snapped(Vector2.ONE)
 	is_maximized = button_pressed
 	set_as_toplevel(button_pressed)
 	resize_buttons.visible = not (is_maximized or is_locked)

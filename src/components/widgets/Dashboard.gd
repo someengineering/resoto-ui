@@ -74,16 +74,16 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	reference.editor_only = false
 	reference.visible = false
 	
-#	container.set_anchors()
-	
 	return container
-	
+
+
 func lock(_locked : bool) -> void:
 	locked = _locked
 	grid_background.visible = !locked
 	
 	for widget in widgets.get_children():
 		widget.lock(locked)
+
 
 func _on_Grid_resized() -> void:
 	
@@ -140,7 +140,8 @@ func refresh(from : int = ts_start, to : int = ts_end, interval : int = step) ->
 	step = interval
 	for widget in widgets.get_children():
 		widget.execute_query()
-	
+
+
 func _on_widget_moved_or_resized():
 	var max_y : float = -INF
 	for widget in widgets.get_children():
