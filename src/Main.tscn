@@ -372,14 +372,18 @@ margin_left = 90.0
 margin_right = 170.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 80, 0 )
+theme_type_variation = "ButtonFlat"
 text = "Yes"
+flat = true
 
 [node name="RightButton" type="Button" parent="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons"]
 margin_left = 190.0
 margin_right = 270.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 80, 0 )
+theme_type_variation = "ButtonFlat"
 text = "Cancel"
+flat = true
 
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 

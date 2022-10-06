@@ -316,8 +316,22 @@ func execute_query() -> void:
 
 
 func _on_DeleteButton_pressed() -> void:
-	
-	queue_free()
+	var message_text:= "Do you want to delete this widget%s?"
+	if title != "":
+		message_text = message_text % (": \"" + title + "\" ")
+	else:
+		message_text = message_text % ""
+		
+	var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
+		"Delete Widget?",
+		message_text,
+		"Yes", "Cancel")
+	delete_confirm_popup.connect("response", self, "_on_delete_confirm_response", [], CONNECT_ONESHOT)
+
+
+func _on_delete_confirm_response(_response:String):
+	if _response == "left":
+		queue_free()
 
 
 func _on_ConfigButton_pressed() -> void:
