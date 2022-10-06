@@ -55,9 +55,7 @@ func _on_tab_deleted(tab:int, _db_last_saved_name:String) -> void:
 
 
 func _on_delete_config_id_done(_error: int, response):
-	print("delete:")
-	print(_error)
-	print(response.transformed)
+	pass
 
 
 func save_dashboard(dashboard : DashboardContainer):
@@ -67,8 +65,6 @@ func save_dashboard(dashboard : DashboardContainer):
 	dashboard.last_saved_name = dashboard.dashboard_name
 	available_dashboards[dashboard.dashboard_name.replace(" ", "_")] = data
 	_refresh_dashboard_list()
-	# refresh list
-	# delete from vars
 
 
 func get_db_config_name(_name:String):

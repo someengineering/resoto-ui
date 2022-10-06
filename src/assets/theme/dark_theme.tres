@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=51 format=2]
+[gd_resource type="Theme" load_steps=52 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -63,6 +63,8 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
 corner_detail = 1
+
+[sub_resource type="StyleBoxEmpty" id=40]
 
 [sub_resource type="StyleBoxEmpty" id=39]
 
@@ -415,6 +417,7 @@ Button/styles/focus = SubResource( 18 )
 Button/styles/hover = SubResource( 4 )
 Button/styles/normal = SubResource( 5 )
 Button/styles/pressed = SubResource( 4 )
+ButtonFlat/styles/focus = SubResource( 40 )
 CheckBox/icons/checked = ExtResource( 2 )
 CheckBox/icons/radio_checked = ExtResource( 11 )
 CheckBox/icons/radio_unchecked = ExtResource( 10 )
