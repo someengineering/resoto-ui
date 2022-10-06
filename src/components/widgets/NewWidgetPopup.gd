@@ -2,6 +2,9 @@ extends WindowDialog
 
 signal widget_added(widget_data)
 
+const title_add = "Add Widget"
+const title_edit = "Edit Widget [%s]"
+
 var current_widget_preview_name : String = "Indicator"
 var current_wdiget_properties : Dictionary = {}
 var preview_widget : BaseWidget = null
@@ -40,9 +43,11 @@ onready var options_container := find_node("Options")
 onready var controller_container := $WidgetPreview/VBoxContainer/PanelContainer/ColorControllersContainer
 onready var data_source_types := $WidgetOptions/VBoxContainer/HBoxContainer/DataSourceTypeOptionButton
 
+
 func _ready() -> void:
 	for key in widgets:
 		widget_type_options.add_item(key)
+
 
 func _on_AddWidgetButton_pressed() -> void:
 	var widget = widgets[widget_type_options.text].instance() if widget_to_edit == null else widget_to_edit.widget
@@ -77,11 +82,14 @@ func _on_AddWidgetButton_pressed() -> void:
 		widget_to_edit.data_sources = new_data_sources
 		widget_to_edit.call_deferred("execute_query")
 		widget_to_edit = null
-		
-	
 	
 	hide()
 	preview_widget.queue_free()
+
+
+func add_widget_popup():
+	window_title = title_add
+	popup_centered()
 
 
 func _on_WidgetType_item_selected(_index : int) -> void:
@@ -89,7 +97,8 @@ func _on_WidgetType_item_selected(_index : int) -> void:
 		return
 		
 	create_preview(widget_type_options.text)
-	
+
+
 func create_preview(widget_type : String = "Indicator") -> void:
 	if is_instance_valid(preview_widget):
 		preview_widget.queue_free()
@@ -163,6 +172,12 @@ func get_control_for_property(property : Dictionary) -> Control:
 			control = SpinBox.new()
 			control.value = preview_widget[property.name]
 			control_signal = "value_changed"
+		TYPE_BOOL:
+			control = CheckBox.new()
+			control.flat = true
+			control.theme_type_variation = "CheckBoxFlat"
+			control.pressed = preview_widget[property.name]
+			control_signal = "toggled"
 		TYPE_STRING:
 			control = LineEdit.new()
 			control.text = preview_widget[property.name]
@@ -176,7 +191,8 @@ func get_control_for_property(property : Dictionary) -> Control:
 	control.size_flags_horizontal |= SIZE_EXPAND
 			
 	return control
-	
+
+
 func get_preview_widget_properties() -> Dictionary:
 	var found_settings := false
 	var properties := {}
@@ -188,6 +204,7 @@ func get_preview_widget_properties() -> Dictionary:
 		elif property.name == "Widget Settings":
 			 found_settings = true
 	return properties
+
 
 func _on_NameEdit_text_changed(new_text : String) -> void:
 	if preview_container.get_child_count() > 0:
@@ -239,7 +256,8 @@ func _on_AddDataSource_pressed() -> void:
 		DataSource.TYPES.TIME_SERIES:
 			ds.interval = interval
 			ds.set_metrics(metrics)
-	
+
+
 func update_preview() -> void:
 	if not is_instance_valid(preview_widget):
 		return
@@ -256,12 +274,12 @@ func update_preview() -> void:
 				attr["to"] = to_date
 			
 		datasource.data_source.make_query(dashboard_filters, attr)
-		
+
 
 func edit_widget(widget) -> void:
 	widget_to_edit = widget
 	popup_centered()
-	
+	window_title = title_edit % [widget_type_options.text]
 
 
 func _on_NewWidgetPopup_popup_hide():

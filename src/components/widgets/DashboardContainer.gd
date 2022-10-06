@@ -63,7 +63,7 @@ func _process(_delta : float) -> void:
 
 
 func _on_AddWidgetButton_pressed() -> void:
-	$WindowDialog.popup_centered()
+	$WindowDialog.add_widget_popup()
 
 
 func _on_WidgetContainer_config_pressed(widget_container) -> void:
@@ -90,7 +90,7 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 
 
 func _on_LockButton_toggled(button_pressed : bool) -> void:
-	$VBoxContainer/PanelContainer/HBoxContainer/AddWidgetButton.visible = button_pressed
+	$VBoxContainer/PanelContainer/Content/MainBar/AddWidgetButton.visible = button_pressed
 	dashboard.lock(!button_pressed)
 	if !button_pressed:
 		emit_signal("dashboard_changed", self)
@@ -115,7 +115,7 @@ func _on_DeleteButton_pressed() -> void:
 
 func _on_delete_confirm_response(_response:String):
 	if _response == "left":
-		emit_signal("deleted", get_position_in_parent())
+		emit_signal("deleted", get_position_in_parent(), last_saved_name)
 		queue_free()
 
 

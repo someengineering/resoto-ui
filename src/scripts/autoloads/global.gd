@@ -3,7 +3,8 @@ extends Node
 signal add_toast
 signal ui_shrink_changed
 
-const tsdb_metric_prefix:String		= "resoto_"
+const tsdb_metric_prefix:String		 = "resoto_"
+const dashboard_config_prefix:String = "resoto.ui.dashboard."
 
 var popup_manager: CanvasLayer = null
 var ui_shrink: float = 1.0 setget set_ui_shrink

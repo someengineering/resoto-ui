@@ -45,26 +45,38 @@ func add_dashboard(dashboard_name : String = ""):
 	new_tab.dashboard._on_Grid_resized()
 
 
-func _on_tab_deleted(tab) -> void:
+func _on_tab_deleted(tab:int, _db_last_saved_name:String) -> void:
+	API.delete_config_id(self, get_db_config_name(_db_last_saved_name))
+	_refresh_dashboard_list()
 	if tab > 0:
 		current_tab = tab-1
 	if get_child_count() <= 2:
 		request_saved_dashboards()
 
 
+func _on_delete_config_id_done(_error: int, response):
+	print("delete:")
+	print(_error)
+	print(response.transformed)
+
+
 func save_dashboard(dashboard : DashboardContainer):
 	var data = dashboard.get_data()
-	API.cli_execute("configs delete resoto.ui.dashboard."+dashboard.last_saved_name.replace(" ", "_"), self)
-	API.patch_config_id(self, "resoto.ui.dashboard."+dashboard.name.replace(" ","_"), JSON.print(data))
+	API.delete_config_id(self, get_db_config_name(dashboard.last_saved_name))
+	API.patch_config_id(self, get_db_config_name(dashboard.name), JSON.print(data))
 	dashboard.last_saved_name = dashboard.dashboard_name
+	available_dashboards[dashboard.dashboard_name.replace(" ", "_")] = data
+	_refresh_dashboard_list()
+	# refresh list
+	# delete from vars
+
+
+func get_db_config_name(_name:String):
+	return _g.dashboard_config_prefix + _name.replace(" ", "_")
 
 
 func close_dashboard(dashboard : DashboardContainer):
 	dashboard.queue_free()
-
-
-func _on_cli_execute_done(_error : int, _response):
-	pass
 
 
 func _on_patch_config_id_done(_error : int, _response):
@@ -92,12 +104,6 @@ func _on_get_config_id_done(_error : int, _response, _config):
 		dashboards_loaded += 1
 		if total_saved_dashboards <= dashboards_loaded:
 			emit_signal("all_dashboards_loaded")
-
-
-func _on_DashBoardManager_all_dashboards_loaded():
-	dashboards_list.clear()
-	for dashboard in available_dashboards:
-		dashboards_list.add_item(dashboard)
 
 
 func open_user_dashboards():
@@ -186,3 +192,9 @@ func _on_DashBoardManager_visibility_changed():
 		request_saved_dashboards()
 		yield(self, "all_dashboards_loaded")
 		open_user_dashboards()
+
+
+func _refresh_dashboard_list():
+	dashboards_list.clear()
+	for dashboard in available_dashboards:
+		dashboards_list.add_item(dashboard)

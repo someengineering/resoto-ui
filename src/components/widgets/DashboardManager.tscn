@@ -118,7 +118,7 @@ margin_bottom = 374.0
 size_flags_horizontal = 8
 text = "Open"
 
-[connection signal="all_dashboards_loaded" from="." to="." method="_on_DashBoardManager_all_dashboards_loaded"]
+[connection signal="all_dashboards_loaded" from="." to="." method="_refresh_dashboard_list"]
 [connection signal="visibility_changed" from="." to="." method="_on_DashBoardManager_visibility_changed"]
 [connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer/AddDashboard" to="." method="_on_AddDashboard_pressed"]
 [connection signal="item_activated" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/DashboardItemList" to="." method="_on_DashboardItemList_item_activated"]
