@@ -91,6 +91,11 @@ func patch_config_id(_connect_to:Node, _config_id:String="resoto.core", _config_
 	_req_res.connect("done", _connect_to, "_on_patch_config_id_done")
 	return _req_res
 
+func delete_config_id(_connect_to:Node, _config_id:String="") -> ResotoAPI.Request:
+	_req_res = _resoto_api.delete_config_id(_config_id, "")
+	_req_res.connect("done", _connect_to, "_on_delete_config_id_done")
+	return _req_res
+
 func get_config_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_config_model()
 	_req_res.connect("done", _connect_to, "_on_get_config_model_done")
