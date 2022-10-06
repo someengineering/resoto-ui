@@ -84,10 +84,11 @@ func _on_get_configs_done(_error: int, response):
 			API.get_config_id(self, config)
 			total_saved_dashboards += 1
 
+
 func _on_get_config_id_done(_error : int, _response, _config):
 	var dashboard = _response.transformed.result
 	if dashboard is Dictionary:
-		available_dashboards[dashboard["dashboard_name"].replace(" ", "_")] = dashboard
+		available_dashboards[dashboard.dashboard_name.replace(" ", "_")] = dashboard
 		dashboards_loaded += 1
 		if total_saved_dashboards <= dashboards_loaded:
 			emit_signal("all_dashboards_loaded")
@@ -178,3 +179,10 @@ func _on_files_dropped(files, _screen):
 
 func _on_DashboardItemList_item_activated(_index):
 	_on_OpenDashboard_pressed()
+
+
+func _on_DashBoardManager_visibility_changed():
+	if visible:
+		request_saved_dashboards()
+		yield(self, "all_dashboards_loaded")
+		open_user_dashboards()
