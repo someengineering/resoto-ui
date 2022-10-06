@@ -107,7 +107,6 @@ margin_right = 354.0
 margin_bottom = 320.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-items = [ "Item 0", null, false ]
 select_mode = 1
 same_column_width = true
 
@@ -120,6 +119,7 @@ size_flags_horizontal = 8
 text = "Open"
 
 [connection signal="all_dashboards_loaded" from="." to="." method="_on_DashBoardManager_all_dashboards_loaded"]
+[connection signal="visibility_changed" from="." to="." method="_on_DashBoardManager_visibility_changed"]
 [connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer/AddDashboard" to="." method="_on_AddDashboard_pressed"]
 [connection signal="item_activated" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/DashboardItemList" to="." method="_on_DashboardItemList_item_activated"]
 [connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/OpenDashboard" to="." method="_on_OpenDashboard_pressed"]
