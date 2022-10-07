@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_maximize.png-b98170eb6eaa1fa8afdcbfbc78ca78cf.stex"
+path="res://.import/download_min-01.svg-eb8a5f125e4a77bd7d97c0219ed9e58b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icon_maximize.png"
-dest_files=[ "res://.import/icon_maximize.png-b98170eb6eaa1fa8afdcbfbc78ca78cf.stex" ]
+source_file="res://assets/download_min-01.svg"
+dest_files=[ "res://.import/download_min-01.svg-eb8a5f125e4a77bd7d97c0219ed9e58b.stex" ]
 
 [params]
 

@@ -2,6 +2,7 @@ extends Node
 
 signal add_toast
 signal ui_shrink_changed
+signal fullscreen_hide_menu
 
 const tsdb_metric_prefix:String		 = "resoto_"
 const dashboard_config_prefix:String = "resoto.ui.dashboard."

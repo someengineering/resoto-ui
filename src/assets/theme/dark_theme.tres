@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=52 format=2]
+[gd_resource type="Theme" load_steps=54 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -186,6 +186,15 @@ border_width_bottom = 1
 border_color = Color( 0.462745, 0.176471, 0.843137, 1 )
 corner_detail = 1
 
+[sub_resource type="DynamicFontData" id=41]
+font_path = "res://assets/theme/Barlow-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=42]
+size = 13
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 41 )
+
 [sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 4.0
 content_margin_right = 4.0
@@ -269,10 +278,7 @@ content_margin_right = 8.0
 content_margin_top = 10.0
 content_margin_bottom = 10.0
 bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
-border_width_left = 1
 border_width_top = 4
-border_width_right = 1
-border_width_bottom = 1
 border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
@@ -440,6 +446,7 @@ ItemList/styles/cursor_unfocused = SubResource( 35 )
 ItemList/styles/selected = SubResource( 5 )
 ItemList/styles/selected_focus = SubResource( 4 )
 Label/colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
+LabelSmall/fonts/font = SubResource( 42 )
 LineEdit/colors/clear_button_color = Color( 0.85098, 0.721569, 1, 1 )
 LineEdit/colors/clear_button_color_pressed = Color( 0.913725, 0.552941, 0.968627, 1 )
 LineEdit/colors/font_color = Color( 0.85098, 0.721569, 1, 1 )

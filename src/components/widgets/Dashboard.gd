@@ -21,6 +21,7 @@ var filters : Dictionary = {
 	"account" : ""
 }
 
+
 func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
 	var container = widget_container_scene.instance()
@@ -87,7 +88,6 @@ func lock(_locked : bool) -> void:
 
 
 func _on_Grid_resized() -> void:
-	
 	_x_grid_size = rect_size.x / x_grid_ratio
 
 	var grid_size := Vector2(_x_grid_size, y_grid_size)
@@ -105,6 +105,7 @@ func _on_Grid_resized() -> void:
 		widget.parent_reference.rect_size = widget.size_on_grid * grid_size
 		widget.call_deferred("set_anchors")
 
+
 func find_rect_intersection(rect : Rect2, exclude_widgets := []):
 	var all_widgets : Array = widgets.get_children()
 
@@ -116,6 +117,7 @@ func find_rect_intersection(rect : Rect2, exclude_widgets := []):
 		if other_rect.intersects(rect):
 			return other_rect
 	return null
+
 
 func find_empty_slot(rect : Rect2) -> Vector2:
 	var position = null

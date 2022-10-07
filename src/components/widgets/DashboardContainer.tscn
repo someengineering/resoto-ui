@@ -1,16 +1,26 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
-[ext_resource path="res://assets/icon_delete.png" type="Texture" id=4]
-[ext_resource path="res://assets/edit.png" type="Texture" id=5]
+[ext_resource path="res://assets/close-01.svg" type="Texture" id=4]
+[ext_resource path="res://assets/edit_new-01.svg" type="Texture" id=5]
 [ext_resource path="res://components/widgets/DashboardContainer.gd" type="Script" id=6]
 [ext_resource path="res://components/widgets/NewWidgetPopup.tscn" type="PackedScene" id=7]
 [ext_resource path="res://components/widgets/DateRangeSelector.tscn" type="PackedScene" id=8]
 [ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=9]
-[ext_resource path="res://assets/icon_tabs_close_med.png" type="Texture" id=10]
+[ext_resource path="res://assets/delete-01.svg" type="Texture" id=10]
 [ext_resource path="res://assets/icon_refresh.png" type="Texture" id=11]
+[ext_resource path="res://assets/download_min-01.svg" type="Texture" id=12]
+[ext_resource path="res://assets/maximize-01.svg" type="Texture" id=13]
+
+[sub_resource type="Gradient" id=10]
+colors = PoolColorArray( 0.141176, 0.141176, 0.203922, 1, 0.105882, 0.0941176, 0.109804, 1 )
+
+[sub_resource type="GradientTexture2D" id=11]
+gradient = SubResource( 10 )
+fill_from = Vector2( 1.057, -0.048 )
+fill_to = Vector2( -0.274, 3.504 )
 
 [sub_resource type="StyleBoxFlat" id=8]
 content_margin_left = 10.0
@@ -22,6 +32,7 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.0470588 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 24
@@ -86,15 +97,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 6 )
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.141176, 0.141176, 0.203922, 1 )
+texture = SubResource( 11 )
+expand = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 3 )
+custom_constants/separation = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 margin_right = 1920.0
@@ -114,7 +127,7 @@ margin_right = 1900.0
 margin_bottom = 29.0
 
 [node name="DashboardNameLabel" type="LineEdit" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-margin_right = 1637.0
+margin_right = 1631.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
 custom_colors/font_color_uneditable = Color( 0.85098, 0.721569, 1, 1 )
@@ -142,8 +155,8 @@ texture = ExtResource( 11 )
 stretch_mode = 6
 
 [node name="RefreshOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-margin_left = 1641.0
-margin_right = 1741.0
+margin_left = 1635.0
+margin_right = 1735.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 100, 0 )
 hint_tooltip = "Refresh interval"
@@ -153,8 +166,8 @@ items = [ "15 min", ExtResource( 11 ), false, 0, null, "30 min", ExtResource( 11
 selected = 0
 
 [node name="LockButton" type="Button" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-margin_left = 1745.0
-margin_right = 1774.0
+margin_left = 1739.0
+margin_right = 1768.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 hint_tooltip = "Edit Dashboard"
@@ -163,20 +176,32 @@ icon = ExtResource( 5 )
 expand_icon = true
 
 [node name="DeleteButton" type="Button" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-margin_left = 1778.0
-margin_right = 1807.0
+margin_left = 1772.0
+margin_right = 1801.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 hint_tooltip = "Delete Dashboard"
-icon = ExtResource( 4 )
+icon = ExtResource( 10 )
 expand_icon = true
 
 [node name="ExportButton" type="Button" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-margin_left = 1811.0
+margin_left = 1805.0
+margin_right = 1834.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 29, 29 )
+hint_tooltip = "Export Dashboard to JSON"
+icon = ExtResource( 12 )
+expand_icon = true
+
+[node name="MaximizeButton" type="Button" parent="VBoxContainer/PanelContainer/Content/MainBar"]
+margin_left = 1838.0
 margin_right = 1867.0
 margin_bottom = 29.0
-hint_tooltip = "Export Dashboard to JSON"
-text = "Export"
+rect_min_size = Vector2( 29, 29 )
+hint_tooltip = "Maximize Dashboard"
+icon = ExtResource( 13 )
+icon_align = 1
+expand_icon = true
 
 [node name="CloseButton" type="Button" parent="VBoxContainer/PanelContainer/Content/MainBar"]
 margin_left = 1871.0
@@ -184,7 +209,7 @@ margin_right = 1900.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 hint_tooltip = "Close Dashboard"
-icon = ExtResource( 10 )
+icon = ExtResource( 4 )
 icon_align = 1
 expand_icon = true
 
@@ -241,8 +266,43 @@ size_flags_vertical = 0
 text = "Last 24 hours"
 flat = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="MinimizedBar" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
 margin_top = 81.0
+margin_right = 1920.0
+margin_bottom = 106.0
+custom_constants/separation = 0
+alignment = 1
+
+[node name="Control" type="Control" parent="VBoxContainer/MinimizedBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 5, 0 )
+
+[node name="DashboardMinLabel" type="Label" parent="VBoxContainer/MinimizedBar"]
+modulate = Color( 1, 1, 1, 0.588235 )
+margin_top = 2.0
+margin_right = 1892.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+
+[node name="MinimizeButton" type="Button" parent="VBoxContainer/MinimizedBar"]
+modulate = Color( 1, 1, 1, 0.27451 )
+margin_left = 1896.0
+margin_right = 1920.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 24, 24 )
+hint_tooltip = "Minimize Dashboard"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_type_variation = "ButtonFlat"
+icon = ExtResource( 13 )
+flat = true
+icon_align = 1
+expand_icon = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+margin_top = 77.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 size_flags_vertical = 3
@@ -250,7 +310,7 @@ scroll_horizontal_enabled = false
 
 [node name="Dashboard" type="Control" parent="VBoxContainer/ScrollContainer"]
 margin_right = 1920.0
-margin_bottom = 999.0
+margin_bottom = 1003.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
@@ -295,11 +355,13 @@ margin_bottom = 285.0
 [connection signal="toggled" from="VBoxContainer/PanelContainer/Content/MainBar/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/DeleteButton" to="." method="_on_DeleteButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/ExportButton" to="." method="_on_ExportButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/MaximizeButton" to="." method="_on_MaximizeButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/FiltersContainer/CloudsCombo" to="." method="_on_CloudsCombo_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/FiltersContainer/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/FiltersContainer/RegionsCombo" to="." method="_on_RegionsCombo_option_changed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/DateButton" to="." method="_on_DateButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/MinimizedBar/MinimizeButton" to="." method="_on_MinimizeButton_pressed"]
 [connection signal="resized" from="VBoxContainer/ScrollContainer/Dashboard/Grid" to="VBoxContainer/ScrollContainer/Dashboard" method="_on_Grid_resized"]
 [connection signal="widget_added" from="WindowDialog" to="." method="_on_WindowDialog_widget_added"]
 [connection signal="widget_added" from="WindowDialog" to="VBoxContainer/ScrollContainer/Dashboard" method="add_widget"]
