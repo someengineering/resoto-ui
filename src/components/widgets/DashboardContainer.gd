@@ -4,6 +4,7 @@ extends Control
 signal deleted
 signal dashboard_changed(dashboard)
 signal dashboard_closed(dashboard)
+signal dashboard_maximized(is_maximized)
 
 var dashboard_name : String = "" setget set_dashboard_name
 var last_saved_name : String = ""
@@ -20,6 +21,7 @@ var widgets : Array setget set_widgets
 var cloud : String setget set_cloud
 var account : String setget set_account
 var region : String setget set_region
+var is_maximized: bool = false setget set_is_maximized
 
 var initial_load : bool = true
 
@@ -127,6 +129,7 @@ func set_dashboard_name(new_name : String) -> void:
 	name = new_name
 	dashboard_name = new_name
 	find_node("DashboardNameLabel").text = new_name
+	find_node("DashboardMinLabel").text = new_name
 
 
 func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
@@ -299,3 +302,18 @@ func _on_ExportButton_pressed():
 
 func _on_CloseButton_pressed():
 	emit_signal("dashboard_closed", self)
+
+
+func set_is_maximized(_is_maximized:bool):
+	is_maximized = _is_maximized
+	$VBoxContainer/PanelContainer.visible = !is_maximized
+	$VBoxContainer/MinimizedBar.visible = is_maximized
+	emit_signal("dashboard_maximized", is_maximized)
+
+
+func _on_MaximizeButton_pressed():
+	set_is_maximized(true)
+
+
+func _on_MinimizeButton_pressed():
+	set_is_maximized(false)

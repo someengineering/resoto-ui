@@ -27,6 +27,13 @@ func _process(delta):
 	update_highlighted_cell(($TextureRect/Grid.get_local_mouse_position() * Vector2(x_categories.size(), y_categories.size()) / $TextureRect/Grid.rect_size - Vector2(0.5,0.5)).snapped(Vector2.ONE))
 	
 func update_highlighted_cell(cell_position : Vector2):
+	cell_position.x = max(0, cell_position.x)
+	cell_position.y = max(0, cell_position.y)
+	if cell_position.y > value_matrix.size()-1:
+		return
+	if cell_position.x > value_matrix[cell_position.y].size()-1:
+		return
+	
 	$TextureRect/Grid.material.set_shader_param(
 		"highlighted_cell",
 		cell_position

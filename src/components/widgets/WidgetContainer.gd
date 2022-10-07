@@ -470,7 +470,7 @@ func _on_MaximizeButton_toggled(button_pressed):
 
 func _on_WidgetContainer_moved_or_resized():  
 	if is_maximized:
-		maximize_button.modulate.a = 1
+		maximize_button.modulate.a = 0.1
 		rect_global_position = get_parent().get_parent().get_parent().rect_global_position
 		rect_size = get_parent().get_parent().get_parent().rect_size
 	else:
@@ -490,7 +490,7 @@ func _on_DuplicateButton_pressed():
 
 
 func _on_PanelContainer_mouse_entered():
-	maximize_button.modulate.a = 1
+	maximize_button.modulate.a = 1 if !is_maximized else 0.1
 
 
 func _on_PanelContainer_mouse_exited():

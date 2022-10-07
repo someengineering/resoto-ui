@@ -38,6 +38,7 @@ func add_dashboard(dashboard_name : String = ""):
 	move_child(new_tab, get_tab_control(current_tab).get_position_in_parent())
 	
 	new_tab.connect("dashboard_changed", self, "save_dashboard")
+	new_tab.connect("dashboard_maximized", self, "maximize_dashboard")
 	new_tab.connect("dashboard_closed", self, "close_dashboard")
 	
 	yield(VisualServer,"frame_post_draw")
@@ -52,6 +53,15 @@ func _on_tab_deleted(tab:int, _db_last_saved_name:String) -> void:
 		current_tab = tab-1
 	if get_child_count() <= 2:
 		request_saved_dashboards()
+
+
+func maximize_dashboard(is_maximized:bool) -> void:
+	tabs_visible = !is_maximized
+	_g.emit_signal("fullscreen_hide_menu", is_maximized)
+	if is_maximized:
+		add_stylebox_override("panel", StyleBoxEmpty.new())
+	else:
+		remove_stylebox_override("panel")
 
 
 func _on_delete_config_id_done(_error: int, response):

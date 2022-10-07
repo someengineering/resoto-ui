@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/edit.png-5f81715ab2833e480257b9a0702c0ed1.stex"
+path="res://.import/minimize_to_bar-01.svg-b1c8ad48fdd3266cc77e294c0e991f37.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/edit.png"
-dest_files=[ "res://.import/edit.png-5f81715ab2833e480257b9a0702c0ed1.stex" ]
+source_file="res://assets/minimize_to_bar-01.svg"
+dest_files=[ "res://.import/minimize_to_bar-01.svg-b1c8ad48fdd3266cc77e294c0e991f37.stex" ]
 
 [params]
 

@@ -10,7 +10,7 @@ var is_closed:bool = false
 var title:String = ""
 var description:String = ""
 var status:int = 0
-var duration:float = 5.0
+var duration:float = 2.0
 var is_closable:bool = true
 
 onready var toast_anchor = $Anchor
