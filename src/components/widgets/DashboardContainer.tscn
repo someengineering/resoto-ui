@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
@@ -68,6 +68,19 @@ shader_param/grid_color = Color( 0.447059, 0.360784, 0.545098, 0.309804 )
 shader_param/dashboard_size = Vector2( 1000, 1000 )
 shader_param/w = 1.0
 
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+border_width_top = 30
+border_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_top = 25.0
+shadow_color = Color( 0, 0, 0, 0.0980392 )
+shadow_size = 30
+shadow_offset = Vector2( 0, 10 )
+
 [node name="DashboardContainer" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -118,7 +131,7 @@ margin_right = 1775.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 29, 29 )
 size_flags_horizontal = 10
-text = "+"
+text = "+ Add Widget"
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/PanelContainer/Content/MainBar"]
 visible = false
@@ -259,6 +272,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="WindowDialog" parent="." instance=ExtResource( 7 )]
+visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -267,6 +281,7 @@ margin_left = -382.5
 margin_top = -260.0
 margin_right = 382.5
 margin_bottom = 260.0
+custom_styles/panel = SubResource( 9 )
 
 [node name="DateRangeSelector" parent="." instance=ExtResource( 8 )]
 margin_left = 806.0

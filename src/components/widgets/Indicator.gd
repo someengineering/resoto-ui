@@ -56,6 +56,8 @@ func set_background_color(new_color) -> void:
 
 
 func set_value(new_value) -> void:
+	if new_value == null:
+		new_value = 0
 	value = float(new_value)
 	if is_instance_valid(value_label):
 		if new_value is String and not new_value.is_valid_float():

@@ -62,6 +62,7 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 		widget.color_controllers_data = widget_data["color_controllers_data"]
 	
 	container.connect("config_pressed", owner, "_on_WidgetContainer_config_pressed")
+	container.connect("duplicate_widget", owner, "_on_WidgetContainer_duplicate_pressed")
 	
 	if not container.is_inside_tree():
 		yield(container, "tree_entered")

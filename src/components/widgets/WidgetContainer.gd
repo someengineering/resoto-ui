@@ -2,7 +2,11 @@ class_name WidgetContainer
 extends Control
 
 signal moved_or_resized
+signal duplicate_widget(widget_container)
 signal config_pressed(widget_container)
+
+const max_hint:= "Maximize widget"
+const min_hint:= "Minimize widget"
 
 enum RESIZE_MODES {
 	MOVE,
@@ -44,16 +48,18 @@ onready var resize_buttons := $ResizeButtons
 onready var resize_tween := $ResizeTween
 onready var last_good_position : Vector2
 onready var last_good_size : Vector2
-onready var title_label := $PanelContainer/Title/TitleLabel
+onready var title_label := $PanelContainer/TitleLabel
 onready var datetime_label := $PanelContainer/Title/DataTimeLabel
 onready var delete_button := $PanelContainer/Title/DeleteButton
 onready var config_button := $PanelContainer/Title/ConfigButton
+onready var duplicate_button := $PanelContainer/Title/DuplicateButton
 onready var maximize_button := $PanelContainer/Title/MaximizeButton
 onready var query_warning := $QueryWarning
 onready var widget_content := $MarginContainer
 
 
 func _ready() -> void:
+	maximize_button.modulate.a = 0
 	for i in $ResizeButtons.get_child_count():
 		var button : BaseButton = resize_buttons.get_child(i)
 		button.connect("button_up", self, "_on_resize_button_released")
@@ -84,10 +90,13 @@ func _on_resize_button_released() -> void:
 	resize_mode = RESIZE_MODES.NONE
 	yield(resize_tween, "tween_all_completed")
 	
+	refresh_pos_and_size_on_grid()
+	set_anchors()
+
+
+func refresh_pos_and_size_on_grid():
 	position_on_grid = (rect_position / grid_size).snapped(Vector2.ONE)
 	size_on_grid = (rect_size / grid_size).snapped(Vector2.ONE)
-	
-	set_anchors()
 
 
 func set_anchors() -> void:
@@ -99,6 +108,7 @@ func set_anchors() -> void:
 	anchor_left = (parent_reference.rect_position.x) / dashboard_size.x
 	anchor_right = (parent_reference.rect_position + parent_reference.rect_size).x / dashboard_size.x
 	emit_signal("moved_or_resized")
+
 
 func _on_resize_button_pressed( mode : int) -> void:
 	limits = get_limits()
@@ -297,6 +307,8 @@ func lock(locked : bool) -> void:
 	resize_buttons.visible = not (is_locked or is_maximized)
 	delete_button.visible = !locked
 	config_button.visible = !locked
+	duplicate_button.visible = !locked
+	maximize_button.visible = locked
 
 func set_title(new_title : String) -> void:
 	title = new_title
@@ -383,6 +395,9 @@ func get_data() -> Dictionary:
 		"color_controllers_data" : color_controllers_data
 	}
 	
+	if position_on_grid == Vector2.ZERO and size_on_grid == Vector2.ZERO:
+		refresh_pos_and_size_on_grid()
+	
 	var data : Dictionary = {
 		"position:x" : position_on_grid.x,
 		"position:y" : position_on_grid.y,
@@ -433,19 +448,21 @@ func get_data_sources_data() -> Array:
 	return data
 
 
+onready var query_warning_title = $QueryWarning/VBox/PanelContainer/VBox/QueryStatusTitle
 func _on_data_source_query_status(_type:int=0, _title:="Widget Error", _message:=""):
-	query_warning.find_node("QueryStatusTitle").visible = _title != ""
-	query_warning.find_node("QueryStatusTitle").text = _title
-	query_warning.find_node("QueryStatusMessage").visible = _message != ""
-	query_warning.find_node("QueryStatusMessage").text = _message
+	query_warning_title.visible = _title != ""
+	query_warning_title.text = _title
+	query_warning_title.hint_tooltip = _message
+	$QueryWarning/VBox/Warning.hint_tooltip = _title + "\n" + _message
+	query_warning.get_node("VBox/PanelContainer").visible = size_on_grid.y >= 2
 	query_warning.show()
 
 
 func _on_MaximizeButton_toggled(button_pressed):
 	if position_on_grid == Vector2.ZERO and size_on_grid == Vector2.ZERO:
-		position_on_grid = (rect_position / grid_size).snapped(Vector2.ONE)
-		size_on_grid = (rect_size / grid_size).snapped(Vector2.ONE)
+		refresh_pos_and_size_on_grid()
 	is_maximized = button_pressed
+	maximize_button.hint_tooltip = min_hint if is_maximized else max_hint
 	set_as_toplevel(button_pressed)
 	resize_buttons.visible = not (is_maximized or is_locked)
 	emit_signal("moved_or_resized")
@@ -453,12 +470,29 @@ func _on_MaximizeButton_toggled(button_pressed):
 
 func _on_WidgetContainer_moved_or_resized():  
 	if is_maximized:
+		maximize_button.modulate.a = 1
 		rect_global_position = get_parent().get_parent().get_parent().rect_global_position
 		rect_size = get_parent().get_parent().get_parent().rect_size
 	else:
 		rect_position = position_on_grid * grid_size
 		rect_size = size_on_grid * grid_size
+	
+	if query_warning:
+		query_warning.get_node("VBox/PanelContainer").visible = (size_on_grid.y >= 2 and size_on_grid.x >= 2) or is_maximized
 
 
 func _on_ExportButton_pressed():
 	JavaScript.download_buffer(widget.get_csv().to_utf8(), "%s %s.csv" % [title, Time.get_datetime_string_from_system()])
+
+
+func _on_DuplicateButton_pressed():
+	emit_signal("duplicate_widget", self)
+
+
+func _on_PanelContainer_mouse_entered():
+	maximize_button.modulate.a = 1
+
+
+func _on_PanelContainer_mouse_exited():
+	if not is_maximized:
+		maximize_button.modulate.a = 0

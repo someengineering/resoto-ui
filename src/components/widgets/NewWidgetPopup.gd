@@ -4,6 +4,7 @@ signal widget_added(widget_data)
 
 const title_add = "Add Widget"
 const title_edit = "Edit Widget [%s]"
+const title_duplicate = "Duplicate Widget [base: %s]"
 
 var current_widget_preview_name : String = "Indicator"
 var current_wdiget_properties : Dictionary = {}
@@ -11,7 +12,8 @@ var preview_widget : BaseWidget = null
 var data_sources : Array = []
 var metrics : Dictionary = {}
 
-var widget_to_edit = null
+var widget_to_edit:Node	= null
+var duplicating:bool	= false
 
 var from_date : int
 var to_date : int
@@ -50,7 +52,12 @@ func _ready() -> void:
 
 
 func _on_AddWidgetButton_pressed() -> void:
-	var widget = widgets[widget_type_options.text].instance() if widget_to_edit == null else widget_to_edit.widget
+	var widget
+	if widget_to_edit == null or duplicating:
+		widget = widgets[widget_type_options.text].instance()
+	else:
+		widget = widget_to_edit.widget
+		
 	var properties = get_preview_widget_properties()
 	
 	for key in get_preview_widget_properties():
@@ -69,7 +76,7 @@ func _on_AddWidgetButton_pressed() -> void:
 		if child is ColorController:
 			widget.get_node(child.name).conditions = child.conditions.duplicate(true)
 		
-	if widget_to_edit == null:
+	if widget_to_edit == null or duplicating:
 		var widget_data := {
 			"scene" : widget,
 			"title" : widget_name_label.text,
@@ -219,9 +226,11 @@ func _on_get_config_id_done(_error, _response, _config_key) -> void:
 
 func _on_NewWidgetPopup_about_to_show() -> void:
 	widget_name_label.text = ""
+	
 	for data_source in data_source_container.get_children():
 		data_source_container.remove_child(data_source)
 		data_source.queue_free()
+	
 	if widget_to_edit != null:
 		widget_name_label.text = widget_to_edit.title
 		for data_source in widget_to_edit.data_sources:
@@ -276,6 +285,13 @@ func update_preview() -> void:
 		datasource.data_source.make_query(dashboard_filters, attr)
 
 
+func duplicate_widget(widget) -> void:
+	duplicating = true
+	widget_to_edit = widget
+	popup_centered()
+	window_title = title_duplicate % [widget_type_options.text]
+
+
 func edit_widget(widget) -> void:
 	widget_to_edit = widget
 	popup_centered()
@@ -283,6 +299,7 @@ func edit_widget(widget) -> void:
 
 
 func _on_NewWidgetPopup_popup_hide():
+	duplicating = false
 	widget_to_edit = null
 	hide()
 	preview_widget.queue_free()

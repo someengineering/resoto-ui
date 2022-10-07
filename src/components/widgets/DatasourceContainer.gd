@@ -137,6 +137,7 @@ func _on_QueryEdit_text_entered(new_text : String) -> void:
 	data_source.query = new_text
 	emit_signal("source_changed")
 
+
 func set_data_source(new_data_source : DataSource) -> void:
 	data_source.copy_data_source(new_data_source)
 	match new_data_source.type:
