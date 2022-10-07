@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
+[ext_resource path="res://components/widgets/LineEdit_update_on_focus_lost.gd" type="Script" id=1]
 [ext_resource path="res://assets/icon_tabs_increment.png" type="Texture" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
 [ext_resource path="res://components/widgets/DatasourceContainer.gd" type="Script" id=4]
@@ -13,18 +14,18 @@ theme = ExtResource( 3 )
 script = ExtResource( 4 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 518.0
-margin_bottom = 674.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 513.0
+margin_bottom = 698.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 513.0
-margin_bottom = 24.0
+margin_right = 503.0
+margin_bottom = 25.0
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
 margin_right = 22.0
-margin_bottom = 24.0
+margin_bottom = 25.0
 toggle_mode = true
 icon = ExtResource( 2 )
 flat = true
@@ -32,212 +33,221 @@ flat = true
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 margin_left = 26.0
 margin_top = 2.0
-margin_right = 120.0
-margin_bottom = 22.0
+margin_right = 125.0
+margin_bottom = 23.0
 text = "Data Source 1"
 
 [node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 458.0
-margin_right = 513.0
-margin_bottom = 24.0
+margin_left = 447.0
+margin_right = 503.0
+margin_bottom = 25.0
 size_flags_horizontal = 10
 text = "Delete"
 
 [node name="DatasourceSettings" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 28.0
-margin_right = 513.0
-margin_bottom = 373.0
+margin_top = 29.0
+margin_right = 503.0
+margin_bottom = 383.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_right = 513.0
-margin_bottom = 45.0
+margin_right = 503.0
+margin_bottom = 46.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer2"]
-margin_right = 513.0
-margin_bottom = 20.0
+margin_right = 503.0
+margin_bottom = 21.0
 text = "Metric"
 
 [node name="MetricsOptions" parent="VBoxContainer/DatasourceSettings/VBoxContainer2" instance=ExtResource( 5 )]
-margin_top = 21.0
-margin_right = 513.0
-margin_bottom = 45.0
+margin_top = 22.0
+margin_right = 503.0
+margin_bottom = 46.0
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 49.0
-margin_right = 513.0
-margin_bottom = 94.0
+margin_top = 50.0
+margin_right = 503.0
+margin_bottom = 96.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer3"]
-margin_right = 513.0
-margin_bottom = 20.0
+margin_right = 503.0
+margin_bottom = 21.0
 text = "Aggregator"
 
 [node name="FunctionComboBox" parent="VBoxContainer/DatasourceSettings/VBoxContainer3" instance=ExtResource( 5 )]
-margin_top = 21.0
-margin_right = 513.0
-margin_bottom = 45.0
+margin_top = 22.0
+margin_right = 503.0
+margin_bottom = 46.0
 items = [ "", "sum", "min", "max", "avg", "count", "sum_over_time", "min_over_time", "max_over_time", "avg_over_time", "count_over_time" ]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 98.0
-margin_right = 513.0
-margin_bottom = 170.0
+margin_top = 100.0
+margin_right = 503.0
+margin_bottom = 172.0
 
 [node name="FilterWidget" parent="VBoxContainer/DatasourceSettings/HBoxContainer" instance=ExtResource( 6 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 513.0
+margin_right = 503.0
 margin_bottom = 72.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 174.0
-margin_right = 513.0
-margin_bottom = 219.0
+margin_top = 176.0
+margin_right = 503.0
+margin_bottom = 223.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer"]
-margin_right = 513.0
-margin_bottom = 20.0
+margin_right = 503.0
+margin_bottom = 21.0
 text = "Date Offset"
 
 [node name="DateOffsetLineEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer"]
-margin_top = 21.0
-margin_right = 513.0
-margin_bottom = 45.0
+margin_top = 22.0
+margin_right = 503.0
+margin_bottom = 47.0
+script = ExtResource( 1 )
 
 [node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 223.0
-margin_right = 513.0
-margin_bottom = 268.0
+margin_top = 227.0
+margin_right = 503.0
+margin_bottom = 274.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
-margin_right = 513.0
-margin_bottom = 20.0
+margin_right = 503.0
+margin_bottom = 21.0
 text = "Sum by"
 
 [node name="ByLineEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
-margin_top = 21.0
-margin_right = 513.0
-margin_bottom = 45.0
+margin_top = 22.0
+margin_right = 503.0
+margin_bottom = 47.0
+script = ExtResource( 1 )
 
 [node name="VBoxContainer5" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 272.0
-margin_right = 513.0
-margin_bottom = 317.0
+margin_top = 278.0
+margin_right = 503.0
+margin_bottom = 325.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer5"]
-margin_right = 513.0
-margin_bottom = 20.0
+margin_right = 503.0
+margin_bottom = 21.0
 text = "Legend"
 
 [node name="LegendEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer5"]
-margin_top = 21.0
-margin_right = 513.0
-margin_bottom = 45.0
+margin_top = 22.0
+margin_right = 503.0
+margin_bottom = 47.0
+script = ExtResource( 1 )
 
 [node name="StackedCheckBox" type="CheckBox" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 321.0
-margin_right = 513.0
-margin_bottom = 345.0
+margin_top = 329.0
+margin_right = 503.0
+margin_bottom = 354.0
 pressed = true
 text = "Stacked"
 
 [node name="TextSearchSettings" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 377.0
-margin_right = 513.0
-margin_bottom = 585.0
+margin_top = 387.0
+margin_right = 503.0
+margin_bottom = 603.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TextSearchSettings"]
-margin_right = 513.0
-margin_bottom = 20.0
+margin_right = 503.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 text = "Text"
 
 [node name="TextLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 24.0
-margin_right = 513.0
-margin_bottom = 48.0
+margin_top = 25.0
+margin_right = 503.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
+script = ExtResource( 1 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 52.0
-margin_right = 513.0
-margin_bottom = 76.0
+margin_top = 54.0
+margin_right = 503.0
+margin_bottom = 79.0
 
 [node name="Label2" type="Label" parent="VBoxContainer/TextSearchSettings/HBoxContainer"]
 margin_top = 2.0
-margin_right = 240.0
-margin_bottom = 22.0
+margin_right = 235.0
+margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "Kinds"
 
 [node name="KindsComboBox" parent="VBoxContainer/TextSearchSettings/HBoxContainer" instance=ExtResource( 5 )]
-margin_left = 244.0
-margin_right = 485.0
+margin_left = 239.0
+margin_right = 475.0
+margin_bottom = 25.0
 size_flags_horizontal = 3
 items = [  ]
 
 [node name="Add" type="Button" parent="VBoxContainer/TextSearchSettings/HBoxContainer"]
-margin_left = 489.0
-margin_right = 513.0
-margin_bottom = 24.0
+margin_left = 479.0
+margin_right = 503.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 24, 24 )
 text = "+"
 
 [node name="LineEditKinds" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 80.0
-margin_right = 513.0
-margin_bottom = 104.0
+margin_top = 83.0
+margin_right = 503.0
+margin_bottom = 108.0
+script = ExtResource( 1 )
 
 [node name="Label2" type="Label" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 108.0
-margin_right = 513.0
-margin_bottom = 128.0
+margin_top = 112.0
+margin_right = 503.0
+margin_bottom = 133.0
 text = "Filters"
 
 [node name="TextFiltersLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 132.0
-margin_right = 513.0
-margin_bottom = 156.0
+margin_top = 137.0
+margin_right = 503.0
+margin_bottom = 162.0
+script = ExtResource( 1 )
 
 [node name="Label3" type="Label" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 160.0
-margin_right = 513.0
-margin_bottom = 180.0
+margin_top = 166.0
+margin_right = 503.0
+margin_bottom = 187.0
 text = "List"
 
 [node name="ListLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 184.0
-margin_right = 513.0
-margin_bottom = 208.0
+margin_top = 191.0
+margin_right = 503.0
+margin_bottom = 216.0
+script = ExtResource( 1 )
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 589.0
-margin_right = 513.0
-margin_bottom = 593.0
+margin_top = 607.0
+margin_right = 503.0
+margin_bottom = 611.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 597.0
-margin_right = 513.0
-margin_bottom = 669.0
+margin_top = 615.0
+margin_right = 503.0
+margin_bottom = 688.0
 
 [node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer"]
-margin_right = 513.0
-margin_bottom = 20.0
+margin_right = 503.0
+margin_bottom = 21.0
 text = "Query"
 
 [node name="QueryEdit" type="LineEdit" parent="VBoxContainer/VBoxContainer"]
-margin_top = 24.0
-margin_right = 513.0
-margin_bottom = 72.0
+margin_top = 25.0
+margin_right = 503.0
+margin_bottom = 73.0
 rect_min_size = Vector2( 0, 48 )
 context_menu_enabled = false
+script = ExtResource( 1 )
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_Button_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]

@@ -70,6 +70,10 @@ func _on_WidgetContainer_config_pressed(widget_container) -> void:
 	$WindowDialog.edit_widget(widget_container)
 
 
+func _on_WidgetContainer_duplicate_pressed(widget_container) -> void:
+	$WindowDialog.duplicate_widget(widget_container)
+
+
 func _on_DateButton_pressed() -> void:
 	$DateRangeSelector.rect_global_position.y = date_button.rect_global_position.y + date_button.rect_size.y
 	$DateRangeSelector.rect_position.x = rect_size.x / 2 - $DateRangeSelector.rect_size.x / 2
