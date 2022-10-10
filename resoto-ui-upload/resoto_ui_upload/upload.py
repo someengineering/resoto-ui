@@ -55,6 +55,24 @@ def upload_ui(args: Namespace) -> None:
     purge_cdn(purge_keys, args.api_token, args.spaces_name, args.spaces_region)
 
 
+def upload_test(args: Namespace) -> None:
+    log.info("Uploading ui commit to the CDN")
+    client = s3_client(args.spaces_region, args.spaces_key, args.spaces_secret)
+    local_ui_path = os.path.abspath(args.ui_path)
+    destination = "commits"
+    purge_keys = []
+    for filename in glob.iglob(local_ui_path + "**/**", recursive=True):
+        if not os.path.isfile(filename):
+            continue
+        basename = filename[len(local_ui_path) + 1 :]
+        key_name = f"{args.spaces_path}{destination}/{basename}"
+        ctype = content_type(filename, ttl_hash=ttl_hash())
+        log.debug(f"Uploading {filename} to {key_name}, type: {ctype}")
+        upload_file(client, filename=filename, key=key_name, spaces_name=args.spaces_name, ctype=ctype)
+        purge_keys.append(key_name)
+    purge_cdn(purge_keys, args.api_token, args.spaces_name, args.spaces_region)
+
+
 def s3_client(region: str, key: str, secret: str) -> BaseClient:
     session = boto3.session.Session()
     return session.client(

@@ -6,7 +6,7 @@ from . import (
     add_args,
     verify_args,
 )
-from .upload import upload_ui
+from .upload import upload_ui, upload_test
 
 
 def main() -> None:
@@ -21,7 +21,10 @@ def main() -> None:
     if args.verbose:
         log.setLevel(logging.DEBUG)
 
-    upload_ui(args)
+    if args.test_build:
+        upload_test(args)
+    else:
+        upload_ui(args)
 
 
 if __name__ == "__main__":

@@ -4,8 +4,11 @@ on:
 jobs:
   export_game:
     runs-on: ubuntu-latest
-    name: Export Game Job
+    name: Export UI Job
     steps:
+      - name: set env
+        run: |
+          echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
       - name: checkout
         uses: actions/checkout@v3.0.2
         with:
@@ -14,13 +17,43 @@ jobs:
         id: export
         uses: firebelley/godot-export@v4.1.0
         with:
-          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.5/rc5/Godot_v3.5-rc5_linux_headless.64.zip
-          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.5/rc5/Godot_v3.5-rc5_export_templates.tpz
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_linux_headless.64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.5/Godot_v3.5-stable_export_templates.tpz
           relative_project_path: ./src
           relative_export_path: ./builds
-          archive_output: true
+          archive_output: false
       - name: upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: test-artifact
-          path: ./builds/*.zip
+          name: ${{ env.GITHUB_SHA_SHORT }}
+          path: ./builds/HTML5/*
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+      - name: install python module
+        run: |
+          pip install ./resoto-ui-upload
+      - name: install zip
+        uses: montudor/action-zip@v1
+      - name: compress build
+        run: |
+          zip -qq -r -j ${{ env.GITHUB_SHA_SHORT }}.zip HTML5/*
+          mkdir compressed
+          mv ${{ env.GITHUB_SHA_SHORT }}.zip compressed/
+        working-directory: ./builds
+      - name: upload test
+        working-directory: ./builds/compressed
+        run: |
+          export API_TOKEN=${{ secrets.RESOTO_UI_DO_API_TOKEN }}
+          export SPACES_KEY=${{ secrets.RESOTO_UI_SPACES_KEY }}
+          export SPACES_SECRET=${{ secrets.RESOTO_UI_SPACES_SECRET }}
+          export SPACES_NAME=${{ secrets.RESOTO_UI_SPACES_NAME }}
+          export SPACES_PATH=${{ secrets.RESOTO_UI_SPACES_PATH }}
+          export SPACES_REGION=${{ secrets.RESOTO_UI_SPACES_REGION }}
+          export GITHUB_REF=${{ github.ref }}
+          export GITHUB_REF_TYPE=${{ github.ref_type }}
+          export GITHUB_EVENT_NAME=${{ github.event_name }}
+          export UI_PATH=.
+          resoto-ui-upload --verbose --test-build
