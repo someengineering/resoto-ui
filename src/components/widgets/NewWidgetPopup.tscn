@@ -77,18 +77,26 @@ margin_bottom = 138.0
 
 [node name="Label" type="Label" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
 margin_top = 2.0
-margin_right = 483.0
+margin_right = 379.0
 margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "Data Sources"
 
 [node name="DataSourceTypeOptionButton" type="OptionButton" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
-margin_left = 487.0
-margin_right = 595.0
+margin_left = 383.0
+margin_right = 491.0
 margin_bottom = 25.0
 text = "Time Series"
 items = [ "Time Series", null, false, 0, null, "Aggregate Search", null, false, 1, null, "Resoto Search", null, false, 2, null ]
 selected = 0
+
+[node name="DataSourceTemplates" type="OptionButton" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
+margin_left = 495.0
+margin_right = 595.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 100, 25 )
+text = "New"
+clip_text = true
 
 [node name="AddDataSource" type="Button" parent="WidgetOptions/VBoxContainer/HBoxContainer"]
 margin_left = 599.0
@@ -197,5 +205,6 @@ text = "Accept"
 [connection signal="popup_hide" from="." to="." method="_on_NewWidgetPopup_popup_hide"]
 [connection signal="text_changed" from="WidgetOptions/VBoxContainer/VBoxContainer/NameEdit" to="." method="_on_NameEdit_text_changed"]
 [connection signal="item_selected" from="WidgetOptions/VBoxContainer/VBoxContainer2/WidgetType" to="." method="_on_WidgetType_item_selected"]
+[connection signal="item_selected" from="WidgetOptions/VBoxContainer/HBoxContainer/DataSourceTypeOptionButton" to="." method="_on_DataSourceTypeOptionButton_item_selected"]
 [connection signal="pressed" from="WidgetOptions/VBoxContainer/HBoxContainer/AddDataSource" to="." method="_on_AddDataSource_pressed"]
 [connection signal="pressed" from="AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]

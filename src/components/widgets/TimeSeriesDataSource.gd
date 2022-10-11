@@ -162,6 +162,5 @@ func get_data() -> Dictionary:
 	}
 	
 	data.merge(.get_data())
-	
 	return data
 	
