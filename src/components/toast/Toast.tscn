@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://components/toast/component_toast.gd" type="Script" id=2]
-[ext_resource path="res://assets/icon_tabs_close_white.png" type="Texture" id=3]
+[ext_resource path="res://assets/icons/icon_tabs_close_white.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 6.0

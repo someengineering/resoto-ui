@@ -1,16 +1,17 @@
 [gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://components/widgets/WidgetContainer.gd" type="Script" id=1]
-[ext_resource path="res://assets/resize_buttons.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/resize_buttons.svg" type="Texture" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
-[ext_resource path="res://assets/delete-01.svg" type="Texture" id=5]
-[ext_resource path="res://assets/maximize-01.svg" type="Texture" id=6]
+[ext_resource path="res://assets/icons/delete-01.svg" type="Texture" id=5]
+[ext_resource path="res://assets/icons/maximize-01.svg" type="Texture" id=6]
 [ext_resource path="res://components/widgets/AggregateSearchDataSource.gd" type="Script" id=7]
-[ext_resource path="res://assets/warning-contrast.svg" type="Texture" id=8]
-[ext_resource path="res://assets/warning.svg" type="Texture" id=9]
-[ext_resource path="res://assets/duplicate.svg" type="Texture" id=10]
-[ext_resource path="res://assets/download_min-01.svg" type="Texture" id=11]
-[ext_resource path="res://assets/edit_new-01.svg" type="Texture" id=12]
+[ext_resource path="res://assets/icons/warning-contrast.svg" type="Texture" id=8]
+[ext_resource path="res://assets/icons/warning.svg" type="Texture" id=9]
+[ext_resource path="res://assets/icons/duplicate.svg" type="Texture" id=10]
+[ext_resource path="res://assets/icons/download_min-01.svg" type="Texture" id=11]
+[ext_resource path="res://assets/icons/edit_new-01.svg" type="Texture" id=12]
+
 
 [sub_resource type="StyleBoxFlat" id=21]
 bg_color = Color( 0, 0, 0, 1 )

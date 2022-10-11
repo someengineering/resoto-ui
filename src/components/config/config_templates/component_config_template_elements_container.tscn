@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://assets/icon_expand.png" type="Texture" id=1]
-[ext_resource path="res://assets/icon_collapse.png" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_expand.png" type="Texture" id=1]
+[ext_resource path="res://assets/icons/icon_collapse.png" type="Texture" id=2]
 [ext_resource path="res://components/config/config_templates/component_config_array_container.gd" type="Script" id=3]
 [ext_resource path="res://components/config/config_templates/component_config_add_custom_tooltip.gd" type="Script" id=4]
 

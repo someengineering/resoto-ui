@@ -3,16 +3,17 @@
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
-[ext_resource path="res://assets/close-01.svg" type="Texture" id=4]
-[ext_resource path="res://assets/edit_new-01.svg" type="Texture" id=5]
+[ext_resource path="res://assets/icons/close-01.svg" type="Texture" id=4]
+[ext_resource path="res://assets/icons/edit_new-01.svg" type="Texture" id=5]
 [ext_resource path="res://components/widgets/DashboardContainer.gd" type="Script" id=6]
 [ext_resource path="res://components/widgets/NewWidgetPopup.tscn" type="PackedScene" id=7]
 [ext_resource path="res://components/widgets/DateRangeSelector.tscn" type="PackedScene" id=8]
 [ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=9]
-[ext_resource path="res://assets/delete-01.svg" type="Texture" id=10]
-[ext_resource path="res://assets/icon_refresh.png" type="Texture" id=11]
-[ext_resource path="res://assets/download_min-01.svg" type="Texture" id=12]
-[ext_resource path="res://assets/maximize-01.svg" type="Texture" id=13]
+[ext_resource path="res://assets/icons/delete-01.svg" type="Texture" id=10]
+[ext_resource path="res://assets/icons/icon_refresh.png" type="Texture" id=11]
+[ext_resource path="res://assets/icons/download_min-01.svg" type="Texture" id=12]
+[ext_resource path="res://assets/icons/maximize-01.svg" type="Texture" id=13]
+
 
 [sub_resource type="Gradient" id=10]
 colors = PoolColorArray( 0.141176, 0.141176, 0.203922, 1, 0.105882, 0.0941176, 0.109804, 1 )

@@ -182,6 +182,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
+_t="*res://scripts/autoloads/theme_manager.gd"
 JWT="*res://scripts/autoloads/jwt.gd"
 API="*res://scripts/autoloads/api_handler.gd"
 _g="*res://scripts/autoloads/global.gd"
@@ -230,4 +231,4 @@ common/enable_pause_aware_picking=true
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
 environment/default_clear_color=Color( 0.0470588, 0.0941176, 0.133333, 1 )
-environment/default_environment="res://assets/default_env.tres"
+environment/default_environment="res://assets/generic/default_env.tres"

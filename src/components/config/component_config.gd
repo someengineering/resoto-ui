@@ -547,3 +547,7 @@ func _on_ConfigCombo_option_changed(option):
 	if config_index == -1:
 		return
 	change_active_tab(config_index, true)
+
+
+func _on_SaveConfigButton2_pressed():
+	pass # Replace with function body.

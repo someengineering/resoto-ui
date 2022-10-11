@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://components/elements/icon_button.gd" type="Script" id=2]
+
+[sub_resource type="StreamTexture" id=1]
+flags = 5
+load_path = "res://.import/maximize-01.svg-2f854743aac3cbb64b5a6c3849626e22.stex"
+
+[node name="IconButton" type="Button"]
+margin_right = 33.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 33, 33 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_type_variation = "ButtonBigText"
+expand_icon = true
+script = ExtResource( 2 )
+
+[node name="Icon" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+texture = SubResource( 1 )
+expand = true

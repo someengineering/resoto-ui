@@ -1,9 +1,9 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
 [ext_resource path="res://components/config/component_config.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/Resoto_logo_and_text.svg" type="Texture" id=4]
+[ext_resource path="res://assets/resoto/Resoto_logo_and_text.svg" type="Texture" id=4]
 [ext_resource path="res://scripts/ui_main.gd" type="Script" id=5]
 [ext_resource path="res://scripts/ui_menu.gd" type="Script" id=6]
 [ext_resource path="res://scripts/ui_popup_manager.gd" type="Script" id=7]
@@ -12,11 +12,12 @@
 [ext_resource path="res://components/toast/ToastManager.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scripts/tools/browser_copy_paste_fix.gd" type="Script" id=11]
 [ext_resource path="res://components/widgets/DashboardManager.tscn" type="PackedScene" id=12]
-[ext_resource path="res://ui/elements/HamburgerButton.tscn" type="PackedScene" id=13]
-[ext_resource path="res://ui/elements/FullTextSearch.tscn" type="PackedScene" id=14]
+[ext_resource path="res://components/elements/HamburgerButton.tscn" type="PackedScene" id=13]
+[ext_resource path="res://components/fulltext_search_menu/FullTextSearch.tscn" type="PackedScene" id=14]
 [ext_resource path="res://components/node_info/NodeInfoElement.tscn" type="PackedScene" id=15]
 [ext_resource path="res://components/message_log/component_message_log.tscn" type="PackedScene" id=16]
 [ext_resource path="res://components/node_list/NodeListElement.tscn" type="PackedScene" id=17]
+[ext_resource path="res://components/popups/popup_generic_confirm.gd" type="Script" id=18]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
@@ -482,7 +483,7 @@ rect_min_size = Vector2( 400, 150 )
 theme = ExtResource( 2 )
 custom_styles/panel = SubResource( 7 )
 popup_exclusive = true
-script = ExtResource( 11 )
+script = ExtResource( 18 )
 
 [node name="Content" type="VBoxContainer" parent="Popups/ConfirmPopup"]
 anchor_right = 1.0
@@ -491,14 +492,14 @@ custom_constants/separation = 0
 
 [node name="Label" type="Label" parent="Popups/ConfirmPopup/Content"]
 margin_right = 400.0
-margin_bottom = 21.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 100, 0 )
 custom_styles/normal = SubResource( 8 )
 text = "Confirm Dialogue"
 align = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Popups/ConfirmPopup/Content"]
-margin_top = 21.0
+margin_top = 29.0
 margin_right = 400.0
 margin_bottom = 150.0
 size_flags_horizontal = 3
@@ -515,28 +516,34 @@ __meta__ = {
 margin_left = 20.0
 margin_top = 10.0
 margin_right = 380.0
-margin_bottom = 109.0
+margin_bottom = 101.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Popups/ConfirmPopup/Content/MarginContainer/Content"]
 margin_right = 360.0
-margin_bottom = 70.0
+margin_bottom = 30.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "Question"
+autowrap = true
+
+[node name="Spacer" type="Control" parent="Popups/ConfirmPopup/Content/MarginContainer/Content"]
+margin_top = 34.0
+margin_right = 360.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 0, 20 )
 
 [node name="Buttons" type="HBoxContainer" parent="Popups/ConfirmPopup/Content/MarginContainer/Content"]
-margin_top = 74.0
+margin_top = 58.0
 margin_right = 360.0
-margin_bottom = 99.0
+margin_bottom = 91.0
 custom_constants/separation = 20
 alignment = 1
 
 [node name="LeftButton" type="Button" parent="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons"]
 margin_left = 90.0
 margin_right = 170.0
-margin_bottom = 25.0
+margin_bottom = 33.0
 rect_min_size = Vector2( 80, 0 )
 theme_type_variation = "ButtonFlat"
 text = "Yes"
@@ -545,7 +552,7 @@ flat = true
 [node name="RightButton" type="Button" parent="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons"]
 margin_left = 190.0
 margin_right = 270.0
-margin_bottom = 25.0
+margin_bottom = 33.0
 rect_min_size = Vector2( 80, 0 )
 theme_type_variation = "ButtonFlat"
 text = "Cancel"

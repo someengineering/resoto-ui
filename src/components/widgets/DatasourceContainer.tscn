@@ -1,11 +1,12 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://components/widgets/LineEdit_update_on_focus_lost.gd" type="Script" id=1]
-[ext_resource path="res://assets/icon_tabs_increment.png" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_tabs_increment.png" type="Texture" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
 [ext_resource path="res://components/widgets/DatasourceContainer.gd" type="Script" id=4]
 [ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=5]
 [ext_resource path="res://components/widgets/FilterWidget.tscn" type="PackedScene" id=6]
+
 
 [node name="DatasourceContainer" type="PanelContainer"]
 margin_right = 523.0

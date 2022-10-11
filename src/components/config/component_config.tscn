@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://components/config/component_config.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://components/config/config_templates/component_config_template_complex.tscn" type="PackedScene" id=9]
 [ext_resource path="res://components/config/config_templates/component_config_template_config_tab.tscn" type="PackedScene" id=10]
 [ext_resource path="res://components/config/config_templates/component_config_template_array_element.tscn" type="PackedScene" id=11]
+[ext_resource path="res://components/elements/IconButton.tscn" type="PackedScene" id=12]
 [ext_resource path="res://components/config/config_templates/component_config_template_dict_element.tscn" type="PackedScene" id=14]
 [ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=16]
 
@@ -90,7 +91,7 @@ items = [  ]
 
 [node name="Spacer" type="Control" parent="TabManager/PanelContainer/Box"]
 margin_left = 467.0
-margin_right = 1547.0
+margin_right = 1346.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 20, 0 )
 size_flags_horizontal = 3
@@ -106,20 +107,41 @@ size_flags_vertical = 8
 text = "Close"
 
 [node name="LoadConfigFromCoreButton" type="Button" parent="TabManager/PanelContainer/Box"]
-margin_left = 1551.0
-margin_right = 1778.0
+margin_left = 1350.0
+margin_right = 1577.0
 margin_bottom = 33.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Reload all Configs from Core"
 
 [node name="SaveConfigButton" type="Button" parent="TabManager/PanelContainer/Box"]
-margin_left = 1782.0
-margin_right = 1892.0
+margin_left = 1581.0
+margin_right = 1691.0
 margin_bottom = 33.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Save Config"
+
+[node name="DeleteConfigButton" type="Button" parent="TabManager/PanelContainer/Box"]
+margin_left = 1695.0
+margin_right = 1817.0
+margin_bottom = 33.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Delete Config"
+
+[node name="AddConfigButton" type="Button" parent="TabManager/PanelContainer/Box"]
+margin_left = 1821.0
+margin_right = 1855.0
+margin_bottom = 33.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_type_variation = "ButtonBigText"
+text = "+"
+
+[node name="AddConfigButton2" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
+margin_left = 1859.0
+margin_right = 1892.0
 
 [node name="TabsBar" type="HBoxContainer" parent="TabManager"]
 visible = false
@@ -224,4 +246,6 @@ margin_bottom = 335.0
 [connection signal="pressed" from="TabManager/PanelContainer/Box/CloseConfigButton" to="." method="_on_CloseConfigButton_pressed"]
 [connection signal="pressed" from="TabManager/PanelContainer/Box/LoadConfigFromCoreButton" to="." method="_on_LoadConfigFromCoreButton_pressed"]
 [connection signal="pressed" from="TabManager/PanelContainer/Box/SaveConfigButton" to="." method="_on_SaveConfigButton_pressed"]
+[connection signal="pressed" from="TabManager/PanelContainer/Box/DeleteConfigButton" to="." method="_on_SaveConfigButton2_pressed"]
+[connection signal="pressed" from="TabManager/PanelContainer/Box/AddConfigButton" to="." method="_on_SaveConfigButton2_pressed"]
 [connection signal="tab_changed" from="TabManager/TabsBar/Tabs" to="." method="_on_Tabs_tab_changed"]
