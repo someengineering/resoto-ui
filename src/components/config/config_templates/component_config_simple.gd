@@ -9,8 +9,14 @@ var value setget set_value, get_value
 var description:String = "" setget set_description
 var key:String = "" setget set_key
 var required:bool = false setget set_required
+var descriptions_as_hints:bool = true
 
 onready var null_value = $VarContent/VarValueIsNull
+
+
+func _ready():
+	if descriptions_as_hints:
+		$Description.hide()
 
 
 func set_default(_value:bool) -> void:
@@ -95,8 +101,17 @@ func get_value():
 				return str(value_field.text)
 
 
+func _make_custom_tooltip(for_text):
+	var tooltip = preload("res://ui/elements/BBTooltip.tscn").instance()
+	tooltip.get_node("Text").bbcode_text = for_text
+	return tooltip
+
+
 func set_description(_value:String) -> void:
 	description = _value
+	if descriptions_as_hints:
+		hint_tooltip = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
+		return
 	if _value == "":
 		$Description.hide()
 	$Description.text = _value

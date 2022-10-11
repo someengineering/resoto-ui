@@ -15,6 +15,7 @@ var key:String = ""
 var description:String = "" setget set_description
 var value = null setget set_value, get_value
 var content_elements:Array = []
+var descriptions_as_hints:bool = true
 
 onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
 onready var content = $Margin/Content
@@ -23,6 +24,8 @@ onready var content = $Margin/Content
 func _ready() -> void:
 	_on_Expand_toggled(start_expanded)
 	orig_size = $Margin.rect_size.y
+	if descriptions_as_hints:
+		$HeaderBG/Header/Description.hide()
 
 
 func set_required(_value:bool) -> void:
@@ -62,9 +65,11 @@ func get_value():
 			var new_value:Dictionary = config_component.build_dict(content_elements)
 			return new_value
 
-
 func set_description(_value:String) -> void:
 	description = _value
+	if descriptions_as_hints:
+		$HeaderBG.hint_tooltip = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
+		return
 	$HeaderBG/Header/Description.text =  description
 
 

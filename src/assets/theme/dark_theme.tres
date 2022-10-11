@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=49 format=2]
+[gd_resource type="Theme" load_steps=50 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -96,7 +96,7 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id=16]
 draw_center = false
-border_width_top = 1
+border_width_top = 2
 border_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 
 [sub_resource type="StyleBoxFlat" id=21]
@@ -298,6 +298,20 @@ font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
 size = 14
 font_data = SubResource( 19 )
 
+[sub_resource type="StyleBoxFlat" id=45]
+content_margin_left = 15.0
+content_margin_right = 15.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 0.941176 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 3
+shadow_offset = Vector2( 0, 5 )
+
 [sub_resource type="StyleBoxFlat" id=10]
 bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 border_width_left = 2
@@ -321,7 +335,7 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id=17]
 draw_center = false
-border_width_right = 1
+border_width_right = 2
 border_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 
 [sub_resource type="StyleBoxFlat" id=32]
@@ -435,6 +449,7 @@ TextEdit/styles/completion = SubResource( 6 )
 TextEdit/styles/focus = SubResource( 6 )
 TextEdit/styles/normal = SubResource( 7 )
 TextEdit/styles/read_only = SubResource( 3 )
+TooltipPanel/styles/panel = SubResource( 45 )
 Tree/colors/font_color = Color( 0.913725, 0.552941, 0.968627, 1 )
 VScrollBar/styles/grabber = SubResource( 10 )
 VScrollBar/styles/grabber_highlight = SubResource( 39 )

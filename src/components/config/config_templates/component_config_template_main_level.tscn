@@ -1,0 +1,7 @@
+[gd_scene format=2]
+
+[node name="TemplateMainLevel" type="VBoxContainer"]
+margin_top = 8.0
+margin_right = 1900.0
+margin_bottom = 8.0
+custom_constants/separation = 20

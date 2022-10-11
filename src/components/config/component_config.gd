@@ -1,6 +1,6 @@
 extends Control
 
-# This configuration UI still needs a lot of clean up and testing!
+export var descriptions_as_hints:bool = true
 
 const BASE_KINDS:Array = [
 	"string",
@@ -35,18 +35,7 @@ var _active_tab_id: int = -1
 
 onready var tabs: Tabs = find_node("Tabs")
 onready var content = find_node("Content")
-
-# Template Elements
-onready var TemplateConfigTab = find_node("TemplateConfigTab")
-onready var TemplateMainLevel = find_node("TemplateMainLevel")
-onready var TemplateComplex = find_node("TemplateComplex")
-onready var TemplateSimple = find_node("TemplateSimple")
-onready var TemplateEnum = find_node("TemplateEnum")
-onready var TemplateElementsContainer = find_node("TemplateElementsContainer")
-onready var TemplateArrayElement = find_node("TemplateArrayElement")
-onready var TemplateDict = find_node("TemplateDict")
-onready var TemplateCustomConfig = find_node("TemplateCustomConfig")
-
+onready var config_combo = $TabManager/PanelContainer/Box/ConfigCombo
 
 func load_config() -> void:
 	API.get_configs(self)
@@ -116,8 +105,8 @@ func build_config_pages() -> void:
 	var default_key = config_keys[resoto_core_index]
 	change_active_tab(resoto_core_index, true)
 	
-	$TabManager/PanelContainer/Box/ConfigCombo.set_items(config_elements)
-	$TabManager/PanelContainer/Box/ConfigCombo.set_text(default_key)
+	config_combo.set_items(config_elements)
+	config_combo.set_text(default_key)
 
 
 func save_config() -> void:
@@ -263,7 +252,7 @@ func get_kind_type(kind:String) -> String:
 
 
 func create_custom(_text:String, _property_value, _parent:Control):
-	var new_custom = TemplateCustomConfig.duplicate()
+	var new_custom = preload("res://components/config/config_templates/component_config_template_custom_config.tscn").instance()
 		
 	if _parent.has_meta("attach"):
 		_parent.get_meta("attach").add_child(new_custom)
@@ -285,7 +274,7 @@ func create_complex(_name:String, kind:String, _property_value, properties, _par
 	var complex_model_search = find_in_model(kind)
 	var complex_properties = complex_model_search[1]
 	
-	var new_complex = TemplateComplex.duplicate()
+	var new_complex = preload("res://components/config/config_templates/component_config_template_complex.tscn").instance()
 	
 	if _parent.has_signal("key_update"):
 		_parent.connect("key_update", new_complex, "_on_key_update")
@@ -296,13 +285,8 @@ func create_complex(_name:String, kind:String, _property_value, properties, _par
 		_parent.add_child(new_complex)
 	
 	new_complex.get_node("HeaderBG/Header/Top/Name").text = _name.capitalize()
+	new_complex.descriptions_as_hints = descriptions_as_hints
 	
-	if properties.has("description"):
-		new_complex.description = properties.description
-		new_complex.required = properties.required
-	else:
-		new_complex.description = ""
-		
 	new_complex.set_meta("attach", new_complex.get_node("Margin/Content"))
 	new_complex.config_component = self
 	new_complex.name = "Complex_" + _name
@@ -313,12 +297,18 @@ func create_complex(_name:String, kind:String, _property_value, properties, _par
 	new_complex.kind_type = get_kind_type(kind)
 	new_complex.value = _property_value
 	
+	if properties.has("description"):
+		new_complex.description = properties.description
+		new_complex.required = properties.required
+	else:
+		new_complex.description = ""
+	
 	return new_complex
 
 
 func create_simple(_name:String, _value, _kind, _properties, _parent:Control, default:bool):
 #	prints("===> Create simple element:", _name, "| Parent:", _parent.name)#, _properties)
-	var new_value = TemplateSimple.duplicate()
+	var new_value = preload("res://components/config/config_templates/component_config_template_simple.tscn").instance()
 	if _parent.has_meta("attach"):
 		_parent.get_meta("attach").add_child(new_value)
 	else:
@@ -327,6 +317,7 @@ func create_simple(_name:String, _value, _kind, _properties, _parent:Control, de
 	if _parent.has_signal("key_update"):
 		_parent.connect("key_update", new_value, "_on_key_update")
 	
+	new_value.descriptions_as_hints = descriptions_as_hints
 	new_value.kind = _kind
 	new_value.value = _value
 	new_value.name = "Simple_" + _name
@@ -348,12 +339,13 @@ func create_simple(_name:String, _value, _kind, _properties, _parent:Control, de
 
 func create_enum(_name:String, _value, _kind, _properties, _enum_values, _parent:Control, default:bool):
 #	prints("===> Create simple element:", _name, "| Parent:", _parent.name)#, _properties)
-	var new_value = TemplateEnum.duplicate()
+	var new_value = preload("res://components/config/config_templates/component_config_template_enum.tscn").instance()
 	if _parent.has_meta("attach"):
 		_parent.get_meta("attach").add_child(new_value)
 	else:
 		_parent.add_child(new_value)
 	
+	new_value.descriptions_as_hints = descriptions_as_hints
 	new_value.enum_values = _enum_values
 	new_value.kind = _kind
 	new_value.value = _value
@@ -376,7 +368,7 @@ func create_enum(_name:String, _value, _kind, _properties, _enum_values, _parent
 
 func create_array(_name:String, _value, _kind, _properties, _parent:Control, default:bool):
 	var kind = _kind.replace("[]", "")
-	var new_array_container = TemplateElementsContainer.duplicate()
+	var new_array_container = preload("res://components/config/config_templates/component_config_template_elements_container.tscn").instance()
 	if _parent.has_meta("attach"):
 		_parent.get_meta("attach").add_child(new_array_container)
 	else:
@@ -385,6 +377,7 @@ func create_array(_name:String, _value, _kind, _properties, _parent:Control, def
 	if _parent.has_signal("key_update"):
 		_parent.connect("key_update", new_array_container, "_on_key_update")
 	
+	new_array_container.descriptions_as_hints = descriptions_as_hints
 	new_array_container.default = default
 	new_array_container.title = _name.capitalize()
 	new_array_container.kind = kind
@@ -416,7 +409,7 @@ func create_array(_name:String, _value, _kind, _properties, _parent:Control, def
 
 
 func create_dict(_name:String, _kind, _value, _properties, _parent:Control, default:bool):
-	var new_dict_container = TemplateElementsContainer.duplicate()
+	var new_dict_container = preload("res://components/config/config_templates/component_config_template_elements_container.tscn").instance()
 	
 	if _parent.has_meta("attach"):
 		_parent.get_meta("attach").add_child(new_dict_container)
@@ -436,6 +429,7 @@ func create_dict(_name:String, _kind, _value, _properties, _parent:Control, defa
 	new_dict_container.name = "Dict_" + _name
 	new_dict_container.config_component = self
 	new_dict_container.key = _name
+	new_dict_container.descriptions_as_hints = descriptions_as_hints
 	
 	# if _properties is null, the created node represents a array element.
 	if _properties:
@@ -474,7 +468,7 @@ func change_tab_name(_new_name:String) -> void:
 func add_new_tab(_title:String) -> Node:
 	var new_element = null
 	tabs.add_tab(_title)
-	var new_config_tab = TemplateConfigTab.duplicate()
+	var new_config_tab = preload("res://components/config/config_templates/component_config_template_config_tab.tscn").instance()
 	new_config_tab.name = "Tab_" + _title
 	content.add_child(new_config_tab)
 	new_element = new_config_tab
@@ -489,8 +483,20 @@ func change_active_tab(tab:int, update_tab:bool =false) -> void:
 	hide_all_tabs()
 	if tabs_content.empty():
 		return
-	tabs_content[ tabs_content_keys[tab] ].show()
-
+	var tab_content = tabs_content[ tabs_content_keys[tab] ]
+	tab_content.show()
+	
+	# If there is only one main key in the dictionary / config, expand it when showing the tab.
+	var count_complex:= 0
+	var first_complex:Node= null
+	for c in tab_content.get_children():
+		if count_complex > 1:
+			break
+		if c.name.begins_with("Complex_"):
+			first_complex = c
+			count_complex += 1
+	if count_complex == 1:
+		first_complex._on_Expand_toggled(true)
 
 func hide_all_tabs() -> void:
 	for tab in tabs_content.values():

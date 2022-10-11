@@ -1,8 +1,8 @@
 extends VBoxContainer
 class_name ConfigComponentArray
 
-const TemplateArrayElement = preload("res://components/config/component_config_template_array_element.tscn")
-const TemplateDictElement = preload("res://components/config/component_config_template_dict_element.tscn")
+const TemplateArrayElement = preload("res://components/config/config_templates/component_config_template_array_element.tscn")
+const TemplateDictElement = preload("res://components/config/config_templates/component_config_template_dict_element.tscn")
 
 var config_component:Node = null
 var start_expanded:bool = false
@@ -19,12 +19,15 @@ var title:String = "" setget set_title
 var description:String = "" setget set_description
 var value = null setget set_value, get_value
 var content_elements:Array = []
+var descriptions_as_hints:bool = true
 
 onready var content = $Margin/Content/Elements
 onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
 
 
 func _ready() -> void:
+	if descriptions_as_hints:
+		$HeaderBG/Header/Description.hide()
 	_on_Expand_toggled(start_expanded)
 	orig_size = $Margin.rect_size.y
 
@@ -144,6 +147,9 @@ func get_value():
 
 func set_description(_value:String) -> void:
 	description = _value
+	if descriptions_as_hints:
+		$HeaderBG.hint_tooltip = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
+		return
 	$HeaderBG/Header/Description.text =  description
 
 
