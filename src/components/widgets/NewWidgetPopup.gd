@@ -330,5 +330,5 @@ func _on_DataSourceTypeOptionButton_item_selected(index):
 	data_sources_templates_options.add_item("New", -1)
 	for i in data_sources_templates.size():
 		var data : Dictionary = data_sources_templates[i]
-		if data["data"]["type"] == data_source_type:
+		if data["data"]["type"] == data_source_type and widget_type_options.text in data["Widgets"]:
 			data_sources_templates_options.add_item(data["Name"], i)
