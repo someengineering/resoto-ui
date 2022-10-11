@@ -139,7 +139,7 @@ size_flags_vertical = 3
 theme_type_variation = "ButtonBigText"
 text = "+"
 
-[node name="AddConfigButton2" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
+[node name="IconButton" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
 margin_left = 1859.0
 margin_right = 1892.0
 
