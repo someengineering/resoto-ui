@@ -9,6 +9,36 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "DataSource",
+"class": "AggregateSearchDataSource",
+"language": "GDScript",
+"path": "res://components/widgets/AggregateSearchDataSource.gd"
+}, {
+"base": "Control",
+"class": "BaseWidget",
+"language": "GDScript",
+"path": "res://components/widgets/BaseWidget.gd"
+}, {
+"base": "Label",
+"class": "ClippedLabel",
+"language": "GDScript",
+"path": "res://components/widgets/ClippedLabel.gd"
+}, {
+"base": "MarginContainer",
+"class": "ColorCondition",
+"language": "GDScript",
+"path": "res://components/widgets/ColorCondition.gd"
+}, {
+"base": "Node",
+"class": "ColorController",
+"language": "GDScript",
+"path": "res://components/widgets/ColorController.gd"
+}, {
+"base": "MarginContainer",
+"class": "ColorControllerUi",
+"language": "GDScript",
+"path": "res://components/widgets/ColorControllerUI.gd"
+}, {
 "base": "VBoxContainer",
 "class": "ConfigComponentArray",
 "language": "GDScript",
@@ -34,6 +64,26 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/config/component_config_field.gd"
 }, {
+"base": "Control",
+"class": "DashboardContainer",
+"language": "GDScript",
+"path": "res://components/widgets/DashboardContainer.gd"
+}, {
+"base": "Node",
+"class": "DataSource",
+"language": "GDScript",
+"path": "res://components/widgets/DataSource.gd"
+}, {
+"base": "Label",
+"class": "DynamicLabel",
+"language": "GDScript",
+"path": "res://components/widgets/DynamicLabel.gd"
+}, {
+"base": "BaseWidget",
+"class": "Indicator",
+"language": "GDScript",
+"path": "res://components/widgets/Indicator.gd"
+}, {
 "base": "Node",
 "class": "JWTGenerator",
 "language": "GDScript",
@@ -55,9 +105,29 @@ _global_script_classes=[ {
 "path": "res://scripts/classes/resoto_api.gd"
 }, {
 "base": "Control",
+"class": "RotatedLabel",
+"language": "GDScript",
+"path": "res://components/widgets/RotatedLabel.gd"
+}, {
+"base": "BaseWidget",
+"class": "TableWidget",
+"language": "GDScript",
+"path": "res://components/widgets/TableWidget.gd"
+}, {
+"base": "Control",
 "class": "TerminalComponent",
 "language": "GDScript",
 "path": "res://components/terminal/component_terminal.gd"
+}, {
+"base": "DataSource",
+"class": "TextSearchDataSource",
+"language": "GDScript",
+"path": "res://components/widgets/TextSearchDataSource.gd"
+}, {
+"base": "DataSource",
+"class": "TimeSeriesDataSource",
+"language": "GDScript",
+"path": "res://components/widgets/TimeSeriesDataSource.gd"
 }, {
 "base": "Reference",
 "class": "UserAgent",
@@ -68,25 +138,45 @@ _global_script_classes=[ {
 "class": "Utils",
 "language": "GDScript",
 "path": "res://scripts/classes/utils.gd"
+}, {
+"base": "Control",
+"class": "WidgetContainer",
+"language": "GDScript",
+"path": "res://components/widgets/WidgetContainer.gd"
 } ]
 _global_script_class_icons={
+"AggregateSearchDataSource": "",
+"BaseWidget": "",
+"ClippedLabel": "",
+"ColorCondition": "",
+"ColorController": "",
+"ColorControllerUi": "",
 "ConfigComponentArray": "",
 "ConfigComponentComplex": "",
 "ConfigComponentDict": "",
 "ConfigComponentEnum": "",
 "ConfigComponentSimple": "",
+"DashboardContainer": "",
+"DataSource": "",
+"DynamicLabel": "",
+"Indicator": "",
 "JWTGenerator": "",
 "LineEditFloat": "",
 "LineEditInt": "",
 "ResotoAPI": "",
+"RotatedLabel": "",
+"TableWidget": "",
 "TerminalComponent": "",
+"TextSearchDataSource": "",
+"TimeSeriesDataSource": "",
 "UserAgent": "",
-"Utils": ""
+"Utils": "",
+"WidgetContainer": ""
 }
 
 [application]
 
-config/name="Resoto UI"
+config/name="resoto-ui"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
@@ -96,6 +186,8 @@ JWT="*res://scripts/autoloads/jwt.gd"
 API="*res://scripts/autoloads/api_handler.gd"
 _g="*res://scripts/autoloads/global.gd"
 SaveLoadSettings="*res://scripts/autoloads/saveload_settings.gd"
+HtmlFiles="*res://scripts/autoloads/html_files.gd"
+InfrastructureInformation="*res://scripts/autoloads/infrastructure_information.gd"
 
 [debug]
 
@@ -106,14 +198,19 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1920
 window/size/height=1080
-window/size/test_width=960
-window/size/test_height=540
+window/size/test_width=1280
+window/size/test_height=720
 window/dpi/allow_hidpi=true
 window/stretch/aspect="expand"
 
 [editor_plugins]
 
 enabled=PoolStringArray(  )
+
+[gui]
+
+theme/custom="res://assets/theme/dark_theme.tres"
+common/snap_controls_to_pixels=false
 
 [network]
 

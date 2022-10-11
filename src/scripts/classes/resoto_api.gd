@@ -27,10 +27,12 @@ var accept_json_put_headers:Headers = Headers.new()
 var config_put_headers:Headers = Headers.new()
 var accept_json_nd_headers:Headers = Headers.new()
 var accept_text_headers:Headers = Headers.new()
+var content_urlencoded_headers:Headers = Headers.new()
 
 
 func _init().(default_options) -> void:
 	accept_text_headers.Accept = "text/plain"
+	content_urlencoded_headers.Content_Type = "Application/x-www-form-urlencoded"
 
 
 func refresh_jwt_header(header:Headers) -> void:
@@ -168,8 +170,69 @@ func put_config_id(_config_id:String="resoto.core", _config_body:String="") -> R
 	return request
 
 
+func patch_config_id(_config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_put_headers)
+	var config_id = "/config/" + _config_id
+	var request = req_patch(config_id, _config_body, accept_json_put_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func delete_config_id(_config_id:String="", _config_body:String="") -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_put_headers)
+	var config_id = "/config/" + _config_id
+	var request = req_delete(config_id, _config_body, accept_json_put_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
 func get_subscribers() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
 	var request = req_get("/subscribers", accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+func get_infra_info() -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var request = req_post("/graph/resoto/search/graph", 
+							"is(cloud) -[0:2]-> is(cloud, account, region)",
+							 accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func query_tsdb(_query:String):
+	refresh_jwt_header(content_urlencoded_headers)
+	var body = "query=" + _query
+	var request = req_post("/tsdb/api/v1/query?"+body,"",content_urlencoded_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+	
+func query_range_tsdb(_query:String, start_ts:int=1656422693, end_ts:int=1657025493, step:int=3600):
+	refresh_jwt_header(content_urlencoded_headers)
+	var body = "query=" + _query + "&start=%d&end=%d&step=%d" % [start_ts, end_ts, step]
+	var request = req_post("/tsdb/api/v1/query_range?"+body,"",content_urlencoded_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+	
+func tsdb_label_values(label:String):
+	refresh_jwt_header(content_urlencoded_headers)
+	var request = req_get("/tsdb/api/v1/label/%s/values"%label,content_urlencoded_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+	
+	
+func aggregate_search(query : String):
+	refresh_jwt_header(accept_json_headers)
+	var body = query
+	var request = req_post("/graph/resoto/search/aggregate", body, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func search_graph(query : String):
+	refresh_jwt_header(accept_json_headers)
+	var body = query
+	var request = req_post("/graph/resoto/search/graph", body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request

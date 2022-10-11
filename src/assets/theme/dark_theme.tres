@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=46 format=2]
+[gd_resource type="Theme" load_steps=54 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -9,9 +9,8 @@
 [ext_resource path="res://assets/icon_tabs_increment.png" type="Texture" id=7]
 [ext_resource path="res://assets/icon_tabs_increment_highlight.png" type="Texture" id=8]
 [ext_resource path="res://assets/icon_tabs_decrement_highlight.png" type="Texture" id=9]
-[ext_resource path="res://assets/icon_radio_unselected.png" type="Texture" id=10]
-[ext_resource path="res://assets/icon_radio_selected.png" type="Texture" id=11]
-[ext_resource path="res://assets/icon_collapse.png" type="Texture" id=12]
+[ext_resource path="res://assets/theme/theme_radio_off.png" type="Texture" id=10]
+[ext_resource path="res://assets/theme/theme_radio_on.png" type="Texture" id=11]
 
 [sub_resource type="StyleBoxFlat" id=3]
 content_margin_left = 4.0
@@ -31,7 +30,7 @@ content_margin_left = 4.0
 content_margin_right = 4.0
 content_margin_top = 2.0
 content_margin_bottom = 2.0
-bg_color = Color( 0.184314, 0.145098, 0.333333, 1 )
+bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -57,13 +56,17 @@ content_margin_left = 4.0
 content_margin_right = 4.0
 content_margin_top = 2.0
 content_margin_bottom = 2.0
-bg_color = Color( 0.184314, 0.145098, 0.333333, 1 )
+bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
 corner_detail = 1
+
+[sub_resource type="StyleBoxEmpty" id=40]
+
+[sub_resource type="StyleBoxEmpty" id=39]
 
 [sub_resource type="StyleBoxFlat" id=14]
 bg_color = Color( 0.462745, 0.176471, 0.843137, 1 )
@@ -138,6 +141,60 @@ draw_center = false
 border_width_top = 1
 border_color = Color( 0.85098, 0.721569, 1, 1 )
 
+[sub_resource type="StyleBoxFlat" id=21]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+
+[sub_resource type="StyleBoxEmpty" id=36]
+
+[sub_resource type="StyleBoxFlat" id=34]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color( 0.141176, 0.141176, 0.203922, 0 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.462745, 0.176471, 0.843137, 1 )
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id=35]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.462745, 0.176471, 0.843137, 1 )
+corner_detail = 1
+
+[sub_resource type="DynamicFontData" id=41]
+font_path = "res://assets/theme/Barlow-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=42]
+size = 13
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 41 )
+
 [sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 4.0
 content_margin_right = 4.0
@@ -164,31 +221,19 @@ border_width_bottom = 1
 border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
 corner_detail = 1
 
-[sub_resource type="StyleBoxFlat" id=21]
-content_margin_left = 5.0
-content_margin_right = 5.0
-content_margin_top = 5.0
-content_margin_bottom = 5.0
-bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
-corner_detail = 1
+[sub_resource type="StyleBoxFlat" id=38]
+bg_color = Color( 0.462745, 0.176471, 0.843137, 0.196078 )
+border_width_left = 10
+border_width_right = 10
+border_color = Color( 0.462745, 0.176471, 0.843137, 0.27451 )
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id=34]
-content_margin_left = 4.0
-content_margin_right = 4.0
-content_margin_top = 2.0
-content_margin_bottom = 2.0
-bg_color = Color( 0.184314, 0.145098, 0.333333, 1 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
-corner_detail = 1
+[sub_resource type="StyleBoxLine" id=37]
+color = Color( 0.313726, 0.223529, 0.435294, 1 )
 
 [sub_resource type="StyleBoxFlat" id=8]
 bg_color = Color( 0.0901961, 0.0901961, 0.145098, 1 )
@@ -227,23 +272,26 @@ extra_spacing_top = -7
 extra_spacing_bottom = -5
 font_data = SubResource( 25 )
 
-[sub_resource type="StyleBoxFlat" id=22]
-content_margin_left = 15.0
-content_margin_right = 15.0
+[sub_resource type="StyleBoxFlat" id=33]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
 bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
-border_width_left = 1
 border_width_top = 4
-border_width_right = 1
 border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 corner_detail = 1
 expand_margin_top = 2.0
 
 [sub_resource type="StyleBoxFlat" id=24]
-content_margin_left = 15.0
-content_margin_right = 15.0
-content_margin_top = 4.0
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 8.0
 bg_color = Color( 0.0470588, 0.0392157, 0.0509804, 1 )
 border_width_left = 1
 border_width_top = 1
@@ -254,8 +302,8 @@ corner_radius_top_right = 2
 corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id=23]
-content_margin_left = 15.0
-content_margin_right = 15.0
+content_margin_left = 20.0
+content_margin_right = 20.0
 bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
 border_width_left = 1
 border_width_top = 1
@@ -265,7 +313,7 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_detail = 1
 expand_margin_top = 3.0
-expand_margin_bottom = 1.0
+expand_margin_bottom = 2.0
 
 [sub_resource type="DynamicFontData" id=29]
 font_path = "res://assets/theme/Barlow-Regular.ttf"
@@ -290,6 +338,17 @@ expand_margin_left = 4.0
 expand_margin_right = 4.0
 expand_margin_top = 4.0
 expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id=22]
+bg_color = Color( 0.141176, 0.141176, 0.203922, 1 )
+border_width_left = 1
+border_width_top = 4
+border_width_right = 1
+border_color = Color( 0.313726, 0.223529, 0.435294, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_detail = 1
+expand_margin_top = 2.0
 
 [sub_resource type="DynamicFontData" id=19]
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
@@ -334,20 +393,26 @@ draw_center = false
 border_width_right = 1
 border_color = Color( 0.85098, 0.721569, 1, 1 )
 
-[sub_resource type="DynamicFontData" id=33]
-font_path = "res://assets/theme/NotoEmoji-Regular.ttf"
+[sub_resource type="StyleBoxFlat" id=32]
+bg_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
+border_width_left = 1
+border_width_top = 22
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.160784, 0.117647, 0.176471, 1 )
+expand_margin_top = 22.0
 
-[sub_resource type="DynamicFontData" id=2]
+[sub_resource type="DynamicFontData" id=1]
 font_path = "res://assets/theme/Barlow-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=32]
+[sub_resource type="DynamicFont" id=2]
+size = 17
 use_mipmaps = true
 use_filter = true
-font_data = SubResource( 2 )
-fallback/0 = SubResource( 33 )
+font_data = SubResource( 1 )
 
 [resource]
-default_font = SubResource( 32 )
+default_font = SubResource( 2 )
 Button/colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
 Button/colors/font_color_disabled = Color( 0.462745, 0.176471, 0.843137, 1 )
 Button/colors/font_color_focus = Color( 0.913725, 0.552941, 0.968627, 1 )
@@ -358,8 +423,12 @@ Button/styles/focus = SubResource( 18 )
 Button/styles/hover = SubResource( 4 )
 Button/styles/normal = SubResource( 5 )
 Button/styles/pressed = SubResource( 4 )
+ButtonFlat/styles/focus = SubResource( 40 )
 CheckBox/icons/checked = ExtResource( 2 )
+CheckBox/icons/radio_checked = ExtResource( 11 )
+CheckBox/icons/radio_unchecked = ExtResource( 10 )
 CheckBox/icons/unchecked = ExtResource( 4 )
+CheckBoxFlat/styles/focus = SubResource( 39 )
 CheckButton/icons/off = ExtResource( 1 )
 CheckButton/icons/on = ExtResource( 3 )
 HScrollBar/styles/grabber = SubResource( 14 )
@@ -368,7 +437,16 @@ HScrollBar/styles/grabber_pressed = SubResource( 12 )
 HScrollBar/styles/scroll = SubResource( 15 )
 HScrollBar/styles/scroll_focus = SubResource( 15 )
 HSeparator/styles/separator = SubResource( 16 )
+ItemList/colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
+ItemList/colors/font_color_selected = Color( 0.913725, 0.552941, 0.968627, 1 )
+ItemList/styles/bg = SubResource( 21 )
+ItemList/styles/bg_focus = SubResource( 36 )
+ItemList/styles/cursor = SubResource( 34 )
+ItemList/styles/cursor_unfocused = SubResource( 35 )
+ItemList/styles/selected = SubResource( 5 )
+ItemList/styles/selected_focus = SubResource( 4 )
 Label/colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
+LabelSmall/fonts/font = SubResource( 42 )
 LineEdit/colors/clear_button_color = Color( 0.85098, 0.721569, 1, 1 )
 LineEdit/colors/clear_button_color_pressed = Color( 0.913725, 0.552941, 0.968627, 1 )
 LineEdit/colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
@@ -378,21 +456,23 @@ LineEdit/colors/selection_color = Color( 0.913725, 0.552941, 0.968627, 1 )
 LineEdit/styles/focus = SubResource( 6 )
 LineEdit/styles/normal = SubResource( 7 )
 LineEdit/styles/read_only = SubResource( 3 )
+Panel/styles/panel = SubResource( 21 )
 PanelContainer/styles/panel = SubResource( 21 )
-PopupMenu/colors/font_color = Color( 0.913725, 0.552941, 0.968627, 1 )
-PopupMenu/colors/font_color_hover = Color( 0.85098, 0.721569, 1, 1 )
-PopupMenu/colors/font_color_separator = Color( 0.913725, 0.552941, 0.968627, 0.501961 )
+PopupMenu/icons/checked = ExtResource( 2 )
 PopupMenu/icons/radio_checked = ExtResource( 11 )
 PopupMenu/icons/radio_unchecked = ExtResource( 10 )
-PopupMenu/icons/submenu = ExtResource( 12 )
-PopupMenu/styles/panel = SubResource( 34 )
+PopupMenu/icons/unchecked = ExtResource( 4 )
+PopupMenu/styles/hover = SubResource( 38 )
+PopupMenu/styles/panel = SubResource( 21 )
+PopupMenu/styles/separator = SubResource( 37 )
+PopupPanel/styles/panel = SubResource( 21 )
 ProgressBar/colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
 ProgressBar/styles/bg = SubResource( 8 )
 ProgressBar/styles/fg = SubResource( 9 )
 TabContainer/colors/font_color_bg = Color( 0.686275, 0.384314, 0.945098, 1 )
 TabContainer/colors/font_color_fg = Color( 0.913725, 0.552941, 0.968627, 1 )
 TabContainer/fonts/font = SubResource( 26 )
-TabContainer/styles/panel = SubResource( 22 )
+TabContainer/styles/panel = SubResource( 33 )
 TabContainer/styles/tab_bg = SubResource( 24 )
 TabContainer/styles/tab_fg = SubResource( 23 )
 Tabs/colors/font_color_bg = Color( 0.572549, 0.415686, 0.709804, 1 )
@@ -419,9 +499,14 @@ TextEdit/styles/completion = SubResource( 6 )
 TextEdit/styles/focus = SubResource( 6 )
 TextEdit/styles/normal = SubResource( 7 )
 TextEdit/styles/read_only = SubResource( 3 )
+Tree/colors/font_color = Color( 0.913725, 0.552941, 0.968627, 1 )
 VScrollBar/styles/grabber = SubResource( 10 )
 VScrollBar/styles/grabber_highlight = SubResource( 31 )
 VScrollBar/styles/grabber_pressed = SubResource( 10 )
 VScrollBar/styles/scroll = SubResource( 13 )
 VScrollBar/styles/scroll_focus = SubResource( 13 )
 VSeparator/styles/separator = SubResource( 17 )
+WindowDialog/colors/title_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+WindowDialog/icons/close = ExtResource( 5 )
+WindowDialog/icons/close_highlight = ExtResource( 5 )
+WindowDialog/styles/panel = SubResource( 32 )

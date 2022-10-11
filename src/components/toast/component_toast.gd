@@ -14,7 +14,7 @@ var is_closed:bool = false
 var title:String = ""
 var description:String = ""
 var status:int = STATUS_SUCCESS
-var duration:float = 5.0
+var duration:float = 4.0
 var is_closable:bool = true
 
 onready var tween:Tween = $Tween
@@ -37,7 +37,7 @@ func open(_title:String, _description:String=description, _status:int=status, _d
 		STATUS_INFO:
 			self_modulate = INFO_COLOR
 	
-	$DisappearTimer.wait_time = duration
+	$DisappearTimer.wait_time = _duration
 	$DisappearTimer.start()
 	
 	if not _is_closable:

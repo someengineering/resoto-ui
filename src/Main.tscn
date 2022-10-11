@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -10,10 +10,13 @@
 [ext_resource path="res://scripts/ui_content.gd" type="Script" id=8]
 [ext_resource path="res://components/terminal/component_terminal_manager.tscn" type="PackedScene" id=9]
 [ext_resource path="res://components/toast/ToastManager.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scripts/tools/browser_copy_paste_fix.gd" type="Script" id=11]
+[ext_resource path="res://components/popups/popup_generic_confirm.gd" type="Script" id=11]
+[ext_resource path="res://components/widgets/DashboardManager.tscn" type="PackedScene" id=12]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.161705, 0.119476, 0.175781, 1 )
+
+[sub_resource type="ButtonGroup" id=19]
 
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
@@ -58,6 +61,15 @@ custom_constants/margin_bottom = 10
 
 [node name="TerminalManager" parent="Content/Content" instance=ExtResource( 9 )]
 
+[node name="DashBoardManager" parent="Content/Content" instance=ExtResource( 12 )]
+visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+
 [node name="Config" parent="Content" instance=ExtResource( 3 )]
 visible = false
 
@@ -73,7 +85,7 @@ theme = ExtResource( 2 )
 
 [node name="Menu" type="PanelContainer" parent="MenuBar/MenuContainer"]
 margin_right = 1920.0
-margin_bottom = 32.0
+margin_bottom = 33.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 3
 custom_styles/panel = SubResource( 3 )
@@ -84,18 +96,18 @@ __meta__ = {
 
 [node name="Title" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu"]
 margin_right = 1920.0
-margin_bottom = 32.0
+margin_bottom = 33.0
 custom_constants/separation = 0
 
 [node name="Spacer2" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
 margin_right = 10.0
-margin_bottom = 32.0
+margin_bottom = 33.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="TextureRect" type="TextureRect" parent="MenuBar/MenuContainer/Menu/Title"]
 margin_left = 10.0
 margin_right = 74.0
-margin_bottom = 32.0
+margin_bottom = 33.0
 rect_min_size = Vector2( 64, 32 )
 texture = ExtResource( 4 )
 expand = true
@@ -103,14 +115,14 @@ stretch_mode = 6
 
 [node name="Spacer" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
 margin_left = 74.0
-margin_right = 1813.0
-margin_bottom = 32.0
+margin_right = 1779.0
+margin_bottom = 33.0
 size_flags_horizontal = 3
 
 [node name="SideMenu" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
-margin_left = 1813.0
-margin_right = 1920.0
-margin_bottom = 32.0
+margin_left = 1779.0
+margin_right = 1888.0
+margin_bottom = 33.0
 grow_horizontal = 0
 grow_vertical = 0
 custom_constants/margin_right = 4
@@ -121,19 +133,75 @@ custom_constants/margin_bottom = 4
 [node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/MenuContainer/Menu/Title/SideMenu"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 103.0
-margin_bottom = 28.0
+margin_right = 105.0
+margin_bottom = 29.0
 
 [node name="ButtonConfig" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
-margin_right = 53.0
-margin_bottom = 24.0
+margin_right = 54.0
+margin_bottom = 25.0
 text = "config"
 
 [node name="ButtonDocs" type="Button" parent="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer"]
-margin_left = 57.0
-margin_right = 99.0
-margin_bottom = 24.0
+margin_left = 58.0
+margin_right = 101.0
+margin_bottom = 25.0
 text = "docs"
+
+[node name="SideMenu2" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 1888.0
+margin_right = 1920.0
+margin_bottom = 33.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="Config" type="MenuButton" parent="MenuBar/MenuContainer/Menu/Title/SideMenu2"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 28.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 24, 24 )
+expand_icon = true
+items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false, "Merge Graph", null, 0, false, false, 3, 0, null, "", false ]
+
+[node name="Config" type="MenuButton" parent="MenuBar/MenuContainer/Menu/Title/SideMenu2"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 28.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 24, 24 )
+expand_icon = true
+items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false, "Merge Graph", null, 0, false, false, 3, 0, null, "", false ]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -87.0
+margin_right = 87.0
+margin_bottom = 32.0
+
+[node name="TerminalsButton" type="Button" parent="MenuBar/HBoxContainer"]
+margin_right = 81.0
+margin_bottom = 32.0
+toggle_mode = true
+group = SubResource( 19 )
+text = "Terminals"
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="MenuBar/HBoxContainer"]
+margin_left = 85.0
+margin_right = 89.0
+margin_bottom = 32.0
+
+[node name="DashboardsButton" type="Button" parent="MenuBar/HBoxContainer"]
+margin_left = 93.0
+margin_right = 188.0
+margin_bottom = 32.0
+toggle_mode = true
+group = SubResource( 19 )
+text = "Dashboards"
+flat = true
 
 [node name="Popups" type="CanvasLayer" parent="."]
 layer = 30
@@ -165,22 +233,19 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="Popups/ConnectPopup/Content"]
 margin_right = 400.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 rect_min_size = Vector2( 100, 0 )
 custom_styles/normal = SubResource( 8 )
 text = "Connect to Resoto Core"
 align = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Popups/ConnectPopup/Content"]
-margin_top = 20.0
+margin_top = 21.0
 margin_right = 400.0
-margin_bottom = 158.0
+margin_bottom = 163.0
 custom_constants/margin_right = 20
 custom_constants/margin_top = 10
 custom_constants/margin_left = 20
@@ -193,7 +258,7 @@ __meta__ = {
 margin_left = 20.0
 margin_top = 10.0
 margin_right = 380.0
-margin_bottom = 118.0
+margin_bottom = 122.0
 size_flags_horizontal = 3
 script = ExtResource( 1 )
 __meta__ = {
@@ -202,7 +267,7 @@ __meta__ = {
 
 [node name="ConnectStatusLabel" type="Label" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
 margin_right = 360.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 rect_min_size = Vector2( 100, 0 )
 size_flags_vertical = 7
 text = "Connecting"
@@ -211,29 +276,29 @@ autowrap = true
 
 [node name="HSeparator" type="HSeparator" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
 modulate = Color( 1, 1, 1, 0.415686 )
-margin_top = 24.0
+margin_top = 25.0
 margin_right = 360.0
-margin_bottom = 28.0
+margin_bottom = 29.0
 
 [node name="Label" type="Label" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
-margin_top = 32.0
+margin_top = 33.0
 margin_right = 360.0
-margin_bottom = 52.0
+margin_bottom = 54.0
 rect_min_size = Vector2( 100, 0 )
 text = "PSK:"
 
 [node name="PSKLineEdit" type="LineEdit" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
-margin_top = 56.0
+margin_top = 58.0
 margin_right = 360.0
-margin_bottom = 80.0
+margin_bottom = 83.0
 size_flags_horizontal = 3
 caret_blink = true
 caret_blink_speed = 0.5
 
 [node name="ButtonConnect" type="Button" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
-margin_top = 84.0
+margin_top = 87.0
 margin_right = 360.0
-margin_bottom = 108.0
+margin_bottom = 112.0
 text = "Connect"
 
 [node name="ConnectDelay" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
@@ -242,16 +307,97 @@ one_shot = true
 
 [node name="ConnectTimeoutTimer" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
 
+[node name="ConfirmPopup" type="PopupDialog" parent="Popups"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1920.0
+margin_bottom = -1080.0
+rect_min_size = Vector2( 400, 150 )
+theme = ExtResource( 2 )
+custom_styles/panel = SubResource( 7 )
+popup_exclusive = true
+script = ExtResource( 11 )
+
+[node name="Content" type="VBoxContainer" parent="Popups/ConfirmPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 0
+
+[node name="Label" type="Label" parent="Popups/ConfirmPopup/Content"]
+margin_right = 400.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 100, 0 )
+custom_styles/normal = SubResource( 8 )
+text = "Confirm Dialogue"
+align = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Popups/ConfirmPopup/Content"]
+margin_top = 21.0
+margin_right = 400.0
+margin_bottom = 150.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 20
+custom_constants/margin_top = 10
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Content" type="VBoxContainer" parent="Popups/ConfirmPopup/Content/MarginContainer"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 380.0
+margin_bottom = 109.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Popups/ConfirmPopup/Content/MarginContainer/Content"]
+margin_right = 360.0
+margin_bottom = 70.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Question"
+
+[node name="Buttons" type="HBoxContainer" parent="Popups/ConfirmPopup/Content/MarginContainer/Content"]
+margin_top = 74.0
+margin_right = 360.0
+margin_bottom = 99.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="LeftButton" type="Button" parent="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons"]
+margin_left = 90.0
+margin_right = 170.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 80, 0 )
+theme_type_variation = "ButtonFlat"
+text = "Yes"
+flat = true
+
+[node name="RightButton" type="Button" parent="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons"]
+margin_left = 190.0
+margin_right = 270.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 80, 0 )
+theme_type_variation = "ButtonFlat"
+text = "Cancel"
+flat = true
+
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
 [node name="BrowserCopyPasteWatcher" type="Node" parent="."]
-script = ExtResource( 11 )
 
 [connection signal="close_config" from="Content/Config" to="Content" method="_on_Config_close_config"]
 [connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonConfig" to="Content" method="_on_ButtonConfig_pressed"]
 [connection signal="pressed" from="MenuBar/MenuContainer/Menu/Title/SideMenu/HBoxContainer/ButtonDocs" to="MenuBar/MenuContainer/Menu" method="_on_ButtonDocs_pressed"]
+[connection signal="toggled" from="MenuBar/HBoxContainer/TerminalsButton" to="Content" method="_on_TerminalsButton_toggled"]
+[connection signal="toggled" from="MenuBar/HBoxContainer/DashboardsButton" to="Content" method="_on_DashboardsButton_toggled"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
 [connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectDelay" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectDelay_timeout"]
 [connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectTimeoutTimer" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectTimeoutTimer_timeout"]
+[connection signal="pressed" from="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons/LeftButton" to="Popups/ConfirmPopup" method="_on_LeftButton_pressed"]
+[connection signal="pressed" from="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons/RightButton" to="Popups/ConfirmPopup" method="_on_RightButton_pressed"]

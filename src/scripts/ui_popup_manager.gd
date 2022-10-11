@@ -3,6 +3,7 @@ extends CanvasLayer
 var current_popup: Popup = null
 var popup_connect: Node = null
 
+onready var confirm_popup: Popup = $ConfirmPopup
 onready var popup_bg = $BG
 
 
@@ -21,6 +22,17 @@ func on_popup_close() -> void:
 	current_popup = null
 
 
+func show_confirm_popup(_title:String, _text:String, _left_button_text:String="Ok", _right_button_text:String="Cancel") -> Popup:
+	popup_bg.show()
+	if current_popup != null:
+		current_popup.hide()
+	current_popup = confirm_popup
+	confirm_popup.confirm_popup(_title, _text, _left_button_text, _right_button_text)
+	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
+	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
+	return confirm_popup
+
+
 func popup_active() ->bool:
 	return current_popup != null
 
@@ -28,7 +40,7 @@ func popup_active() ->bool:
 func open_popup(_name:String) -> void:
 	popup_bg.show()
 	current_popup = (get_node(_name) as Popup)
-	current_popup.connect("popup_hide", self, "on_popup_close", [], 4)
+	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
 	current_popup.popup_centered_clamped(Vector2(0,0), 2.2)
 
 

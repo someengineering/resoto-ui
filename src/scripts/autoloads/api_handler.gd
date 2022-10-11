@@ -61,10 +61,14 @@ func connection_config(_adress:String = adress, _port:int = port, _psk:String = 
 	# For debug purposes
 	prints("Resoto UI: Connection Settings to Core | Host:", adress, "- Port:", port, "- SSL:", use_ssl)
 
-
 func get_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_model()
 	_req_res.connect("done", _connect_to, "_on_get_model_done")
+
+
+func patch_model(_body:String, _connect_to:Node) -> void:
+	_req_res = _resoto_api.patch_model(_body)
+	_req_res.connect("done", _connect_to, "_on_patch_model_done")
 
 
 func get_configs(_connect_to:Node):
@@ -82,10 +86,34 @@ func put_config_id(_connect_to:Node, _config_id:String="resoto.core", _config_bo
 	_req_res.connect("done", _connect_to, "_on_put_config_id_done")
 	return _req_res
 
+func patch_config_id(_connect_to:Node, _config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
+	_req_res = _resoto_api.patch_config_id(_config_id, _config_body)
+	_req_res.connect("done", _connect_to, "_on_patch_config_id_done")
+	return _req_res
+
+func delete_config_id(_connect_to:Node, _config_id:String="") -> ResotoAPI.Request:
+	_req_res = _resoto_api.delete_config_id(_config_id, "")
+	_req_res.connect("done", _connect_to, "_on_delete_config_id_done")
+	return _req_res
 
 func get_config_model(_connect_to:Node) -> void:
 	_req_res = _resoto_api.get_config_model()
 	_req_res.connect("done", _connect_to, "_on_get_config_model_done")
+	
+
+func query_tsdb(_query:String, _connect_to:Node, _connect_function :String = "_on_query_tsdb_done") -> void:
+	_req_res = _resoto_api.query_tsdb(_query)
+	_req_res.connect("done", _connect_to, _connect_function)
+
+
+func query_range_tsdb(_query:String, _connect_to:Node, start_ts:int=1656422693, end_ts:int=1657025493, step:int=3600):
+	_req_res = _resoto_api.query_range_tsdb(_query, start_ts, end_ts, step)
+	_req_res.connect("done", _connect_to, "_on_query_range_tsdb_done")
+
+
+func tsdb_label_values(_label:String, _connect_to:Node):
+	_req_res = _resoto_api.tsdb_label_values(_label)
+	_req_res.connect("done", _connect_to, "_on_tsdb_label_values_done")
 
 
 func cli_info(_connect_to:Node) -> ResotoAPI.Request:
@@ -111,4 +139,20 @@ func cli_execute_json(_command:String, _connect_to:Node) -> ResotoAPI.Request:
 	_req_res = _resoto_api.post_cli_execute_nd_chunks(_command, graph_id)
 	_req_res.connect("data", _connect_to, "_on_cli_execute_json_data")
 	_req_res.connect("done", _connect_to, "_on_cli_execute_json_done")
+	return _req_res
+
+
+func _get_infra_info(_connect_to:Node = self) -> void:
+	_req_res = _resoto_api.get_infra_info()
+	_req_res.connect("done", _connect_to, "_on_get_infra_info_done")
+	
+
+func aggregate_search(_query : String, _connect_to: Node) -> ResotoAPI.Request:
+	_req_res = _resoto_api.aggregate_search(_query)
+	_req_res.connect("done", _connect_to, "_on_aggregate_search_done")
+	return _req_res
+	
+func search_graph(_query : String, _connect_to: Node) -> ResotoAPI.Request:
+	_req_res = _resoto_api.search_graph(_query)
+	_req_res.connect("done", _connect_to, "_on_search_graph_done")
 	return _req_res

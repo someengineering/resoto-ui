@@ -41,12 +41,18 @@ func connect_to_core() -> void:
 		API.adress = JavaScript.eval("getURL()")
 		var protocol = JavaScript.eval("getProtocol()")
 		API.use_ssl = protocol == "https:"
-		
+	
 	status.text = CONNECT_TEXT.format(["0", API.adress, API.port])
 	yield(VisualServer, "frame_post_draw")
 	$ConnectTimeoutTimer.start()
 	
 	info_request = API.cli_info(self)
+	API._get_infra_info(self)
+
+
+func _on_get_infra_info_done(_error:int, response):
+	if _error == OK:
+		InfrastructureInformation.infra_info = response.transformed.result
 
 
 func _on_cli_info_done(error:int, response:UserAgent.Response) -> void:

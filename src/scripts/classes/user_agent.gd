@@ -80,6 +80,8 @@ class Request:
 		
 		match state_:
 			states.CHECK_CONNECTION:
+				if false:
+					prints(_method, _path, _body)
 				if http_status == HTTPClient.STATUS_CONNECTING or http_status == HTTPClient.STATUS_RESOLVING:
 					if not poll_():
 						return
@@ -160,8 +162,6 @@ func _on_request_done_(_err:int, _response:Response) -> void:
 
 func request_(method:int, path:String, headers:Array = [], body:String = "") -> Request:
 	var http_ :HTTPClient = HTTPClient.new()
-	
-	#prints("\nConnecting:\n",options.host, options.port, options.use_ssl)
 	var err = http_.connect_to_host(options.host, options.port, options.use_ssl)
 	if err != OK:
 		debug_message("Error in connection! Check adress and port!")
@@ -196,6 +196,14 @@ func req_post(path:String, body:String, req_headers:RequestHeaders) -> Request:
 
 func req_put(path:String, body:String, req_headers:RequestHeaders) -> Request:
 	return request_(HTTPClient.METHOD_PUT, path, create_headers(req_headers), body)
+
+
+func req_patch(path:String, body:String, req_headers:RequestHeaders) -> Request:
+	return request_(HTTPClient.METHOD_PATCH, path, create_headers(req_headers), body)
+
+
+func req_delete(path:String, body:String, req_headers:RequestHeaders) -> Request:
+	return request_(HTTPClient.METHOD_DELETE, path, create_headers(req_headers), body)
 
 
 func poll() -> void:
