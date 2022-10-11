@@ -38,6 +38,8 @@ onready var accounts_combo := find_node("AccountsCombo")
 onready var regions_combo := find_node("RegionsCombo")
 
 func _ready() -> void:
+	_t.style($VBoxContainer/MinimizedBar/MinimizeButton, _t.col.C_LIGHT)
+	_t.style($VBoxContainer/PanelContainer/Content/MainBar/RefreshIcon, _t.col.C_LIGHT)
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
 	add_widget_popup.interval = 144 # 500 points in a day
@@ -131,14 +133,6 @@ func set_dashboard_name(new_name : String) -> void:
 	find_node("DashboardMinLabel").text = new_name
 
 
-func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
-	set_dashboard_name(new_text)
-	if initial_load:
-		emit_signal("dashboard_changed", self)
-		
-	last_saved_name = new_text
-
-
 func _on_infra_info_updated() -> void:
 	var clouds_filters = ["All"]
 	clouds_filters.append_array(InfrastructureInformation.clouds)
@@ -196,7 +190,8 @@ func _on_CloudsCombo_option_changed(option):
 
 
 func _on_AccountsCombo_option_changed(option):
-	if option == "All": option = ""
+	if option == "All":
+		option = ""
 	dashboard.filters["account"] = option
 	account = option
 	add_widget_popup.dashboard_filters["account"] = option
@@ -207,7 +202,8 @@ func _on_AccountsCombo_option_changed(option):
 
 
 func _on_RegionsCombo_option_changed(option):
-	if option == "All": option = ""
+	if option == "All":
+		option = ""
 	dashboard.filters["region"] = option
 	region = option
 	add_widget_popup.dashboard_filters["region"] = option
@@ -316,3 +312,16 @@ func _on_MaximizeButton_pressed():
 
 func _on_MinimizeButton_pressed():
 	set_is_maximized(false)
+
+
+func _on_RenameButton_pressed():
+	pass
+#	_on_DashboardNameLabel_text_entered("placeholder for popup")
+
+
+func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
+	set_dashboard_name(new_text)
+	if initial_load:
+		emit_signal("dashboard_changed", self)
+		
+	last_saved_name = new_text

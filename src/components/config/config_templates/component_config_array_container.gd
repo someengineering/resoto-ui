@@ -26,6 +26,7 @@ onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
 
 
 func _ready() -> void:
+	_t.style($HeaderBG/Header/Top/Expand, _t.col.C_LIGHT)
 	if descriptions_as_hints:
 		$HeaderBG/Header/Description.hide()
 	_on_Expand_toggled(start_expanded)

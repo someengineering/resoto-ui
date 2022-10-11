@@ -1,6 +1,6 @@
 extends Control
 
-const TREEMAP_ELEMENT = preload("res://ui/elements/Element_TreeMap_Box.tscn")
+const TREEMAP_ELEMENT = preload("res://components/elements/Element_TreeMap_Box.tscn")
 
 signal pressed
 

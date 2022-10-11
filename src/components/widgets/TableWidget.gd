@@ -82,7 +82,7 @@ class SortButton extends Button:
 		flat = true
 		toggle_mode = true
 		connect("toggled", self, "on_toggled")
-		icon = preload("res://assets/sort-desc.png")
+		icon = preload("res://assets/icons/sort-desc.png")
 		expand_icon = true
 		
 		
@@ -90,9 +90,9 @@ class SortButton extends Button:
 		ascending = pressed
 		
 		if ascending:
-			icon = preload("res://assets/sort-asc.png")
+			icon = preload("res://assets/icons/sort-asc.png")
 		else:
-			icon = preload("res://assets/sort-desc.png")
+			icon = preload("res://assets/icons/sort-desc.png")
 			
 		emit_signal("sort_requested")
 		

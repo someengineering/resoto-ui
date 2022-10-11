@@ -59,6 +59,11 @@ onready var widget_content := $MarginContainer
 
 
 func _ready() -> void:
+	_t.style($ResizeButtons, _t.col.C_LIGHT)
+	_t.style($QueryWarning/BG, _t.col.C_BG2)
+	_t.style_self($QueryWarning/VBox/PanelContainer, _t.col.C_BG)
+	_t.style_self($PanelContainer, _t.col.C_BG)
+	
 	maximize_button.modulate.a = 0
 	for i in $ResizeButtons.get_child_count():
 		var button : BaseButton = resize_buttons.get_child(i)
@@ -452,8 +457,7 @@ onready var query_warning_title = $QueryWarning/VBox/PanelContainer/VBox/QuerySt
 func _on_data_source_query_status(_type:int=0, _title:="Widget Error", _message:=""):
 	query_warning_title.visible = _title != ""
 	query_warning_title.text = _title
-	query_warning_title.hint_tooltip = _message
-	$QueryWarning/VBox/Warning.hint_tooltip = _title + "\n" + _message
+	$QueryWarning/VBox/PanelContainer.hint_tooltip = _title + "\n" + _message
 	query_warning.get_node("VBox/PanelContainer").visible = size_on_grid.y >= 2
 	query_warning.show()
 
@@ -478,7 +482,7 @@ func _on_WidgetContainer_moved_or_resized():
 		rect_size = size_on_grid * grid_size
 	
 	if query_warning:
-		query_warning.get_node("VBox/PanelContainer").visible = (size_on_grid.y >= 2 and size_on_grid.x >= 2) or is_maximized
+		$QueryWarning/VBox/PanelContainer/VBox/QueryStatusTitle.visible = (size_on_grid.y >= 2 and size_on_grid.x >= 2) or is_maximized
 
 
 func _on_ExportButton_pressed():

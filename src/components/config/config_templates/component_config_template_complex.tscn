@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://components/config/config_templates/component_config_complex.gd" type="Script" id=1]
-[ext_resource path="res://assets/icons/icon_expand.png" type="Texture" id=2]
-[ext_resource path="res://assets/icons/icon_collapse.png" type="Texture" id=3]
+[ext_resource path="res://assets/icons/icon_128_collapse.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_128_expand.svg" type="Texture" id=3]
 [ext_resource path="res://components/config/config_templates/component_config_add_custom_tooltip.gd" type="Script" id=4]
 
 [sub_resource type="StyleBoxFlat" id=8]
@@ -66,12 +66,13 @@ margin_right = 1900.0
 margin_bottom = 21.0
 
 [node name="Expand" type="TextureButton" parent="HeaderBG/Header/Top"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
 margin_right = 10.0
 margin_bottom = 21.0
-rect_min_size = Vector2( 10, 10 )
+rect_min_size = Vector2( 10, 21 )
 toggle_mode = true
-texture_normal = ExtResource( 3 )
-texture_pressed = ExtResource( 2 )
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
 expand = true
 stretch_mode = 5
 

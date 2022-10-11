@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=56 format=2]
+[gd_resource type="Theme" load_steps=60 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -104,6 +104,26 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id=54]
+content_margin_left = 2.0
+content_margin_right = 2.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxEmpty" id=59]
+content_margin_left = 1.0
+content_margin_right = 1.0
+content_margin_top = 1.0
+content_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxEmpty" id=58]
+content_margin_left = 2.0
+content_margin_right = 2.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxEmpty" id=56]
 
 [sub_resource type="StyleBoxFlat" id=39]
 bg_color = Color( 0, 0.329412, 0.639216, 1 )
@@ -273,13 +293,15 @@ corner_radius_bottom_left = 3
 corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id=33]
-content_margin_left = 8.0
-content_margin_right = 8.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-bg_color = Color( 0.091, 0.11245, 0.13, 1 )
-border_width_top = 4
-border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+draw_center = false
+border_width_top = 400
+border_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+border_blend = true
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -291,7 +313,7 @@ content_margin_left = 20.0
 content_margin_right = 20.0
 content_margin_top = 10.0
 content_margin_bottom = 8.0
-bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+bg_color = Color( 0.0303497, 0.116377, 0.199219, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 
@@ -307,7 +329,7 @@ corner_radius_top_right = 4
 [sub_resource type="StyleBoxFlat" id=23]
 content_margin_left = 20.0
 content_margin_right = 20.0
-bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 expand_margin_top = 3.0
@@ -431,7 +453,12 @@ ButtonBigText/styles/focus = SubResource( 43 )
 ButtonBigText/styles/hover = SubResource( 48 )
 ButtonBigText/styles/normal = SubResource( 49 )
 ButtonBigText/styles/pressed = SubResource( 50 )
-ButtonFlat/styles/focus = SubResource( 43 )
+ButtonBorderless/styles/disabled = SubResource( 54 )
+ButtonBorderless/styles/focus = SubResource( 54 )
+ButtonBorderless/styles/hover = SubResource( 59 )
+ButtonBorderless/styles/normal = SubResource( 58 )
+ButtonBorderless/styles/pressed = SubResource( 54 )
+ButtonFlat/styles/focus = SubResource( 56 )
 CheckBox/icons/checked = ExtResource( 2 )
 CheckBox/icons/radio_checked = ExtResource( 11 )
 CheckBox/icons/radio_unchecked = ExtResource( 10 )
@@ -477,8 +504,9 @@ PopupPanel/styles/panel = SubResource( 21 )
 ProgressBar/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 ProgressBar/styles/bg = SubResource( 8 )
 ProgressBar/styles/fg = SubResource( 9 )
-TabContainer/colors/font_color_bg = Color( 0.537255, 0.819608, 0.945098, 1 )
-TabContainer/colors/font_color_fg = Color( 1, 1, 1, 1 )
+TabContainer/colors/font_color_bg = Color( 0.0588235, 0.2, 0.337255, 1 )
+TabContainer/colors/font_color_disabled = Color( 0.0588235, 0.2, 0.337255, 1 )
+TabContainer/colors/font_color_fg = Color( 0.537255, 0.819608, 0.945098, 1 )
 TabContainer/icons/decrement = ExtResource( 6 )
 TabContainer/icons/decrement_highlight = ExtResource( 9 )
 TabContainer/icons/increment = ExtResource( 7 )

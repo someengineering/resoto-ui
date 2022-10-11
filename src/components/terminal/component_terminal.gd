@@ -39,7 +39,7 @@ func _ready() -> void:
 	
 	loading.console = console
 	console_v_scroll.connect("changed", self, "on_scroll_changed")
-	var image = load("res://assets/Resoto-Logo_bigger.svg")
+	var image = load("res://assets/resoto/Resoto-Logo_bigger.svg")
 	
 	for i in 5:
 		console.newline()

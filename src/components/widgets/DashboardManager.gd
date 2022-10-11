@@ -86,7 +86,7 @@ func close_dashboard(dashboard : DashboardContainer):
 
 
 func _on_patch_config_id_done(_error : int, _response):
-	_g.emit_signal("add_toast", "Your Dashboard has been saved!", "", self)
+	_g.emit_signal("add_toast", "Your Dashboard has been saved!", "", 0, self, 0.7)
 
 
 func request_saved_dashboards() -> void:
@@ -137,7 +137,10 @@ func create_dashboard_with_data(data):
 	dashboard = get_node(dashboard_name)
 	dashboard.initial_load = false
 	for key in data:
-		dashboard.set(key, data[key])
+		if key in ["cloud", "account", "region"] and data[key] == "":
+			dashboard.set(key, "All")
+		else:
+			dashboard.set(key, data[key])
 	dashboard.initial_load = true
 	dashboard.last_saved_name = dashboard.name
 

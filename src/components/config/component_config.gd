@@ -549,5 +549,17 @@ func _on_ConfigCombo_option_changed(option):
 	change_active_tab(config_index, true)
 
 
-func _on_SaveConfigButton2_pressed():
+func _on_AddConfigButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_DeleteConfigButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_DuplicateConfigButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_RenameConfigButton_pressed():
 	pass # Replace with function body.
