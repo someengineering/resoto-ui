@@ -33,9 +33,9 @@ onready var refresh_option := $VBoxContainer/PanelContainer/Content/MainBar/Refr
 onready var name_label := $VBoxContainer/PanelContainer/Content/MainBar/DashboardNameLabel
 onready var lock_button := $VBoxContainer/PanelContainer/Content/MainBar/LockButton
 
-onready var clouds_combo := $VBoxContainer/PanelContainer/Content/FiltersContainer/CloudsCombo
-onready var accounts_combo := $VBoxContainer/PanelContainer/Content/FiltersContainer/AccountsCombo
-onready var regions_combo := $VBoxContainer/PanelContainer/Content/FiltersContainer/RegionsCombo
+onready var clouds_combo := find_node("CloudsCombo")
+onready var accounts_combo := find_node("AccountsCombo")
+onready var regions_combo := find_node("RegionsCombo")
 
 func _ready() -> void:
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time

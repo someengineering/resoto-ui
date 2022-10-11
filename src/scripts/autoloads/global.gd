@@ -3,6 +3,7 @@ extends Node
 signal add_toast
 signal toast_created
 signal ui_shrink_changed
+signal connected_to_resotocore
 signal fullscreen_hide_menu
 
 const tsdb_metric_prefix:String		 = "resoto_"
@@ -24,5 +25,5 @@ var popup_manager: CanvasLayer = null
 
 func set_ui_shrink(new_shrink:float) -> void:
 	ui_shrink = new_shrink
-	emit_signal("add_toast", "Scale " + str(ui_shrink*100) + "%", "", 3, 1)
+	emit_signal("add_toast", "Scale " + str(ui_shrink*100) + "%", "", 3, self, 0.7)
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED,  SceneTree.STRETCH_ASPECT_EXPAND, Vector2(1920,1080), ui_shrink)

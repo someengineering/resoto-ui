@@ -10,7 +10,6 @@
 [ext_resource path="res://scripts/ui_content.gd" type="Script" id=8]
 [ext_resource path="res://components/terminal/component_terminal_manager.tscn" type="PackedScene" id=9]
 [ext_resource path="res://components/toast/ToastManager.tscn" type="PackedScene" id=10]
-[ext_resource path="res://components/popups/popup_generic_confirm.gd" type="Script" id=11]
 [ext_resource path="res://scripts/tools/browser_copy_paste_fix.gd" type="Script" id=11]
 [ext_resource path="res://components/widgets/DashboardManager.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/elements/HamburgerButton.tscn" type="PackedScene" id=13]
@@ -300,8 +299,8 @@ custom_constants/separation = 0
 
 [node name="TopMenu" type="PanelContainer" parent="MenuBar/MenuContainer"]
 margin_right = 1920.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 0, 30 )
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 custom_styles/panel = SubResource( 3 )
 __meta__ = {

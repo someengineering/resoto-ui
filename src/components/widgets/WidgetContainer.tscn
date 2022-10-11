@@ -392,6 +392,13 @@ icon = ExtResource( 6 )
 flat = true
 expand_icon = true
 
+[node name="DataTimeLabel" type="Label" parent="PanelContainer/Title"]
+modulate = Color( 1, 1, 1, 0.498039 )
+margin_left = 115.0
+margin_top = 5.0
+margin_right = 115.0
+margin_bottom = 19.0
+
 [node name="ExportButton" type="Button" parent="PanelContainer/Title"]
 margin_left = 128.0
 margin_right = 152.0
