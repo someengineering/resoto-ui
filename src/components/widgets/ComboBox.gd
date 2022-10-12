@@ -4,6 +4,7 @@ extends Control
 signal option_changed(option)
 
 export (Array, String) var items
+export (bool) var align_items_left:= false
 
 var matching_items : Array
 var previous_option : String = ""
@@ -67,6 +68,7 @@ func add_option(option_name : String) -> void:
 	var button := Button.new()
 	button.size_flags_horizontal = SIZE_EXPAND_FILL
 	button.text = option_name
+	button.align = Button.ALIGN_CENTER if not align_items_left else Button.ALIGN_LEFT
 	button.connect("pressed", self, "_on_option_pressed", [option_name])
 	options_container.add_child(button)
 
@@ -89,7 +91,7 @@ func show_options() -> void:
 	options_popup.popup()
 	options_popup.rect_global_position = rect_global_position + Vector2(0, rect_size.y + 2)
 	options_popup.rect_size.x = rect_size.x
-	options_popup.rect_size.y = min(400, items.size()*(38) + 5)
+	options_popup.rect_size.y = min(410, items.size()*(40) + 5)
 
 
 func set_items(new_items : Array) -> void:

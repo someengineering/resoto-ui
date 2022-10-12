@@ -82,9 +82,17 @@ margin_right = 463.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 400, 24 )
 items = [  ]
+align_items_left = true
+
+[node name="ShowDashboardsButton" type="CheckBox" parent="TabManager/PanelContainer/Box"]
+margin_left = 467.0
+margin_right = 692.0
+margin_bottom = 33.0
+text = "Show Dashboard Configs"
+flat = true
 
 [node name="Spacer" type="Control" parent="TabManager/PanelContainer/Box"]
-margin_left = 467.0
+margin_left = 696.0
 margin_right = 1592.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 20, 0 )
@@ -246,6 +254,7 @@ margin_top = 387.0
 [node name="TemplateEnum" parent="Templates" instance=ExtResource( 6 )]
 
 [connection signal="option_changed" from="TabManager/PanelContainer/Box/ConfigCombo" to="." method="_on_ConfigCombo_option_changed"]
+[connection signal="toggled" from="TabManager/PanelContainer/Box/ShowDashboardsButton" to="." method="_on_ShowDashboardsButton_toggled"]
 [connection signal="pressed" from="TabManager/PanelContainer/Box/CloseConfigButton" to="." method="_on_CloseConfigButton_pressed"]
 [connection signal="pressed" from="TabManager/PanelContainer/Box/SaveConfigButton" to="." method="_on_SaveConfigButton_pressed"]
 [connection signal="pressed" from="TabManager/PanelContainer/Box/RenameConfigButton" to="." method="_on_RenameConfigButton_pressed"]

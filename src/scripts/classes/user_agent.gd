@@ -110,7 +110,7 @@ class Request:
 				if http_status == HTTPClient.STATUS_REQUESTING:
 					if not poll_():
 						return
-				elif http_status == HTTPClient.STATUS_BODY:
+				elif http_status == HTTPClient.STATUS_BODY or http_status == HTTPClient.STATUS_CONNECTED:
 					state_ = states.RECEIVE
 			
 			states.RECEIVE:

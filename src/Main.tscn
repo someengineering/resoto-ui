@@ -594,5 +594,6 @@ script = ExtResource( 11 )
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]
 [connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectDelay" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectDelay_timeout"]
 [connection signal="timeout" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ConnectTimeoutTimer" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectTimeoutTimer_timeout"]
+[connection signal="text_entered" from="Popups/ConfirmPopup/Content/MarginContainer/Content/LineEdit" to="Popups/ConfirmPopup" method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons/LeftButton" to="Popups/ConfirmPopup" method="_on_LeftButton_pressed"]
 [connection signal="pressed" from="Popups/ConfirmPopup/Content/MarginContainer/Content/Buttons/RightButton" to="Popups/ConfirmPopup" method="_on_RightButton_pressed"]

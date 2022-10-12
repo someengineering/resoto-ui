@@ -4,7 +4,6 @@
 [ext_resource path="res://components/widgets/ComboBox.gd" type="Script" id=2]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
 
-
 [node name="ComboBox" type="HBoxContainer"]
 margin_right = 312.0
 margin_bottom = 24.0
@@ -55,12 +54,12 @@ focus_mode = 1
 [node name="ScrollContainer" type="ScrollContainer" parent="PopupPanel"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 302.0
-margin_bottom = 10.0
+margin_right = 12.0
+margin_bottom = 23.0
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PopupPanel/ScrollContainer"]
-margin_right = 292.0
+margin_right = 2.0
 size_flags_horizontal = 3
 
 [node name="JustHiddenTimer" type="Timer" parent="."]

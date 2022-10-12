@@ -58,3 +58,8 @@ func send_response(_button_pressed:String):
 		emit_signal("response_with_input", _button_pressed, line_edit.text)
 	else:
 		emit_signal("response", _button_pressed)
+
+
+func _on_LineEdit_text_entered(_new_text):
+	send_response("left")
+	hide()
