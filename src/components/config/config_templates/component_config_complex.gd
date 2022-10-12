@@ -22,7 +22,8 @@ onready var content = $Margin/Content
 
 
 func _ready() -> void:
-	_t.style($HeaderBG/Header/Top/Expand, _t.col.C_LIGHT)
+	Style.add($HeaderBG/Header/Top/Expand, Style.c.LIGHT)
+	
 	_on_Expand_toggled(start_expanded)
 	orig_size = $Margin.rect_size.y
 	if descriptions_as_hints:

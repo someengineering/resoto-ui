@@ -12,7 +12,7 @@
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=10]
 [ext_resource path="res://assets/icons/icon_128_refresh_thick.svg" type="Texture" id=11]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=12]
-[ext_resource path="res://assets/icons/icon_128_fullscreen_square.svg" type="Texture" id=14]
+[ext_resource path="res://assets/icons/icon_128_fullscreen_variant.svg" type="Texture" id=13]
 [ext_resource path="res://components/elements/Styled/IconButton.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/icons/icon_128_close_thick.svg" type="Texture" id=16]
 
@@ -250,7 +250,7 @@ icon_tex = ExtResource( 4 )
 margin_left = 1834.0
 margin_right = 1867.0
 hint_tooltip = "Maximize dashboard"
-icon_tex = ExtResource( 14 )
+icon_tex = ExtResource( 13 )
 
 [node name="CloseButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 15 )]
 margin_left = 1871.0
@@ -300,7 +300,7 @@ hint_tooltip = "Minimize Dashboard"
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_type_variation = "ButtonBorderless"
-icon = ExtResource( 14 )
+icon = ExtResource( 13 )
 icon_align = 1
 expand_icon = true
 
@@ -312,7 +312,8 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Dashboard" type="Control" parent="VBoxContainer/ScrollContainer"]
-margin_right = 1908.0
+margin_right = 1920.0
+margin_bottom = 1039.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )

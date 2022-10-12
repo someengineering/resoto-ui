@@ -11,7 +11,7 @@ onready var icon_node = $Margin/Icon
 
 func _ready():
 	icon_node.texture = icon_tex
-	_t.style(icon_node, _t.col.C_LIGHT)
+	Style.add(icon_node, Style.c.LIGHT)
 	connect("pressed", self, "_on_IconButton_mouse_exited")
 
 
@@ -41,8 +41,8 @@ func set_flip_v(_flip_v:bool):
 
 
 func _on_IconButton_mouse_entered():
-	icon_node.modulate = _t.col_map[_t.col.C_LIGHTER]
+	icon_node.modulate = Style.col_map[Style.c.LIGHTER]
 
 
 func _on_IconButton_mouse_exited():
-	icon_node.modulate = _t.col_map[_t.col.C_LIGHT]
+	icon_node.modulate = Style.col_map[Style.c.LIGHT]

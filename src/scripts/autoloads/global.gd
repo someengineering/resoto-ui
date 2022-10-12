@@ -19,8 +19,8 @@ var focus_in_search:bool = false
 var is_connected_to_resotocore:bool	= false
 
 # global references
-var content_manager: Node = null
-var popup_manager: CanvasLayer = null
+var content_manager: ContentManager	= null
+var popup_manager: PopupManager		= null
 
 
 func set_ui_shrink(new_shrink:float) -> void:

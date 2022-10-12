@@ -1,4 +1,5 @@
 extends CanvasLayer
+class_name ContentManager
 
 onready var sections = {
 	"terminals": $Content/TerminalManager,
@@ -6,7 +7,8 @@ onready var sections = {
 	"config": $Content/ConfigManager,
 	"message_log": $Content/MessageLog,
 	"node_single_info": $Content/NodeSingleInfo,
-	"node_list_info": $Content/NodeListElement
+	"node_list_info": $Content/NodeListElement,
+	"hub": $Content/ResotoHub
 }
 
 var active_section = "terminal"

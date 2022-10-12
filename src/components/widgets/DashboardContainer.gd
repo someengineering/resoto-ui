@@ -38,8 +38,8 @@ onready var accounts_combo := find_node("AccountsCombo")
 onready var regions_combo := find_node("RegionsCombo")
 
 func _ready() -> void:
-	_t.style($VBoxContainer/MinimizedBar/MinimizeButton, _t.col.C_LIGHT)
-	_t.style($VBoxContainer/PanelContainer/Content/MainBar/RefreshIcon, _t.col.C_LIGHT)
+	Style.add($VBoxContainer/MinimizedBar/MinimizeButton, Style.c.LIGHT)
+	Style.add($VBoxContainer/PanelContainer/Content/MainBar/RefreshIcon, Style.c.LIGHT)
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
 	add_widget_popup.interval = 144 # 500 points in a day

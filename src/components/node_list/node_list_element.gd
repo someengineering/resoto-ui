@@ -15,6 +15,10 @@ onready var scroll_container = $Margin/VBox/MainPanel/ScrollContainer/Content
 onready var vbox = $Margin/VBox/MainPanel/ScrollContainer/Content/ListContainer
 
 
+func _ready():
+	Style.add($Margin/VBox/TitleBar/Icon, Style.c.LIGHT)
+
+
 func show_kind_from_node_data(parent_node:Dictionary, kind:String):
 	var search_command = "id(" + parent_node.id + ") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
 	

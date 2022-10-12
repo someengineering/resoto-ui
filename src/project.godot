@@ -59,6 +59,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/config/config_templates/component_config_simple.gd"
 }, {
+"base": "CanvasLayer",
+"class": "ContentManager",
+"language": "GDScript",
+"path": "res://scripts/ui_content.gd"
+}, {
 "base": "Control",
 "class": "DashboardContainer",
 "language": "GDScript",
@@ -93,6 +98,11 @@ _global_script_classes=[ {
 "class": "LineEditInt",
 "language": "GDScript",
 "path": "res://components/config/config_templates/component_config_line_edit_int.gd"
+}, {
+"base": "CanvasLayer",
+"class": "PopupManager",
+"language": "GDScript",
+"path": "res://scripts/ui_popup_manager.gd"
 }, {
 "base": "UserAgent",
 "class": "ResotoAPI",
@@ -155,6 +165,7 @@ _global_script_class_icons={
 "ConfigComponentComplex": "",
 "ConfigComponentEnum": "",
 "ConfigComponentSimple": "",
+"ContentManager": "",
 "DashboardContainer": "",
 "DataSource": "",
 "DynamicLabel": "",
@@ -162,6 +173,7 @@ _global_script_class_icons={
 "JWTGenerator": "",
 "LineEditFloat": "",
 "LineEditInt": "",
+"PopupManager": "",
 "ResotoAPI": "",
 "RightClickCopyLabel": "",
 "RotatedLabel": "",
@@ -182,7 +194,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-_t="*res://scripts/autoloads/theme_manager.gd"
+Style="*res://scripts/autoloads/StyleManager.gd"
 JWT="*res://scripts/autoloads/jwt.gd"
 API="*res://scripts/autoloads/api_handler.gd"
 _g="*res://scripts/autoloads/global.gd"

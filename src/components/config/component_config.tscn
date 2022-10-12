@@ -187,7 +187,8 @@ scroll_horizontal_enabled = false
 script = ExtResource( 8 )
 
 [node name="Content" type="MarginContainer" parent="TabManager/MainPanel/ScrollContainer"]
-margin_right = 1888.0
+margin_right = 1900.0
+margin_bottom = 981.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 10

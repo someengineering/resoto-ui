@@ -4,9 +4,8 @@
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://components/elements/Element_TreeMap.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/icons/element-01.svg" type="Texture" id=5]
+[ext_resource path="res://assets/icons/icon_128_node_element.svg" type="Texture" id=5]
 [ext_resource path="res://scripts/tools/right_click_copy.gd" type="Script" id=6]
-
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -60,16 +59,16 @@ custom_constants/separation = 10
 
 [node name="NodeIcon" type="TextureRect" parent="Margin/VBox/TitleBar"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_right = 30.0
+margin_right = 34.0
 margin_bottom = 39.0
-rect_min_size = Vector2( 30, 0 )
+rect_min_size = Vector2( 34, 39 )
 texture = ExtResource( 5 )
 expand = true
 stretch_mode = 6
 
 [node name="NodeNameLabel" type="Label" parent="Margin/VBox/TitleBar"]
-margin_left = 40.0
-margin_right = 203.0
+margin_left = 44.0
+margin_right = 207.0
 margin_bottom = 39.0
 mouse_filter = 1
 custom_fonts/font = SubResource( 1 )

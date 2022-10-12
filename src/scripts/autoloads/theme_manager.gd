@@ -7,21 +7,21 @@ extends Node
 const themed_group_name:= "themed"
 const themed_self_group_name:= "themed_self"
 const themed_col_name:= "theme_color"
-enum col {C_NORMAL, C_LIGHT, C_LIGHTER, C_DARK, C_DARKER, C_BG, C_BG2, C_BG_BACK, C_CON_1, C_CON_2, C_CON_3}
+enum c {C_NORMAL, C_LIGHT, C_LIGHTER, C_DARK, C_DARKER, C_BG, C_BG2, C_BG_BACK, C_CON_1, C_CON_2, C_CON_3}
 
 var col_map:= {
-	col.C_NORMAL:	Color("#0054a3"),
-	col.C_LIGHT:	Color("#89d1f1"),
-	col.C_LIGHTER:	Color("#ffffff"),
-	col.C_DARK: 	Color("#0054a3"),
-	col.C_DARKER:	Color("#0f3356"),
-	col.C_BG:		Color("#0a253f"),
-	col.C_BG2:		Color("#0c1822"),
-	col.C_BG_BACK:	Color("#171d21"),
+	c.C_NORMAL:	Color("#0054a3"),
+	c.C_LIGHT:	Color("#89d1f1"),
+	c.C_LIGHTER:	Color("#ffffff"),
+	c.C_DARK: 	Color("#0054a3"),
+	c.C_DARKER:	Color("#0f3356"),
+	c.C_BG:		Color("#0a253f"),
+	c.C_BG2:		Color("#0c1822"),
+	c.C_BG_BACK:	Color("#171d21"),
 	# Contrast Colors
-	col.C_CON_1:	Color("#e98df7"),
-	col.C_CON_2:	Color("#762dd7"),
-	col.C_CON_3:	Color("#3d176e")
+	c.C_CON_1:	Color("#e98df7"),
+	c.C_CON_2:	Color("#762dd7"),
+	c.C_CON_3:	Color("#3d176e")
 	
 }
 

@@ -104,3 +104,8 @@ func _on_HamburgerButton_hamburger_button_pressed(pressed):
 	else:
 		hb_tween.interpolate_property(hb_menu, "rect_position:x", hb_menu.rect_position.x, 0, 0.2, Tween.TRANS_EXPO, Tween.EASE_OUT)
 	hb_tween.start()
+
+
+func _on_ResotoLogo_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+		_g.content_manager.change_section("hub")

@@ -6,6 +6,10 @@ var current_main_node:Dictionary
 var breadcrumbs:Dictionary
 
 
+func _ready():
+	Style.add($Margin/VBox/TitleBar/NodeIcon, Style.c.LIGHT)
+
+
 func show_node(node_id:String):
 	var search_command = "id(" + node_id + ") <-[0:]-"
 	current_node_id = node_id
