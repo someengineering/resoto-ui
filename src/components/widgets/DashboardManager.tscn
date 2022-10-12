@@ -66,8 +66,6 @@ size_flags_vertical = 3
 custom_styles/bg = SubResource( 23 )
 
 [node name="DashboardItemList" type="ItemList" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
-margin_right = 640.0
-margin_bottom = 263.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/cursor_unfocused = SubResource( 28 )

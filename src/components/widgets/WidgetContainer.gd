@@ -59,6 +59,10 @@ onready var widget_content := $MarginContainer
 
 
 func _ready() -> void:
+	_t.style($PanelContainer/Title/MaximizeButton, _t.col.C_LIGHT)
+	_t.style($PanelContainer/Title/ExportButton, _t.col.C_LIGHT)
+	_t.style($PanelContainer/Title/DuplicateButton, _t.col.C_LIGHT)
+	_t.style($PanelContainer/Title/DeleteButton, _t.col.C_LIGHT)
 	_t.style($ResizeButtons, _t.col.C_LIGHT)
 	_t.style($QueryWarning/BG, _t.col.C_BG2)
 	_t.style_self($QueryWarning/VBox/PanelContainer, _t.col.C_BG)

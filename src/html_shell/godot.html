@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml' lang='' xml:lang=''>
+<head>
+	<meta charset='utf-8' />
+	<meta name='viewport' content='width=device-width, user-scalable=no' />
+	<title>$GODOT_PROJECT_NAME</title>
+	<style type='text/css'>
+
+		body {
+			touch-action: none;
+			margin: 0;
+			border: 0 none;
+			padding: 0;
+			text-align: center;
+			background-repeat: no-repeat;
+    		background-attachment: fixed;
+			background-color: #242434;
+			background-image: linear-gradient(to bottom, #2a124a, #291e2d);
+			color: #e98df7;
+		}
+
+		#canvas {
+			display: block;
+			margin: 0;
+			color: #e98df7;
+		}
+
+		#canvas:focus {
+			outline: none;
+		}
+
+		.godot {
+			font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+			color: #e98df7;
+		}
+
+		.gelatine {
+			animation: gelatine 1.5s infinite;
+		}
+			@keyframes gelatine {
+			from, to { transform: scale(1, 1); }
+			25% { transform: scale(0.95, 1.05); }
+			50% { transform: scale(1.05, 0.95); }
+			75% { transform: scale(0.97, 1.03); }
+		}
+
+		/* Status display
+		 * ============== */
+
+		#status {
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			justify-content: center;
+			align-items: center;
+			margin: auto;
+			height: 23em;
+			/* don't consume click events - make children visible explicitly */
+			visibility: hidden;
+		}
+
+		#status-progress {
+			width: 15em;
+			height: 0.75em;
+			margin: auto;
+			background-color: #000000;
+    		border: 1px solid #762dd7;
+			visibility: visible;
+			border-radius: 4px;
+		}
+
+		@media only screen and (orientation:portrait) {
+			#status-progress {
+				width: 61.8%;
+			}
+		}
+
+		#status-progress-inner {
+			height: 100%;
+			width: 0;
+			box-sizing: border-box;
+			transition: width 0.5s linear;
+			background-color: #762dd7;
+		}
+
+		#resoto-logo {
+			width: 10em;
+			margin: auto;
+			visibility: visible;
+			position: relative;
+		}
+
+		#status-text {
+			font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+			padding-top: 1em;
+			font-size: larger;
+			visibility: visible;
+			position: relative;
+		}
+
+		#status-indeterminate {
+			visibility: visible;
+			position: relative;
+		}
+
+		#status-indeterminate > div {
+			width: 4.5px;
+			height: 0;
+			border-style: solid;
+			border-width: 9px 3px 0 3px;
+			border-color: #2b2b2b transparent transparent transparent;
+			transform-origin: center 21px;
+			position: absolute;
+		}
+		
+		#status-indeterminate > div:nth-child(1) { transform: rotate( 22.5deg); }
+		#status-indeterminate > div:nth-child(2) { transform: rotate( 67.5deg); }
+		#status-indeterminate > div:nth-child(3) { transform: rotate(112.5deg); }
+		#status-indeterminate > div:nth-child(4) { transform: rotate(157.5deg); }
+		#status-indeterminate > div:nth-child(5) { transform: rotate(202.5deg); }
+		#status-indeterminate > div:nth-child(6) { transform: rotate(247.5deg); }
+		#status-indeterminate > div:nth-child(7) { transform: rotate(292.5deg); }
+		#status-indeterminate > div:nth-child(8) { transform: rotate(337.5deg); }
+
+		#status-notice {
+			margin: 0 100px;
+			line-height: 1.3;
+			visibility: visible;
+			padding: 4px 6px;
+			visibility: visible;
+		}
+	</style>
+$GODOT_HEAD_INCLUDE
+</head>
+<body style="cursor: default">
+	<canvas id='canvas' contenteditable=true>
+		HTML5 canvas appears to be unsupported in the current browser.<br />
+		Please try updating or use a different browser.
+	</canvas>
+	<div id='status'>
+		<div id='resoto-logo'style='display: none;' oncontextmenu='event.preventDefault();'>
+			<svg class="gelatine" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 478.63 502.72"><path id="EarR" d="M373,256.53C442.82,297.28,478.86,363,478.86,404.11s-29,46.48-52.16,33.93c-23.61-12.8-34-56.53-34-56.53Z" transform="translate(-26.22 -5.83)" style="fill:#fec08d"></path><path id="EarR-2" data-name="EarR" d="M380.51,291.86c54.36,31.71,78.18,69.78,78.18,101.8,0,23.53-22.44,31.64-40.46,21.87-18.37-10-22.34-37.76-22.34-37.76Z" transform="translate(-26.22 -5.83)" style="fill:#fb9b7a"></path><path id="EarL" d="M142.33,251.42c-69.84,40.75-111,111.55-111,152.69s29,46.48,52.15,33.93c23.61-12.8,28.85-56.53,28.85-56.53Z" transform="translate(-26.22 -5.83)" style="fill:#fec08d"></path><path id="EarR-3" data-name="EarR" d="M129.68,291.86C75.32,323.57,51.5,361.64,51.5,393.66c0,23.53,22.44,31.64,40.46,21.87,18.37-10,22.34-37.76,22.34-37.76Z" transform="translate(-26.22 -5.83)" style="fill:#fb9b7a"></path><path id="ShadowEarR" d="M480.9,403.88c0,41.15-31.56,46.49-54.71,33.94-7.91-4.29-14.33-12.62-19.37-21.81a126.63,126.63,0,0,1-6.6-14.15c6.22-16.79,9.62-29.84,9.62-48.79a155.61,155.61,0,0,0-5.14-39.76H406a162.11,162.11,0,0,1,7,84.18c4.87,8.41,10.93,15.89,18.28,19.87,17.68,9.58,36.64,5.75,47-14.91C478.34,402.93,480.9,403.41,480.9,403.88Z" transform="translate(-26.22 -5.83)" style="fill:#dd9a63"></path><path id="ShadowHair" d="M385.39,274a162.13,162.13,0,0,0-11.06-13.58l-1.36-9q5.07,3,9.93,6.12Z" transform="translate(-26.22 -5.83)" style="fill:#dd9a63"></path><circle id="Head" cx="232.07" cy="347.47" r="152.28" style="fill:#fec08d"></circle><path d="M403,277.19c-5.92,7.2-19,13.23-29.91,13.23a58.83,58.83,0,0,1-34.25-10.92,4.22,4.22,0,0,0-5.62.61c-6.63,7.5-16,14.06-26.41,14.06-11,0-20.84-6.68-27.52-15.1a4,4,0,0,0-6.74.94c-8.28,20.48-30.43,38-53.94,38-22.64,0-42.31-16.76-52.24-35.81a3.08,3.08,0,0,0-4-1.36c-7.72,3.51-16.36,4.76-25.49,4.76a35.65,35.65,0,0,1-23.57-9.3c-.34-2.27,14.88-20.23,53-34.32,35.65-5.65,71.06-7.87,106.18-5.91,0,0,75.37,4.64,103.84,37.92L396,269.78C400.73,271.43,404.16,274.79,403,277.19Z" transform="translate(-26.22 -5.83)" style="fill:#dd9a63"></path><path d="M405.24,353.29c0,85.75-64.4,150.14-150.14,150.14S105,439,105,353.29a155.53,155.53,0,0,1,5.14-39.75h4.24a135,135,0,0,0-1.6,20.83c0,76.65,63.74,138.78,142.36,138.78S397.46,411,397.46,334.37a135,135,0,0,0-1.6-20.83h4.23A155.09,155.09,0,0,1,405.24,353.29Z" transform="translate(-26.22 -5.83)" style="fill:#dd9a63"></path><path d="M392.19,304h0a6.94,6.94,0,0,0-6.69,8.82,150.92,150.92,0,0,1,5.38,40.49c0,81.61-60.79,147.77-135.78,147.77S119.32,434.9,119.32,353.29a150.92,150.92,0,0,1,5.38-40.49A7,7,0,0,0,118,304h0a6.93,6.93,0,0,0-6.64,4.9A150.85,150.85,0,0,0,105,353.29c0,85.75,64.4,150.14,150.14,150.14S405.24,439,405.24,353.29a150.85,150.85,0,0,0-6.41-44.41A7,7,0,0,0,392.19,304Z" transform="translate(-26.22 -5.83)" style="fill:#fee4ce"></path><path d="M478.34,403.88c0,37.14-22.67,44.15-45.11,36.94,16.67-3.92,31.24-14.6,31.24-42.06,0-42.79-33.43-89.51-88.81-126.49l-3.2-16C442.3,297.05,478.34,362.75,478.34,403.88Z" transform="translate(-26.22 -5.83)" style="fill:#fee4ce"></path><path id="ShadowEarR-2" data-name="ShadowEarR" d="M29.3,403.88C29.3,445,60.87,450.37,84,437.82c7.91-4.29,14.33-12.62,19.38-21.81A126.53,126.53,0,0,0,110,401.86c-6.22-16.79-9.62-29.84-9.62-48.79a155.61,155.61,0,0,1,5.14-39.76h-1.27a162.11,162.11,0,0,0-7,84.18c-4.87,8.41-10.93,15.89-18.28,19.87-17.68,9.58-36.63,5.75-47-14.91C31.86,402.93,29.3,403.41,29.3,403.88Z" transform="translate(-26.22 -5.83)" style="fill:#dd9a63"></path><path d="M31.86,403.88C31.86,441,54.54,448,77,440.82c-16.67-3.92-31.24-14.6-31.24-42.06,0-42.79,33.44-89.51,88.81-126.49l3.2-16C67.9,297.05,31.86,362.75,31.86,403.88Z" transform="translate(-26.22 -5.83)" style="fill:#fee4ce"></path><circle id="EyeRWhite" cx="324.72" cy="310.25" r="21.91" style="fill:#fff"></circle><path id="EyeR" d="M372.87,316.07a21.92,21.92,0,0,1-42.06,8.67l8.67-8.67-8.67-8.67a21.92,21.92,0,0,1,42.06,8.67Z" transform="translate(-26.22 -5.83)"></path><circle id="EyeLWhite" cx="133.02" cy="310.25" r="21.91" style="fill:#fff"></circle><path id="EyeL" d="M181.16,316.07a21.92,21.92,0,0,1-42,8.67l8.67-8.67-8.67-8.67a21.92,21.92,0,0,1,42,8.67Z" transform="translate(-26.22 -5.83)"></path><circle id="Cheeks" cx="317.59" cy="369.6" r="14.79" style="fill:#fb9b7a"></circle><circle id="Cheeks-2" data-name="Cheeks" cx="140.16" cy="369.13" r="14.79" style="fill:#fb9b7a"></circle><path id="NoseRed" d="M283.57,376.06a36.5,36.5,0,0,1-13.39,10.42,35.66,35.66,0,0,1-8.52,2.67,36.43,36.43,0,0,1-35-13.09,36.45,36.45,0,0,1,56.93,0Z" transform="translate(-26.22 -5.83)" style="fill:#fb9b7a"></path><circle id="NoseHighlight" cx="221.48" cy="369.6" r="7.39" style="fill:#fff"></circle><path id="Mouth" d="M310.13,427.12a36.45,36.45,0,0,1-55,13.88,36.46,36.46,0,0,1-55-13.88c7.72,7.14,18.74,11.66,31,11.79h1.14A21.86,21.86,0,0,0,247,432.6a22.45,22.45,0,0,0,2.66-3.17,21.91,21.91,0,0,0-6.54-31.08c-.2-.13-.41-.26-.63-.38a29.19,29.19,0,0,1-5.63-4.15A37.23,37.23,0,0,1,226.59,376h0a36.49,36.49,0,0,0,35.05,13.13,35.66,35.66,0,0,0,8.52-2.67A36.6,36.6,0,0,0,283.6,376h0a37.18,37.18,0,0,1-10.31,17.78,29.2,29.2,0,0,1-5.64,4.16l-.63.38a21.92,21.92,0,0,0,11,40.56h1.14C291.4,438.78,302.42,434.27,310.13,427.12Z" transform="translate(-26.22 -5.83)"></path><path d="M461.38,238.65c10.37,10.65,21.87,25.19,21.87,41.23,0,20.9-16,39.27-32.32,49.79a256.42,256.42,0,0,0-53-57.59c-8.78,5.16-13.89,5.56-24.8,5.56-14.19,0-27.2-7.55-37.39-15.88-6.66,8.66-17.12,17.3-28.89,17.3-13.73,0-25.68-10.66-31.9-21.87-7.65,23.79-30,43.56-56.3,43.56-23.7,0-42.1-13.43-51.53-33.56-8.37,4.54-20,7.12-30.21,7.12-9.71,0-14.53-1.38-21.84-4.44q-5.22,4-10.15,8.3c-2.1,1.81-4.15,3.64-6.17,5.5a258.26,258.26,0,0,0-29.93,32.65H63.4c-20.13,0-31.34-16.31-31.34-36.45a36.46,36.46,0,0,1,26.41-35A95.69,95.69,0,0,1,46.34,198c0-53.07,37.91-91,91-91,7.46,0,19.84.85,26.81,2.45,0-.81,0-6.75,0-7.56,0-53.08,37.91-91,91-91A96.13,96.13,0,0,1,344,70.38a58.85,58.85,0,0,1,29.17-7.69c32.66,0,54,21.37,54,54,0,3.09-.24,11.24-.7,14.2,4.53-1.11,14.38-1.7,19.25-1.7,32.67,0,54,21.37,54,54A59.17,59.17,0,0,1,461.38,238.65Z" transform="translate(-26.22 -5.83)" style="fill:#762dd7"></path><path d="M396.7,162c-.7,0-1.4,0-2.1,0a1,1,0,0,1-.66-1.82,44.16,44.16,0,0,0,17-34.64c0-24.77-20.8-44.84-46.47-44.84a47.42,47.42,0,0,0-24.1,6.5,6.27,6.27,0,0,1-9.26-3.76c-9.14-35-37.4-60.56-70.85-60.56-40.86,0-74,38.06-74,85a98.24,98.24,0,0,0,.7,11.72,7.61,7.61,0,0,1-10.5,7.91A76.42,76.42,0,0,0,78.79,232.36a1.19,1.19,0,0,0,2.25-.64c-.13-1.58-.2-3.17-.2-4.78a54.49,54.49,0,0,1,5-22.95,2.49,2.49,0,0,1,4.75,1V205a52.77,52.77,0,0,0,67.88,48.65,2,2,0,0,0,1.45-2.2,61,61,0,0,1-.44-7.32c0-1.53.06-3.06.17-4.57a1.12,1.12,0,0,1,2.17-.27c7.28,21.17,29,36.15,54.71,36.65,32.49.64,55.42-23.9,57.21-48.55a1,1,0,0,1,2-.28,33.84,33.84,0,0,1,2,13.93,2.43,2.43,0,0,0,.19,1.16,31.62,31.62,0,0,0,28.87,18.71c16.88,0,29.42-9.2,33.64-21.92a1.24,1.24,0,0,1,2.41.23,37,37,0,0,1,.4,5.41,36,36,0,0,1-.94,8.23,2.14,2.14,0,0,0,.94,2.28,46.37,46.37,0,0,0,64-63.87,1.57,1.57,0,0,1,2.22-2.13,49.72,49.72,0,0,1,11.9,11.07,2.59,2.59,0,0,0,4.6-1.05,32,32,0,0,0,.56-6.61C426.24,176.69,412.58,162.7,396.7,162ZM133,162c15-2.18,22.41,2.75,22.14,2.6l-1.06,0a34.34,34.34,0,0,0-15.85,64.8,1.52,1.52,0,0,1-.72,2.85h0a36.17,36.17,0,0,1-36.14-36.44c0-3.27,2.13-13.76,7.1-20.18C113.75,169.15,125.24,163.07,133,162ZM365,154.3a1,1,0,0,1-2,.45,36.94,36.94,0,0,0-43.33-18.36,2.13,2.13,0,0,0-1.44,2.68,44.88,44.88,0,0,1,2.32,16.35,1.13,1.13,0,0,1-2.22.24,54.55,54.55,0,0,0-105.17.45,1.47,1.47,0,0,1-2.88-.33c0-1.17,0-2.36,0-3.55.76-31.57,26.59-55.64,58.17-56.15A59.06,59.06,0,0,1,316.85,120a1,1,0,0,0,1.11.36,36.43,36.43,0,0,1,11.31-1.54c19.91.4,36,15.48,35.69,35.39Z" transform="translate(-26.22 -5.83)" style="fill:#af62f1"></path><path d="M458.69,393.66c0,10-4.08,17.26-10.15,21.49,4-4.07,6.54-10,6.54-17.56,0-24.46-15-52.67-48.48-78.38a156.37,156.37,0,0,1-3.43,80.88q-1.12,3.6-2.44,7.11a155.29,155.29,0,0,1-297.12-88c-33.48,25.71-48.5,53.93-48.5,78.39,0,7.6,2.53,13.49,6.54,17.56-6.07-4.23-10.15-11.46-10.15-21.49,0-27.15,17.12-58.63,55.45-86.91h0c1.66-1.23,3.37-2.45,5.11-3.66a3.13,3.13,0,0,1,4.73,3.64c-.48,1.34-1,2.69-1.39,4a136.47,136.47,0,0,0-6.75,42.52c0,78,65.57,141.29,146.45,141.29,66.66,0,122.91-43,140.63-101.75.86-2.82,1.62-5.66,2.29-8.55a137.47,137.47,0,0,0-3.22-73.5c-.44-1.36-.91-2.71-1.39-4.06a3.13,3.13,0,0,1,4.73-3.64c1.74,1.22,3.45,2.44,5.11,3.67C441.58,335,458.69,366.52,458.69,393.66Z" transform="translate(-26.22 -5.83)"></path><path d="M458.69,393.66c0,10-4.08,17.26-10.15,21.49,4-4.07,6.54-10,6.54-17.56,0-24.46-15-52.67-48.48-78.38a156.37,156.37,0,0,1-3.43,80.88q-1.12,3.6-2.44,7.11a155.29,155.29,0,0,1-297.12-88c-33.48,25.71-48.5,53.93-48.5,78.39,0,7.6,2.53,13.49,6.54,17.56-6.07-4.23-10.15-11.46-10.15-21.49,0-27.15,17.12-58.63,55.45-86.91h0c1.66-1.23,3.37-2.45,5.11-3.66a3.13,3.13,0,0,1,4.73,3.64c-.48,1.34-1,2.69-1.39,4a136.47,136.47,0,0,0-6.75,42.52c0,78,65.57,141.29,146.45,141.29,66.66,0,122.91-43,140.63-101.75.86-2.82,1.62-5.66,2.29-8.55a137.47,137.47,0,0,0-3.22-73.5c-.44-1.36-.91-2.71-1.39-4.06a3.13,3.13,0,0,1,4.73-3.64c1.74,1.22,3.45,2.44,5.11,3.67C441.58,335,458.69,366.52,458.69,393.66Z" transform="translate(-26.22 -5.83)"></path><path d="M469.08,237.61a2,2,0,0,0-.69,3.08,59.14,59.14,0,0,1-12.35,89q-3.66-5.51-7.78-11c20.55-11.72,37.29-55.66,3.39-83.35a3,3,0,0,1,.83-5.09c71.85-26.73,36.77-117.86-27.64-93.27a3,3,0,0,1-3.92-3.5c10.43-41.65-24.8-80.57-78.71-55.19a3,3,0,0,1-4.12-1.93C316.73-5.75,179.77-16.9,172.36,112.82a3,3,0,0,1-3.84,2.68C99.56,93.71,23,158.26,69.27,244.3a3,3,0,0,1-2.37,4.35c-41,2.93-39.08,60.77,5,57.54-2.87,3.35-5.6,6.74-8.21,10.13h0a36.45,36.45,0,0,1-12.54-70.79,2,2,0,0,0,1.09-2.75A96.19,96.19,0,0,1,156.66,103.88,2,2,0,0,0,159,102v0A96.12,96.12,0,0,1,343.13,63.32a1.94,1.94,0,0,0,2.67.94,59.16,59.16,0,0,1,86.47,52.47,58.11,58.11,0,0,1-.34,6.36,1.94,1.94,0,0,0,2.29,2.14,59.16,59.16,0,0,1,34.86,112.38Z" transform="translate(-26.22 -5.83)"></path><path d="M429.75,232a.75.75,0,0,1,1.43.4,59.13,59.13,0,0,1-93.36,36.08l-.34-.25a2.29,2.29,0,0,0-3.13.34,36.44,36.44,0,0,1-56.79-2.21,2.48,2.48,0,0,0-4.29.53,59.16,59.16,0,0,1-107.44,3.9,1.64,1.64,0,0,0-2.23-.7,57.16,57.16,0,0,1-26.69,6.27,59.16,59.16,0,0,1-54.38-35.87.75.75,0,0,1,1.3-.72A64,64,0,0,0,136.91,268c16.15,0,24.79-4.31,29.23-6.91a2.69,2.69,0,0,1,3.7,1c.62,1.12,1.33,2.35,1.77,3.06,26,42.16,79,41.91,99.59-14.73a2.52,2.52,0,0,1,4.62-.29c14.3,28.18,39.21,32.91,55,12.27.62-.81,1.22-1.66,1.81-2.55a3,3,0,0,1,4.25-.76l.22.15A60.86,60.86,0,0,0,429.75,232Z" transform="translate(-26.22 -5.83)"></path><path d="M484,404.11c0,41.14-34.12,51.59-57.27,39-11.9-6.44-20.43-22-26-35.95-2.08-5.22-3.74-10.21-5-14.37.86-2.82,1.62-5.66,2.29-8.55a151.21,151.21,0,0,0,5.15,15.81c4.59,11.74,11.78,25.2,21.89,30.68,19.23,10.43,47.58,1.74,47.58-32.43,0-30-31.39-85.95-78.24-122.09-2.64-2.05-5.32-4-8-5.92l-1-.67a60.21,60.21,0,0,0,10.43-3.17q3.7,2.75,7.25,5.59C454.47,313.19,484,369.28,484,404.11Z" transform="translate(-26.22 -5.83)"></path><path d="M128.22,267.38c-1.47,1-2.93,1.95-4.37,2.95s-3.11,2.2-4.64,3.33c-48.73,36-81.65,94-81.65,124.68,0,34.17,28.34,42.86,47.57,32.43,10.11-5.48,17.3-18.94,21.89-30.68a151.66,151.66,0,0,0,5.16-15.81c.67,2.89,1.42,5.73,2.28,8.55-1.26,4.16-2.92,9.15-5,14.37-5.54,13.9-14.07,29.51-26,35.95-23.14,12.55-57.27,2.1-57.27-39,0-35.46,30.57-92.95,83.73-134.24q3.36-2.61,6.84-5.13A62.71,62.71,0,0,0,128.22,267.38Z" transform="translate(-26.22 -5.83)"></path><path d="M364.91,155.61a.91.91,0,0,1-1.81.12c-3.14-15.95-17.89-30.17-36.34-29.81a43.11,43.11,0,0,0-5,.33,36.92,36.92,0,0,0-6.24,1.4,5.08,5.08,0,0,1-5.44-1.63c-.69-.83-1.4-1.64-2.13-2.44a59.2,59.2,0,0,0-88.15,1.27.91.91,0,0,1-1.48-1.06,59.15,59.15,0,0,1,96.95-7.38,5.15,5.15,0,0,0,5.15,1.73,36.48,36.48,0,0,1,44.5,34.06C365,153.35,365,154.49,364.91,155.61Z" transform="translate(-26.22 -5.83)"></path><path d="M435.22,209.72a40.7,40.7,0,0,0,.74-9.55,39.73,39.73,0,0,0-47.5-37.23,1.07,1.07,0,0,1-.74-2,36.46,36.46,0,0,1,49.48,49.5A1.07,1.07,0,0,1,435.22,209.72Z" transform="translate(-26.22 -5.83)"></path><path d="M107.55,212.51a39.72,39.72,0,0,1,46.75-46.77,1.07,1.07,0,0,0,.75-2,36.45,36.45,0,0,0-49.48,49.49A1.07,1.07,0,0,0,107.55,212.51Z" transform="translate(-26.22 -5.83)"></path></svg>
+		</div>
+		<div id='status-text'style='display: none;' oncontextmenu='event.preventDefault();'>Loading Resoto UI</div>
+		<div id='status-progress' style='display: none;' oncontextmenu='event.preventDefault();'><div id ='status-progress-inner'></div></div>
+		<div id='status-indeterminate' style='display: none;' oncontextmenu='event.preventDefault();'>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<div id='status-notice' class='godot' style='display: none;'></div>
+	</div>
+	
+	<script type='text/javascript' src='$GODOT_URL'></script>
+	<script type='text/javascript'>//<![CDATA[
+
+		const GODOT_CONFIG = $GODOT_CONFIG;
+		var engine = new Engine(GODOT_CONFIG);
+
+		(function() {
+			const INDETERMINATE_STATUS_STEP_MS = 100;
+			var statusProgress = document.getElementById('status-progress');
+			var statusProgressInner = document.getElementById('status-progress-inner');
+			var statusText = document.getElementById('status-text');
+			var statusLogo = document.getElementById('resoto-logo');
+			var statusIndeterminate = document.getElementById('status-indeterminate');
+			var statusNotice = document.getElementById('status-notice');
+
+			var initializing = true;
+			var statusMode = 'hidden';
+
+			var animationCallbacks = [];
+			function animate(time) {
+				animationCallbacks.forEach(callback => callback(time));
+				requestAnimationFrame(animate);
+			}
+			requestAnimationFrame(animate);
+
+			function setStatusMode(mode) {
+
+				if (statusMode === mode || !initializing)
+					return;
+				[statusLogo, statusText, statusProgress, statusIndeterminate, statusNotice].forEach(elem => {
+					elem.style.display = 'none';
+				});
+				animationCallbacks = animationCallbacks.filter(function(value) {
+					return (value != animateStatusIndeterminate);
+				});
+				switch (mode) {
+					case 'progress':
+						statusProgress.style.display = 'block';
+						statusText.style.display = 'block';
+						statusLogo.style.display = 'block';
+						break;
+					case 'indeterminate':
+						statusIndeterminate.style.display = 'block';
+						animationCallbacks.push(animateStatusIndeterminate);
+						break;
+					case 'notice':
+						statusNotice.style.display = 'block';
+						break;
+					case 'hidden':
+						break;
+					default:
+						throw new Error('Invalid status mode');
+				}
+				statusMode = mode;
+			}
+
+			function animateStatusIndeterminate(ms) {
+				var i = Math.floor(ms / INDETERMINATE_STATUS_STEP_MS % 8);
+				if (statusIndeterminate.children[i].style.borderTopColor == '') {
+					Array.prototype.slice.call(statusIndeterminate.children).forEach(child => {
+						child.style.borderTopColor = '';
+					});
+					statusIndeterminate.children[i].style.borderTopColor = '#dfdfdf';
+				}
+			}
+
+			function setStatusNotice(text) {
+				while (statusNotice.lastChild) {
+					statusNotice.removeChild(statusNotice.lastChild);
+				}
+				var lines = text.split('\n');
+				lines.forEach((line) => {
+					statusNotice.appendChild(document.createTextNode(line));
+					statusNotice.appendChild(document.createElement('br'));
+				});
+			};
+
+			function displayFailureNotice(err) {
+				var msg = err.message || err;
+				console.error(msg);
+				setStatusNotice(msg);
+				setStatusMode('notice');
+				initializing = false;
+			};
+
+			if (!Engine.isWebGLAvailable()) {
+				displayFailureNotice('WebGL not available');
+			} else {
+				setStatusMode('indeterminate');
+				engine.startGame({
+					'onProgress': function (current, total) {
+						if (total > 0) {
+							statusProgressInner.style.width = current/total * 100 + '%';
+							setStatusMode('progress');
+							if (current === total) {
+								// wait for progress bar animation
+								setTimeout(() => {
+									setStatusMode('indeterminate');
+								}, 500);
+							}
+						} else {
+							setStatusMode('indeterminate');
+						}
+					},
+				}).then(() => {
+					setStatusMode('hidden');
+					initializing = false;
+				}, displayFailureNotice);
+			}
+		})();
+	//]]></script>
+</body>
+</html>
