@@ -12,7 +12,7 @@ var background_color := Color("#1b141d") setget set_background_color
 
 onready var value_label := $IndicatorBackground/ValueLabel
 onready var unit_label := $IndicatorBackground/UnitLabel
-onready var color_rect := $IndicatorBackground
+onready var color_bg := $IndicatorBackground
 onready var value_font : DynamicFont = value_label.get("custom_fonts/font")
 onready var unit_font : DynamicFont = unit_label.get("custom_fonts/font")
 
@@ -51,8 +51,8 @@ func set_background_color(new_color) -> void:
 	if new_color is String:
 		new_color = str2var(new_color)
 	background_color = new_color
-	if is_instance_valid(color_rect):
-		color_rect.color = new_color
+	if is_instance_valid(color_bg):
+		color_bg.self_modulate = new_color
 
 
 func set_value(new_value) -> void:

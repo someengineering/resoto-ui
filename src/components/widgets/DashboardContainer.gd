@@ -29,7 +29,7 @@ onready var date_button := $VBoxContainer/PanelContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Dashboard
 onready var add_widget_popup := $WindowDialog
 onready var range_selector := $DateRangeSelector
-onready var refresh_option := $VBoxContainer/PanelContainer/Content/MainBar/RefreshOptionButton
+onready var refresh_option := $"%RefreshOptionButton"
 onready var name_label := $VBoxContainer/PanelContainer/Content/MainBar/DashboardNameLabel
 onready var lock_button := $VBoxContainer/PanelContainer/Content/MainBar/LockButton
 
@@ -39,7 +39,7 @@ onready var regions_combo := find_node("RegionsCombo")
 
 func _ready() -> void:
 	Style.add($VBoxContainer/MinimizedBar/MinimizeButton, Style.c.LIGHT)
-	Style.add($VBoxContainer/PanelContainer/Content/MainBar/RefreshIcon, Style.c.LIGHT)
+	Style.add(find_node("RefreshIcon"), Style.c.LIGHT)
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
 	add_widget_popup.interval = 144 # 500 points in a day
@@ -104,6 +104,7 @@ func _on_LockButton_toggled(button_pressed : bool) -> void:
 
 
 func _on_OptionButton_item_selected(_index : int) -> void:
+	kebap_popup.hide()
 	var text : String = refresh_option.text
 	text = text.replace("min", "*60")
 	text = text.replace("hr", "*3600")
@@ -113,6 +114,7 @@ func _on_OptionButton_item_selected(_index : int) -> void:
 
 
 func _on_DeleteButton_pressed() -> void:
+	kebap_popup.hide()
 	var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
 		"Delete Dashboard?",
 		"Do you want to delete the dashboard \"" + dashboard_name + "\"?",
@@ -291,6 +293,7 @@ func _on_WindowDialog_widget_added(_widget_data):
 
 
 func _on_ExportButton_pressed():
+	kebap_popup.hide()
 	if OS.has_feature("HTML5"):
 		JavaScript.download_buffer(JSON.print(get_data(),"\t").to_utf8(), "%s.json" % dashboard_name)
 
@@ -315,13 +318,26 @@ func _on_MinimizeButton_pressed():
 
 
 func _on_RenameButton_pressed():
-	pass
-#	_on_DashboardNameLabel_text_entered("placeholder for popup")
+	kebap_popup.hide()
+	var rename_confirm_popup = _g.popup_manager.show_input_popup(
+		"Rename Configuration",
+		"Enter a new name for the dashboard:\n`%s`" % last_saved_name,
+		last_saved_name,
+		"Accept", "Cancel")
+	rename_confirm_popup.connect("response_with_input", self, "_on_rename_confirm_response", [], CONNECT_ONESHOT)
 
 
-func _on_DashboardNameLabel_text_entered(new_text : String) -> void:
-	set_dashboard_name(new_text)
-	if initial_load:
-		emit_signal("dashboard_changed", self)
-		
-	last_saved_name = new_text
+
+func _on_rename_confirm_response(_button_clicked:String, _value:String):
+	if _button_clicked == "left":
+		set_dashboard_name(_value)
+		if initial_load:
+			emit_signal("dashboard_changed", self)
+			
+		last_saved_name = _value
+
+
+onready var kebap_button = $"%KebapButton"
+onready var kebap_popup:= $KebapPopup
+func _on_KebapButton_pressed():
+	kebap_popup.popup(Rect2(kebap_button.rect_global_position+Vector2(kebap_button.rect_size), Vector2.ONE))

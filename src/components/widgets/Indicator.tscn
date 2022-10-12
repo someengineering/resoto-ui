@@ -1,9 +1,14 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/theme/SourceCodePro-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://components/widgets/Indicator.gd" type="Script" id=2]
 [ext_resource path="res://components/widgets/DynamicLabel.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/widgets/ColorController.tscn" type="PackedScene" id=4]
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="DynamicFontData" id=7]
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
@@ -29,10 +34,11 @@ decimal_digits = 2
 unit = "[unit]"
 show_comma = false
 
-[node name="IndicatorBackground" type="ColorRect" parent="."]
+[node name="IndicatorBackground" type="Panel" parent="."]
+self_modulate = Color( 0.123871, 0.346745, 0.480469, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.105882, 0.0784314, 0.113725, 1 )
+custom_styles/panel = SubResource( 9 )
 
 [node name="ValueLabel" parent="IndicatorBackground" instance=ExtResource( 3 )]
 anchor_right = 1.0

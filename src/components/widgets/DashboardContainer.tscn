@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
@@ -13,8 +13,11 @@
 [ext_resource path="res://assets/icons/icon_128_refresh_thick.svg" type="Texture" id=11]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=12]
 [ext_resource path="res://assets/icons/icon_128_fullscreen_variant.svg" type="Texture" id=13]
+[ext_resource path="res://assets/icons/icon_128_kebap_horizontal.svg" type="Texture" id=14]
 [ext_resource path="res://components/elements/Styled/IconButton.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/icons/icon_128_close_thick.svg" type="Texture" id=16]
+[ext_resource path="res://components/elements/Styled/IconButtonText.tscn" type="PackedScene" id=17]
+[ext_resource path="res://components/elements/Styled/style_color_auto_remap.gd" type="Script" id=18]
 
 [sub_resource type="Gradient" id=10]
 colors = PoolColorArray( 0.0470588, 0.0941176, 0.133333, 1, 0.0392157, 0.145098, 0.247059, 1 )
@@ -93,6 +96,31 @@ expand_margin_top = 25.0
 shadow_color = Color( 0, 0, 0, 0.0980392 )
 shadow_size = 30
 shadow_offset = Vector2( 0, 10 )
+
+[sub_resource type="StyleBoxFlat" id=13]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.0784314 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 4 )
+
+[sub_resource type="StyleBoxFlat" id=12]
+content_margin_left = 6.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="DashboardContainer" type="Control"]
 anchor_right = 1.0
@@ -174,7 +202,7 @@ items = [  ]
 
 [node name="Spacer" type="Control" parent="VBoxContainer/PanelContainer/Content/MainBar"]
 margin_left = 477.0
-margin_right = 1548.0
+margin_right = 1756.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 
@@ -199,52 +227,19 @@ rect_min_size = Vector2( 29, 29 )
 size_flags_horizontal = 10
 text = "+ Add Widget"
 
-[node name="RefreshIcon" type="TextureRect" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_left = 1552.0
-margin_top = 3.0
-margin_right = 1578.0
-margin_bottom = 29.0
-rect_min_size = Vector2( 26, 26 )
-size_flags_vertical = 4
-texture = ExtResource( 11 )
-expand = true
-stretch_mode = 6
-
-[node name="RefreshOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-margin_left = 1582.0
-margin_right = 1682.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 100, 0 )
-hint_tooltip = "Dashboard refresh interval"
-text = "15 min"
-items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hr", null, false, 3, null, "12 hr", null, false, 4, null, "24 hr", null, false, 5, null ]
-selected = 0
+[node name="KebapButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 15 )]
+unique_name_in_owner = true
+margin_left = 1760.0
+margin_right = 1793.0
+hint_tooltip = "More Options"
+icon_tex = ExtResource( 14 )
 
 [node name="LockButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 15 )]
-margin_left = 1686.0
-margin_right = 1719.0
+margin_left = 1797.0
+margin_right = 1830.0
 hint_tooltip = "Edit dashboard"
 toggle_mode = true
 icon_tex = ExtResource( 5 )
-
-[node name="RenameButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 15 )]
-margin_left = 1723.0
-margin_right = 1756.0
-hint_tooltip = "Rename dashboard"
-icon_tex = ExtResource( 12 )
-
-[node name="DeleteButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 15 )]
-margin_left = 1760.0
-margin_right = 1793.0
-hint_tooltip = "Delete dashboard"
-icon_tex = ExtResource( 10 )
-
-[node name="ExportButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 15 )]
-margin_left = 1797.0
-margin_right = 1830.0
-hint_tooltip = "Download dashboard as JSON"
-icon_tex = ExtResource( 4 )
 
 [node name="MaximizeButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 15 )]
 margin_left = 1834.0
@@ -335,7 +330,6 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="WindowDialog" parent="." instance=ExtResource( 7 )]
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -352,16 +346,104 @@ margin_top = 53.0
 margin_right = 1094.0
 margin_bottom = 285.0
 
+[node name="KebapPopup" type="PopupPanel" parent="."]
+self_modulate = Color( 0.0588235, 0.2, 0.337255, 1 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -304.0
+margin_top = 75.0
+margin_right = -179.0
+margin_bottom = 165.0
+custom_styles/panel = SubResource( 13 )
+script = ExtResource( 18 )
+
+[node name="VBox" type="VBoxContainer" parent="KebapPopup"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 160.0
+margin_bottom = 148.0
+
+[node name="RefreshBox" type="PanelContainer" parent="KebapPopup/VBox"]
+self_modulate = Color( 0.0588235, 0.2, 0.337255, 1 )
+margin_right = 156.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 0, 33 )
+hint_tooltip = "Dashboard refresh interval"
+mouse_filter = 1
+custom_styles/panel = SubResource( 12 )
+script = ExtResource( 18 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="KebapPopup/VBox/RefreshBox"]
+margin_left = 6.0
+margin_right = 156.0
+margin_bottom = 33.0
+mouse_filter = 2
+custom_constants/separation = -6
+
+[node name="RefreshIcon" type="TextureRect" parent="KebapPopup/VBox/RefreshBox/HBoxContainer"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_top = 5.0
+margin_right = 22.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 22, 22 )
+mouse_filter = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 11 )
+expand = true
+stretch_mode = 6
+
+[node name="RefreshOptionButton" type="OptionButton" parent="KebapPopup/VBox/RefreshBox/HBoxContainer"]
+unique_name_in_owner = true
+show_behind_parent = true
+margin_left = 16.0
+margin_right = 150.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 100, 0 )
+mouse_filter = 1
+size_flags_horizontal = 3
+text = "15 min"
+flat = true
+items = [ "15 min", null, false, 0, null, "30 min", null, false, 1, null, "1 hr", null, false, 2, null, "5 hr", null, false, 3, null, "12 hr", null, false, 4, null, "24 hr", null, false, 5, null ]
+selected = 0
+
+[node name="ExportButton" parent="KebapPopup/VBox" instance=ExtResource( 17 )]
+margin_top = 37.0
+margin_right = 156.0
+margin_bottom = 70.0
+hint_tooltip = "Export dashboard to JSON"
+size_flags_horizontal = 3
+text = "       Export to JSON"
+align = 0
+icon_tex = ExtResource( 4 )
+
+[node name="RenameButton" parent="KebapPopup/VBox" instance=ExtResource( 17 )]
+margin_top = 74.0
+margin_right = 156.0
+margin_bottom = 107.0
+hint_tooltip = "Rename dashboard"
+size_flags_horizontal = 3
+text = "       Rename"
+align = 0
+icon_tex = ExtResource( 12 )
+
+[node name="DeleteButton" parent="KebapPopup/VBox" instance=ExtResource( 17 )]
+margin_top = 111.0
+margin_right = 156.0
+margin_bottom = 144.0
+hint_tooltip = "Delete dashboard"
+size_flags_horizontal = 3
+text = "       Delete"
+align = 0
+icon_tex = ExtResource( 10 )
+
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer/CloudsCombo" to="." method="_on_CloudsCombo_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer/RegionsCombo" to="." method="_on_RegionsCombo_option_changed"]
 [connection signal="text_entered" from="VBoxContainer/PanelContainer/Content/MainBar/DashboardNameLabel" to="." method="_on_DashboardNameLabel_text_entered"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
-[connection signal="item_selected" from="VBoxContainer/PanelContainer/Content/MainBar/RefreshOptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/KebapButton" to="." method="_on_KebapButton_pressed"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/Content/MainBar/LockButton" to="." method="_on_LockButton_toggled"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/RenameButton" to="." method="_on_RenameButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/DeleteButton" to="." method="_on_DeleteButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/MaximizeButton" to="." method="_on_MaximizeButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/DateButton" to="." method="_on_DateButton_pressed"]
@@ -370,3 +452,7 @@ margin_bottom = 285.0
 [connection signal="widget_added" from="WindowDialog" to="." method="_on_WindowDialog_widget_added"]
 [connection signal="widget_added" from="WindowDialog" to="VBoxContainer/ScrollContainer/Dashboard" method="add_widget"]
 [connection signal="range_selected" from="DateRangeSelector" to="." method="_on_DateRangeSelector_range_selected"]
+[connection signal="item_selected" from="KebapPopup/VBox/RefreshBox/HBoxContainer/RefreshOptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="pressed" from="KebapPopup/VBox/ExportButton" to="." method="_on_ExportButton_pressed"]
+[connection signal="pressed" from="KebapPopup/VBox/RenameButton" to="." method="_on_RenameButton_pressed"]
+[connection signal="pressed" from="KebapPopup/VBox/DeleteButton" to="." method="_on_DeleteButton_pressed"]
