@@ -27,7 +27,7 @@ var initial_load : bool = true
 
 onready var date_button := $VBoxContainer/PanelContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Dashboard
-onready var add_widget_popup := $WindowDialog
+onready var add_widget_popup := $NewWidgetPopup
 onready var range_selector := $DateRangeSelector
 onready var refresh_option := $"%RefreshOptionButton"
 onready var name_label := $VBoxContainer/PanelContainer/Content/MainBar/DashboardNameLabel
@@ -36,6 +36,7 @@ onready var lock_button := $VBoxContainer/PanelContainer/Content/MainBar/LockBut
 onready var clouds_combo := find_node("CloudsCombo")
 onready var accounts_combo := find_node("AccountsCombo")
 onready var regions_combo := find_node("RegionsCombo")
+
 
 func _ready() -> void:
 	Style.add($VBoxContainer/MinimizedBar/MinimizeButton, Style.c.LIGHT)
@@ -54,6 +55,9 @@ func _ready() -> void:
 	InfrastructureInformation.connect("infra_info_updated", self, "_on_infra_info_updated")
 	
 	dashboard.lock(true)
+	
+	add_widget_popup.connect("about_to_show", self, "show_popup_bg")
+	add_widget_popup.connect("popup_hide", self, "hide_popup_bg")
 
 
 func _process(_delta : float) -> void:
@@ -65,16 +69,24 @@ func _process(_delta : float) -> void:
 		dashboard.refresh()
 
 
+func show_popup_bg():
+	$PopupBG.show()
+
+
+func hide_popup_bg():
+	$PopupBG.hide()
+
+
 func _on_AddWidgetButton_pressed() -> void:
-	$WindowDialog.add_widget_popup()
+	add_widget_popup.add_widget_popup()
 
 
 func _on_WidgetContainer_config_pressed(widget_container) -> void:
-	$WindowDialog.edit_widget(widget_container)
+	add_widget_popup.edit_widget(widget_container)
 
 
 func _on_WidgetContainer_duplicate_pressed(widget_container) -> void:
-	$WindowDialog.duplicate_widget(widget_container)
+	add_widget_popup.duplicate_widget(widget_container)
 
 
 func _on_DateButton_pressed() -> void:
@@ -288,7 +300,7 @@ func set_widgets(new_widgets : Array) -> void:
 		container.set_anchors()
 
 
-func _on_WindowDialog_widget_added(_widget_data):
+func _on_NewWidgetPopup_widget_added(_widget_data):
 	force_refresh = true
 
 

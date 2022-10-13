@@ -392,6 +392,7 @@ __meta__ = {
 }
 
 [node name="ConnectPopup" type="PopupPanel" parent="Popups"]
+visible = true
 self_modulate = Color( 0.091, 0.11245, 0.13, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -415,7 +416,6 @@ rect_min_size = Vector2( 100, 29 )
 custom_styles/normal = SubResource( 8 )
 text = "Connect to Resoto Core"
 align = 1
-script = ExtResource( 20 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Popups/ConnectPopup/Content"]
 margin_top = 29.0
@@ -483,7 +483,6 @@ one_shot = true
 [node name="ConnectTimeoutTimer" type="Timer" parent="Popups/ConnectPopup/Content/MarginContainer/Connect"]
 
 [node name="ConfirmPopup" type="PopupDialog" parent="Popups"]
-visible = true
 self_modulate = Color( 0.0901961, 0.113725, 0.129412, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0

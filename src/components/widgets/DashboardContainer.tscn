@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://components/widgets/Dashboard.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
@@ -6,7 +6,6 @@
 [ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=4]
 [ext_resource path="res://assets/icons/icon_128_edit_frame.svg" type="Texture" id=5]
 [ext_resource path="res://components/widgets/DashboardContainer.gd" type="Script" id=6]
-[ext_resource path="res://components/widgets/NewWidgetPopup.tscn" type="PackedScene" id=7]
 [ext_resource path="res://components/widgets/DateRangeSelector.tscn" type="PackedScene" id=8]
 [ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=10]
@@ -18,6 +17,7 @@
 [ext_resource path="res://assets/icons/icon_128_close_thick.svg" type="Texture" id=16]
 [ext_resource path="res://components/elements/Styled/IconButtonText.tscn" type="PackedScene" id=17]
 [ext_resource path="res://components/elements/Styled/style_color_auto_remap.gd" type="Script" id=18]
+[ext_resource path="res://components/widgets/NewWidgetPopup.tscn" type="PackedScene" id=19]
 
 [sub_resource type="Gradient" id=10]
 colors = PoolColorArray( 0.0470588, 0.0941176, 0.133333, 1, 0.0392157, 0.145098, 0.247059, 1 )
@@ -83,19 +83,6 @@ shader_param/margin_size = Vector2( 0, 0 )
 shader_param/grid_color = Color( 0.447059, 0.360784, 0.545098, 0.309804 )
 shader_param/dashboard_size = Vector2( 1000, 1000 )
 shader_param/w = 1.0
-
-[sub_resource type="StyleBoxFlat" id=9]
-bg_color = Color( 0.160784, 0.117647, 0.176471, 1 )
-border_width_top = 30
-border_color = Color( 0.105882, 0.0941176, 0.109804, 1 )
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-expand_margin_top = 25.0
-shadow_color = Color( 0, 0, 0, 0.0980392 )
-shadow_size = 30
-shadow_offset = Vector2( 0, 10 )
 
 [sub_resource type="StyleBoxFlat" id=13]
 content_margin_left = 4.0
@@ -329,16 +316,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="WindowDialog" parent="." instance=ExtResource( 7 )]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -382.5
-margin_top = -260.0
-margin_right = 382.5
-margin_bottom = 260.0
-custom_styles/panel = SubResource( 9 )
+[node name="PopupBG" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0.0509804, 0.0980392, 0.705882 )
+
+[node name="NewWidgetPopup" parent="." instance=ExtResource( 19 )]
+self_modulate = Color( 0.091, 0.11245, 0.13, 1 )
+default_size = Vector2( 800, 600 )
 
 [node name="DateRangeSelector" parent="." instance=ExtResource( 8 )]
 margin_left = 806.0
@@ -449,8 +435,8 @@ icon_tex = ExtResource( 10 )
 [connection signal="pressed" from="VBoxContainer/PanelContainer/DateButton" to="." method="_on_DateButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/MinimizedBar/MinimizeButton" to="." method="_on_MinimizeButton_pressed"]
 [connection signal="resized" from="VBoxContainer/ScrollContainer/Dashboard/Grid" to="VBoxContainer/ScrollContainer/Dashboard" method="_on_Grid_resized"]
-[connection signal="widget_added" from="WindowDialog" to="." method="_on_WindowDialog_widget_added"]
-[connection signal="widget_added" from="WindowDialog" to="VBoxContainer/ScrollContainer/Dashboard" method="add_widget"]
+[connection signal="widget_added" from="NewWidgetPopup" to="." method="_on_NewWidgetPopup_widget_added"]
+[connection signal="widget_added" from="NewWidgetPopup" to="VBoxContainer/ScrollContainer/Dashboard" method="add_widget"]
 [connection signal="range_selected" from="DateRangeSelector" to="." method="_on_DateRangeSelector_range_selected"]
 [connection signal="item_selected" from="KebapPopup/VBox/RefreshBox/HBoxContainer/RefreshOptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="pressed" from="KebapPopup/VBox/ExportButton" to="." method="_on_ExportButton_pressed"]

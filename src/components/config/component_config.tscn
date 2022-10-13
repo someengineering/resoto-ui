@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://components/config/component_config.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=17]
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=18]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=19]
 
 [sub_resource type="StyleBoxFlat" id=18]
 content_margin_left = 4.0
@@ -93,7 +94,7 @@ flat = true
 
 [node name="Spacer" type="Control" parent="TabManager/PanelContainer/Box"]
 margin_left = 696.0
-margin_right = 1592.0
+margin_right = 1593.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 20, 0 )
 size_flags_horizontal = 3
@@ -108,8 +109,8 @@ size_flags_vertical = 8
 text = "Close"
 
 [node name="SaveConfigButton" type="Button" parent="TabManager/PanelContainer/Box"]
-margin_left = 1596.0
-margin_right = 1706.0
+margin_left = 1597.0
+margin_right = 1707.0
 margin_bottom = 33.0
 hint_tooltip = "Save the changes to the current configuration in Resoto Core"
 size_flags_horizontal = 4
@@ -117,32 +118,28 @@ size_flags_vertical = 8
 text = "Save Config"
 
 [node name="RenameConfigButton" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
-margin_left = 1710.0
-margin_right = 1743.0
+margin_left = 1711.0
+margin_right = 1744.0
 hint_tooltip = "Rename the current configuration"
 icon_tex = ExtResource( 17 )
 
 [node name="DuplicateConfigButton" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
-margin_left = 1747.0
-margin_right = 1780.0
+margin_left = 1748.0
+margin_right = 1781.0
 hint_tooltip = "Duplicate the current configuration with a new name"
 icon_tex = ExtResource( 18 )
 
 [node name="ReloadConfigButton" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
-margin_left = 1784.0
-margin_right = 1817.0
+margin_left = 1785.0
+margin_right = 1818.0
 hint_tooltip = "Reload all configurations from Resoto Core"
 icon_tex = ExtResource( 15 )
 
-[node name="AddConfigButton" type="Button" parent="TabManager/PanelContainer/Box"]
-margin_left = 1821.0
+[node name="AddConfigButton" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
+margin_left = 1822.0
 margin_right = 1855.0
-margin_bottom = 33.0
-hint_tooltip = "Add a new configuration to Resoto Core"
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme_type_variation = "ButtonBigText"
-text = "+"
+hint_tooltip = "Reload all configurations from Resoto Core"
+icon_tex = ExtResource( 19 )
 
 [node name="DeleteConfigButton" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
 margin_left = 1859.0

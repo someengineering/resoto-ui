@@ -1,20 +1,21 @@
 extends PanelContainer
 
 signal source_changed
+signal delete_source(node)
 
 var widget : BaseWidget setget set_widget
 var datasource_type : int =  DataSource.TYPES.TIME_SERIES
 onready var data_source : DataSource setget set_data_source
 
-onready var metrics_options := $VBoxContainer/DatasourceSettings/VBoxContainer2/MetricsOptions
-onready var filters_widget := $VBoxContainer/DatasourceSettings/HBoxContainer/FilterWidget
+onready var metrics_options := $VBoxContainer/DatasourceSettings/MetricsVBox/MetricsOptions
+onready var filters_widget := $VBoxContainer/DatasourceSettings/FilterHBox/FilterWidget
 onready var legend_edit := $VBoxContainer/DatasourceSettings/VBoxContainer5/LegendEdit
-onready var function_options := $VBoxContainer/DatasourceSettings/VBoxContainer3/FunctionComboBox
+onready var function_options := $VBoxContainer/DatasourceSettings/FunctionVBox/FunctionComboBox
 onready var date_offset_edit := $VBoxContainer/DatasourceSettings/VBoxContainer/DateOffsetLineEdit
 onready var stacked_check_box := $VBoxContainer/DatasourceSettings/StackedCheckBox
 onready var by_line_edit := $VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit
-onready var query_edit := $VBoxContainer/VBoxContainer/QueryEdit
-onready var expand_button := $VBoxContainer/HBoxContainer/Button
+onready var query_edit := $VBoxContainer/QueryEditVBox/QueryEdit
+onready var expand_button := $VBoxContainer/HBoxContainer/ExpandButton
 onready var kinds_combo_box := $VBoxContainer/TextSearchSettings/HBoxContainer/KindsComboBox
 onready var kinds_line_edit := $VBoxContainer/TextSearchSettings/LineEditKinds
 onready var text_line_edit := $VBoxContainer/TextSearchSettings/TextLineEdit
@@ -40,6 +41,7 @@ func _ready() -> void:
 			$VBoxContainer/TextSearchSettings.show()
 			API.cli_execute("kinds", self)
 	data_source.widget = widget
+	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
 	
 
 
@@ -50,14 +52,8 @@ func _on_cli_execute_done(error : int, response):
 		$VBoxContainer/TextSearchSettings/HBoxContainer/KindsComboBox.set_items(kinds)
 
 
-func _on_Button_toggled(button_pressed : bool) -> void:
-	$VBoxContainer/DatasourceSettings.visible = not button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
-	$VBoxContainer/TextSearchSettings.visible = not button_pressed and datasource_type == DataSource.TYPES.SEARCH
-	
-
 func _on_DeleteButton_pressed() -> void:
-	emit_signal("source_changed")
-	queue_free()
+	emit_signal("delete_source", self)
 
 
 func set_metrics(metrics : Dictionary) -> void:
@@ -133,6 +129,10 @@ func _on_ByLineEdit_text_entered(sum_by) -> void:
 	update_query()
 
 
+func _on_QueryEdit_focus_exited():
+	_on_QueryEdit_text_entered(query_edit.text)
+
+
 func _on_QueryEdit_text_entered(new_text : String) -> void:
 	data_source.query = new_text
 	emit_signal("source_changed")
@@ -185,3 +185,8 @@ func _on_KindsComboBox_option_changed(option):
 	kinds_line_edit.text += option
 	data_source.kinds = kinds_line_edit.text
 	update_query()
+
+
+func _on_ExpandButton_toggled(button_pressed:bool):
+	$VBoxContainer/DatasourceSettings.visible = not button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
+	$VBoxContainer/TextSearchSettings.visible = not button_pressed and datasource_type == DataSource.TYPES.SEARCH

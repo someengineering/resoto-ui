@@ -55,13 +55,18 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 	making_query = false
 	if not is_instance_valid(widget):
 		return
+	
 	var data = response.transformed.result
 	
 	if _error != 0 or typeof(data) == TYPE_STRING:
 		_g.emit_signal("add_toast", "Request Error", data, 1, self)
 		emit_signal("query_status", 0, "Request Error", data)
 		return
-		
+	
+	if not data.has("data"):
+		widget.value = 0
+		return
+	
 	if data.data.result.size() == 0:
 		_g.emit_signal("add_toast", "Empty TSDB result.", "", 2, self)
 		emit_signal("query_status", 0, "Empty TSDB result.")

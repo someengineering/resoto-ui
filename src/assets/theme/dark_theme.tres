@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=60 format=2]
+[gd_resource type="Theme" load_steps=61 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -12,13 +12,14 @@
 [ext_resource path="res://assets/theme/theme_radio_off.png" type="Texture" id=10]
 [ext_resource path="res://assets/theme/theme_radio_on.png" type="Texture" id=11]
 [ext_resource path="res://assets/theme/Barlow-Regular.ttf" type="DynamicFontData" id=12]
+[ext_resource path="res://assets/icons/icon_special_option_icon.svg" type="Texture" id=13]
 
 [sub_resource type="StyleBoxFlat" id=3]
 content_margin_left = 12.0
 content_margin_right = 12.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
-bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
 border_color = Color( 0.462745, 0.25098, 0.737255, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
@@ -438,7 +439,7 @@ font_data = SubResource( 1 )
 [resource]
 default_font = SubResource( 2 )
 Button/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
-Button/colors/font_color_disabled = Color( 0, 0.329412, 0.639216, 1 )
+Button/colors/font_color_disabled = Color( 0.123871, 0.346745, 0.480469, 1 )
 Button/colors/font_color_focus = Color( 0.537255, 0.819608, 0.945098, 1 )
 Button/colors/font_color_hover = Color( 1, 1, 1, 1 )
 Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
@@ -491,6 +492,7 @@ LineEdit/colors/selection_color = Color( 0, 0.329412, 0.639216, 1 )
 LineEdit/styles/focus = SubResource( 6 )
 LineEdit/styles/normal = SubResource( 7 )
 LineEdit/styles/read_only = SubResource( 7 )
+OptionButton/icons/arrow = ExtResource( 13 )
 Panel/styles/panel = SubResource( 36 )
 PanelContainer/styles/panel = SubResource( 21 )
 PopupMenu/icons/checked = ExtResource( 2 )

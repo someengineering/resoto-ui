@@ -1,4 +1,4 @@
-extends WindowDialog
+extends CustomPopupWindow
 
 signal widget_added(widget_data)
 
@@ -40,13 +40,15 @@ const widgets := {
 
 onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
-onready var widget_name_label := find_node("NameEdit")
+onready var widget_name_label := find_node("WidgetNameEdit")
 onready var options_container := find_node("Options")
-onready var controller_container := $WidgetPreview/VBoxContainer/PanelContainer/ColorControllersContainer
-onready var data_source_types := $WidgetOptions/VBoxContainer/HBoxContainer/DataSourceTypeOptionButton
+onready var controller_container := $"%ColorControllersContainer"
+onready var data_source_types := $"%DataSourceTypeOptionButton"
+onready var new_data_source_container := $"%NewDataSourceHBox"
 
 
 func _ready() -> void:
+	Style.add_self(self, Style.c.BG_BACK)
 	for key in widgets:
 		widget_type_options.add_item(key)
 
@@ -95,7 +97,7 @@ func _on_AddWidgetButton_pressed() -> void:
 
 
 func add_widget_popup():
-	window_title = title_add
+	set_window_title(title_add)
 	popup_centered()
 
 
@@ -169,6 +171,8 @@ func create_preview(widget_type : String = "Indicator") -> void:
 	for i in preview_widget.supported_types:
 		data_source_types.add_item(DataSource.TYPES.keys()[i].capitalize(), i)
 
+	data_source_types.disabled = data_source_types.get_item_count() <= 1
+
 
 func get_control_for_property(property : Dictionary) -> Control:
 	var control : Control
@@ -215,7 +219,7 @@ func get_preview_widget_properties() -> Dictionary:
 
 func _on_NameEdit_text_changed(new_text : String) -> void:
 	if preview_container.get_child_count() > 0:
-		$WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer/PanelContainer/Title.text = new_text
+		$"%WidgetPreviewTitleLabel".text = new_text
 
 
 func _on_get_config_id_done(_error, _response, _config_key) -> void:
@@ -233,6 +237,7 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 	
 	if widget_to_edit != null:
 		widget_name_label.text = widget_to_edit.title
+		$"%WidgetPreviewTitleLabel".text = widget_to_edit.title
 		for data_source in widget_to_edit.data_sources:
 			var ds = data_source_widget.instance()
 			ds.datasource_type = data_source.type
@@ -240,8 +245,9 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 			ds.data_source = data_source
 			ds.set_metrics(metrics)
 			ds.connect("source_changed", self, "update_preview")
+			ds.connect("delete_source", self, "delete_datasource")
 			
-	$WidgetOptions/VBoxContainer/VBoxContainer2.visible = widget_to_edit == null
+	$"%WidgetTypeVBox".visible = widget_to_edit == null
 	create_preview(current_widget_preview_name)
 	API.get_config_id(self, "resoto.metrics")
 	
@@ -260,14 +266,28 @@ func _on_AddDataSource_pressed() -> void:
 	data_source_container.add_child(ds)
 	ds.widget = preview_widget
 	ds.connect("source_changed", self, "update_preview")
+	ds.connect("delete_source", self, "delete_datasource")
 
 	match ds.datasource_type:
 		DataSource.TYPES.TIME_SERIES:
 			ds.interval = interval
 			ds.set_metrics(metrics)
+	update_new_data_vis()
+
+
+func delete_datasource(_data_source:Node) -> void:
+	_data_source.queue_free()
+	yield(_data_source, "tree_exited")
+	update_preview()
+
+
+func update_new_data_vis():
+	new_data_source_container.visible = data_source_container.get_child_count() < preview_widget.max_data_sources
 
 
 func update_preview() -> void:
+	update_new_data_vis()
+		
 	if not is_instance_valid(preview_widget):
 		return
 		
@@ -289,13 +309,17 @@ func duplicate_widget(widget) -> void:
 	duplicating = true
 	widget_to_edit = widget
 	popup_centered()
-	window_title = title_duplicate % [widget_type_options.text]
+	set_window_title(title_duplicate % [widget_type_options.text])
 
 
 func edit_widget(widget) -> void:
 	widget_to_edit = widget
 	popup_centered()
-	window_title = title_edit % [widget_type_options.text]
+	set_window_title(title_edit % [widget_type_options.text])
+
+
+func _close_popup():
+	_on_NewWidgetPopup_popup_hide()
 
 
 func _on_NewWidgetPopup_popup_hide():
