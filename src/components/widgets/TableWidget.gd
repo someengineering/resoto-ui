@@ -17,13 +17,13 @@ onready var rows := $Table/ScrollContainer/VBoxContainer/ScrollContainer/Rows
 onready var scroll_container := $Table/ScrollContainer
 
 class RowElement extends Label:
-	
+	var SortButton = preload("res://components/elements/Styled/IconButtonSmall.tscn")
 	signal sort_requested(column, ascending)
 	
 	var color : Color setget set_color
 	var rect := ColorRect.new()
 	var column_id : int
-	var sort_button := SortButton.new()
+	var sort_button:Button = null
 	
 	func _init(t, c, sort_enabled := false):
 		text = t.replace('"', "")
@@ -39,11 +39,22 @@ class RowElement extends Label:
 		rect_min_size.y = 24
 		
 		if sort_enabled:
-			sort_button.connect("sort_requested", self, "request_sort")
+			sort_button = SortButton.instance()
+			sort_button.anchor_left = 1
+			sort_button.anchor_right = 1
+			sort_button.anchor_top = 0.5
+			sort_button.anchor_bottom = 0.5
+			sort_button.flat = true
+			sort_button.toggle_mode = true
+			sort_button.icon_tex = load("res://assets/icons/icon_128_sort.svg")
+			#sort_button.rect_min_size = Vector2(16,16)
+			#sort_button.rect_size = Vector2(16,16)
+			sort_button.connect("toggled", self, "request_sort")
 			add_child(sort_button)
-			
-		mouse_filter = MOUSE_FILTER_STOP
 		
+		mouse_filter = MOUSE_FILTER_STOP
+	
+	
 	func _ready():
 		call_deferred("add_child", rect)
 		rect.color = color
@@ -54,7 +65,7 @@ class RowElement extends Label:
 		column_id = get_parent().get_children().find(self)
 		connect("mouse_entered", self, "on_mouse_entered")
 		connect("mouse_exited", self, "on_mouse_exited")
-		
+	
 	func set_color(new_color : Color):
 		color = new_color
 		rect.color = color
@@ -63,41 +74,17 @@ class RowElement extends Label:
 		var font = get_font("font")
 		return font.get_string_size(text)
 		
-	func request_sort():
-		emit_signal("sort_requested", column_id, sort_button.ascending)
+	func request_sort(pressed: bool):
+		sort_button.flip_v = pressed
+		emit_signal("sort_requested", column_id, pressed)
 		
 	func on_mouse_entered():
 		rect.color = color.lightened(0.1)
 		
 	func on_mouse_exited():
 		rect.color = color
-		
-class SortButton extends Button:
-	signal sort_requested
-	var ascending := false
-	func _ready():
-		anchor_right = 1
-		anchor_left = 1
-		margin_left = -24
-		flat = true
-		toggle_mode = true
-		connect("toggled", self, "on_toggled")
-		icon = preload("res://assets/icons/sort-desc.png")
-		expand_icon = true
-		
-		
-	func on_toggled(pressed : bool):
-		ascending = pressed
-		
-		if ascending:
-			icon = preload("res://assets/icons/sort-asc.png")
-		else:
-			icon = preload("res://assets/icons/sort-desc.png")
-			
-		emit_signal("sort_requested")
-		
 
-	
+
 func clear_all():
 	for child in header_row.get_children():
 		header_row.remove_child(child)
@@ -105,23 +92,24 @@ func clear_all():
 	
 	clear_rows()
 
+
 func clear_rows():
 	for child in rows.get_children():
 		rows.remove_child(child)
 		child.queue_free()
-		
-		
+
+
 func set_headers(headers : Array):
-	header_row.add_child(RowElement.new("", header_color))
 	for header in headers:
 		var element = RowElement.new(header, header_color, true)
 		element.align = Label.ALIGN_LEFT
 		header_row.add_child(element)
 		element.connect("sort_requested", self, "sort_by_column")
-		
+
+
 func add_row(data : Array):
 	var row = HBoxContainer.new()
-	row.set("custom_constants/separation", 2)
+	row.set("custom_constants/separation", 0)
 	row.size_flags_vertical = SIZE_EXPAND_FILL
 	for value in data:
 		var color : Color
@@ -133,9 +121,10 @@ func add_row(data : Array):
 			color = row_color
 			if rows.get_child_count() % 2 == 1:
 				color = color.darkened(0.3)
-		row.add_child(RowElement.new(str(value), color if row.get_child_count() > 0 else header_color))
+		row.add_child(RowElement.new(str(value), color))
 	rows.add_child(row)
-		
+
+
 func _get_property_list() -> Array:
 	var properties = []
 	
@@ -159,9 +148,9 @@ func _get_property_list() -> Array:
 		"name" : "column_header_color",
 		"type" : TYPE_COLOR
 	})
-
 	
 	return properties
+
 
 func set_data(data, type):
 	if raw_data.size() > 0:
@@ -178,7 +167,7 @@ func set_data(data, type):
 		
 		var i : int = 1
 		for data_row in data:
-			var data_array : Array = [" "]
+			var data_array : Array = []#[" "]
 			for key in data_row["group"]:
 				data_array.append(data_row["group"][key])
 				
@@ -197,36 +186,35 @@ func set_data(data, type):
 		for row in rows:
 			row = " ,"+row
 			raw_data.append(row.split(",",false))
-
-		
+	
 	update_table()
-		
+
+
 func update_table():
 	for data in raw_data:
 		add_row(data)
-		
+	
 	autoadjust_table()
 
 
 func _on_Rows_resized():
 	if is_instance_valid(rows):
 		header_row.rect_size.x = rows.rect_size.x
-		
+
+
 func get_column_min_size(column : int):
-	var size = -INF
+	var size = -100000000000
 	for row in rows.get_children():
 		var cell = row.get_child(column)
 		var cell_size = cell.get_min_size().x
 		if size < cell_size:
 			size = cell_size
-			
-	if column == 0:
-		size = 8
-	else:
-		size = max(size, header_row.get_child(column).get_min_size().x + 24)
+	
+	size = max(size, header_row.get_child(column).get_min_size().x + 24)
 	
 	return size
-	
+
+
 func set_column_size(column, size):
 	for row in rows.get_children():
 		var cell = row.get_child(column)
@@ -243,7 +231,7 @@ func autoadjust_table():
 		columns_sizes.append(get_column_min_size(i))
 		set_column_size(i, columns_sizes[i])
 		total_size += columns_sizes[i] 
-		
+	
 	if total_size == 0.0:
 		return
 	
@@ -255,15 +243,15 @@ func autoadjust_table():
 			set_column_size(i, columns_sizes[i]*ratio)
 			
 	yield(VisualServer,"frame_post_draw")
-	
 	scroll_container.scroll_horizontal = container_width < total_size
 
 
 func _on_TableWidget_resized():
+	print(rect_size)
 	if is_instance_valid(header_row):
 		yield(VisualServer,"frame_post_draw")
 		autoadjust_table()
-		
+
 
 func sort_by_column(column : int, ascending : bool):
 	clear_rows()
@@ -273,7 +261,6 @@ func sort_by_column(column : int, ascending : bool):
 		raw_data.sort_custom(self, "sort_ascending")
 	else:
 		raw_data.sort_custom(self, "sort_descending")
-	
 	
 	update_table()
 
@@ -290,6 +277,24 @@ func sort_descending(a, b):
 	return false
 
 
+func set_column_header_color(_new_color:Color):
+	column_header_color = _new_color
+	clear_all()
+	update_table()
+
+
+func set_row_color(_new_color:Color):
+	row_color = _new_color
+	clear_all()
+	update_table()
+
+
+func set_header_color(_new_color:Color):
+	header_color = _new_color
+	clear_all()
+	update_table()
+
+
 func get_csv(sepparator := ",", end_of_line := "\n"):
 	var csv_array : PoolStringArray = []
 	var header_array : PoolStringArray = []
@@ -304,4 +309,3 @@ func get_csv(sepparator := ",", end_of_line := "\n"):
 		csv_array.append(row.join(sepparator))
 		
 	return csv_array.join(end_of_line)
-		

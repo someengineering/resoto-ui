@@ -21,7 +21,7 @@ script = ExtResource( 4 )
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 513.0
-margin_bottom = 811.0
+margin_bottom = 793.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 503.0
@@ -238,20 +238,23 @@ script = ExtResource( 1 )
 [node name="QueryEditVBox" type="VBoxContainer" parent="VBoxContainer"]
 margin_top = 728.0
 margin_right = 503.0
-margin_bottom = 801.0
+margin_bottom = 783.0
 
 [node name="QueryLabel" type="Label" parent="VBoxContainer/QueryEditVBox"]
 margin_right = 503.0
 margin_bottom = 21.0
 text = "Query"
 
-[node name="QueryEdit" type="LineEdit" parent="VBoxContainer/QueryEditVBox"]
+[node name="QueryEdit" type="TextEdit" parent="VBoxContainer/QueryEditVBox"]
 margin_top = 25.0
 margin_right = 503.0
-margin_bottom = 73.0
-rect_min_size = Vector2( 0, 48 )
-context_menu_enabled = false
-script = ExtResource( 1 )
+margin_bottom = 55.0
+rect_min_size = Vector2( 0, 30 )
+wrap_enabled = true
+
+[node name="QueryUpdateTimer" type="Timer" parent="VBoxContainer/QueryEditVBox"]
+wait_time = 2.0
+one_shot = true
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/ExpandButton" to="." method="_on_ExpandButton_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
@@ -267,4 +270,6 @@ script = ExtResource( 1 )
 [connection signal="text_entered" from="VBoxContainer/TextSearchSettings/LineEditKinds" to="." method="_on_LineEdit2_text_entered"]
 [connection signal="text_entered" from="VBoxContainer/TextSearchSettings/TextFiltersLineEdit" to="." method="_on_LineEdit3_text_entered"]
 [connection signal="text_entered" from="VBoxContainer/TextSearchSettings/ListLineEdit" to="." method="_on_LineEdit4_text_entered"]
-[connection signal="text_entered" from="VBoxContainer/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_text_entered"]
+[connection signal="item_rect_changed" from="VBoxContainer/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_item_rect_changed"]
+[connection signal="text_changed" from="VBoxContainer/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_text_entered"]
+[connection signal="timeout" from="VBoxContainer/QueryEditVBox/QueryUpdateTimer" to="." method="_on_QueryUpdateTimer_timeout"]

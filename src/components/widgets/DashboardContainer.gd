@@ -26,7 +26,7 @@ var is_maximized: bool = false setget set_is_maximized
 var initial_load : bool = true
 
 onready var date_button := $VBoxContainer/PanelContainer/DateButton
-onready var dashboard := $VBoxContainer/ScrollContainer/Dashboard
+onready var dashboard := $VBoxContainer/ScrollContainer/Content/Dashboard
 onready var add_widget_popup := $NewWidgetPopup
 onready var range_selector := $DateRangeSelector
 onready var refresh_option := $"%RefreshOptionButton"

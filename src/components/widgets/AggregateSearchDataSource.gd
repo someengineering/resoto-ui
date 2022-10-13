@@ -24,7 +24,7 @@ func _on_aggregate_search_done(_error : int, response):
 		emit_signal("query_status", 0, "Invalid Aggregate Search", "There is a problem with the aggregate search query.")
 		return
 	if widget is TableWidget:
-		widget.header_columns_count = response.transformed.result[0]["group"].size()
+		widget.header_columns_count = response.transformed.result[0]["group"].size()-1
 	widget.set_data(response.transformed.result, type)
 	emit_signal("query_success")
 

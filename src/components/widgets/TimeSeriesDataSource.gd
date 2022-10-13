@@ -96,7 +96,10 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 		_g.emit_signal("add_toast", "Request Error", data, 1, self)
 		emit_signal("query_status", 0, "Request Error")
 		return
-		
+	
+	if not data.has("data"):
+		return
+	
 	if data.data.result.size() == 0:
 		widget.clear_series()
 		_g.emit_signal("add_toast", "Empty TSDB result.", "", 2, self)

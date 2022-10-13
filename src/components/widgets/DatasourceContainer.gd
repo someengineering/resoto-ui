@@ -89,6 +89,7 @@ func update_query(force_query := false) -> void:
 	data_source.update_query()
 	if data_source.query != query or force_query:
 		query_edit.text = data_source.query
+		_on_QueryEdit_item_rect_changed()
 		emit_signal("source_changed")
 	
 func set_widget(new_widget : BaseWidget) -> void:
@@ -129,13 +130,27 @@ func _on_ByLineEdit_text_entered(sum_by) -> void:
 	update_query()
 
 
+# All the Query TextEdit stuff like resizing, updating etc.
+# A bit more complex because I wanted Textedit with automatic height adjustment
+onready var query_timer:= $VBoxContainer/QueryEditVBox/QueryUpdateTimer
 func _on_QueryEdit_focus_exited():
-	_on_QueryEdit_text_entered(query_edit.text)
+	_on_QueryUpdateTimer_timeout()
 
 
-func _on_QueryEdit_text_entered(new_text : String) -> void:
-	data_source.query = new_text
+func _on_QueryEdit_item_rect_changed():
+	var row_count = query_edit.get_total_visible_rows()
+	query_edit.rect_min_size.y = (row_count*25)+10
+
+
+func _on_QueryUpdateTimer_timeout():
+	data_source.query = query_edit.text
+	_on_QueryEdit_item_rect_changed()
 	emit_signal("source_changed")
+
+
+func _on_QueryEdit_text_entered() -> void:
+	_on_QueryEdit_item_rect_changed()
+	query_timer.start()
 
 
 func set_data_source(new_data_source : DataSource) -> void:
@@ -157,6 +172,7 @@ func set_data_source(new_data_source : DataSource) -> void:
 			list_line_edit.text = new_data_source.list
 		
 	query_edit.text = new_data_source.query
+	_on_QueryEdit_item_rect_changed()
 
 
 func _on_LineEdit_text_entered(new_text):

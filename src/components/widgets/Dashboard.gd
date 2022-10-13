@@ -154,5 +154,5 @@ func _on_widget_moved_or_resized():
 		if widget.rect_size.y + widget.rect_position.y > max_y:
 			max_y = widget.rect_size.y + widget.rect_position.y
 	yield(VisualServer,"frame_post_draw")
-	rect_min_size.y = max(max_y, get_parent().rect_size.y)
+	rect_min_size.y = min(max_y, get_parent().rect_size.y)
 	rect_size.y = max(max_y, get_parent().rect_size.y)

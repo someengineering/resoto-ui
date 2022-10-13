@@ -10,7 +10,7 @@ bg_color = Color( 1, 1, 1, 1 )
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="DynamicFontData" id=7]
+[sub_resource type="DynamicFontData" id=10]
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
 
 [sub_resource type="DynamicFont" id=8]
@@ -18,7 +18,7 @@ resource_local_to_scene = true
 size = 64
 use_mipmaps = true
 use_filter = true
-font_data = SubResource( 7 )
+font_data = SubResource( 10 )
 
 [sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
@@ -39,7 +39,7 @@ unit = "[unit]"
 show_comma = false
 
 [node name="IndicatorBackground" type="Panel" parent="."]
-self_modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+self_modulate = Color( 0.105882, 0.0784314, 0.113725, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 9 )

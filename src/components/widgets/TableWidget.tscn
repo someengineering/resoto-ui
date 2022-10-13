@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://components/widgets/TableWidget.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="TableWidget" type="Control"]
 anchor_right = 1.0
@@ -12,11 +19,11 @@ header_color = Color( 0, 0, 0, 1 )
 row_color = Color( 0, 0, 0, 1 )
 column_header_color = Color( 0, 0, 0, 1 )
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="IndicatorBackground" type="Panel" parent="."]
+self_modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 2
-color = Color( 0.0823529, 0.0588235, 0.0901961, 1 )
+custom_styles/panel = SubResource( 1 )
 
 [node name="Table" type="Control" parent="."]
 anchor_right = 1.0
@@ -33,17 +40,17 @@ margin_bottom = 1080.0
 mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 2
+custom_constants/separation = 0
 
 [node name="Header" type="HBoxContainer" parent="Table/ScrollContainer/VBoxContainer"]
 margin_right = 1920.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 0, 24 )
 mouse_filter = 0
-custom_constants/separation = 2
+custom_constants/separation = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Table/ScrollContainer/VBoxContainer"]
-margin_top = 26.0
+margin_top = 24.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 size_flags_horizontal = 3
@@ -52,11 +59,11 @@ scroll_horizontal_enabled = false
 
 [node name="Rows" type="VBoxContainer" parent="Table/ScrollContainer/VBoxContainer/ScrollContainer"]
 margin_right = 1920.0
-margin_bottom = 1054.0
+margin_bottom = 1056.0
 mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 2
+custom_constants/separation = 0
 
 [connection signal="resized" from="." to="." method="_on_TableWidget_resized"]
 [connection signal="resized" from="Table/ScrollContainer/VBoxContainer/ScrollContainer/Rows" to="." method="_on_Rows_resized"]
