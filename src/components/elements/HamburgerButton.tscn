@@ -1,9 +1,8 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://assets/icons/hamburger-menu-icon-thin.svg" type="Texture" id=1]
-[ext_resource path="res://assets/icons/close-line-icon-thin.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_128_hamburger-menu-thin.svg" type="Texture" id=1]
+[ext_resource path="res://assets/icons/icon_128_close_thin.svg" type="Texture" id=2]
 [ext_resource path="res://components/elements/hamburger_button.gd" type="Script" id=3]
-
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
