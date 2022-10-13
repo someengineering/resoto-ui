@@ -28,11 +28,14 @@ var config_put_headers:Headers = Headers.new()
 var accept_json_nd_headers:Headers = Headers.new()
 var accept_text_headers:Headers = Headers.new()
 var content_urlencoded_headers:Headers = Headers.new()
+var content_json_headers : Headers = Headers.new()
 
 
 func _init().(default_options) -> void:
 	accept_text_headers.Accept = "text/plain"
 	content_urlencoded_headers.Content_Type = "Application/x-www-form-urlencoded"
+	content_json_headers.Content_Type = "application/json"
+	content_json_headers.Accept = "*/*"
 
 
 func refresh_jwt_header(header:Headers) -> void:
@@ -250,4 +253,10 @@ func aggregate_search(query : String, section : String):
 	var body = query
 	var request = req_post("/graph/resoto/search/aggregate?section=%s" % section, body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func analytics(body : String):
+	refresh_jwt_header(content_json_headers)
+	var request = req_post("/analytics", body, content_json_headers)
 	return request

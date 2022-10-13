@@ -19,6 +19,7 @@ class RequestHeaders:
 
 class Response:
 	var status_code:int
+	var response_code:int
 	var headers:Dictionary
 	var body:PoolByteArray
 	var transformed:Dictionary
@@ -110,7 +111,11 @@ class Request:
 				if http_status == HTTPClient.STATUS_REQUESTING:
 					if not poll_():
 						return
+<<<<<<< HEAD
 				elif http_status == HTTPClient.STATUS_BODY or http_status == HTTPClient.STATUS_CONNECTED:
+=======
+				elif http_status == HTTPClient.STATUS_BODY or HTTPClient.STATUS_CONNECTED:
+>>>>>>> 43c38cc (Initial posthog api autoload)
 					state_ = states.RECEIVE
 			
 			states.RECEIVE:
@@ -130,6 +135,7 @@ class Request:
 					response_.headers		= http_.get_response_headers_as_dictionary()
 					response_.body			= PoolByteArray()
 					state_					= states.RESPONSE
+					response_.response_code = http_.get_response_code()
 			
 			states.RESPONSE:
 				for i in 100:

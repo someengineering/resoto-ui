@@ -102,6 +102,10 @@ func _on_AddWidgetButton_pressed() -> void:
 		emit_signal("widget_edited")
 	
 	hide()
+	
+	if widget_to_edit == null:
+		Analytics.event(Analytics.events_dashboard.NEW_WIDGET)
+	
 	preview_widget.queue_free()
 
 
@@ -296,6 +300,7 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 	ds.datasource_type = data_source_types.get_selected_id()
 	
 	data_source_container.add_child(ds)
+
 	ds.widget = preview_widget
 	ds.connect("source_changed", self, "update_preview")
 	ds.connect("delete_source", self, "delete_datasource")
@@ -304,6 +309,7 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 		DataSource.TYPES.TIME_SERIES:
 			ds.interval = interval
 			ds.set_metrics(metrics)
+
 	update_new_data_vis()
 
 	if template_id >= 0:
