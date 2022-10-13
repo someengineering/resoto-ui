@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://components/elements/Styled/IconButton.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/icons/icon_128_fullscreen_square.svg" type="Texture" id=2]
 
 [sub_resource type="DynamicFont" id=1]
 size = 1
@@ -11,6 +12,7 @@ margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 1 )
+icon_tex = ExtResource( 2 )
 icon_margin = 0
 
 [node name="Margin" parent="." index="0"]
@@ -24,3 +26,4 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 16.0
 margin_bottom = 16.0
+texture = ExtResource( 2 )
