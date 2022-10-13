@@ -28,13 +28,17 @@ custom_styles/panel = SubResource( 1 )
 [node name="Table" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Table"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 scroll_vertical_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Table/ScrollContainer"]
+[node name="TableVBox" type="VBoxContainer" parent="Table/ScrollContainer"]
 margin_right = 1920.0
 margin_bottom = 1080.0
 mouse_filter = 0
@@ -42,14 +46,14 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
 
-[node name="Header" type="HBoxContainer" parent="Table/ScrollContainer/VBoxContainer"]
+[node name="Header" type="HBoxContainer" parent="Table/ScrollContainer/TableVBox"]
 margin_right = 1920.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 0, 24 )
 mouse_filter = 0
 custom_constants/separation = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Table/ScrollContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Table/ScrollContainer/TableVBox"]
 margin_top = 24.0
 margin_right = 1920.0
 margin_bottom = 1080.0
@@ -57,7 +61,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="Rows" type="VBoxContainer" parent="Table/ScrollContainer/VBoxContainer/ScrollContainer"]
+[node name="Rows" type="VBoxContainer" parent="Table/ScrollContainer/TableVBox/ScrollContainer"]
 margin_right = 1920.0
 margin_bottom = 1056.0
 mouse_filter = 0
@@ -66,4 +70,4 @@ size_flags_vertical = 3
 custom_constants/separation = 0
 
 [connection signal="resized" from="." to="." method="_on_TableWidget_resized"]
-[connection signal="resized" from="Table/ScrollContainer/VBoxContainer/ScrollContainer/Rows" to="." method="_on_Rows_resized"]
+[connection signal="resized" from="Table/ScrollContainer/TableVBox/ScrollContainer/Rows" to="." method="_on_Rows_resized"]

@@ -12,9 +12,10 @@ var sorting_type : String = ""
 
 var header_columns_count := 0
 
-onready var header_row := $Table/ScrollContainer/VBoxContainer/Header
-onready var rows := $Table/ScrollContainer/VBoxContainer/ScrollContainer/Rows
+onready var header_row := $Table/ScrollContainer/TableVBox/Header
+onready var rows := $Table/ScrollContainer/TableVBox/ScrollContainer/Rows
 onready var scroll_container := $Table/ScrollContainer
+
 
 class RowElement extends Label:
 	var SortButton = preload("res://components/elements/Styled/IconButtonSmall.tscn")
@@ -25,7 +26,8 @@ class RowElement extends Label:
 	var column_id : int
 	var sort_button:Button = null
 	
-	func _init(t, c, sort_enabled := false):
+	func _init(t, c, sort_enabled := false, c_id:=-1):
+		column_id = c_id
 		text = t.replace('"', "")
 		self.color = c
 		
@@ -33,22 +35,17 @@ class RowElement extends Label:
 		size_flags_vertical = SIZE_FILL
 		valign = Label.VALIGN_CENTER
 		align = Label.ALIGN_CENTER
-#		autowrap = true
-#		clip_text = true
 		
 		rect_min_size.y = 24
 		
 		if sort_enabled:
 			sort_button = SortButton.instance()
-			sort_button.anchor_left = 1
-			sort_button.anchor_right = 1
+			sort_button.hide()
 			sort_button.anchor_top = 0.5
 			sort_button.anchor_bottom = 0.5
 			sort_button.flat = true
 			sort_button.toggle_mode = true
 			sort_button.icon_tex = load("res://assets/icons/icon_128_sort.svg")
-			#sort_button.rect_min_size = Vector2(16,16)
-			#sort_button.rect_size = Vector2(16,16)
 			sort_button.connect("toggled", self, "request_sort")
 			add_child(sort_button)
 		
@@ -62,7 +59,8 @@ class RowElement extends Label:
 		rect.anchor_bottom = 1
 		rect.show_behind_parent = true
 		rect.mouse_filter = MOUSE_FILTER_IGNORE
-		column_id = get_parent().get_children().find(self)
+		if column_id == -1:
+			column_id = get_parent().get_children().find(self)
 		connect("mouse_entered", self, "on_mouse_entered")
 		connect("mouse_exited", self, "on_mouse_exited")
 	
@@ -100,28 +98,33 @@ func clear_rows():
 
 
 func set_headers(headers : Array):
+	var c_id:= 0
 	for header in headers:
-		var element = RowElement.new(header, header_color, true)
+		var element = RowElement.new(header, header_color, true, c_id)
 		element.align = Label.ALIGN_LEFT
 		header_row.add_child(element)
 		element.connect("sort_requested", self, "sort_by_column")
+		c_id += 1
 
 
 func add_row(data : Array):
 	var row = HBoxContainer.new()
 	row.set("custom_constants/separation", 0)
 	row.size_flags_vertical = SIZE_EXPAND_FILL
+	var c_id:= 0
+	var r_count:= rows.get_child_count()
 	for value in data:
 		var color : Color
-		if row.get_child_count() <= header_columns_count:
+		if c_id <= header_columns_count:
 			color = column_header_color 
-			if rows.get_child_count() % 2 == 1:
+			if r_count % 2 == 1:
 				color = color.darkened(0.3)
 		else:
 			color = row_color
-			if rows.get_child_count() % 2 == 1:
+			if r_count % 2 == 1:
 				color = color.darkened(0.3)
-		row.add_child(RowElement.new(str(value), color))
+		row.add_child(RowElement.new(str(value), color, false, c_id))
+		c_id += 1
 	rows.add_child(row)
 
 
@@ -225,29 +228,40 @@ func set_column_size(column, size):
 
 func autoadjust_table():
 	var columns = header_row.get_child_count()
-	var total_size : float = 0.0
 	var columns_sizes : Array = []
-	for i in columns:
-		columns_sizes.append(get_column_min_size(i))
-		set_column_size(i, columns_sizes[i])
-		total_size += columns_sizes[i] 
 	
-	if total_size == 0.0:
-		return
+	var total_column_width:= 0.0
+	for i in columns:
+		var col_w = get_column_min_size(i)
+		columns_sizes.append(col_w)
+		total_column_width += col_w
 	
 	var container_width : float = scroll_container.rect_size.x
 	
-	if container_width > total_size:
-		var ratio = (container_width - 2 * (header_row.get_child_count() - 1)) / total_size
+	if total_column_width == 0.0:
+		return
+	
+	if container_width > total_column_width:
+		var ratio = (container_width-0.001 * header_row.get_child_count()) / total_column_width
+		
 		for i in columns:
-			set_column_size(i, columns_sizes[i]*ratio)
-			
+			columns_sizes[i] *= ratio
+	
+	total_column_width = 0.0
+	for i in columns_sizes:
+		i = floor(i)
+		total_column_width += i
+		
+	columns_sizes[0] += max(container_width - total_column_width, 0)
+	
+	for i in columns:
+		set_column_size(i, columns_sizes[i])
+	
 	yield(VisualServer,"frame_post_draw")
-	scroll_container.scroll_horizontal = container_width < total_size
+	scroll_container.scroll_horizontal = container_width < total_column_width
 
 
 func _on_TableWidget_resized():
-	print(rect_size)
 	if is_instance_valid(header_row):
 		yield(VisualServer,"frame_post_draw")
 		autoadjust_table()
