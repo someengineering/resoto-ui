@@ -90,7 +90,6 @@ func clear_all():
 	
 	clear_rows()
 
-
 func clear_rows():
 	for child in rows.get_children():
 		rows.remove_child(child)
@@ -265,7 +264,6 @@ func _on_TableWidget_resized():
 	if is_instance_valid(header_row):
 		yield(VisualServer,"frame_post_draw")
 		autoadjust_table()
-
 
 func sort_by_column(column : int, ascending : bool):
 	clear_rows()

@@ -28,6 +28,8 @@ var data_source_widget := preload("res://components/widgets/DatasourceContainer.
 
 var query : String = ""
 
+var data_sources_templates : Array = []
+
 onready var data_source_container := find_node("DataSources")
 onready var color_controller_ui_scene := preload("res://components/widgets/ColorControllerUI.tscn")
 
@@ -45,12 +47,17 @@ onready var options_container := find_node("Options")
 onready var controller_container := $"%ColorControllersContainer"
 onready var data_source_types := $"%DataSourceTypeOptionButton"
 onready var new_data_source_container := $"%NewDataSourceHBox"
-
+onready var data_sources_templates_options := $WidgetOptions/VBoxContainer/HBoxContainer/DataSourceTemplates
 
 func _ready() -> void:
 	Style.add_self(self, Style.c.BG_BACK)
 	for key in widgets:
 		widget_type_options.add_item(key)
+		
+	var file = File.new()
+	if file.open("res://tests/data_sources_templates.json", File.READ) == OK:
+		data_sources_templates = parse_json(file.get_as_text())
+
 
 
 func _on_AddWidgetButton_pressed() -> void:
@@ -172,6 +179,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		data_source_types.add_item(DataSource.TYPES.keys()[i].capitalize(), i)
 
 	data_source_types.disabled = data_source_types.get_item_count() <= 1
+	data_source_types.emit_signal("item_selected", 0)
 
 
 func get_control_for_property(property : Dictionary) -> Control:
@@ -274,6 +282,15 @@ func _on_AddDataSource_pressed() -> void:
 			ds.set_metrics(metrics)
 	update_new_data_vis()
 
+	var template_id : int = data_sources_templates_options.get_selected_id()
+	print(template_id)
+	if template_id >= 0 and data_sources_templates_options.text != "New":
+		var template_data : Dictionary = data_sources_templates[template_id]["data"]
+		for key in template_data:
+			ds.data_source.set(key, template_data[key])
+		ds.set_data_source(ds.data_source)
+		update_preview()
+
 
 func delete_datasource(_data_source:Node) -> void:
 	_data_source.queue_free()
@@ -327,3 +344,13 @@ func _on_NewWidgetPopup_popup_hide():
 	widget_to_edit = null
 	hide()
 	preview_widget.queue_free()
+
+
+func _on_DataSourceTypeOptionButton_item_selected(index):
+	data_sources_templates_options.clear()
+	var data_source_type = data_source_types.get_selected_id()
+	data_sources_templates_options.add_item("New", -1)
+	for i in data_sources_templates.size():
+		var data : Dictionary = data_sources_templates[i]
+		if data["data"]["type"] == data_source_type and widget_type_options.text in data["Widgets"]:
+			data_sources_templates_options.add_item(data["Name"], i)

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/resize_buttons.svg-b6180a7730c1187b8f05648339e23712.stex"
+path="res://.import/duplicate.svg-5358b8dcaa966b2a48fd4a3912804ff2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/resize_buttons.svg"
-dest_files=[ "res://.import/resize_buttons.svg-b6180a7730c1187b8f05648339e23712.stex" ]
+source_file="res://assets/duplicate.svg"
+dest_files=[ "res://.import/duplicate.svg-5358b8dcaa966b2a48fd4a3912804ff2.stex" ]
 
 [params]
 
@@ -32,4 +32,4 @@ process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true
-svg/scale=1.0
+svg/scale=0.5

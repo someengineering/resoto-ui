@@ -36,6 +36,13 @@ def get_arg_parser() -> ArgumentParser:
         action="store_true",
         default=False,
     )
+    parser.add_argument(
+        "--test-build",
+        "-t",
+        help="Upload test build",
+        action="store_true",
+        default=False
+    )
     return parser
 
 

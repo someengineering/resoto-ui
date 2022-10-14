@@ -51,7 +51,8 @@ func connect_to_core() -> void:
 
 
 func _on_get_infra_info_done(_error:int, response):
-	InfrastructureInformation.infra_info = response.transformed.result
+	if _error == OK:
+		InfrastructureInformation.infra_info = response.transformed.result
 
 
 func _on_system_ready_done(error:int, response:UserAgent.Response) -> void:

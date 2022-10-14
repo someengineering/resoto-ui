@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/resize_buttons.svg-b6180a7730c1187b8f05648339e23712.stex"
+path="res://.import/download-01.svg-a3fa60d38f5f005326160979b51e70d1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/resize_buttons.svg"
-dest_files=[ "res://.import/resize_buttons.svg-b6180a7730c1187b8f05648339e23712.stex" ]
+source_file="res://assets/download-01.svg"
+dest_files=[ "res://.import/download-01.svg-a3fa60d38f5f005326160979b51e70d1.stex" ]
 
 [params]
 

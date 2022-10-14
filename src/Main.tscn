@@ -69,6 +69,8 @@ fill_to = Vector2( 0, 1 )
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
 
+[sub_resource type="ButtonGroup" id=19]
+
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 4
@@ -378,6 +380,62 @@ margin_right = 1920.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 10, 0 )
 
+[node name="SideMenu2" type="MarginContainer" parent="MenuBar/MenuContainer/Menu/Title"]
+margin_left = 1888.0
+margin_right = 1920.0
+margin_bottom = 33.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="Config" type="MenuButton" parent="MenuBar/MenuContainer/Menu/Title/SideMenu2"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 28.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 24, 24 )
+expand_icon = true
+items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false, "Merge Graph", null, 0, false, false, 3, 0, null, "", false ]
+
+[node name="Config" type="MenuButton" parent="MenuBar/MenuContainer/Menu/Title/SideMenu2"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 28.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 24, 24 )
+expand_icon = true
+items = [ "Configuration", null, 0, false, false, 0, 0, null, "", false, "Backup", null, 0, false, false, 1, 0, null, "", false, "Restore", null, 0, false, false, 2, 0, null, "", false, "Merge Graph", null, 0, false, false, 3, 0, null, "", false ]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -87.0
+margin_right = 87.0
+margin_bottom = 32.0
+
+[node name="TerminalsButton" type="Button" parent="MenuBar/HBoxContainer"]
+margin_right = 81.0
+margin_bottom = 32.0
+toggle_mode = true
+group = SubResource( 19 )
+text = "Terminals"
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="MenuBar/HBoxContainer"]
+margin_left = 85.0
+margin_right = 89.0
+margin_bottom = 32.0
+
+[node name="DashboardsButton" type="Button" parent="MenuBar/HBoxContainer"]
+margin_left = 93.0
+margin_right = 188.0
+margin_bottom = 32.0
+toggle_mode = true
+group = SubResource( 19 )
+text = "Dashboards"
+flat = true
+
 [node name="Popups" type="CanvasLayer" parent="."]
 layer = 30
 script = ExtResource( 7 )
@@ -579,7 +637,6 @@ flat = true
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
 [node name="BrowserCopyPasteWatcher" type="Node" parent="."]
-script = ExtResource( 11 )
 
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/MenuItems/ButtonTerminals" to="MenuBar" method="_on_ButtonTerminals_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/MenuItems/ButtonDashboards" to="MenuBar" method="_on_ButtonDashboards_pressed"]
