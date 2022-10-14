@@ -70,7 +70,7 @@ class RowElement extends Label:
 	
 	func get_min_size():
 		var font = get_font("font")
-		return font.get_string_size(text)
+		return font.get_string_size(text).x
 		
 	func request_sort(pressed: bool):
 		sort_button.flip_v = pressed
@@ -87,8 +87,8 @@ func clear_all():
 	for child in header_row.get_children():
 		header_row.remove_child(child)
 		child.queue_free()
-	
 	clear_rows()
+
 
 func clear_rows():
 	for child in rows.get_children():
@@ -96,13 +96,14 @@ func clear_rows():
 		child.queue_free()
 
 
+const HeaderCell = preload("res://components/widgets/widget_table/widget_table_header_cell.tscn")
 func set_headers(headers : Array):
 	var c_id:= 0
 	for header in headers:
-		var element = RowElement.new(header, header_color, true, c_id)
-		element.align = Label.ALIGN_LEFT
-		header_row.add_child(element)
-		element.connect("sort_requested", self, "sort_by_column")
+		var header_cell = HeaderCell.instance()
+		header_row.add_child(header_cell)
+		header_cell.set_cell(header, header_color, c_id)
+		header_cell.connect("sort_requested", self, "sort_by_column")
 		c_id += 1
 
 
@@ -208,11 +209,11 @@ func get_column_min_size(column : int):
 	var size = -100000000000
 	for row in rows.get_children():
 		var cell = row.get_child(column)
-		var cell_size = cell.get_min_size().x
+		var cell_size = cell.get_min_size()
 		if size < cell_size:
 			size = cell_size
 	
-	size = max(size, header_row.get_child(column).get_min_size().x + 24)
+	size = max(size, header_row.get_child(column).get_min_size() + 24)
 	
 	return size
 
@@ -266,6 +267,10 @@ func _on_TableWidget_resized():
 		autoadjust_table()
 
 func sort_by_column(column : int, ascending : bool):
+	for header in header_row.get_children():
+		if header.column != column:
+			header.reset_sort()
+	
 	clear_rows()
 	sorting_column = column
 	

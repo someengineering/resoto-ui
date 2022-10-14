@@ -47,17 +47,15 @@ onready var options_container := find_node("Options")
 onready var controller_container := $"%ColorControllersContainer"
 onready var data_source_types := $"%DataSourceTypeOptionButton"
 onready var new_data_source_container := $"%NewDataSourceHBox"
-onready var data_sources_templates_options := $WidgetOptions/VBoxContainer/HBoxContainer/DataSourceTemplates
+onready var data_sources_templates_options := $Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox/DataSourceTemplates
+
 
 func _ready() -> void:
 	Style.add_self(self, Style.c.BG_BACK)
 	for key in widgets:
 		widget_type_options.add_item(key)
-		
-	var file = File.new()
-	if file.open("res://tests/data_sources_templates.json", File.READ) == OK:
-		data_sources_templates = parse_json(file.get_as_text())
-
+	
+	data_sources_templates = Utils.load_json("res://tests/data_sources_templates.json")
 
 
 func _on_AddWidgetButton_pressed() -> void:
@@ -283,7 +281,6 @@ func _on_AddDataSource_pressed() -> void:
 	update_new_data_vis()
 
 	var template_id : int = data_sources_templates_options.get_selected_id()
-	print(template_id)
 	if template_id >= 0 and data_sources_templates_options.text != "New":
 		var template_data : Dictionary = data_sources_templates[template_id]["data"]
 		for key in template_data:

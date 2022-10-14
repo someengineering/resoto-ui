@@ -17,10 +17,6 @@ func init_menu():
 	on_ui_shrink_changed()
 	$HamburgerMenu/Panel/MenuContent/MenuItems/ResotoUIVersion.text = "Resoto UI v" + _g.ui_version
 
-onready var config_menu : PopupMenu = $Title/SideMenu2/Config.get_popup()
-
-func _ready() -> void:
-	config_menu.connect("id_pressed", self, "_on_config_menu_id_pressed")
 
 func _input(event:InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and Input.is_key_pressed(KEY_CONTROL):

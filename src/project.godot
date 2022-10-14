@@ -89,26 +89,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/widgets/Indicator.gd"
 }, {
-"base": "Control",
-"class": "DashboardContainer",
-"language": "GDScript",
-"path": "res://components/widgets/DashboardContainer.gd"
-}, {
-"base": "Node",
-"class": "DataSource",
-"language": "GDScript",
-"path": "res://components/widgets/DataSource.gd"
-}, {
-"base": "Label",
-"class": "DynamicLabel",
-"language": "GDScript",
-"path": "res://components/widgets/DynamicLabel.gd"
-}, {
-"base": "BaseWidget",
-"class": "Indicator",
-"language": "GDScript",
-"path": "res://components/widgets/Indicator.gd"
-}, {
 "base": "Node",
 "class": "JWTGenerator",
 "language": "GDScript",
@@ -138,16 +118,6 @@ _global_script_classes=[ {
 "class": "RightClickCopyLabel",
 "language": "GDScript",
 "path": "res://scripts/tools/right_click_copy.gd"
-}, {
-"base": "Control",
-"class": "RotatedLabel",
-"language": "GDScript",
-"path": "res://components/widgets/RotatedLabel.gd"
-}, {
-"base": "BaseWidget",
-"class": "TableWidget",
-"language": "GDScript",
-"path": "res://components/widgets/TableWidget.gd"
 }, {
 "base": "Control",
 "class": "RotatedLabel",
@@ -251,6 +221,10 @@ window/size/test_width=1280
 window/size/test_height=720
 window/dpi/allow_hidpi=true
 window/stretch/aspect="expand"
+
+[editor]
+
+scene_naming=2
 
 [editor_plugins]
 

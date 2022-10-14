@@ -140,8 +140,8 @@ scroll_horizontal_enabled = false
 script = ExtResource( 4 )
 
 [node name="Content" type="MarginContainer" parent="Margin/VBox/MainPanel/ScrollContainer"]
-margin_right = 1892.0
-margin_bottom = 962.0
+margin_right = 1878.0
+margin_bottom = 10.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 5
