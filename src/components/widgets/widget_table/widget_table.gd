@@ -120,7 +120,7 @@ func set_data(data, type):
 		rows.remove(0)
 		
 		for row in rows:
-			row = " ,"+row
+#			row = " ,"+row
 			raw_data.append(row.split(",",false))
 	
 	update_table()

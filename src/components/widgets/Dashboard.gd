@@ -22,6 +22,13 @@ var filters : Dictionary = {
 	"account" : ""
 }
 
+var remap_old_data:= {
+	"res://components/widgets/TableWidget.tscn":	"Table",
+	"res://components/widgets/Indicator.tscn":		"Indicator",
+	"res://components/widgets/Chart.tscn":			"Chart",
+	"res://components/widgets/HeatMap.tscn":		"Heatmap",
+}
+
 
 func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
@@ -46,6 +53,8 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	if widget_data.scene is BaseWidget:
 		widget = widget_data.scene
 	elif widget_data.scene is String:
+		if not widget_data.has("widget_type"):
+			widget_data["widget_type"] = remap_old_data[widget_data.scene]
 		widget = dashboard_container.WidgetScenes[widget_data.widget_type].instance()
 		
 	container.call_deferred("set_widget", widget)

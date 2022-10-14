@@ -20,7 +20,7 @@ func set_cell(_cell_text:String, _cell_color:Color, _column:int=-1) -> void:
 
 func get_min_size() -> float:
 	var font = label.get_font("font")
-	var total_size = font.get_string_size(cell_text).x
+	var total_size = font.get_string_size(cell_text).x + 10
 	return total_size
 
 func on_mouse_entered() -> void:

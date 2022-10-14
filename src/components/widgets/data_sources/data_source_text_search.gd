@@ -40,7 +40,8 @@ func copy_data_source(other : TextSearchDataSource):
 	filters = other.filters
 	list = other.list
 	query = other.query
-	
+
+
 func update_query():
 	query = text_to_search
 	
