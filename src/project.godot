@@ -12,32 +12,32 @@ _global_script_classes=[ {
 "base": "DataSource",
 "class": "AggregateSearchDataSource",
 "language": "GDScript",
-"path": "res://components/widgets/data_sources/data_source_aggregate_search.gd"
+"path": "res://components/dashboard/data_sources/data_source_aggregate_search.gd"
 }, {
 "base": "Control",
 "class": "BaseWidget",
 "language": "GDScript",
-"path": "res://components/widgets/shared/base_widget.gd"
+"path": "res://components/dashboard/shared/base_widget.gd"
 }, {
 "base": "Label",
 "class": "ClippedLabel",
 "language": "GDScript",
-"path": "res://components/widgets/ClippedLabel.gd"
+"path": "res://components/dashboard/shared/clipped_label.gd"
 }, {
 "base": "MarginContainer",
 "class": "ColorCondition",
 "language": "GDScript",
-"path": "res://components/widgets/ColorCondition.gd"
+"path": "res://components/dashboard/new_widget_popup/color_condition.gd"
 }, {
 "base": "Node",
 "class": "ColorController",
 "language": "GDScript",
-"path": "res://components/widgets/ColorController.gd"
+"path": "res://components/dashboard/widget_indicator/color_controller.gd"
 }, {
 "base": "MarginContainer",
 "class": "ColorControllerUi",
 "language": "GDScript",
-"path": "res://components/widgets/ColorControllerUI.gd"
+"path": "res://components/dashboard/new_widget_popup/color_controller_ui.gd"
 }, {
 "base": "VBoxContainer",
 "class": "ConfigComponentArray",
@@ -72,22 +72,22 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "DashboardContainer",
 "language": "GDScript",
-"path": "res://components/widgets/DashboardContainer.gd"
+"path": "res://components/dashboard/dashboard_container.gd"
 }, {
 "base": "Node",
 "class": "DataSource",
 "language": "GDScript",
-"path": "res://components/widgets/data_sources/data_source.gd"
+"path": "res://components/dashboard/data_sources/data_source.gd"
 }, {
 "base": "Label",
 "class": "DynamicLabel",
 "language": "GDScript",
-"path": "res://components/widgets/shared/dynamic_label.gd"
+"path": "res://components/dashboard/shared/dynamic_label.gd"
 }, {
 "base": "BaseWidget",
 "class": "Indicator",
 "language": "GDScript",
-"path": "res://components/widgets/widget_indicator/widget_indicator.gd"
+"path": "res://components/dashboard/widget_indicator/widget_indicator.gd"
 }, {
 "base": "Node",
 "class": "JWTGenerator",
@@ -122,12 +122,12 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "RotatedLabel",
 "language": "GDScript",
-"path": "res://components/widgets/RotatedLabel.gd"
+"path": "res://components/dashboard/widget_heatmap/rotated_label.gd"
 }, {
 "base": "BaseWidget",
 "class": "TableWidget",
 "language": "GDScript",
-"path": "res://components/widgets/widget_table/widget_table.gd"
+"path": "res://components/dashboard/widget_table/widget_table.gd"
 }, {
 "base": "Control",
 "class": "TerminalComponent",
@@ -137,12 +137,12 @@ _global_script_classes=[ {
 "base": "DataSource",
 "class": "TextSearchDataSource",
 "language": "GDScript",
-"path": "res://components/widgets/data_sources/data_source_text_search.gd"
+"path": "res://components/dashboard/data_sources/data_source_text_search.gd"
 }, {
 "base": "DataSource",
 "class": "TimeSeriesDataSource",
 "language": "GDScript",
-"path": "res://components/widgets/data_sources/data_source_time_series.gd"
+"path": "res://components/dashboard/data_sources/data_source_time_series.gd"
 }, {
 "base": "Reference",
 "class": "UserAgent",
@@ -157,7 +157,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "WidgetContainer",
 "language": "GDScript",
-"path": "res://components/widgets/container/widget_container.gd"
+"path": "res://components/dashboard/container/widget_container.gd"
 } ]
 _global_script_class_icons={
 "AggregateSearchDataSource": "",
@@ -217,8 +217,8 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1920
 window/size/height=1080
-window/size/test_width=1280
-window/size/test_height=720
+window/size/test_width=1600
+window/size/test_height=1200
 window/dpi/allow_hidpi=true
 window/stretch/aspect="expand"
 

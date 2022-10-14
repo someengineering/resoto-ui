@@ -15,10 +15,11 @@
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=13]
 [ext_resource path="res://components/config/config_templates/component_config_template_dict_element.tscn" type="PackedScene" id=14]
 [ext_resource path="res://assets/icons/icon_128_reload_thick.svg" type="Texture" id=15]
-[ext_resource path="res://components/widgets/ComboBox.tscn" type="PackedScene" id=16]
+[ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=17]
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=18]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=19]
+
 
 [sub_resource type="StyleBoxFlat" id=18]
 content_margin_left = 4.0
