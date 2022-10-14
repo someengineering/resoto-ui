@@ -202,6 +202,7 @@ func get_control_for_property(property : Dictionary) -> Control:
 			control_signal = "text_changed"
 		TYPE_COLOR:
 			control = ColorPickerButton.new()
+			printt("preview_widget", property.name, preview_widget[property.name])
 			control.color = preview_widget[property.name]
 			control_signal = "color_changed"
 	
@@ -364,6 +365,7 @@ func _on_DataSourceTypeOptionButton_item_selected(index):
 	for c in template_options.get_children():
 		c.queue_free()
 	var data_source_type = data_source_types.get_selected_id()
+	var templates_available:= false
 	for i in data_sources_templates.size():
 		var data : Dictionary = data_sources_templates[i]
 		if data["data"]["type"] == data_source_type and widget_type_options.text in data["Widgets"]:
@@ -373,3 +375,5 @@ func _on_DataSourceTypeOptionButton_item_selected(index):
 			new_template.set_meta("template_id", i)
 			new_template.align = Button.ALIGN_LEFT
 			template_options.add_child(new_template)
+			templates_available = true
+	$"%TemplatesAvailableLabel".visible = templates_available

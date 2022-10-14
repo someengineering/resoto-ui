@@ -2,9 +2,9 @@ tool
 class_name TableWidget
 extends BaseWidget
 
-var header_color : Color
-var row_color : Color
-var column_header_color : Color
+var header_color: Color			= Color.red
+var row_color: Color			= Color.blue
+var column_header_color: Color	= Color.green
 
 const HeaderCell = preload("res://components/dashboard/widget_table/widget_table_header_cell.tscn")
 const TableCell = preload("res://components/dashboard/widget_table/widget_table_cell.tscn")
