@@ -2,7 +2,6 @@ class_name TimeSeriesDataSource
 extends DataSource
 
 # Variables for data source container
-
 var metric : String = ""
 var aggregator : String = ""
 var filters : String = ""

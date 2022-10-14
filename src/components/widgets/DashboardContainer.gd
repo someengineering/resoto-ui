@@ -1,6 +1,13 @@
 class_name DashboardContainer
 extends Control
 
+const WidgetScenes := {
+	"Indicator" : preload("res://components/widgets/widget_indicator/widget_indicator.tscn"),
+	"Chart" : preload("res://components/widgets/widget_chart/widget_chart.tscn"),
+	"Table" : preload("res://components/widgets/widget_table/widget_table.tscn"),
+	"Heatmap" : preload("res://components/widgets/widget_heatmap/widget_heatmap.tscn")
+}
+
 signal deleted
 signal dashboard_changed(dashboard)
 signal dashboard_closed(dashboard)
@@ -41,6 +48,10 @@ onready var regions_combo := find_node("RegionsCombo")
 func _ready() -> void:
 	Style.add($VBoxContainer/MinimizedBar/MinimizeButton, Style.c.LIGHT)
 	Style.add(find_node("RefreshIcon"), Style.c.LIGHT)
+	
+	dashboard.dashboard_container = self
+	add_widget_popup.dashboard_container = self
+	
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
 	add_widget_popup.interval = 144 # 500 points in a day

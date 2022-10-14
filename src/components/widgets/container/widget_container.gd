@@ -395,6 +395,7 @@ func get_data() -> Dictionary:
 		
 	var widget_data : Dictionary = {
 		"scene" : widget.filename,
+		"widget_type" : widget.widget_type_id,
 		"settings" : widget_settings,
 		"title" : title,
 		"color_controllers_data" : color_controllers_data

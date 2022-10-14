@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://assets/theme/SourceCodePro-Regular.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://components/widgets/Indicator.gd" type="Script" id=2]
-[ext_resource path="res://components/widgets/DynamicLabel.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/widgets/widget_indicator/widget_indicator.gd" type="Script" id=1]
+[ext_resource path="res://assets/theme/SourceCodePro-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://components/widgets/shared/dynamic_label.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/widgets/ColorController.tscn" type="PackedScene" id=4]
 
 [sub_resource type="StyleBoxFlat" id=9]
@@ -39,12 +39,13 @@ resource_local_to_scene = true
 size = 34
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 1 )
+font_data = ExtResource( 2 )
 
 [node name="Indicator" type="Control"]
 margin_right = 256.0
 margin_bottom = 256.0
-script = ExtResource( 2 )
+script = ExtResource( 1 )
+widget_type_id = "Indicator"
 single_value = true
 supported_types = [ 0, 1 ]
 unit = "[unit]"
@@ -82,7 +83,6 @@ custom_fonts/font = SubResource( 8 )
 text = "0.00"
 autowrap = true
 clip_text = true
-can_copy_lmb = true
 
 [node name="UnitLabel" parent="IndicatorBackground" instance=ExtResource( 3 )]
 anchor_left = 0.03125

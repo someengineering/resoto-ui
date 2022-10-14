@@ -6,6 +6,7 @@ const title_add = "Add Widget"
 const title_edit = "Edit Widget [%s]"
 const title_duplicate = "Duplicate Widget [base: %s]"
 
+var dashboard_container:DashboardContainer = null setget set_dashboard_container
 var current_widget_preview_name : String = "Indicator"
 var current_wdiget_properties : Dictionary = {}
 var preview_widget : BaseWidget = null
@@ -33,13 +34,6 @@ var data_sources_templates : Array = []
 onready var data_source_container := find_node("DataSources")
 onready var color_controller_ui_scene := preload("res://components/widgets/ColorControllerUI.tscn")
 
-const widgets := {
-	"Indicator" : preload("res://components/widgets/Indicator.tscn"),
-	"Chart" : preload("res://components/widgets/Chart.tscn"),
-	"Table" : preload("res://components/widgets/TableWidget.tscn"),
-	"Heatmap" : preload("res://components/widgets/HeatMap.tscn")
-}
-
 onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("WidgetNameEdit")
@@ -52,16 +46,21 @@ onready var data_sources_templates_options := $Content/Content/HBoxContainer/Wid
 
 func _ready() -> void:
 	Style.add_self(self, Style.c.BG_BACK)
-	for key in widgets:
-		widget_type_options.add_item(key)
+	
 	
 	data_sources_templates = Utils.load_json("res://tests/data_sources_templates.json")
+
+func set_dashboard_container(_dc:DashboardContainer) -> void:
+	dashboard_container = _dc
+	widget_type_options.clear()
+	for key in dashboard_container.WidgetScenes:
+		widget_type_options.add_item(key)
 
 
 func _on_AddWidgetButton_pressed() -> void:
 	var widget
 	if widget_to_edit == null or duplicating:
-		widget = widgets[widget_type_options.text].instance()
+		widget = dashboard_container.WidgetScenes[widget_type_options.text].instance()
 	else:
 		widget = widget_to_edit.widget
 		
@@ -85,9 +84,10 @@ func _on_AddWidgetButton_pressed() -> void:
 		
 	if widget_to_edit == null or duplicating:
 		var widget_data := {
-			"scene" : widget,
-			"title" : widget_name_label.text,
-			"data_sources" : new_data_sources
+			"scene"			: widget,
+			"widget_type"	: widget_type_options.text,
+			"title"			: widget_name_label.text,
+			"data_sources"	: new_data_sources
 		}
 		emit_signal("widget_added", widget_data)
 	else:
@@ -118,7 +118,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		preview_widget.queue_free()
 	
 	if widget_to_edit == null:
-		preview_widget = widgets[widget_type].instance()
+		preview_widget = dashboard_container.WidgetScenes[widget_type].instance()
 	else:
 		preview_widget = load(widget_to_edit.widget.filename).instance()
 		for key in get_preview_widget_properties():

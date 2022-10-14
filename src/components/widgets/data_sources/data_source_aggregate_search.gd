@@ -1,8 +1,6 @@
 class_name AggregateSearchDataSource
 extends DataSource
 
-
-
 func _init():
 	type = TYPES.AGGREGATE_SEARCH
 

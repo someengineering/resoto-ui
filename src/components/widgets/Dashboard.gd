@@ -1,14 +1,15 @@
 extends Control
 
-onready var widgets : Control = $Widgets
-onready var grid_background : ColorRect = $Grid
-
 export var x_grid_ratio := 10.0 
 export var y_grid_size := 100.0 
 export var grid_margin := Vector2(5,5)
 
+var dashboard_container:DashboardContainer = null
+
+onready var widgets : Control = $Widgets
+onready var grid_background : ColorRect = $Grid
 onready var _x_grid_size := rect_size.x / x_grid_ratio
-onready var widget_container_scene := preload("res://components/widgets/WidgetContainer.tscn")
+onready var widget_container_scene := preload("res://components/widgets/container/widget_container.tscn")
 
 var locked := true
 
@@ -42,25 +43,25 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	
 	var widget : BaseWidget
 	
-	if widget_data["scene"] is BaseWidget:
-		widget = widget_data["scene"]
-	elif widget_data["scene"] is String:
-		widget = load(widget_data["scene"]).instance()
+	if widget_data.scene is BaseWidget:
+		widget = widget_data.scene
+	elif widget_data.scene is String:
+		widget = dashboard_container.WidgetScenes[widget_data.widget_type].instance()
 		
 	container.call_deferred("set_widget", widget)
-	container.call_deferred("set_data_sources", widget_data["data_sources"])
-	container.set_deferred("title", widget_data["title"])
+	container.call_deferred("set_data_sources", widget_data.data_sources)
+	container.set_deferred("title", widget_data.title)
 	container.call_deferred("lock", locked)
 	
-	if "settings" in widget_data:
-		for key in widget_data["settings"]:
-			if "color" in key and not widget_data["settings"][key] is Color:
+	if widget_data.has("settings"):
+		for key in widget_data.settings:
+			if "color" in key and not widget_data.settings[key] is Color:
 				# asume it was passed as string
-				widget_data["settings"][key] = str2var(widget_data["settings"][key])
-			widget.set(key, widget_data["settings"][key])
+				widget_data.settings[key] = str2var(widget_data.settings[key])
+			widget.set(key, widget_data.settings[key])
 	
-	if "color_controllers_data" in widget_data:
-		widget.color_controllers_data = widget_data["color_controllers_data"]
+	if widget_data.has("color_controllers_data"):
+		widget.color_controllers_data = widget_data.color_controllers_data
 	
 	container.connect("config_pressed", owner, "_on_WidgetContainer_config_pressed")
 	container.connect("duplicate_widget", owner, "_on_WidgetContainer_duplicate_pressed")

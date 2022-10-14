@@ -4,6 +4,10 @@ extends Control
 enum DATA_TYPE {INSTANT, RANGE}
 
 export (DATA_TYPE) var data_type = DATA_TYPE.INSTANT
+
+# This must be defined in DashboardContainer.WidgetScenes
+export var widget_type_id:String = "Not Defined"
+
 # 0 max_data_sources means infinite
 export (int) var max_data_sources : int = 1
 export (bool) var single_value : bool = false

@@ -296,8 +296,7 @@ scroll_horizontal_enabled = false
 script = ExtResource( 7 )
 
 [node name="Content" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
-margin_right = 1920.0
-margin_bottom = 1039.0
+margin_right = 1906.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 

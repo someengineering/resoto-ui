@@ -33,7 +33,6 @@ func clear_rows():
 		child.queue_free()
 
 
-
 func set_headers(headers : Array):
 	var c_id:= 0
 	for header in headers:

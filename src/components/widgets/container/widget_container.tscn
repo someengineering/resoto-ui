@@ -1,17 +1,17 @@
 [gd_scene load_steps=35 format=2]
 
-[ext_resource path="res://components/widgets/WidgetContainer.gd" type="Script" id=1]
-[ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=2]
-[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
-[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=4]
-[ext_resource path="res://assets/icons/icon_128_edit_frame.svg" type="Texture" id=5]
-[ext_resource path="res://assets/icons/icon_128_fullscreen_variant.svg" type="Texture" id=6]
-[ext_resource path="res://components/widgets/AggregateSearchDataSource.gd" type="Script" id=7]
+[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=1]
+[ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=2]
+[ext_resource path="res://components/elements/Styled/styled_icon_button_hover.gd" type="Script" id=3]
+[ext_resource path="res://components/widgets/data_sources/data_source_aggregate_search.gd" type="Script" id=4]
+[ext_resource path="res://components/widgets/container/widget_container.gd" type="Script" id=5]
+[ext_resource path="res://assets/icons/icon_128_edit_frame.svg" type="Texture" id=6]
+[ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=7]
 [ext_resource path="res://assets/icons/icon_special_resize_buttons_new.svg" type="Texture" id=8]
-[ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=9]
-[ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=10]
-[ext_resource path="res://components/elements/Styled/styled_icon_button_hover.gd" type="Script" id=11]
-[ext_resource path="res://components/elements/Styled/IconButton.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/icons/icon_128_fullscreen_variant.svg" type="Texture" id=9]
+[ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=10]
+[ext_resource path="res://components/elements/Styled/IconButton.tscn" type="PackedScene" id=11]
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=12]
 
 [sub_resource type="StyleBoxFlat" id=21]
 bg_color = Color( 0, 0, 0, 1 )
@@ -137,7 +137,7 @@ corner_radius_top_right = 4
 [node name="WidgetContainer" type="Control"]
 margin_right = 256.0
 margin_bottom = 256.0
-script = ExtResource( 1 )
+script = ExtResource( 5 )
 
 [node name="Shadow" type="Panel" parent="."]
 modulate = Color( 1, 1, 1, 0.0862745 )
@@ -291,7 +291,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 40.0
 mouse_filter = 2
-theme = ExtResource( 3 )
+theme = ExtResource( 12 )
 custom_constants/margin_right = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
@@ -326,7 +326,7 @@ margin_right = 85.0
 margin_bottom = 71.0
 custom_constants/separation = 8
 
-[node name="ConfigButton" parent="QueryWarning/VBox/PanelContainer/VBox" instance=ExtResource( 13 )]
+[node name="ConfigButton" parent="QueryWarning/VBox/PanelContainer/VBox" instance=ExtResource( 11 )]
 modulate = Color( 1, 1, 1, 0.588235 )
 margin_left = 21.0
 margin_right = 57.0
@@ -334,7 +334,7 @@ margin_bottom = 36.0
 rect_min_size = Vector2( 36, 36 )
 mouse_filter = 1
 flat = true
-icon_tex = ExtResource( 2 )
+icon_tex = ExtResource( 10 )
 icon_margin = 0
 
 [node name="QueryStatusTitle" type="Label" parent="QueryWarning/VBox/PanelContainer/VBox"]
@@ -395,10 +395,10 @@ hint_tooltip = "Maximize widget"
 mouse_filter = 1
 theme_type_variation = "ButtonBorderless"
 toggle_mode = true
-icon = ExtResource( 6 )
+icon = ExtResource( 9 )
 flat = true
 expand_icon = true
-script = ExtResource( 11 )
+script = ExtResource( 3 )
 
 [node name="ExportButton" type="Button" parent="PanelContainer/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
@@ -409,10 +409,10 @@ rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Export data to csv"
 mouse_filter = 1
 theme_type_variation = "ButtonBorderless"
-icon = ExtResource( 10 )
+icon = ExtResource( 7 )
 flat = true
 expand_icon = true
-script = ExtResource( 11 )
+script = ExtResource( 3 )
 
 [node name="DuplicateButton" type="Button" parent="PanelContainer/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
@@ -423,10 +423,10 @@ rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Duplicate widget"
 mouse_filter = 1
 theme_type_variation = "ButtonBorderless"
-icon = ExtResource( 9 )
+icon = ExtResource( 2 )
 flat = true
 expand_icon = true
-script = ExtResource( 11 )
+script = ExtResource( 3 )
 
 [node name="ConfigButton" type="Button" parent="PanelContainer/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
@@ -437,10 +437,10 @@ rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Edit widget"
 mouse_filter = 1
 theme_type_variation = "ButtonBorderless"
-icon = ExtResource( 5 )
+icon = ExtResource( 6 )
 flat = true
 expand_icon = true
-script = ExtResource( 11 )
+script = ExtResource( 3 )
 
 [node name="DeleteButton" type="Button" parent="PanelContainer/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
@@ -451,15 +451,15 @@ rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Delete widget"
 mouse_filter = 1
 theme_type_variation = "ButtonBorderless"
-icon = ExtResource( 4 )
+icon = ExtResource( 1 )
 flat = true
 expand_icon = true
-script = ExtResource( 11 )
+script = ExtResource( 3 )
 
 [node name="ResizeTween" type="Tween" parent="."]
 
 [node name="AggregateSearchDataSource" type="Node" parent="."]
-script = ExtResource( 7 )
+script = ExtResource( 4 )
 
 [connection signal="moved_or_resized" from="." to="." method="_on_WidgetContainer_moved_or_resized"]
 [connection signal="pressed" from="QueryWarning/VBox/PanelContainer/VBox/ConfigButton" to="." method="_on_ConfigButton_pressed"]
