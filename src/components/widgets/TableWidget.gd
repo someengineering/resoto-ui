@@ -18,15 +18,11 @@ onready var scroll_container := $Table/ScrollContainer
 
 
 class RowElement extends Label:
-	var SortButton = preload("res://components/elements/Styled/IconButtonSmall.tscn")
-	signal sort_requested(column, ascending)
-	
 	var color : Color setget set_color
 	var rect := ColorRect.new()
 	var column_id : int
-	var sort_button:Button = null
 	
-	func _init(t, c, sort_enabled := false, c_id:=-1):
+	func _init(t, c, c_id:=-1):
 		column_id = c_id
 		text = t.replace('"', "")
 		self.color = c
@@ -35,20 +31,7 @@ class RowElement extends Label:
 		size_flags_vertical = SIZE_FILL
 		valign = Label.VALIGN_CENTER
 		align = Label.ALIGN_CENTER
-		
 		rect_min_size.y = 24
-		
-		if sort_enabled:
-			sort_button = SortButton.instance()
-			sort_button.hide()
-			sort_button.anchor_top = 0.5
-			sort_button.anchor_bottom = 0.5
-			sort_button.flat = true
-			sort_button.toggle_mode = true
-			sort_button.icon_tex = load("res://assets/icons/icon_128_sort.svg")
-			sort_button.connect("toggled", self, "request_sort")
-			add_child(sort_button)
-		
 		mouse_filter = MOUSE_FILTER_STOP
 	
 	
@@ -71,14 +54,10 @@ class RowElement extends Label:
 	func get_min_size():
 		var font = get_font("font")
 		return font.get_string_size(text).x
-		
-	func request_sort(pressed: bool):
-		sort_button.flip_v = pressed
-		emit_signal("sort_requested", column_id, pressed)
-		
+	
 	func on_mouse_entered():
 		rect.color = color.lightened(0.1)
-		
+	
 	func on_mouse_exited():
 		rect.color = color
 
@@ -123,7 +102,7 @@ func add_row(data : Array):
 			color = row_color
 			if r_count % 2 == 1:
 				color = color.darkened(0.3)
-		row.add_child(RowElement.new(str(value), color, false, c_id))
+		row.add_child(RowElement.new(str(value), color, c_id))
 		c_id += 1
 	rows.add_child(row)
 
