@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://assets/theme/SourceCodePro-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://components/widgets/Indicator.gd" type="Script" id=2]
@@ -6,9 +6,23 @@
 [ext_resource path="res://components/widgets/ColorController.tscn" type="PackedScene" id=4]
 
 [sub_resource type="StyleBoxFlat" id=9]
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
 bg_color = Color( 1, 1, 1, 1 )
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 0.765625, 0.765625, 0.765625, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture2D" id=11]
+gradient = SubResource( 2 )
+width = 4
+height = 4
+fill_from = Vector2( 0.370833, 0.0916667 )
+fill_to = Vector2( 0.5625, 1 )
 
 [sub_resource type="DynamicFontData" id=10]
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
@@ -39,10 +53,20 @@ unit = "[unit]"
 show_comma = false
 
 [node name="IndicatorBackground" type="Panel" parent="."]
-self_modulate = Color( 0.105882, 0.0784314, 0.113725, 1 )
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 9 )
+
+[node name="Gradient" type="TextureRect" parent="IndicatorBackground"]
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -5.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 11 )
+expand = true
 
 [node name="ValueLabel" parent="IndicatorBackground" instance=ExtResource( 3 )]
 anchor_right = 1.0
@@ -50,6 +74,7 @@ anchor_bottom = 0.875
 margin_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_colors/font_color = Color( 1, 1, 1, 1 )
@@ -57,6 +82,7 @@ custom_fonts/font = SubResource( 8 )
 text = "0.00"
 autowrap = true
 clip_text = true
+can_copy_lmb = true
 
 [node name="UnitLabel" parent="IndicatorBackground" instance=ExtResource( 3 )]
 anchor_left = 0.03125
