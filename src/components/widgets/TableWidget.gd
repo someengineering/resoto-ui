@@ -6,6 +6,9 @@ var header_color : Color
 var row_color : Color
 var column_header_color : Color
 
+const HeaderCell = preload("res://components/widgets/widget_table/widget_table_header_cell.tscn")
+const TableCell = preload("res://components/widgets/widget_table/widget_table_cell.tscn")
+
 var raw_data : Array 
 var sorting_column : int = 0
 var sorting_type : String = ""
@@ -15,51 +18,6 @@ var header_columns_count := 0
 onready var header_row := $Table/ScrollContainer/TableVBox/Header
 onready var rows := $Table/ScrollContainer/TableVBox/ScrollContainer/Rows
 onready var scroll_container := $Table/ScrollContainer
-
-
-class RowElement extends Label:
-	var color : Color setget set_color
-	var rect := ColorRect.new()
-	var column_id : int
-	
-	func _init(t, c, c_id:=-1):
-		column_id = c_id
-		text = t.replace('"', "")
-		self.color = c
-		
-		size_flags_horizontal = SIZE_FILL
-		size_flags_vertical = SIZE_FILL
-		valign = Label.VALIGN_CENTER
-		align = Label.ALIGN_CENTER
-		rect_min_size.y = 24
-		mouse_filter = MOUSE_FILTER_STOP
-	
-	
-	func _ready():
-		call_deferred("add_child", rect)
-		rect.color = color
-		rect.anchor_right = 1
-		rect.anchor_bottom = 1
-		rect.show_behind_parent = true
-		rect.mouse_filter = MOUSE_FILTER_IGNORE
-		if column_id == -1:
-			column_id = get_parent().get_children().find(self)
-		connect("mouse_entered", self, "on_mouse_entered")
-		connect("mouse_exited", self, "on_mouse_exited")
-	
-	func set_color(new_color : Color):
-		color = new_color
-		rect.color = color
-	
-	func get_min_size():
-		var font = get_font("font")
-		return font.get_string_size(text).x
-	
-	func on_mouse_entered():
-		rect.color = color.lightened(0.1)
-	
-	func on_mouse_exited():
-		rect.color = color
 
 
 func clear_all():
@@ -75,7 +33,7 @@ func clear_rows():
 		child.queue_free()
 
 
-const HeaderCell = preload("res://components/widgets/widget_table/widget_table_header_cell.tscn")
+
 func set_headers(headers : Array):
 	var c_id:= 0
 	for header in headers:
@@ -92,19 +50,16 @@ func add_row(data : Array):
 	row.size_flags_vertical = SIZE_EXPAND_FILL
 	var c_id:= 0
 	var r_count:= rows.get_child_count()
-	for value in data:
-		var color : Color
-		if c_id <= header_columns_count:
-			color = column_header_color 
-			if r_count % 2 == 1:
-				color = color.darkened(0.3)
-		else:
-			color = row_color
-			if r_count % 2 == 1:
-				color = color.darkened(0.3)
-		row.add_child(RowElement.new(str(value), color, c_id))
-		c_id += 1
 	rows.add_child(row)
+	for value in data:
+		var is_header_column:bool = c_id <= header_columns_count
+		var color:Color = column_header_color if is_header_column else row_color
+		var table_cell = TableCell.instance()
+		table_cell.data_cell = is_header_column
+		table_cell.even_row = r_count % 2 == 0
+		row.add_child(table_cell)
+		table_cell.set_cell(str(value), color, c_id)
+		c_id += 1
 
 
 func _get_property_list() -> Array:
@@ -275,20 +230,24 @@ func sort_descending(a, b):
 
 func set_column_header_color(_new_color:Color):
 	column_header_color = _new_color
-	clear_all()
-	update_table()
+	for row in rows.get_children():
+		for cell in row.get_children():
+			if cell.data_cell:
+				cell.cell_color = column_header_color
 
 
 func set_row_color(_new_color:Color):
 	row_color = _new_color
-	clear_all()
-	update_table()
+	for row in rows.get_children():
+		for cell in row.get_children():
+			if not cell.data_cell:
+				cell.cell_color = row_color
 
 
 func set_header_color(_new_color:Color):
 	header_color = _new_color
-	clear_all()
-	update_table()
+	for header in header_row.get_children():
+		header.cell_color = header_color
 
 
 func get_csv(sepparator := ",", end_of_line := "\n"):

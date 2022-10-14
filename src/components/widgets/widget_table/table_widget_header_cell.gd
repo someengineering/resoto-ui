@@ -38,11 +38,14 @@ func on_mouse_exited() -> void:
 func set_cell_text(_new:String) -> void:
 	cell_text = _new.replace('"', "")
 	label.text = cell_text
-	label.add_color_override("font_color", sort_icon.modulate.lightened(0.3))
 
 func set_cell_color(_new:Color) -> void:
 	cell_color = _new
 	cell_bg.modulate = cell_color
+	if cell_color.get_luminance() > 0.6:
+		label.add_color_override("font_color", Style.col_map[Style.c.BG])
+	else:
+		label.add_color_override("font_color", Style.col_map[Style.c.LIGHT].lightened(0.2))
 
 func next_sort() -> void:
 	sorting = wrapi(sorting+1, 1, 3)
