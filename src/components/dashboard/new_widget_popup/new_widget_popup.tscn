@@ -77,6 +77,7 @@ custom_constants/separation = 1
 [node name="WidgetNameLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetNameVBox" index="0"]
 margin_right = 385.0
 margin_bottom = 21.0
+theme_type_variation = "LabelBold"
 text = "Widget Name"
 
 [node name="WidgetNameEdit" type="LineEdit" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetNameVBox" index="1"]
@@ -96,6 +97,7 @@ custom_constants/separation = 1
 [node name="WidgetTypeLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetTypeVBox" index="0"]
 margin_right = 385.0
 margin_bottom = 21.0
+theme_type_variation = "LabelBold"
 text = "Widget Type"
 
 [node name="WidgetType" type="OptionButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetTypeVBox" index="1"]
@@ -121,6 +123,7 @@ margin_top = 6.0
 margin_right = 222.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
+theme_type_variation = "LabelBold"
 text = "Data Sources"
 
 [node name="DataSourceTypeOptionButton" type="OptionButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox" index="1"]
@@ -187,6 +190,7 @@ custom_constants/separation = 1
 [node name="WidgetPreviewLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer" index="0"]
 margin_right = 385.0
 margin_bottom = 21.0
+theme_type_variation = "LabelBold"
 text = "Widget Preview"
 
 [node name="PreviewContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer" index="1"]
@@ -234,6 +238,7 @@ margin_bottom = 496.0
 
 [node name="Options" type="GridContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/PanelContainer" index="0"]
 margin_right = 385.0
+size_flags_horizontal = 3
 columns = 2
 
 [node name="ColorControllersContainer" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/PanelContainer" index="1"]

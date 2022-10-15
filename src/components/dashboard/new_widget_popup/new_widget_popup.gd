@@ -6,6 +6,11 @@ const title_add = "Add Widget"
 const title_edit = "Edit Widget [%s]"
 const title_duplicate = "Duplicate Widget [base: %s]"
 
+const HexColorPicker := preload("res://components/shared/hex_color_picker.tscn")
+const IntSpinBoxBig := preload("res://components/shared/int_spinbox_big.tscn")
+const DataSourceWidget := preload("res://components/dashboard/new_widget_popup/data_source_container.tscn")
+const ColorControllerUIScene := preload("res://components/dashboard/new_widget_popup/color_controller_ui.tscn")
+
 var dashboard_container:DashboardContainer = null setget set_dashboard_container
 var current_widget_preview_name : String = "Indicator"
 var current_wdiget_properties : Dictionary = {}
@@ -25,15 +30,11 @@ var dashboard_filters : Dictionary = {
 	"account" : ""
 }
 
-var data_source_widget := preload("res://components/dashboard/new_widget_popup/data_source_container.tscn")
-
 var query : String = ""
 
 var data_sources_templates : Array = []
 
 onready var data_source_container := find_node("DataSources")
-onready var color_controller_ui_scene := preload("res://components/dashboard/new_widget_popup/color_controller_ui.tscn")
-
 onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("WidgetNameEdit")
@@ -148,13 +149,13 @@ func create_preview(widget_type : String = "Indicator") -> void:
 			options_container.add_child(label)
 			options_container.add_child(value)
 			
-			value.size_flags_horizontal |= SIZE_EXPAND
+			value.size_flags_horizontal |= SIZE_SHRINK_END
 		elif property.name == "Widget Settings":
 			 found_settings = true
 			
 	for child in preview_widget.get_children():
 		if child is ColorController:
-			var controller_ui := color_controller_ui_scene.instance()
+			var controller_ui := ColorControllerUIScene.instance()
 			controller_ui.color_controller = child
 			controller_ui.size_flags_horizontal |= SIZE_EXPAND
 			controller_container.add_child(controller_ui)
@@ -187,8 +188,8 @@ func get_control_for_property(property : Dictionary) -> Control:
 	
 	match property.type:
 		TYPE_INT:
-			control = SpinBox.new()
-			control.value = preview_widget[property.name]
+			control = IntSpinBoxBig.instance()
+			control.value_to_set = preview_widget[property.name]
 			control_signal = "value_changed"
 		TYPE_BOOL:
 			control = CheckBox.new()
@@ -201,9 +202,8 @@ func get_control_for_property(property : Dictionary) -> Control:
 			control.text = preview_widget[property.name]
 			control_signal = "text_changed"
 		TYPE_COLOR:
-			control = ColorPickerButton.new()
-			printt("preview_widget", property.name, preview_widget[property.name])
-			control.color = preview_widget[property.name]
+			control = HexColorPicker.instance()
+			control.color_to_set = preview_widget[property.name]
 			control_signal = "color_changed"
 	
 	control.connect(control_signal, preview_widget, "set_"+property.name)
@@ -247,7 +247,7 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 		widget_name_label.text = widget_to_edit.title
 		$"%WidgetPreviewTitleLabel".text = widget_to_edit.title
 		for data_source in widget_to_edit.data_sources:
-			var ds = data_source_widget.instance()
+			var ds = DataSourceWidget.instance()
 			ds.datasource_type = data_source.type
 			data_source_container.add_child(ds)
 			ds.data_source = data_source
@@ -285,7 +285,7 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 		_g.emit_signal("add_toast", "Max Data Sources Exceeded", "Can't add more data sources to this kind of widget.", 1, self)
 		return
 		
-	var ds = data_source_widget.instance()
+	var ds = DataSourceWidget.instance()
 	ds.datasource_type = data_source_types.get_selected_id()
 	
 	data_source_container.add_child(ds)
@@ -341,13 +341,13 @@ func duplicate_widget(widget) -> void:
 	duplicating = true
 	widget_to_edit = widget
 	popup_centered()
-	set_window_title(title_duplicate % [widget_type_options.text])
+	set_window_title(title_duplicate % [widget.widget.widget_type_id])
 
 
 func edit_widget(widget) -> void:
 	widget_to_edit = widget
 	popup_centered()
-	set_window_title(title_edit % [widget_type_options.text])
+	set_window_title(title_edit % [widget.widget.widget_type_id])
 
 
 func _close_popup():

@@ -14,9 +14,9 @@ mouse_filter = 2
 script = ExtResource( 1 )
 widget_type_id = "Table"
 supported_types = [ 1, 2 ]
-header_color = Color( 0, 0, 0, 1 )
-row_color = Color( 0, 0, 0, 1 )
-column_header_color = Color( 0, 0, 0, 1 )
+header_color = Color( 0, 0.301961, 0.584314, 1 )
+row_color = Color( 0.0489686, 0.160932, 0.265625, 1 )
+column_header_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 
 [node name="Background" type="Panel" parent="."]
 self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
@@ -73,5 +73,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
 
+[node name="UpdateDelayTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
 [connection signal="resized" from="." to="." method="_on_TableWidget_resized"]
 [connection signal="resized" from="Table/ScrollContainer/TableVBox/ScrollContainer/Rows" to="." method="_on_Rows_resized"]
+[connection signal="timeout" from="UpdateDelayTimer" to="." method="_on_UpdateDelayTimer_timeout"]

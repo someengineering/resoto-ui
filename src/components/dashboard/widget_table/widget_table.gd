@@ -2,9 +2,9 @@ tool
 class_name TableWidget
 extends BaseWidget
 
-var header_color: Color			= Color.red
-var row_color: Color			= Color.blue
-var column_header_color: Color	= Color.green
+var header_color: Color
+var row_color: Color
+var column_header_color: Color
 
 const HeaderCell = preload("res://components/dashboard/widget_table/widget_table_header_cell.tscn")
 const TableCell = preload("res://components/dashboard/widget_table/widget_table_cell.tscn")
@@ -12,12 +12,15 @@ const TableCell = preload("res://components/dashboard/widget_table/widget_table_
 var raw_data : Array 
 var sorting_column : int = 0
 var sorting_type : String = ""
+var first_update:= true
 
 var header_columns_count := 0
 
 onready var header_row := $Table/ScrollContainer/TableVBox/Header
 onready var rows := $Table/ScrollContainer/TableVBox/ScrollContainer/Rows
+onready var scroll_rows := $Table/ScrollContainer/TableVBox/ScrollContainer
 onready var scroll_container := $Table/ScrollContainer
+onready var update_delay_timer := $UpdateDelayTimer
 
 func _ready():
 	Style.add_self($Background, Style.c.BG)
@@ -131,7 +134,7 @@ func set_data(data, type):
 func update_table():
 	for data in raw_data:
 		add_row(data)
-	
+	yield(VisualServer, "frame_post_draw")
 	autoadjust_table()
 
 
@@ -162,12 +165,23 @@ func set_column_size(column, size):
 
 
 func autoadjust_table():
+	if first_update and header_row.get_child_count() > 0:
+		first_update = false
+		_on_UpdateDelayTimer_timeout()
+		return
+	modulate.a = 0.5
+	update_delay_timer.start()
+
+
+func _on_UpdateDelayTimer_timeout():
+	modulate.a = 1.0
 	var columns = header_row.get_child_count()
 	var columns_sizes : Array = []
 	
 	var total_column_width:= 0.0
+	var scrollbar_size = 0 if !scroll_rows.get_v_scrollbar().visible else scroll_rows.get_v_scrollbar().rect_size.x
 	for i in columns:
-		var col_w = get_column_min_size(i)
+		var col_w = get_column_min_size(i) if i > 0 else get_column_min_size(i) + scrollbar_size
 		columns_sizes.append(col_w)
 		total_column_width += col_w
 	
@@ -190,15 +204,14 @@ func autoadjust_table():
 	columns_sizes[0] += max(container_width - total_column_width, 0)
 	
 	for i in columns:
-		set_column_size(i, columns_sizes[i])
+		var s = columns_sizes[i] if i > 0 else columns_sizes[i] - scrollbar_size
+		set_column_size(i, s)
 	
-	yield(VisualServer,"frame_post_draw")
 	scroll_container.scroll_horizontal = container_width < total_column_width
 
 
 func _on_TableWidget_resized():
 	if is_instance_valid(header_row):
-		yield(VisualServer,"frame_post_draw")
 		autoadjust_table()
 
 

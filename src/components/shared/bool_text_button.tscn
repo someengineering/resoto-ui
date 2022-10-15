@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://components/shared/bool_text_button.gd" type="Script" id=1]
+
+[node name="BoolTextButton" type="Button"]
+margin_right = 24.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 180, 0 )
+toggle_mode = true
+text = "On"
+script = ExtResource( 1 )
