@@ -117,7 +117,7 @@ _global_script_classes=[ {
 "base": "Label",
 "class": "RightClickCopyLabel",
 "language": "GDScript",
-"path": "res://scripts/tools/right_click_copy.gd"
+"path": "res://scripts/tools/left_click_copy.gd"
 }, {
 "base": "Control",
 "class": "RotatedLabel",

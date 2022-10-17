@@ -2,35 +2,60 @@ extends MarginContainer
 
 const NODE_LIMIT:int = 500
 
+const SearchResult = preload("res://components/fulltext_search_menu/full_text_search_result_template.tscn")
+
 var active_request:ResotoAPI.Request
 var parent_node_id:String
 var parent_node_name:String
 var filter_variables:Dictionary
 
 onready var parent_button = find_node("ParentNodeButton")
-onready var kind_label = find_node("KindNameLabel")
+onready var list_kind_button = $"%ListKindButton"
+onready var node_kind_button = $"%NodeKindButton"
+onready var arrow_icon_mid = $"%ArrowIconMid"
+onready var all_kinds_label = $"%AllKindsLabel"
+onready var search_type_label = $"%SearchTypeLabel"
 onready var kind_arrow = find_node("KindLabelArrow")
 onready var template = find_node("ResultTemplate")
 onready var scroll_container = $Margin/VBox/MainPanel/ScrollContainer/Content
 onready var vbox = $Margin/VBox/MainPanel/ScrollContainer/Content/ListContainer
 
 
-func _ready():
-	Style.add($Margin/VBox/TitleBar/Icon, Style.c.LIGHT)
-
-
 func show_kind_from_node_data(parent_node:Dictionary, kind:String):
 	var search_command = "id(" + parent_node.id + ") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
 	
+	search_type_label.hide()
+	all_kinds_label.hide()
+	arrow_icon_mid.show()
+	node_kind_button.show()
+	list_kind_button.show()
+	
+	node_kind_button.text = parent_node.reported.kind
 	parent_node_id = parent_node.id
 	parent_node_name = parent_node.reported.name
 	
 	parent_button.text = parent_node_name
 	parent_button.set_meta("id", parent_node_id)
 	parent_button.show()
-	kind_label.text = kind
+	
+	list_kind_button.text = kind
 	
 	print(search_command)
+	active_request = API.graph_search(search_command, self, "list")
+
+
+func show_kind(kind:String):
+	var search_command = "is(" + kind + ") limit " + str(NODE_LIMIT)
+	
+	search_type_label.hide()
+	list_kind_button.hide()
+	arrow_icon_mid.hide()
+	parent_button.hide()
+	
+	all_kinds_label.show()
+	node_kind_button.show()
+	node_kind_button.text = kind
+	
 	active_request = API.graph_search(search_command, self, "list")
 
 
@@ -38,22 +63,39 @@ func show_kind_from_node_id(id:String, kind:String):
 	var search_command = "id(" + id + ") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
 	parent_node_id = id
 	
+	search_type_label.hide()
+	node_kind_button.hide()
+	all_kinds_label.hide()
+	arrow_icon_mid.show()
+	list_kind_button.show()
+	
 	parent_button.text = parent_node_id
 	parent_button.set_meta("id", parent_node_id)
 	parent_button.show()
-	kind_label.text = kind
+	
+	list_kind_button.text = kind
 	
 	active_request = API.graph_search(search_command, self, "list")
 
 
-func show_list_from_search(parent_node:Dictionary, search_command:String, kind_label_text:String):
+func show_list_from_search(parent_node:Dictionary, search_command:String, kind_label_string:String):
 	parent_node_id = parent_node.id
 	parent_node_name = parent_node.reported.name
 	
+	node_kind_button.hide()
 	parent_button.text = parent_node_name
 	parent_button.set_meta("id", parent_node_id)
 	parent_button.show()
-	kind_label.text = kind_label_text
+	list_kind_button.hide()
+	search_type_label.show()
+	arrow_icon_mid.show()
+	
+	if kind_label_string == "<--":
+		search_type_label.text = "All Predecessors"
+	elif kind_label_string == "-->":
+		search_type_label.text = "All Successors"
+	else:
+		search_type_label.text = kind_label_string
 	
 	print(search_command)
 	active_request = API.graph_search(search_command, self, "list")
@@ -77,7 +119,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 func add_result_element(r, parent_element:Node):
 	var filter_string = ""
 	
-	var new_result = template.duplicate()
+	var new_result = SearchResult.instance()
 	parent_element.add_child(new_result)
 	new_result.connect("pressed", self, "_on_node_button_pressed", [r.id])
 	new_result.name = r.id
@@ -103,8 +145,9 @@ func add_result_element(r, parent_element:Node):
 	
 	filter_variables[r.id] = filter_string
 	
-	new_result.get_node("Result/ResultName").text = "[" + r_kind + "] :: " + r_name
-	new_result.get_node("Result/ResultDetails").text = ancestors
+	new_result.get_node("VBox/Top/ResultKind").text = r_kind
+	new_result.get_node("VBox/Top/ResultName").text = r_name
+	new_result.get_node("VBox/ResultDetails").text = ancestors
 
 
 func filter_results(filter_string:String):
@@ -138,3 +181,16 @@ func reset_display():
 
 func _on_FullTextSearch_text_changed(new_text):
 	filter_results(new_text)
+
+
+func _on_NodeKindButton_pressed():
+	show_kind(node_kind_button.text)
+
+
+func _on_ListKindButton_pressed():
+	show_kind(list_kind_button.text)
+
+
+func _on_IconButton_pressed():
+	reset_display()
+	_g.content_manager.change_section("node_single_info")

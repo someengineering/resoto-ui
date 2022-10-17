@@ -3,7 +3,6 @@
 [ext_resource path="res://components/elements/element_treemap.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
 
-
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.505747, 1 )
 colors = PoolColorArray( 0.159164, 0.25059, 0.667969, 1, 0.015625, 0.630859, 1, 1, 0.539063, 0.902771, 1, 1 )

@@ -2,7 +2,8 @@
 
 [ext_resource path="res://components/config/config_templates/component_config_line_edit_int.gd" type="Script" id=1]
 [ext_resource path="res://components/shared/int_spinbox_big.gd" type="Script" id=2]
-[ext_resource path="res://components/elements/Styled/IconButton.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/elements/Styled/icon_button.tscn" type="PackedScene" id=3]
+
 
 [node name="IntSpinnerBig" type="HBoxContainer"]
 anchor_right = 1.0

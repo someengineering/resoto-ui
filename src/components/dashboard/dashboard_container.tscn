@@ -2,7 +2,7 @@
 
 [ext_resource path="res://components/dashboard/new_widget_popup/new_widget_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://components/shared/date_range_selector.tscn" type="PackedScene" id=2]
-[ext_resource path="res://components/elements/Styled/IconButtonText.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/elements/Styled/icon_button_text.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/tools/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=4]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=5]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=6]
@@ -18,7 +18,8 @@
 [ext_resource path="res://assets/icons/icon_128_refresh_thick.svg" type="Texture" id=16]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=17]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=18]
-[ext_resource path="res://components/elements/Styled/IconButton.tscn" type="PackedScene" id=19]
+[ext_resource path="res://components/elements/Styled/icon_button.tscn" type="PackedScene" id=19]
+
 
 [sub_resource type="Gradient" id=10]
 colors = PoolColorArray( 0.0470588, 0.0941176, 0.133333, 1, 0.0392157, 0.145098, 0.247059, 1 )

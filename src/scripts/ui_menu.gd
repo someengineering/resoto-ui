@@ -1,11 +1,15 @@
 extends CanvasLayer
 
+export (bool) var force_hide_message_log:= false
+
 onready var hb_tween = $HamburgerMenu/HamburgerTween
 onready var hb_menu = $HamburgerMenu
 onready var hb_button = find_node("HamburgerButton")
 
 
 func _ready() -> void:
+	$"%HamburgerMenuItems/ButtonMessageLog".visible = OS.has_feature("editor") and not force_hide_message_log
+	
 	get_tree().root.connect("size_changed", self, "on_ui_shrink_changed")
 	_g.connect("ui_shrink_changed", self, "on_ui_shrink_changed")
 	init_menu()
@@ -15,7 +19,7 @@ func init_menu():
 	yield(get_tree(), "idle_frame")
 	hb_menu.rect_position.x = -400
 	on_ui_shrink_changed()
-	$HamburgerMenu/Panel/MenuContent/MenuItems/ResotoUIVersion.text = "Resoto UI v" + _g.ui_version
+	$"%HamburgerMenuItems/ResotoUIVersion".text = "Resoto UI v" + _g.ui_version
 
 
 func _input(event:InputEvent) -> void:

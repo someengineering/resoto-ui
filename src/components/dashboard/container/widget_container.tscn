@@ -10,7 +10,7 @@
 [ext_resource path="res://assets/icons/icon_special_resize_buttons_new.svg" type="Texture" id=8]
 [ext_resource path="res://assets/icons/icon_128_fullscreen_variant.svg" type="Texture" id=9]
 [ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=10]
-[ext_resource path="res://components/elements/Styled/IconButton.tscn" type="PackedScene" id=11]
+[ext_resource path="res://components/elements/Styled/icon_button.tscn" type="PackedScene" id=11]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=12]
 
 [sub_resource type="StyleBoxFlat" id=21]

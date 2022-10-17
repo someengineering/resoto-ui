@@ -1,15 +1,16 @@
 extends LineEdit
 
 const NO_RESULT_MESSAGE = "0 results"
+const ResultTemplate = preload("res://components/fulltext_search_menu/full_text_search_result_template.tscn")
 
 var popup_x_size:int = 500
 var result_limit:int = 10
 var active_request: ResotoAPI.Request
 var count_request: ResotoAPI.Request
 
-onready var result_template = $ResultTemplate
 onready var popup = $ResultsPopUp
 onready var popup_results = $ResultsPopUp/VBox
+onready var single_node_info = _g.content_manager.find_node("NodeSingleInfo")
 
 func _on_FullTextSearch_focus_entered() -> void:
 	_g.focus_in_search = true
@@ -60,9 +61,15 @@ func show_search_results(results:Array) -> void:
 	if text == "":
 		return
 	
+	var current_showing_id:= ""
+	if single_node_info.visible and single_node_info.current_node_id != "":
+		current_showing_id = single_node_info.current_node_id
+	
 	for r in results:
-		var new_result = result_template.duplicate()
+		var new_result = ResultTemplate.instance()
 		new_result.show()
+		if r.id == current_showing_id:
+			new_result.modulate *= 1.4
 		new_result.connect("pressed", self, "on_result_button_clicked", [r.id])
 		new_result.hint_tooltip = "id: " + r.id
 		new_result.set_meta("id", r.id)
@@ -81,7 +88,8 @@ func show_search_results(results:Array) -> void:
 		
 		var r_name = r.reported.name
 		var r_kind = r.reported.kind
-		new_result.get_node("VBox/ResultName").text = "[" + r_kind + "] :: " + r_name
+		new_result.get_node("VBox/Top/ResultKind").text = r_kind
+		new_result.get_node("VBox/Top/ResultName").text = r_name
 		new_result.get_node("VBox/ResultDetails").text = ancestors
 		popup_results.add_child(new_result)
 	
@@ -94,6 +102,7 @@ func show_search_results(results:Array) -> void:
 
 
 func on_result_button_clicked(_id:String):
+	popup.hide()
 	_g.content_manager.change_section("node_single_info")
 	_g.content_manager.find_node("NodeSingleInfo").show_node(_id)
 

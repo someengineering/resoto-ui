@@ -24,7 +24,7 @@ func _on_gui_input(input:InputEvent):
 		orig_text = text
 		orig_size = rect_size
 		text = COPY_TEXT
-		rect_size = orig_size
+		rect_min_size = orig_size
 	OS.set_clipboard(orig_text)
 
 
