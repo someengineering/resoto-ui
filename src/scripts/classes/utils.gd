@@ -102,13 +102,25 @@ static func truncate_string_px(_string:String, letter_size:float, _max_size:floa
 static func print_dict(_dict:Dictionary, _depth:int) -> void:
 	var _spacing = ""
 	for i in _depth:
-		_spacing += ">  "
+		_spacing += "  "
 	for d in _dict.keys():
 		prints(_spacing, d)
 		if typeof(_dict[d]) == TYPE_DICTIONARY:
 			print_dict(_dict[d], _depth+1)
 		else:
-			prints(_spacing + ">   ", _dict[d])
+			prints(_spacing + "  %s: %s" % [d, str(_dict[d])])
+
+
+static func readable_dict(_dict:Dictionary, readable:String="", _depth:int=0) -> String:
+	var _spacing = ""
+	for i in _depth:
+		_spacing += "  "
+	for d in _dict.keys():
+		if typeof(_dict[d]) == TYPE_DICTIONARY:
+			readable += readable_dict(_dict[d], readable, _depth+1)
+		else:
+			readable += (_spacing + "  %s: %s\n" % [d, str(_dict[d])])
+	return readable
 
 
 static func comma_sep(number):

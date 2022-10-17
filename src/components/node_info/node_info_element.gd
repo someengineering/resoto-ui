@@ -28,7 +28,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 			return
 		
 		var current_result = _response.transformed.result
-		$"%AllDataTextEdit".text = var2str(current_result)
+		$"%AllDataTextEdit".text = Utils.readable_dict(current_result[0])
 		breadcrumbs.clear()
 		breadcrumbs["edges"] = []
 		breadcrumbs["nodes"] = {}
