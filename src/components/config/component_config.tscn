@@ -20,7 +20,6 @@
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=18]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=19]
 
-
 [sub_resource type="StyleBoxFlat" id=18]
 content_margin_left = 4.0
 content_margin_right = 4.0

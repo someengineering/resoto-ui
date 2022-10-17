@@ -24,7 +24,10 @@ onready var list_line_edit := $VBoxContainer/TextSearchSettings/ListLineEdit
 
 var interval : int = 3600
 
+
 func _ready() -> void:
+	$"%TitleLabel".text = "Data Source %s" % str(get_parent().get_children().find(self)+1)
+	Style.add_self(self, Style.c.BG)
 	match datasource_type:
 		DataSource.TYPES.TIME_SERIES:
 			data_source = TimeSeriesDataSource.new()
@@ -41,8 +44,8 @@ func _ready() -> void:
 			$VBoxContainer/TextSearchSettings.show()
 			API.cli_execute("kinds", self)
 	data_source.widget = widget
+	data_source.connect("query_status", self, "_on_data_source_query_status")
 	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
-	
 
 
 func _on_cli_execute_done(error : int, response):
@@ -71,8 +74,9 @@ func _on_MetricsOptions_option_changed(option : String) -> void:
 func _on_metrics_query_finished(_error:int, response) -> void:
 	var labels := []
 	var data = response.transformed.result
-	if data.begins_with("Error"):
-		_g.emit_signal("add_toast", "Error receiving Metrics", data, 2, self)
+	
+	if data is String and data.begins_with("Error"):
+		_g.emit_signal("add_toast", "Error receiving Metrics", "Remote Message: %s" % data, 2, self)
 		return
 	if data.data.result.size() == 0:
 		_g.emit_signal("add_toast", "Can't find Labels", "Can't find labels for the selected metric", 2, self)
@@ -94,7 +98,8 @@ func update_query(force_query := false) -> void:
 		query_edit.text = data_source.query
 		_on_QueryEdit_item_rect_changed()
 		emit_signal("source_changed")
-	
+
+
 func set_widget(new_widget : BaseWidget) -> void:
 	widget = new_widget
 	data_source.widget = new_widget
@@ -133,27 +138,64 @@ func _on_ByLineEdit_text_entered(sum_by) -> void:
 	update_query()
 
 
-# All the Query TextEdit stuff like resizing, updating etc.
-# A bit more complex because I wanted Textedit with automatic height adjustment
-onready var query_timer:= $VBoxContainer/QueryEditVBox/QueryUpdateTimer
+func reset_error_display():
+	$Warning.hide()
+
+
+var delete_nl:= false
 func _on_QueryEdit_focus_exited():
-	_on_QueryUpdateTimer_timeout()
+	execute_query_edit()
 
 
 func _on_QueryEdit_item_rect_changed():
 	var row_count = query_edit.get_total_visible_rows()
 	query_edit.rect_min_size.y = (row_count*25)+10
 
-
-func _on_QueryUpdateTimer_timeout():
+func execute_query_edit():
 	data_source.query = query_edit.text
-	_on_QueryEdit_item_rect_changed()
 	emit_signal("source_changed")
 
 
-func _on_QueryEdit_text_entered() -> void:
+func _on_QueryEdit_text_changed():
 	_on_QueryEdit_item_rect_changed()
-	query_timer.start()
+
+
+func _on_QueryEdit_gui_input(event:InputEventKey):
+	if event is InputEventKey and event.is_pressed() and event.physical_scancode == KEY_ENTER:
+		query_edit.text = query_edit.text.replace("\n", "")
+		execute_query_edit()
+		query_edit.cursor_set_line(query_text_edit_cursor_pos[0])
+		query_edit.cursor_set_column(query_text_edit_cursor_pos[1])
+		get_tree().set_input_as_handled()
+
+var query_text_edit_cursor_pos:= []
+func _on_QueryEdit_cursor_changed():
+	query_text_edit_cursor_pos = [query_edit.cursor_get_line(), query_edit.cursor_get_column()]
+
+
+func _on_data_source_query_status(_status:int, _title:String, _message:=""):
+	var error_icon = $"%ErrorIcon"
+	var tooltip = "[b][color=#%s]%s[/color][/b]" % [Style.col_map[Style.c.ERR_MSG].to_html(), _title]
+	if _message != "":
+		tooltip += "\n" + _message
+	match _status:
+		OK:
+			error_icon.hide()
+			$Warning.hide()
+		FAILED:
+			error_icon.show()
+			hint_tooltip = tooltip
+			$Warning.show()
+		ERR_QUERY_FAILED:
+			error_icon.show()
+			hint_tooltip = tooltip
+			$Warning.show()
+
+
+func _make_custom_tooltip(for_text):
+	var tooltip = preload("res://components/shared/custom_bb_hint_tooltip_error.tscn").instance()
+	tooltip.get_node("Text").bbcode_text = for_text
+	return tooltip
 
 
 func set_data_source(new_data_source : DataSource) -> void:
@@ -207,5 +249,5 @@ func _on_KindsComboBox_option_changed(option):
 
 
 func _on_ExpandButton_toggled(button_pressed:bool):
-	$VBoxContainer/DatasourceSettings.visible = not button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
-	$VBoxContainer/TextSearchSettings.visible = not button_pressed and datasource_type == DataSource.TYPES.SEARCH
+	$VBoxContainer/DatasourceSettings.visible = button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
+	$VBoxContainer/TextSearchSettings.visible = button_pressed and datasource_type == DataSource.TYPES.SEARCH

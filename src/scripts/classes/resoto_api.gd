@@ -44,7 +44,13 @@ func refresh_jwt_header(header:Headers) -> void:
 func _transform_json(error:int, response:ResotoAPI.Response) -> void:
 	if error == OK:
 		var string_to_parse:String = response.body.get_string_from_utf8()
-		if not string_to_parse.begins_with("Error") and not string_to_parse.empty():
+		if (string_to_parse.begins_with("Error")
+		or string_to_parse.begins_with("Invalid")
+		or string_to_parse.empty()):
+			# Handle error gracefully... 
+			response.transformed["result"] = string_to_parse
+			return
+		else:
 			var json_result:JSONParseResult = JSON.parse(string_to_parse)
 			if json_result.error == OK:
 				response.transformed["result"] = json_result.result

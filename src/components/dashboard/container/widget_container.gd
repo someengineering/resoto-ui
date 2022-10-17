@@ -456,6 +456,8 @@ func get_data_sources_data() -> Array:
 
 onready var query_warning_title = $QueryWarning/VBox/PanelContainer/VBox/QueryStatusTitle
 func _on_data_source_query_status(_type:int=0, _title:="Widget Error", _message:=""):
+	if _type == OK:
+		return
 	query_warning_title.visible = _title != ""
 	query_warning_title.text = _title
 	$QueryWarning/VBox/PanelContainer.hint_tooltip = _title + "\n" + _message

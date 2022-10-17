@@ -224,24 +224,26 @@ margin_top = 457.0
 margin_right = 385.0
 margin_bottom = 461.0
 
-[node name="Label" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="2"]
+[node name="WidgetOptionsLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="2"]
+unique_name_in_owner = true
 margin_top = 466.0
 margin_right = 385.0
 margin_bottom = 487.0
 theme_type_variation = "LabelBold"
 text = "Widget Options"
 
-[node name="PanelContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="3"]
+[node name="WidgetOptionsPanelContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="3"]
+unique_name_in_owner = true
 margin_top = 492.0
 margin_right = 385.0
 margin_bottom = 496.0
 
-[node name="Options" type="GridContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/PanelContainer" index="0"]
+[node name="Options" type="GridContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="0"]
 margin_right = 385.0
 size_flags_horizontal = 3
 columns = 2
 
-[node name="ColorControllersContainer" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/PanelContainer" index="1"]
+[node name="ColorControllersContainer" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="1"]
 unique_name_in_owner = true
 margin_top = 4.0
 margin_right = 385.0

@@ -57,9 +57,13 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 	
 	var data = response.transformed.result
 	
-	if _error != 0 or typeof(data) == TYPE_STRING:
-		_g.emit_signal("add_toast", "Request Error", data, 1, self)
-		emit_signal("query_status", 0, "Request Error", data)
+	if _error != 0 or data.has("error") or typeof(data) == TYPE_STRING:
+		if data.has("error"):
+			_g.emit_signal("add_toast", "Request Error", data.error, 1, self)
+			emit_signal("query_status", FAILED, "Request Error", data.error)
+		else:
+			_g.emit_signal("add_toast", "Request Error", data, 1, self)
+			emit_signal("query_status", FAILED, "Request Error", data)
 		return
 	
 	if not data.has("data"):
@@ -68,7 +72,7 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 	
 	if data.data.result.size() == 0:
 		_g.emit_signal("add_toast", "Empty TSDB result.", "", 2, self)
-		emit_signal("query_status", 0, "Empty TSDB result.")
+		emit_signal("query_status", ERR_QUERY_FAILED, "Empty TSDB result.")
 		widget.value = 0
 		return
 
@@ -76,24 +80,36 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 		var n : int = data["data"]["result"].size()
 		if n > 0:
 			if widget.single_value:
-				widget.value = data["data"]["result"][0]["value"][1]
-				if n > 1:
+				if n == 1:
+					emit_signal("query_status", OK, "")
+					widget.value = data["data"]["result"][0]["value"][1]
+				else:
 					var warning_title := "Multiple values for single value widget."
 					var warning_body := "This widget accept just one value, but the query result has %d" % n
 					_g.emit_signal("add_toast", warning_title, warning_body, 2, self)
-					emit_signal("query_status", 0, warning_title, warning_body)
+					emit_signal("query_status", ERR_QUERY_FAILED, warning_title, warning_body)
+			else:
+				emit_signal("query_status", OK, "")
 	else:
 		_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"], 1, self)
-		emit_signal("query_status", 0, "TSDB Query Error %s" % data["errorType"], data["error"])
+		emit_signal("query_status", FAILED, "TSDB Query Error %s" % data["errorType"], data["error"])
 		widget.value = "NaN"
+
 
 func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 	making_query = false
+	if not is_instance_valid(widget):
+		return
+	
 	var data = response.transformed.result
 	
-	if _error != 0 or typeof(data) == TYPE_STRING:
-		_g.emit_signal("add_toast", "Request Error", data, 1, self)
-		emit_signal("query_status", 0, "Request Error")
+	if _error != 0 or data.has("error") or typeof(data) == TYPE_STRING:
+		if data.has("error"):
+			_g.emit_signal("add_toast", "Request Error", data.error, 1, self)
+			emit_signal("query_status", FAILED, "Request Error", data.error)
+		else:
+			_g.emit_signal("add_toast", "Request Error", data, 1, self)
+			emit_signal("query_status", FAILED, "Request Error", data)
 		return
 	
 	if not data.has("data"):
@@ -102,7 +118,7 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 	if data.data.result.size() == 0:
 		widget.clear_series()
 		_g.emit_signal("add_toast", "Empty TSDB result.", "", 2, self)
-		emit_signal("query_status", 0, "Empty TSDB result.")
+		emit_signal("query_status", FAILED, "Empty TSDB result.")
 		return
 		
 	if data["status"] == "success":
@@ -123,11 +139,12 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 					replace =serie.metric[label.strings[0]]
 				l = l.replace("{%s}"%label.strings[0], replace)
 			widget.add_serie(array, null, l, stacked)
-			
+		
+		emit_signal("query_status", OK, "")
 		widget.complete_update(true)
 	else:
 			_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"],2, self)
-			emit_signal("query_status", 0, "TSDB Query Error %s" % data["errorType"], data["error"])
+			emit_signal("query_status", FAILED, "TSDB Query Error %s" % data["errorType"], data["error"])
 			widget.value = "NaN"
 			
 

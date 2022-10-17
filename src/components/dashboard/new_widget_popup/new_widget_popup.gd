@@ -139,6 +139,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 	
 	# create properties options
 	var found_settings := false
+	var show_widget_options_label := false
 	for property in preview_widget.get_property_list():
 		if found_settings:
 			if property.type == TYPE_NIL:
@@ -148,6 +149,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 			var value = get_control_for_property(property)
 			options_container.add_child(label)
 			options_container.add_child(value)
+			show_widget_options_label = true
 			
 			value.size_flags_horizontal |= SIZE_SHRINK_END
 		elif property.name == "Widget Settings":
@@ -163,7 +165,10 @@ func create_preview(widget_type : String = "Indicator") -> void:
 			for i in child.conditions.size():
 				var condition = child.conditions[i]
 				controller_ui.add_condition(condition[0], condition[1])
-
+	
+	$"%WidgetOptionsLabel".visible = show_widget_options_label
+	$"%WidgetOptionsPanelContainer".visible = show_widget_options_label
+	
 	preview_container.add_child(preview_widget)
 	current_widget_preview_name = widget_type
 	
