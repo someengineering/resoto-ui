@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://components/dashboard/new_widget_popup/new_widget_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://components/shared/date_range_selector.tscn" type="PackedScene" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=5]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=6]
 [ext_resource path="res://components/dashboard/dashboard.gd" type="Script" id=7]
-[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=8]
 [ext_resource path="res://assets/icons/icon_128_fullscreen_variant.svg" type="Texture" id=9]
 [ext_resource path="res://assets/icons/icon_128_edit_frame.svg" type="Texture" id=10]
 [ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=11]
@@ -39,16 +38,6 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 shadow_color = Color( 0, 0, 0, 0.0470588 )
-
-[sub_resource type="DynamicFont" id=3]
-size = 24
-font_data = ExtResource( 8 )
-
-[sub_resource type="StyleBoxEmpty" id=4]
-
-[sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="StyleBoxEmpty" id=5]
 
 [sub_resource type="Shader" id=6]
 code = "shader_type canvas_item;
@@ -141,72 +130,71 @@ margin_bottom = 37.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MainBar" type="HBoxContainer" parent="VBoxContainer/PanelContainer/Content"]
+[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer/PanelContainer/Content"]
 margin_right = 1904.0
 margin_bottom = 33.0
 
-[node name="FiltersContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/Content/MainBar"]
+[node name="FiltersContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/Content/HFlowContainer"]
 margin_right = 473.0
 margin_bottom = 33.0
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer"]
 margin_top = 6.0
 margin_right = 41.0
 margin_bottom = 27.0
 text = "Cloud"
 
-[node name="CloudsCombo" parent="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer" instance=ExtResource( 18 )]
+[node name="CloudsCombo" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer" instance=ExtResource( 18 )]
 margin_left = 45.0
 margin_right = 145.0
 margin_bottom = 33.0
 items = [  ]
 
-[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer"]
 margin_left = 149.0
 margin_top = 6.0
 margin_right = 211.0
 margin_bottom = 27.0
 text = "Account"
 
-[node name="AccountsCombo" parent="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer" instance=ExtResource( 18 )]
+[node name="AccountsCombo" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer" instance=ExtResource( 18 )]
 margin_left = 215.0
 margin_right = 315.0
 margin_bottom = 33.0
 items = [  ]
 
-[node name="Label3" type="Label" parent="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer"]
+[node name="Label3" type="Label" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer"]
 margin_left = 319.0
 margin_top = 6.0
 margin_right = 369.0
 margin_bottom = 27.0
 text = "Region"
 
-[node name="RegionsCombo" parent="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer" instance=ExtResource( 18 )]
+[node name="RegionsCombo" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer" instance=ExtResource( 18 )]
 margin_left = 373.0
 margin_right = 473.0
 margin_bottom = 33.0
 items = [  ]
 
-[node name="Spacer" type="Control" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-margin_left = 477.0
-margin_right = 1756.0
+[node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer/Content/HFlowContainer"]
+margin_left = 759.0
+margin_right = 909.0
 margin_bottom = 33.0
-size_flags_horizontal = 3
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 6
+size_flags_vertical = 0
+text = "Last 24 hours"
+flat = true
 
-[node name="DashboardNameLabel" type="LineEdit" parent="VBoxContainer/PanelContainer/Content/MainBar"]
-visible = false
-margin_right = 1581.0
+[node name="ToolButtons" type="HBoxContainer" parent="VBoxContainer/PanelContainer/Content/HFlowContainer"]
+margin_left = 1759.0
+margin_right = 1903.0
 margin_bottom = 33.0
-size_flags_horizontal = 3
-custom_colors/font_color_uneditable = Color( 0.85098, 0.721569, 1, 1 )
-custom_fonts/font = SubResource( 3 )
-custom_styles/read_only = SubResource( 4 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/normal = SubResource( 5 )
-text = "Dashboard"
+size_flags_horizontal = 10
 
-[node name="AddWidgetButton" type="Button" parent="VBoxContainer/PanelContainer/Content/MainBar"]
+[node name="DashboardAddWidgetButton" type="Button" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons"]
+unique_name_in_owner = true
 visible = false
 margin_left = 1746.0
 margin_right = 1775.0
@@ -215,33 +203,33 @@ rect_min_size = Vector2( 29, 29 )
 size_flags_horizontal = 10
 text = "+ Add Widget"
 
-[node name="KebapButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 19 )]
+[node name="KebapButton" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons" instance=ExtResource( 19 )]
 unique_name_in_owner = true
-margin_left = 1760.0
-margin_right = 1793.0
 hint_tooltip = "More Options"
 icon_tex = ExtResource( 15 )
 
-[node name="LockButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 19 )]
-margin_left = 1797.0
-margin_right = 1830.0
+[node name="DashboardEditButton" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons" instance=ExtResource( 19 )]
+unique_name_in_owner = true
+margin_left = 37.0
+margin_right = 70.0
 hint_tooltip = "Edit dashboard"
 toggle_mode = true
 icon_tex = ExtResource( 10 )
 
-[node name="MaximizeButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 19 )]
-margin_left = 1834.0
-margin_right = 1867.0
+[node name="MaximizeButton" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons" instance=ExtResource( 19 )]
+margin_left = 74.0
+margin_right = 107.0
 hint_tooltip = "Maximize dashboard"
 icon_tex = ExtResource( 9 )
 
-[node name="CloseButton" parent="VBoxContainer/PanelContainer/Content/MainBar" instance=ExtResource( 19 )]
-margin_left = 1871.0
-margin_right = 1904.0
+[node name="CloseButton" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons" instance=ExtResource( 19 )]
+margin_left = 111.0
+margin_right = 144.0
 hint_tooltip = "Close dashboard"
 icon_tex = ExtResource( 14 )
 
 [node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer"]
+visible = false
 margin_left = 889.0
 margin_top = 4.0
 margin_right = 1039.0
@@ -431,15 +419,15 @@ text = "       Delete"
 align = 0
 icon_tex = ExtResource( 5 )
 
-[connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer/CloudsCombo" to="." method="_on_CloudsCombo_option_changed"]
-[connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]
-[connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/MainBar/FiltersContainer/RegionsCombo" to="." method="_on_RegionsCombo_option_changed"]
-[connection signal="text_entered" from="VBoxContainer/PanelContainer/Content/MainBar/DashboardNameLabel" to="." method="_on_DashboardNameLabel_text_entered"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/AddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/KebapButton" to="." method="_on_KebapButton_pressed"]
-[connection signal="toggled" from="VBoxContainer/PanelContainer/Content/MainBar/LockButton" to="." method="_on_LockButton_toggled"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/MaximizeButton" to="." method="_on_MaximizeButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/MainBar/CloseButton" to="." method="_on_CloseButton_pressed"]
+[connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer/CloudsCombo" to="." method="_on_CloudsCombo_option_changed"]
+[connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]
+[connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer/RegionsCombo" to="." method="_on_RegionsCombo_option_changed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/DateButton" to="." method="_on_DateButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/DashboardAddWidgetButton" to="." method="_on_AddWidgetButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/KebapButton" to="." method="_on_KebapButton_pressed"]
+[connection signal="toggled" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/DashboardEditButton" to="." method="_on_DashboardEditButton_toggled"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/MaximizeButton" to="." method="_on_MaximizeButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/DateButton" to="." method="_on_DateButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/MinimizedBar/MinimizeButton" to="." method="_on_MinimizeButton_pressed"]
 [connection signal="resized" from="VBoxContainer/ScrollContainer/Content/Dashboard/Grid" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="_on_Grid_resized"]

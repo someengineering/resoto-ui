@@ -39,8 +39,7 @@ onready var dashboard := $VBoxContainer/ScrollContainer/Content/Dashboard
 onready var add_widget_popup := $NewWidgetPopup
 onready var range_selector := $DateRangeSelector
 onready var refresh_option := $"%RefreshOptionButton"
-onready var name_label := $VBoxContainer/PanelContainer/Content/MainBar/DashboardNameLabel
-onready var lock_button := $VBoxContainer/PanelContainer/Content/MainBar/LockButton
+onready var lock_button := $"%DashboardEditButton"
 
 onready var clouds_combo := find_node("CloudsCombo")
 onready var accounts_combo := find_node("AccountsCombo")
@@ -121,9 +120,9 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 		emit_signal("dashboard_changed", self)
 
 
-func _on_LockButton_toggled(button_pressed : bool) -> void:
+func _on_DashboardEditButton_toggled(button_pressed : bool) -> void:
 	is_editing = button_pressed
-	$VBoxContainer/PanelContainer/Content/MainBar/AddWidgetButton.visible = is_editing
+	$"%DashboardAddWidgetButton".visible = is_editing
 	dashboard.lock(!is_editing)
 	if !is_editing:
 		emit_signal("dashboard_changed", self)
@@ -161,7 +160,6 @@ func _on_delete_confirm_response(_response:String):
 func set_dashboard_name(new_name : String) -> void:
 	name = new_name
 	dashboard_name = new_name
-	find_node("DashboardNameLabel").text = new_name
 	find_node("DashboardMinLabel").text = new_name
 
 

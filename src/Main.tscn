@@ -607,7 +607,7 @@ flat = true
 
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
-[node name="BrowserCopyPasteWatcher" type="Node" parent="."]
+[node name="ShortcutWatcher" type="Node" parent="."]
 script = ExtResource( 22 )
 
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonDashboards" to="MenuBar" method="_on_ButtonDashboards_pressed"]
