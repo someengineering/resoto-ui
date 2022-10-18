@@ -172,8 +172,9 @@ func _get_infra_info(_connect_to:Node = self,
 
 
 func aggregate_search(_query:String, _connect_to:Node,
-	_connect_function:String="_on_aggregate_search_done") -> ResotoAPI.Request:
-	_req_res = _resoto_api.aggregate_search(_query)
+	_connect_function:String="_on_aggregate_search_done",
+	section:String="reported") -> ResotoAPI.Request:
+	_req_res = _resoto_api.aggregate_search(_query, section)
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
 

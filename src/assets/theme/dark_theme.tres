@@ -380,12 +380,14 @@ corner_radius_top_right = 6
 expand_margin_top = 3.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="DynamicFont" id=26]
-size = 18
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://assets/theme/Barlow-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=66]
+size = 17
 use_mipmaps = true
 use_filter = true
-extra_spacing_top = -4
-extra_spacing_bottom = 1
+font_data = SubResource( 1 )
 
 [sub_resource type="StyleBoxFlat" id=27]
 draw_center = false
@@ -401,11 +403,21 @@ expand_margin_right = 4.0
 expand_margin_top = 4.0
 expand_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxFlat" id=22]
+[sub_resource type="StyleBoxFlat" id=70]
 content_margin_left = 15.0
-content_margin_right = 15.0
-content_margin_top = 5.0
-content_margin_bottom = 3.0
+content_margin_right = 6.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+border_width_left = 1
+border_width_right = 1
+border_color = Color( 0.0588235, 0.2, 0.337255, 0 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+
+[sub_resource type="StyleBoxFlat" id=69]
+content_margin_left = 15.0
+content_margin_right = 6.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
 bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 border_width_left = 1
 border_width_right = 1
@@ -478,15 +490,6 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 expand_margin_top = 32.0
-
-[sub_resource type="DynamicFontData" id=1]
-font_path = "res://assets/theme/Barlow-Medium.ttf"
-
-[sub_resource type="DynamicFont" id=66]
-size = 17
-use_mipmaps = true
-use_filter = true
-font_data = SubResource( 1 )
 
 [resource]
 default_font = SubResource( 66 )
@@ -581,13 +584,13 @@ TabContainer/styles/panel = SubResource( 33 )
 TabContainer/styles/tab_bg = SubResource( 24 )
 TabContainer/styles/tab_disabled = SubResource( 44 )
 TabContainer/styles/tab_fg = SubResource( 23 )
-Tabs/colors/font_color_bg = Color( 0, 0.329412, 0.639216, 1 )
+Tabs/colors/font_color_bg = Color( 0.123871, 0.346745, 0.480469, 1 )
 Tabs/colors/font_color_fg = Color( 0.537255, 0.819608, 0.945098, 1 )
 Tabs/constants/hseparation = 50
 Tabs/constants/label_valign_bg = 5
 Tabs/constants/label_valign_fg = 5
 Tabs/constants/top_margin = 0
-Tabs/fonts/font = SubResource( 26 )
+Tabs/fonts/font = SubResource( 66 )
 Tabs/icons/close = ExtResource( 5 )
 Tabs/icons/decrement = ExtResource( 6 )
 Tabs/icons/decrement_highlight = ExtResource( 9 )
@@ -595,8 +598,8 @@ Tabs/icons/increment = ExtResource( 7 )
 Tabs/icons/increment_highlight = ExtResource( 8 )
 Tabs/styles/button = SubResource( 27 )
 Tabs/styles/button_pressed = SubResource( 28 )
-Tabs/styles/tab_bg = null
-Tabs/styles/tab_fg = SubResource( 22 )
+Tabs/styles/tab_bg = SubResource( 70 )
+Tabs/styles/tab_fg = SubResource( 69 )
 TextEdit/colors/font_color = Color( 0.816406, 0.94351, 1, 1 )
 TextEdit/colors/font_color_readonly = Color( 0.537255, 0.819608, 0.945098, 1 )
 TextEdit/colors/selection_color = Color( 0, 0.329412, 0.639216, 1 )

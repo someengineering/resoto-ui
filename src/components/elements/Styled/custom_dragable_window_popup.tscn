@@ -29,6 +29,7 @@ corner_radius_top_right = 4
 size = 1
 
 [node name="CustomDragableWindowPopup" type="PopupPanel"]
+visible = true
 self_modulate = Color( 0.0901961, 0.113725, 0.129412, 1 )
 margin_right = 1193.0
 margin_bottom = 656.0

@@ -48,8 +48,8 @@ margin_bottom = 1010.0
 focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_colors/default_color = Color( 0.85098, 0.721569, 1, 1 )
-custom_colors/selection_color = Color( 0.313726, 0.223529, 0.435294, 1 )
+custom_colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+custom_colors/selection_color = Color( 0, 0.329412, 0.639216, 1 )
 custom_fonts/mono_font = SubResource( 20 )
 custom_fonts/bold_italics_font = SubResource( 20 )
 custom_fonts/italics_font = SubResource( 20 )
@@ -119,5 +119,7 @@ margin_right = 1920.0
 margin_bottom = 1080.0
 rect_min_size = Vector2( 0, 40 )
 
+[connection signal="gui_input" from="RichResponseText" to="." method="_on_RichResponseText_gui_input"]
+[connection signal="meta_clicked" from="RichResponseText" to="." method="_on_RichResponseText_meta_clicked"]
 [connection signal="gui_input" from="Command/CommandEdit" to="." method="_on_CommandEdit_gui_input"]
 [connection signal="text_changed" from="Command/CommandEdit" to="Command/CommandEdit" method="_on_CommandEdit_text_changed"]

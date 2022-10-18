@@ -1,6 +1,7 @@
 extends CustomPopupWindow
 
 signal widget_added(widget_data)
+signal widget_edited
 
 const title_add = "Add Widget"
 const title_edit = "Edit Widget [%s]"
@@ -49,7 +50,7 @@ onready var add_data_source_button:= $"%AddDataSourceButton"
 
 func _ready() -> void:
 	Style.add_self(self, Style.c.BG_BACK)
-	data_sources_templates = Utils.load_json("res://tests/data_sources_templates.json")
+	data_sources_templates = Utils.load_json("res://data/data_sources_templates.json")
 
 
 func set_dashboard_container(_dc:DashboardContainer) -> void:
@@ -98,6 +99,7 @@ func _on_AddWidgetButton_pressed() -> void:
 		widget_to_edit.data_sources = new_data_sources
 		widget_to_edit.call_deferred("execute_query")
 		widget_to_edit = null
+		emit_signal("widget_edited")
 	
 	hide()
 	preview_widget.queue_free()

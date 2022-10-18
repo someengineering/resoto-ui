@@ -115,12 +115,44 @@ static func readable_dict(_dict:Dictionary, readable:String="", _depth:int=0) ->
 	var _spacing = ""
 	for i in _depth:
 		_spacing += "  "
+	
 	for d in _dict.keys():
 		if typeof(_dict[d]) == TYPE_DICTIONARY:
-			readable += readable_dict(_dict[d], readable, _depth+1)
+			readable += (_spacing + "%s:\n" % str(d))
+			readable += readable_dict(_dict[d], "", _depth+1)
+			
+		elif typeof(_dict[d]) == TYPE_ARRAY:
+			readable += (_spacing + "%s:\n" % str(d))
+			readable += (readable_array(_dict[d], "", _depth+1))
+			
 		else:
-			readable += (_spacing + "  %s: %s\n" % [d, str(_dict[d])])
+			readable += (_spacing + "%s: %s\n" % [d, format_value(_dict[d])])
 	return readable
+
+
+static func readable_array(_array:Array, readable:String="", _depth:int=0) -> String:
+	var _spacing = ""
+	for i in _depth:
+		_spacing += "  "
+	
+	for array_element in _array:
+		var next_text:= ""
+		if typeof(array_element) == TYPE_DICTIONARY:
+			next_text += ("%s" % readable_dict(array_element, "", _depth+1))
+		elif typeof(array_element) == TYPE_ARRAY:
+			next_text += ("%s" % readable_array(array_element, "", _depth+1))
+		else:
+			next_text += ("%s\n" % str(array_element))
+		readable += _spacing + "- " + next_text.trim_prefix(_spacing + "  ")
+	
+	return readable
+
+
+static func format_value(_value) -> String:
+	if typeof(_value) == TYPE_STRING:
+		return "'" + str(_value) + "'"
+	else:
+		return str(_value)
 
 
 static func comma_sep(number):

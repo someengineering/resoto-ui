@@ -80,21 +80,25 @@ margin_bottom = 300.0
 custom_constants/separation = 50
 
 [node name="AddDashboard" type="Button" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
-margin_right = 295.0
+margin_right = 640.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Create new dashboard"
 
 [node name="OpenDashboard" type="Button" parent="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
 margin_left = 345.0
 margin_right = 640.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 text = "Open"
 
-[connection signal="all_dashboards_loaded" from="." to="." method="_refresh_dashboard_list"]
+[connection signal="tab_changed" from="." to="." method="_on_DashBoardManager_tab_changed"]
 [connection signal="visibility_changed" from="." to="." method="_on_DashBoardManager_visibility_changed"]
 [connection signal="item_activated" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/DashboardItemList" to="." method="_on_DashboardItemList_item_activated"]
+[connection signal="item_selected" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/DashboardItemList" to="." method="_on_DashboardItemList_item_selected"]
+[connection signal="nothing_selected" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/DashboardItemList" to="." method="_on_DashboardItemList_nothing_selected"]
 [connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AddDashboard" to="." method="_on_AddDashboard_pressed"]
 [connection signal="pressed" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer/OpenDashboard" to="." method="_on_OpenDashboard_pressed"]

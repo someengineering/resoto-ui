@@ -5,9 +5,12 @@ export (bool) var force_hide_message_log:= false
 onready var hb_tween = $HamburgerMenu/HamburgerTween
 onready var hb_menu = $HamburgerMenu
 onready var hb_button = find_node("HamburgerButton")
+onready var click_detection = find_node("ClickDetection")
+onready var shadow_side = find_node("ShadowSide")
 
 
 func _ready() -> void:
+	_g.connect("close_hamburger_menu", self, "close_menu")
 	$"%HamburgerMenuItems/ButtonMessageLog".visible = OS.has_feature("editor") and not force_hide_message_log
 	
 	get_tree().root.connect("size_changed", self, "on_ui_shrink_changed")
@@ -31,14 +34,14 @@ func _input(event:InputEvent) -> void:
 
 
 func ui_scale_down() -> void:
-	var new_shrink = max(_g.ui_shrink-0.1, 0.5)
+	var new_shrink = stepify(max(_g.ui_shrink-0.1, 0.5), 0.1)
 	_g.ui_shrink = new_shrink
 	_g.emit_signal("ui_shrink_changed")
 	SaveLoadSettings.save_settings()
 
 
 func ui_scale_up() -> void:
-	var new_shrink = min(_g.ui_shrink+0.1, 4)
+	var new_shrink = stepify(min(_g.ui_shrink+0.1, 4), 0.1)
 	_g.ui_shrink = new_shrink
 	_g.emit_signal("ui_shrink_changed")
 	SaveLoadSettings.save_settings()
@@ -46,6 +49,7 @@ func ui_scale_up() -> void:
 
 func _on_ButtonDocs_pressed() -> void:
 	OS.shell_open("https://resoto.com/docs")
+
 
 func _on_config_menu_id_pressed(id : int) -> void:
 	match id:
@@ -95,17 +99,22 @@ func _on_ButtonMessageLog_pressed():
 
 
 func close_menu():
-	hb_button.set_pressed(false)
+	if hb_button.pressed:
+		hb_button.pressed = false
 
 
 func on_ui_shrink_changed():
 	hb_menu.rect_size.y = OS.window_size.y / _g.ui_shrink
 
 
-func _on_HamburgerButton_hamburger_button_pressed(pressed):
+func _on_HamburgerButton_hamburger_button_pressed(pressed:bool):
 	if not pressed:
+		shadow_side.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		click_detection.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		hb_tween.interpolate_property(hb_menu, "rect_position:x", hb_menu.rect_position.x, -400, 0.2, Tween.TRANS_EXPO, Tween.EASE_IN)
 	else:
+		shadow_side.mouse_filter = Control.MOUSE_FILTER_PASS
+		click_detection.mouse_filter = Control.MOUSE_FILTER_PASS
 		hb_tween.interpolate_property(hb_menu, "rect_position:x", hb_menu.rect_position.x, 0, 0.2, Tween.TRANS_EXPO, Tween.EASE_OUT)
 	hb_tween.start()
 
@@ -113,3 +122,9 @@ func _on_HamburgerButton_hamburger_button_pressed(pressed):
 func _on_ResotoLogo_gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
 		_g.content_manager.change_section("hub")
+		close_menu()
+
+
+func _on_click_detection_gui_input(event:InputEventMouseButton):
+	if hb_button.pressed and event is InputEventMouseButton and event.is_pressed():
+		hb_button.pressed = false

@@ -1,0 +1,122 @@
+{
+	"dashboard_name": "Resoto Example Dashboard",
+	"refresh_time_option": 0,
+	"time_range": "Last 15 minutes",
+	"cloud": "",
+	"account": "",
+	"region": "",
+	"widgets": [
+		{
+			"position:x": 0,
+			"position:y": 0,
+			"size:x": 3,
+			"size:y": 3,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 0,
+					"unit": "accounts",
+					"show_comma": false
+				},
+				"title": "Accounts Total - Count",
+				"color_controllers_data": [
+					"[ [ 0, Color( 0.0941176, 0.188235, 0.337255, 1 ) ], [ 100.0, Color( 0.164706, 0.423529, 0.533333, 1 ) ] ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"metric": "accounts_total",
+					"aggregator": "sum",
+					"filters": "",
+					"stacked": true,
+					"offset": "",
+					"sum_by": "",
+					"legend": "",
+					"type": 0,
+					"query": "sum(resoto_accounts_total{$dashboard_filters})"
+				}
+			]
+		},
+		{
+			"position:x": 3,
+			"position:y": 0,
+			"size:x": 3,
+			"size:y": 5,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+				"widget_type": "Chart",
+				"settings": {
+
+				},
+				"title": "Accounts Total",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"metric": "accounts_total",
+					"aggregator": "",
+					"filters": "",
+					"stacked": true,
+					"offset": "",
+					"sum_by": "",
+					"legend": "{cloud}",
+					"type": 0,
+					"query": "resoto_accounts_total{$dashboard_filters}"
+				}
+			]
+		},
+		{
+			"position:x": 0,
+			"position:y": 3,
+			"size:x": 3,
+			"size:y": 3,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+				"widget_type": "Table",
+				"settings": {
+					"header_color": "Color( 0.14902, 0.356863, 0.509804, 1 )",
+					"row_color": "Color( 0.117647, 0.196078, 0.282353, 1 )",
+					"column_header_color": "Color( 0.0901961, 0.215686, 0.329412, 1 )"
+				},
+				"title": "Instance cores by kind",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(kind, /ancestors.cloud.reported.name: sum(1) as nodes, sum(instance_cores) as cores): is(instance)"
+				}
+			]
+		},
+		{
+			"position:x": 6,
+			"position:y": 0,
+			"size:x": 3,
+			"size:y": 5,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_heatmap/widget_heatmap.tscn",
+				"widget_type": "Heatmap",
+				"settings": {
+					"low_color": "Color( 0.0705882, 0.203922, 0.411765, 1 )",
+					"high_color": "Color( 1, 0.988235, 0.356863, 1 )"
+				},
+				"title": "Instances in Accounts",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(instance_type, /ancestors.account.reported.name: sum(1) as instances): is(instance)"
+				}
+			]
+		}
+	],
+	"uuid": ""
+}

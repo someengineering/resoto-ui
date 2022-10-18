@@ -14,6 +14,7 @@ onready var single_node_info = _g.content_manager.find_node("NodeSingleInfo")
 
 func _on_FullTextSearch_focus_entered() -> void:
 	_g.focus_in_search = true
+	_g.emit_signal("close_hamburger_menu")
 
 
 func _on_FullTextSearch_focus_exited() -> void:

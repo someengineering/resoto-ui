@@ -245,9 +245,9 @@ func tsdb_label_values(label:String):
 	return request
 	
 	
-func aggregate_search(query : String):
+func aggregate_search(query : String, section : String):
 	refresh_jwt_header(accept_json_headers)
 	var body = query
-	var request = req_post("/graph/resoto/search/aggregate", body, accept_json_headers)
+	var request = req_post("/graph/resoto/search/aggregate?section=%s" % section, body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request

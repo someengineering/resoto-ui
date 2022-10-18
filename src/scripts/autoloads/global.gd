@@ -5,6 +5,7 @@ signal toast_created
 signal ui_shrink_changed
 signal connected_to_resotocore
 signal fullscreen_hide_menu
+signal close_hamburger_menu
 
 const tsdb_metric_prefix:String		 = "resoto_"
 const dashboard_config_prefix:String = "resoto.ui.dashboard."

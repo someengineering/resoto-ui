@@ -314,6 +314,7 @@ func lock(locked : bool) -> void:
 	config_button.visible = !locked
 	duplicate_button.visible = !locked
 	maximize_button.visible = locked
+	title_label.modulate.a = 0.1 if !locked else 1
 
 func set_title(new_title : String) -> void:
 	title = new_title

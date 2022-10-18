@@ -3,6 +3,7 @@ extends Button
 
 export (Texture) var icon_tex:Texture setget set_icon_tex
 export (bool) var add_to_style:= true setget set_add_to_style
+export (bool) var icon_align_right:= false setget set_icon_align_right
 export var icon_margin:int = 4 setget set_icon_margin
 export var flip_h:bool = false setget set_flip_h
 export var flip_v:bool = false setget set_flip_v
@@ -15,6 +16,7 @@ func _ready() -> void:
 	if add_to_style:
 		Style.add(icon_node, Style.c.LIGHT)
 	connect("pressed", self, "_on_IconButton_mouse_exited")
+	set_icon_align_right(icon_align_right)
 
 
 func set_add_to_style(_add_to_style:bool) -> void:
@@ -24,6 +26,15 @@ func set_add_to_style(_add_to_style:bool) -> void:
 			$Margin/Icon.modulate = Style.col_map[Style.c.LIGHT]
 		else:
 			$Margin/Icon.modulate = Color(1,1,1,0.9)
+
+
+func set_icon_align_right(_icon_align_right:bool) -> void:
+	icon_align_right = _icon_align_right
+	if has_node("Margin"):
+		$Margin.anchor_left = 1 if icon_align_right else 0
+		$Margin.anchor_right = 1 if icon_align_right else 0
+		$Margin.rect_position.x = rect_size.x - 33 if icon_align_right else 0.0
+		$Margin.rect_position.y = 0.0
 
 
 func set_icon_tex(_icon_tex:Texture) -> void:
@@ -52,6 +63,8 @@ func set_flip_v(_flip_v:bool) -> void:
 
 
 func _on_IconButton_mouse_entered() -> void:
+	if disabled:
+		return
 	if add_to_style:
 		icon_node.modulate = Style.col_map[Style.c.LIGHTER]
 	else:

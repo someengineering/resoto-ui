@@ -1,23 +1,26 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://components/elements/Styled/icon_button.gd" type="Script" id=1]
-[ext_resource path="res://assets/icons/icon_128_fullscreen_square.svg" type="Texture" id=2]
+[ext_resource path="res://components/elements/Styled/icon_button_aligned.gd" type="Script" id=1]
 
-[node name="IconButton" type="Button"]
-margin_right = 33.0
+[node name="IconButtonText" type="Button"]
+margin_right = 100.0
 margin_bottom = 33.0
-rect_min_size = Vector2( 33, 33 )
+rect_min_size = Vector2( 100, 33 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
-theme_type_variation = "ButtonBigText"
 expand_icon = true
 script = ExtResource( 1 )
-icon_tex = ExtResource( 2 )
 
 [node name="Margin" type="MarginContainer" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -16.5
+margin_right = 33.0
+margin_bottom = 16.5
+rect_min_size = Vector2( 33, 33 )
 mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
 custom_constants/margin_right = 4
 custom_constants/margin_top = 4
 custom_constants/margin_left = 4
@@ -30,9 +33,6 @@ margin_top = 4.0
 margin_right = 29.0
 margin_bottom = 29.0
 mouse_filter = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource( 2 )
 expand = true
 stretch_mode = 6
 

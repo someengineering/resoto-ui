@@ -28,7 +28,8 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 			return
 		
 		var current_result = _response.transformed.result
-		$"%AllDataTextEdit".text = Utils.readable_dict(current_result[0])
+		if not current_result.empty() and current_result[0].has("reported"):
+			$"%AllDataTextEdit".text = Utils.readable_dict(current_result[0].reported)
 		breadcrumbs.clear()
 		breadcrumbs["edges"] = []
 		breadcrumbs["nodes"] = {}
@@ -41,24 +42,59 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 				
 				if r.id == current_node_id:
 					main_node_display(r)
-					update_treemap(r)
+					set_successor_button(false)
+					hide_treemap()
+					if r.id != "root":
+						if (r.has("metadata") and r.metadata.has("descendant_summary")):
+							update_treemap(r.metadata.descendant_summary)
+						else:
+							var descendants_query:= "aggregate(kind: sum(1) as count): id(%s) -[1:]->" % str(current_node_id)
+							API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
+					else:
+						set_successor_button(true)
 		update_breadcrumbs()
 		show()
 
 
-func update_treemap(r):
+func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> void:
+	if error:
+		_g.emit_signal("add_toast", "Error in Node Info", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
+		show()
+		return
+	if _response.transformed.has("result"):
+		if _response.transformed.result is String and _response.transformed.result.begins_with("Error"):
+			_g.emit_signal("add_toast", "Error in Node Info", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
+			return
+		if not _response.transformed.result.empty():
+			var treemap_format:= {}
+			for element in _response.transformed.result:
+				treemap_format[element.group.kind] = element.count
+			update_treemap(treemap_format)
+
+
+func hide_treemap():
 	find_node("TreeMapContainer").hide()
-	if (not r.has("metadata") or not r.metadata.has("descendant_summary")):
+
+
+func update_treemap(_descendants:Dictionary = {}):
+	if _descendants.empty():
 		return
 	
+	set_successor_button(true)
+	
 	var account_dict:= {}
-	for key in r.metadata.descendant_summary:
-		account_dict[key] = r.metadata.descendant_summary[key]
+	for key in _descendants:
+		account_dict[key] = _descendants[key]
 	
 	find_node("TreeMapContainer").show()
 	yield(VisualServer, "frame_post_draw")
 	find_node("TreeMap").clear_treemap()
 	find_node("TreeMap").create_treemap(account_dict)
+
+
+func set_successor_button(_enabled:bool):
+	$"%SuccessorsButton".disabled = !_enabled
+	$"%SuccessorsButton".modulate.a = 1 if _enabled else 0
 
 
 onready var breadcrumb_container = find_node("BreadcrumbContainer")
@@ -162,7 +198,6 @@ func main_node_display(node_data):
 
 
 func on_id_button_pressed(id:String):
-	prints("on_id_button_pressed:", id)
 	show_node(id)
 
 
@@ -177,14 +212,14 @@ func _on_PredecessorsButton_pressed():
 	_g.content_manager.find_node("NodeListElement").show_list_from_search(current_main_node, search_command, "<--")
 
 
-func _on_SucessorsButton_pressed():
+func _on_SuccessorsButton_pressed():
 	_g.content_manager.change_section("node_list_info")
 	var search_command = "id(" + current_main_node.id + ") --> limit 500"
 	_g.content_manager.find_node("NodeListElement").show_list_from_search(current_main_node, search_command, "-->")
 
 
 func _on_AllDataMaximizeButton_pressed():
-	pass # Replace with function body.
+	$AllDataPopup.show_all_data_popup($"%AllDataTextEdit".text, $"%AllDataTextEdit".scroll_vertical)
 
 
 func _on_AllDataCopyButton_pressed():
@@ -194,3 +229,7 @@ func _on_AllDataCopyButton_pressed():
 func _on_KindLabelButton_pressed():
 	_g.content_manager.change_section("node_list_info")
 	_g.content_manager.find_node("NodeListElement").show_kind(current_main_node.reported.kind)
+
+
+func _on_AllDataPopup_change_scroll_pos(_sv:int):
+	$"%AllDataTextEdit".scroll_vertical = _sv

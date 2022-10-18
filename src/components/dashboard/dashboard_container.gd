@@ -13,9 +13,11 @@ signal dashboard_changed(dashboard)
 signal dashboard_closed(dashboard)
 signal dashboard_maximized(is_maximized)
 
+var manager: Node = null
 var dashboard_name : String = "" setget set_dashboard_name
 var last_saved_name : String = ""
 var uuid : String = ""
+var is_editing: bool = false
 
 onready var last_refresh := Time.get_unix_time_from_system()
 var refresh_time := 900
@@ -120,9 +122,10 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 
 
 func _on_LockButton_toggled(button_pressed : bool) -> void:
-	$VBoxContainer/PanelContainer/Content/MainBar/AddWidgetButton.visible = button_pressed
-	dashboard.lock(!button_pressed)
-	if !button_pressed:
+	is_editing = button_pressed
+	$VBoxContainer/PanelContainer/Content/MainBar/AddWidgetButton.visible = is_editing
+	dashboard.lock(!is_editing)
+	if !is_editing:
 		emit_signal("dashboard_changed", self)
 
 
@@ -138,6 +141,10 @@ func _on_OptionButton_item_selected(_index : int) -> void:
 
 func _on_DeleteButton_pressed() -> void:
 	kebap_popup.hide()
+	if manager and dashboard_name == manager.DefaultDashboardName:
+		_g.emit_signal("add_toast", "%s can not be deleted" % manager.DefaultDashboardName, "", 2, self)
+		return
+	
 	var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
 		"Delete Dashboard?",
 		"Do you want to delete the dashboard \"" + dashboard_name + "\"?",
@@ -313,6 +320,7 @@ func set_widgets(new_widgets : Array) -> void:
 
 func _on_NewWidgetPopup_widget_added(_widget_data):
 	force_refresh = true
+	emit_signal("dashboard_changed", self)
 
 
 func _on_ExportButton_pressed():
@@ -322,6 +330,22 @@ func _on_ExportButton_pressed():
 
 
 func _on_CloseButton_pressed():
+	kebap_popup.hide()
+	if not is_editing:
+		emit_signal("dashboard_changed", self)
+		emit_signal("dashboard_closed", self)
+		return
+	
+	var close_confirm_popup = _g.popup_manager.show_confirm_popup(
+		"Save changes before closing Dashboard?",
+		"Do you want to save the current changes in this dashboard before closing?",
+		"Yes", "No")
+	close_confirm_popup.connect("response", self, "_on_close_confirm_response", [], CONNECT_ONESHOT)
+
+
+func _on_close_confirm_response(_response:String):
+	if _response == "left":
+		emit_signal("dashboard_changed", self)
 	emit_signal("dashboard_closed", self)
 
 
@@ -350,7 +374,6 @@ func _on_RenameButton_pressed():
 	rename_confirm_popup.connect("response_with_input", self, "_on_rename_confirm_response", [], CONNECT_ONESHOT)
 
 
-
 func _on_rename_confirm_response(_button_clicked:String, _value:String):
 	if _button_clicked == "left":
 		set_dashboard_name(_value)
@@ -364,3 +387,7 @@ onready var kebap_button = $"%KebapButton"
 onready var kebap_popup:= $KebapPopup
 func _on_KebapButton_pressed():
 	kebap_popup.popup(Rect2(kebap_button.rect_global_position+Vector2(kebap_button.rect_size), Vector2.ONE))
+
+
+func _on_NewWidgetPopup_widget_edited():
+	emit_signal("dashboard_changed", self)

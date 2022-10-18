@@ -2,6 +2,8 @@ extends Control
 
 signal hamburger_button_pressed(pressed)
 
+var pressed:bool = false setget set_pressed, get_pressed
+
 onready var icon_close = $Button/CloseIcon
 onready var icon_menu = $Button/MenuIcon
 
@@ -14,3 +16,6 @@ func _on_Button_toggled(button_pressed):
 	
 func set_pressed(value:bool):
 	$Button.pressed = value
+
+func get_pressed() -> bool:
+	return $Button.pressed

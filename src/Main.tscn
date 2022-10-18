@@ -180,8 +180,8 @@ follow_viewport_enable = true
 script = ExtResource( 6 )
 
 [node name="HamburgerMenu" type="HBoxContainer" parent="MenuBar"]
-margin_right = 300.0
-margin_bottom = 1080.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_min_size = Vector2( 350, 0 )
 mouse_filter = 2
 size_flags_horizontal = 0
@@ -190,10 +190,11 @@ theme = ExtResource( 2 )
 custom_constants/separation = 0
 
 [node name="Panel" type="PanelContainer" parent="MenuBar/HamburgerMenu"]
-margin_right = 300.0
+margin_right = 350.0
 margin_bottom = 1080.0
+rect_min_size = Vector2( 350, 0 )
 mouse_filter = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 0
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 24 )
 __meta__ = {
@@ -201,7 +202,7 @@ __meta__ = {
 }
 
 [node name="ShadowTop" type="TextureRect" parent="MenuBar/HamburgerMenu/Panel"]
-margin_right = 300.0
+margin_right = 350.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 0, 60 )
 mouse_filter = 2
@@ -210,7 +211,7 @@ texture = SubResource( 23 )
 stretch_mode = 1
 
 [node name="MenuContent" type="MarginContainer" parent="MenuBar/HamburgerMenu/Panel"]
-margin_right = 300.0
+margin_right = 350.0
 margin_bottom = 1080.0
 custom_constants/margin_right = 20
 custom_constants/margin_top = 60
@@ -221,12 +222,12 @@ custom_constants/margin_bottom = 20
 unique_name_in_owner = true
 margin_left = 20.0
 margin_top = 60.0
-margin_right = 280.0
+margin_right = 330.0
 margin_bottom = 1060.0
 custom_constants/separation = 8
 
 [node name="ButtonDashboards" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_right = 260.0
+margin_right = 310.0
 margin_bottom = 33.0
 toggle_mode = true
 group = SubResource( 19 )
@@ -234,13 +235,13 @@ text = "Dashboards"
 
 [node name="ButtonConfig" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 41.0
-margin_right = 260.0
+margin_right = 310.0
 margin_bottom = 74.0
 text = "Configuration"
 
 [node name="ButtonTerminals" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 82.0
-margin_right = 260.0
+margin_right = 310.0
 margin_bottom = 115.0
 toggle_mode = true
 group = SubResource( 19 )
@@ -248,13 +249,13 @@ text = "Terminals"
 
 [node name="Spacer" type="Control" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 123.0
-margin_right = 260.0
+margin_right = 310.0
 margin_bottom = 894.0
 size_flags_vertical = 3
 
 [node name="ButtonMessageLog" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 902.0
-margin_right = 260.0
+margin_right = 310.0
 margin_bottom = 935.0
 toggle_mode = true
 group = SubResource( 19 )
@@ -262,7 +263,7 @@ text = "Message Log"
 
 [node name="ButtonDocs" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems" instance=ExtResource( 11 )]
 margin_top = 943.0
-margin_right = 260.0
+margin_right = 310.0
 margin_bottom = 976.0
 hint_tooltip = "https://resoto.com/docs"
 size_flags_horizontal = 3
@@ -274,7 +275,7 @@ icon_margin = 10
 [node name="ResotoUIVersion" type="Label" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 modulate = Color( 1, 1, 1, 0.196078 )
 margin_top = 984.0
-margin_right = 260.0
+margin_right = 310.0
 margin_bottom = 1000.0
 custom_fonts/font = SubResource( 30 )
 text = "resoto-ui v"
@@ -282,13 +283,21 @@ align = 1
 
 [node name="ShadowSide" type="TextureRect" parent="MenuBar/HamburgerMenu"]
 modulate = Color( 1, 1, 1, 0.227451 )
-margin_left = 300.0
-margin_right = 350.0
+margin_left = 350.0
+margin_right = 400.0
 margin_bottom = 1080.0
+mouse_filter = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 texture = SubResource( 26 )
 stretch_mode = 1
+
+[node name="ClickDetection" type="Control" parent="MenuBar/HamburgerMenu"]
+margin_left = 400.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+mouse_filter = 2
+size_flags_horizontal = 3
 
 [node name="HamburgerTween" type="Tween" parent="MenuBar/HamburgerMenu"]
 
@@ -314,6 +323,7 @@ custom_constants/separation = 0
 margin_right = 1920.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
+mouse_filter = 2
 size_flags_horizontal = 3
 custom_styles/panel = SubResource( 3 )
 __meta__ = {
@@ -323,18 +333,21 @@ __meta__ = {
 [node name="BackgroundGradient" type="TextureRect" parent="MenuBar/MenuContainer/TopMenu"]
 margin_right = 1920.0
 margin_bottom = 40.0
+mouse_filter = 2
 texture = SubResource( 21 )
 stretch_mode = 1
 
 [node name="Title" type="HBoxContainer" parent="MenuBar/MenuContainer/TopMenu"]
 margin_right = 1920.0
 margin_bottom = 40.0
+mouse_filter = 2
 custom_constants/separation = 0
 
 [node name="SpacerL" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
 margin_right = 10.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 10, 0 )
+mouse_filter = 2
 
 [node name="HamburgerButton" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 13 )]
 modulate = Color( 0.913725, 0.552941, 0.968627, 1 )
@@ -375,15 +388,18 @@ stretch_mode = 6
 margin_left = 1002.0
 margin_right = 1610.0
 margin_bottom = 40.0
+mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="FullTextSearch" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 14 )]
+mouse_filter = 1
 
 [node name="SpacerR" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
 margin_left = 1910.0
 margin_right = 1920.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 10, 0 )
+mouse_filter = 2
 
 [node name="Popups" type="CanvasLayer" parent="."]
 layer = 30
@@ -399,7 +415,6 @@ __meta__ = {
 }
 
 [node name="ConnectPopup" type="PopupPanel" parent="Popups"]
-visible = true
 self_modulate = Color( 0.091, 0.11245, 0.13, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -592,6 +607,8 @@ flat = true
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonTerminals" to="MenuBar" method="_on_ButtonTerminals_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonMessageLog" to="MenuBar" method="_on_ButtonMessageLog_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonDocs" to="MenuBar" method="_on_ButtonDocs_pressed"]
+[connection signal="gui_input" from="MenuBar/HamburgerMenu/ShadowSide" to="MenuBar" method="_on_click_detection_gui_input"]
+[connection signal="gui_input" from="MenuBar/HamburgerMenu/ClickDetection" to="MenuBar" method="_on_click_detection_gui_input"]
 [connection signal="hamburger_button_pressed" from="MenuBar/MenuContainer/TopMenu/Title/HamburgerButton" to="MenuBar" method="_on_HamburgerButton_hamburger_button_pressed"]
 [connection signal="gui_input" from="MenuBar/MenuContainer/TopMenu/Title/ResotoLogo" to="MenuBar" method="_on_ResotoLogo_gui_input"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
