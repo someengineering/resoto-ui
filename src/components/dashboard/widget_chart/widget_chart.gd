@@ -35,6 +35,8 @@ onready var legend_container := $CanvasLayer/PopupLegend/VBoxContainer
 onready var x_labels := $Viewport/GridContainer/XLabels
 onready var y_labels := $Viewport/GridContainer/YLabels
 onready var grid := $Viewport/GridContainer/Grid
+onready var legend_pos := $Grid/LegendPosition
+
 
 func _ready() -> void:
 	legend.visible = false
@@ -42,32 +44,13 @@ func _ready() -> void:
 		get_parent().get_parent().connect("moved_or_resized", self, "_on_Grid_resized")
 	_on_Grid_resized()
 
-func _input(event) -> void:
-#	if event.is_action_pressed("ui_accept"):
-#		var data : PoolVector2Array = []
-#		data.resize(100)
-#
-#		for i in data.size():
-#			data[i] = Vector2(i,2)
-#
-#		clear_series()
-#		add_serie(data, null, "", true)
-#
-#		for i in data.size():
-#			data[i] = Vector2(i+20,1+int(i/10))
-#		add_serie(data, null, "", true)
-#
-#		for i in data.size():
-#			data[i] = Vector2(i,int(i/5))
-#		add_serie(data, null, "", true)
-#
-#		complete_update()
 
+func _input(event) -> void:
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
 		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x
 		legend.rect_global_position = get_global_mouse_position() + Vector2(24,0)
 		legend.rect_size.y = 0
-			
+		
 		var stacked = 0
 		
 		for label in legend_container.get_children():
@@ -101,11 +84,14 @@ func _input(event) -> void:
 					legend_container.move_child(legend_container.get_child(j), i)
 					legend_container.move_child(label, j)
 
+
 func set_x_origin(origin : float) -> void:
 	x_origin = origin
-	
+
+
 func set_x_range(r : float) -> void:
 	x_range = r
+
 
 func _on_Grid_resized() -> void:
 	if not is_instance_valid(x_labels):
@@ -124,15 +110,15 @@ func _on_Grid_resized() -> void:
 	grid.material.set_shader_param("grid_divisions", divisions)
 	grid.material.set_shader_param("size", grid.rect_size)
 	
-	$Grid/LegendPosition.rect_size = graph_area.rect_size
-	
+	legend_pos.rect_size = graph_area.rect_size
+
+
 func update_series() -> void:
-	if not is_instance_valid(graph_area):
+	if (series.empty()
+	or not is_instance_valid(graph_area)
+	or (graph_area.rect_size.x == 0 or graph_area.rect_size.y == 0)):
 		return
-	if graph_area.rect_size.x == 0 or graph_area.rect_size.y == 0:
-		return
-	if series.size() == 0:
-		return
+	
 	var origin : Vector2 = Vector2(grid.rect_global_position.x, grid.rect_global_position.y + graph_area.rect_size.y)
 	var n = graph_area.get_child_count()
 	var stacked : PoolRealArray = []
@@ -151,7 +137,6 @@ func update_series() -> void:
 			if line.get_meta("stack"):
 				point.y += stacked[j]
 				stacked[j] = point.y
-#			if graph_area.get_global_rect().grow(1).has_point(point + origin):
 			values.append(transform_point(point))
 		line.points = values
 		line.global_position = origin
@@ -163,7 +148,6 @@ func update_graph_area(force := false) -> void:
 	var new_divisions = (graph_area.rect_size / 100).snapped(Vector2.ONE)
 	new_divisions.x = max(2, new_divisions.x)
 	new_divisions.y = max(2, new_divisions.y)
-
 	
 	if divisions.x != new_divisions.x or force:
 		divisions.x = new_divisions.x
@@ -172,7 +156,6 @@ func update_graph_area(force := false) -> void:
 		for l in x_labels.get_children():
 			x_labels.remove_child(l)
 			l.queue_free()
-			
 		
 		var dummy_label := Control.new()
 		dummy_label.rect_min_size.x = x_labels.rect_size.x / nx / 2
@@ -209,7 +192,8 @@ func update_graph_area(force := false) -> void:
 			l.align = Label.ALIGN_RIGHT
 			l.valign = Label.VALIGN_BOTTOM
 			y_labels.add_child(l)
-		
+
+
 func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack := false) -> void:
 	var serie := series_scene.instance()
 	serie.set_meta("stack", stack)
@@ -228,8 +212,8 @@ func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack :=
 		serie_name = "Serie %d" % series.size()
 		
 	serie.name = serie_name
-	
-	
+
+
 func clear_series() -> void:
 	for serie in graph_area.get_children():
 		if serie is Line2D:
@@ -237,6 +221,7 @@ func clear_series() -> void:
 			serie.queue_free()
 	current_color = 0
 	series.clear()
+
 
 func set_scale_from_series() -> void:
 	if series.size() == 0:
@@ -267,8 +252,8 @@ func set_scale_from_series() -> void:
 	min_y_value = miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9
 	if miny == 0:
 		min_y_value = 0
-	
-	
+
+
 func _process(_delta : float) -> void:
 	var origin : Vector2 = graph_area.rect_global_position + Vector2(0, graph_area.rect_size.y)
 	
@@ -278,8 +263,8 @@ func _process(_delta : float) -> void:
 			if line is Line2D:
 				line.global_position = origin
 				
-	$Grid/LegendPosition.rect_size = graph_area.rect_size
-	$Grid/LegendPosition.rect_position = $Viewport/GridContainer/Grid.rect_position
+	legend_pos.rect_size = graph_area.rect_size
+	legend_pos.rect_position = $Viewport/GridContainer/Grid.rect_position
 
 
 func complete_update(force_update_graph_area := false) -> void:
@@ -287,8 +272,8 @@ func complete_update(force_update_graph_area := false) -> void:
 		set_scale_from_series()
 	update_series()
 	update_graph_area(force_update_graph_area)
-	
-	
+
+
 func find_closest_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	var distance = INF
 	var result = null
@@ -301,14 +286,15 @@ func find_closest_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 		result = value
 		
 	return result
-	
+
+
 func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	var prev = null
 	var next = null
 	
 	if target_x < serie[0].x or target_x > serie[serie.size() -1].x:
 		return Vector2(target_x, NAN)
-		
+	
 	for value in serie:
 		if value.x == target_x:
 			return value
@@ -317,11 +303,12 @@ func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 		else:
 			next = value
 			break
-			
+	
 	if prev == null or next == null:
 		return Vector2(target_x, 0)
 	else:
 		return Vector2(target_x, lerp(prev.y, next.y ,(target_x - prev.x) / (next.x - prev.x)))
+
 
 func _on_Grid_mouse_entered() -> void:
 	for line in graph_area.get_children():
@@ -337,6 +324,7 @@ func _on_Grid_mouse_exited() -> void:
 	legend.visible = false
 	mouse_on_graph = false
 
+
 func transform_point(point : Vector2) -> Vector2:
 	var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
 	point += Vector2(0, -min_y_value)
@@ -344,19 +332,19 @@ func transform_point(point : Vector2) -> Vector2:
 	point.y *= -1
 	if point.y >= 0.0:
 		point.y = -0.0001
-		
 	return point
+
 
 func get_csv(separator := ",", end_of_line := "\n") -> String:
 	if series.size() <= 0:
 		return ""
-		
+	
 	var data : PoolStringArray = []
 	var header : PoolStringArray = ["Date"]
 	
 	for line in graph_area.get_children():
 		header.append(line.name)
-		
+	
 	data.append(header.join(separator))
 	
 	for i in series[0].size():
@@ -368,4 +356,3 @@ func get_csv(separator := ",", end_of_line := "\n") -> String:
 		data.append(row.join(separator))
 	
 	return data.join(end_of_line)
-			

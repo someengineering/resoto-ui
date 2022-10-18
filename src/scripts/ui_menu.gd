@@ -35,6 +35,9 @@ func _input(event:InputEvent) -> void:
 			ui_scale_up()
 		elif event.button_index == BUTTON_WHEEL_DOWN:
 			ui_scale_down()
+	
+	if event.is_action_pressed("ui_cancel"):
+		hb_button.pressed = !hb_button.pressed
 
 
 func ui_scale_down() -> void:
@@ -54,33 +57,33 @@ func ui_scale_up() -> void:
 func _on_ButtonDocs_pressed() -> void:
 	OS.shell_open("https://resoto.com/docs")
 
-
-func _on_config_menu_id_pressed(id : int) -> void:
-	match id:
-		0:
-			pass
-		1:
-			# Download the model
-			API.get_model(self)
-		2:
-			# Patch model by upload
-			HtmlFiles.upload_file(self)
-		3:
-			# Upload Graph popup
-			_g.popup_manager.open_popup("GraphPopup")
-
-
-# Download the model
-func _on_get_model_done(_error:int, response) -> void:
-	JavaScript.download_buffer(response.body,"model.json")
-
-# Patch model by upload
-func _on_upload_file_done(_filename:String, data) -> void:
-	API.patch_model(data, self)
-
-
-func _on_patch_model_done(_error:int, _response) -> void:
-	print("Done patching model")
+# This still needs to be build back into the UI, but for now the PR is on ice.
+#func _on_config_menu_id_pressed(id : int) -> void:
+#	match id:
+#		0:
+#			pass
+#		1:
+#			# Download the model
+#			API.get_model(self)
+#		2:
+#			# Patch model by upload
+#			HtmlFiles.upload_file(self)
+#		3:
+#			# Upload Graph popup
+#			_g.popup_manager.open_popup("GraphPopup")
+#
+#
+## Download the model
+#func _on_get_model_done(_error:int, response) -> void:
+#	JavaScript.download_buffer(response.body,"model.json")
+#
+## Patch model by upload
+#func _on_upload_file_done(_filename:String, data) -> void:
+#	API.patch_model(data, self)
+#
+#
+#func _on_patch_model_done(_error:int, _response) -> void:
+#	print("Done patching model")
 
 
 func _on_ButtonConfig_pressed():

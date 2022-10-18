@@ -59,9 +59,9 @@ margin_bottom = 218.0
 rect_min_size = Vector2( 0, 50 )
 
 [node name="VBox" type="GridContainer" parent="VBox"]
-margin_left = 740.0
+margin_left = 737.0
 margin_top = 222.0
-margin_right = 1160.0
+margin_right = 1162.0
 margin_bottom = 642.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -70,37 +70,42 @@ custom_constants/hseparation = 20
 columns = 2
 
 [node name="ButtonDashboards" type="Button" parent="VBox/VBox"]
-margin_right = 200.0
+margin_left = 2.0
+margin_right = 202.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 4
+theme_type_variation = "FontBig"
 group = SubResource( 2 )
 text = "Dashboards"
 
 [node name="ButtonExplore" type="Button" parent="VBox/VBox"]
-margin_left = 220.0
-margin_right = 420.0
+margin_left = 225.0
+margin_right = 425.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 4
+theme_type_variation = "FontBig"
 group = SubResource( 2 )
 text = "Explore"
 
 [node name="ButtonConfig" type="Button" parent="VBox/VBox"]
 margin_top = 220.0
-margin_right = 200.0
+margin_right = 205.0
 margin_bottom = 420.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 4
+theme_type_variation = "FontBig"
 text = "Configuration"
 
 [node name="ButtonTerminals" type="Button" parent="VBox/VBox"]
-margin_left = 220.0
+margin_left = 225.0
 margin_top = 220.0
-margin_right = 420.0
+margin_right = 425.0
 margin_bottom = 420.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 4
+theme_type_variation = "FontBig"
 group = SubResource( 2 )
 text = "Terminals"
 

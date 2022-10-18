@@ -1,6 +1,6 @@
 extends Control
 
-const Toast = preload("res://components/toast/Toast.tscn")
+const Toast = preload("res://components/toast/toast_component_toast.tscn")
 
 var toasts:Array = []
 var toast_padding:int = 10

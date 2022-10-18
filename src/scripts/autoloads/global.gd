@@ -41,3 +41,11 @@ func set_ui_shrink(new_shrink:float) -> void:
 	ui_shrink = new_shrink
 	emit_signal("add_toast", "Scale " + str(ui_shrink*100) + "%", "", 3, self, 0.7)
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED,  SceneTree.STRETCH_ASPECT_EXPAND, Vector2(1920,1080), ui_shrink)
+
+var time_before = 0.0
+func start_benchmark():
+	time_before = OS.get_ticks_msec()
+
+func stop_benchmark():
+	var total_time = OS.get_ticks_msec() - time_before
+	print("Benchmark: " + str(total_time))

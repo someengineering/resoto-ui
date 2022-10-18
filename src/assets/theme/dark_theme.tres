@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=70 format=2]
+[gd_resource type="Theme" load_steps=71 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -168,6 +168,15 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://assets/theme/Barlow-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=71]
+size = 30
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
 
 [sub_resource type="StyleBoxFlat" id=14]
 content_margin_left = 5.0
@@ -380,9 +389,6 @@ corner_radius_top_right = 6
 expand_margin_top = 3.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="DynamicFontData" id=1]
-font_path = "res://assets/theme/Barlow-Medium.ttf"
-
 [sub_resource type="DynamicFont" id=66]
 size = 17
 use_mipmaps = true
@@ -533,6 +539,7 @@ CheckBox/icons/unchecked = ExtResource( 4 )
 CheckBoxFlat/styles/focus = SubResource( 39 )
 CheckButton/icons/off = ExtResource( 1 )
 CheckButton/icons/on = ExtResource( 3 )
+FontBig/fonts/font = SubResource( 71 )
 HScrollBar/styles/grabber = SubResource( 14 )
 HScrollBar/styles/grabber_highlight = SubResource( 40 )
 HScrollBar/styles/grabber_pressed = SubResource( 40 )

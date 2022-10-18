@@ -83,6 +83,7 @@ func set_widget(_widget : BaseWidget) -> void:
 	widget = _widget
 	$PanelContainer/Title/ExportButton.visible = widget.has_method("get_csv")
 
+
 func _on_resize_button_released() -> void:
 	set_process(false)
 	if resize_tween.is_active():

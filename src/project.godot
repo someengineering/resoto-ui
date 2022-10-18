@@ -67,7 +67,7 @@ _global_script_classes=[ {
 "base": "PopupPanel",
 "class": "CustomPopupWindow",
 "language": "GDScript",
-"path": "res://components/elements/Styled/custom_dragable_window_popup.gd"
+"path": "res://components/elements/styled/custom_dragable_window_popup.gd"
 }, {
 "base": "Control",
 "class": "DashboardContainer",
