@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/exit-svgrepo-com.svg-e7d7e592ca6c6ef420a2fc568db92129.stex"
+path="res://.import/resize_buttons.svg-063e5cd1ee1090181a6027fac1148b98.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/exit-svgrepo-com.svg"
-dest_files=[ "res://.import/exit-svgrepo-com.svg-e7d7e592ca6c6ef420a2fc568db92129.stex" ]
+source_file="res://assets/resize_buttons.svg"
+dest_files=[ "res://.import/resize_buttons.svg-063e5cd1ee1090181a6027fac1148b98.stex" ]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
 flags/filter=true
-flags/mipmaps=true
+flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true

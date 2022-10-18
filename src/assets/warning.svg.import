@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/exit-svgrepo-com.svg-e7d7e592ca6c6ef420a2fc568db92129.stex"
+path="res://.import/warning.svg-2dd953c1223ba762bd0fd69b3ce4e7e7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/exit-svgrepo-com.svg"
-dest_files=[ "res://.import/exit-svgrepo-com.svg-e7d7e592ca6c6ef420a2fc568db92129.stex" ]
+source_file="res://assets/warning.svg"
+dest_files=[ "res://.import/warning.svg-2dd953c1223ba762bd0fd69b3ce4e7e7.stex" ]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
 flags/filter=true
-flags/mipmaps=true
+flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true
