@@ -333,9 +333,8 @@ margin_right = 57.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 36, 36 )
 mouse_filter = 1
-flat = true
 icon_tex = ExtResource( 10 )
-icon_margin = 0
+icon_margin = 2
 
 [node name="QueryStatusTitle" type="Label" parent="QueryWarning/VBox/PanelContainer/VBox"]
 modulate = Color( 1, 1, 1, 0.588235 )

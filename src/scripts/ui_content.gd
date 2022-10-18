@@ -8,16 +8,21 @@ onready var sections = {
 	"message_log": $Content/MessageLog,
 	"node_single_info": $Content/NodeSingleInfo,
 	"node_list_info": $Content/NodeListElement,
-	"hub": $Content/ResotoHub
+	"home": $Content/ResotoHome
 }
 
-var active_section = "terminal"
-
+var active_section:= "terminal"
+var last_visited_explore_section:= "none"
 onready var content_sections = $Content
 
 
 func _enter_tree():
 	_g.content_manager = self
+
+
+func _ready():
+	_g.connect("nav_change_section", self, "change_section")
+	_g.connect("nav_change_section_explore", self, "change_section_explore")
 
 
 func change_section(new_section:String):
@@ -32,3 +37,17 @@ func change_section(new_section:String):
 		sections[active_section].start()
 	else:
 		sections[active_section].show()
+
+
+func change_section_explore(type:String):
+	if type == "last":
+		if last_visited_explore_section == "none":
+			_g.emit_signal("explore_node_by_id", "root")
+			last_visited_explore_section = "node_single_info"
+		else:
+			change_section(last_visited_explore_section)
+	elif type == "node_single_info" or type == "node_list_info":
+		prints(type)
+		last_visited_explore_section = type
+		change_section(type)
+		

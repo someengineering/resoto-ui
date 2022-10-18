@@ -21,7 +21,20 @@ onready var scroll_container = $Margin/VBox/MainPanel/ScrollContainer/Content
 onready var vbox = $Margin/VBox/MainPanel/ScrollContainer/Content/ListContainer
 
 
+func _ready():
+	_g.connect("explore_node_list_data", self, "show_kind_from_node_data")
+	_g.connect("explore_node_list_search", self, "show_list_from_search")
+	_g.connect("explore_node_list_kind", self, "show_kind")
+	_g.connect("explore_node_list_id", self, "show_kind_from_node_id")
+
+
+func change_section_to_self():
+	_g.content_manager.change_section_explore("node_list_info")
+
+
 func show_kind_from_node_data(parent_node:Dictionary, kind:String):
+	change_section_to_self()
+	reset_display()
 	var search_command = "id(" + parent_node.id + ") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
 	
 	search_type_label.hide()
@@ -40,11 +53,11 @@ func show_kind_from_node_data(parent_node:Dictionary, kind:String):
 	
 	list_kind_button.text = kind
 	
-	print(search_command)
 	active_request = API.graph_search(search_command, self, "list")
 
 
 func show_kind(kind:String):
+	change_section_to_self()
 	var search_command = "is(" + kind + ") limit " + str(NODE_LIMIT)
 	
 	search_type_label.hide()
@@ -60,6 +73,7 @@ func show_kind(kind:String):
 
 
 func show_kind_from_node_id(id:String, kind:String):
+	change_section_to_self()
 	var search_command = "id(" + id + ") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
 	parent_node_id = id
 	
@@ -79,6 +93,7 @@ func show_kind_from_node_id(id:String, kind:String):
 
 
 func show_list_from_search(parent_node:Dictionary, search_command:String, kind_label_string:String):
+	change_section_to_self()
 	parent_node_id = parent_node.id
 	parent_node_name = parent_node.reported.name
 	
@@ -97,7 +112,6 @@ func show_list_from_search(parent_node:Dictionary, search_command:String, kind_l
 	else:
 		search_type_label.text = kind_label_string
 	
-	print(search_command)
 	active_request = API.graph_search(search_command, self, "list")
 
 
@@ -108,12 +122,11 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 	
 	if _response.transformed.has("result"):
 		# Delete old results, prepare new container (fastest way to delete a lot of nodes)
-		reset_display()
-		
 		filter_variables = {}
 		var current_result = _response.transformed.result
 		for r in current_result:
 			add_result_element(r, vbox)
+		show()
 
 
 func add_result_element(r, parent_element:Node):
@@ -162,17 +175,18 @@ func filter_results(filter_string:String):
 
 func _on_ParentNodeButton_pressed():
 	reset_display()
-	_g.content_manager.change_section("node_single_info")
+	_g.content_manager.change_section_explore("node_single_info")
 	_g.content_manager.find_node("NodeSingleInfo").show_node(parent_node_id)
 
 
 func _on_node_button_pressed(id:String):
 	reset_display()
-	_g.content_manager.change_section("node_single_info")
+	_g.content_manager.change_section_explore("node_single_info")
 	_g.content_manager.find_node("NodeSingleInfo").show_node(id)
 
 
 func reset_display():
+	hide()
 	vbox.queue_free()
 	vbox = VBoxContainer.new()
 	scroll_container.add_child(vbox)
@@ -193,4 +207,4 @@ func _on_ListKindButton_pressed():
 
 func _on_IconButton_pressed():
 	reset_display()
-	_g.content_manager.change_section("node_single_info")
+	_g.content_manager.change_section_explore("node_single_info")

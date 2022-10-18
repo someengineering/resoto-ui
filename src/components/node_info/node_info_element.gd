@@ -8,10 +8,12 @@ var breadcrumbs:Dictionary = {}
 
 func _ready():
 	Style.add($Margin/VBox/TitleBar/NodeIcon, Style.c.LIGHT)
+	_g.connect("explore_node_by_id", self, "show_node")
 
 
 func show_node(node_id:String):
 	hide()
+	_g.content_manager.change_section_explore("node_single_info")
 	var search_command = "id(" + node_id + ") <-[0:]-"
 	current_node_id = node_id
 	active_request = API.graph_search(search_command, self, "graph")
@@ -43,6 +45,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 				if r.id == current_node_id:
 					main_node_display(r)
 					set_successor_button(false)
+					set_predecessor_button(true)
 					hide_treemap()
 					if r.id != "root":
 						if (r.has("metadata") and r.metadata.has("descendant_summary")):
@@ -51,6 +54,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 							var descendants_query:= "aggregate(kind: sum(1) as count): id(%s) -[1:]->" % str(current_node_id)
 							API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
 					else:
+						set_predecessor_button(false)
 						set_successor_button(true)
 		update_breadcrumbs()
 		show()
@@ -95,6 +99,11 @@ func update_treemap(_descendants:Dictionary = {}):
 func set_successor_button(_enabled:bool):
 	$"%SuccessorsButton".disabled = !_enabled
 	$"%SuccessorsButton".modulate.a = 1 if _enabled else 0
+
+
+func set_predecessor_button(_enabled:bool):
+	$"%PredecessorsButton".disabled = !_enabled
+	$"%PredecessorsButton".modulate.a = 1 if _enabled else 0
 
 
 onready var breadcrumb_container = find_node("BreadcrumbContainer")
@@ -202,20 +211,17 @@ func on_id_button_pressed(id:String):
 
 
 func _on_TreeMap_pressed(kind:String):
-	_g.content_manager.change_section("node_list_info")
-	_g.content_manager.find_node("NodeListElement").show_kind_from_node_data(current_main_node, kind)
+	_g.emit_signal("explore_node_list_data", current_main_node, kind)
 
 
 func _on_PredecessorsButton_pressed():
-	_g.content_manager.change_section("node_list_info")
 	var search_command = "id(" + current_main_node.id + ") <-- limit 500"
-	_g.content_manager.find_node("NodeListElement").show_list_from_search(current_main_node, search_command, "<--")
+	_g.emit_signal("explore_node_list_search", current_main_node, search_command, "<--")
 
 
 func _on_SuccessorsButton_pressed():
-	_g.content_manager.change_section("node_list_info")
 	var search_command = "id(" + current_main_node.id + ") --> limit 500"
-	_g.content_manager.find_node("NodeListElement").show_list_from_search(current_main_node, search_command, "-->")
+	_g.emit_signal("explore_node_list_search", current_main_node, search_command, "-->")
 
 
 func _on_AllDataMaximizeButton_pressed():
@@ -227,8 +233,7 @@ func _on_AllDataCopyButton_pressed():
 
 
 func _on_KindLabelButton_pressed():
-	_g.content_manager.change_section("node_list_info")
-	_g.content_manager.find_node("NodeListElement").show_kind(current_main_node.reported.kind)
+	_g.emit_signal("explore_node_list_kind", current_main_node.reported.kind)
 
 
 func _on_AllDataPopup_change_scroll_pos(_sv:int):

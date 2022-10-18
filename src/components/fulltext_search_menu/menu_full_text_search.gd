@@ -96,16 +96,16 @@ func show_search_results(results:Array) -> void:
 	
 	yield(get_tree(), "idle_frame")
 	popup.set_as_minsize()
-	var popup_pos  = self.rect_global_position + Vector2(popup_x_size-rect_size.x, self.rect_size.y)
-	var popup_size = Vector2(popup_x_size, popup.rect_size.y)
+	var _popup_x_size = max(popup_x_size, rect_size.x)
+	var popup_pos  = rect_global_position + Vector2(-abs(_popup_x_size-rect_size.x), self.rect_size.y)
+	var popup_size = Vector2(_popup_x_size, popup.rect_size.y)
 	popup.popup(Rect2(popup_pos, popup_size))
 	grab_focus()
 
 
 func on_result_button_clicked(_id:String):
 	popup.hide()
-	_g.content_manager.change_section("node_single_info")
-	_g.content_manager.find_node("NodeSingleInfo").show_node(_id)
+	_g.emit_signal("explore_node_by_id", _id)
 
 
 func _on_FullTextSearch_gui_input(event):

@@ -1,0 +1,112 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/resoto/Resoto_logo_and_text_big.svg" type="Texture" id=2]
+[ext_resource path="res://components/fulltext_search_menu/full_text_search.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/hub/component_resoto_home.gd" type="Script" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 28
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="ButtonGroup" id=2]
+
+[node name="ResotoHome" type="MarginContainer"]
+margin_left = 10.0
+margin_top = 48.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+custom_constants/margin_top = 40
+script = ExtResource( 4 )
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_top = 40.0
+margin_right = 1900.0
+margin_bottom = 1022.0
+mouse_filter = 2
+
+[node name="Logo" type="TextureRect" parent="VBox"]
+margin_right = 1900.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 0, 80 )
+mouse_filter = 2
+size_flags_vertical = 0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Spacer2" type="Control" parent="VBox"]
+margin_top = 84.0
+margin_right = 1900.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 0, 30 )
+
+[node name="FullTextSearch" parent="VBox" instance=ExtResource( 3 )]
+margin_left = 650.0
+margin_top = 118.0
+margin_right = 1250.0
+margin_bottom = 164.0
+rect_min_size = Vector2( 600, 0 )
+size_flags_horizontal = 4
+custom_fonts/font = SubResource( 1 )
+
+[node name="Spacer" type="Control" parent="VBox"]
+margin_top = 168.0
+margin_right = 1900.0
+margin_bottom = 218.0
+rect_min_size = Vector2( 0, 50 )
+
+[node name="VBox" type="GridContainer" parent="VBox"]
+margin_left = 740.0
+margin_top = 222.0
+margin_right = 1160.0
+margin_bottom = 642.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_constants/vseparation = 20
+custom_constants/hseparation = 20
+columns = 2
+
+[node name="ButtonDashboards" type="Button" parent="VBox/VBox"]
+margin_right = 200.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 200, 200 )
+size_flags_horizontal = 4
+group = SubResource( 2 )
+text = "Dashboards"
+
+[node name="ButtonExplore" type="Button" parent="VBox/VBox"]
+margin_left = 220.0
+margin_right = 420.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 200, 200 )
+size_flags_horizontal = 4
+group = SubResource( 2 )
+text = "Explore"
+
+[node name="ButtonConfig" type="Button" parent="VBox/VBox"]
+margin_top = 220.0
+margin_right = 200.0
+margin_bottom = 420.0
+rect_min_size = Vector2( 200, 200 )
+size_flags_horizontal = 4
+text = "Configuration"
+
+[node name="ButtonTerminals" type="Button" parent="VBox/VBox"]
+margin_left = 220.0
+margin_top = 220.0
+margin_right = 420.0
+margin_bottom = 420.0
+rect_min_size = Vector2( 200, 200 )
+size_flags_horizontal = 4
+group = SubResource( 2 )
+text = "Terminals"
+
+[connection signal="visibility_changed" from="." to="." method="_on_ResotoHome_visibility_changed"]
+[connection signal="text_changed" from="VBox/FullTextSearch" to="." method="_on_FullTextSearch_text_changed"]
+[connection signal="pressed" from="VBox/VBox/ButtonDashboards" to="." method="_on_ButtonDashboards_pressed"]
+[connection signal="pressed" from="VBox/VBox/ButtonExplore" to="." method="_on_ButtonExplore_pressed"]
+[connection signal="pressed" from="VBox/VBox/ButtonConfig" to="." method="_on_ButtonConfig_pressed"]
+[connection signal="pressed" from="VBox/VBox/ButtonTerminals" to="." method="_on_ButtonTerminals_pressed"]

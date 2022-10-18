@@ -67,19 +67,19 @@ script = ExtResource( 1 )
 
 [node name="TabsBar" type="HBoxContainer" parent="."]
 margin_right = 1900.0
-margin_bottom = 24.0
+margin_bottom = 31.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="StartSpacer" type="MarginContainer" parent="TabsBar"]
 margin_right = 8.0
-margin_bottom = 24.0
+margin_bottom = 31.0
 rect_min_size = Vector2( 8, 0 )
 
 [node name="TerminalTabs" type="Tabs" parent="TabsBar"]
 margin_left = 8.0
 margin_right = 8.0
-margin_bottom = 24.0
+margin_bottom = 31.0
 size_flags_horizontal = 13
 size_flags_vertical = 3
 custom_constants/label_valign_fg = 0
@@ -93,8 +93,9 @@ drag_to_rearrange_enabled = true
 
 [node name="NewTabButton" type="Button" parent="TabsBar"]
 margin_left = 8.0
+margin_top = 3.0
 margin_right = 32.0
-margin_bottom = 24.0
+margin_bottom = 27.0
 rect_min_size = Vector2( 24, 24 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -113,7 +114,7 @@ text = "+"
 
 [node name="TerminalContainer" type="PanelContainer" parent="."]
 show_behind_parent = true
-margin_top = 23.0
+margin_top = 30.0
 margin_right = 1900.0
 margin_bottom = 1030.0
 size_flags_horizontal = 3

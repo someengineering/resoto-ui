@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -18,9 +18,10 @@
 [ext_resource path="res://components/message_log/component_message_log.tscn" type="PackedScene" id=16]
 [ext_resource path="res://components/node_list/node_list_element.tscn" type="PackedScene" id=17]
 [ext_resource path="res://components/popups/popup_generic_confirm.gd" type="Script" id=18]
-[ext_resource path="res://components/hub/component_resoto_hub.tscn" type="PackedScene" id=19]
+[ext_resource path="res://components/hub/component_resoto_home.tscn" type="PackedScene" id=19]
 [ext_resource path="res://components/elements/Styled/style_color_auto_remap.gd" type="Script" id=20]
 [ext_resource path="res://assets/icons/icon_128_external_link.svg" type="Texture" id=21]
+[ext_resource path="res://scripts/tools/browser_copy_paste_fix.gd" type="Script" id=22]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
@@ -172,7 +173,7 @@ margin_top = 48.0
 margin_right = 1910.0
 margin_bottom = 1070.0
 
-[node name="ResotoHub" parent="Content/Content" instance=ExtResource( 19 )]
+[node name="ResotoHome" parent="Content/Content" instance=ExtResource( 19 )]
 
 [node name="MenuBar" type="CanvasLayer" parent="."]
 layer = 20
@@ -229,26 +230,31 @@ custom_constants/separation = 8
 [node name="ButtonDashboards" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_right = 310.0
 margin_bottom = 33.0
-toggle_mode = true
 group = SubResource( 19 )
 text = "Dashboards"
 
-[node name="ButtonConfig" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+[node name="ButtonExplore" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 41.0
 margin_right = 310.0
 margin_bottom = 74.0
-text = "Configuration"
+group = SubResource( 19 )
+text = "Explore"
 
-[node name="ButtonTerminals" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+[node name="ButtonConfig" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 82.0
 margin_right = 310.0
 margin_bottom = 115.0
-toggle_mode = true
+text = "Configuration"
+
+[node name="ButtonTerminals" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+margin_top = 123.0
+margin_right = 310.0
+margin_bottom = 156.0
 group = SubResource( 19 )
 text = "Terminals"
 
 [node name="Spacer" type="Control" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_top = 123.0
+margin_top = 164.0
 margin_right = 310.0
 margin_bottom = 894.0
 size_flags_vertical = 3
@@ -257,7 +263,6 @@ size_flags_vertical = 3
 margin_top = 902.0
 margin_right = 310.0
 margin_bottom = 935.0
-toggle_mode = true
 group = SubResource( 19 )
 text = "Message Log"
 
@@ -375,7 +380,8 @@ rect_min_size = Vector2( 20, 0 )
 mouse_filter = 2
 size_flags_horizontal = 3
 
-[node name="ResotoLogo" type="TextureRect" parent="MenuBar/MenuContainer/TopMenu/Title"]
+[node name="MainResotoLogo" type="TextureRect" parent="MenuBar/MenuContainer/TopMenu/Title"]
+unique_name_in_owner = true
 margin_left = 917.0
 margin_right = 1002.0
 margin_bottom = 40.0
@@ -391,7 +397,8 @@ margin_bottom = 40.0
 mouse_filter = 2
 size_flags_horizontal = 3
 
-[node name="FullTextSearch" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 14 )]
+[node name="TopMenuFullTextSearch" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 14 )]
+unique_name_in_owner = true
 mouse_filter = 1
 
 [node name="SpacerR" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
@@ -601,8 +608,10 @@ flat = true
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
 [node name="BrowserCopyPasteWatcher" type="Node" parent="."]
+script = ExtResource( 22 )
 
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonDashboards" to="MenuBar" method="_on_ButtonDashboards_pressed"]
+[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonExplore" to="MenuBar" method="_on_ButtonExplore_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonConfig" to="MenuBar" method="_on_ButtonConfig_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonTerminals" to="MenuBar" method="_on_ButtonTerminals_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonMessageLog" to="MenuBar" method="_on_ButtonMessageLog_pressed"]
@@ -610,7 +619,7 @@ flat = true
 [connection signal="gui_input" from="MenuBar/HamburgerMenu/ShadowSide" to="MenuBar" method="_on_click_detection_gui_input"]
 [connection signal="gui_input" from="MenuBar/HamburgerMenu/ClickDetection" to="MenuBar" method="_on_click_detection_gui_input"]
 [connection signal="hamburger_button_pressed" from="MenuBar/MenuContainer/TopMenu/Title/HamburgerButton" to="MenuBar" method="_on_HamburgerButton_hamburger_button_pressed"]
-[connection signal="gui_input" from="MenuBar/MenuContainer/TopMenu/Title/ResotoLogo" to="MenuBar" method="_on_ResotoLogo_gui_input"]
+[connection signal="gui_input" from="MenuBar/MenuContainer/TopMenu/Title/MainResotoLogo" to="MenuBar" method="_on_ResotoLogo_gui_input"]
 [connection signal="about_to_show" from="Popups/ConnectPopup" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ConnectPopup_about_to_show"]
 [connection signal="text_entered" from="Popups/ConnectPopup/Content/MarginContainer/Connect/PSKLineEdit" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_PSKLineEdit_text_entered"]
 [connection signal="pressed" from="Popups/ConnectPopup/Content/MarginContainer/Connect/ButtonConnect" to="Popups/ConnectPopup/Content/MarginContainer/Connect" method="_on_ButtonConnect_pressed"]

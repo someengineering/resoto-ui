@@ -7,10 +7,14 @@ onready var hb_menu = $HamburgerMenu
 onready var hb_button = find_node("HamburgerButton")
 onready var click_detection = find_node("ClickDetection")
 onready var shadow_side = find_node("ShadowSide")
+onready var search_box = $"%TopMenuFullTextSearch"
+onready var main_logo = $"%MainResotoLogo"
 
 
 func _ready() -> void:
 	_g.connect("close_hamburger_menu", self, "close_menu")
+	_g.connect("top_search_update", self, "_on_top_search_update")
+	_g.connect("resoto_home_visible", self, "_on_resoto_home_visible")
 	$"%HamburgerMenuItems/ButtonMessageLog".visible = OS.has_feature("editor") and not force_hide_message_log
 	
 	get_tree().root.connect("size_changed", self, "on_ui_shrink_changed")
@@ -80,21 +84,22 @@ func _on_patch_model_done(_error:int, _response) -> void:
 
 
 func _on_ButtonConfig_pressed():
-	_g.content_manager.change_section("config")
+	_g.emit_signal("nav_change_section", "config")
 	close_menu()
 
 
 func _on_ButtonDashboards_pressed():
-	_g.content_manager.change_section("dashboards")
+	_g.emit_signal("nav_change_section", "dashboards")
 	close_menu()
 
 
 func _on_ButtonTerminals_pressed():
-	_g.content_manager.change_section("terminals")
+	_g.emit_signal("nav_change_section", "terminals")
 	close_menu()
 
+
 func _on_ButtonMessageLog_pressed():
-	_g.content_manager.change_section("message_log")
+	_g.emit_signal("nav_change_section", "message_log")
 	close_menu()
 
 
@@ -121,10 +126,26 @@ func _on_HamburgerButton_hamburger_button_pressed(pressed:bool):
 
 func _on_ResotoLogo_gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
-		_g.content_manager.change_section("hub")
+		_g.emit_signal("nav_change_section", "home")
 		close_menu()
 
 
 func _on_click_detection_gui_input(event:InputEventMouseButton):
 	if hb_button.pressed and event is InputEventMouseButton and event.is_pressed():
 		hb_button.pressed = false
+
+
+func _on_top_search_update(_text:String) -> void:
+	search_box.text = _text
+
+
+func _on_resoto_home_visible(_visibility:bool) -> void:
+	search_box.modulate.a = 0 if _visibility else 1
+	search_box.mouse_filter = Control.MOUSE_FILTER_IGNORE if _visibility else Control.MOUSE_FILTER_PASS
+	main_logo.modulate.a = 0 if _visibility else 1
+	main_logo.mouse_filter = Control.MOUSE_FILTER_IGNORE if _visibility else Control.MOUSE_FILTER_PASS
+
+
+func _on_ButtonExplore_pressed():
+	_g.emit_signal("nav_change_section_explore", "last")
+	close_menu()

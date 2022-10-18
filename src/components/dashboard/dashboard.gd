@@ -82,7 +82,8 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	reference.rect_size = container.rect_size
 	
 	reference.mouse_filter = MOUSE_FILTER_IGNORE
-	reference.border_color = Color(0.662745, 0.568627, 0.792157)
+	reference.border_color = Style.col_map[Style.c.NORMAL]
+	reference.border_width = 2
 	reference.editor_only = false
 	reference.visible = false
 	

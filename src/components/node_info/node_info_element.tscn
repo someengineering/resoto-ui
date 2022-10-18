@@ -138,6 +138,7 @@ size_flags_horizontal = 3
 custom_constants/separation = 10
 
 [node name="PredecessorsButton" parent="Margin/VBox/NodeContent/NodeDetails/Actions" instance=ExtResource( 12 )]
+unique_name_in_owner = true
 margin_right = 195.0
 size_flags_horizontal = 11
 text = "      Show Predecessors"
