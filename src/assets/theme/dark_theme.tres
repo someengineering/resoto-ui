@@ -323,6 +323,20 @@ corner_radius_bottom_left = 4
 [sub_resource type="StyleBoxLine" id=37]
 color = Color( 0.313726, 0.223529, 0.435294, 1 )
 
+[sub_resource type="StyleBoxFlat" id=38]
+bg_color = Color( 0.462745, 0.176471, 0.843137, 0.196078 )
+border_width_left = 10
+border_width_right = 10
+border_color = Color( 0.462745, 0.176471, 0.843137, 0.27451 )
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxLine" id=37]
+color = Color( 0.313726, 0.223529, 0.435294, 1 )
+
 [sub_resource type="StyleBoxFlat" id=8]
 bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 border_width_left = 1
@@ -387,7 +401,7 @@ bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 expand_margin_top = 3.0
-expand_margin_bottom = 1.0
+expand_margin_bottom = 2.0
 
 [sub_resource type="DynamicFont" id=66]
 size = 17
