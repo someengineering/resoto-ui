@@ -7,6 +7,7 @@ var accounts : Dictionary = {}
 var clouds : Array = []
 var regions : Dictionary = {}
 
+
 func set_infra_info(new_info : Array) -> void:
 	infra_info = new_info
 	for info in infra_info:
