@@ -12,57 +12,82 @@ _global_script_classes=[ {
 "base": "DataSource",
 "class": "AggregateSearchDataSource",
 "language": "GDScript",
-"path": "res://components/widgets/AggregateSearchDataSource.gd"
+"path": "res://components/dashboard/data_sources/data_source_aggregate_search.gd"
 }, {
 "base": "Control",
 "class": "BaseWidget",
 "language": "GDScript",
-"path": "res://components/widgets/BaseWidget.gd"
+"path": "res://components/dashboard/shared/base_widget.gd"
 }, {
 "base": "Label",
 "class": "ClippedLabel",
 "language": "GDScript",
-"path": "res://components/widgets/ClippedLabel.gd"
+"path": "res://components/dashboard/shared/clipped_label.gd"
 }, {
 "base": "MarginContainer",
 "class": "ColorCondition",
 "language": "GDScript",
-"path": "res://components/widgets/ColorCondition.gd"
+"path": "res://components/dashboard/new_widget_popup/color_condition.gd"
 }, {
 "base": "Node",
 "class": "ColorController",
 "language": "GDScript",
-"path": "res://components/widgets/ColorController.gd"
+"path": "res://components/dashboard/widget_indicator/color_controller.gd"
 }, {
 "base": "MarginContainer",
 "class": "ColorControllerUi",
 "language": "GDScript",
-"path": "res://components/widgets/ColorControllerUI.gd"
+"path": "res://components/dashboard/new_widget_popup/color_controller_ui.gd"
 }, {
 "base": "VBoxContainer",
 "class": "ConfigComponentArray",
 "language": "GDScript",
-"path": "res://components/config/component_config_array_container.gd"
+"path": "res://components/config/config_templates/component_config_array_container.gd"
 }, {
 "base": "VBoxContainer",
 "class": "ConfigComponentComplex",
 "language": "GDScript",
-"path": "res://components/config/component_config_complex.gd"
-}, {
-"base": "VBoxContainer",
-"class": "ConfigComponentDict",
-"language": "GDScript",
-"path": "res://components/config/component_config_dict.gd"
+"path": "res://components/config/config_templates/component_config_complex.gd"
 }, {
 "base": "Control",
 "class": "ConfigComponentEnum",
 "language": "GDScript",
-"path": "res://components/config/component_config_enum.gd"
+"path": "res://components/config/config_templates/component_config_enum.gd"
 }, {
 "base": "Control",
 "class": "ConfigComponentSimple",
 "language": "GDScript",
-"path": "res://components/config/component_config_field.gd"
+"path": "res://components/config/config_templates/component_config_simple.gd"
+}, {
+"base": "CanvasLayer",
+"class": "ContentManager",
+"language": "GDScript",
+"path": "res://scripts/ui_content.gd"
+}, {
+"base": "PopupPanel",
+"class": "CustomPopupWindow",
+"language": "GDScript",
+"path": "res://components/elements/styled/custom_dragable_window_popup.gd"
+}, {
+"base": "Control",
+"class": "DashboardContainer",
+"language": "GDScript",
+"path": "res://components/dashboard/dashboard_container.gd"
+}, {
+"base": "Node",
+"class": "DataSource",
+"language": "GDScript",
+"path": "res://components/dashboard/data_sources/data_source.gd"
+}, {
+"base": "Label",
+"class": "DynamicLabel",
+"language": "GDScript",
+"path": "res://components/dashboard/shared/dynamic_label.gd"
+}, {
+"base": "BaseWidget",
+"class": "Indicator",
+"language": "GDScript",
+"path": "res://components/dashboard/widget_indicator/widget_indicator.gd"
 }, {
 "base": "Control",
 "class": "DashboardContainer",
@@ -92,17 +117,37 @@ _global_script_classes=[ {
 "base": "LineEdit",
 "class": "LineEditFloat",
 "language": "GDScript",
-"path": "res://components/config/component_config_line_edit_float.gd"
+"path": "res://components/config/config_templates/component_config_line_edit_float.gd"
 }, {
 "base": "LineEdit",
 "class": "LineEditInt",
 "language": "GDScript",
-"path": "res://components/config/component_config_line_edit_int.gd"
+"path": "res://components/config/config_templates/component_config_line_edit_int.gd"
+}, {
+"base": "CanvasLayer",
+"class": "PopupManager",
+"language": "GDScript",
+"path": "res://scripts/ui_popup_manager.gd"
 }, {
 "base": "UserAgent",
 "class": "ResotoAPI",
 "language": "GDScript",
 "path": "res://scripts/classes/resoto_api.gd"
+}, {
+"base": "Label",
+"class": "RightClickCopyLabel",
+"language": "GDScript",
+"path": "res://scripts/tools/left_click_copy.gd"
+}, {
+"base": "Control",
+"class": "RotatedLabel",
+"language": "GDScript",
+"path": "res://components/dashboard/widget_heatmap/rotated_label.gd"
+}, {
+"base": "BaseWidget",
+"class": "TableWidget",
+"language": "GDScript",
+"path": "res://components/dashboard/widget_table/widget_table.gd"
 }, {
 "base": "Control",
 "class": "RotatedLabel",
@@ -122,12 +167,12 @@ _global_script_classes=[ {
 "base": "DataSource",
 "class": "TextSearchDataSource",
 "language": "GDScript",
-"path": "res://components/widgets/TextSearchDataSource.gd"
+"path": "res://components/dashboard/data_sources/data_source_text_search.gd"
 }, {
 "base": "DataSource",
 "class": "TimeSeriesDataSource",
 "language": "GDScript",
-"path": "res://components/widgets/TimeSeriesDataSource.gd"
+"path": "res://components/dashboard/data_sources/data_source_time_series.gd"
 }, {
 "base": "Reference",
 "class": "UserAgent",
@@ -142,7 +187,7 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "WidgetContainer",
 "language": "GDScript",
-"path": "res://components/widgets/WidgetContainer.gd"
+"path": "res://components/dashboard/container/widget_container.gd"
 } ]
 _global_script_class_icons={
 "AggregateSearchDataSource": "",
@@ -153,9 +198,10 @@ _global_script_class_icons={
 "ColorControllerUi": "",
 "ConfigComponentArray": "",
 "ConfigComponentComplex": "",
-"ConfigComponentDict": "",
 "ConfigComponentEnum": "",
 "ConfigComponentSimple": "",
+"ContentManager": "",
+"CustomPopupWindow": "",
 "DashboardContainer": "",
 "DataSource": "",
 "DynamicLabel": "",
@@ -163,7 +209,9 @@ _global_script_class_icons={
 "JWTGenerator": "",
 "LineEditFloat": "",
 "LineEditInt": "",
+"PopupManager": "",
 "ResotoAPI": "",
+"RightClickCopyLabel": "",
 "RotatedLabel": "",
 "TableWidget": "",
 "TerminalComponent": "",
@@ -182,6 +230,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
+Style="*res://scripts/autoloads/StyleManager.gd"
 JWT="*res://scripts/autoloads/jwt.gd"
 API="*res://scripts/autoloads/api_handler.gd"
 _g="*res://scripts/autoloads/global.gd"
@@ -198,14 +247,22 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1920
 window/size/height=1080
-window/size/test_width=1280
-window/size/test_height=720
+window/size/test_width=1600
+window/size/test_height=1200
 window/dpi/allow_hidpi=true
 window/stretch/aspect="expand"
+
+[editor]
+
+scene_naming=2
 
 [editor_plugins]
 
 enabled=PoolStringArray(  )
+
+[global]
+
+default_clear_color=false
 
 [gui]
 
@@ -223,8 +280,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_clear_color=Color( 0.105882, 0.0941176, 0.109804, 1 )
-environment/default_environment="res://assets/default_env.tres"
+environment/default_clear_color=Color( 0.0470588, 0.0941176, 0.133333, 1 )
+environment/default_environment="res://assets/generic/default_env.tres"

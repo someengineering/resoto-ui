@@ -132,6 +132,76 @@
 			visibility: visible;
 		}
 	</style>
+	<script>
+		var reader = new FileReader();
+		var input = document.createElement('INPUT');
+		
+		function getOS() {
+			let os = "Unknown";
+			if (navigator.appVersion.indexOf("Win") != -1) os = "Windows";
+			if (navigator.appVersion.indexOf("Mac") != -1) os = "MacOS";
+			if (navigator.appVersion.indexOf("X11") != -1) os = "UNIX";
+			if (navigator.appVersion.indexOf("Linux") != -1) os = "Linux";
+			return(os);
+		}
+	
+		function getURL() {
+			return(window.location.protocol + "//" + window.location.hostname);
+		}
+		function getProtocol() {
+			return(window.location.protocol);
+		}
+		function getParameter(parameter) {
+			const queryString = window.location.search;
+			const urlParams = new URLSearchParams(queryString);
+			const result = urlParams.get(parameter);
+			console.log(parameter);
+			console.log(result);
+			return(result);
+		}
+		function uploadFile(fileTypes) {
+			input.setAttribute("type", "file");
+			input.setAttribute("accept", fileTypes);
+			input.click();
+		/*	input.addEventListener('change', event => {
+				if (event.target.files.length > 0){
+				  var file = event.target.files[0];
+				  fileName = file.name;
+				  reader.readAsText(file);
+				}
+			  });*/
+		}
+	</script>
+	<script type='text/javascript'>
+		// A simple Godot watchdog to notify the user when the engine is unresponsive
+		var godotWatchdogTimer = 0.0;
+		var godotWatchdogDialog = false;
+		var myInterval = setInterval(godotWatchdogCount, 500);
+
+		function godotWatchdogCount() {
+			if (document.hasFocus())
+				godotWatchdogTimer += 0.5;
+			if (godotWatchdogTimer >= 3.0 && !godotWatchdogDialog) {
+				godotWatchdogTimer = 3.0;
+				godotWatchdogTimeout()
+			}
+		}
+
+		function godotWatchdogNotification() {
+			godotWatchdogTimer = 0.0;
+		}
+
+		function godotWatchdogTimeout() {
+			godotWatchdogDialog = true;
+			if (confirm("Resoto UI is not responding...\nConfirm to reload the UI.")) {
+				window.location.reload();
+			} else {
+				godotWatchdogDialog = false;
+				godotWatchdogTimer = 0.0;
+			}
+		}
+		
+	</script>
 $GODOT_HEAD_INCLUDE
 </head>
 <body style="cursor: default">

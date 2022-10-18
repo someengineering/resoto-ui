@@ -21,7 +21,7 @@ func update_size() -> void:
 	var total_size_x : float = 0.0
 	for i in tab_count:
 		total_size_x += tabs.get_tab_rect(i).size.x
-	tabs.rect_min_size.x = clamp(32 + total_size_x, 0, rect_size.x-30)
+	tabs.rect_min_size.x = clamp(40 + total_size_x, 0, rect_size.x-30)
 
 
 func deactivate_all_terminals() -> void:

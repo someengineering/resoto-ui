@@ -5,7 +5,7 @@ signal rename_terminal
 
 const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META, KEY_MASK_META, KEY_MASK_CMD]
 
-var terminal_active: bool = false
+var terminal_active: bool = false setget set_terminal_active
 var last_command_id: int  = -1
 var current_command:String = ""
 var active_request: ResotoAPI.Request
@@ -31,26 +31,35 @@ class UITerminalCommand:
 	func exec(_parent:Node, _params:Array):
 		if _parent.has_method(command_function_name):
 			_parent.call(command_function_name, _params)
-		
+
 
 func _ready() -> void:
+	if not _g.is_connected_to_resotocore:
+		yield(_g, "connected_to_resotocore")
+	
 	loading.console = console
 	console_v_scroll.connect("changed", self, "on_scroll_changed")
-	var image = load("res://assets/Resoto-Logo_bigger.svg")
+	var image = load("res://assets/resoto/Resoto-Logo_bigger.svg")
 	
 	for i in 5:
 		console.newline()
 	console.push_align(RichTextLabel.ALIGN_CENTER)
 	console.add_image(image, 200, 200)
 	console.newline()
-	console.add_text("Resoto UI - " + _g.ui_version)
+	console.append_bbcode("[b]Resoto[/b]\nVersion: " + _g.resotocore_version)
+	console.append_bbcode("\n[i]We recommend using the Resoto Shell for a much better CLI experience.[/i]")
+	console.append_bbcode("\n[url=url::https://resoto.com/docs/concepts/components/shell]Learn more about the Resoto Shell[img=8x8]res://assets/icons/icon_128_external_link_colored.svg[/img][/url]")
 	for i in 5:
 		console.newline()
 	console.pop()
 
 
 func _input(event:InputEvent) -> void:
-	if not is_visible_in_tree() or !terminal_active or _g.popup_manager.popup_active() or not event is InputEventKey:
+	if (not is_visible_in_tree()
+	or !terminal_active
+	or _g.popup_manager.popup_active()
+	or not event is InputEventKey
+	or _g.focus_in_search):
 		return
 	
 	if not command.has_focus() and event.pressed and not MODIFIER_KEYS.has(event.scancode):
@@ -123,6 +132,11 @@ func _on_cli_execute_streamed_data(data:String) -> void:
 	console.append_bbcode(str(data))
 
 
+func set_terminal_active(_terminal_active:bool) -> void:
+	terminal_active = _terminal_active
+	command.grab_focus()
+
+
 func on_scroll_changed() -> void:
 	console_v_scroll.value = console_v_scroll.max_value
 
@@ -177,3 +191,13 @@ func _on_CommandEdit_gui_input(event):
 	if event.pressed and event.scancode == KEY_ENTER or event.scancode == KEY_KP_ENTER:
 		command.text = command.text.replace("\n", "")
 		_on_CommandEdit_text_entered()
+
+
+func _on_RichResponseText_meta_clicked(meta:String):
+	if meta.begins_with("url::"):
+		OS.shell_open(meta.trim_prefix("url::"))
+
+
+func _on_RichResponseText_gui_input(event:InputEventMouseButton):
+	if event is InputEventMouseButton and not event.is_pressed() and console.get_selected_text() == "":
+		command.grab_focus()

@@ -1,0 +1,471 @@
+[gd_scene load_steps=35 format=2]
+
+[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=1]
+[ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=2]
+[ext_resource path="res://components/elements/styled/styled_icon_button_hover.gd" type="Script" id=3]
+[ext_resource path="res://components/dashboard/data_sources/data_source_aggregate_search.gd" type="Script" id=4]
+[ext_resource path="res://components/dashboard/container/widget_container.gd" type="Script" id=5]
+[ext_resource path="res://assets/icons/icon_128_edit_frame.svg" type="Texture" id=6]
+[ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=7]
+[ext_resource path="res://assets/icons/icon_special_resize_buttons_new.svg" type="Texture" id=8]
+[ext_resource path="res://assets/icons/icon_128_fullscreen_variant.svg" type="Texture" id=9]
+[ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=10]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=11]
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=12]
+
+[sub_resource type="StyleBoxFlat" id=21]
+bg_color = Color( 0, 0, 0, 1 )
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_size = 8
+shadow_offset = Vector2( 0, 6 )
+
+[sub_resource type="StyleBoxEmpty" id=17]
+
+[sub_resource type="StyleBoxFlat" id=18]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.639216, 0.54902, 0.764706, 1 )
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 180, 0, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=16]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 0, 0, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 240, 0, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 60, 0, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 300, 0, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 120, 0, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 180, 60, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 0, 60, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=12]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 300, 60, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=13]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 120, 60, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 180, 120, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 0, 120, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=14]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 240, 120, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=15]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 60, 120, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 300, 120, 60, 60 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 5
+atlas = ExtResource( 8 )
+region = Rect2( 120, 120, 60, 60 )
+
+[sub_resource type="StyleBoxFlat" id=22]
+bg_color = Color( 1, 1, 1, 0.901961 )
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=20]
+content_margin_left = 6.0
+content_margin_right = 6.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=19]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+
+[node name="WidgetContainer" type="Control"]
+margin_right = 256.0
+margin_bottom = 256.0
+script = ExtResource( 5 )
+
+[node name="Shadow" type="Panel" parent="."]
+modulate = Color( 1, 1, 1, 0.0862745 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_styles/panel = SubResource( 21 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 40.0
+mouse_filter = 2
+custom_constants/margin_right = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="ResizeButtons" type="Control" parent="."]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MidCenter" type="Button" parent="ResizeButtons"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+mouse_default_cursor_shape = 13
+custom_styles/hover = SubResource( 17 )
+custom_styles/pressed = SubResource( 18 )
+custom_styles/focus = SubResource( 17 )
+custom_styles/normal = SubResource( 17 )
+keep_pressed_outside = true
+flat = true
+
+[node name="TopLeft" type="TextureButton" parent="ResizeButtons"]
+margin_right = 20.0
+margin_bottom = 20.0
+mouse_default_cursor_shape = 12
+keep_pressed_outside = true
+texture_normal = SubResource( 1 )
+texture_pressed = SubResource( 16 )
+expand = true
+stretch_mode = 5
+
+[node name="TopCenter" type="TextureButton" parent="ResizeButtons"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -10.0
+margin_right = 10.0
+margin_bottom = 20.0
+mouse_default_cursor_shape = 9
+keep_pressed_outside = true
+texture_normal = SubResource( 9 )
+texture_pressed = SubResource( 2 )
+expand = true
+stretch_mode = 5
+
+[node name="TopRight" type="TextureButton" parent="ResizeButtons"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -20.0
+margin_bottom = 20.0
+mouse_default_cursor_shape = 11
+keep_pressed_outside = true
+texture_normal = SubResource( 3 )
+texture_pressed = SubResource( 4 )
+expand = true
+stretch_mode = 5
+
+[node name="MidLeft" type="TextureButton" parent="ResizeButtons"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -10.0
+margin_right = 20.0
+margin_bottom = 10.0
+mouse_default_cursor_shape = 10
+keep_pressed_outside = true
+texture_normal = SubResource( 10 )
+texture_pressed = SubResource( 11 )
+expand = true
+stretch_mode = 5
+
+[node name="MidRight" type="TextureButton" parent="ResizeButtons"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -10.0
+margin_bottom = 10.0
+mouse_default_cursor_shape = 10
+keep_pressed_outside = true
+texture_normal = SubResource( 12 )
+texture_pressed = SubResource( 13 )
+expand = true
+stretch_mode = 5
+
+[node name="BottomLeft" type="TextureButton" parent="ResizeButtons"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -20.0
+margin_right = 20.0
+mouse_default_cursor_shape = 11
+keep_pressed_outside = true
+texture_normal = SubResource( 5 )
+texture_pressed = SubResource( 6 )
+expand = true
+stretch_mode = 5
+
+[node name="BottomCenter" type="TextureButton" parent="ResizeButtons"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -10.0
+margin_top = -20.0
+margin_right = 10.0
+mouse_default_cursor_shape = 9
+keep_pressed_outside = true
+texture_normal = SubResource( 14 )
+texture_pressed = SubResource( 15 )
+expand = true
+stretch_mode = 5
+
+[node name="BottomRight" type="TextureButton" parent="ResizeButtons"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -20.0
+margin_top = -20.0
+mouse_default_cursor_shape = 12
+keep_pressed_outside = true
+texture_normal = SubResource( 7 )
+texture_pressed = SubResource( 8 )
+expand = true
+stretch_mode = 5
+
+[node name="QueryWarning" type="MarginContainer" parent="."]
+visible = false
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 40.0
+mouse_filter = 2
+theme = ExtResource( 12 )
+custom_constants/margin_right = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="BG" type="Panel" parent="QueryWarning"]
+modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+margin_left = 5.0
+margin_right = 251.0
+margin_bottom = 211.0
+custom_styles/panel = SubResource( 22 )
+
+[node name="VBox" type="VBoxContainer" parent="QueryWarning"]
+margin_left = 5.0
+margin_right = 251.0
+margin_bottom = 211.0
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="QueryWarning/VBox"]
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
+margin_left = 77.0
+margin_top = 67.0
+margin_right = 168.0
+margin_bottom = 144.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_styles/panel = SubResource( 20 )
+
+[node name="VBox" type="VBoxContainer" parent="QueryWarning/VBox/PanelContainer"]
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 85.0
+margin_bottom = 71.0
+custom_constants/separation = 8
+
+[node name="ConfigButton" parent="QueryWarning/VBox/PanelContainer/VBox" instance=ExtResource( 11 )]
+modulate = Color( 1, 1, 1, 0.588235 )
+margin_left = 21.0
+margin_right = 57.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 36, 36 )
+mouse_filter = 1
+icon_tex = ExtResource( 10 )
+icon_margin = 2
+
+[node name="QueryStatusTitle" type="Label" parent="QueryWarning/VBox/PanelContainer/VBox"]
+modulate = Color( 1, 1, 1, 0.588235 )
+margin_top = 44.0
+margin_right = 79.0
+margin_bottom = 65.0
+text = "Error: Title"
+align = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
+anchor_right = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = 29.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 19 )
+
+[node name="TitleLabel" type="Label" parent="PanelContainer"]
+margin_left = 5.0
+margin_top = 7.0
+margin_right = 241.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+text = "Title"
+align = 1
+clip_text = true
+
+[node name="Title" type="HBoxContainer" parent="PanelContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 241.0
+margin_bottom = 30.0
+mouse_filter = 2
+
+[node name="DataTimeLabel" type="Label" parent="PanelContainer/Title"]
+modulate = Color( 1, 1, 1, 0.498039 )
+margin_top = 4.0
+margin_bottom = 20.0
+theme_type_variation = "LabelSmall"
+
+[node name="Spacer" type="Control" parent="PanelContainer/Title"]
+margin_left = 4.0
+margin_right = 92.0
+margin_bottom = 25.0
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="MaximizeButton" type="Button" parent="PanelContainer/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
+margin_left = 96.0
+margin_right = 124.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 28, 24 )
+hint_tooltip = "Maximize widget"
+mouse_filter = 1
+theme_type_variation = "ButtonBorderless"
+toggle_mode = true
+icon = ExtResource( 9 )
+flat = true
+expand_icon = true
+script = ExtResource( 3 )
+
+[node name="ExportButton" type="Button" parent="PanelContainer/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 128.0
+margin_right = 152.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 24, 24 )
+hint_tooltip = "Export data to csv"
+mouse_filter = 1
+theme_type_variation = "ButtonBorderless"
+icon = ExtResource( 7 )
+flat = true
+expand_icon = true
+script = ExtResource( 3 )
+
+[node name="DuplicateButton" type="Button" parent="PanelContainer/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 156.0
+margin_right = 180.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 24, 24 )
+hint_tooltip = "Duplicate widget"
+mouse_filter = 1
+theme_type_variation = "ButtonBorderless"
+icon = ExtResource( 2 )
+flat = true
+expand_icon = true
+script = ExtResource( 3 )
+
+[node name="ConfigButton" type="Button" parent="PanelContainer/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 184.0
+margin_right = 208.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 24, 24 )
+hint_tooltip = "Edit widget"
+mouse_filter = 1
+theme_type_variation = "ButtonBorderless"
+icon = ExtResource( 6 )
+flat = true
+expand_icon = true
+script = ExtResource( 3 )
+
+[node name="DeleteButton" type="Button" parent="PanelContainer/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 212.0
+margin_right = 236.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 24, 24 )
+hint_tooltip = "Delete widget"
+mouse_filter = 1
+theme_type_variation = "ButtonBorderless"
+icon = ExtResource( 1 )
+flat = true
+expand_icon = true
+script = ExtResource( 3 )
+
+[node name="ResizeTween" type="Tween" parent="."]
+
+[node name="AggregateSearchDataSource" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[connection signal="moved_or_resized" from="." to="." method="_on_WidgetContainer_moved_or_resized"]
+[connection signal="pressed" from="QueryWarning/VBox/PanelContainer/VBox/ConfigButton" to="." method="_on_ConfigButton_pressed"]
+[connection signal="mouse_entered" from="PanelContainer" to="." method="_on_PanelContainer_mouse_entered"]
+[connection signal="mouse_exited" from="PanelContainer" to="." method="_on_PanelContainer_mouse_exited"]
+[connection signal="toggled" from="PanelContainer/Title/MaximizeButton" to="." method="_on_MaximizeButton_toggled"]
+[connection signal="pressed" from="PanelContainer/Title/ExportButton" to="." method="_on_ExportButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Title/DuplicateButton" to="." method="_on_DuplicateButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Title/ConfigButton" to="." method="_on_ConfigButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Title/DeleteButton" to="." method="_on_DeleteButton_pressed"]

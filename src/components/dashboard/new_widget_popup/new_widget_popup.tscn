@@ -1,0 +1,315 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://components/elements/styled/custom_dragable_window_popup.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=2]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=3]
+[ext_resource path="res://components/dashboard/new_widget_popup/new_widget_popup.gd" type="Script" id=4]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.0784314 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 4 )
+
+[node name="NewWidgetPopup" instance=ExtResource( 1 )]
+visible = false
+margin_right = 800.0
+margin_bottom = 600.0
+script = ExtResource( 4 )
+
+[node name="Titlebar" parent="Content" index="0"]
+margin_right = 800.0
+
+[node name="Label" parent="Content/Titlebar" index="0"]
+margin_right = 800.0
+
+[node name="Content" parent="Content" index="1"]
+margin_right = 800.0
+margin_bottom = 549.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/Content" index="0"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 790.0
+margin_bottom = 506.0
+custom_constants/separation = 10
+
+[node name="WidgetOptions" type="MarginContainer" parent="Content/Content/HBoxContainer" index="0"]
+margin_right = 385.0
+margin_bottom = 496.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="VBox" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions" index="0"]
+margin_right = 385.0
+margin_bottom = 496.0
+custom_constants/separation = 20
+
+[node name="WidgetBaseData" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="0"]
+margin_right = 385.0
+margin_bottom = 120.0
+custom_constants/separation = 10
+
+[node name="WidgetNameVBox" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData" index="0"]
+margin_right = 385.0
+margin_bottom = 55.0
+custom_constants/separation = 1
+
+[node name="WidgetNameLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetNameVBox" index="0"]
+margin_right = 385.0
+margin_bottom = 21.0
+theme_type_variation = "LabelBold"
+text = "Widget Name"
+
+[node name="WidgetNameEdit" type="LineEdit" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetNameVBox" index="1"]
+margin_top = 22.0
+margin_right = 385.0
+margin_bottom = 55.0
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="WidgetTypeVBox" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData" index="1"]
+unique_name_in_owner = true
+margin_top = 65.0
+margin_right = 385.0
+margin_bottom = 120.0
+custom_constants/separation = 1
+
+[node name="WidgetTypeLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetTypeVBox" index="0"]
+margin_right = 385.0
+margin_bottom = 21.0
+theme_type_variation = "LabelBold"
+text = "Widget Type"
+
+[node name="WidgetType" type="OptionButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetTypeVBox" index="1"]
+margin_top = 22.0
+margin_right = 385.0
+margin_bottom = 55.0
+
+[node name="HSeparator" type="HSeparator" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="1"]
+visible = false
+self_modulate = Color( 1, 1, 1, 0.392157 )
+margin_top = 120.0
+margin_right = 375.0
+margin_bottom = 124.0
+
+[node name="NewDataSourceHBox" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="2"]
+unique_name_in_owner = true
+margin_top = 140.0
+margin_right = 385.0
+margin_bottom = 173.0
+
+[node name="Label" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox" index="0"]
+margin_top = 6.0
+margin_right = 222.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+theme_type_variation = "LabelBold"
+text = "Data Sources"
+
+[node name="DataSourceTypeOptionButton" type="OptionButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox" index="1"]
+unique_name_in_owner = true
+margin_left = 226.0
+margin_right = 348.0
+margin_bottom = 33.0
+disabled = true
+text = "Time Series"
+items = [ "Time Series", null, false, 0, null, "Aggregate Search", null, false, 1, null, "Resoto Search", null, false, 2, null ]
+selected = 0
+
+[node name="AddDataSourceButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox" index="2" instance=ExtResource( 5 )]
+unique_name_in_owner = true
+margin_left = 352.0
+margin_right = 385.0
+hint_tooltip = "Add Data Source"
+size_flags_horizontal = 8
+size_flags_vertical = 1
+icon_tex = ExtResource( 2 )
+icon_margin = 6
+
+[node name="TemplatesAvailableLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox/AddDataSourceButton" index="1"]
+unique_name_in_owner = true
+visible = false
+margin_left = 20.0
+margin_top = 18.0
+margin_right = 53.0
+margin_bottom = 51.0
+theme_type_variation = "LabelSmall"
+text = "..."
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="3"]
+margin_top = 193.0
+margin_right = 385.0
+margin_bottom = 496.0
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="DataSources" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/ScrollContainer" index="0"]
+margin_right = 385.0
+size_flags_horizontal = 3
+
+[node name="WidgetPreview" type="MarginContainer" parent="Content/Content/HBoxContainer" index="1"]
+margin_left = 395.0
+margin_right = 780.0
+margin_bottom = 496.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview" index="0"]
+margin_right = 385.0
+margin_bottom = 496.0
+custom_constants/separation = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="0"]
+margin_right = 385.0
+margin_bottom = 461.0
+size_flags_vertical = 3
+custom_constants/separation = 1
+
+[node name="WidgetPreviewLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer" index="0"]
+margin_right = 385.0
+margin_bottom = 21.0
+theme_type_variation = "LabelBold"
+text = "Widget Preview"
+
+[node name="PreviewContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer" index="1"]
+margin_top = 22.0
+margin_right = 385.0
+margin_bottom = 461.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer" index="0"]
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
+margin_right = 385.0
+margin_bottom = 31.0
+mouse_filter = 1
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 3 )
+
+[node name="WidgetPreviewTitleLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer/PanelContainer" index="0"]
+unique_name_in_owner = true
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 380.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+align = 1
+clip_text = true
+
+[node name="HSeparator" type="HSeparator" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="1"]
+visible = false
+margin_top = 457.0
+margin_right = 385.0
+margin_bottom = 461.0
+
+[node name="WidgetOptionsLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="2"]
+unique_name_in_owner = true
+margin_top = 466.0
+margin_right = 385.0
+margin_bottom = 487.0
+theme_type_variation = "LabelBold"
+text = "Widget Options"
+
+[node name="WidgetOptionsPanelContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="3"]
+unique_name_in_owner = true
+margin_top = 492.0
+margin_right = 385.0
+margin_bottom = 496.0
+
+[node name="Options" type="GridContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="0"]
+margin_right = 385.0
+size_flags_horizontal = 3
+columns = 2
+
+[node name="ColorControllersContainer" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="1"]
+unique_name_in_owner = true
+margin_top = 4.0
+margin_right = 385.0
+margin_bottom = 4.0
+
+[node name="Footer" parent="Content" index="2"]
+margin_top = 553.0
+margin_right = 800.0
+margin_bottom = 600.0
+
+[node name="Footerbar" parent="Content/Footer" index="0"]
+margin_right = 790.0
+
+[node name="AddWidgetButton" parent="Content/Footer/Footerbar" index="0"]
+margin_left = 703.0
+margin_right = 780.0
+
+[node name="TemplatePopup" type="PopupPanel" parent="." index="2"]
+self_modulate = Color( 0.0588235, 0.2, 0.337255, 1 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -800.0
+margin_bottom = 600.0
+custom_styles/panel = SubResource( 2 )
+script = ExtResource( 3 )
+
+[node name="VBox" type="VBoxContainer" parent="TemplatePopup" index="0"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 796.0
+margin_bottom = 596.0
+
+[node name="AddEmptyButton" type="Button" parent="TemplatePopup/VBox" index="0"]
+margin_right = 241.0
+margin_bottom = 33.0
+text = "New (empty)"
+align = 0
+
+[node name="TemplateHeadline" type="HBoxContainer" parent="TemplatePopup/VBox" index="1"]
+margin_top = 37.0
+margin_right = 241.0
+margin_bottom = 53.0
+
+[node name="TemplatesLabel" type="Label" parent="TemplatePopup/VBox/TemplateHeadline" index="0"]
+margin_right = 60.0
+margin_bottom = 16.0
+theme_type_variation = "LabelSmall"
+text = "Templates"
+
+[node name="HSeparator" type="HSeparator" parent="TemplatePopup/VBox/TemplateHeadline" index="1"]
+modulate = Color( 1, 1, 1, 0.25098 )
+margin_left = 64.0
+margin_right = 241.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+
+[node name="TemplateContent" type="VBoxContainer" parent="TemplatePopup/VBox" index="2"]
+margin_top = 57.0
+margin_right = 241.0
+margin_bottom = 57.0
+
+[connection signal="about_to_show" from="." to="." method="_on_NewWidgetPopup_about_to_show"]
+[connection signal="popup_hide" from="." to="." method="_on_NewWidgetPopup_popup_hide"]
+[connection signal="text_changed" from="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetNameVBox/WidgetNameEdit" to="." method="_on_NameEdit_text_changed"]
+[connection signal="item_selected" from="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetTypeVBox/WidgetType" to="." method="_on_WidgetType_item_selected"]
+[connection signal="item_selected" from="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox/DataSourceTypeOptionButton" to="." method="_on_DataSourceTypeOptionButton_item_selected"]
+[connection signal="pressed" from="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox/AddDataSourceButton" to="." method="_on_AddDataSource_pressed"]
+[connection signal="pressed" from="TemplatePopup/VBox/AddEmptyButton" to="." method="_on_AddDataSource"]

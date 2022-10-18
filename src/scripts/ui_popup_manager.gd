@@ -1,4 +1,5 @@
 extends CanvasLayer
+class_name PopupManager
 
 var current_popup: Popup = null
 var popup_connect: Node = null
@@ -28,6 +29,17 @@ func show_confirm_popup(_title:String, _text:String, _left_button_text:String="O
 		current_popup.hide()
 	current_popup = confirm_popup
 	confirm_popup.confirm_popup(_title, _text, _left_button_text, _right_button_text)
+	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
+	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
+	return confirm_popup
+
+
+func show_input_popup(_title:String, _text:String, _default_value:String="", _left_button_text:String="Ok", _right_button_text:String="Cancel") -> Popup:
+	popup_bg.show()
+	if current_popup != null:
+		current_popup.hide()
+	current_popup = confirm_popup
+	confirm_popup.input_popup(_title, _text, _default_value, _left_button_text, _right_button_text)
 	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
 	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
 	return confirm_popup

@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://components/elements/styled/icon_button.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/icon_128_fullscreen_square.svg" type="Texture" id=2]
+
+[node name="IconButtonText" type="Button"]
+margin_right = 100.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 100, 33 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
+expand_icon = true
+script = ExtResource( 1 )
+icon_tex = ExtResource( 2 )
+icon_margin = 6
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -16.5
+margin_right = 33.0
+margin_bottom = 16.5
+rect_min_size = Vector2( 33, 33 )
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+custom_constants/margin_right = 6
+custom_constants/margin_top = 6
+custom_constants/margin_left = 6
+custom_constants/margin_bottom = 6
+
+[node name="Icon" type="TextureRect" parent="Margin"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 27.0
+margin_bottom = 27.0
+mouse_filter = 2
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[connection signal="mouse_entered" from="." to="." method="_on_IconButton_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_IconButton_mouse_exited"]
