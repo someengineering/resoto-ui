@@ -21,16 +21,28 @@ var shortcut_list:Dictionary = {
 var _clipboard_callback:JavaScriptObject	= JavaScript.create_callback(self, "_on_clipboard")
 var copied:bool								= false
 
-var is_web									= OS.has_feature("HTML5")
+var is_web:bool								= OS.has_feature("HTML5")
+var godot_watchdog_timer:float				= 0.0
 onready var navigator:JavaScriptObject		= JavaScript.get_interface("navigator")
 
 
 func _ready():
 	if not is_web:
+		set_physics_process(false)
 		return
+		
+	set_physics_process(true)
+	
 	_g.os = JavaScript.eval("getOS()")
 	if _g.os == "MacOS":
 		add_mac_actions()
+
+
+func _physics_process(delta:float):
+	godot_watchdog_timer += delta
+	if godot_watchdog_timer >= 1.0:
+		godot_watchdog_timer -= 1.0
+		JavaScript.eval("godotWatchdogNotification()")
 
 
 func add_mac_actions():

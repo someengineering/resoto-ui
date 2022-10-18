@@ -21,7 +21,7 @@
 [ext_resource path="res://components/hub/component_resoto_home.tscn" type="PackedScene" id=19]
 [ext_resource path="res://components/elements/Styled/style_color_auto_remap.gd" type="Script" id=20]
 [ext_resource path="res://assets/icons/icon_128_external_link.svg" type="Texture" id=21]
-[ext_resource path="res://scripts/tools/browser_copy_paste_fix.gd" type="Script" id=22]
+[ext_resource path="res://scripts/tools/html_helpers.gd" type="Script" id=22]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
@@ -116,18 +116,7 @@ custom_constants/margin_top = 48
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
 
-[node name="MessageLog" parent="Content/Content" instance=ExtResource( 16 )]
-visible = false
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 10.0
-margin_top = 48.0
-margin_right = 1910.0
-margin_bottom = 1070.0
-
-[node name="TerminalManager" parent="Content/Content" instance=ExtResource( 9 )]
-visible = false
-margin_top = 48.0
+[node name="ResotoHome" parent="Content/Content" instance=ExtResource( 19 )]
 
 [node name="DashBoardManager" parent="Content/Content" instance=ExtResource( 12 )]
 visible = false
@@ -137,19 +126,6 @@ margin_left = 10.0
 margin_top = 48.0
 margin_right = 1910.0
 margin_bottom = 1070.0
-
-[node name="ConfigManager" parent="Content/Content" instance=ExtResource( 3 )]
-visible = false
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 10.0
-margin_top = 48.0
-margin_right = 1910.0
-margin_bottom = 1070.0
-custom_constants/margin_right = 0
-custom_constants/margin_top = 0
-custom_constants/margin_left = 0
-custom_constants/margin_bottom = 0
 
 [node name="NodeSingleInfo" parent="Content/Content" instance=ExtResource( 15 )]
 visible = false
@@ -173,7 +149,31 @@ margin_top = 48.0
 margin_right = 1910.0
 margin_bottom = 1070.0
 
-[node name="ResotoHome" parent="Content/Content" instance=ExtResource( 19 )]
+[node name="ConfigManager" parent="Content/Content" instance=ExtResource( 3 )]
+visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_top = 48.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+
+[node name="TerminalManager" parent="Content/Content" instance=ExtResource( 9 )]
+visible = false
+margin_top = 48.0
+
+[node name="MessageLog" parent="Content/Content" instance=ExtResource( 16 )]
+visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_top = 48.0
+margin_right = 1910.0
+margin_bottom = 1070.0
 
 [node name="MenuBar" type="CanvasLayer" parent="."]
 layer = 20
@@ -607,7 +607,7 @@ flat = true
 
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
-[node name="ShortcutWatcher" type="Node" parent="."]
+[node name="HTMLHelpers" type="Node" parent="."]
 script = ExtResource( 22 )
 
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonDashboards" to="MenuBar" method="_on_ButtonDashboards_pressed"]
