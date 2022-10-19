@@ -223,6 +223,7 @@ func _on_OpenDashboard_pressed():
 
 func _on_AddDashboard_pressed():
 	add_dashboard()
+	Analytics.event(Analytics.EventsDashboard.NEW)
 
 
 func _on_files_dropped(files, _screen):

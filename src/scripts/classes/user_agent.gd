@@ -19,6 +19,7 @@ class RequestHeaders:
 
 class Response:
 	var status_code:int
+	var response_code:int
 	var headers:Dictionary
 	var body:PoolByteArray
 	var transformed:Dictionary
@@ -110,6 +111,7 @@ class Request:
 				if http_status == HTTPClient.STATUS_REQUESTING:
 					if not poll_():
 						return
+
 				elif http_status == HTTPClient.STATUS_BODY or http_status == HTTPClient.STATUS_CONNECTED:
 					state_ = states.RECEIVE
 			
@@ -126,6 +128,7 @@ class Request:
 					state_ = states.DONE
 				else:
 					response_				= Response.new()
+					response_.response_code	= http_.get_response_code()
 					response_.status_code	= http_status
 					response_.headers		= http_.get_response_headers_as_dictionary()
 					response_.body			= PoolByteArray()

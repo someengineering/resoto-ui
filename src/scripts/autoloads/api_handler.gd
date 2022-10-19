@@ -183,3 +183,9 @@ func search_graph(_query : String, _connect_to: Node) -> ResotoAPI.Request:
 	_req_res = _resoto_api.search_graph(_query)
 	_req_res.connect("done", _connect_to, "_on_search_graph_done")
 	return _req_res
+
+
+func analytics(_query : String, _connect_to : Node, _connect_function:String="_on_analytics_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.analytics(_query)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
