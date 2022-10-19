@@ -34,7 +34,7 @@ var is_maximized: bool = false setget set_is_maximized
 
 var initial_load : bool = true
 
-onready var date_button := $VBoxContainer/PanelContainer/DateButton
+onready var date_button := $VBoxContainer/PanelContainer/Content/HFlowContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Content/Dashboard
 onready var add_widget_popup := $NewWidgetPopup
 onready var range_selector := $DateRangeSelector
@@ -155,6 +155,7 @@ func _on_delete_confirm_response(_response:String):
 	if _response == "left":
 		emit_signal("deleted", get_position_in_parent(), last_saved_name)
 		queue_free()
+		Analytics.event(Analytics.EventsDashboard.DELETE)
 
 
 func set_dashboard_name(new_name : String) -> void:

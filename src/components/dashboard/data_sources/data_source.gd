@@ -35,4 +35,5 @@ func _on_query_status(_type:int=0, _title:="Widget Error", _message:=""):
 		"message" : _message,
 		"title" : _title
 	}
-	Analytics.event(Analytics.EventsDatasource.STATUS, properties)
+	if _type != OK:
+		Analytics.event(Analytics.EventsDatasource.FAILED, {"datasource_type" : TYPES.keys()[type], "message" : _message})
