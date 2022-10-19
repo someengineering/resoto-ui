@@ -30,6 +30,7 @@ shadow_size = 10
 shadow_offset = Vector2( 0, 4 )
 
 [node name="NewWidgetPopup" instance=ExtResource( 1 )]
+visible = false
 margin_right = 800.0
 margin_bottom = 600.0
 script = ExtResource( 4 )
@@ -277,14 +278,14 @@ margin_right = 796.0
 margin_bottom = 596.0
 
 [node name="AddEmptyButton" type="Button" parent="TemplatePopup/VBox" index="0"]
-margin_right = 792.0
+margin_right = 241.0
 margin_bottom = 33.0
 text = "New (empty)"
 align = 0
 
 [node name="TemplateHeadline" type="HBoxContainer" parent="TemplatePopup/VBox" index="1"]
 margin_top = 37.0
-margin_right = 792.0
+margin_right = 241.0
 margin_bottom = 53.0
 
 [node name="TemplatesLabel" type="Label" parent="TemplatePopup/VBox/TemplateHeadline" index="0"]
@@ -296,13 +297,13 @@ text = "Templates"
 [node name="HSeparator" type="HSeparator" parent="TemplatePopup/VBox/TemplateHeadline" index="1"]
 modulate = Color( 1, 1, 1, 0.25098 )
 margin_left = 64.0
-margin_right = 792.0
+margin_right = 241.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 
 [node name="TemplateContent" type="VBoxContainer" parent="TemplatePopup/VBox" index="2"]
 margin_top = 57.0
-margin_right = 792.0
+margin_right = 241.0
 margin_bottom = 57.0
 
 [connection signal="about_to_show" from="." to="." method="_on_NewWidgetPopup_about_to_show"]

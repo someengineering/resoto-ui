@@ -34,7 +34,7 @@ var user_id : String = ""
 
 func _ready():
 	var post_timer := Timer.new()
-	post_timer.wait_time = 10
+	post_timer.wait_time = 60
 	add_child(post_timer)
 	post_timer.start()
 	post_timer.connect("timeout", self, "post_events")
@@ -87,3 +87,9 @@ func _on_analytics_done(error : int, response):
 		print("Posting to analytics endpoint failed, not clearing the queue")
 		
 	emit_signal("analytics_event_posted")
+
+
+func _notification(what):
+	# If user quits, send all the events
+	if what == NOTIFICATION_WM_QUIT_REQUEST:
+		post_events()
