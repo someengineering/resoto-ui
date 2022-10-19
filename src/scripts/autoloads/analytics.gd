@@ -2,21 +2,21 @@ extends Node
 
 signal analytics_event_posted
 
-enum events_dashboard { NEW, DELETE, NEW_WIDGET, EDIT_WIDGET, DUPLICATE_WIDGET}
-enum events_config { NEW = 100, DELETE, EDIT }
-enum events_datasource {NEW = 200, STATUS}
+enum EventsDashboard{ NEW, DELETE, NEW_WIDGET, EDIT_WIDGET, DUPLICATE_WIDGET}
+enum EventsConfig { NEW = 100, DELETE, EDIT }
+enum EventsDatasource {NEW = 200, STATUS}
 
 var events:= {
-	events_dashboard.NEW : "ui.dashboard.new",
-	events_dashboard.DELETE : "ui.dashboard.delete",
-	events_dashboard.NEW_WIDGET : "ui.dashboard.widget-new",
-	events_dashboard.EDIT_WIDGET : "ui.dashboard.widget-edit",
-	events_dashboard.DUPLICATE_WIDGET : "ui.dashboard.widget-duplicate",
-	events_config.NEW : "ui.config.new",
-	events_config.DELETE : "ui.config.delete",
-	events_config.EDIT : "ui.config.edit",
-	events_datasource.NEW : "ui.datasource.new",
-	events_datasource.STATUS : "ui.datasource.status",
+	EventsDashboard.NEW : "ui.dashboard.new",
+	EventsDashboard.DELETE : "ui.dashboard.delete",
+	EventsDashboard.NEW_WIDGET : "ui.dashboard.widget-new",
+	EventsDashboard.EDIT_WIDGET : "ui.dashboard.widget-edit",
+	EventsDashboard.DUPLICATE_WIDGET : "ui.dashboard.widget-duplicate",
+	EventsConfig.NEW : "ui.config.new",
+	EventsConfig.DELETE : "ui.config.delete",
+	EventsConfig.EDIT : "ui.config.edit",
+	EventsDatasource.NEW : "ui.datasource.new",
+	EventsDatasource.STATUS : "ui.datasource.status",
 }
 
 var api_key : String = ""

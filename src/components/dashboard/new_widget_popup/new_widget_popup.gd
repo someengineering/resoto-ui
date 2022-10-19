@@ -104,7 +104,7 @@ func _on_AddWidgetButton_pressed() -> void:
 	hide()
 	
 	if widget_to_edit == null:
-		Analytics.event(Analytics.events_dashboard.NEW_WIDGET)
+		Analytics.event(Analytics.EventsDashboard.NEW_WIDGET)
 	
 	preview_widget.queue_free()
 

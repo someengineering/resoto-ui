@@ -35,4 +35,4 @@ func _on_query_status(_type:int=0, _title:="Widget Error", _message:=""):
 		"message" : _message,
 		"title" : _title
 	}
-	Analytics.event(Analytics.events_datasource.STATUS, properties)
+	Analytics.event(Analytics.EventsDatasource.STATUS, properties)
