@@ -228,18 +228,6 @@ margin_right = 144.0
 hint_tooltip = "Close dashboard"
 icon_tex = ExtResource( 14 )
 
-[node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer"]
-visible = false
-margin_left = 889.0
-margin_top = 4.0
-margin_right = 1039.0
-margin_bottom = 37.0
-rect_min_size = Vector2( 150, 0 )
-size_flags_horizontal = 6
-size_flags_vertical = 0
-text = "Last 24 hours"
-flat = true
-
 [node name="MinimizedBar" type="HBoxContainer" parent="VBoxContainer"]
 visible = false
 margin_top = 91.0
@@ -429,7 +417,6 @@ icon_tex = ExtResource( 5 )
 [connection signal="toggled" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/DashboardEditButton" to="." method="_on_DashboardEditButton_toggled"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/MaximizeButton" to="." method="_on_MaximizeButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/CloseButton" to="." method="_on_CloseButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/DateButton" to="." method="_on_DateButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/MinimizedBar/MinimizeButton" to="." method="_on_MinimizeButton_pressed"]
 [connection signal="resized" from="VBoxContainer/ScrollContainer/Content/Dashboard/Grid" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="_on_Grid_resized"]
 [connection signal="widget_added" from="NewWidgetPopup" to="." method="_on_NewWidgetPopup_widget_added"]
