@@ -207,7 +207,7 @@ _g="*res://scripts/autoloads/global.gd"
 SaveLoadSettings="*res://scripts/autoloads/saveload_settings.gd"
 HtmlFiles="*res://scripts/autoloads/html_files.gd"
 InfrastructureInformation="*res://scripts/autoloads/infrastructure_information.gd"
-Analytics="*res://scripts/classes/analytics.gd"
+Analytics="*res://scripts/autoloads/analytics.gd"
 
 [debug]
 

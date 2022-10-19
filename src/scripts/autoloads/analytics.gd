@@ -1,6 +1,6 @@
 extends Node
 
-signal posthog_event_posted
+signal analytics_event_posted
 
 enum events_dashboard { NEW, DELETE, NEW_WIDGET, EDIT_WIDGET, DUPLICATE_WIDGET}
 enum events_config { NEW = 100, DELETE, EDIT }
@@ -18,9 +18,6 @@ var events:= {
 	events_datasource.NEW : "ui.datasource.new",
 	events_datasource.STATUS : "ui.datasource.status",
 }
-
-var posthog_url := "https://analytics.some.engineering/batch"
-var api_key_url := "https://cdn.some.engineering/posthog/public_api_key"
 
 var api_key : String = ""
 var last_api_timestamp = 0
@@ -46,16 +43,7 @@ func _ready():
 		user_id = str(OS.get_unique_id())
 
 
-func refresh_api_key():
-	if Time.get_unix_time_from_system() - last_api_timestamp > api_key_refresh_time:
-		var request := HTTPRequest.new()
-		add_child(request)
-		request.request(api_key_url)
-		api_key = (yield(request,"request_completed")[3] as PoolByteArray).get_string_from_utf8().strip_edges()
-		request.queue_free()
-
-
-func posthog_event_data(event : int, context := {}, counters := {}) -> Dictionary:
+func analytics_event_data(event : int, context := {}, counters := {}) -> Dictionary:
 	var data : Dictionary = {
 		"system" : "ui",
 		"kind" : events[event],
@@ -71,13 +59,13 @@ func posthog_event_data(event : int, context := {}, counters := {}) -> Dictionar
 
 
 func event(event, properties := {}):
-	var body = posthog_event_data(event, properties)
+	var body = analytics_event_data(event, properties)
 	
 	if event_queue and event_queue.size() > max_queue_size:
 		post_events()
-		yield(self, "posthog_event_posted")
+		yield(self, "analytics_event_posted")
 		if event_queue.size() > 0:
-			print("Force clear the queue: posthog request failed but the queue is full...")
+			print("Force clear the queue: analytics request failed but the queue is full...")
 			event_queue.clear()
 			
 	event_queue.append(body)
@@ -94,3 +82,5 @@ func _on_analytics_done(error : int, response):
 		event_queue.clear()
 	else:
 		print("Posting to analytics endpoint failed, not clearing the queue")
+		
+	emit_signal("analytics_event_posted")
