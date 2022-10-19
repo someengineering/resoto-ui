@@ -284,7 +284,8 @@ scroll_horizontal_enabled = false
 script = ExtResource( 4 )
 
 [node name="Content" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
-margin_right = 1906.0
+margin_right = 1920.0
+margin_bottom = 1039.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -320,10 +321,6 @@ color = Color( 0, 0.0509804, 0.0980392, 0.705882 )
 [node name="NewWidgetPopup" parent="." instance=ExtResource( 1 )]
 self_modulate = Color( 0.091, 0.11245, 0.13, 1 )
 default_size = Vector2( 800, 600 )
-show_close_icon = true
-show_max_icon = true
-can_drag = true
-can_resize = true
 
 [node name="DateRangeSelector" parent="." instance=ExtResource( 2 )]
 margin_left = 806.0

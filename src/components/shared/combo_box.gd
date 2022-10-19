@@ -5,6 +5,7 @@ signal option_changed(option)
 
 export (Array, String) var items
 export (bool) var align_items_left:= false
+export (Vector2) var button_min_size:= Vector2(1,1) setget set_button_min_size
 
 var matching_items : Array
 var previous_option : String = ""
@@ -28,6 +29,7 @@ func _on_Button_pressed():
 	show_options()
 	line_edit.grab_focus()
 
+
 func set_text(new_text:String) -> void:
 	if $LineEdit.text != new_text:
 		text = new_text
@@ -37,7 +39,7 @@ func set_text(new_text:String) -> void:
 
 func get_text() -> String:
 	return $LineEdit.text
-	
+
 
 func populate_options(filter : String = "") -> void:
 	for option in options_container.get_children():
@@ -77,6 +79,7 @@ func _on_LineEdit_text_changed(new_text : String) -> void:
 	show_options()
 	line_edit.grab_focus()
 
+
 func _on_option_pressed(option_name : String) -> void:
 	line_edit.text = option_name
 	options_popup.hide()
@@ -100,9 +103,11 @@ func set_items(new_items : Array) -> void:
 
 func add_item(new_item):
 	items.append(new_item)
-	
+
+
 func clear() -> void:
 	items.clear()
+
 
 func _on_LineEdit_text_entered(new_text: String) -> void:
 	emit_signal("option_changed", new_text)
@@ -163,3 +168,8 @@ func _on_PopupPanel_popup_hide():
 
 func _on_JustHiddenTimer_timeout():
 	just_hidden = false
+
+
+func set_button_min_size(_button_min_size:Vector2) -> void:
+	button_min_size = _button_min_size
+	$Button.rect_min_size = button_min_size

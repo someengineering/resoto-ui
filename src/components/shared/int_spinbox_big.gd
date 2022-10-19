@@ -65,9 +65,9 @@ func change_value(_minus:=true):
 		add_value = -1
 
 	if negative_allowed:
-		set_value(value+add_value)
+		set_value(int(value + add_value))
 	else:
-		set_value(max(value+add_value, 0))
+		set_value(int(max(value + add_value, 0)))
 
 
 func _on_ChangeTimer_timeout():

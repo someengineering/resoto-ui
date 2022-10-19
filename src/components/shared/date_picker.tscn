@@ -7,87 +7,105 @@
 [node name="DatePicker" type="PanelContainer"]
 margin_right = 212.0
 margin_bottom = 306.0
+rect_min_size = Vector2( 360, 320 )
 theme = ExtResource( 3 )
 script = ExtResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 207.0
-margin_bottom = 301.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 350.0
+margin_bottom = 310.0
+custom_constants/separation = 10
 
 [node name="CurrentDateContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 202.0
-margin_bottom = 24.0
+margin_right = 340.0
+margin_bottom = 33.0
 alignment = 1
 
 [node name="PrevYear" type="Button" parent="VBoxContainer/CurrentDateContainer"]
-margin_right = 24.0
-margin_bottom = 24.0
+margin_right = 40.0
+margin_bottom = 33.0
+theme_type_variation = "LabelBold"
 text = "<<"
 flat = true
 
 [node name="PrevMonth" type="Button" parent="VBoxContainer/CurrentDateContainer"]
-margin_left = 28.0
-margin_right = 44.0
-margin_bottom = 24.0
+margin_left = 44.0
+margin_right = 76.0
+margin_bottom = 33.0
+theme_type_variation = "LabelBold"
 text = "<"
 flat = true
 
 [node name="Label" type="Label" parent="VBoxContainer/CurrentDateContainer"]
-margin_left = 48.0
-margin_top = 2.0
-margin_right = 154.0
-margin_bottom = 22.0
+margin_left = 80.0
+margin_top = 6.0
+margin_right = 260.0
+margin_bottom = 27.0
 size_flags_horizontal = 3
-text = "2022-07-12"
+theme_type_variation = "LabelBold"
+text = "date"
 align = 1
 valign = 1
 
 [node name="NextMonth" type="Button" parent="VBoxContainer/CurrentDateContainer"]
-margin_left = 158.0
-margin_right = 174.0
-margin_bottom = 24.0
+margin_left = 264.0
+margin_right = 296.0
+margin_bottom = 33.0
+theme_type_variation = "LabelBold"
 text = ">"
 flat = true
 
 [node name="NextYear" type="Button" parent="VBoxContainer/CurrentDateContainer"]
-margin_left = 178.0
-margin_right = 202.0
-margin_bottom = 24.0
+margin_left = 300.0
+margin_right = 340.0
+margin_bottom = 33.0
+theme_type_variation = "LabelBold"
 text = ">>"
 flat = true
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
-margin_top = 28.0
-margin_right = 202.0
-margin_bottom = 204.0
+margin_top = 43.0
+margin_right = 340.0
+margin_bottom = 143.0
 size_flags_vertical = 3
 columns = 7
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 208.0
-margin_right = 202.0
-margin_bottom = 212.0
+[node name="TimeLabel" type="Label" parent="VBoxContainer"]
+margin_top = 153.0
+margin_right = 340.0
+margin_bottom = 183.0
+rect_min_size = Vector2( 0, 30 )
+theme_type_variation = "LabelBold"
+text = "Time"
+align = 1
+valign = 2
 
 [node name="TimePicker" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 216.0
-margin_right = 202.0
-margin_bottom = 296.0
+margin_top = 193.0
+margin_right = 340.0
+margin_bottom = 300.0
+alignment = 1
 
 [node name="Hour" parent="VBoxContainer/TimePicker" instance=ExtResource( 1 )]
-margin_right = 94.0
+margin_left = 115.0
+margin_right = 163.0
+margin_bottom = 107.0
+size_flags_horizontal = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/TimePicker"]
-margin_left = 98.0
-margin_top = 30.0
-margin_right = 103.0
-margin_bottom = 50.0
+margin_left = 167.0
+margin_top = 43.0
+margin_right = 173.0
+margin_bottom = 64.0
 text = ":"
 
 [node name="Minute" parent="VBoxContainer/TimePicker" instance=ExtResource( 1 )]
-margin_left = 107.0
-margin_right = 202.0
+margin_left = 177.0
+margin_right = 225.0
+margin_bottom = 107.0
+size_flags_horizontal = 1
 maximum = 59
 
 [connection signal="pressed" from="VBoxContainer/CurrentDateContainer/PrevYear" to="." method="_on_PrevYear_pressed"]

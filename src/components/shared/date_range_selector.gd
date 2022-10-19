@@ -2,9 +2,14 @@ extends Popup
 
 signal range_selected(start, end, text)
 
-onready var from := $PanelContainer/VBoxContainer/FromLineEdit
-onready var to := $PanelContainer/VBoxContainer/ToLineEdit
-onready var relative := $PanelContainer/VBoxContainer/ComboBox
+onready var from := $PanelContainer/VBox/FromLineEdit
+onready var to := $PanelContainer/VBox/ToLineEdit
+onready var relative := $PanelContainer/VBox/ComboBox
+
+onready var cancel_button:= $PanelContainer/VBox/Buttons/CancelButton
+onready var accept_button:= $PanelContainer/VBox/Buttons/AcceptButton
+onready var buttons := $PanelContainer/VBox/Buttons
+
 
 func _ready() -> void:
 	var success = from.process_date(from.text)
@@ -44,3 +49,10 @@ func _on_FromLineEdit_date_changed(_timestamp : int) -> void:
 
 func _on_ToLineEdit_date_changed(_timestamp : int) -> void:
 	relative.text = ""
+
+
+func _on_DateRangeSelector_about_to_show():
+	if _g.os == "MacOS":
+		buttons.move_child(accept_button, 1)
+	else:
+		buttons.move_child(accept_button, 0)
