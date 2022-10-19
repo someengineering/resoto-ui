@@ -3,8 +3,8 @@ extends Node
 signal analytics_event_posted
 
 enum EventsDashboard{ NEW, DELETE, NEW_WIDGET, EDIT_WIDGET, DUPLICATE_WIDGET}
-enum EventsConfig { NEW = 100, DELETE, EDIT }
-enum EventsDatasource {NEW = 200, STATUS}
+enum EventsConfig { NEW = 100, DELETE, EDIT, DUPLICATE }
+enum EventsDatasource {NEW = 200, NEW_FROM_TEMPLATE, FAILED, DELETE}
 
 var events:= {
 	EventsDashboard.NEW : "ui.dashboard.new",
@@ -15,8 +15,11 @@ var events:= {
 	EventsConfig.NEW : "ui.config.new",
 	EventsConfig.DELETE : "ui.config.delete",
 	EventsConfig.EDIT : "ui.config.edit",
+	EventsConfig.DUPLICATE : "ui.config.duplicate",
 	EventsDatasource.NEW : "ui.datasource.new",
-	EventsDatasource.STATUS : "ui.datasource.status",
+	EventsDatasource.NEW_FROM_TEMPLATE : "ui.datasource.new-from-template",
+	EventsDatasource.FAILED : "ui.datasource.failed",
+	EventsDatasource.DELETE : "ui.datasource.delete",
 }
 
 var api_key : String = ""
@@ -31,7 +34,7 @@ var user_id : String = ""
 
 func _ready():
 	var post_timer := Timer.new()
-	post_timer.wait_time = 10
+	post_timer.wait_time = 60
 	add_child(post_timer)
 	post_timer.start()
 	post_timer.connect("timeout", self, "post_events")
@@ -84,3 +87,9 @@ func _on_analytics_done(error : int, response):
 		print("Posting to analytics endpoint failed, not clearing the queue")
 		
 	emit_signal("analytics_event_posted")
+
+
+func _notification(what):
+	# If user quits, send all the events
+	if what == NOTIFICATION_WM_QUIT_REQUEST:
+		post_events()

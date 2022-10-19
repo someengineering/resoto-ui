@@ -103,8 +103,15 @@ func _on_AddWidgetButton_pressed() -> void:
 	
 	hide()
 	
-	if widget_to_edit == null:
-		Analytics.event(Analytics.EventsDashboard.NEW_WIDGET)
+	var event : int 
+	if duplicating:
+		event = Analytics.EventsDashboard.DUPLICATE_WIDGET
+	elif widget_to_edit == null:
+		event = Analytics.EventsDashboard.NEW_WIDGET
+	else:
+		event = Analytics.EventsDashboard.EDIT_WIDGET
+		
+	Analytics.event(event, {"widget" : widget.widget_type_id})
 	
 	preview_widget.queue_free()
 
@@ -311,19 +318,30 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 			ds.set_metrics(metrics)
 
 	update_new_data_vis()
-
+	
+	var context = {
+			"widget" : ds.widget.widget_type_id,
+			"datasource_type" : DataSource.TYPES.keys()[ds.datasource_type]
+		}
+	var event : int = Analytics.EventsDatasource.NEW
+	
 	if template_id >= 0:
 		var template_data : Dictionary = data_sources_templates[template_id]["data"]
 		for key in template_data:
 			ds.data_source.set(key, template_data[key])
 		ds.set_data_source(ds.data_source)
 		update_preview()
+		event = Analytics.EventsDatasource.NEW_FROM_TEMPLATE
+		context["template"] = template_options.get_child(template_id).text
+
+	Analytics.event(Analytics.EventsDatasource.NEW, {"widget" : ds.widget.wdiget_type_id})
 
 
 func delete_datasource(_data_source:Node) -> void:
 	_data_source.queue_free()
 	yield(_data_source, "tree_exited")
 	update_preview()
+	Analytics.event(Analytics.EventsDatasource.DELETE)
 
 
 func update_new_data_vis():

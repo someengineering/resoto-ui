@@ -155,6 +155,7 @@ func _on_delete_confirm_response(_response:String):
 	if _response == "left":
 		emit_signal("deleted", get_position_in_parent(), last_saved_name)
 		queue_free()
+		Analytics.event(Analytics.EventsDashboard.DELETE)
 
 
 func set_dashboard_name(new_name : String) -> void:

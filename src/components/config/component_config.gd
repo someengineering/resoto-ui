@@ -147,6 +147,8 @@ func save_config() -> void:
 	if json_config.begins_with("{\"\":"):
 		json_config = json_config.trim_prefix("{\"\":").trim_suffix("}")
 	config_put_req = API.put_config_id(self, selected_config, json_config)
+	
+	Analytics.event(Analytics.EventsConfig.EDIT, {"config-name": selected_config})
 
 
 func _on_put_config_id_done(_error, _response) -> void:
@@ -600,6 +602,7 @@ func _on_add_confirm_response(_button_clicked:String, _value:String):
 		hide()
 		# Show loading animation
 		config_put_req = API.put_config_id(self, _value, "{\"purple\":\"sheep\"}")
+		Analytics.event(Analytics.EventsConfig.NEW)
 		yield(self, "config_updated")
 		load_tab = _value
 		load_config()
@@ -619,6 +622,7 @@ func _on_delete_confirm_response(_response:String):
 		hide()
 		# Show loading animation
 		API.delete_config_id(self, get_current_config_name())
+		Analytics.event(Analytics.EventsConfig.DELETE)
 
 
 func _on_delete_config_id_done(_error: int, _response):
@@ -657,6 +661,7 @@ func _on_config_duplicate_get_done(_error, _response, _config_key) -> void:
 	var config_backup = _response.transformed.result
 	var json_config = JSON.print(config_backup)
 	config_put_req = API.put_config_id(self, duplicate_new_name, json_config)
+	Analytics.event(Analytics.EventsConfig.DUPLICATE)
 	yield(self, "config_updated")
 	duplicate_new_name = ""
 	load_config()
