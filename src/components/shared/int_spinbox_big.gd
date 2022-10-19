@@ -32,7 +32,6 @@ func reset_timer():
 
 
 func get_value():
-	print("return value!", int(int_edit.old_text))
 	value = int(int_edit.old_text)
 
 

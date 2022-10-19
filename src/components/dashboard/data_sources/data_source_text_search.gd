@@ -9,7 +9,7 @@ var list : String = ""
 func _init():
 	type = TYPES.SEARCH
 
-func make_query(dashboard_filters : Dictionary, attr : Dictionary):
+func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 	var q : String = query
 	
 	var global_filters = ""
@@ -23,15 +23,15 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary):
 	q = q.replace("{global_filters}", global_filters)
 	API.cli_execute(q, self)
 
-	
+
 func _on_cli_execute_done(_error : int, response):
-	var message : String = response.transformed.result
+	var result : String = response.transformed.result
 	if "Error: " in response.transformed.result:
-		_g.emit_signal("add_toast", "Invalid query", response.transformed.result, 1, self)
-		emit_signal("query_status", FAILED, "Invalid query", response.transformed.result)
+		_g.emit_signal("add_toast", "Invalid query", result, 1, self)
+		emit_signal("query_status", FAILED, "Invalid query", result)
 		return
 	if is_instance_valid(widget):
-		widget.set_data(response.transformed.result, type)
+		widget.set_data(result, type)
 		emit_signal("query_status", OK, "")
 
 	

@@ -51,7 +51,7 @@ func reset_settings():
 	rect_size = size_before_max
 
 
-func _process(delta):
+func _process(_delta:float):
 	if not visible or ((is_dragging or is_resizing) and not Input.is_mouse_button_pressed(BUTTON_LEFT)):
 		is_dragging = false
 		is_resizing = false
@@ -81,7 +81,7 @@ func start_drag(_drag_position:Vector2):
 	if is_maximized:
 		is_maximized = false
 		max_btn.pressed = false
-		maximized_offset.x = 0 if _drag_position.x <= size_before_max.x else (_drag_position.x - size_before_max.x) + size_before_max.x*0.5
+		maximized_offset.x = 0 if _drag_position.x <= size_before_max.x else int((_drag_position.x - size_before_max.x) + size_before_max.x*0.5)
 		rect_size = size_before_max
 	
 	is_dragging = true

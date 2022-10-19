@@ -100,14 +100,12 @@ func set_data(data, type):
 	clear_all()
 	
 	if type == DataSource.TYPES.AGGREGATE_SEARCH:
-		
 		var headers : Array = data[0]["group"].keys()
 		var vars : Array = data[0].keys()
 		vars.remove(vars.find("group"))
 		headers.append_array(vars)
 		set_headers(headers)
 		
-		var i : int = 1
 		for data_row in data:
 			var data_array : Array = []#[" "]
 			for key in data_row["group"]:
@@ -119,13 +117,13 @@ func set_data(data, type):
 				data_array.append(data_row[key])
 			
 			raw_data.append(data_array)
-			i += 1
+	
 	elif type == DataSource.TYPES.SEARCH:
-		var rows : Array = data.split("\n",false)
-		set_headers(rows[0].split(",",false))
-		rows.remove(0)
+		var rows_array : Array = data.split("\n",false)
+		set_headers(rows_array[0].split(",",false))
+		rows_array.remove(0)
 		
-		for row in rows:
+		for row in rows_array:
 			raw_data.append(row.split(",",false))
 	
 	update_table()

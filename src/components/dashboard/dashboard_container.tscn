@@ -323,6 +323,7 @@ self_modulate = Color( 0.091, 0.11245, 0.13, 1 )
 default_size = Vector2( 800, 600 )
 
 [node name="DateRangeSelector" parent="." instance=ExtResource( 2 )]
+visible = false
 margin_left = 806.0
 margin_top = 53.0
 margin_right = 1094.0

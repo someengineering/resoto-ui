@@ -65,7 +65,7 @@ func _input(event):
 			# Handling default Inputs (Windows)
 			if event.scancode == KEY_V and not copied:
 				copied = true
-				var obj = navigator.clipboard.readText().then(_clipboard_callback)
+				var _obj = navigator.clipboard.readText().then(_clipboard_callback)
 				get_tree().set_input_as_handled()
 		else:
 			# Handling Mac Input
@@ -73,7 +73,7 @@ func _input(event):
 				simulate_input(KEY_C)
 			if event.is_action_pressed("mac_paste") and not copied:
 				copied = true
-				var obj = navigator.clipboard.readText().then(_clipboard_callback)
+				var _obj = navigator.clipboard.readText().then(_clipboard_callback)
 			if event.is_action_pressed("mac_cut"):
 				simulate_input(KEY_X)
 			if event.is_action_pressed("mac_select_all"):

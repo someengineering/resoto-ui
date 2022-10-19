@@ -28,7 +28,7 @@ func _ready():
 	set_process(false)
 
 
-func _process(delta):
+func _process(_delta):
 	update_highlighted_cell((grid.get_local_mouse_position() * Vector2(x_categories.size(), y_categories.size()) / grid.rect_size - Vector2(0.5,0.5)).snapped(Vector2.ONE))
 
 

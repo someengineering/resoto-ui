@@ -16,7 +16,8 @@ func _ready():
 	set_number(old_text)
 
 
-func set_negative_allowed(value:bool):
+func set_negative_allowed(_negative_allowed:bool):
+	negative_allowed = _negative_allowed
 	var regex = "^[-]?[0-9]*$" if negative_allowed else "^[0-9]*$"
 	LineEditRegEx.compile(regex)
 

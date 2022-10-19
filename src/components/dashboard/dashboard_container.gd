@@ -111,10 +111,10 @@ func _on_DateRangeSelector_range_selected(start : int, end : int, text : String)
 	date_button.text = text
 	add_widget_popup.from_date = start
 	add_widget_popup.to_date = end
-	add_widget_popup.interval = (end-start)/500
+	add_widget_popup.interval = int(float(end-start)/500.0)
 	dashboard.ts_end = end
 	dashboard.ts_start = start
-	dashboard.step = (end-start)/500
+	dashboard.step = int(float(end-start)/500.0)
 	force_refresh = true
 	if initial_load:
 		emit_signal("dashboard_changed", self)
