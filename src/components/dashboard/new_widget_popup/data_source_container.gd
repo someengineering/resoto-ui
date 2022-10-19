@@ -48,7 +48,7 @@ func _ready() -> void:
 	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
 
 
-func _on_cli_execute_done(error : int, response):
+func _on_cli_execute_done(_error : int, response):
 	var kinds = response.transformed.result.split("\n")
 	
 	if kinds.size() > 0:

@@ -9,10 +9,10 @@ var query : String
 var widget 
 var type : int = TYPES.TIME_SERIES
 
-func make_query(dashboard_filters : Dictionary, attr : Dictionary):
+func make_query(_dashboard_filters : Dictionary, _attr : Dictionary):
 	pass
 	
-func copy_data_source(other):
+func copy_data_source(_other):
 	pass
 	
 func update_query():

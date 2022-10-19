@@ -7,10 +7,11 @@ export (Array) var conditions : Array
 
 onready var widget := get_parent()
 
-func _process(delta):
+func _process(_delta:float):
 	find_enclosing_conditions(property)
 
-func find_enclosing_conditions(property : String):
+
+func find_enclosing_conditions(_property : String):
 	# condition must be [value, result_color]
 	var value = widget.get(control_variable)
 	
@@ -49,8 +50,5 @@ func find_enclosing_conditions(property : String):
 		prev_result.a = 1.0-ratio
 		result = next_result.blend(prev_result)
 		
-		
-	widget.set(property, result)
-	
-	
+	widget.set(_property, result)
 	

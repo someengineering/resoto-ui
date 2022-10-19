@@ -368,7 +368,7 @@ func _on_NewWidgetPopup_popup_hide():
 	preview_widget.queue_free()
 
 
-func _on_DataSourceTypeOptionButton_item_selected(index):
+func _on_DataSourceTypeOptionButton_item_selected(_index):
 	for c in template_options.get_children():
 		c.queue_free()
 	var data_source_type = data_source_types.get_selected_id()

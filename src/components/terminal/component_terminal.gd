@@ -101,7 +101,7 @@ func _input(event:InputEvent) -> void:
 			current_command = command.text
 		
 		var change_id = 1 if event.scancode == KEY_UP else -1
-		last_command_id = clamp(last_command_id+change_id, -2, _g.terminal_scrollback.size()-1)
+		last_command_id = int(clamp(last_command_id+change_id, -2, _g.terminal_scrollback.size()-1))
 		
 		if current_command == "" and last_command_id == -2:
 			last_command_id = -1

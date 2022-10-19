@@ -19,8 +19,8 @@ func _ready():
 	hex_edit.text = color.to_html(false)
 
 
-func _on_ColorPickerButton_color_changed(color):
-	set_color(color)
+func _on_ColorPickerButton_color_changed(_color):
+	set_color(_color)
 	hex_edit.text = color.to_html(false)
 	emit_signal("color_changed", color)
 
@@ -33,7 +33,7 @@ func set_color(_color:Color) -> void:
 	valid_text = hex_edit.text
 
 
-func _on_HexEdit_text_changed(new_text:String) -> void:
+func _on_HexEdit_text_changed(_new_text:String) -> void:
 	validate_col_text(false)
 
 

@@ -22,13 +22,13 @@ func set_color(new_color : Color):
 	color = new_color
 	$PanelContainer/HBoxContainer/ColorPickerButton.color = color
 
-func _on_SpinBox_value_changed(value):
-	condition[0] = value
+func _on_SpinBox_value_changed(new_value):
+	condition[0] = new_value
 	emit_signal("condition_changed")
 
 
-func _on_ColorPickerButton_color_changed(color):
-	condition[1] = color
+func _on_ColorPickerButton_color_changed(new_color):
+	condition[1] = new_color
 	emit_signal("condition_changed")
 
 

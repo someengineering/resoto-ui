@@ -4,7 +4,7 @@ extends DataSource
 func _init():
 	type = TYPES.AGGREGATE_SEARCH
 
-func make_query(dashboard_filters : Dictionary, attr : Dictionary):
+func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 	var q : String = query
 
 	if dashboard_filters["cloud"] != "" and dashboard_filters["cloud"] != "All":

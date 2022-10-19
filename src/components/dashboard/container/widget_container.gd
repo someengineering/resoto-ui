@@ -315,7 +315,7 @@ func lock(locked : bool) -> void:
 	config_button.visible = !locked
 	duplicate_button.visible = !locked
 	maximize_button.visible = locked
-	title_label.modulate.a = 0.1 if !locked else 1
+	title_label.modulate.a = 0.1 if !locked else 1.0
 
 func set_title(new_title : String) -> void:
 	title = new_title
@@ -499,9 +499,9 @@ func _on_DuplicateButton_pressed():
 
 
 func _on_PanelContainer_mouse_entered():
-	maximize_button.modulate.a = 1 if !is_maximized else 0.1
+	maximize_button.modulate.a = 1.0 if !is_maximized else 0.1
 
 
 func _on_PanelContainer_mouse_exited():
 	if not is_maximized:
-		maximize_button.modulate.a = 0
+		maximize_button.modulate.a = 0.0

@@ -67,7 +67,7 @@ func maximize_dashboard(is_maximized:bool) -> void:
 		remove_stylebox_override("panel")
 
 
-func _on_delete_config_id_done(_error: int, response):
+func _on_delete_config_id_done(_error: int, _response):
 	pass
 
 
@@ -253,7 +253,7 @@ func _refresh_dashboard_list():
 		idx += 1
 
 
-func _on_DashboardItemList_item_selected(index):
+func _on_DashboardItemList_item_selected(_index):
 	open_dashboard_btn.show()
 
 
@@ -262,5 +262,5 @@ func _on_DashboardItemList_nothing_selected():
 	open_dashboard_btn.hide()
 
 
-func _on_DashBoardManager_tab_changed(tab):
+func _on_DashBoardManager_tab_changed(_tab):
 	save_opened_dashboards()

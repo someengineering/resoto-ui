@@ -95,7 +95,6 @@ func build_config_pages(go_to_tab:String="resoto.core") -> void:
 	for c in content.get_children():
 		c.queue_free()
 	
-	var id
 	var config_elements:Array = []
 	for key in config_keys:
 		var new_tab = add_new_tab(key)
@@ -651,11 +650,10 @@ func _on_duplicate_confirm_response(_button_clicked:String, _value:String):
 		# Show loading animation
 		duplicate_new_name = _value
 		load_tab = _value
-		var config_duplicate = API.get_config_id(self, get_current_config_name(), "_on_config_duplicate_get_done")
+		API.get_config_id(self, get_current_config_name(), "_on_config_duplicate_get_done")
 
 
-
-func _on_config_duplicate_get_done(_error, _response, config_key) -> void:
+func _on_config_duplicate_get_done(_error, _response, _config_key) -> void:
 	var config_backup = _response.transformed.result
 	var json_config = JSON.print(config_backup)
 	config_put_req = API.put_config_id(self, duplicate_new_name, json_config)
@@ -677,10 +675,10 @@ var rename_new_name:= ""
 func _on_rename_confirm_response(_button_clicked:String, _value:String):
 	if _button_clicked == "left":
 		rename_new_name = _value
-		var config_duplicate = API.get_config_id(self, get_current_config_name(), "_on_config_rename_get_done")
+		API.get_config_id(self, get_current_config_name(), "_on_config_rename_get_done")
 
 
-func _on_config_rename_get_done(_error, _response, config_key) -> void:
+func _on_config_rename_get_done(_error, _response, _config_key) -> void:
 	var config_backup = _response.transformed.result
 	var json_config = JSON.print(config_backup)
 	config_put_req = API.put_config_id(self, rename_new_name, json_config)
