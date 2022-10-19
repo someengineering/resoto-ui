@@ -155,6 +155,11 @@ static func format_value(_value) -> String:
 		return str(_value)
 
 
+static func readable_date(_date:Dictionary) -> String:
+	var month_names := ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+	return "{m} {d}, {y}".format({"m": month_names[_date.month], "d": _date.day, "y": _date.year})
+
+
 static func comma_sep(number):
 	var string = str(number)
 	var mod = string.length() % 3

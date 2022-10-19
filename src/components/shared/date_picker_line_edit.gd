@@ -3,23 +3,28 @@ extends LineEdit
 signal date_changed(timestamp)
 
 var unix_time : int setget , get_unix_time
-
 var previous_text
+
+onready var popup:= $Popup
 
 func _ready():
 	connect("text_entered", self, "process_date")
 	connect("focus_exited", self, "process_date")
 	previous_text = text
 
-func _on_Button_pressed() -> void:
-	$Popup.rect_size = $Popup/DatePicker.rect_size
-	$Popup.rect_global_position = rect_global_position + rect_size
-	$Popup.rect_global_position.x -= $Popup.rect_size.x
-	$Popup.popup()
+
+func _on_DateButton_pressed() -> void:
+	popup.rect_size = $Popup/DatePicker.rect_size
+	popup.rect_global_position = rect_global_position + rect_size
+	popup.rect_global_position.x -= popup.rect_size.x
+	popup.popup()
+
 
 func _on_DatePicker_date_picked(date : int) -> void:
 	unix_time = date
 	text = Time.get_datetime_string_from_unix_time(date, true)
+	process_date()
+
 
 func process_date(new_text : String = text, notify := true) -> bool:
 	if new_text == "":
@@ -87,8 +92,8 @@ func replaces_tokens(new_text : String) -> String:
 	new_text = new_text.replace("m", "*60")
 	new_text = new_text.replace("s", "")
 	return new_text
-	
-	
+
+
 func get_unix_time():
 	process_date(text, false)
 	return unix_time

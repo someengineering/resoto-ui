@@ -5,8 +5,8 @@
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/shared/date_range_selector.gd" type="Script" id=4]
 
-
 [node name="DateRangeSelector" type="Popup"]
+visible = true
 margin_right = 288.0
 margin_bottom = 232.0
 theme = ExtResource( 1 )
@@ -16,69 +16,78 @@ script = ExtResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 283.0
-margin_bottom = 227.0
-
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
+[node name="VBox" type="VBoxContainer" parent="PanelContainer"]
+margin_left = 10.0
+margin_top = 10.0
 margin_right = 278.0
-margin_bottom = 20.0
+margin_bottom = 243.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBox"]
+margin_right = 268.0
+margin_bottom = 21.0
 text = "From:"
 
-[node name="FromLineEdit" parent="PanelContainer/VBoxContainer" instance=ExtResource( 2 )]
-margin_top = 24.0
-margin_right = 278.0
-margin_bottom = 48.0
+[node name="FromLineEdit" parent="PanelContainer/VBox" instance=ExtResource( 2 )]
+margin_top = 25.0
+margin_right = 268.0
+margin_bottom = 58.0
 text = "now - 24h"
 
-[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer"]
-margin_top = 52.0
-margin_right = 278.0
-margin_bottom = 72.0
+[node name="Label2" type="Label" parent="PanelContainer/VBox"]
+margin_top = 62.0
+margin_right = 268.0
+margin_bottom = 83.0
 text = "To:"
 
-[node name="ToLineEdit" parent="PanelContainer/VBoxContainer" instance=ExtResource( 2 )]
-margin_top = 76.0
-margin_right = 278.0
-margin_bottom = 100.0
+[node name="ToLineEdit" parent="PanelContainer/VBox" instance=ExtResource( 2 )]
+margin_top = 87.0
+margin_right = 268.0
+margin_bottom = 120.0
 text = "now"
 
-[node name="Label3" type="Label" parent="PanelContainer/VBoxContainer"]
-margin_top = 104.0
-margin_right = 278.0
-margin_bottom = 124.0
+[node name="Label3" type="Label" parent="PanelContainer/VBox"]
+margin_top = 124.0
+margin_right = 268.0
+margin_bottom = 145.0
 text = "Relative Range:"
 
-[node name="ComboBox" parent="PanelContainer/VBoxContainer" instance=ExtResource( 3 )]
-margin_top = 128.0
-margin_right = 278.0
-margin_bottom = 152.0
+[node name="ComboBox" parent="PanelContainer/VBox" instance=ExtResource( 3 )]
+margin_top = 149.0
+margin_right = 268.0
+margin_bottom = 182.0
 items = [ "Last 5 minutes", "Last 15 minutes", "Last 30 minutes", "Last 1 hour", "Last 3 hours", "Last 6 hours", "Last 12 hours", "Last 24 hours", "Last 2 days", "Last 7 days" ]
+button_min_size = Vector2( 33, 33 )
 text = "Last 24 hours"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-margin_left = 160.0
-margin_top = 198.0
-margin_right = 278.0
-margin_bottom = 222.0
+[node name="Spacer" type="Control" parent="PanelContainer/VBox"]
+margin_top = 186.0
+margin_right = 268.0
+margin_bottom = 196.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBox"]
+margin_left = 107.0
+margin_top = 200.0
+margin_right = 268.0
+margin_bottom = 233.0
 size_flags_horizontal = 8
 size_flags_vertical = 10
+custom_constants/separation = 10
 
-[node name="CancelButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
-margin_right = 56.0
-margin_bottom = 24.0
+[node name="CancelButton" type="Button" parent="PanelContainer/VBox/Buttons"]
+margin_right = 74.0
+margin_bottom = 33.0
 text = "Cancel"
 
-[node name="AcceptButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 60.0
-margin_right = 118.0
-margin_bottom = 24.0
+[node name="AcceptButton" type="Button" parent="PanelContainer/VBox/Buttons"]
+margin_left = 84.0
+margin_right = 161.0
+margin_bottom = 33.0
 text = "Accept"
 
-[connection signal="date_changed" from="PanelContainer/VBoxContainer/FromLineEdit" to="." method="_on_FromLineEdit_date_changed"]
-[connection signal="date_changed" from="PanelContainer/VBoxContainer/ToLineEdit" to="." method="_on_ToLineEdit_date_changed"]
-[connection signal="option_changed" from="PanelContainer/VBoxContainer/ComboBox" to="." method="_on_ComboBox_option_changed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_CancelButton_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/AcceptButton" to="." method="_on_AcceptButton_pressed"]
+[connection signal="about_to_show" from="." to="." method="_on_DateRangeSelector_about_to_show"]
+[connection signal="date_changed" from="PanelContainer/VBox/FromLineEdit" to="." method="_on_FromLineEdit_date_changed"]
+[connection signal="date_changed" from="PanelContainer/VBox/ToLineEdit" to="." method="_on_ToLineEdit_date_changed"]
+[connection signal="option_changed" from="PanelContainer/VBox/ComboBox" to="." method="_on_ComboBox_option_changed"]
+[connection signal="pressed" from="PanelContainer/VBox/Buttons/CancelButton" to="." method="_on_CancelButton_pressed"]
+[connection signal="pressed" from="PanelContainer/VBox/Buttons/AcceptButton" to="." method="_on_AcceptButton_pressed"]
