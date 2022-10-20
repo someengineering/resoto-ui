@@ -5,11 +5,16 @@ export var y_grid_size := 100.0
 export var grid_margin := Vector2(5,5)
 
 var dashboard_container:DashboardContainer = null
+var is_ready := false
 
 onready var widgets : Control = $Widgets
 onready var grid_background : ColorRect = $Grid
 onready var _x_grid_size := rect_size.x / x_grid_ratio
 onready var widget_container_scene := preload("res://components/dashboard/container/widget_container.tscn")
+
+
+func _ready():
+	is_ready = true
 
 var locked := true
 
@@ -99,8 +104,12 @@ func lock(_locked : bool) -> void:
 
 
 func _on_Grid_resized() -> void:
-	_x_grid_size = rect_size.x / x_grid_ratio
-
+	var new_x_size = rect_size.x / x_grid_ratio
+	if not is_ready or is_equal_approx(new_x_size, _x_grid_size):
+		return
+		
+	_x_grid_size = new_x_size
+	
 	var grid_size := Vector2(_x_grid_size, y_grid_size)
 	
 	$Grid.material.set_shader_param("grid_size", grid_size)
@@ -114,6 +123,7 @@ func _on_Grid_resized() -> void:
 		
 		widget.parent_reference.rect_global_position = widget.position_on_grid * grid_size + rect_global_position
 		widget.parent_reference.rect_size = widget.size_on_grid * grid_size
+		print("SET ANCHORS RESIZED")
 		widget.call_deferred("set_anchors")
 
 
