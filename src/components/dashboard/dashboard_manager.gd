@@ -150,10 +150,10 @@ func load_dashboard(dashboard_name : String):
 	if not available_dashboards.has(dashboard_name):
 		return
 	var data : Dictionary = available_dashboards[dashboard_name]
-	create_dashboard_with_data(data)
+	create_dashboard_with_data(data, false)
 
 
-func create_dashboard_with_data(data):
+func create_dashboard_with_data(data, save_dashboard:bool=true):
 	if not data.has("dashboard_name"):
 		return
 
@@ -174,9 +174,11 @@ func create_dashboard_with_data(data):
 	dashboard.initial_load = true
 	dashboard.last_saved_name = dashboard.name
 	dashboard.manager = self
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	save_dashboard(dashboard)
+	
+	if save_dashboard:
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		save_dashboard(dashboard)
 
 
 func get_user_dashboards() -> Dictionary:
