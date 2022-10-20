@@ -41,6 +41,11 @@ func connect_to_core() -> void:
 		API.adress = JavaScript.eval("getURL()")
 		var protocol = JavaScript.eval("getProtocol()")
 		API.use_ssl = protocol == "https:"
+		var port : String = JavaScript.eval("getPort()")
+		if port != "":
+			API.port = int(port)
+		else:
+			API.port = -1
 	
 	status.text = CONNECT_TEXT.format(["0", API.adress, API.port])
 	yield(VisualServer, "frame_post_draw")

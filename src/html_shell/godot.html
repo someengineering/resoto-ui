@@ -151,6 +151,9 @@
 		function getProtocol() {
 			return(window.location.protocol);
 		}
+		function getPort() {
+			return(window.location.port);
+		}
 		function getParameter(parameter) {
 			const queryString = window.location.search;
 			const urlParams = new URLSearchParams(queryString);
