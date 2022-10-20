@@ -314,7 +314,8 @@ func set_widgets(new_widgets : Array) -> void:
 		container.rect_size = Vector2(settings["size:x"], settings["size:y"]) * container.grid_size
 		container.parent_reference.rect_size = container.rect_size
 		container.parent_reference.rect_position = container.rect_position
-		container.set_anchors()
+		
+#		container.set_anchors()
 
 
 func _on_NewWidgetPopup_widget_added(_widget_data):

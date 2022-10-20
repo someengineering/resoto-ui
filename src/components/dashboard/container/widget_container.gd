@@ -75,6 +75,7 @@ func _ready() -> void:
 
 func set_grid_size(new_grid_size : Vector2) -> void:
 		grid_size = new_grid_size
+		prints(is_inside_tree(), "grid resize")
 		emit_signal("moved_or_resized")
 
 
@@ -113,6 +114,7 @@ func set_anchors() -> void:
 	margin_right = 0
 	anchor_left = (parent_reference.rect_position.x) / dashboard_size.x
 	anchor_right = (parent_reference.rect_position + parent_reference.rect_size).x / dashboard_size.x
+	prints(is_inside_tree(), "anchors")
 	emit_signal("moved_or_resized")
 
 
@@ -476,6 +478,7 @@ func _on_MaximizeButton_toggled(button_pressed):
 	maximize_button.hint_tooltip = min_hint if is_maximized else max_hint
 	set_as_toplevel(button_pressed)
 	resize_buttons.visible = not (is_maximized or is_locked)
+	prints(is_inside_tree(), "maximize")
 	emit_signal("moved_or_resized")
 
 
