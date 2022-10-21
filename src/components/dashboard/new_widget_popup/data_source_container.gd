@@ -22,6 +22,14 @@ onready var text_line_edit := $VBoxContainer/TextSearchSettings/TextLineEdit
 onready var text_filters_line_edit := $VBoxContainer/TextSearchSettings/TextFiltersLineEdit
 onready var list_line_edit := $VBoxContainer/TextSearchSettings/ListLineEdit
 
+onready var entry_1_line_edit := $VBoxContainer/TwoEntryAggregateSettings/EntryContainer1/Entry1LineEdit
+onready var entry_2_line_edit := $VBoxContainer/TwoEntryAggregateSettings/EntryContainer2/Entry2LineEdit
+onready var entry_1_alias_line_edit := $VBoxContainer/TwoEntryAggregateSettings/EntryContainer1/Entry1Alias
+onready var entry_2_alias_line_edit := $VBoxContainer/TwoEntryAggregateSettings/EntryContainer2/Entry2Alias
+onready var function_line_edit := $VBoxContainer/TwoEntryAggregateSettings/FunctionContainer/FunctionLineEdit
+onready var function_alias_line_edit := $VBoxContainer/TwoEntryAggregateSettings/FunctionContainer/FunctionAlias
+onready var kinds_combobox_two_entries_datasource := $VBoxContainer/TwoEntryAggregateSettings/KindComboBox
+
 var interval : int = 3600
 
 
@@ -225,6 +233,15 @@ func set_data_source(new_data_source : DataSource) -> void:
 			text_line_edit.text = new_data_source.text_to_search
 			text_filters_line_edit.text = new_data_source.filters
 			list_line_edit.text = new_data_source.list
+		DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
+			entry_1_line_edit.text = new_data_source.category_1
+			entry_2_line_edit.text = new_data_source.category_2
+			entry_1_alias_line_edit.text = new_data_source.category_1_alias
+			entry_2_alias_line_edit.text = new_data_source.category_2_alias
+			function_line_edit.text = new_data_source.function
+			function_alias_line_edit.text = new_data_source.function_alias
+			kinds_combobox_two_entries_datasource.text = new_data_source.kind 
+			
 		
 	query_edit.text = new_data_source.query
 	_on_QueryEdit_item_rect_changed()

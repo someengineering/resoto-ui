@@ -47,5 +47,21 @@
             "type": 1,
             "query": "aggregate(instance_type, /ancestors.account.reported.name: sum(1) as instances): is(instance)"
         }
+    },
+    {
+        "Name": "Instance number per account and instance type",
+        "Widgets": ["Heatmap"],
+        "Description": "Gets the number of instances per instance type and account name",
+        "data": {
+            "category_1": "/ancestors.account.reported.name",
+            "category_1_alias": "account_name",
+            "category_2": "instance_type",
+            "category_2_alias": "type",
+            "function": "sum(1)",
+            "function_alias": "instances",
+            "kind": "instance",
+            "type": 3,
+            "query": "aggregate(/ancestors.account.reported.name as account_name, instance_type as type: sum(1) as instances) : is(instance)"
+        }
     }
 ]

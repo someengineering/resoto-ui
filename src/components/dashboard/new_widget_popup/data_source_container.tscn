@@ -313,7 +313,6 @@ margin_bottom = 120.0
 margin_right = 243.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
-placeholder_text = "/ancestors.account.reported.name"
 script = ExtResource( 6 )
 
 [node name="Label" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings/EntryContainer1"]
@@ -328,7 +327,6 @@ margin_left = 268.0
 margin_right = 511.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
-placeholder_text = "cloud_name"
 script = ExtResource( 6 )
 
 [node name="SecondEntryLabel" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings"]
@@ -346,7 +344,6 @@ margin_bottom = 182.0
 margin_right = 243.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
-placeholder_text = "instance_type"
 script = ExtResource( 6 )
 
 [node name="Label" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings/EntryContainer2"]
@@ -361,7 +358,6 @@ margin_left = 268.0
 margin_right = 511.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
-placeholder_text = "type"
 script = ExtResource( 6 )
 
 [node name="FunctionLabel" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings"]
@@ -379,7 +375,6 @@ margin_bottom = 244.0
 margin_right = 243.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
-placeholder_text = "sum(1)"
 script = ExtResource( 6 )
 
 [node name="Label" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings/FunctionContainer"]
@@ -394,7 +389,6 @@ margin_left = 268.0
 margin_right = 511.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
-placeholder_text = "instances"
 script = ExtResource( 6 )
 
 [node name="QueryEditVBox" type="VBoxContainer" parent="VBoxContainer"]
