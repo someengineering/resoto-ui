@@ -10,6 +10,7 @@ var last_command_id: int  = -1
 var current_command:String = ""
 var active_request: ResotoAPI.Request
 var just_grabbed_focus:bool = false
+var connected:bool = false
 
 var cmd_rename:UITerminalCommand = UITerminalCommand.new("name ", "terminal_cmd_rename")
 var terminal_commands:Array = [cmd_rename]
@@ -34,10 +35,10 @@ class UITerminalCommand:
 
 
 func _ready() -> void:
+	loading.console = console
 	if not _g.is_connected_to_resotocore:
 		yield(_g, "connected_to_resotocore")
-	
-	loading.console = console
+	connected = true
 	console_v_scroll.connect("changed", self, "on_scroll_changed")
 	var image = load("res://assets/resoto/Resoto-Logo_bigger.svg")
 	
@@ -129,6 +130,7 @@ func _on_cli_execute_streamed_done(error:int, _response:UserAgent.Response) -> v
 func _on_cli_execute_streamed_data(data:String) -> void:
 	if data.left(3) == "401":
 		_g.popup_manager.open_popup("ConnectPopup")
+		return
 	console.append_bbcode(str(data))
 
 
@@ -142,11 +144,16 @@ func on_scroll_changed() -> void:
 
 
 func _on_CommandEdit_text_entered() -> void:
-	if !terminal_active:
+	if not terminal_active:
 		return
 	var _new_command = command.text
 	new_line(_new_command)
 	if _new_command == "":
+		return
+	if not connected:
+		console.append_bbcode("\n[b][color=red]> Not connected to Resoto Core or not authorized.[/color][/b]")
+		current_command = ""
+		command.text = ""
 		return
 	execute_command(_new_command)
 	last_command_id = -1

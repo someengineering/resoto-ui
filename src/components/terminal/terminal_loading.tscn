@@ -4,7 +4,6 @@
 [ext_resource path="res://assets/resoto/seaching_2.png" type="Texture" id=2]
 [ext_resource path="res://components/terminal/terminal_loading.gd" type="Script" id=3]
 
-
 [sub_resource type="Animation" id=1]
 length = 0.001
 tracks/0/type = "value"

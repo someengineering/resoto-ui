@@ -87,6 +87,7 @@ class Request:
 					if not poll_():
 						return
 					else:
+						
 						state_ = states.CONNECTING
 			
 			states.CONNECTING:
@@ -132,7 +133,11 @@ class Request:
 					response_.status_code	= http_status
 					response_.headers		= http_.get_response_headers_as_dictionary()
 					response_.body			= PoolByteArray()
-					state_					= states.RESPONSE
+					if response_.response_code == 401:
+						emit_signal("pre_done", FAILED, response_)
+						state_ = states.DONE
+						return
+					state_ = states.RESPONSE
 			
 			states.RESPONSE:
 				for i in 100:

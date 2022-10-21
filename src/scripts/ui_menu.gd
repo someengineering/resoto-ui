@@ -36,6 +36,9 @@ func _input(event:InputEvent) -> void:
 		elif event.button_index == BUTTON_WHEEL_DOWN:
 			ui_scale_down()
 	
+	if _g.popup_manager.current_popup != null:
+		return
+	
 	if event.is_action_pressed("ui_cancel"):
 		hb_button.pressed = !hb_button.pressed
 

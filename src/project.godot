@@ -211,6 +211,7 @@ Analytics="*res://scripts/autoloads/analytics.gd"
 
 [debug]
 
+settings/profiler/max_functions=65535
 gdscript/warnings/unused_signal=false
 gdscript/warnings/return_value_discarded=false
 

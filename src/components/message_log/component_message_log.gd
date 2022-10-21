@@ -12,9 +12,10 @@ func _ready():
 func add_toast(_toast):
 	var new_toast = _toast.duplicate()
 	new_toast.get_node("Main/CloseButton").hide()
-	var title_add = " :: " + str(_toast.from_node.get_script().get_path().split("/")[-1])
+	var title_add:= ""
 	if _toast.from_node != null:
-		title_add += " @ " + Time.get_time_string_from_system()
+		title_add += " :: " + str(_toast.from_node.get_script().get_path().split("/")[-1])
+	title_add += " @ " + Time.get_time_string_from_system()
 	new_toast.get_node("Main/Content/Title").text += title_add
 	container.add_child(new_toast)
 	container.move_child(new_toast, 0)

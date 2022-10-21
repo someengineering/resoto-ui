@@ -28,7 +28,6 @@ extra_spacing_bottom = -2
 font_data = SubResource( 4 )
 
 [node name="Toast" type="PanelContainer"]
-visible = false
 self_modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
 margin_right = 400.0
 margin_bottom = 27.0
@@ -39,11 +38,11 @@ script = ExtResource( 1 )
 margin_left = 6.0
 margin_top = 6.0
 margin_right = 394.0
-margin_bottom = 21.0
+margin_bottom = 47.0
 
 [node name="Content" type="VBoxContainer" parent="Main"]
 margin_right = 370.0
-margin_bottom = 15.0
+margin_bottom = 41.0
 size_flags_horizontal = 3
 
 [node name="Title" type="Label" parent="Main/Content"]
@@ -53,19 +52,19 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 3 )
 text = "Title"
 
-[node name="Description" type="Label" parent="Main/Content"]
-visible = false
-margin_top = 21.0
+[node name="Description" type="RichTextLabel" parent="Main/Content"]
+margin_top = 19.0
 margin_right = 370.0
 margin_bottom = 41.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_constants/line_spacing = 0
-text = "Message"
+mouse_filter = 1
+size_flags_horizontal = 3
+bbcode_enabled = true
+fit_content_height = true
 
 [node name="CloseButton" type="TextureButton" parent="Main"]
 margin_left = 374.0
 margin_right = 388.0
-margin_bottom = 15.0
+margin_bottom = 41.0
 rect_min_size = Vector2( 14, 14 )
 texture_normal = ExtResource( 2 )
 
@@ -74,6 +73,7 @@ texture_normal = ExtResource( 2 )
 [node name="DisappearTimer" type="Timer" parent="."]
 one_shot = true
 
+[connection signal="meta_clicked" from="Main/Content/Description" to="." method="_on_Description_meta_clicked"]
 [connection signal="pressed" from="Main/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="tween_all_completed" from="Tween" to="." method="_on_Tween_tween_all_completed"]
 [connection signal="timeout" from="DisappearTimer" to="." method="_on_DisappearTimer_timeout"]

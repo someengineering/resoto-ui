@@ -26,7 +26,7 @@ func open(_title:String, _description:String=description, _status:int=status, _d
 	
 	if _description != "":
 		$Main/Content/Description.show()
-		$Main/Content/Description.text = _description
+		$Main/Content/Description.bbcode_text = _description
 	
 	match _status:
 		STATUS_SUCCESS:
@@ -38,8 +38,9 @@ func open(_title:String, _description:String=description, _status:int=status, _d
 		STATUS_INFO:
 			self_modulate = INFO_COLOR
 	
-	$DisappearTimer.wait_time = _duration
-	$DisappearTimer.start()
+	if _duration > 0:
+		$DisappearTimer.wait_time = _duration
+		$DisappearTimer.start()
 	
 	if not _is_closable:
 		$Main/CloseButton.hide()
@@ -74,3 +75,8 @@ func _on_Tween_tween_all_completed():
 	if is_closed:
 		emit_signal("closed")
 		hide()
+
+
+func _on_Description_meta_clicked(_meta):
+	_g.emit_signal("toast_click", _meta)
+	close()

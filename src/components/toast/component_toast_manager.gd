@@ -19,6 +19,7 @@ onready var tween:Tween = $MoveToastsTween
 
 func _ready():
 	_g.connect("add_toast", self, "on_add_toast")
+	_g.connect("toast_click", self, "_on_toast_clicked")
 
 
 func on_add_toast(_title:String, _description:String=description, _status:int=status, _from:Node=null, _duration:float = duration, _is_closable:bool=is_closable):
@@ -60,3 +61,9 @@ func on_toast_closed(toast:Control):
 	toasts.erase(toast)
 	toast.queue_free()
 	move_toasts()
+
+
+func _on_toast_clicked(_meta:String):
+	match _meta:
+		"reconnect":
+			_g.popup_manager.open_popup("ConnectPopup")

@@ -5,7 +5,7 @@ const DEFAULT_PSK: String = "changeme"
 var _req_res: ResotoAPI.Request
 var _resoto_api: ResotoAPI = ResotoAPI.new()
 
-var adress: String		= "http://127.0.0.1" setget set_adress
+var adress: String		= "127.0.0.1" setget set_adress
 var port: int			= 8900 setget set_port
 var psk: String			= DEFAULT_PSK setget set_psk
 var graph_id: String	= "resoto"
@@ -21,7 +21,6 @@ func _ready() -> void:
 	_resoto_api.accept_text_headers.Resotoui_via = "Web" if OS.has_feature("web") else "Desktop"
 	_resoto_api.config_put_headers.Accept = "application/json"
 	_resoto_api.config_put_headers.Content_Type = "application/json"
-	
 	Engine.get_main_loop().connect("idle_frame", self, "poll")
 
 
@@ -55,11 +54,13 @@ func connection_config(_adress:String = adress, _port:int = port, _psk:String = 
 	psk = _psk
 	use_ssl = _use_ssl
 	JWT.psk = _psk
-	_resoto_api.options.host = adress
+	var protocol:= "https://" if use_ssl else "http://"
+	_resoto_api.options.host = protocol+adress
 	_resoto_api.options.port = port
 	_resoto_api.options.use_ssl = use_ssl
 	# For debug purposes
-	prints("Resoto UI: Connection Settings to Core | Host:", adress, "- Port:", port, "- SSL:", use_ssl)
+	prints("Connect Settings: host: %s - port: %s - ssl: %s" % [adress, port, use_ssl])
+
 
 func get_model(_connect_to:Node, _connect_function:String="_on_get_model_done") -> void:
 	_req_res = _resoto_api.get_model()
