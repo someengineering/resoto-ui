@@ -1,42 +1,40 @@
-# `ui`
-resoto UI prototype
-
+# `Resoto UI`
 
 ## Table of contents
 
 * [Overview](#overview)
 * [How to get the UI running](#overview)
-    * [Importing your cloud data into the UI](#importing-your-cloud-data-into-the-ui)
-* [Contact](#contact)
+* [Join the Community](#contact)
 * [License](#license)
 
 
 ## Overview
-This serves to communicate the vision we work on for the resoto UI.
-At the moment, this is just a prototype with no functionality except the visual rendition of an exported resoto Graph and some fancy UI elements.
+First things first: This readme is still very short. We are working on full-on documentation for the UI right now.
 
-**Our goals for this and the upcoming releases**
- - Establishing a basic navigation concept.
- - Trying to rethink the dashboard from a display tool to a deeply connected entry point.
- - Find an intuitive way of integrating the resoto query language.
- - Exploring ways of displaying the graph and give the user intuitive tools to navigate it.
- - Having fun exploring the cloud environment.
- - Easy and useful ways of searching the graph and integrate queries into this concept.
+Resoto UI is a web-based WASM application that runs in most browsers (we recommend Chrome) and was built using the [Godot Engine](https://godotengine.org/).
+The Resoto UI connects to a running Resoto Core - so if you want to use the UI, [you need Resoto first](https://github.com/someengineering/resoto).
+
+**The UI has four main features to make using Resoto easier:**
+- Customizable dashboards (Historic data via Prometheus and live data via Resoto)
+- Exploring your infrastructure via search. Navigate via fast and easy navigation.
+- Change your Resoto configuration via a comfortable and powerful configuration editor
+- Have simple and fast access to the Resoto Shell via a Terminal emulator (very basic though)
+
+Of course, we already work on more features, especially rendering and navigating a visual graph!
 
 
-## How to get the UI running
-The UI ships as part of the Resoto Docker image and will be available at `<resotocore-address>:8900/ui/`.
+## How to use the Resoto UI
+The UI ships as part of the [Resoto Docker](https://resoto.com/docs/getting-started/install-resoto/docker) image and is then served at `<resotocore-address>:8900/ui/`.
 
-**To build the standalone version follow these steps:**
-- Download [Godot 3.4](https://godotengine.org/download) (standard version).
+**To use a standalone version follow these steps:**
+- Download [Godot 3.5](https://godotengine.org/download) (standard version).
 - Start the engine and import the project in the Project Manager (click import, select the 'project.godot' file).
 - Open the project from the Project Manager.
-- Run the Project by clicking on the "Play" button in the upper right corner.
-- Enter your resotocore URI in the provided field and load the graph.
+- Run the Project by clicking on the `Play` button in the upper right corner or by pressing `F5`.
 
 
 ## Contact
-If you have any questions feel free to [join our Discord](https://discord.gg/someengineering) or [open a GitHub issue](https://github.com/someengineering/resoto/issues/new).
+[Join our Discord](https://discord.gg/someengineering) if you have any questions or want to chat about Resoto or Resoto UI - or [open a GitHub issue](https://github.com/someengineering/resoto-ui/issues/new) if you encounter problems and/or bugs.
 
 
 ## License
