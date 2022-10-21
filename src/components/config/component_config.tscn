@@ -138,7 +138,7 @@ icon_tex = ExtResource( 15 )
 [node name="AddConfigButton" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]
 margin_left = 1822.0
 margin_right = 1855.0
-hint_tooltip = "Reload all configurations from Resoto Core"
+hint_tooltip = "Add Configuration to Resoto Core"
 icon_tex = ExtResource( 19 )
 
 [node name="DeleteConfigButton" parent="TabManager/PanelContainer/Box" instance=ExtResource( 12 )]

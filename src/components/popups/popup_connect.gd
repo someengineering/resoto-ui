@@ -1,23 +1,27 @@
-extends VBoxContainer
+extends PopupPanel
 
 signal connected
 
-const CONNECT_TEXT = "Connecting to Resoto Core...\n({0}s) {1}:{2}"
+const CONNECT_TEXT = "Connecting to Resoto Core\n%s:%s"
 const TEXT_ERROR_CONNECTION = "Could not connect to Resoto Core!\nConnection timed out\nPlease check if adress is correct, ports are open and resotocore is running."
 
 var timeout_timer:= 0.0
-var timeout_limit:= 5.0
+var timeout_limit:= 4.0
 var info_request : ResotoAPI.Request
 
-onready var status = $ConnectStatusLabel
-onready var psk_line_edit = $PSKLineEdit
+onready var status = $"%ConnectStatusLabel"
+onready var psk_line_edit = $"%PSKLineEdit"
+onready var adress_line_edit = $"%ResotoAdressEdit"
+onready var connect_button = $"%ButtonConnect"
+onready var show_psk_icon = $"%ShowPSKIcon"
 
-func _ready() -> void:
+
+func _ready():
+	if modulate != Color.white:
+		Style.add(self, Style.find_color(modulate))
+	elif self_modulate != Color.white:
+		Style.add_self(self, Style.find_color(self_modulate))
 	_g.popup_manager.popup_connect = self
-
-
-func _on_PSKLineEdit_text_entered(_new_text) -> void:
-	connect_to_core()
 
 
 func _on_ButtonConnect_pressed() -> void:
@@ -26,27 +30,39 @@ func _on_ButtonConnect_pressed() -> void:
 
 func _on_ConnectPopup_about_to_show() -> void:
 	psk_line_edit.text = API.psk
+	var protocol:= "https://" if API.use_ssl else "http://"
+	adress_line_edit.text = protocol + API.adress + ":" + str(API.port)
 	$ConnectDelay.start()
 
 
 func connect_to_core() -> void:
-	$Label.hide()
-	$PSKLineEdit.hide()
-	$ButtonConnect.hide()
+	$Content/Margin/Connect/PSK.hide()
+	$Content/Margin/Connect/Adress.hide()
+	connect_button.hide()
 	
 	JWT.token = ""
-	API.psk = psk_line_edit.text
+	var psk = psk_line_edit.text
 	
 	if OS.has_feature("HTML5"):
-		API.adress = JavaScript.eval("getURL()")
-		var protocol = JavaScript.eval("getProtocol()")
-		API.use_ssl = protocol == "https:"
-		var port : String = JavaScript.eval("getPort()")
-		if port != "":
-			API.port = int(port)
+		var adress : String		= JavaScript.eval("getURL()")
+		var use_ssl : bool		= JavaScript.eval("getProtocol()") == "https:"
+		var port : String		= JavaScript.eval("getPort()")
+		if port == "":
+			port = "80" if not use_ssl else "443"
+		API.connection_config(adress, int(port), psk, use_ssl)
+	else:
+		var a_t = adress_line_edit.text.strip_edges()
+		var adress = a_t.split("://")
+		adress.remove(0)
+		adress = adress[0].split(":")
+		var use_ssl = a_t.begins_with("https:")
+		var port = 8900
+		if adress.size() > 1:
+			port = int(adress[1])
+		API.connection_config(adress[0], int(port), psk, use_ssl)
 	
-	
-	status.text = CONNECT_TEXT.format(["0", API.adress, API.port])
+	var protocol:= "https://" if API.use_ssl else "http://"
+	status.text = CONNECT_TEXT % [(protocol + API.adress), API.port]
 	yield(VisualServer, "frame_post_draw")
 	$ConnectTimeoutTimer.start()
 	
@@ -61,7 +77,10 @@ func _on_get_infra_info_done(_error:int, response):
 
 func _on_system_ready_done(error:int, response:UserAgent.Response) -> void:
 	if error:
-		not_connected(Utils.err_enum_to_string(error))
+		if error == 25:
+			not_connected(Utils.http_status_to_string(info_request.http_.get_status()))
+		else:
+			not_connected(Utils.err_enum_to_string(error))
 	else:
 		if response.status_code == 7:
 			if response.transformed["result"].left(3) == "401":
@@ -99,9 +118,9 @@ func connected(status_text:String) -> void:
 func not_connected(status_text:String) -> void:
 	reset_timer()
 	status.text = status_text
-	$Label.show()
-	$PSKLineEdit.show()
-	$ButtonConnect.show()
+	$Content/Margin/Connect/PSK.show()
+	$Content/Margin/Connect/Adress.show()
+	connect_button.show()
 
 
 func _on_ConnectDelay_timeout():
@@ -115,7 +134,22 @@ func reset_timer():
 
 func _on_ConnectTimeoutTimer_timeout():
 	timeout_timer += 1.0
-	status.text = CONNECT_TEXT.format([timeout_timer, API.adress, API.port])
+	var protocol:= "https://" if API.use_ssl else "http://"
+	status.text = CONNECT_TEXT % [(str("(%s) " % timeout_timer) + protocol + API.adress), API.port]
 	if timeout_timer >= timeout_limit:
 		info_request.cancel(24)
-	
+
+
+const show_tex = preload("res://assets/icons/icon_128_show.svg")
+const hide_tex = preload("res://assets/icons/icon_128_hide.svg")
+func _on_ShowPSKIcon_toggled(button_pressed:bool):
+	show_psk_icon.icon_tex = hide_tex if button_pressed else show_tex
+	psk_line_edit.secret = !button_pressed
+
+
+func _on_ResotoAdressEdit_text_entered(_new_text):
+	connect_to_core()
+
+
+func _on_PSKLineEdit_text_entered(_new_text):
+	connect_to_core()

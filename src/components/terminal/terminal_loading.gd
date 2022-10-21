@@ -7,6 +7,7 @@ onready var anim_player_cloud = $AnimationPlayerCloud
 var loading: bool = false
 var console: RichTextLabel = null
 
+
 func start() -> void:
 	show()
 	loading = true

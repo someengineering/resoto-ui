@@ -55,6 +55,8 @@ func start() -> void:
 
 
 func _on_get_configs_done(_error, _response) -> void:
+	if _error != OK:
+		return
 	unfiltered_keys = _response.transformed.result
 	API.get_config_model(self)
 	yield(self, "model_ready")

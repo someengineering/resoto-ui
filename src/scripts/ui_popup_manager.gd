@@ -53,7 +53,7 @@ func open_popup(_name:String) -> void:
 	popup_bg.show()
 	current_popup = (get_node(_name) as Popup)
 	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
-	current_popup.popup_centered_clamped(Vector2(0,0), 2.2)
+	current_popup.popup_centered_clamped(Vector2(1,1), 1.8)
 
 
 func on_ui_shrink_changed() -> void:
