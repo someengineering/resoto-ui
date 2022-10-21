@@ -144,6 +144,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/data_sources/data_source_time_series.gd"
 }, {
+"base": "AggregateSearchDataSource",
+"class": "TwoEntryAggregateDataSource",
+"language": "GDScript",
+"path": "res://components/dashboard/data_sources/data_source_two_entry_aggregate.gd"
+}, {
 "base": "Reference",
 "class": "UserAgent",
 "language": "GDScript",
@@ -187,6 +192,7 @@ _global_script_class_icons={
 "TerminalComponent": "",
 "TextSearchDataSource": "",
 "TimeSeriesDataSource": "",
+"TwoEntryAggregateDataSource": "",
 "UserAgent": "",
 "Utils": "",
 "WidgetContainer": ""

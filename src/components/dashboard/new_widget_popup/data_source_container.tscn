@@ -51,9 +51,10 @@ script = ExtResource( 7 )
 margin_left = 6.0
 margin_top = 6.0
 margin_right = 517.0
-margin_bottom = 826.0
+margin_bottom = 349.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
 margin_right = 511.0
 margin_bottom = 33.0
 
@@ -102,9 +103,9 @@ size_flags_vertical = 1
 icon_tex = ExtResource( 4 )
 
 [node name="DatasourceSettings" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 37.0
+visible = false
 margin_right = 511.0
-margin_bottom = 464.0
+margin_bottom = 427.0
 size_flags_horizontal = 3
 
 [node name="MetricsVBox" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
@@ -210,9 +211,9 @@ pressed = true
 text = "Stacked"
 
 [node name="TextSearchSettings" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 468.0
+visible = false
 margin_right = 511.0
-margin_bottom = 724.0
+margin_bottom = 256.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TextSearchSettings"]
 margin_right = 511.0
@@ -283,10 +284,123 @@ margin_right = 511.0
 margin_bottom = 256.0
 script = ExtResource( 6 )
 
-[node name="QueryEditVBox" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 728.0
+[node name="TwoEntryAggregateSettings" type="VBoxContainer" parent="VBoxContainer"]
 margin_right = 511.0
-margin_bottom = 820.0
+margin_bottom = 244.0
+
+[node name="Label" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings"]
+margin_right = 511.0
+margin_bottom = 21.0
+text = "Kind"
+
+[node name="KindComboBox" parent="VBoxContainer/TwoEntryAggregateSettings" instance=ExtResource( 9 )]
+margin_top = 25.0
+margin_right = 511.0
+margin_bottom = 58.0
+
+[node name="FirstEntryLabel" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings"]
+margin_top = 62.0
+margin_right = 511.0
+margin_bottom = 83.0
+text = "1st Category"
+
+[node name="EntryContainer1" type="HBoxContainer" parent="VBoxContainer/TwoEntryAggregateSettings"]
+margin_top = 87.0
+margin_right = 511.0
+margin_bottom = 120.0
+
+[node name="Entry1LineEdit" type="LineEdit" parent="VBoxContainer/TwoEntryAggregateSettings/EntryContainer1"]
+margin_right = 243.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+placeholder_text = "/ancestors.account.reported.name"
+script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings/EntryContainer1"]
+margin_left = 247.0
+margin_top = 6.0
+margin_right = 264.0
+margin_bottom = 27.0
+text = "as"
+
+[node name="Entry1Alias" type="LineEdit" parent="VBoxContainer/TwoEntryAggregateSettings/EntryContainer1"]
+margin_left = 268.0
+margin_right = 511.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+placeholder_text = "cloud_name"
+script = ExtResource( 6 )
+
+[node name="SecondEntryLabel" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings"]
+margin_top = 124.0
+margin_right = 511.0
+margin_bottom = 145.0
+text = "2nd Category"
+
+[node name="EntryContainer2" type="HBoxContainer" parent="VBoxContainer/TwoEntryAggregateSettings"]
+margin_top = 149.0
+margin_right = 511.0
+margin_bottom = 182.0
+
+[node name="Entry2LineEdit" type="LineEdit" parent="VBoxContainer/TwoEntryAggregateSettings/EntryContainer2"]
+margin_right = 243.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+placeholder_text = "instance_type"
+script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings/EntryContainer2"]
+margin_left = 247.0
+margin_top = 6.0
+margin_right = 264.0
+margin_bottom = 27.0
+text = "as"
+
+[node name="Entry2Alias" type="LineEdit" parent="VBoxContainer/TwoEntryAggregateSettings/EntryContainer2"]
+margin_left = 268.0
+margin_right = 511.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+placeholder_text = "type"
+script = ExtResource( 6 )
+
+[node name="FunctionLabel" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings"]
+margin_top = 186.0
+margin_right = 511.0
+margin_bottom = 207.0
+text = "Function"
+
+[node name="FunctionContainer" type="HBoxContainer" parent="VBoxContainer/TwoEntryAggregateSettings"]
+margin_top = 211.0
+margin_right = 511.0
+margin_bottom = 244.0
+
+[node name="FunctionLineEdit" type="LineEdit" parent="VBoxContainer/TwoEntryAggregateSettings/FunctionContainer"]
+margin_right = 243.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+placeholder_text = "sum(1)"
+script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="VBoxContainer/TwoEntryAggregateSettings/FunctionContainer"]
+margin_left = 247.0
+margin_top = 6.0
+margin_right = 264.0
+margin_bottom = 27.0
+text = "as"
+
+[node name="FunctionAlias" type="LineEdit" parent="VBoxContainer/TwoEntryAggregateSettings/FunctionContainer"]
+margin_left = 268.0
+margin_right = 511.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+placeholder_text = "instances"
+script = ExtResource( 6 )
+
+[node name="QueryEditVBox" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 248.0
+margin_right = 511.0
+margin_bottom = 340.0
 
 [node name="QueryLabel" type="Label" parent="VBoxContainer/QueryEditVBox"]
 margin_right = 511.0
@@ -333,6 +447,13 @@ custom_styles/panel = SubResource( 2 )
 [connection signal="text_entered" from="VBoxContainer/TextSearchSettings/LineEditKinds" to="." method="_on_LineEdit2_text_entered"]
 [connection signal="text_entered" from="VBoxContainer/TextSearchSettings/TextFiltersLineEdit" to="." method="_on_LineEdit3_text_entered"]
 [connection signal="text_entered" from="VBoxContainer/TextSearchSettings/ListLineEdit" to="." method="_on_LineEdit4_text_entered"]
+[connection signal="option_changed" from="VBoxContainer/TwoEntryAggregateSettings/KindComboBox" to="." method="_on_KindComboBox_option_changed"]
+[connection signal="text_entered" from="VBoxContainer/TwoEntryAggregateSettings/EntryContainer1/Entry1LineEdit" to="." method="_on_Entry1LineEdit_text_entered"]
+[connection signal="text_entered" from="VBoxContainer/TwoEntryAggregateSettings/EntryContainer1/Entry1Alias" to="." method="_on_Entry1Alias_text_entered"]
+[connection signal="text_entered" from="VBoxContainer/TwoEntryAggregateSettings/EntryContainer2/Entry2LineEdit" to="." method="_on_Entry2LineEdit_text_entered"]
+[connection signal="text_entered" from="VBoxContainer/TwoEntryAggregateSettings/EntryContainer2/Entry2Alias" to="." method="_on_Entry2Alias_text_entered"]
+[connection signal="text_entered" from="VBoxContainer/TwoEntryAggregateSettings/FunctionContainer/FunctionLineEdit" to="." method="_on_FunctionLineEdit_text_entered"]
+[connection signal="text_entered" from="VBoxContainer/TwoEntryAggregateSettings/FunctionContainer/FunctionAlias" to="." method="_on_FunctionAlias_text_entered"]
 [connection signal="cursor_changed" from="VBoxContainer/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_cursor_changed"]
 [connection signal="gui_input" from="VBoxContainer/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_gui_input"]
 [connection signal="item_rect_changed" from="VBoxContainer/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_item_rect_changed"]

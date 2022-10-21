@@ -33,16 +33,26 @@ func _ready() -> void:
 			data_source = TimeSeriesDataSource.new()
 			$VBoxContainer/DatasourceSettings.show()
 			$VBoxContainer/TextSearchSettings.hide()
+			$VBoxContainer/TwoEntryAggregateSettings.hide()
 		DataSource.TYPES.AGGREGATE_SEARCH:
 			data_source = AggregateSearchDataSource.new()
 			$VBoxContainer/DatasourceSettings.hide()
 			$VBoxContainer/TextSearchSettings.hide()
+			$VBoxContainer/TwoEntryAggregateSettings.hide()
 			expand_button.hide()
 		DataSource.TYPES.SEARCH:
 			data_source = TextSearchDataSource.new()
 			$VBoxContainer/DatasourceSettings.hide()
 			$VBoxContainer/TextSearchSettings.show()
+			$VBoxContainer/TwoEntryAggregateSettings.hide()
 			API.cli_execute("kinds", self)
+		DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
+			data_source = TwoEntryAggregateDataSource.new()
+			$VBoxContainer/DatasourceSettings.hide()
+			$VBoxContainer/TextSearchSettings.hide()
+			$VBoxContainer/TwoEntryAggregateSettings.show()
+			API.cli_execute("kinds", self)
+			
 	data_source.widget = widget
 	data_source.connect("query_status", self, "_on_data_source_query_status")
 	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
@@ -53,7 +63,7 @@ func _on_cli_execute_done(_error : int, response):
 	
 	if kinds.size() > 0:
 		$VBoxContainer/TextSearchSettings/HBoxContainer/KindsComboBox.set_items(kinds)
-
+		$VBoxContainer/TwoEntryAggregateSettings/KindComboBox.set_items(kinds)
 
 func _on_DeleteButton_pressed() -> void:
 	emit_signal("delete_source", self)
@@ -251,3 +261,38 @@ func _on_KindsComboBox_option_changed(option):
 func _on_ExpandButton_toggled(button_pressed:bool):
 	$VBoxContainer/DatasourceSettings.visible = button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
 	$VBoxContainer/TextSearchSettings.visible = button_pressed and datasource_type == DataSource.TYPES.SEARCH
+
+
+func _on_KindComboBox_option_changed(option):
+	data_source.kind = option
+	update_query()
+
+
+func _on_Entry1LineEdit_text_entered(new_text):
+	data_source.category_1 = new_text
+	update_query()
+
+
+func _on_Entry2LineEdit_text_entered(new_text):
+	data_source.category_2 = new_text
+	update_query()
+
+
+func _on_Entry1Alias_text_entered(new_text):
+	data_source.category_1_alias = new_text
+	update_query()
+
+
+func _on_Entry2Alias_text_entered(new_text):
+	data_source.category_2_alias = new_text
+	update_query()
+
+
+func _on_FunctionLineEdit_text_entered(new_text):
+	data_source.function = new_text
+	update_query()
+
+
+func _on_FunctionAlias_text_entered(new_text):
+	data_source.function_alias = new_text
+	update_query()

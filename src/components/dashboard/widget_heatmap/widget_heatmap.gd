@@ -106,7 +106,7 @@ func set_data(data, type : int):
 	x_categories.clear()
 	y_categories.clear()
 	
-	if type == DataSource.TYPES.AGGREGATE_SEARCH:
+	if type == DataSource.TYPES.AGGREGATE_SEARCH || type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
 		var headers : Array = data[0]["group"].keys()
 		var vars : Array = data[0].keys()
 		vars.remove(vars.find("group"))
