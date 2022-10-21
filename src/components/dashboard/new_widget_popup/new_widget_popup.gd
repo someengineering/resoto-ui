@@ -334,7 +334,7 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 		ds.set_data_source(ds.data_source)
 		update_preview()
 		event = Analytics.EventsDatasource.NEW_FROM_TEMPLATE
-		context["template"] = template_options.get_child(template_id).text
+		context["template"] = data_sources_templates[template_id]["Name"]
 
 	Analytics.event(event, context)
 
