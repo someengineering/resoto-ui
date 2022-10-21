@@ -279,6 +279,8 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 	
 	if widget_to_edit != null:
 		update_preview()
+		
+	update_new_data_vis()
 
 func _on_AddDataSource_pressed() -> void:
 	if data_source_container.get_child_count() >= preview_widget.max_data_sources:
