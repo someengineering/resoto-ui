@@ -51,6 +51,8 @@ func popup_active() ->bool:
 
 func open_popup(_name:String) -> void:
 	popup_bg.show()
+	if current_popup != null:
+		current_popup.hide()
 	current_popup = (get_node(_name) as Popup)
 	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
 	current_popup.popup_centered_clamped(Vector2(1,1), 1.8)

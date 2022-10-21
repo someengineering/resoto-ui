@@ -18,6 +18,7 @@ func show_connect_popup(_found_settings:bool) -> void:
 			_g.ui_shrink = 1.0
 		SaveLoadSettings.save_settings()
 	_g.popup_manager.open_popup("ConnectPopup")
+	_g.emit_signal("connect_to_core")
 	
 	# If we ever need Godot to receive URL parameters:
 #	var custom_parameter = JavaScript.eval("getParameter('custom_parameter')")

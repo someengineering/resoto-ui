@@ -22,6 +22,7 @@ func _ready():
 	elif self_modulate != Color.white:
 		Style.add_self(self, Style.find_color(self_modulate))
 	_g.popup_manager.popup_connect = self
+	_g.connect("connect_to_core", self, "connect_to_core")
 
 
 func _on_ButtonConnect_pressed() -> void:
@@ -32,10 +33,17 @@ func _on_ConnectPopup_about_to_show() -> void:
 	psk_line_edit.text = API.psk
 	var protocol:= "https://" if API.use_ssl else "http://"
 	adress_line_edit.text = protocol + API.adress + ":" + str(API.port)
-	$ConnectDelay.start()
+	$Content/Margin/Connect/PSK.show()
+	$Content/Margin/Connect/Adress.show()
+	connect_button.show()
+	status.text = "Resoto Core connection settings."
 
 
 func connect_to_core() -> void:
+	$ConnectDelay.start()
+
+
+func start_connect() -> void:
 	$Content/Margin/Connect/PSK.hide()
 	$Content/Margin/Connect/Adress.hide()
 	connect_button.hide()
@@ -83,9 +91,6 @@ func _on_system_ready_done(error:int, response:UserAgent.Response) -> void:
 			not_connected(Utils.err_enum_to_string(error))
 	else:
 		if response.status_code == 7:
-			if response.transformed["result"].left(3) == "401":
-				not_connected("401: Unauthorized")
-				return
 			get_system_info()
 			connected(Utils.http_status_to_string(response.status_code))
 
@@ -109,6 +114,7 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 
 
 func connected(status_text:String) -> void:
+	reset_timer()
 	status.text = status_text
 	SaveLoadSettings.save_settings()
 	_g.popup_manager.on_popup_close()
@@ -124,7 +130,7 @@ func not_connected(status_text:String) -> void:
 
 
 func _on_ConnectDelay_timeout():
-	connect_to_core()
+	start_connect()
 
 
 func reset_timer():
@@ -148,8 +154,8 @@ func _on_ShowPSKIcon_toggled(button_pressed:bool):
 
 
 func _on_ResotoAdressEdit_text_entered(_new_text):
-	connect_to_core()
+	start_connect()
 
 
 func _on_PSKLineEdit_text_entered(_new_text):
-	connect_to_core()
+	start_connect()

@@ -62,7 +62,7 @@ func _transform_json(error:int, response:ResotoAPI.Response) -> void:
 		response.transformed["result"] = string_to_parse
 	else:
 		if response.response_code == 401:
-			_g.emit_signal("add_toast", "401: Unauthorized", "", 1, self)
+			_g.emit_signal("add_toast", "401: Unauthorized", "[b][url=reconnect]Change your connection settings.[/url][/b]", 1, self, -1)
 
 
 func _transform_nd_json(_chunk:PoolByteArray, response:ResotoAPI.Response, request:ResotoAPI.Request) -> void:
@@ -84,7 +84,7 @@ func _transform_string(error:int, response:ResotoAPI.Response) -> void:
 		response.transformed["result"] = response.body.get_string_from_utf8()
 	else:
 		if response.response_code == 401:
-			_g.emit_signal("add_toast", "401: Unauthorized", "", 1, self)
+			_g.emit_signal("add_toast", "401: Unauthorized", "[b][url=reconnect]Change your connection settings.[/url][/b]", 1, self, -1)
 
 
 class Chunk:

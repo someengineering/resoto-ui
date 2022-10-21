@@ -1,9 +1,16 @@
 extends Node
 
+# Connection
+signal connected_to_resotocore
+signal connect_to_core
+
+# Toasts
 signal add_toast
 signal toast_created
+signal toast_click
+
+# UI and fullscreen
 signal ui_shrink_changed
-signal connected_to_resotocore
 signal fullscreen_hide_menu
 signal close_hamburger_menu
 signal resoto_home_visible
@@ -19,6 +26,7 @@ signal explore_node_list_data
 signal explore_node_list_search
 signal explore_node_list_kind
 signal explore_node_list_id
+
 
 const tsdb_metric_prefix:String		 = "resoto_"
 const dashboard_config_prefix:String = "resoto.ui.dashboard."
