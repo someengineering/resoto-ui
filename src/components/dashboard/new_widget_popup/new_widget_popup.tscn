@@ -30,7 +30,6 @@ shadow_size = 10
 shadow_offset = Vector2( 0, 4 )
 
 [node name="NewWidgetPopup" instance=ExtResource( 1 )]
-visible = false
 margin_right = 800.0
 margin_bottom = 600.0
 script = ExtResource( 4 )

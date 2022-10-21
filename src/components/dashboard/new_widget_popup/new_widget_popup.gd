@@ -334,7 +334,7 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 		event = Analytics.EventsDatasource.NEW_FROM_TEMPLATE
 		context["template"] = template_options.get_child(template_id).text
 
-	Analytics.event(Analytics.EventsDatasource.NEW, {"widget" : ds.widget.wdiget_type_id})
+	Analytics.event(event, context)
 
 
 func delete_datasource(_data_source:Node) -> void:
