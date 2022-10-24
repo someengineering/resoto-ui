@@ -157,7 +157,7 @@ static func format_value(_value) -> String:
 
 static func readable_date(_date:Dictionary) -> String:
 	var month_names := ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
-	return "{m} {d}, {y}".format({"m": month_names[_date.month], "d": _date.day, "y": _date.year})
+	return "{m} {d}, {y}".format({"m": month_names[_date.month - 1], "d": _date.day, "y": _date.year})
 
 
 static func comma_sep(number):
