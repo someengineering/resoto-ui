@@ -507,3 +507,8 @@ func _on_PanelContainer_mouse_entered():
 func _on_PanelContainer_mouse_exited():
 	if not is_maximized:
 		maximize_button.modulate.a = 0.0
+
+
+func _on_WidgetContainer_tree_exiting():
+	for data_source in data_sources:
+		data_source.queue_free()

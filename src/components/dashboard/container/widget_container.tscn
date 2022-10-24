@@ -461,6 +461,7 @@ script = ExtResource( 3 )
 script = ExtResource( 4 )
 
 [connection signal="moved_or_resized" from="." to="." method="_on_WidgetContainer_moved_or_resized"]
+[connection signal="tree_exiting" from="." to="." method="_on_WidgetContainer_tree_exiting"]
 [connection signal="pressed" from="QueryWarning/VBox/PanelContainer/VBox/ConfigButton" to="." method="_on_ConfigButton_pressed"]
 [connection signal="mouse_entered" from="PanelContainer" to="." method="_on_PanelContainer_mouse_entered"]
 [connection signal="mouse_exited" from="PanelContainer" to="." method="_on_PanelContainer_mouse_exited"]

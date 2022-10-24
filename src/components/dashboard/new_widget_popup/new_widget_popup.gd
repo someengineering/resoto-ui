@@ -113,6 +113,8 @@ func _on_AddWidgetButton_pressed() -> void:
 		
 	Analytics.event(event, {"widget" : widget.widget_type_id})
 	
+	
+	clear_data_sources()
 	preview_widget.queue_free()
 
 
@@ -254,12 +256,16 @@ func _on_get_config_id_done(_error, _response, _config_key) -> void:
 		ds.set_metrics(metrics)
 
 
-func _on_NewWidgetPopup_about_to_show() -> void:
-	widget_name_label.text = ""
-	
+func clear_data_sources():
 	for data_source in data_source_container.get_children():
 		data_source_container.remove_child(data_source)
 		data_source.queue_free()
+
+
+func _on_NewWidgetPopup_about_to_show() -> void:
+	widget_name_label.text = ""
+	
+	clear_data_sources()
 	
 	if widget_to_edit != null:
 		widget_name_label.text = widget_to_edit.title
