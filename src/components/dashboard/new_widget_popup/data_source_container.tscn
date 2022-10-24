@@ -427,6 +427,7 @@ margin_bottom = 826.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 2 )
 
+[connection signal="tree_exiting" from="." to="." method="_on_DatasourceContainer_tree_exiting"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/ExpandButton" to="." method="_on_ExpandButton_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
 [connection signal="option_changed" from="VBoxContainer/DatasourceSettings/MetricsVBox/MetricsOptions" to="." method="_on_MetricsOptions_option_changed"]

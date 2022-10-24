@@ -313,3 +313,7 @@ func _on_FunctionLineEdit_text_entered(new_text):
 func _on_FunctionAlias_text_entered(new_text):
 	data_source.function_alias = new_text
 	update_query()
+
+
+func _on_DatasourceContainer_tree_exiting():
+	data_source.queue_free()
