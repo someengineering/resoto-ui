@@ -115,12 +115,17 @@ func _on_Grid_resized() -> void:
 	$Grid.material.set_shader_param("grid_size", grid_size)
 	$Grid.material.set_shader_param("dashboard_size", rect_size)
 	
+	$ResizeTimer.start()
+	
+func _on_ResizeTimer_timeout():
+	var grid_size := Vector2(_x_grid_size, y_grid_size)
+	
 	for widget in $Widgets.get_children():
 		widget.grid_size = grid_size
 		
 	yield(VisualServer, "frame_post_draw")
 	for widget in $Widgets.get_children():
-		
+
 		widget.parent_reference.rect_global_position = widget.position_on_grid * grid_size + rect_global_position
 		widget.parent_reference.rect_size = widget.size_on_grid * grid_size
 		print("SET ANCHORS RESIZED")
