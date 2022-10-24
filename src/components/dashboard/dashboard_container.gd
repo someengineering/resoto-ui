@@ -1,6 +1,7 @@
 class_name DashboardContainer
 extends Control
 
+const min_resolution := 144
 const WidgetScenes := {
 	"Indicator" : preload("res://components/dashboard/widget_indicator/widget_indicator.tscn"),
 	"Chart" : preload("res://components/dashboard/widget_chart/widget_chart.tscn"),
@@ -55,7 +56,7 @@ func _ready() -> void:
 	
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
-	add_widget_popup.interval = 144 # 500 points in a day
+	add_widget_popup.interval = 144
 	dashboard.ts_start = $DateRangeSelector.from.unix_time
 	dashboard.ts_end = $DateRangeSelector.to.unix_time
 	dashboard.step = 144
@@ -109,12 +110,13 @@ func _on_DateButton_pressed() -> void:
 
 func _on_DateRangeSelector_range_selected(start : int, end : int, text : String) -> void:
 	date_button.text = text
+	var time_range_in_hours = float(end-start)/3600
 	add_widget_popup.from_date = start
 	add_widget_popup.to_date = end
-	add_widget_popup.interval = int(float(end-start)/500.0)
+	add_widget_popup.interval = max(int(float(end-start)/500.0), min_resolution/time_range_in_hours)
 	dashboard.ts_end = end
 	dashboard.ts_start = start
-	dashboard.step = int(float(end-start)/500.0)
+	dashboard.step = max(int(float(end-start)/500.0), min_resolution/time_range_in_hours)
 	force_refresh = true
 	if initial_load:
 		emit_signal("dashboard_changed", self)
