@@ -128,7 +128,6 @@ func _on_ResizeTimer_timeout():
 
 		widget.parent_reference.rect_global_position = widget.position_on_grid * grid_size + rect_global_position
 		widget.parent_reference.rect_size = widget.size_on_grid * grid_size
-		print("SET ANCHORS RESIZED")
 		widget.call_deferred("set_anchors")
 
 
