@@ -61,7 +61,7 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 		if not widget_data.has("widget_type"):
 			widget_data["widget_type"] = remap_old_data[widget_data.scene]
 		widget = dashboard_container.WidgetScenes[widget_data.widget_type].instance()
-		
+	
 	container.call_deferred("set_widget", widget)
 	container.call_deferred("set_data_sources", widget_data.data_sources)
 	container.set_deferred("title", widget_data.title)
