@@ -85,7 +85,7 @@ func pick_date(date : int) -> void:
 		refresh_calendar(new_date_dict)
 	current_date = date
 	current_date_dict = new_date_dict
-	date_label.text = Utils.readable_date(Time.get_datetime_dict_from_unix_time(date))
+	date_label.text = Utils.readable_date(new_date_dict)
 	emit_signal("date_picked", date)
 
 

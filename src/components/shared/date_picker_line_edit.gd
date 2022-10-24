@@ -34,7 +34,7 @@ func process_date(new_text : String = text, notify := true) -> bool:
 	if "now" in new_text:
 		new_text = replaces_tokens(new_text)
 		var regex = RegEx.new()
-		regex.compile("[^\\*+\\-\\d]")
+		regex.compile("[^\\*+\\-\\d\\.]")
 		if regex.search_all(new_text) != []:
 			_g.emit_signal("add_toast", "Invalid Date", "Cannot parse date.", 1, self)
 			text = previous_text
