@@ -22,6 +22,9 @@ jobs:
           relative_project_path: ./src
           relative_export_path: ./builds
           archive_output: false
+      - name: create git sha file
+        run: |
+          echo ${{ github.sha }} > ./builds/HTML5/git-commit.HEAD
       - name: upload artifacts
         uses: actions/upload-artifact@v3
         with:
