@@ -30,6 +30,7 @@ func set_color(_color:Color) -> void:
 	color = _color
 	color_picker_button.color = _color
 	color_block.modulate = _color
+	hex_edit.text = _color.to_html(false)
 	valid_text = hex_edit.text
 
 
