@@ -23,6 +23,7 @@ onready var vbox = $Margin/VBox/MainPanel/ScrollContainer/Content/ListContainer
 
 func _ready():
 	_g.connect("explore_node_list_data", self, "show_kind_from_node_data")
+	_g.connect("explore_node_list_from_node", self, "explore_node_list_from_node")
 	_g.connect("explore_node_list_search", self, "show_list_from_search")
 	_g.connect("explore_node_list_kind", self, "show_kind")
 	_g.connect("explore_node_list_id", self, "show_kind_from_node_id")
@@ -92,8 +93,24 @@ func show_kind_from_node_id(id:String, kind:String):
 	active_request = API.graph_search(search_command, self, "list")
 
 
-func show_list_from_search(parent_node:Dictionary, search_command:String, kind_label_string:String):
+func show_list_from_search(search_command:String):
 	change_section_to_self()
+	
+	node_kind_button.hide()
+	parent_button.hide()
+	list_kind_button.hide()
+	search_type_label.show()
+	arrow_icon_mid.hide()
+	
+	search_type_label.text = "search " + search_command + " limit " + str(NODE_LIMIT)
+	search_type_label.enabled = true
+	
+	active_request = API.graph_search(search_command, self, "list")
+
+
+func explore_node_list_from_node(parent_node:Dictionary, search_command:String, kind_label_string:String):
+	change_section_to_self()
+	
 	parent_node_id = parent_node.id
 	parent_node_name = parent_node.reported.name
 	
@@ -103,6 +120,7 @@ func show_list_from_search(parent_node:Dictionary, search_command:String, kind_l
 	parent_button.show()
 	list_kind_button.hide()
 	search_type_label.show()
+	search_type_label.enabled = false
 	arrow_icon_mid.show()
 	
 	if kind_label_string == "<--":

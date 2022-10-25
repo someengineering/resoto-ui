@@ -31,11 +31,12 @@ custom_colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
 custom_colors/clear_button_color = Color( 0.913725, 0.552941, 0.968627, 1 )
 clear_button_enabled = true
 right_icon = ExtResource( 2 )
-placeholder_text = "full text search"
+placeholder_text = "search"
 placeholder_alpha = 0.3
 script = ExtResource( 1 )
 
 [node name="ResultsPopUp" type="PopupPanel" parent="."]
+visible = true
 margin_right = 8.0
 margin_bottom = 8.0
 custom_styles/panel = SubResource( 1 )
@@ -43,13 +44,32 @@ custom_styles/panel = SubResource( 1 )
 [node name="VBox" type="VBoxContainer" parent="ResultsPopUp"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 10.0
-margin_bottom = 31.0
+margin_right = 76.0
+margin_bottom = 37.0
 
-[node name="ResultAmountLabel" type="Label" parent="ResultsPopUp/VBox"]
-margin_bottom = 21.0
+[node name="Title" type="HBoxContainer" parent="ResultsPopUp/VBox"]
+margin_right = 66.0
+margin_bottom = 27.0
+
+[node name="ResultAmountLabel" type="Label" parent="ResultsPopUp/VBox/Title"]
+margin_bottom = 27.0
+rect_min_size = Vector2( 0, 27 )
+size_flags_horizontal = 3
+
+[node name="ListButton" type="Button" parent="ResultsPopUp/VBox/Title"]
+margin_left = 4.0
+margin_right = 66.0
+margin_bottom = 27.0
+theme_type_variation = "ButtonComboList"
+text = "more"
+
+[node name="SearchDelay" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
 
 [connection signal="focus_entered" from="." to="." method="_on_FullTextSearch_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_FullTextSearch_focus_exited"]
 [connection signal="gui_input" from="." to="." method="_on_FullTextSearch_gui_input"]
 [connection signal="text_changed" from="." to="." method="_on_FullTextSearch_text_changed"]
+[connection signal="pressed" from="ResultsPopUp/VBox/Title/ListButton" to="." method="_on_ListButton_pressed"]
+[connection signal="timeout" from="SearchDelay" to="." method="_on_SearchDelay_timeout"]

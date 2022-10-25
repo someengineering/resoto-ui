@@ -7,10 +7,16 @@ var popup_x_size:int = 500
 var result_limit:int = 10
 var active_request: ResotoAPI.Request
 var count_request: ResotoAPI.Request
+var search_command:= ""
+var buffered_command:= ""
 
 onready var popup = $ResultsPopUp
 onready var popup_results = $ResultsPopUp/VBox
+onready var result_amount_label:= $ResultsPopUp/VBox/Title/ResultAmountLabel
+onready var list_btn := $ResultsPopUp/VBox/Title/ListButton
 onready var single_node_info = _g.content_manager.find_node("NodeSingleInfo")
+onready var search_delay := $SearchDelay
+
 
 func _on_FullTextSearch_focus_entered() -> void:
 	_g.focus_in_search = true
@@ -22,10 +28,12 @@ func _on_FullTextSearch_focus_exited() -> void:
 
 
 func _on_FullTextSearch_text_changed(_command:String) -> void:
-	var search_command = "\"" + _command + "\" limit "+ str(result_limit)
-	var count_command = "search \"" + _command + "\" | count"
-	count_request = API.cli_execute(count_command, self)
-	active_request = API.graph_search(search_command, self, "list")
+	buffered_command = _command
+	if buffered_command == "":
+		popup.hide()
+		search_delay.stop()
+	list_btn.hide()
+	search_delay.start()
 	grab_focus()
 
 
@@ -40,12 +48,15 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 		result_count_text += "s"
 	if results_count > result_limit:
 		result_count_text += " (showing first " + str(result_limit) + ")"
-	$ResultsPopUp/VBox/ResultAmountLabel.text = result_count_text
+	result_amount_label.text = result_count_text
 
 
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
 		_g.emit_signal("add_toast", "Error in Search", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
+		return
+	if _response.response_code == 400:
+		# This can be removed when PR #44 is merged
 		return
 	if _response.transformed.has("result"):
 		show_search_results(_response.transformed.result)
@@ -55,12 +66,14 @@ func show_search_results(results:Array) -> void:
 	grab_focus()
 	# clear old results
 	for c in popup_results.get_children():
-		if c.name == "ResultAmountLabel":
+		if c.get_class() == "HBoxContainer":
 			continue
 		c.queue_free()
 	
 	if text == "":
 		return
+	
+	list_btn.show()
 	
 	var current_showing_id:= ""
 	if single_node_info.visible and single_node_info.current_node_id != "":
@@ -114,3 +127,25 @@ func _on_FullTextSearch_gui_input(event):
 	and event.button_index == BUTTON_LEFT
 	and not popup.visible):
 		_on_FullTextSearch_text_changed(text)
+
+
+func _on_ListButton_pressed():
+	_g.emit_signal("explore_node_list_search", search_command)
+	popup.hide()
+
+
+func _on_SearchDelay_timeout():
+	search_command = ""
+	var limited_search_command := ""
+	var count_command := ""
+	if buffered_command.to_lower().begins_with("search "):
+		search_command = buffered_command.trim_prefix("search ")
+		limited_search_command = search_command + " limit "+ str(result_limit)
+		count_command = buffered_command + " | count"
+	else:
+		search_command = "\"" + buffered_command + "\""
+		limited_search_command = search_command + " limit " + str(result_limit)
+		count_command = "search \"" + buffered_command + "\" | count"
+	
+	count_request = API.cli_execute(count_command, self)
+	active_request = API.graph_search(limited_search_command, self, "list")

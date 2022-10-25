@@ -1,6 +1,8 @@
 extends Label
 class_name RightClickCopyLabel
 
+export (bool) var enabled:= true
+
 const COPY_TEXT = "copied!"
 
 var orig_text:String
@@ -16,7 +18,7 @@ func _ready():
 
 
 func _on_gui_input(input:InputEvent):
-	if not (input is InputEventMouseButton and input.pressed and input.button_index == BUTTON_LEFT):
+	if not enabled or not(input is InputEventMouseButton and input.pressed and input.button_index == BUTTON_LEFT):
 		return
 	
 	if text != COPY_TEXT:

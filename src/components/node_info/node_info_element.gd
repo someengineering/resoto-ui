@@ -32,7 +32,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		var current_result = _response.transformed.result
 		
 		if not current_result.empty() and current_result[0].has("reported"):
-			$"%AllDataTextEdit".text = Utils.readable_dict(current_result[0].reported)
+			$"%AllDataGroup".node_text = Utils.readable_dict(current_result[0].reported)
 		breadcrumbs.clear()
 		breadcrumbs["edges"] = []
 		breadcrumbs["nodes"] = {}
@@ -116,7 +116,6 @@ func update_breadcrumbs():
 		c.queue_free()
 	
 	var next:String = "root"
-	
 	
 	var new_root_button = root_button.duplicate()
 	breadcrumb_container.add_child(new_root_button)
@@ -217,12 +216,12 @@ func _on_TreeMap_pressed(kind:String):
 
 func _on_PredecessorsButton_pressed():
 	var search_command = "id(\"" + current_main_node.id + "\") <-- limit 500"
-	_g.emit_signal("explore_node_list_search", current_main_node, search_command, "<--")
+	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "<--")
 
 
 func _on_SuccessorsButton_pressed():
 	var search_command = "id(\"" + current_main_node.id + "\") --> limit 500"
-	_g.emit_signal("explore_node_list_search", current_main_node, search_command, "-->")
+	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "-->")
 
 
 func _on_AllDataMaximizeButton_pressed():
@@ -236,6 +235,3 @@ func _on_AllDataCopyButton_pressed():
 func _on_KindLabelButton_pressed():
 	_g.emit_signal("explore_node_list_kind", current_main_node.reported.kind)
 
-
-func _on_AllDataPopup_change_scroll_pos(_sv:int):
-	$"%AllDataTextEdit".scroll_vertical = _sv

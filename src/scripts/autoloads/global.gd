@@ -24,6 +24,7 @@ signal nav_change_section_explore
 signal explore_node_by_id
 signal explore_node_list_data
 signal explore_node_list_search
+signal explore_node_list_from_node
 signal explore_node_list_kind
 signal explore_node_list_id
 
