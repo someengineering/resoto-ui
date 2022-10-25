@@ -34,7 +34,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="DynamicFont" id=6]
-size = 18
+size = 22
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 1 )
@@ -88,12 +88,14 @@ margin_right = 80.0
 margin_bottom = 42.0
 rect_pivot_offset = Vector2( 40, 0 )
 custom_colors/font_color = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+custom_constants/line_spacing = -4
 custom_fonts/font = SubResource( 6 )
 text = "500
 asda"
 align = 1
 valign = 1
 autowrap = true
+clip_text = true
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_Button_mouse_entered"]
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
