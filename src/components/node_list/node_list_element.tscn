@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://assets/icons/search-blue-01.svg" type="Texture" id=8]
 [ext_resource path="res://assets/theme/Barlow-Bold.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://assets/icons/icon_128_exit.svg" type="Texture" id=10]
+[ext_resource path="res://scripts/tools/left_click_copy.gd" type="Script" id=11]
 
 [sub_resource type="DynamicFont" id=8]
 size = 23
@@ -125,13 +126,14 @@ text = "Node Kind"
 [node name="SearchTypeLabel" type="Label" parent="Margin/VBox/TitleBar"]
 unique_name_in_owner = true
 visible = false
-margin_left = 578.0
-margin_top = 2.0
-margin_right = 732.0
-margin_bottom = 30.0
+margin_left = 457.0
+margin_top = 6.0
+margin_right = 611.0
+margin_bottom = 34.0
 size_flags_horizontal = 0
 custom_fonts/font = SubResource( 8 )
 text = "All Successors"
+script = ExtResource( 11 )
 
 [node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
 visible = false
