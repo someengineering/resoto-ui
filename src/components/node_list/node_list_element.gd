@@ -35,7 +35,7 @@ func change_section_to_self():
 func show_kind_from_node_data(parent_node:Dictionary, kind:String):
 	change_section_to_self()
 	reset_display()
-	var search_command = "id(" + parent_node.id + ") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
+	var search_command = "id(\"" + parent_node.id + "\") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
 	
 	search_type_label.hide()
 	all_kinds_label.hide()
@@ -74,7 +74,7 @@ func show_kind(kind:String):
 
 func show_kind_from_node_id(id:String, kind:String):
 	change_section_to_self()
-	var search_command = "id(" + id + ") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
+	var search_command = "id(\"" + id + "\") -[1:]-> is(" + kind + ") limit " + str(NODE_LIMIT)
 	parent_node_id = id
 	
 	search_type_label.hide()
@@ -159,7 +159,7 @@ func add_result_element(r, parent_element:Node):
 	filter_variables[r.id] = filter_string
 	
 	new_result.get_node("VBox/Top/ResultKind").text = r_kind
-	new_result.get_node("VBox/Top/ResultName").text = r_name
+	new_result.get_node("VBox/Top/ResultName").text = r.id + " | " + r_name
 	new_result.get_node("VBox/ResultDetails").text = ancestors
 
 

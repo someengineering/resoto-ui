@@ -20,7 +20,9 @@ class Headers extends UserAgent.RequestHeaders:
 	var Authorization = ""
 
 
-var default_graph:String = "resoto"
+const default_graph:String = "resoto"
+const default_section:String = "reported"
+
 var default_options:Options = Options.new()
 var accept_json_headers:Headers = Headers.new()
 var accept_json_put_headers:Headers = Headers.new()
@@ -141,9 +143,11 @@ func post_cli_execute_nd_chunks(body:String, graph:String=default_graph) -> Reso
 	return request
 
 
-func post_graph_search(body:String, type:String="graph", graph:String=default_graph) -> ResotoAPI.Request:
+func post_graph_search(body:String, type:String="graph", 
+	graph:String=default_graph,
+	section:String=default_section) -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
-	var request = req_post("/graph/"+ graph +"/search/"+ type, body, accept_json_headers)
+	var request = req_post("/graph/"+ graph +"/search/"+ type + "?section=%s" % section, body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
 
@@ -224,7 +228,7 @@ func get_subscribers() -> ResotoAPI.Request:
 
 func get_infra_info() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
-	var request = req_post("/graph/"+ default_graph +"/search/graph", 
+	var request = req_post("/graph/"+ default_graph +"/search/graph?section=reported", 
 							"is(cloud) -[0:2]-> is(cloud, account, region)",
 							 accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
@@ -250,14 +254,6 @@ func query_range_tsdb(_query:String, start_ts:int=1656422693, end_ts:int=1657025
 func tsdb_label_values(label:String):
 	refresh_jwt_header(content_urlencoded_headers)
 	var request = req_get("/tsdb/api/v1/label/%s/values"%label,content_urlencoded_headers)
-	request.connect("pre_done", self, "_transform_json")
-	return request
-	
-	
-func aggregate_search(query : String, section : String):
-	refresh_jwt_header(accept_json_headers)
-	var body = query
-	var request = req_post("/graph/resoto/search/aggregate?section=%s" % section, body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
 

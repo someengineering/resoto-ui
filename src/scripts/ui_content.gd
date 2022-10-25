@@ -47,7 +47,5 @@ func change_section_explore(type:String):
 		else:
 			change_section(last_visited_explore_section)
 	elif type == "node_single_info" or type == "node_list_info":
-		prints(type)
 		last_visited_explore_section = type
 		change_section(type)
-		
