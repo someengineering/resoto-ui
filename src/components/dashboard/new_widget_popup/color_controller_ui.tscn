@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://components/dashboard/new_widget_popup/color_controller_ui.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=3]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=4]
 
 [node name="ColorControllerUi" type="MarginContainer"]
 anchor_right = 1.0
@@ -22,26 +24,19 @@ margin_bottom = 33.0
 
 [node name="PropertyLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
 margin_top = 6.0
-margin_right = 272.0
+margin_right = 271.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 text = "Property"
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 276.0
+[node name="AddButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
+margin_left = 275.0
 margin_right = 308.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 24, 24 )
-text = "+"
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 37.0
-margin_right = 308.0
-margin_bottom = 41.0
+icon_tex = ExtResource( 3 )
 
 [node name="ConditionsContainer" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 45.0
+margin_top = 37.0
 margin_right = 308.0
-margin_bottom = 45.0
+margin_bottom = 37.0
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/AddButton" to="." method="_on_AddButton_pressed"]
