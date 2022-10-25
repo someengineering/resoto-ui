@@ -325,7 +325,7 @@ func set_widgets(new_widgets : Array) -> void:
 		container.parent_reference.rect_position = container.rect_position
 
 
-func _on_NewWidgetPopup_widget_added(_widget_data):
+func _on_NewWidgetPopup_widget_added(_widget_data, _show):
 	force_refresh = true
 	emit_signal("dashboard_changed", self)
 
