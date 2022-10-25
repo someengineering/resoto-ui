@@ -62,10 +62,11 @@ WORKDIR /usr/local/resoto/ui
 COPY src /usr/src/ui
 RUN /build/godot/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux_headless.64 --path /usr/src/ui --export HTML5 /usr/local/resoto/ui/index.html
 
+RUN echo "${SOURCE_COMMIT:-unknown}" > /usr/local/resoto/ui/git-commit.HEAD
+
 # Upload resotoui
 RUN if [ -n "$SPACES_NAME" ]; then resoto-ui-upload --verbose; fi
 
-RUN echo "${SOURCE_COMMIT:-unknown}" > /usr/local/resoto/ui/git-commit.HEAD
 
 # Setup main image
 FROM ubuntu:20.04
