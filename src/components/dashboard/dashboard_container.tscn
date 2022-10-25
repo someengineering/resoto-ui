@@ -422,7 +422,6 @@ icon_tex = ExtResource( 5 )
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/MaximizeButton" to="." method="_on_MaximizeButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/MinimizedBar/MinimizeButton" to="." method="_on_MinimizeButton_pressed"]
-[connection signal="resized" from="VBoxContainer/ScrollContainer/Content/Dashboard/Grid" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="_on_Grid_resized"]
 [connection signal="timeout" from="VBoxContainer/ScrollContainer/Content/Dashboard/ResizeTimer" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="_on_ResizeTimer_timeout"]
 [connection signal="widget_added" from="NewWidgetPopup" to="." method="_on_NewWidgetPopup_widget_added"]
 [connection signal="widget_added" from="NewWidgetPopup" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="add_widget"]

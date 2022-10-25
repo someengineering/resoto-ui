@@ -69,13 +69,12 @@ func _ready() -> void:
 		var button : BaseButton = resize_buttons.get_child(i)
 		button.connect("button_up", self, "_on_resize_button_released")
 		button.connect("button_down", self, "_on_resize_button_pressed", [i])
-	
 	set_process(false)
 
 
 func set_grid_size(new_grid_size : Vector2) -> void:
-		grid_size = new_grid_size
-		emit_signal("moved_or_resized")
+	grid_size = new_grid_size
+	emit_signal("moved_or_resized")
 
 
 func set_widget(_widget : BaseWidget) -> void:

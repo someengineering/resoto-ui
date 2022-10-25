@@ -14,6 +14,7 @@ var default_dashboard_found:= false
 
 onready var open_dashboard_btn = $"%OpenDashboard"
 onready var dashboards_list = find_node("DashboardItemList")
+onready var manager_tab = $ManageDashboards
 
 
 func _ready():
@@ -38,7 +39,7 @@ func add_dashboard(dashboard_name : String = ""):
 		new_tab.dashboard_name = dashboard_name
 
 	new_tab.connect("deleted", self, "_on_tab_deleted")
-	add_child(new_tab,true)
+	add_child(new_tab, true)
 	move_child(new_tab, get_tab_control(current_tab).get_position_in_parent())
 	
 	new_tab.connect("dashboard_changed", self, "save_dashboard")
@@ -46,7 +47,7 @@ func add_dashboard(dashboard_name : String = ""):
 	new_tab.connect("dashboard_closed", self, "close_dashboard")
 	
 	yield(VisualServer,"frame_post_draw")
-	
+
 	new_tab.dashboard._on_Grid_resized()
 
 
@@ -75,8 +76,7 @@ func save_dashboard(dashboard : DashboardContainer):
 	var data = dashboard.get_data()
 	if dashboard.last_saved_name != DefaultDashboardName:
 		API.delete_config_id(self, get_db_config_name(dashboard.last_saved_name))
-		if dashboard.last_saved_name != dashboard.name:
-			available_dashboards.erase(dashboard.last_saved_name.replace(" ", "_"))
+		available_dashboards.erase(dashboard.last_saved_name.replace(" ", "_"))
 	API.patch_config_id(self, get_db_config_name(dashboard.name), JSON.print(data))
 	dashboard.last_saved_name = dashboard.dashboard_name
 	available_dashboards[dashboard.dashboard_name.replace(" ", "_")] = data
@@ -125,21 +125,23 @@ func _on_get_config_id_done(_error : int, _response, _config):
 			else:
 				emit_signal("all_dashboards_loaded")
 				_refresh_dashboard_list()
-	
+
 
 func restore_default_dashboard() -> void:
 	var dashboard = Utils.load_json("res://data/resoto_example_dashboard.json")
 	if not dashboard.empty():
 		API.patch_config_id(self, get_db_config_name(dashboard.dashboard_name), JSON.print(dashboard))
 		available_dashboards[dashboard.dashboard_name.replace(" ", "_")] = dashboard
-	print("Resoto Default Dashboard restored!")
 	_refresh_dashboard_list()
 
 
 func open_user_dashboards():
 	var dashboard_status = get_user_dashboards()
-	for dashboard_name in dashboard_status.open_dashboards:
-		load_dashboard(dashboard_name)
+	for dashboard in dashboard_status.open_dashboards:
+		if dashboard_status.has("active_dashboard") and dashboard == dashboard_status.active_dashboard:
+			load_dashboard(dashboard_status.active_dashboard)
+			continue
+		add_dashboard_placeholder(dashboard)
 	
 	for i in get_children().size():
 		if get_tab_control(i).name.replace(" ","_") == dashboard_status.active_dashboard:
@@ -151,6 +153,13 @@ func load_dashboard(dashboard_name : String):
 		return
 	var data : Dictionary = available_dashboards[dashboard_name]
 	create_dashboard_with_data(data, false)
+
+
+func add_dashboard_placeholder(dashboard_name : String):
+	var dashboard_placeholder = Control.new()
+	dashboard_placeholder.name = dashboard_name
+	add_child(dashboard_placeholder, true)
+	move_child(dashboard_placeholder, get_tab_control(current_tab).get_position_in_parent())
 
 
 func create_dashboard_with_data(data, save_dashboard:bool=true):
@@ -166,7 +175,14 @@ func create_dashboard_with_data(data, save_dashboard:bool=true):
 	add_dashboard(dashboard_name)
 	dashboard = get_node(dashboard_name)
 	dashboard.initial_load = false
-	for key in data:
+	# Make sure the widgets are loaded last!
+	var sorted_keys : Array = data.keys()
+	
+	if sorted_keys.has("widgets"):
+		sorted_keys.erase("widgets")
+		sorted_keys.append("widgets")
+	
+	for key in sorted_keys:
 		if key in ["cloud", "account", "region"] and data[key] == "":
 			dashboard.set(key, "All")
 		else:
@@ -250,9 +266,11 @@ func _on_DashBoardManager_visibility_changed():
 func _refresh_dashboard_list():
 	dashboards_list.clear()
 	var idx:= 0
-	for dashboard in available_dashboards:
-		dashboards_list.add_item(available_dashboards[dashboard].dashboard_name)
-		dashboards_list.set_item_metadata(idx, dashboard)
+	var available_dashboard_keys : Array = available_dashboards.keys()
+	available_dashboard_keys.sort()
+	for key in available_dashboard_keys:
+		dashboards_list.add_item(available_dashboards[key].dashboard_name)
+		dashboards_list.set_item_metadata(idx, key)
 		idx += 1
 
 
@@ -266,4 +284,10 @@ func _on_DashboardItemList_nothing_selected():
 
 
 func _on_DashBoardManager_tab_changed(_tab):
+	var new_tab_control:Node = get_tab_control(_tab)
+	if new_tab_control.get_class() != "DashboardContainer" and new_tab_control != manager_tab:
+		var dashboard_name = new_tab_control.name
+		new_tab_control.name = "loading"
+		load_dashboard(dashboard_name)
+		new_tab_control.queue_free()
 	save_opened_dashboards()
