@@ -81,6 +81,8 @@ func post_events():
 
 
 func _on_analytics_done(error : int, response):
+	if error:
+		return
 	if response.response_code == 204:
 		event_queue.clear()
 	else:
