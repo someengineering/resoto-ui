@@ -2,6 +2,7 @@ extends Button
 
 var orig_alpha:= 1.0
 
+
 func _ready():
 	orig_alpha = modulate.a
 	Style.add(self, Style.c.LIGHT)

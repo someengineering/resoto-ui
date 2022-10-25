@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=18]
 [ext_resource path="res://assets/icons/icon_128_search.svg" type="Texture" id=19]
 [ext_resource path="res://components/node_info/node_info_element_all_data.gd" type="Script" id=20]
+[ext_resource path="res://components/elements/styled/flat_copy_button.tscn" type="PackedScene" id=21]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -341,23 +342,7 @@ rect_min_size = Vector2( 200, 24 )
 align_items_left = true
 clear_button_enabled = true
 
-[node name="AllDataCopyButton" type="Button" parent="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox/Title"]
-modulate = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
-margin_left = 380.0
-margin_top = 2.0
-margin_right = 401.0
-margin_bottom = 23.0
-rect_min_size = Vector2( 21, 21 )
-hint_tooltip = "Copy to Clipboard"
-mouse_filter = 1
-size_flags_vertical = 4
-theme_type_variation = "ButtonBorderless"
-custom_fonts/font = ExtResource( 10 )
-toggle_mode = true
-icon = ExtResource( 14 )
-flat = true
-expand_icon = true
-script = ExtResource( 9 )
+[node name="AllDataCopyButton" parent="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox/Title" instance=ExtResource( 21 )]
 
 [node name="AllDataMaximizeButton" type="Button" parent="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
@@ -534,7 +519,6 @@ readonly = true
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/Actions/SuccessorsButton" to="." method="_on_SuccessorsButton_pressed"]
 [connection signal="option_changed" from="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataFilter_option_changed"]
 [connection signal="text_changed" from="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataFilter_text_changed"]
-[connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataCopyButton" to="Margin/VBox/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataCopyButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataMaximizeButton" to="Margin/VBox/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataMaximizeButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed"]
 [connection signal="change_scroll_pos" from="AllDataPopup" to="." method="_on_AllDataPopup_change_scroll_pos"]
