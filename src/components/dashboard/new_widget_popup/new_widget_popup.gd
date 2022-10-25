@@ -92,7 +92,7 @@ func _on_AddWidgetButton_pressed() -> void:
 			"title"			: widget_name_label.text,
 			"data_sources"	: new_data_sources
 		}
-		emit_signal("widget_added", widget_data)
+		emit_signal("widget_added", widget_data, true)
 	else:
 		widget_to_edit.title = widget_name_label.text
 		widget_to_edit.data_sources.clear()

@@ -11,6 +11,9 @@ var is_ready := false
 var ts_start : int
 var ts_end : int
 var step : int
+var widget_reveal_timer:= Timer.new()
+var appear_tween:= Tween.new()
+
 var filters : Dictionary = {
 	"cloud" : "",
 	"region" : "",
@@ -24,8 +27,6 @@ var remap_old_data:= {
 	"res://components/widgets/HeatMap.tscn":		"Heatmap",
 }
 
-var appear_tween:= Tween.new()
-
 onready var widgets : Control = $Widgets
 onready var grid_background : ColorRect = $Grid
 onready var _x_grid_size := rect_size.x / x_grid_ratio
@@ -33,12 +34,15 @@ onready var widget_container_scene := preload("res://components/dashboard/contai
 
 
 func _ready():
+	add_child(widget_reveal_timer)
+	widget_reveal_timer.wait_time = 0.1
+	widget_reveal_timer.one_shot = true
 	add_child(appear_tween)
 	is_ready = true
 	$Grid.connect("resized", self, "_on_Grid_resized")
 
 
-func add_widget(widget_data : Dictionary) -> WidgetContainer:
+func add_widget(widget_data : Dictionary, _show_after_creation:=false) -> WidgetContainer:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
 	var container = widget_container_scene.instance()
 	container.hide()
@@ -96,7 +100,18 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	reference.editor_only = false
 	reference.visible = false
 	
+	if _show_after_creation:
+		widget_reveal_timer.connect("timeout", self, "reveal_widget", [container], CONNECT_ONESHOT)
+		widget_reveal_timer.start()
+	
 	return container
+
+
+func reveal_widget(_widget_container:WidgetContainer):
+	_widget_container.modulate.a = 0.0
+	appear_tween.interpolate_property(_widget_container, "modulate:a", 0, 1, 0.8, Tween.TRANS_EXPO, Tween.EASE_OUT)
+	_widget_container.show()
+	appear_tween.start()
 
 
 func lock(_locked : bool) -> void:
