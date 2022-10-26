@@ -9,6 +9,7 @@ export (bool) var align_items_left:= false
 export (Vector2) var button_min_size:= Vector2(1,1) setget set_button_min_size
 export (bool) var clear_button_enabled:= false
 export (bool) var scroll_with_keyboard:= true
+export (bool) var small_results:= false
 
 var matching_items : Array
 var previous_option : String = ""
@@ -116,13 +117,14 @@ func populate_options(filter : String = "") -> void:
 
 
 func add_option(option_name : String) -> void:
-	var button := Button.new()
-	button.size_flags_horizontal = SIZE_EXPAND_FILL
-	button.text = option_name
-	button.theme_type_variation = "ButtonComboList"
-	button.align = Button.ALIGN_CENTER if not align_items_left else Button.ALIGN_LEFT
-	button.connect("pressed", self, "_on_option_pressed", [option_name])
-	options_container.add_child(button)
+	var new_button := Button.new()
+	new_button.size_flags_horizontal = SIZE_EXPAND_FILL
+	new_button.text = option_name
+	if small_results:
+		new_button.theme_type_variation = "ButtonComboList"
+	new_button.align = Button.ALIGN_CENTER if not align_items_left else Button.ALIGN_LEFT
+	new_button.connect("pressed", self, "_on_option_pressed", [option_name])
+	options_container.add_child(new_button)
 
 
 func _on_LineEdit_text_changed(new_text : String) -> void:
@@ -174,10 +176,10 @@ func _on_LineEdit_text_entered(new_text: String) -> void:
 func _on_LineEdit_focus_exited() -> void:
 	yield(VisualServer,"frame_post_draw")
 	focus = line_edit.has_focus()
-	for button in options_container.get_children():
+	for o_button in options_container.get_children():
 		if focus:
 			break
-		focus = focus or button.has_focus()
+		focus = focus or o_button.has_focus()
 		
 	if not focus:
 		options_popup.hide()

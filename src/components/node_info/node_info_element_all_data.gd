@@ -74,12 +74,12 @@ func apply_filter(_filter:String):
 
 
 func _on_AllDataMaximizeButton_pressed():
-	if not max_btn.pressed:
+	if get_parent() == popup:
 		popup.remove_child(self)
 		original_node.add_child(self)
 		set_owner(original_node)
 		popup.hide()
-	else:
+	elif get_parent() == original_node:
 		original_node.remove_child(self)
 		popup.add_child(self)
 		set_owner(popup)
@@ -90,3 +90,8 @@ func _on_AllDataMaximizeButton_pressed():
 
 func _on_AllDataCopyButton_pressed():
 	OS.set_clipboard(node_text)
+
+
+func _on_AllDataPopup_popup_hide():
+	if get_parent() == popup:
+		_on_AllDataMaximizeButton_pressed()

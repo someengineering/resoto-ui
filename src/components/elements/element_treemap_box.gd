@@ -1,9 +1,10 @@
 extends MarginContainer
 
-signal pressed
+signal pressed_lmb
+signal pressed_rmb
 
 var element_color := Color.white
-var label := ""
+var element_name := ""
 var value := 0.0
 var final_size := Vector2.ZERO
 
@@ -12,8 +13,9 @@ onready var scaler = $Center/C/Z
 
 
 func _ready():
-	text_label.text = label + "\n(" + Utils.comma_sep(value) + ")"
-	$Button.hint_tooltip = label + ": " + Utils.comma_sep(value)
+	var value_str = Utils.comma_sep(value)
+	text_label.text = element_name + "\n(" + value_str + ")"
+	$Button.hint_tooltip = element_name + ": " + value_str
 	$Button.modulate = element_color
 	var font_color: Color = Style.col_map[Style.c.BG2] if element_color.get_luminance() > 0.46 else Style.col_map[Style.c.LIGHT]
 	text_label.add_color_override("font_color", font_color)
@@ -43,5 +45,9 @@ func _on_Button_mouse_entered():
 	update_label_pos()
 
 
-func _on_Button_pressed():
-	emit_signal("pressed")
+func _on_Button_gui_input(event:InputEvent):
+	if event is InputEventMouseButton and event.is_pressed():
+		if event.button_index == BUTTON_LEFT:
+			emit_signal("pressed_lmb", self)
+		elif event.button_index == BUTTON_RIGHT:
+			emit_signal("pressed_rmb", self)
