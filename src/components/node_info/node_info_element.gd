@@ -4,6 +4,7 @@ var active_request:ResotoAPI.Request
 var current_node_id:String = ""
 var current_main_node:Dictionary = {}
 var breadcrumbs:Dictionary = {}
+var treemap_display_mode:int = 1
 
 
 func _ready():
@@ -48,15 +49,36 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 					set_successor_button(false)
 					set_predecessor_button(true)
 					hide_treemap()
-					if r.id != "root":
-						if (r.has("metadata") and r.metadata.has("descendant_summary")):
-							update_treemap(r.metadata.descendant_summary)
-						else:
+					treemap_display_mode = 1
+					if treemap_display_mode == 0:
+						if r.id != "root":
+#							if (r.has("metadata") and r.metadata.has("descendant_summary")):
+#								update_treemap(r.metadata.descendant_summary)
+#							else:
 							var descendants_query:= "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
 							API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
-					else:
-						set_predecessor_button(false)
-						set_successor_button(true)
+						else:
+							set_predecessor_button(false)
+							set_successor_button(true)
+					elif treemap_display_mode == 1:
+						if r.has("reported") and r.reported.has("kind"):
+							var descendants_query:= "aggregate(/ancestors.%s.reported.name: sum(1) as count): /ancestors.%s.reported.id%s"
+							match r.reported.kind:
+								"graph_root":
+									descendants_query = descendants_query % ["cloud", "cloud", "!=null"]
+								"cloud":
+									descendants_query = descendants_query % ["account", "cloud", "=\"" + r.reported.id + "\""]
+								"account":
+									descendants_query = descendants_query % ["region", "account", "="+r.reported.id]
+								"region":
+									descendants_query = descendants_query % ["zone", "zone", "="+r.reported.id]
+								_:
+									treemap_display_mode = 0
+									descendants_query = "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
+							API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
+						else:
+							# use fallback
+							pass
 		update_breadcrumbs()
 		show()
 
@@ -72,8 +94,9 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 			return
 		if not _response.transformed.result.empty():
 			var treemap_format:= {}
+			var key_name:String = _response.transformed.result[0]["group"].keys()[0]
 			for element in _response.transformed.result:
-				treemap_format[element.group.kind] = element.count
+				treemap_format[element.group[key_name]] = element.count
 			update_treemap(treemap_format)
 
 
@@ -81,15 +104,15 @@ func hide_treemap():
 	find_node("TreeMapContainer").hide()
 
 
-func update_treemap(_descendants:Dictionary = {}):
-	if _descendants.empty():
+func update_treemap(_treemap_content:Dictionary = {}):
+	if _treemap_content.empty():
 		return
 	
 	set_successor_button(true)
 	
 	var account_dict:= {}
-	for key in _descendants:
-		account_dict[key] = _descendants[key]
+	for key in _treemap_content:
+		account_dict[key] = _treemap_content[key]
 	
 	find_node("TreeMapContainer").show()
 	yield(VisualServer, "frame_post_draw")
@@ -206,12 +229,25 @@ func main_node_display(node_data):
 	$"%KindLabelButton".text = r_kind
 
 
-func on_id_button_pressed(id:String):
+func on_id_button_pressed(id:String) -> void:
 	show_node(id)
 
 
-func _on_TreeMap_pressed(kind:String):
-	_g.emit_signal("explore_node_list_data", current_main_node, kind)
+func _on_TreeMap_pressed(click_meta:String) -> void:
+	if treemap_display_mode == 0:
+		# click_meta = kind
+		_g.emit_signal("explore_node_list_data", current_main_node, click_meta)
+	elif treemap_display_mode == 1:
+		# click_meta = id (not node id!)
+		var search_query:= "id(\"%s\") --> name=\"%s\"" % [current_node_id, click_meta]
+		API.graph_search(search_query, self, "list", "_on_get_node_from_id_done")
+
+
+func _on_get_node_from_id_done(_error:int, _r:ResotoAPI.Response) -> void:
+	if _error:
+		return
+	if _r.transformed.result:
+		show_node(_r.transformed.result[0].id)
 
 
 func _on_PredecessorsButton_pressed():
@@ -222,14 +258,6 @@ func _on_PredecessorsButton_pressed():
 func _on_SuccessorsButton_pressed():
 	var search_command = "id(\"" + current_main_node.id + "\") --> limit 500"
 	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "-->")
-
-
-func _on_AllDataMaximizeButton_pressed():
-	$AllDataPopup.show_all_data_popup($"%AllDataTextEdit".text, $"%AllDataTextEdit".scroll_vertical)
-
-
-func _on_AllDataCopyButton_pressed():
-	OS.set_clipboard($"%AllDataTextEdit".text)
 
 
 func _on_KindLabelButton_pressed():

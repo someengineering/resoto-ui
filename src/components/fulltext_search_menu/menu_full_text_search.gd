@@ -33,13 +33,17 @@ func _on_FullTextSearch_text_changed(_command:String) -> void:
 		popup.hide()
 		search_delay.stop()
 	list_btn.hide()
+	result_amount_label.text = ""
+	result_amount_label.autowrap = false
+	result_amount_label.modulate.a = 0.0
 	search_delay.start()
 	grab_focus()
 
 
 func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
-		_g.emit_signal("add_toast", "Error in Search", Utils.err_enum_to_string(error) + "\nBody: "+ count_request.body, 1, self)
+		if _response.response_code == 400:
+			return
 		return
 	var response_text:String = _response.transformed.result
 	var results_count:int = int(response_text.split("\n")[0].split(": ")[1])
@@ -49,20 +53,21 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 	if results_count > result_limit:
 		result_count_text += " (showing first " + str(result_limit) + ")"
 	result_amount_label.text = result_count_text
+	result_amount_label.modulate.a = 1.0
 
 
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
-		_g.emit_signal("add_toast", "Error in Search", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
-		return
-	if _response.response_code == 400:
-		# This can be removed when PR #44 is merged
+		if _response.response_code == 400:
+			show_search_results([], _response.body.get_string_from_utf8())
+		else:
+			_g.emit_signal("add_toast", "Error in Seasrch", "Query: "+ active_request.body, 1, self)
 		return
 	if _response.transformed.has("result"):
 		show_search_results(_response.transformed.result)
 
 
-func show_search_results(results:Array) -> void:
+func show_search_results(results:Array, error:="") -> void:
 	grab_focus()
 	# clear old results
 	for c in popup_results.get_children():
@@ -70,7 +75,16 @@ func show_search_results(results:Array) -> void:
 			continue
 		c.queue_free()
 	
-	if text == "":
+	if text == "" or results.empty():
+		if error != "":
+			result_amount_label.text = error
+			result_amount_label.modulate.a = 1.0
+			result_amount_label.autowrap = true
+			popup.show()
+			yield(VisualServer, "frame_post_draw")
+			popup.rect_size.y = 1
+		else:
+			popup.hide()
 		return
 	
 	list_btn.show()
@@ -113,6 +127,8 @@ func show_search_results(results:Array) -> void:
 	var popup_pos  = rect_global_position + Vector2(-abs(_popup_x_size-rect_size.x), self.rect_size.y)
 	var popup_size = Vector2(_popup_x_size, popup.rect_size.y)
 	popup.popup(Rect2(popup_pos, popup_size))
+	yield(VisualServer, "frame_post_draw")
+	popup.rect_size.y = 1
 	grab_focus()
 
 

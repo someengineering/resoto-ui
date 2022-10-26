@@ -1,11 +1,17 @@
 extends PanelContainer
 
+export (NodePath) var original_path : NodePath
+export (NodePath) var popup_path : NodePath
+
 var persistent_key := "NodeInfoElement_AllDataFilterComboBox"
 var filter_history := []
 var filter := ""
 var node_text := "" setget set_node_text
 var node_text_lines : Array = []
 
+onready var popup : PopupPanel = get_node(popup_path)
+onready var popup_size_ref : PopupPanel = get_node(popup_path)
+onready var original_node : VBoxContainer = get_node(original_path)
 onready var combo := $VBox/Title/AllDataFilter
 onready var edit := $VBox/AllDataTextEdit
 
@@ -66,7 +72,12 @@ func apply_filter(_filter:String):
 
 
 func _on_AllDataMaximizeButton_pressed():
-	pass
+	original_node.remove_child(self)
+	popup.add_child(self)
+	set_owner(popup)
+	rect_size = popup.rect_size
+	rect_position = Vector2.ZERO
+	popup.popup()
 	
 
 func _on_AllDataCopyButton_pressed():

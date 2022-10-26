@@ -173,7 +173,7 @@ func add_visuals():
 		new_element.rect_size = Vector2.ZERO
 		new_element.final_size = d.ds_displaysize
 		new_element.element_color = d.ds_color
-		new_element.label = d.ds_name
+		new_element.label = str(d.ds_name)
 		new_element.value = d.ds_value if !d.ds_is_zero else 0
 		new_element.connect("pressed", self, "_on_treemap_element_pressed", [d.ds_name])
 		new_element.show()

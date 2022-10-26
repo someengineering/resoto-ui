@@ -36,7 +36,6 @@ placeholder_alpha = 0.3
 script = ExtResource( 1 )
 
 [node name="ResultsPopUp" type="PopupPanel" parent="."]
-visible = true
 margin_right = 8.0
 margin_bottom = 8.0
 custom_styles/panel = SubResource( 1 )
@@ -64,7 +63,7 @@ theme_type_variation = "ButtonComboList"
 text = "more"
 
 [node name="SearchDelay" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.3
 one_shot = true
 
 [connection signal="focus_entered" from="." to="." method="_on_FullTextSearch_focus_entered"]

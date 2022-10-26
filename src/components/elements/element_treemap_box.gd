@@ -12,8 +12,8 @@ onready var scaler = $Center/C/Z
 
 
 func _ready():
-	text_label.text = label + "\n(" + str(value) + ")"
-	$Button.hint_tooltip = label + ": " + str(value)
+	text_label.text = label + "\n(" + Utils.comma_sep(value) + ")"
+	$Button.hint_tooltip = label + ": " + Utils.comma_sep(value)
 	$Button.modulate = element_color
 	var font_color: Color = Style.col_map[Style.c.BG2] if element_color.get_luminance() > 0.46 else Style.col_map[Style.c.LIGHT]
 	text_label.add_color_override("font_color", font_color)

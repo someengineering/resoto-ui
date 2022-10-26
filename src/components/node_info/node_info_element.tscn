@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -13,7 +13,6 @@
 [ext_resource path="res://assets/resoto/Resoto-Logo_med.svg" type="Texture" id=11]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/icons/icon_128_arrow.svg" type="Texture" id=13]
-[ext_resource path="res://assets/icons/icon_128_copy.svg" type="Texture" id=14]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://components/node_info/node_info_element_all_data_popup.gd" type="Script" id=16]
 [ext_resource path="res://components/elements/styled/icon_button_text_aligned.tscn" type="PackedScene" id=17]
@@ -299,9 +298,12 @@ self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
 margin_top = 271.0
 margin_right = 450.0
 margin_bottom = 986.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 20 )
+original_path = NodePath("..")
+popup_path = NodePath("../../../../../AllDataPopup")
 
 [node name="VBox" type="VBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails/AllDataGroup"]
 margin_left = 12.0
@@ -450,70 +452,6 @@ size_flags_vertical = 3
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 16 )
 
-[node name="VBox" type="VBoxContainer" parent="AllDataPopup"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = 8.0
-margin_right = -12.0
-margin_bottom = -8.0
-
-[node name="Title" type="HBoxContainer" parent="AllDataPopup/VBox"]
-margin_right = 1896.0
-margin_bottom = 21.0
-
-[node name="AllDataLabel" type="Label" parent="AllDataPopup/VBox/Title"]
-margin_right = 1846.0
-margin_bottom = 21.0
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_type_variation = "LabelBold"
-text = "All Data"
-
-[node name="AllDataCopyButton" type="Button" parent="AllDataPopup/VBox/Title"]
-modulate = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
-margin_left = 1850.0
-margin_right = 1871.0
-margin_bottom = 21.0
-rect_min_size = Vector2( 21, 21 )
-hint_tooltip = "Copy to Clipboard"
-mouse_filter = 1
-size_flags_vertical = 4
-theme_type_variation = "ButtonBorderless"
-custom_fonts/font = ExtResource( 10 )
-toggle_mode = true
-icon = ExtResource( 14 )
-flat = true
-expand_icon = true
-script = ExtResource( 9 )
-
-[node name="AllDataMaximizeButton" type="Button" parent="AllDataPopup/VBox/Title"]
-modulate = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
-margin_left = 1875.0
-margin_right = 1896.0
-margin_bottom = 21.0
-rect_min_size = Vector2( 21, 21 )
-hint_tooltip = "Maximize All Data"
-mouse_filter = 1
-size_flags_vertical = 4
-theme_type_variation = "ButtonBorderless"
-custom_fonts/font = ExtResource( 10 )
-toggle_mode = true
-icon = ExtResource( 8 )
-flat = true
-expand_icon = true
-script = ExtResource( 9 )
-
-[node name="AllDataTextEdit" type="TextEdit" parent="AllDataPopup/VBox"]
-margin_top = 25.0
-margin_right = 1896.0
-margin_bottom = 1064.0
-rect_min_size = Vector2( 0, 160 )
-size_flags_vertical = 3
-custom_styles/focus = SubResource( 6 )
-text = "..."
-readonly = true
-
 [connection signal="pressed" from="Margin/VBox/TitleBar/KindLabelButton" to="." method="_on_KindLabelButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/Actions/PredecessorsButton" to="." method="_on_PredecessorsButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/Actions/SuccessorsButton" to="." method="_on_SuccessorsButton_pressed"]
@@ -522,5 +460,3 @@ readonly = true
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataMaximizeButton" to="Margin/VBox/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataMaximizeButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed"]
 [connection signal="change_scroll_pos" from="AllDataPopup" to="." method="_on_AllDataPopup_change_scroll_pos"]
-[connection signal="pressed" from="AllDataPopup/VBox/Title/AllDataCopyButton" to="." method="_on_AllDataCopyButton_pressed"]
-[connection signal="pressed" from="AllDataPopup/VBox/Title/AllDataMaximizeButton" to="AllDataPopup" method="_on_AllDataMaximizeButton_pressed"]

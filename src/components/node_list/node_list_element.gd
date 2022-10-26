@@ -177,7 +177,7 @@ func add_result_element(r, parent_element:Node):
 	filter_variables[r.id] = filter_string
 	
 	new_result.get_node("VBox/Top/ResultKind").text = r_kind
-	new_result.get_node("VBox/Top/ResultName").text = r.id + " | " + r_name
+	new_result.get_node("VBox/Top/ResultName").text = r_name
 	new_result.get_node("VBox/ResultDetails").text = ancestors
 
 
