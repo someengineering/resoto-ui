@@ -16,6 +16,7 @@ var series_scene := preload("res://components/dashboard/widget_chart/widget_char
 var mouse_on_graph := false
 
 var is_dirty:= false
+var blur_image_active:= false
 var force_update_graph_area:= false
 var dirty_timer:= 0.0
 
@@ -41,6 +42,8 @@ onready var y_labels := $Viewport/GridContainer/YLabels
 onready var grid := $Viewport/GridContainer/Grid
 onready var legend_pos := $Grid/LegendPosition
 onready var viewport := $Viewport
+onready var update_blur := $UpdateBlur
+onready var update_tween := $UpdateTween
 
 
 func _ready() -> void:
@@ -84,9 +87,12 @@ func _input(event) -> void:
 				stacked = closest_point.y
 			line.show_indicator(transform_point(closest_point, ratio))
 		
+		var child_count = legend_container.get_child_count()
+		legend.visible = child_count > 0
+		
 		# Sort labels
-		for i in legend_container.get_child_count():
-			for j in range(i+1, legend_container.get_child_count()):
+		for i in child_count:
+			for j in range(i+1, child_count):
 				if legend_container.get_child(i).get_meta("value") < legend_container.get_child(j).get_meta("value"):
 					var label = legend_container.get_child(i)
 					legend_container.move_child(legend_container.get_child(j), i)
@@ -267,21 +273,47 @@ func do_complete_update():
 	legend_pos.rect_size = graph_area.rect_size
 	force_update_graph_area = false
 	is_dirty = false
+	blur_image_active = false
 	dirty_timer = 0.0
-	yield(VisualServer, "frame_post_draw")
-	viewport.render_target_update_mode = Viewport.UPDATE_ONCE
-	viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
+	update_tween.interpolate_property(update_blur.material, "shader_param/lod", 4, 0, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT, 0.1)
+	update_tween.interpolate_property(update_blur, "modulate:a", 1, 0, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT, 0.1)
+	update_tween.start()
+	set_viewport_mode(false)
 	show()
 
 
+func set_viewport_mode(_update:bool):
+	if _update:
+		viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
+		viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
+	else:
+		viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+		viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
+
+
 func complete_update(_force_update_graph_area:bool=false):
+	set_viewport_mode(true)
 	dirty_timer = 0.0
 	if _force_update_graph_area:
 		force_update_graph_area = true
 	is_dirty = true
-	
-	viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
-	viewport.render_target_clear_mode = Viewport.CLEAR_MODE_NEVER
+
+
+func _on_Chart_resized():
+	if not viewport:
+		return
+	if not blur_image_active:
+		blur_image_active = true
+		var img:Image = viewport.get_texture().get_data()
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		var tex:ImageTexture = ImageTexture.new()
+		tex.create_from_image(img)
+		update_blur.texture = tex
+		update_blur.show()
+		update_tween.interpolate_property(update_blur.material, "shader_param/lod", 0, 4, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT)
+		update_tween.interpolate_property(update_blur, "modulate:a", 0, 1, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT)
+		update_tween.start()
 
 
 func _process(_delta : float) -> void:
@@ -342,8 +374,7 @@ func _on_Grid_mouse_entered() -> void:
 	for line in graph_area.get_children():
 		line.indicator.visible = true
 	mouse_on_graph = true
-	viewport.render_target_update_mode = Viewport.UPDATE_WHEN_VISIBLE
-	viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
+	set_viewport_mode(true)
 	yield(VisualServer,"frame_post_draw")
 	legend.visible = true
 
@@ -353,8 +384,7 @@ func _on_Grid_mouse_exited() -> void:
 		line.indicator.visible = false
 	legend.visible = false
 	mouse_on_graph = false
-	viewport.render_target_update_mode = Viewport.UPDATE_ONCE
-	viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
+	set_viewport_mode(false)
 
 
 func transform_point(point : Vector2, ratio : Vector2) -> Vector2:
