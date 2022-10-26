@@ -149,8 +149,15 @@ margin_bottom = 85.0
 mouse_filter = 2
 custom_constants/separation = 10
 
+[node name="Label" type="Label" parent="Margin/VBox/Filter"]
+margin_top = 7.0
+margin_right = 92.0
+margin_bottom = 28.0
+text = "Filter results"
+
 [node name="FilterLineEdit" type="LineEdit" parent="Margin/VBox/Filter"]
-margin_right = 400.0
+margin_left = 102.0
+margin_right = 502.0
 margin_bottom = 35.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_vertical = 4

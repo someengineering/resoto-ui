@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://assets/resoto/Resoto-Logo_med.svg" type="Texture" id=11]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/icons/icon_128_arrow.svg" type="Texture" id=13]
+[ext_resource path="res://assets/icons/icon_128_leaf.svg" type="Texture" id=14]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://components/node_info/node_info_element_all_data_popup.gd" type="Script" id=16]
 [ext_resource path="res://components/elements/styled/icon_button_text_aligned.tscn" type="PackedScene" id=17]
@@ -73,9 +74,14 @@ margin_bottom = 1070.0
 mouse_filter = 2
 custom_constants/separation = 10
 
-[node name="TitleBar" type="HBoxContainer" parent="Margin/VBox"]
+[node name="BreadcrumbContainer" type="HBoxContainer" parent="Margin/VBox"]
 margin_right = 1900.0
-margin_bottom = 40.0
+custom_constants/separation = 3
+
+[node name="TitleBar" type="HBoxContainer" parent="Margin/VBox"]
+margin_top = 10.0
+margin_right = 1900.0
+margin_bottom = 50.0
 rect_min_size = Vector2( 0, 40 )
 mouse_filter = 2
 custom_constants/separation = 10
@@ -108,12 +114,6 @@ mouse_filter = 1
 custom_fonts/font = SubResource( 1 )
 text = "Node Name"
 script = ExtResource( 6 )
-
-[node name="BreadcrumbContainer" type="HBoxContainer" parent="Margin/VBox"]
-margin_top = 50.0
-margin_right = 1900.0
-margin_bottom = 50.0
-custom_constants/separation = 3
 
 [node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
 margin_top = 60.0
@@ -303,6 +303,7 @@ size_flags_vertical = 3
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 20 )
 original_path = NodePath("..")
+popup_size_ref_path = NodePath("../../..")
 popup_path = NodePath("../../../../../AllDataPopup")
 
 [node name="VBox" type="VBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails/AllDataGroup"]
@@ -408,6 +409,21 @@ margin_right = 1380.0
 margin_bottom = 966.0
 size_flags_horizontal = 11
 size_flags_vertical = 3
+
+[node name="LeafIcon" type="TextureRect" parent="Margin/VBox/NodeContent"]
+visible = false
+modulate = Color( 0, 0.329412, 0.639216, 1 )
+margin_left = 1462.0
+margin_top = 393.0
+margin_right = 1662.0
+margin_bottom = 593.0
+rect_min_size = Vector2( 200, 200 )
+size_flags_horizontal = 6
+size_flags_vertical = 6
+texture = ExtResource( 14 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 7 )
 
 [node name="Templates" type="Control" parent="."]
 visible = false

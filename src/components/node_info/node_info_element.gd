@@ -98,6 +98,8 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 			for element in _response.transformed.result:
 				treemap_format[element.group[key_name]] = element.count
 			update_treemap(treemap_format)
+		else:
+			$Margin/VBox/NodeContent/LeafIcon.show()
 
 
 func hide_treemap():
@@ -115,6 +117,7 @@ func update_treemap(_treemap_content:Dictionary = {}):
 		account_dict[key] = _treemap_content[key]
 	
 	find_node("TreeMapContainer").show()
+	$Margin/VBox/NodeContent/LeafIcon.hide()
 	yield(VisualServer, "frame_post_draw")
 	find_node("TreeMap").clear_treemap()
 	find_node("TreeMap").create_treemap(account_dict)
@@ -186,10 +189,10 @@ func main_node_display(node_data):
 		$"%NodeDescendantCountValueLabel".hide()
 	
 	if node_data.has("reported"):
-		if node_data.reported.has("ctime"):
+		if node_data.reported.has("mtime"):
 			$"%NodeCtimeLabel".show()
 			$"%NodeCtimeValueLabel".show()
-			var time_str = node_data.reported.ctime.split("T")
+			var time_str = node_data.reported.mtime.split("T")
 			$"%NodeCtimeValueLabel".text = time_str[0] + " - " + time_str[1].replace("Z", "")
 		else:
 			$"%NodeCtimeLabel".hide()
@@ -224,7 +227,8 @@ func main_node_display(node_data):
 		# Display node ancestory / descendants
 	
 	var r_name = node_data.reported.name
-	$"%NodeNameLabel".text = r_name
+	var r_id = node_data.reported.id
+	$"%NodeNameLabel".text = r_name if r_name == r_id else r_name + " (%s)" % r_id
 	var r_kind = node_data.reported.kind
 	$"%KindLabelButton".text = r_kind
 

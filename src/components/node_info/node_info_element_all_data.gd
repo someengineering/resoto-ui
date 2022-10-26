@@ -1,6 +1,7 @@
 extends PanelContainer
 
 export (NodePath) var original_path : NodePath
+export (NodePath) var popup_size_ref_path : NodePath
 export (NodePath) var popup_path : NodePath
 
 var persistent_key := "NodeInfoElement_AllDataFilterComboBox"
@@ -10,10 +11,11 @@ var node_text := "" setget set_node_text
 var node_text_lines : Array = []
 
 onready var popup : PopupPanel = get_node(popup_path)
-onready var popup_size_ref : PopupPanel = get_node(popup_path)
+onready var popup_size_ref : VBoxContainer = get_node(popup_size_ref_path)
 onready var original_node : VBoxContainer = get_node(original_path)
 onready var combo := $VBox/Title/AllDataFilter
 onready var edit := $VBox/AllDataTextEdit
+onready var max_btn := $VBox/Title/AllDataMaximizeButton
 
 func _ready():
 	if modulate != Color.white:
@@ -72,12 +74,18 @@ func apply_filter(_filter:String):
 
 
 func _on_AllDataMaximizeButton_pressed():
-	original_node.remove_child(self)
-	popup.add_child(self)
-	set_owner(popup)
-	rect_size = popup.rect_size
-	rect_position = Vector2.ZERO
-	popup.popup()
+	if not max_btn.pressed:
+		popup.remove_child(self)
+		original_node.add_child(self)
+		set_owner(original_node)
+		popup.hide()
+	else:
+		original_node.remove_child(self)
+		popup.add_child(self)
+		set_owner(popup)
+		popup.popup(Rect2(popup_size_ref.rect_global_position-Vector2(1, 1), popup_size_ref.rect_size + Vector2(2,2)))
+		rect_size = popup_size_ref.rect_size
+		rect_position = Vector2.ZERO
 	
 
 func _on_AllDataCopyButton_pressed():
