@@ -1,4 +1,5 @@
 tool
+class_name ComboBox
 extends Control
 
 signal option_changed(option)

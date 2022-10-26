@@ -33,3 +33,15 @@ func _on_fullscreen_hide_menu(is_fullscreen:bool) -> void:
 	content.add_constant_override("margin_right", side_margin)
 	content.add_constant_override("margin_bottom", side_margin)
 	content.add_constant_override("margin_left", side_margin)
+
+
+func _on_Back_pressed():
+	UINavigation.back()
+
+
+func _on_Forward_pressed():
+	UINavigation.forward()
+
+
+func _on_ConnectPopup_connected():
+	UINavigation.on_home_loaded()

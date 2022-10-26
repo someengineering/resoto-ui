@@ -25,6 +25,7 @@ signal config_received
 signal pages_built
 signal config_updated
 signal config_list_refreshed
+signal config_changed(config_id)
 
 var config_req: ResotoAPI.Request
 var config_put_req: ResotoAPI.Request

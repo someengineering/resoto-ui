@@ -2,13 +2,13 @@ extends CanvasLayer
 class_name ContentManager
 
 onready var sections = {
-	"terminals": $Content/TerminalManager,
-	"dashboards": $Content/DashBoardManager,
-	"config": $Content/ConfigManager,
-	"message_log": $Content/MessageLog,
-	"node_single_info": $Content/NodeSingleInfo,
-	"node_list_info": $Content/NodeListElement,
-	"home": $Content/ResotoHome
+	"terminals": $Content/TerminalComponent,
+	"dashboards": $Content/DashBoardComponent,
+	"config": $Content/ConfigComponent,
+	"message_log": $Content/LogComponent,
+	"node_single_info": $Content/NodeSingleInfoComponent,
+	"node_list_info": $Content/NodeListElementComponent,
+	"home": $Content/HomeComponent
 }
 
 var active_section:= "terminal"
@@ -23,9 +23,10 @@ func _enter_tree():
 func _ready():
 	_g.connect("nav_change_section", self, "change_section")
 	_g.connect("nav_change_section_explore", self, "change_section_explore")
+	UINavigation.connect("navigate", self, "_on_navigate")
 
 
-func change_section(new_section:String):
+func change_section(new_section:String, update_navigation_state := true):
 	if new_section == active_section or not sections.has(new_section):
 		return
 	
@@ -33,10 +34,14 @@ func change_section(new_section:String):
 	for c in content_sections.get_children():
 		c.hide()
 	
-	if sections[active_section].has_method("start"):
-		sections[active_section].start()
-	else:
-		sections[active_section].show()
+	sections[active_section].show()
+	
+	if update_navigation_state:
+		if not sections[active_section] is ComponentContainer:
+			var args := {
+				"view" : active_section
+			}
+			UINavigation.set_current_navigation_state(args)
 
 
 func change_section_explore(type:String):
@@ -49,3 +54,17 @@ func change_section_explore(type:String):
 	elif type == "node_single_info" or type == "node_list_info":
 		last_visited_explore_section = type
 		change_section(type)
+
+
+func _on_navigate(navigation_args : Dictionary):
+	if navigation_args["view"] == "":
+		navigation_args["view"] = "home"
+	
+	var section = sections[navigation_args["view"]]
+		
+	change_section(navigation_args["view"], false)
+	
+	if section is ComponentContainer:
+		section.navigation_arguments = navigation_args
+		section.apply_navigation_arguments()
+	

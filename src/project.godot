@@ -44,6 +44,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/new_widget_popup/color_controller_ui.gd"
 }, {
+"base": "Control",
+"class": "ComboBox",
+"language": "GDScript",
+"path": "res://components/shared/combo_box.gd"
+}, {
+"base": "MarginContainer",
+"class": "ComponentContainer",
+"language": "GDScript",
+"path": "res://components/hub/component_container.gd"
+}, {
 "base": "VBoxContainer",
 "class": "ConfigComponentArray",
 "language": "GDScript",
@@ -78,6 +88,11 @@ _global_script_classes=[ {
 "class": "DashboardContainer",
 "language": "GDScript",
 "path": "res://components/dashboard/dashboard_container.gd"
+}, {
+"base": "TabContainer",
+"class": "DashboardManager",
+"language": "GDScript",
+"path": "res://components/dashboard/dashboard_manager.gd"
 }, {
 "base": "Node",
 "class": "DataSource",
@@ -177,6 +192,8 @@ _global_script_class_icons={
 "ColorCondition": "",
 "ColorController": "",
 "ColorControllerUi": "",
+"ComboBox": "",
+"ComponentContainer": "",
 "ConfigComponentArray": "",
 "ConfigComponentComplex": "",
 "ConfigComponentEnum": "",
@@ -184,6 +201,7 @@ _global_script_class_icons={
 "ContentManager": "",
 "CustomPopupWindow": "",
 "DashboardContainer": "",
+"DashboardManager": "",
 "DataSource": "",
 "DynamicLabel": "",
 "Indicator": "",
@@ -220,6 +238,7 @@ SaveLoadSettings="*res://scripts/autoloads/saveload_settings.gd"
 HtmlFiles="*res://scripts/autoloads/html_files.gd"
 InfrastructureInformation="*res://scripts/autoloads/infrastructure_information.gd"
 Analytics="*res://scripts/autoloads/analytics.gd"
+UINavigation="*res://scripts/autoloads/navigation_controller.gd"
 
 [debug]
 

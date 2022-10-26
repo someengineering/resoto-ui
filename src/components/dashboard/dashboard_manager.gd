@@ -1,7 +1,9 @@
+class_name DashboardManager
 extends TabContainer
 
 signal all_dashboards_loaded
 signal dashboard_saved
+signal dashboard_opened(dashboard_name)
 
 const DefaultDashboardName:= "Resoto Example Dashboard"
 const number_keys : Array = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
@@ -149,6 +151,9 @@ func open_user_dashboards():
 
 
 func load_dashboard(dashboard_name : String):
+	if dashboard_name == "ManageDashboards":
+		set_current_tab(get_children().find(manager_tab))
+		return
 	if not available_dashboards.has(dashboard_name):
 		return
 	var data : Dictionary = available_dashboards[dashboard_name]
@@ -285,9 +290,11 @@ func _on_DashboardItemList_nothing_selected():
 
 func _on_DashBoardManager_tab_changed(_tab):
 	var new_tab_control:Node = get_tab_control(_tab)
+	emit_signal("dashboard_opened", new_tab_control.name.replace(" ","_"))
 	if new_tab_control.get_class() != "DashboardContainer" and new_tab_control != manager_tab:
 		var dashboard_name = new_tab_control.name
 		new_tab_control.name = "loading"
 		load_dashboard(dashboard_name)
 		new_tab_control.queue_free()
 	save_opened_dashboards()
+	
