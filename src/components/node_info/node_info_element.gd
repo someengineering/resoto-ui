@@ -46,6 +46,8 @@ func clear_view():
 		c.queue_free()
 	for c in breadcrumb_container.get_children():
 		c.queue_free()
+	for c in $"%TagsContent".get_children():
+		c.queue_free()
 	$Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton.pressed = false
 	$"%NodeNameLabel".text = "..."
 	$"%KindLabelButton".text = "..."
@@ -277,26 +279,30 @@ func main_node_display(node_data):
 				if vp_key == "name":
 					var id_txt = str(node_data.reported.id)
 					value_text = value_text if value_text == id_txt else value_text + " (%s)" % id_txt
+				if visible_properties[vp_key][1] == "duration":
+					value_text = Utils.readable_duration(value_text)
 				value_node.text = value_text
 				property_container.add_child(descr_node)
 				property_container.add_child(value_node)
 		
 		# Handle Tags
-#		if node_data.reported.has("tags") and not node_data.reported.tags.empty():
-#			$"%TagsGroup".show()
-#			var tags = $"%TagsContent"
-#			for c in tags.get_children():
-#				c.queue_free()
-#			for tag in node_data.reported.tags:
-#				var new_tag_var = Label.new()
-#				new_tag_var.rect_min_size.x = 200
-#				var new_tag_value = Label.new()
-#				new_tag_var.text = tag
-#				new_tag_value.text = node_data.reported.tags[tag]
-#				tags.add_child(new_tag_var)
-#				tags.add_child(new_tag_value)
-#		else:
-#			$"%TagsGroup".hide()
+		$"%TagsGroup".visible = has_tags
+		if has_tags:
+			var tags = $"%TagsContent"
+			for c in tags.get_children():
+				c.queue_free()
+			for tag in node_data.reported.tags:
+				var new_tag_var = Label.new()
+				new_tag_var.autowrap = true
+				new_tag_var.rect_min_size.x = 120
+				new_tag_var.text = tag
+				tags.add_child(new_tag_var)
+				
+				var new_tag_value = Label.new()
+				new_tag_value.autowrap = true
+				new_tag_value.size_flags_horizontal = SIZE_EXPAND_FILL
+				new_tag_value.text = node_data.reported.tags[tag]
+				tags.add_child(new_tag_value)
 
 
 func on_id_button_pressed(id:String) -> void:

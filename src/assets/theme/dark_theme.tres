@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=81 format=2]
+[gd_resource type="Theme" load_steps=82 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -318,6 +318,11 @@ size = 17
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 62 )
+
+[sub_resource type="DynamicFont" id=81]
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 15 )
 
 [sub_resource type="DynamicFontData" id=41]
 font_path = "res://assets/theme/Barlow-Regular.ttf"
@@ -680,6 +685,8 @@ ItemList/styles/selected = SubResource( 5 )
 ItemList/styles/selected_focus = SubResource( 4 )
 Label/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 LabelBold/fonts/font = SubResource( 63 )
+LabelCode/base_type = "Label"
+LabelCode/fonts/font = SubResource( 81 )
 LabelSmall/base_type = "Label"
 LabelSmall/fonts/font = SubResource( 42 )
 LineEdit/colors/clear_button_color = Color( 0, 0.329412, 0.639216, 1 )
@@ -748,6 +755,9 @@ TextEdit/styles/completion = SubResource( 6 )
 TextEdit/styles/focus = SubResource( 6 )
 TextEdit/styles/normal = SubResource( 7 )
 TextEdit/styles/read_only = SubResource( 3 )
+TextEditTag/base_type = "TextEdit"
+TextEditTag/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+TextEditTag/fonts/font = SubResource( 81 )
 TooltipPanel/styles/panel = SubResource( 45 )
 Tree/colors/font_color = Color( 0.913725, 0.552941, 0.968627, 1 )
 VScrollBar/styles/grabber = SubResource( 10 )

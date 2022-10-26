@@ -160,6 +160,10 @@ static func readable_date(_date:Dictionary) -> String:
 	return "{m} {d}, {y}".format({"m": month_names[_date.month - 1], "d": _date.day, "y": _date.year})
 
 
+static func readable_duration(_dur:String) -> String:
+	return _dur.replace("yr", "yr ").replace("mo", "mo ").replace("d", "d ").replace("h", "h ").replace("min", "min ")
+
+
 static func comma_sep(number):
 	var string = str(number)
 	var mod = string.length() % 3
