@@ -68,6 +68,7 @@ func start_connect() -> void:
 		if adress.size() > 1:
 			port = int(adress[1])
 		API.connection_config(adress[0], int(port), psk, use_ssl)
+
 	
 	var protocol:= "https://" if API.use_ssl else "http://"
 	status.text = CONNECT_TEXT % [(protocol + API.adress), API.port]

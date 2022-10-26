@@ -241,6 +241,7 @@ margin_bottom = 496.0
 [node name="Options" type="GridContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="0"]
 margin_right = 385.0
 size_flags_horizontal = 3
+custom_constants/hseparation = 30
 columns = 2
 
 [node name="ColorControllersContainer" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="1"]

@@ -1,7 +1,15 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://components/dashboard/widget_chart/widget_chart.gd" type="Script" id=1]
-[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
+
+[sub_resource type="StyleBoxFlat" id=10]
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="Shader" id=5]
 code = "shader_type canvas_item;
@@ -33,6 +41,20 @@ shader_param/line_width = 3.0
 flags = 4
 viewport_path = NodePath("Viewport")
 
+[sub_resource type="Shader" id=11]
+code = "shader_type canvas_item;
+
+uniform float lod: hint_range(0.0, 5) = 0.0;
+
+void fragment(){
+	vec4 color = texture(TEXTURE, UV, lod);
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=12]
+shader = SubResource( 11 )
+shader_param/lod = 0.0
+
 [node name="Chart" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -45,15 +67,18 @@ supported_types = [ 0 ]
 x_range = 100.0
 divisions = Vector2( 4, 8 )
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Background" type="Panel" parent="."]
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
+custom_styles/panel = SubResource( 10 )
 
 [node name="Viewport" type="Viewport" parent="."]
-size = Vector2( 1859, 1003 )
+size = Vector2( 50, 50 )
+hdr = false
 usage = 0
 render_target_v_flip = true
+render_target_update_mode = 3
 
 [node name="GridContainer" type="Control" parent="Viewport"]
 anchor_right = 1.0
@@ -118,23 +143,34 @@ margin_top = -3.0
 margin_right = 56.0
 margin_bottom = -3.0
 
+[node name="UpdateBlur" type="TextureRect" parent="."]
+material = SubResource( 12 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand = true
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PopupLegend" type="PanelContainer" parent="CanvasLayer"]
-visible = false
-self_modulate = Color( 1, 1, 1, 0.717647 )
+self_modulate = Color( 0.737255, 0.737255, 0.737255, 1 )
 margin_right = 14.0
 margin_bottom = 14.0
 mouse_filter = 2
-theme = ExtResource( 2 )
+theme_type_variation = "PanelPopup"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PopupLegend"]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 9.0
-margin_bottom = 5.0
+margin_left = 15.0
+margin_top = 10.0
+margin_right = 15.0
+margin_bottom = 10.0
 mouse_filter = 2
 size_flags_vertical = 0
 
+[node name="UpdateTween" type="Tween" parent="."]
+
+[connection signal="resized" from="." to="." method="_on_Chart_resized"]
 [connection signal="mouse_entered" from="Grid/LegendPosition" to="." method="_on_Grid_mouse_entered"]
 [connection signal="mouse_exited" from="Grid/LegendPosition" to="." method="_on_Grid_mouse_exited"]

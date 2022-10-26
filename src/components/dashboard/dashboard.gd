@@ -4,18 +4,16 @@ export var x_grid_ratio := 10.0
 export var y_grid_size := 100.0 
 export var grid_margin := Vector2(5,5)
 
-var dashboard_container:DashboardContainer = null
-
-onready var widgets : Control = $Widgets
-onready var grid_background : ColorRect = $Grid
-onready var _x_grid_size := rect_size.x / x_grid_ratio
-onready var widget_container_scene := preload("res://components/dashboard/container/widget_container.tscn")
-
 var locked := true
-
+var initial_grid_set:= true
+var dashboard_container:DashboardContainer = null
+var is_ready := false
 var ts_start : int
 var ts_end : int
 var step : int
+var widget_reveal_timer:= Timer.new()
+var appear_tween:= Tween.new()
+
 var filters : Dictionary = {
 	"cloud" : "",
 	"region" : "",
@@ -29,15 +27,30 @@ var remap_old_data:= {
 	"res://components/widgets/HeatMap.tscn":		"Heatmap",
 }
 
+onready var widgets : Control = $Widgets
+onready var grid_background : ColorRect = $Grid
+onready var _x_grid_size := rect_size.x / x_grid_ratio
+onready var widget_container_scene := preload("res://components/dashboard/container/widget_container.tscn")
 
-func add_widget(widget_data : Dictionary) -> WidgetContainer:
+
+func _ready():
+	add_child(widget_reveal_timer)
+	widget_reveal_timer.wait_time = 0.1
+	widget_reveal_timer.one_shot = true
+	add_child(appear_tween)
+	is_ready = true
+	$Grid.connect("resized", self, "_on_Grid_resized")
+
+
+func add_widget(widget_data : Dictionary, _show_after_creation:=false) -> WidgetContainer:
 	var grid_size : Vector2 = Vector2(_x_grid_size, y_grid_size)
 	var container = widget_container_scene.instance()
+	container.hide()
 	container.name = "WidgetContainer"
 	container.dashboard = self
-	widgets.call_deferred("add_child", container)
 	container.grid_size = grid_size
 	container.rect_size = 2*grid_size
+	widgets.call_deferred("add_child", container)
 	
 	var empty_slot = find_empty_slot(container.get_rect())
 	container.rect_position = empty_slot.snapped(grid_size) 
@@ -56,7 +69,7 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 		if not widget_data.has("widget_type"):
 			widget_data["widget_type"] = remap_old_data[widget_data.scene]
 		widget = dashboard_container.WidgetScenes[widget_data.widget_type].instance()
-		
+	
 	container.call_deferred("set_widget", widget)
 	container.call_deferred("set_data_sources", widget_data.data_sources)
 	container.set_deferred("title", widget_data.title)
@@ -87,7 +100,18 @@ func add_widget(widget_data : Dictionary) -> WidgetContainer:
 	reference.editor_only = false
 	reference.visible = false
 	
+	if _show_after_creation:
+		widget_reveal_timer.connect("timeout", self, "reveal_widget", [container], CONNECT_ONESHOT)
+		widget_reveal_timer.start()
+	
 	return container
+
+
+func reveal_widget(_widget_container:WidgetContainer):
+	_widget_container.modulate.a = 0.0
+	appear_tween.interpolate_property(_widget_container, "modulate:a", 0, 1, 0.8, Tween.TRANS_EXPO, Tween.EASE_OUT)
+	_widget_container.show()
+	appear_tween.start()
 
 
 func lock(_locked : bool) -> void:
@@ -99,22 +123,33 @@ func lock(_locked : bool) -> void:
 
 
 func _on_Grid_resized() -> void:
-	_x_grid_size = rect_size.x / x_grid_ratio
-
+	var new_x_size = rect_size.x / x_grid_ratio
+	if not is_ready or is_equal_approx(new_x_size, _x_grid_size):
+		return
+		
+	_x_grid_size = new_x_size
 	var grid_size := Vector2(_x_grid_size, y_grid_size)
-	
 	$Grid.material.set_shader_param("grid_size", grid_size)
 	$Grid.material.set_shader_param("dashboard_size", rect_size)
+	$ResizeTimer.start()
+
+
+func _on_ResizeTimer_timeout():
+	var grid_size := Vector2(_x_grid_size, y_grid_size)
 	
+	var w_delay:= 0.3
 	for widget in $Widgets.get_children():
 		widget.grid_size = grid_size
-		
-	yield(VisualServer, "frame_post_draw")
-	for widget in $Widgets.get_children():
-		
 		widget.parent_reference.rect_global_position = widget.position_on_grid * grid_size + rect_global_position
 		widget.parent_reference.rect_size = widget.size_on_grid * grid_size
 		widget.call_deferred("set_anchors")
+		if initial_grid_set:
+			widget.modulate.a = 0.0
+			appear_tween.interpolate_property(widget, "modulate:a", 0, 1, 1.3, Tween.TRANS_EXPO, Tween.EASE_OUT, w_delay)
+			w_delay += 0.1
+			widget.show()
+	appear_tween.start()
+	initial_grid_set = false
 
 
 func find_rect_intersection(rect : Rect2, exclude_widgets := []):

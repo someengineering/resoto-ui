@@ -132,7 +132,7 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 	if data["status"] == "success":
 		var regex = RegEx.new()
 		regex.compile("(?<={)(.*?)(?=})")
-		var legend_labels : Array = regex.search_all(legend)		
+		var legend_labels : Array = regex.search_all(legend)
 		
 		for serie in data.data.result:
 			var array : PoolVector2Array = []

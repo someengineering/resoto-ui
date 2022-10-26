@@ -8,6 +8,7 @@ const title_edit = "Edit Widget [%s]"
 const title_duplicate = "Duplicate Widget [base: %s]"
 
 const HexColorPicker := preload("res://components/shared/hex_color_picker.tscn")
+const CheckBoxStyled := preload("res://components/elements/styled/icon_check_button.tscn")
 const IntSpinBoxBig := preload("res://components/shared/int_spinbox_big.tscn")
 const DataSourceWidget := preload("res://components/dashboard/new_widget_popup/data_source_container.tscn")
 const ColorControllerUIScene := preload("res://components/dashboard/new_widget_popup/color_controller_ui.tscn")
@@ -92,7 +93,7 @@ func _on_AddWidgetButton_pressed() -> void:
 			"title"			: widget_name_label.text,
 			"data_sources"	: new_data_sources
 		}
-		emit_signal("widget_added", widget_data)
+		emit_signal("widget_added", widget_data, true)
 	else:
 		widget_to_edit.title = widget_name_label.text
 		widget_to_edit.data_sources.clear()
@@ -209,16 +210,17 @@ func get_control_for_property(property : Dictionary) -> Control:
 	match property.type:
 		TYPE_INT:
 			control = IntSpinBoxBig.instance()
+			control.size_flags_horizontal = SIZE_FILL
 			control.value_to_set = preview_widget[property.name]
 			control_signal = "value_changed"
 		TYPE_BOOL:
-			control = CheckBox.new()
-			control.flat = true
-			control.theme_type_variation = "CheckBoxFlat"
+			control = CheckBoxStyled.instance()
+			#control.size_flags_horizontal = 0
 			control.pressed = preview_widget[property.name]
 			control_signal = "toggled"
 		TYPE_STRING:
 			control = LineEdit.new()
+			control.theme_type_variation = "LineEditCode"
 			control.text = preview_widget[property.name]
 			control_signal = "text_changed"
 		TYPE_COLOR:

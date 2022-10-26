@@ -15,7 +15,12 @@ var dynamic_label_scene := preload("res://components/dashboard/shared/dynamic_la
 var series_scene := preload("res://components/dashboard/widget_chart/widget_chart_serie.tscn")
 var mouse_on_graph := false
 
-var step := 1
+var is_dirty:= false
+var blur_image_active:= false
+var force_update_graph_area:= false
+var dirty_timer:= 0.0
+
+var step := 144
 var prev_origin : Vector2
 
 var colors := [
@@ -36,6 +41,9 @@ onready var x_labels := $Viewport/GridContainer/XLabels
 onready var y_labels := $Viewport/GridContainer/YLabels
 onready var grid := $Viewport/GridContainer/Grid
 onready var legend_pos := $Grid/LegendPosition
+onready var viewport := $Viewport
+onready var update_blur := $UpdateBlur
+onready var update_tween := $UpdateTween
 
 
 func _ready() -> void:
@@ -43,6 +51,7 @@ func _ready() -> void:
 	if get_parent().get_parent() is WidgetContainer:
 		get_parent().get_parent().connect("moved_or_resized", self, "_on_Grid_resized")
 	_on_Grid_resized()
+	hide()
 
 
 func _input(event) -> void:
@@ -56,6 +65,8 @@ func _input(event) -> void:
 		for label in legend_container.get_children():
 			legend_container.remove_child(label)
 			label.queue_free()
+		
+		var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
 		
 		for i in series.size():
 			var index = series.size() - i - 1
@@ -74,11 +85,14 @@ func _input(event) -> void:
 			if line.get_meta("stack"):
 				closest_point.y += stacked
 				stacked = closest_point.y
-			line.show_indicator(transform_point(closest_point))
+			line.show_indicator(transform_point(closest_point, ratio))
+		
+		var child_count = legend_container.get_child_count()
+		legend.visible = child_count > 0
 		
 		# Sort labels
-		for i in legend_container.get_child_count():
-			for j in range(i+1, legend_container.get_child_count()):
+		for i in child_count:
+			for j in range(i+1, child_count):
 				if legend_container.get_child(i).get_meta("value") < legend_container.get_child(j).get_meta("value"):
 					var label = legend_container.get_child(i)
 					legend_container.move_child(legend_container.get_child(j), i)
@@ -96,21 +110,9 @@ func set_x_range(r : float) -> void:
 func _on_Grid_resized() -> void:
 	if not is_instance_valid(x_labels):
 		return
-
-	yield(VisualServer,"frame_post_draw")
-	$Viewport.size = rect_size
+	viewport.size = rect_size
 	$Viewport/GridContainer.rect_size = rect_size
-	
-	complete_update()
-	var n = x_labels.get_child_count()
-	if n > 0:
-		x_labels.get_child(0).rect_min_size.x = grid.rect_size.x / divisions.x / 2
-		x_labels.get_child(n - 1).rect_min_size.x = grid.rect_size.x / divisions.x / 2
-	
-	grid.material.set_shader_param("grid_divisions", divisions)
-	grid.material.set_shader_param("size", grid.rect_size)
-	
-	legend_pos.rect_size = graph_area.rect_size
+	complete_update(false)
 
 
 func update_series() -> void:
@@ -124,6 +126,7 @@ func update_series() -> void:
 	var stacked : PoolRealArray = []
 	stacked.resize(range(0, x_range, step).size())
 	stacked.fill(0)
+	var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
 	for i in n:
 		var index = n - i - 1
 		var line : Line2D = graph_area.get_child(index)
@@ -137,7 +140,7 @@ func update_series() -> void:
 			if line.get_meta("stack"):
 				point.y += stacked[j]
 				stacked[j] = point.y
-			values.append(transform_point(point))
+			values.append(transform_point(point, ratio))
 		line.points = values
 		line.global_position = origin
 
@@ -233,7 +236,7 @@ func set_scale_from_series() -> void:
 	var stacked : PoolRealArray = []
 	stacked.resize(range(0, x_range, step).size())
 	stacked.fill(0)
-
+	
 	for j in stacked.size():
 		for serie in series:
 			var value = find_value_at_x(j*step, serie)
@@ -246,7 +249,6 @@ func set_scale_from_series() -> void:
 				stacked[j] = value.y
 			if maxy < value.y:
 				maxy = value.y
-			
 	
 	max_y_value = maxy + (maxy - miny) * 0.1 if maxy != miny else maxy * 1.1
 	min_y_value = miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9
@@ -254,7 +256,72 @@ func set_scale_from_series() -> void:
 		min_y_value = 0
 
 
+func do_complete_update():
+	if auto_scale:
+		set_scale_from_series()
+	update_series()
+	update_graph_area(force_update_graph_area)
+	
+	var n = x_labels.get_child_count()
+	if n > 0:
+		x_labels.get_child(0).rect_min_size.x = grid.rect_size.x / divisions.x / 2
+		x_labels.get_child(n - 1).rect_min_size.x = grid.rect_size.x / divisions.x / 2
+	
+	grid.material.set_shader_param("grid_divisions", divisions)
+	grid.material.set_shader_param("size", grid.rect_size)
+	
+	legend_pos.rect_size = graph_area.rect_size
+	force_update_graph_area = false
+	is_dirty = false
+	blur_image_active = false
+	dirty_timer = 0.0
+	update_tween.interpolate_property(update_blur.material, "shader_param/lod", 4, 0, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT, 0.1)
+	update_tween.interpolate_property(update_blur, "modulate:a", 1, 0, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT, 0.1)
+	update_tween.start()
+	set_viewport_mode(false)
+	show()
+
+
+func set_viewport_mode(_update:bool):
+	if _update:
+		viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
+		viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
+	else:
+		viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+		viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
+
+
+func complete_update(_force_update_graph_area:bool=false):
+	set_viewport_mode(true)
+	dirty_timer = 0.0
+	if _force_update_graph_area:
+		force_update_graph_area = true
+	is_dirty = true
+
+
+func _on_Chart_resized():
+	if not viewport:
+		return
+	if not blur_image_active:
+		blur_image_active = true
+		var img:Image = viewport.get_texture().get_data()
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		var tex:ImageTexture = ImageTexture.new()
+		tex.create_from_image(img)
+		update_blur.texture = tex
+		update_blur.show()
+		update_tween.interpolate_property(update_blur.material, "shader_param/lod", 0, 4, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT)
+		update_tween.interpolate_property(update_blur, "modulate:a", 0, 1, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT)
+		update_tween.start()
+
+
 func _process(_delta : float) -> void:
+	if is_dirty:
+		dirty_timer += _delta
+		if dirty_timer > 0.2:
+			do_complete_update()
+	
 	var origin : Vector2 = graph_area.rect_global_position + Vector2(0, graph_area.rect_size.y)
 	
 	if prev_origin != origin:
@@ -264,14 +331,7 @@ func _process(_delta : float) -> void:
 				line.global_position = origin
 				
 	legend_pos.rect_size = graph_area.rect_size
-	legend_pos.rect_position = $Viewport/GridContainer/Grid.rect_position
-
-
-func complete_update(force_update_graph_area := false) -> void:
-	if auto_scale:
-		set_scale_from_series()
-	update_series()
-	update_graph_area(force_update_graph_area)
+	legend_pos.rect_position = grid.rect_position
 
 
 func find_closest_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
@@ -314,6 +374,7 @@ func _on_Grid_mouse_entered() -> void:
 	for line in graph_area.get_children():
 		line.indicator.visible = true
 	mouse_on_graph = true
+	set_viewport_mode(true)
 	yield(VisualServer,"frame_post_draw")
 	legend.visible = true
 
@@ -323,16 +384,12 @@ func _on_Grid_mouse_exited() -> void:
 		line.indicator.visible = false
 	legend.visible = false
 	mouse_on_graph = false
+	set_viewport_mode(false)
 
 
-func transform_point(point : Vector2) -> Vector2:
-	var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
-	point += Vector2(0, -min_y_value)
-	point /= ratio
-	point.y *= -1
-	if point.y >= 0.0:
-		point.y = -0.0001
-	return point
+func transform_point(point : Vector2, ratio : Vector2) -> Vector2:
+	point = ((point + Vector2(0, -min_y_value)) / ratio)
+	return Vector2(point.x, min(-point.y, -0.0001))
 
 
 func get_csv(separator := ",", end_of_line := "\n") -> String:

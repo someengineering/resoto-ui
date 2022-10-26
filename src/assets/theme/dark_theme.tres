@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=71 format=2]
+[gd_resource type="Theme" load_steps=74 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://assets/theme/Barlow-Regular.ttf" type="DynamicFontData" id=12]
 [ext_resource path="res://assets/icons/icon_special_option_icon.svg" type="Texture" id=13]
 [ext_resource path="res://assets/theme/Barlow-Bold.ttf" type="DynamicFontData" id=14]
+[ext_resource path="res://assets/theme/SourceCodePro-Medium.ttf" type="DynamicFontData" id=15]
 
 [sub_resource type="StyleBoxFlat" id=3]
 content_margin_left = 12.0
@@ -306,7 +307,27 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="DynamicFont" id=72]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 15 )
+
 [sub_resource type="StyleBoxEmpty" id=36]
+
+[sub_resource type="StyleBoxFlat" id=73]
+content_margin_left = 15.0
+content_margin_right = 15.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 0.941176 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 3
+shadow_offset = Vector2( 0, 5 )
 
 [sub_resource type="StyleBoxFlat" id=38]
 content_margin_left = 12.0
@@ -566,9 +587,13 @@ LineEdit/colors/selection_color = Color( 0, 0.329412, 0.639216, 1 )
 LineEdit/styles/focus = SubResource( 6 )
 LineEdit/styles/normal = SubResource( 7 )
 LineEdit/styles/read_only = SubResource( 7 )
+LineEditCode/base_type = "LineEdit"
+LineEditCode/fonts/font = SubResource( 72 )
 OptionButton/icons/arrow = ExtResource( 13 )
 Panel/styles/panel = SubResource( 36 )
 PanelContainer/styles/panel = SubResource( 21 )
+PanelPopup/base_type = "PanelContainer"
+PanelPopup/styles/panel = SubResource( 73 )
 PopupMenu/icons/checked = ExtResource( 2 )
 PopupMenu/icons/radio_checked = ExtResource( 11 )
 PopupMenu/icons/radio_unchecked = ExtResource( 10 )

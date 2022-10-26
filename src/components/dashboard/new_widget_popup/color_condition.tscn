@@ -1,9 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=1]
 [ext_resource path="res://components/dashboard/new_widget_popup/color_condition.gd" type="Script" id=2]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=3]
-
+[ext_resource path="res://components/shared/hex_color_picker.tscn" type="PackedScene" id=4]
 
 [node name="ColorCondition" type="MarginContainer"]
 anchor_right = 1.0
@@ -13,45 +13,41 @@ margin_bottom = -1042.0
 script = ExtResource( 2 )
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-margin_right = 267.0
+margin_right = 374.0
 margin_bottom = 53.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 257.0
+margin_right = 364.0
 margin_bottom = 43.0
 
+[node name="HexColorPicker" parent="PanelContainer/HBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 180.0
+margin_bottom = 33.0
+
 [node name="VariableLabel" type="Label" parent="PanelContainer/HBoxContainer"]
+margin_left = 184.0
 margin_top = 6.0
-margin_right = 47.0
+margin_right = 249.0
 margin_bottom = 27.0
-text = "Value:"
+rect_min_size = Vector2( 65, 0 )
+text = "at value"
+align = 1
 
 [node name="SpinBox" type="SpinBox" parent="PanelContainer/HBoxContainer"]
-margin_left = 51.0
-margin_right = 115.0
+margin_left = 253.0
+margin_right = 317.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 max_value = inf
 
-[node name="ColorLabel" type="Label" parent="PanelContainer/HBoxContainer"]
-margin_left = 119.0
-margin_top = 6.0
-margin_right = 163.0
-margin_bottom = 27.0
-text = "Color:"
-
-[node name="ColorPickerButton" type="ColorPickerButton" parent="PanelContainer/HBoxContainer"]
-margin_left = 167.0
-margin_right = 210.0
-margin_bottom = 33.0
-size_flags_horizontal = 3
-
 [node name="Button" parent="PanelContainer/HBoxContainer" instance=ExtResource( 3 )]
-margin_left = 214.0
-margin_right = 247.0
+margin_left = 321.0
+margin_right = 354.0
 icon_tex = ExtResource( 1 )
 
+[connection signal="color_changed" from="PanelContainer/HBoxContainer/HexColorPicker" to="." method="_on_HexColorPicker_color_changed"]
 [connection signal="value_changed" from="PanelContainer/HBoxContainer/SpinBox" to="." method="_on_SpinBox_value_changed"]
-[connection signal="color_changed" from="PanelContainer/HBoxContainer/ColorPickerButton" to="." method="_on_ColorPickerButton_color_changed"]

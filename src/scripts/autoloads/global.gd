@@ -54,6 +54,6 @@ var time_before = 0.0
 func start_benchmark():
 	time_before = OS.get_ticks_msec()
 
-func stop_benchmark():
+func stop_benchmark(_text:String = "-"):
 	var total_time = OS.get_ticks_msec() - time_before
-	print("Benchmark: " + str(total_time))
+	print("Benchmark (%s): %s" % [_text, str(total_time)])

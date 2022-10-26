@@ -7,10 +7,6 @@ onready var conditions_container := $VBoxContainer/ConditionsContainer
 onready var condition_scene := preload("res://components/dashboard/new_widget_popup/color_condition.tscn")
 
 
-func _on_Button_pressed():
-	add_condition()
-	
-
 func add_condition(value : float = 0.0, color : Color = Color.black):
 	var color_condition := condition_scene.instance()
 	color_condition.variable_name = color_controller.control_variable
@@ -29,4 +25,8 @@ func _on_condition_changed():
 
 func set_color_controller(controller : ColorController):
 	color_controller = controller
-	$VBoxContainer/HBoxContainer/PropertyLabel.text = color_controller.property
+	$VBoxContainer/HBoxContainer/PropertyLabel.text = color_controller.property.capitalize()
+
+
+func _on_AddButton_pressed():
+	add_condition()
