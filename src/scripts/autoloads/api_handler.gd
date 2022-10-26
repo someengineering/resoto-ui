@@ -159,9 +159,19 @@ func cli_execute_json(_command:String, _connect_to:Node,
 	return _req_res
 
 
-func graph_search(_command:String, _connect_to:Node, type:String="graph",
-	_connect_function:String="_on_graph_search_done") -> ResotoAPI.Request:
-	_req_res = _resoto_api.post_graph_search(_command, type, graph_id)
+func graph_search(_query:String, _connect_to:Node, type:String="graph",
+	_connect_function:String="_on_graph_search_done",
+	section:String=ResotoAPI.default_section) -> ResotoAPI.Request:
+	prints("graph_search", _query)
+	_req_res = _resoto_api.post_graph_search(_query, type, graph_id, section)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+
+
+func aggregate_search(_query:String, _connect_to:Node,
+	_connect_function:String="_on_aggregate_search_done",
+	section:String=ResotoAPI.default_section) -> ResotoAPI.Request:
+	_req_res = _resoto_api.post_graph_search(_query, "aggregate", graph_id, section)
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
 
@@ -170,20 +180,6 @@ func _get_infra_info(_connect_to:Node = self,
 	_connect_function:String="_on_get_infra_info_done") -> void:
 	_req_res = _resoto_api.get_infra_info()
 	_req_res.connect("done", _connect_to, _connect_function)
-
-
-func aggregate_search(_query:String, _connect_to:Node,
-	_connect_function:String="_on_aggregate_search_done",
-	section:String="reported") -> ResotoAPI.Request:
-	_req_res = _resoto_api.aggregate_search(_query, section)
-	_req_res.connect("done", _connect_to, _connect_function)
-	return _req_res
-
-
-func search_graph(_query : String, _connect_to: Node) -> ResotoAPI.Request:
-	_req_res = _resoto_api.search_graph(_query)
-	_req_res.connect("done", _connect_to, "_on_search_graph_done")
-	return _req_res
 
 
 func analytics(_query : String, _connect_to : Node, _connect_function:String="_on_analytics_done") -> ResotoAPI.Request:

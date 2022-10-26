@@ -14,7 +14,7 @@ func _ready():
 func show_node(node_id:String):
 	hide()
 	_g.content_manager.change_section_explore("node_single_info")
-	var search_command = "id(" + node_id + ") <-[0:]-"
+	var search_command = "id(\"" + node_id + "\") <-[0:]-"
 	current_node_id = node_id
 	active_request = API.graph_search(search_command, self, "graph")
 
@@ -30,6 +30,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 			return
 		
 		var current_result = _response.transformed.result
+		
 		if not current_result.empty() and current_result[0].has("reported"):
 			$"%AllDataTextEdit".text = Utils.readable_dict(current_result[0].reported)
 		breadcrumbs.clear()
@@ -51,7 +52,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 						if (r.has("metadata") and r.metadata.has("descendant_summary")):
 							update_treemap(r.metadata.descendant_summary)
 						else:
-							var descendants_query:= "aggregate(kind: sum(1) as count): id(%s) -[1:]->" % str(current_node_id)
+							var descendants_query:= "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
 							API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
 					else:
 						set_predecessor_button(false)
@@ -215,12 +216,12 @@ func _on_TreeMap_pressed(kind:String):
 
 
 func _on_PredecessorsButton_pressed():
-	var search_command = "id(" + current_main_node.id + ") <-- limit 500"
+	var search_command = "id(\"" + current_main_node.id + "\") <-- limit 500"
 	_g.emit_signal("explore_node_list_search", current_main_node, search_command, "<--")
 
 
 func _on_SuccessorsButton_pressed():
-	var search_command = "id(" + current_main_node.id + ") --> limit 500"
+	var search_command = "id(\"" + current_main_node.id + "\") --> limit 500"
 	_g.emit_signal("explore_node_list_search", current_main_node, search_command, "-->")
 
 

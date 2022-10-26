@@ -1,6 +1,5 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/theme/SourceCodePro-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://components/elements/element_treemap_box.gd" type="Script" id=3]
 
@@ -33,11 +32,15 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="DynamicFontData" id=10]
+override_oversampling = 2.0
+font_path = "res://assets/theme/Barlow-Medium.ttf"
+
 [sub_resource type="DynamicFont" id=6]
 size = 18
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 1 )
+font_data = SubResource( 10 )
 
 [node name="TreemapBox" type="MarginContainer"]
 margin_right = 2.0

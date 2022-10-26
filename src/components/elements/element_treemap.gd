@@ -68,7 +68,7 @@ func set_treemap_size():
 
 func get_treemap_from_api(node_id:String):
 	clear_treemap()
-	var search_command = "id(" + node_id + ") limit 1"
+	var search_command = "id(\"" + node_id + "\") limit 1"
 	active_request = API.graph_search(search_command, self, "list")
 
 
