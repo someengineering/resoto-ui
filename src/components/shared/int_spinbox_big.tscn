@@ -4,7 +4,6 @@
 [ext_resource path="res://components/shared/int_spinbox_big.gd" type="Script" id=2]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=3]
 
-
 [node name="IntSpinnerBig" type="HBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0

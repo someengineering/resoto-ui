@@ -50,8 +50,12 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 		API.query_range_tsdb(q, self, from, to, interval)
 
 
-func _on_query_tsdb_done(_error: int, response) -> void: 
+func _on_query_tsdb_done(_error: int, response:ResotoAPI.Response) -> void:
 	making_query = false
+	if _error:
+		if response.response_code == 400:
+			emit_signal("query_status", FAILED, "400: Bad Request", "Is the time series database running?\nIs resoto.core.api.tsdb_proxy_url correctly configured?")
+		return
 	if not is_instance_valid(widget):
 		return
 	
@@ -97,6 +101,10 @@ func _on_query_tsdb_done(_error: int, response) -> void:
 
 
 func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
+	if _error:
+		if response.response_code == 400:
+			emit_signal("query_status", FAILED, "400: Bad Request", "Is the time series database running?\nIs resoto.core.api.tsdb_proxy_url correctly configured?")
+		return
 	making_query = false
 	if not is_instance_valid(widget):
 		return

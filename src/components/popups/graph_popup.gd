@@ -17,6 +17,8 @@ func _on_GraphPopup_about_to_show() -> void:
 
 
 func _on_get_graph_done(error: int, response) -> void:
+	if error:
+		return
 	var graphs : Array = response.transformed["result"]
 	graph_option.clear()
 	for graph in graphs:
@@ -43,6 +45,8 @@ func _on_MergeButton_pressed() -> void:
 
 
 func _on_merge_graph_done(error:int, response) -> void:
+	if error:
+		return
 	info_label.text = JSON.print(response.transformed["result"],"\t")
 	set_busy(false)
 

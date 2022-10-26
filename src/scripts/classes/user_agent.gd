@@ -133,8 +133,9 @@ class Request:
 					response_.status_code	= http_status
 					response_.headers		= http_.get_response_headers_as_dictionary()
 					response_.body			= PoolByteArray()
-					if response_.response_code == 401:
+					if [401, 400].has(response_.response_code):
 						emit_signal("pre_done", FAILED, response_)
+						emit_signal("done", FAILED, response_)
 						state_ = states.DONE
 						return
 					state_ = states.RESPONSE

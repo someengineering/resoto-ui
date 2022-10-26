@@ -92,7 +92,6 @@ func _on_system_ready_done(error:int, response:UserAgent.Response) -> void:
 	else:
 		if response.status_code == 7:
 			get_system_info()
-			connected(Utils.http_status_to_string(response.status_code))
 
 
 func get_system_info():
@@ -101,8 +100,10 @@ func get_system_info():
 
 func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
-		_g.emit_signal("add_toast", "Error in Search", Utils.err_enum_to_string(error), 1, self)
+		if _response.response_code == 401:
+			not_connected("401: Unauthorized")
 		return
+	
 	var response_text:String = _response.transformed.result
 	var start_index:int = response_text.find("version: ") + 9
 	response_text = response_text.right(start_index)
@@ -110,6 +111,7 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 	response_text = response_text.left(end_index)
 	_g.resotocore_version = response_text
 	_g.is_connected_to_resotocore = true
+	connected(Utils.http_status_to_string(_response.status_code))
 	_g.emit_signal("connected_to_resotocore")
 
 

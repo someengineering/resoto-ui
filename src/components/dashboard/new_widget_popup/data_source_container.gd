@@ -90,6 +90,8 @@ func _on_MetricsOptions_option_changed(option : String) -> void:
 
 
 func _on_metrics_query_finished(_error:int, response) -> void:
+	if _error:
+		return
 	var labels := []
 	var data = response.transformed.result
 	
