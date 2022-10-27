@@ -353,6 +353,7 @@ unique_name_in_owner = true
 margin_top = 118.0
 margin_right = 450.0
 margin_bottom = 163.0
+size_flags_horizontal = 3
 theme_type_variation = "PanelContainerDark"
 script = ExtResource( 27 )
 
@@ -361,6 +362,8 @@ margin_left = 12.0
 margin_top = 8.0
 margin_right = 438.0
 margin_bottom = 37.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="TagTitleBar" type="HBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup/VBox"]
 margin_right = 426.0
@@ -384,10 +387,16 @@ size_flags_vertical = 0
 icon_tex = ExtResource( 26 )
 icon_margin = 3
 
-[node name="TagsContent" type="VBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup/VBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup/VBox"]
 margin_top = 29.0
 margin_right = 426.0
 margin_bottom = 29.0
+size_flags_horizontal = 3
+scroll_horizontal_enabled = false
+
+[node name="TagsContent" type="VBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup/VBox/ScrollContainer"]
+margin_right = 426.0
+size_flags_horizontal = 3
 
 [node name="AddTagPopup" type="PopupPanel" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup"]
 self_modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )

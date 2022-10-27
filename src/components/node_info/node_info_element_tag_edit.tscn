@@ -9,6 +9,7 @@
 [node name="TagElement" type="PanelContainer"]
 margin_right = 356.0
 margin_bottom = 45.0
+rect_min_size = Vector2( 0, 45 )
 theme = ExtResource( 3 )
 theme_type_variation = "PanelContainerTagElement"
 script = ExtResource( 5 )

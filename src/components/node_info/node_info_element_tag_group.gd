@@ -6,7 +6,7 @@ const TagElement = preload("res://components/node_info/node_info_element_tag_edi
 
 var node_id : String = ""
 
-onready var tags_content := $VBox/TagsContent
+onready var tags_content := $VBox/ScrollContainer/TagsContent
 onready var add_tag_popup := $AddTagPopup
 onready var add_btn := $VBox/TagTitleBar/AddTagButton
 onready var new_tag_var_edit := $AddTagPopup/NewTagData/NewTagVariableEdit
@@ -43,6 +43,8 @@ func create_tag(_variable:="purple", _value:="sheep"):
 	new_tag.connect("search_tag", self, "search_tag")
 	new_tag.connect("change_tag", self, "change_tag")
 	new_tag.connect("delete_tag", self, "delete_tag")
+	yield(VisualServer, "frame_post_draw")
+	$VBox/ScrollContainer.rect_min_size.y = min(tags_content.rect_size.y, 290)
 
 
 func _on_AddTagButton_pressed():
