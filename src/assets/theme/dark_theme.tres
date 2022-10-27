@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=88 format=2]
+[gd_resource type="Theme" load_steps=89 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -325,6 +325,12 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 15 )
 
+[sub_resource type="DynamicFont" id=89]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 15 )
+
 [sub_resource type="DynamicFontData" id=41]
 font_path = "res://assets/theme/Barlow-Regular.ttf"
 
@@ -581,10 +587,10 @@ corner_radius_top_right = 4
 expand_margin_bottom = 3.0
 
 [sub_resource type="DynamicFontData" id=19]
+override_oversampling = 2.0
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
 
 [sub_resource type="DynamicFont" id=20]
-size = 14
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 19 )
@@ -720,6 +726,8 @@ Label/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 LabelBold/fonts/font = SubResource( 63 )
 LabelCode/base_type = "Label"
 LabelCode/fonts/font = SubResource( 81 )
+LabelCodeBig/base_type = "Label"
+LabelCodeBig/fonts/font = SubResource( 89 )
 LabelSmall/base_type = "Label"
 LabelSmall/fonts/font = SubResource( 42 )
 LineEdit/colors/clear_button_color = Color( 0, 0.329412, 0.639216, 1 )
@@ -738,6 +746,9 @@ LineEditSmall/base_type = "LineEdit"
 LineEditSmall/styles/focus = SubResource( 72 )
 LineEditSmall/styles/normal = SubResource( 73 )
 LineEditSmall/styles/read_only = SubResource( 74 )
+LineEditCodeConfig/fonts/font = SubResource( 89 )
+LineEditConfig/base_type = "LineEdit"
+LineEditConfig/fonts/font = SubResource( 89 )
 OptionButton/icons/arrow = ExtResource( 13 )
 Panel/styles/panel = SubResource( 36 )
 PanelContainer/styles/panel = SubResource( 21 )
@@ -785,8 +796,10 @@ Tabs/styles/button = SubResource( 27 )
 Tabs/styles/button_pressed = SubResource( 28 )
 Tabs/styles/tab_bg = SubResource( 70 )
 Tabs/styles/tab_fg = SubResource( 69 )
-TextEdit/colors/font_color = Color( 0.816406, 0.94351, 1, 1 )
+TextEdit/colors/current_line_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+TextEdit/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 TextEdit/colors/font_color_readonly = Color( 0.537255, 0.819608, 0.945098, 1 )
+TextEdit/colors/line_number_color = Color( 0.123871, 0.346745, 0.480469, 1 )
 TextEdit/colors/selection_color = Color( 0, 0.329412, 0.639216, 1 )
 TextEdit/fonts/font = SubResource( 20 )
 TextEdit/styles/completion = SubResource( 6 )

@@ -138,7 +138,9 @@ func set_to_null(to_null:bool) -> void:
 		yield(self, "ready")
 	
 	value_field.visible = !to_null
-	null_value.visible = to_null
+	# Testing not showing Null at all
+	null_value.hide()
+#	null_value.visible = to_null
 	
 	if not required:
 		$VarContent/ButtonAddValue.visible = to_null
