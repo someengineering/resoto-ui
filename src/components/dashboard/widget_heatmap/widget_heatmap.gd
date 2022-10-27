@@ -166,7 +166,7 @@ func set_data(data, type : int):
 				var y_category : String = row["group"][headers[0]]
 				if not y_category in y_categories:
 					y_categories.append(y_category)
-					var label := preload("res://components/dashboard/shared/clipped_label.tscn").instance()
+					var label := preload("res://components/elements/utility/clipped_label.tscn").instance()
 					var control := Control.new()
 					
 					vbox.add_child(control)

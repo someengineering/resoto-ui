@@ -1,14 +1,16 @@
 extends Control
 
-var active_request:ResotoAPI.Request
-var aggregation_request:ResotoAPI.Request
-var current_node_id:String = ""
-var id_history:Array = []
-var current_main_node:Dictionary = {}
-var breadcrumbs:Dictionary = {}
-var treemap_display_mode:int = 1
-var last_aggregation_query:= ""
-var default_treemap_mode:int = 1
+var active_request :ResotoAPI.Request
+var aggregation_request :ResotoAPI.Request
+var current_node_id : String				= ""
+var id_history : Array						= []
+var current_main_node : Dictionary			= {}
+var breadcrumbs : Dictionary				= {}
+var treemap_display_mode : int				= 1
+var last_aggregation_query	: String		= ""
+var default_treemap_mode : int				= 1
+var treemap_button_script_pressed : bool	= false
+var treemap_button_force_switched : bool	= false
 
 onready var n_icon_protected := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconProtected
 onready var n_icon_cleaned := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconCleaned
@@ -16,6 +18,7 @@ onready var n_icon_dclean := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/V
 onready var n_icon_phantom := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconPhantom
 onready var property_container := $"%PropertyContainer"
 onready var leaf_panel := $Margin/VBox/NodeContent/LeafPanel
+onready var tag_group := $"%TagsGroup"
 
 
 func _ready():
@@ -37,6 +40,7 @@ func show_node(node_id:String, _add_to_history:=true):
 	if _add_to_history and current_node_id != "" and current_node_id != node_id:
 		id_history.append(current_node_id)
 	current_node_id = node_id
+	tag_group.node_id = current_node_id
 	active_request = API.graph_search(search_command, self, "graph")
 
 
@@ -46,9 +50,8 @@ func clear_view():
 		c.queue_free()
 	for c in breadcrumb_container.get_children():
 		c.queue_free()
-	for c in $"%TagsContent".get_children():
-		c.queue_free()
-	$Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton.pressed = false
+	tag_group.clear()
+	$"%TreeMapModeButton".set_pressed_direct(false)
 	$"%NodeNameLabel".text = "..."
 	$"%KindLabelButton".text = "..."
 	set_successor_button(false)
@@ -56,6 +59,7 @@ func clear_view():
 	n_icon_protected.hide()
 	n_icon_cleaned.hide()
 	n_icon_dclean.hide()
+	leaf_panel.hide()
 	$"%TreeMapContainer".show()
 
 
@@ -91,6 +95,8 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 					set_predecessor_button(true)
 					hide_treemap()
 					treemap_display_mode = default_treemap_mode
+					$"%TreeMapModeButton".disabled = false
+					$"%TreeMapModeButton".modulate.a = 0.3
 					# Not used anymore at the moment
 					if treemap_display_mode == 0:
 						var descendants_query:= "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
@@ -114,13 +120,14 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 									descendants_query = descendants_query % ["cloud", "cloud", "!=null", "cloud"]
 								"cloud":
 									descendants_query = descendants_query % ["account", "cloud", "=\"" + r.reported.id + "\"", "account"]
-								"gcp_project", "aws_account", "digitalocean_team", "slack_team", "kubernetes_cluster", "onelogin_account":
+								"account", "gcp_project", "aws_account", "digitalocean_team", "slack_team", "kubernetes_cluster", "onelogin_account":
 									descendants_query = descendants_query % ["region", "account", "="+r.reported.id, "region"]
 								"-":
 									# not yet in use, this would eventually be neccessary for gcp
 									descendants_query = descendants_query % ["zone", "region", "="+r.reported.id, "zone"]
 								_:
 									treemap_display_mode = 0
+									$"%TreeMapModeButton".disabled = true
 									descendants_query = "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
 							last_aggregation_query = descendants_query
 							aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
@@ -169,9 +176,10 @@ func update_treemap(_treemap_content:Dictionary = {}):
 	leaf_panel.hide()
 	$"%TreeMapContainer".show()
 	if treemap_display_mode != default_treemap_mode:
-		$Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton.pressed = treemap_display_mode == 0
-		if treemap_display_mode == 0:
-			_g.emit_signal("add_toast", "View not available", "Node Successors by their Descendant Count is not available here.", 2, self, 1.5)
+		$"%TreeMapModeButton".disabled = treemap_display_mode == 0
+#		if treemap_display_mode == 0:
+#			_g.emit_signal("add_toast", "View not available", "Node Successors by their Descendant Count is not available here.", 2, self, 1.5)
+	$"%TreeMapModeButton".modulate.a = 1.0 if !$"%TreeMapModeButton".disabled else 0.0
 	$"%TreeMapTitle".text = "Node Descendants grouped by Kind" if treemap_display_mode == 0 else "Node Successors by their Descendant Count"
 	yield(VisualServer, "frame_post_draw")
 	$"%TreeMap".clear_treemap()
@@ -264,45 +272,44 @@ func main_node_display(node_data):
 	
 	var visible_properties:= {
 		"kind" : ["Kind", "kind"],
-		"name" : ["Name (id)", "string"],
+		"name" : ["Name", "string"],
+		"id" : ["Id", "string"],
 		"age" : ["Age", "duration"],
 		"last_update" : ["Last Update", "duration"],
 		"last_access" : ["Last Access", "duration"],
 		}
+	
 	if has_reported:
 		for vp_key in visible_properties:
 			if node_data.reported.has(vp_key):
 				var descr_node:= Label.new()
 				descr_node.text = visible_properties[vp_key][0]
-				var value_node:= Label.new()
+				var value_node = load("res://components/elements/utility/clipped_label.tscn").instance()
+				value_node.script = load("res://components/elements/utility/clipped_label_copy_lmb.gd")
 				var value_text = str(node_data.reported[vp_key])
+				
 				if vp_key == "name":
 					var id_txt = str(node_data.reported.id)
-					value_text = value_text if value_text == id_txt else value_text + " (%s)" % id_txt
+					if value_text == id_txt:
+						descr_node.text += " (Id)"
+				
+				elif vp_key == "id":
+					var name_txt = str(node_data.reported.name)
+					if value_text == name_txt:
+						continue
+				
 				if visible_properties[vp_key][1] == "duration":
 					value_text = Utils.readable_duration(value_text)
-				value_node.text = value_text
+				
+				value_node.raw_text = value_text
+				value_node.size_flags_horizontal = SIZE_EXPAND_FILL
 				property_container.add_child(descr_node)
 				property_container.add_child(value_node)
 		
 		# Handle Tags
-		$"%TagsGroup".visible = has_tags
 		if has_tags:
-			var tags = $"%TagsContent"
-			for c in tags.get_children():
-				c.queue_free()
-			for tag in node_data.reported.tags:
-				var new_tag_var = Label.new()
-				new_tag_var.autowrap = true
-				new_tag_var.rect_min_size.x = 120
-				new_tag_var.text = tag
-				tags.add_child(new_tag_var)
-				
-				var new_tag_value = Label.new()
-				new_tag_value.autowrap = true
-				new_tag_value.size_flags_horizontal = SIZE_EXPAND_FILL
-				new_tag_value.text = node_data.reported.tags[tag]
-				tags.add_child(new_tag_value)
+			tag_group.clear()
+			tag_group.create_tags(node_data.reported.tags)
 
 
 func on_id_button_pressed(id:String) -> void:
@@ -374,6 +381,19 @@ func _on_TreeMapCopyButton_pressed():
 func _on_TreeMapModeButton_toggled(button_pressed:bool):
 	if (default_treemap_mode == 1 and !button_pressed) or (default_treemap_mode == 0 and button_pressed):
 		return
+	
 	default_treemap_mode = 1 if !button_pressed else 0
 	$"%TreeMapTitle".text = "Node Descendants grouped by Kind" if default_treemap_mode == 0 else "Node Successors by their Descendant Count"
 	show_node(current_node_id, false)
+
+
+func _on_TagsGroup_tags_request_refresh():
+	API.get_node_by_id(current_node_id, self, "_on_get_node_by_id_for_tags_done")
+
+
+func _on_get_node_by_id_for_tags_done(_error:int, _r:ResotoAPI.Response) -> void:
+	if _error:
+		return
+	tag_group.clear()
+	var node_info = _r.transformed.result.reported.tags
+	tag_group.create_tags(node_info)

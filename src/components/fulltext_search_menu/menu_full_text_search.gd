@@ -129,7 +129,7 @@ func show_search_results(results:Array, error:="") -> void:
 	popup.popup(Rect2(popup_pos, popup_size))
 	yield(VisualServer, "frame_post_draw")
 	popup.rect_size.y = 1
-	grab_focus()
+#	grab_focus()
 
 
 func on_result_button_clicked(_id:String):

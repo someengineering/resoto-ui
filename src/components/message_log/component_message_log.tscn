@@ -2,7 +2,8 @@
 
 [ext_resource path="res://components/message_log/component_message_log.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
-[ext_resource path="res://scripts/tools/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=8]
+[ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=8]
+
 
 
 [sub_resource type="StyleBoxFlat" id=17]

@@ -22,7 +22,12 @@ _global_script_classes=[ {
 "base": "Label",
 "class": "ClippedLabel",
 "language": "GDScript",
-"path": "res://components/dashboard/shared/clipped_label.gd"
+"path": "res://components/elements/utility/clipped_label.gd"
+}, {
+"base": "Label",
+"class": "ClippedLabelCopyLMB",
+"language": "GDScript",
+"path": "res://components/elements/utility/clipped_label_copy_lmb.gd"
 }, {
 "base": "MarginContainer",
 "class": "ColorCondition",
@@ -82,7 +87,7 @@ _global_script_classes=[ {
 "base": "Label",
 "class": "DynamicLabel",
 "language": "GDScript",
-"path": "res://components/dashboard/shared/dynamic_label.gd"
+"path": "res://components/elements/utility/dynamic_label.gd"
 }, {
 "base": "BaseWidget",
 "class": "Indicator",
@@ -117,7 +122,7 @@ _global_script_classes=[ {
 "base": "Label",
 "class": "RightClickCopyLabel",
 "language": "GDScript",
-"path": "res://scripts/tools/left_click_copy.gd"
+"path": "res://components/elements/utility/left_click_copy.gd"
 }, {
 "base": "Control",
 "class": "RotatedLabel",
@@ -168,6 +173,7 @@ _global_script_class_icons={
 "AggregateSearchDataSource": "",
 "BaseWidget": "",
 "ClippedLabel": "",
+"ClippedLabelCopyLMB": "",
 "ColorCondition": "",
 "ColorController": "",
 "ColorControllerUi": "",

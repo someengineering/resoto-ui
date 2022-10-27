@@ -159,6 +159,13 @@ func post_graph_search(body:String, type:String="graph",
 	return request
 
 
+func get_node_by_id(node_id:String, graph:String=default_graph) -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var request = req_get("/graph/"+ graph +"/node/" + node_id, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
 func get_cli_info() -> ResotoAPI.Request:
 	refresh_jwt_header(accept_text_headers)
 	var request = req_get("/cli/info", accept_text_headers)

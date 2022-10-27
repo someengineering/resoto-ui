@@ -17,12 +17,6 @@ onready var combo := $VBox/Title/AllDataFilter
 onready var edit := $VBox/AllDataTextEdit
 onready var max_btn := $VBox/Title/AllDataMaximizeButton
 
-func _ready():
-	if modulate != Color.white:
-		Style.add(self, Style.find_color(modulate))
-	elif self_modulate != Color.white:
-		Style.add_self(self, Style.find_color(self_modulate))
-
 
 func set_node_text(_node_text:String):
 	node_text = _node_text

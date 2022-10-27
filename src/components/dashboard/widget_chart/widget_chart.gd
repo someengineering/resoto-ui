@@ -11,7 +11,7 @@ export (Vector2) var divisions := Vector2(3.0, 3.0)
 
 export (Array, PoolVector2Array) var series : Array
 
-var dynamic_label_scene := preload("res://components/dashboard/shared/dynamic_label.tscn")
+var dynamic_label_scene := preload("res://components/elements/utility/dynamic_label.tscn")
 var series_scene := preload("res://components/dashboard/widget_chart/widget_chart_serie.tscn")
 var mouse_on_graph := false
 

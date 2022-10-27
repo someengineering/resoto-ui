@@ -175,6 +175,12 @@ func aggregate_search(_query:String, _connect_to:Node,
 	return _req_res
 
 
+func get_node_by_id(_node_id:String, _connect_to:Node, _connect_function:String="_on_get_node_by_id_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.get_node_by_id(_node_id, graph_id)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+
+
 func _get_infra_info(_connect_to:Node = self,
 	_connect_function:String="_on_get_infra_info_done") -> void:
 	_req_res = _resoto_api.get_infra_info()
