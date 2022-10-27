@@ -74,9 +74,9 @@ script = ExtResource( 2 )
 
 [node name="NodeIconProtected" type="TextureRect" parent="VBox/Top/Icons"]
 visible = false
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
+margin_right = 21.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 21, 21 )
 hint_tooltip = "Protected - Resource is protected"
 texture = ExtResource( 4 )
 expand = true
@@ -84,9 +84,9 @@ stretch_mode = 6
 
 [node name="NodeIconCleaned" type="TextureRect" parent="VBox/Top/Icons"]
 visible = false
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
+margin_right = 21.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 21, 21 )
 hint_tooltip = "Cleaned - Resource was cleaned."
 texture = ExtResource( 5 )
 expand = true
@@ -94,9 +94,9 @@ stretch_mode = 6
 
 [node name="NodeIconDesiredClean" type="TextureRect" parent="VBox/Top/Icons"]
 visible = false
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
+margin_right = 21.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 21, 21 )
 hint_tooltip = "Marked for Cleanup - Resource will be cleaned."
 texture = ExtResource( 7 )
 expand = true
@@ -104,9 +104,9 @@ stretch_mode = 6
 
 [node name="NodeIconPhantom" type="TextureRect" parent="VBox/Top/Icons"]
 visible = false
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
+margin_right = 21.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 21, 21 )
 hint_tooltip = "Phantom Resource"
 texture = ExtResource( 6 )
 expand = true

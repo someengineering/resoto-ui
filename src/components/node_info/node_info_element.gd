@@ -256,6 +256,10 @@ func main_node_display(node_data):
 	var r_kind = node_data.reported.kind
 	$"%KindLabelButton".text = r_kind
 	
+	# Reset Buttons
+	$"%AddToCleanupButton".show()
+	$"%RemoveFromCleanupButton".hide()
+	
 	$"%NodeNameLabel".set("custom_colors/font_color", null)
 	$"%KindLabelButton".set("custom_colors/font_color", null)
 	
@@ -274,6 +278,8 @@ func main_node_display(node_data):
 		n_icon_phantom.visible = node_data.metadata.phantom
 	if has_desired and node_data.desired.has("clean"):
 		n_icon_dclean.visible = node_data.desired.clean
+		$"%AddToCleanupButton".visible = !node_data.desired.clean
+		$"%RemoveFromCleanupButton".visible = !node_data.desired.clean
 	
 	var visible_properties:= {
 		"kind" : ["Kind", "kind"],
@@ -410,11 +416,45 @@ func _on_ResourceListButton_pressed():
 
 func _on_RemoveFromCleanupButton_pressed():
 	n_icon_dclean.visible = false
+	$"%RemoveFromCleanupButton".hide()
+	$"%AddToCleanupButton".show()
+	var remove_from_cleanup_query : String = "search id(\"%s\") | set_desired clean=false" % [current_node_id]
+	if not _g.demo_mode:
+		API.cli_execute(remove_from_cleanup_query, self, "_on_remove_cleanup_query_done")
+	else:
+		print(remove_from_cleanup_query)
 
 
 func _on_AddToCleanupButton_pressed():
 	n_icon_dclean.visible = true
+	$"%AddToCleanupButton".hide()
+	$"%RemoveFromCleanupButton".show()
+	var cleanup_query : String = "search id(\"%s\") | clean" % [current_node_id]
+	if not _g.demo_mode:
+		API.cli_execute(cleanup_query, self, "_on_cleanup_query_done")
+	else:
+		print(cleanup_query)
 
 
 func _on_ProtectButton_pressed():
 	n_icon_protected.visible = !n_icon_protected.visible
+	var protect_query : String = "search id(\"%s\") | set_metadata protected=%s" % [current_node_id, str(n_icon_protected.visible)]
+	if not _g.demo_mode:
+		API.cli_execute(protect_query, self, "_on_protect_query_done")
+	else:
+		print(protect_query)
+
+
+func _on_remove_cleanup_query_done(_error:int, _r:ResotoAPI.Response):
+	if _error:
+		return
+
+
+func _on_protect_query_done(_error:int, _r:ResotoAPI.Response):
+	if _error:
+		return
+
+
+func _on_cleanup_query_done(_error:int, _r:ResotoAPI.Response):
+	if _error:
+		return

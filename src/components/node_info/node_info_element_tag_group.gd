@@ -54,8 +54,13 @@ func _on_AddTagButton_pressed():
 func add_tag(_variable:="purple", _value:="sheep"):
 	if node_id == "":
 		return
-	var add_tag_query : String = "search id(\"%s\") | tag update %s %s" % [node_id, _variable, _value]
-	API.cli_execute(add_tag_query, self, "_on_add_tag_query_done")
+	var add_tag_query : String = "search id(\"%s\") | tag update \"%s\" \"%s\"" % [node_id, _variable, _value]
+	
+	if not _g.demo_mode:
+		API.cli_execute(add_tag_query, self, "_on_add_tag_query_done")
+	else:
+		create_tag(_variable, _value)
+		print(add_tag_query)
 
 
 func _on_add_tag_query_done(_error:int, _r:ResotoAPI.Response):
@@ -69,8 +74,15 @@ func _on_add_tag_query_done(_error:int, _r:ResotoAPI.Response):
 func delete_tag(_tag_variable:String):
 	if node_id == "":
 		return
-	var delete_tag_query : String = "search id(\"%s\") | tag delete %s" % [node_id, _tag_variable]
-	API.cli_execute(delete_tag_query, self, "_on_delete_tag_query_done")
+	var delete_tag_query : String = "search id(\"%s\") | tag delete \"%s\"" % [node_id, _tag_variable]
+	
+	if not _g.demo_mode:
+		API.cli_execute(delete_tag_query, self, "_on_delete_tag_query_done")
+	else:
+		for c in tags_content.get_children():
+			if c.variable == _tag_variable:
+				c.queue_free()
+		print(delete_tag_query)
 
 
 func _on_delete_tag_query_done(_error:int, _r:ResotoAPI.Response):
@@ -84,8 +96,15 @@ func _on_delete_tag_query_done(_error:int, _r:ResotoAPI.Response):
 func change_tag(_tag_variable:String, _tag_value:String):
 	if node_id == "":
 		return
-	var change_tag_query : String = "search id(\"%s\") | tag update %s %s" % [node_id, _tag_variable, _tag_value]
-	API.cli_execute(change_tag_query, self, "_on_change_tag_query_done")
+	var change_tag_query : String = "search id(\"%s\") | tag update \"%s\" \"%s\"" % [node_id, _tag_variable, _tag_value]
+	
+	if not _g.demo_mode:
+		API.cli_execute(change_tag_query, self, "_on_change_tag_query_done")
+	else:
+		for c in tags_content.get_children():
+			if c.variable == _tag_variable:
+				c.value = _tag_value
+		print(change_tag_query)
 
 
 func _on_change_tag_query_done(_error:int, _r:ResotoAPI.Response):
@@ -105,4 +124,4 @@ func _on_AddNewTagButton_pressed():
 		_g.emit_signal("add_toast", "Tag name can not be empty!", "", 2, self, 2)
 		return
 	add_tag_popup.hide()
-	add_tag()
+	add_tag(new_tag_var_edit.text, new_tag_val_edit.text)

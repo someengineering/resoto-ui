@@ -330,6 +330,8 @@ func _on_SearchQueryCopyButton_pressed():
 func _on_AddToCleanupButton_pressed():
 	var cleanup_query : String = ""
 	if filter_edit.text == "":
+		for c in vbox.get_children():
+			c.is_desired_cleaned = true
 		cleanup_query = "search " + last_query + " | clean"
 	else:
 		var node_ids_to_clean : PoolStringArray = []
@@ -347,7 +349,9 @@ func _on_AddToCleanupButton_pressed():
 func _on_RemoveFromCleanupButton_pressed():
 	var remove_from_cleanup_query : String = ""
 	if filter_edit.text == "":
-		remove_from_cleanup_query = "search " + last_query + " | clean"
+		for c in vbox.get_children():
+			c.is_desired_cleaned = false
+		remove_from_cleanup_query = "search " + last_query + " | set_desired clean=false"
 	else:
 		var node_ids_to_clean : PoolStringArray = []
 		for c in vbox.get_children():
@@ -361,7 +365,32 @@ func _on_RemoveFromCleanupButton_pressed():
 		print(remove_from_cleanup_query)
 
 
+func _on_ProtectButton_pressed():
+	var do_protect = $"%ProtectButton".pressed
+	var protect_query : String = ""
+	if filter_edit.text == "":
+		for c in vbox.get_children():
+			c.is_protected = do_protect
+		protect_query = "search " + last_query + " | set_metadata protected=%s" % str(do_protect)
+	else:
+		var node_ids_to_clean : PoolStringArray = []
+		for c in vbox.get_children():
+			if c.visible:
+				c.is_protected = do_protect
+				node_ids_to_clean.append(c.node_id)
+		protect_query = "json %s | set_metadata protected=%s" % [JSON.print(node_ids_to_clean), str(do_protect)]
+	if not _g.demo_mode:
+		API.cli_execute(protect_query, self, "_on_protect_query_done")
+	else:
+		print(protect_query)
+
+
 func _on_remove_cleanup_query_done(_error:int, _r:ResotoAPI.Response):
+	if _error:
+		return
+
+
+func _on_protect_query_done(_error:int, _r:ResotoAPI.Response):
 	if _error:
 		return
 
@@ -372,15 +401,55 @@ func _on_cleanup_query_done(_error:int, _r:ResotoAPI.Response):
 
 
 func _on_TagsGroup_delete_tags(_tag_variable:String):
-	var delete_tag_query : String = "tag delete %s" % [_tag_variable]
+	var delete_tag_end : String = "tag delete \"%s\"" % [_tag_variable]
+	var delete_tag_query : String = ""
+	
+	if filter_edit.text == "":
+		delete_tag_query = "search " + last_query + " | %s" % delete_tag_end
+	else:
+		var node_ids_to_tag_delete : PoolStringArray = []
+		for c in vbox.get_children():
+			if c.visible:
+				node_ids_to_tag_delete.append(c.node_id)
+		delete_tag_query = "json %s | %s" % [JSON.print(node_ids_to_tag_delete), delete_tag_end]
+	
+	if not _g.demo_mode:
+		API.cli_execute(delete_tag_query, self, "_on_delete_tag_query_done")
+	else:
+		print(delete_tag_query)
 
 
 func _on_TagsGroup_update_tags(_tag_variable:String, _tag_value:String):
+	var change_tag_end : String = ""
 	var change_tag_query : String = ""
 	if _tag_value != "":
-		change_tag_query = "search id(\"%s\") | tag update %s %s" % [_tag_variable, _tag_value]
+		change_tag_end = "tag update \"%s\" \"%s\"" % [_tag_variable, _tag_value]
 	else:
-		change_tag_query = "search id(\"%s\") | tag update %s" % [_tag_variable]
+		change_tag_end = "tag update \"%s\"" % [_tag_variable]
+	
+	if filter_edit.text == "":
+		change_tag_query = "search " + last_query + " | %s" % str(change_tag_end)
+	else:
+		var node_ids_to_tag_update : PoolStringArray = []
+		for c in vbox.get_children():
+			if c.visible:
+				node_ids_to_tag_update.append(c.node_id)
+		change_tag_query = "json %s | %s" % [JSON.print(node_ids_to_tag_update), change_tag_end]
+	
+	if not _g.demo_mode:
+		API.cli_execute(change_tag_query, self, "_on_change_tag_query_done")
+	else:
+		print(change_tag_query)
+
+
+func _on_delete_tag_query_done(_error:int, _r:ResotoAPI.Response):
+	if _error:
+		return
+
+
+func _on_change_tag_query_done(_error:int, _r:ResotoAPI.Response):
+	if _error:
+		return
 
 
 func _on_TagsGroup_request_all_tag_keys():
