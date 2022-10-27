@@ -1,6 +1,11 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://components/config/config_templates/component_config_dict_element.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=3]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=4]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/icons/icon_128_to_null.svg" type="Texture" id=6]
 
 [sub_resource type="StyleBoxFlat" id=8]
 content_margin_left = 10.0
@@ -24,12 +29,12 @@ script = ExtResource( 1 )
 margin_left = 10.0
 margin_top = 5.0
 margin_right = 1895.0
-margin_bottom = 50.0
+margin_bottom = 51.0
 size_flags_horizontal = 3
 
 [node name="Header" type="HBoxContainer" parent="Box"]
 margin_right = 1885.0
-margin_bottom = 33.0
+margin_bottom = 34.0
 
 [node name="Description" type="Label" parent="Box/Header"]
 margin_top = 6.0
@@ -40,8 +45,9 @@ text = "Key:"
 [node name="VarKey" type="LineEdit" parent="Box/Header"]
 margin_left = 37.0
 margin_right = 306.0
-margin_bottom = 33.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 269, 0 )
+theme_type_variation = "LineEditCode"
 caret_blink = true
 caret_blink_speed = 0.5
 
@@ -58,59 +64,57 @@ text = "= null"
 
 [node name="Control" type="Control" parent="Box/Header"]
 margin_left = 310.0
-margin_right = 1631.0
-margin_bottom = 33.0
+margin_right = 1782.0
+margin_bottom = 34.0
 size_flags_horizontal = 3
 
-[node name="DuplicateButton" type="Button" parent="Box/Header"]
-margin_left = 1635.0
-margin_right = 1729.0
-margin_bottom = 33.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Duplicate"
+[node name="DuplicateButton" parent="Box/Header" instance=ExtResource( 5 )]
+margin_left = 1786.0
+margin_right = 1819.0
+margin_bottom = 34.0
+hint_tooltip = "Duplicate Element"
+icon_tex = ExtResource( 2 )
+icon_margin = 3
 
-[node name="DeleteButton" type="Button" parent="Box/Header"]
-margin_left = 1733.0
-margin_right = 1805.0
-margin_bottom = 33.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Delete"
+[node name="DeleteButton" parent="Box/Header" instance=ExtResource( 5 )]
+margin_left = 1823.0
+margin_right = 1856.0
+margin_bottom = 34.0
+hint_tooltip = "Delete Element"
+icon_tex = ExtResource( 3 )
+icon_margin = 3
 
-[node name="ButtonSetToNull" type="Button" parent="Box/Header"]
-margin_left = 1809.0
+[node name="ButtonSetToNull" parent="Box/Header" instance=ExtResource( 5 )]
+modulate = Color( 1, 1, 1, 0.235294 )
+margin_left = 1860.0
 margin_right = 1885.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 60, 0 )
-focus_mode = 0
-size_flags_horizontal = 8
-enabled_focus_mode = 0
-text = "set null"
+margin_bottom = 34.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "To null"
+size_flags_vertical = 5
 flat = true
+icon_tex = ExtResource( 6 )
+icon_margin = 3
 
-[node name="ButtonAddValue" type="Button" parent="Box/Header"]
+[node name="ButtonAddValue" parent="Box/Header" instance=ExtResource( 5 )]
 visible = false
-margin_left = 1825.0
+margin_left = 1852.0
 margin_right = 1885.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
-focus_mode = 0
-size_flags_horizontal = 8
-enabled_focus_mode = 0
-text = "add"
-flat = true
+margin_bottom = 34.0
+hint_tooltip = "Add Value"
+icon_tex = ExtResource( 4 )
+icon_margin = 3
 
 [node name="HSeparator" type="HSeparator" parent="Box"]
 modulate = Color( 1, 1, 1, 0.25098 )
-margin_top = 37.0
+margin_top = 38.0
 margin_right = 1885.0
-margin_bottom = 41.0
+margin_bottom = 42.0
 
 [node name="Content" type="VBoxContainer" parent="Box"]
-margin_top = 45.0
+margin_top = 46.0
 margin_right = 1885.0
-margin_bottom = 45.0
+margin_bottom = 46.0
 size_flags_horizontal = 3
 
 [connection signal="text_changed" from="Box/Header/VarKey" to="." method="_on_VarKey_text_changed"]

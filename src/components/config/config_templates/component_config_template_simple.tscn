@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://components/config/config_templates/component_config_simple.gd" type="Script" id=1]
 [ext_resource path="res://components/config/config_templates/component_config_line_edit_int.gd" type="Script" id=2]
 [ext_resource path="res://components/config/config_templates/component_config_line_edit_float.gd" type="Script" id=3]
-
-[sub_resource type="StyleBoxEmpty" id=6]
+[ext_resource path="res://components/elements/styled/icon_check_button.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=5]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/icons/icon_128_to_null.svg" type="Texture" id=7]
 
 [sub_resource type="DynamicFontData" id=2]
 font_path = "res://assets/theme/Barlow-Regular.ttf"
@@ -41,25 +43,21 @@ visible = false
 modulate = Color( 1, 1, 1, 0.439216 )
 margin_left = 304.0
 margin_right = 1900.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 300, 0 )
+margin_bottom = 21.0
 size_flags_horizontal = 3
-size_flags_vertical = 0
+size_flags_vertical = 6
+theme_type_variation = "LabelCode"
 text = "= null"
 
-[node name="VarValueBool" type="CheckBox" parent="VarContent"]
+[node name="VarValueBool" parent="VarContent" instance=ExtResource( 4 )]
 visible = false
 margin_left = 304.0
-margin_right = 1836.0
-margin_bottom = 24.0
-size_flags_horizontal = 3
-custom_styles/hover = SubResource( 6 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 6 )
-custom_styles/disabled = SubResource( 6 )
-custom_styles/hover_pressed = SubResource( 6 )
-custom_styles/normal = SubResource( 6 )
-flat = true
+margin_right = 337.0
+rect_min_size = Vector2( 23, 23 )
+hint_tooltip = "Enable/Disable"
+size_flags_horizontal = 2
+size_flags_vertical = 6
+icon_margin = 1
 
 [node name="VarValueTextbox" type="LineEdit" parent="VarContent"]
 visible = false
@@ -67,6 +65,7 @@ margin_left = 304.0
 margin_right = 1900.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+theme_type_variation = "LineEditConfig"
 caret_blink = true
 caret_blink_speed = 0.5
 
@@ -76,41 +75,39 @@ margin_left = 324.0
 margin_right = 1900.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+theme_type_variation = "LineEditConfig"
 script = ExtResource( 2 )
 
 [node name="VarValueFloat" type="LineEdit" parent="VarContent"]
 visible = false
-margin_left = 324.0
+margin_left = 304.0
 margin_right = 1900.0
-margin_bottom = 24.0
+margin_bottom = 34.0
 size_flags_horizontal = 3
+theme_type_variation = "LineEditConfig"
 script = ExtResource( 3 )
 
-[node name="ButtonSetToNull" type="Button" parent="VarContent"]
+[node name="ButtonSetToNull" parent="VarContent" instance=ExtResource( 6 )]
 visible = false
+modulate = Color( 1, 1, 1, 0.235294 )
 margin_left = 304.0
-margin_right = 364.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 60, 0 )
-focus_mode = 0
-size_flags_horizontal = 8
-size_flags_vertical = 0
-enabled_focus_mode = 0
-text = "set null"
+margin_right = 329.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "To null"
+size_flags_vertical = 5
 flat = true
+icon_tex = ExtResource( 7 )
+icon_margin = 3
 
-[node name="ButtonAddValue" type="Button" parent="VarContent"]
+[node name="ButtonAddValue" parent="VarContent" instance=ExtResource( 6 )]
 visible = false
-margin_left = 1840.0
-margin_right = 1900.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 60, 0 )
-focus_mode = 0
-size_flags_horizontal = 8
-size_flags_vertical = 0
-enabled_focus_mode = 0
-text = "add"
-flat = true
+margin_left = 1852.0
+margin_right = 1885.0
+margin_bottom = 34.0
+hint_tooltip = "Add Value"
+icon_tex = ExtResource( 5 )
+icon_margin = 3
 
 [node name="Description" type="Label" parent="."]
 modulate = Color( 1, 1, 1, 0.54902 )
