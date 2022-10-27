@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -9,14 +9,46 @@
 [ext_resource path="res://assets/icons/icon_128_node_element.svg" type="Texture" id=7]
 [ext_resource path="res://assets/icons/search-blue-01.svg" type="Texture" id=8]
 [ext_resource path="res://assets/theme/Barlow-Bold.ttf" type="DynamicFontData" id=9]
-[ext_resource path="res://assets/icons/icon_128_exit.svg" type="Texture" id=10]
+[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=10]
 [ext_resource path="res://components/elements/utility/left_click_copy.gd" type="Script" id=11]
+[ext_resource path="res://components/elements/styled/check_button_styled.tscn" type="PackedScene" id=12]
+[ext_resource path="res://components/elements/styled/flat_copy_button.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=14]
+[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=15]
+[ext_resource path="res://assets/icons/icon_128_edit_pencil.svg" type="Texture" id=16]
+[ext_resource path="res://assets/icons/icon_128_desired_clean.svg" type="Texture" id=17]
+[ext_resource path="res://components/node_list/node_list_tags_group.gd" type="Script" id=18]
+[ext_resource path="res://assets/icons/icon_128_undo_delete.svg" type="Texture" id=19]
+[ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=20]
 
 [sub_resource type="DynamicFont" id=8]
 size = 23
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=10]
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = -4
+extra_spacing_bottom = -4
+extra_spacing_char = -1
+extra_spacing_space = 1
+font_data = ExtResource( 10 )
+
+[sub_resource type="StyleBoxFlat" id=11]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.0784314 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 4 )
 
 [sub_resource type="StyleBoxEmpty" id=9]
 
@@ -56,9 +88,9 @@ custom_constants/separation = 10
 [node name="IconButton" parent="Margin/VBox/TitleBar" instance=ExtResource( 3 )]
 margin_top = 3.0
 margin_bottom = 36.0
-hint_tooltip = "Back to single Node"
+hint_tooltip = "Single Resource view"
 size_flags_vertical = 4
-icon_tex = ExtResource( 10 )
+icon_tex = ExtResource( 7 )
 flip_h = true
 
 [node name="NodeIcon" type="TextureRect" parent="Margin/VBox/TitleBar"]
@@ -83,6 +115,7 @@ text = "All "
 
 [node name="NodeKindButton" type="Button" parent="Margin/VBox/TitleBar"]
 unique_name_in_owner = true
+visible = false
 margin_left = 43.0
 margin_top = 4.0
 margin_right = 164.0
@@ -92,19 +125,21 @@ theme_type_variation = "ButtonKindLabel"
 text = "Node Kind"
 
 [node name="ParentNodeButton" type="Button" parent="Margin/VBox/TitleBar"]
-margin_left = 174.0
+visible = false
+margin_left = 43.0
 margin_top = 3.0
-margin_right = 282.0
+margin_right = 151.0
 margin_bottom = 36.0
 size_flags_vertical = 4
 text = "Node Name"
 
 [node name="ArrowIconMid" type="TextureRect" parent="Margin/VBox/TitleBar"]
 unique_name_in_owner = true
+visible = false
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_left = 292.0
+margin_left = 43.0
 margin_top = 8.0
-margin_right = 316.0
+margin_right = 67.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 24, 24 )
 size_flags_horizontal = 4
@@ -115,9 +150,10 @@ script = ExtResource( 1 )
 
 [node name="ListKindButton" type="Button" parent="Margin/VBox/TitleBar"]
 unique_name_in_owner = true
-margin_left = 326.0
+visible = false
+margin_left = 43.0
 margin_top = 4.0
-margin_right = 447.0
+margin_right = 164.0
 margin_bottom = 36.0
 size_flags_vertical = 4
 theme_type_variation = "ButtonKindLabel"
@@ -135,6 +171,42 @@ custom_fonts/font = SubResource( 8 )
 text = "All Successors"
 script = ExtResource( 11 )
 
+[node name="Spacer" type="Control" parent="Margin/VBox/TitleBar"]
+margin_left = 43.0
+margin_right = 1750.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="SearchQueryCopyButton" parent="Margin/VBox/TitleBar" instance=ExtResource( 13 )]
+visible = false
+margin_left = 1640.0
+margin_top = 9.0
+margin_right = 1750.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 110, 22 )
+hint_tooltip = "Copy Search Query to Clipboard"
+size_flags_vertical = 6
+custom_fonts/font = SubResource( 10 )
+text = "Search Query"
+align = 2
+icon_align = 2
+
+[node name="LimitLabel" type="Label" parent="Margin/VBox/TitleBar"]
+margin_left = 1760.0
+margin_top = 9.0
+margin_right = 1840.0
+margin_bottom = 30.0
+text = "Limit (200)"
+
+[node name="LimitButton" parent="Margin/VBox/TitleBar" instance=ExtResource( 12 )]
+margin_left = 1850.0
+margin_top = 7.0
+margin_right = 1900.0
+margin_bottom = 32.0
+size_flags_horizontal = 8
+size_flags_vertical = 6
+pressed = true
+
 [node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
 visible = false
 modulate = Color( 1, 1, 1, 0.501961 )
@@ -145,20 +217,21 @@ margin_bottom = 54.0
 [node name="Filter" type="HBoxContainer" parent="Margin/VBox"]
 margin_top = 50.0
 margin_right = 1900.0
-margin_bottom = 85.0
+margin_bottom = 91.0
 mouse_filter = 2
 custom_constants/separation = 10
 
 [node name="Label" type="Label" parent="Margin/VBox/Filter"]
-margin_top = 7.0
+margin_top = 10.0
 margin_right = 92.0
-margin_bottom = 28.0
+margin_bottom = 31.0
 text = "Filter results"
 
 [node name="FilterLineEdit" type="LineEdit" parent="Margin/VBox/Filter"]
 margin_left = 102.0
+margin_top = 3.0
 margin_right = 502.0
-margin_bottom = 35.0
+margin_bottom = 38.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_vertical = 4
 theme = ExtResource( 2 )
@@ -167,9 +240,241 @@ right_icon = ExtResource( 8 )
 placeholder_text = "filter results"
 placeholder_alpha = 0.3
 
+[node name="ResotoActionGroup" type="PanelContainer" parent="Margin/VBox/Filter"]
+unique_name_in_owner = true
+margin_left = 1378.0
+margin_right = 1590.0
+margin_bottom = 41.0
+size_flags_horizontal = 10
+theme_type_variation = "PanelContainerDark"
+
+[node name="TagTitleBar" type="HBoxContainer" parent="Margin/VBox/Filter/ResotoActionGroup"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 200.0
+margin_bottom = 33.0
+
+[node name="NodeTagsLabel" type="Label" parent="Margin/VBox/Filter/ResotoActionGroup/TagTitleBar"]
+margin_right = 130.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 130, 0 )
+size_flags_vertical = 1
+theme_type_variation = "LabelBold"
+text = "Resoto Actions"
+
+[node name="AddToCleanupButton" parent="Margin/VBox/Filter/ResotoActionGroup/TagTitleBar" instance=ExtResource( 3 )]
+margin_left = 134.0
+margin_right = 159.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Mark Resources for Clean-up"
+size_flags_vertical = 0
+icon_tex = ExtResource( 17 )
+icon_margin = 2
+
+[node name="RemoveFromCleanupButton" parent="Margin/VBox/Filter/ResotoActionGroup/TagTitleBar" instance=ExtResource( 3 )]
+margin_left = 163.0
+margin_right = 188.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Remove Resources from Clean-up queue"
+size_flags_vertical = 0
+icon_tex = ExtResource( 19 )
+icon_margin = 2
+
+[node name="TagsGroup" type="PanelContainer" parent="Margin/VBox/Filter"]
+unique_name_in_owner = true
+margin_left = 1600.0
+margin_right = 1900.0
+margin_bottom = 41.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 8
+theme_type_variation = "PanelContainerDark"
+script = ExtResource( 18 )
+
+[node name="TagTitleBar" type="HBoxContainer" parent="Margin/VBox/Filter/TagsGroup"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 288.0
+margin_bottom = 33.0
+
+[node name="NodeTagsLabel" type="Label" parent="Margin/VBox/Filter/TagsGroup/TagTitleBar"]
+margin_right = 189.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = "LabelBold"
+text = "Edit Tags"
+
+[node name="AddTagButton" parent="Margin/VBox/Filter/TagsGroup/TagTitleBar" instance=ExtResource( 3 )]
+margin_left = 193.0
+margin_right = 218.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Add a Tag to Resources"
+size_flags_vertical = 0
+icon_tex = ExtResource( 14 )
+icon_margin = 2
+
+[node name="EditTagsButton" parent="Margin/VBox/Filter/TagsGroup/TagTitleBar" instance=ExtResource( 3 )]
+margin_left = 222.0
+margin_right = 247.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Update or Add a Tag of Resources"
+size_flags_vertical = 0
+icon_tex = ExtResource( 16 )
+icon_margin = 2
+
+[node name="DeleteTagButton" parent="Margin/VBox/Filter/TagsGroup/TagTitleBar" instance=ExtResource( 3 )]
+margin_left = 251.0
+margin_right = 276.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Delete Tag from Resources"
+size_flags_vertical = 0
+icon_tex = ExtResource( 15 )
+icon_margin = 3
+
+[node name="AddTagPopup" type="PopupPanel" parent="Margin/VBox/Filter/TagsGroup"]
+self_modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 288.0
+margin_bottom = 175.0
+custom_styles/panel = SubResource( 11 )
+script = ExtResource( 1 )
+
+[node name="AddTagData" type="VBoxContainer" parent="Margin/VBox/Filter/TagsGroup/AddTagPopup"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 266.0
+margin_bottom = 157.0
+
+[node name="AddTagVariableLabel" type="Label" parent="Margin/VBox/Filter/TagsGroup/AddTagPopup/AddTagData"]
+margin_right = 256.0
+margin_bottom = 16.0
+theme_type_variation = "LabelSmall"
+text = "Tag to update / create"
+
+[node name="NewTagVariableEdit" type="LineEdit" parent="Margin/VBox/Filter/TagsGroup/AddTagPopup/AddTagData"]
+margin_top = 77.0
+margin_right = 256.0
+margin_bottom = 110.0
+max_length = 255
+
+[node name="NewTagValueLabel" type="Label" parent="Margin/VBox/Filter/TagsGroup/AddTagPopup/AddTagData"]
+margin_top = 57.0
+margin_right = 256.0
+margin_bottom = 73.0
+theme_type_variation = "LabelSmall"
+text = "Value"
+
+[node name="NewTagValueEdit" type="LineEdit" parent="Margin/VBox/Filter/TagsGroup/AddTagPopup/AddTagData"]
+margin_top = 77.0
+margin_right = 256.0
+margin_bottom = 110.0
+max_length = 255
+
+[node name="PopupAddTagButton" type="Button" parent="Margin/VBox/Filter/TagsGroup/AddTagPopup/AddTagData"]
+margin_left = 109.0
+margin_top = 114.0
+margin_right = 256.0
+margin_bottom = 147.0
+size_flags_horizontal = 10
+text = "Create or Update"
+
+[node name="UpdateCreateTagPopup" type="PopupPanel" parent="Margin/VBox/Filter/TagsGroup"]
+self_modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 288.0
+margin_bottom = 175.0
+custom_styles/panel = SubResource( 11 )
+script = ExtResource( 1 )
+
+[node name="ChangeTagData" type="VBoxContainer" parent="Margin/VBox/Filter/TagsGroup/UpdateCreateTagPopup"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 266.0
+margin_bottom = 157.0
+
+[node name="ChangeTagVariableLabel" type="Label" parent="Margin/VBox/Filter/TagsGroup/UpdateCreateTagPopup/ChangeTagData"]
+margin_right = 256.0
+margin_bottom = 16.0
+theme_type_variation = "LabelSmall"
+text = "Tag to update / create"
+
+[node name="UpdateVariableCombo" parent="Margin/VBox/Filter/TagsGroup/UpdateCreateTagPopup/ChangeTagData" instance=ExtResource( 20 )]
+margin_top = 20.0
+margin_right = 256.0
+margin_bottom = 53.0
+rect_min_size = Vector2( 100, 33 )
+size_flags_vertical = 1
+align_items_left = true
+small_results = true
+
+[node name="UpdateTagValueLabel" type="Label" parent="Margin/VBox/Filter/TagsGroup/UpdateCreateTagPopup/ChangeTagData"]
+margin_top = 57.0
+margin_right = 256.0
+margin_bottom = 73.0
+theme_type_variation = "LabelSmall"
+text = "Value"
+
+[node name="UpdateTagValueEdit" type="LineEdit" parent="Margin/VBox/Filter/TagsGroup/UpdateCreateTagPopup/ChangeTagData"]
+margin_top = 77.0
+margin_right = 256.0
+margin_bottom = 110.0
+max_length = 255
+
+[node name="PopupUpdateTagButton" type="Button" parent="Margin/VBox/Filter/TagsGroup/UpdateCreateTagPopup/ChangeTagData"]
+margin_left = 109.0
+margin_top = 114.0
+margin_right = 256.0
+margin_bottom = 147.0
+size_flags_horizontal = 10
+text = "Create or Update"
+
+[node name="DeleteTagPopup" type="PopupPanel" parent="Margin/VBox/Filter/TagsGroup"]
+self_modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 288.0
+margin_bottom = 175.0
+custom_styles/panel = SubResource( 11 )
+script = ExtResource( 1 )
+
+[node name="DeleteTagData" type="VBoxContainer" parent="Margin/VBox/Filter/TagsGroup/DeleteTagPopup"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 266.0
+margin_bottom = 157.0
+
+[node name="DeleteTagVariableLabel" type="Label" parent="Margin/VBox/Filter/TagsGroup/DeleteTagPopup/DeleteTagData"]
+margin_right = 256.0
+margin_bottom = 16.0
+theme_type_variation = "LabelSmall"
+text = "Tag name"
+
+[node name="DeleteTagsComboBox" parent="Margin/VBox/Filter/TagsGroup/DeleteTagPopup/DeleteTagData" instance=ExtResource( 20 )]
+margin_top = 20.0
+margin_right = 256.0
+margin_bottom = 45.0
+size_flags_vertical = 1
+align_items_left = true
+small_results = true
+
+[node name="PopupDeleteTagButton" type="Button" parent="Margin/VBox/Filter/TagsGroup/DeleteTagPopup/DeleteTagData"]
+margin_left = 184.0
+margin_top = 49.0
+margin_right = 256.0
+margin_bottom = 82.0
+size_flags_horizontal = 10
+text = "Delete"
+
 [node name="MainPanel" type="PanelContainer" parent="Margin/VBox"]
 show_behind_parent = true
-margin_top = 95.0
+margin_top = 101.0
 margin_right = 1900.0
 margin_bottom = 1060.0
 size_flags_horizontal = 3
@@ -178,7 +483,7 @@ custom_styles/panel = SubResource( 9 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Margin/VBox/MainPanel"]
 margin_right = 1900.0
-margin_bottom = 965.0
+margin_bottom = 959.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 follow_focus = true
@@ -187,7 +492,7 @@ script = ExtResource( 4 )
 
 [node name="Content" type="MarginContainer" parent="Margin/VBox/MainPanel/ScrollContainer"]
 margin_right = 1900.0
-margin_bottom = 965.0
+margin_bottom = 959.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 5
@@ -199,10 +504,23 @@ custom_constants/margin_bottom = 5
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 1895.0
-margin_bottom = 960.0
+margin_bottom = 954.0
 
 [connection signal="pressed" from="Margin/VBox/TitleBar/IconButton" to="." method="_on_IconButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/TitleBar/NodeKindButton" to="." method="_on_NodeKindButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/TitleBar/ParentNodeButton" to="." method="_on_ParentNodeButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/TitleBar/ListKindButton" to="." method="_on_ListKindButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/TitleBar/SearchQueryCopyButton" to="." method="_on_SearchQueryCopyButton_pressed"]
+[connection signal="toggled" from="Margin/VBox/TitleBar/LimitButton" to="." method="_on_LimitButton_toggled"]
 [connection signal="text_changed" from="Margin/VBox/Filter/FilterLineEdit" to="." method="_on_FullTextSearch_text_changed"]
+[connection signal="pressed" from="Margin/VBox/Filter/ResotoActionGroup/TagTitleBar/AddToCleanupButton" to="." method="_on_AddToCleanupButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/Filter/ResotoActionGroup/TagTitleBar/RemoveFromCleanupButton" to="." method="_on_RemoveFromCleanupButton_pressed"]
+[connection signal="delete_tags" from="Margin/VBox/Filter/TagsGroup" to="." method="_on_TagsGroup_delete_tags"]
+[connection signal="request_all_tag_keys" from="Margin/VBox/Filter/TagsGroup" to="." method="_on_TagsGroup_request_all_tag_keys"]
+[connection signal="update_tags" from="Margin/VBox/Filter/TagsGroup" to="." method="_on_TagsGroup_update_tags"]
+[connection signal="pressed" from="Margin/VBox/Filter/TagsGroup/TagTitleBar/AddTagButton" to="Margin/VBox/Filter/TagsGroup" method="_on_AddTagButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/Filter/TagsGroup/TagTitleBar/EditTagsButton" to="Margin/VBox/Filter/TagsGroup" method="_on_EditTagsButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/Filter/TagsGroup/TagTitleBar/DeleteTagButton" to="Margin/VBox/Filter/TagsGroup" method="_on_DeleteTagButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/Filter/TagsGroup/AddTagPopup/AddTagData/PopupAddTagButton" to="Margin/VBox/Filter/TagsGroup" method="_on_PopupAddTagButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/Filter/TagsGroup/UpdateCreateTagPopup/ChangeTagData/PopupUpdateTagButton" to="Margin/VBox/Filter/TagsGroup" method="_on_PopupUpdateTagButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/Filter/TagsGroup/DeleteTagPopup/DeleteTagData/PopupDeleteTagButton" to="Margin/VBox/Filter/TagsGroup" method="_on_PopupDeleteTagButton_pressed"]

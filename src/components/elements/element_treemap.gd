@@ -122,7 +122,7 @@ func create_dataset_from_dict(_data: Dictionary):
 		new_dataset.ds_value = _data[_key]
 		new_dataset.ds_value_temp = _data[_key]
 		datasets.append(new_dataset)
-	datasets.sort_custom(self, "sort_desc")
+	datasets.sort_custom(self, "array_sort_desc")
 
 
 func update_visuals():
@@ -308,7 +308,7 @@ func set_sort_desc(_sort_desc:bool) -> void:
 	sort_desc = _sort_desc
 
 
-func sort_desc(a, b) -> bool:
+static func array_sort_desc(a, b) -> bool:
 	return a.ds_value > b.ds_value
 
 

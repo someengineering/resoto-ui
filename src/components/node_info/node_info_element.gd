@@ -24,6 +24,7 @@ onready var tag_group := $"%TagsGroup"
 func _ready():
 	Style.add($Margin/VBox/TitleBar/NodeIcon, Style.c.LIGHT)
 	_g.connect("explore_node_by_id", self, "show_node")
+	root_button.connect("pressed", self, "on_id_button_pressed", ["root"])
 
 
 func show_node(node_id:String, _add_to_history:=true):
@@ -49,11 +50,13 @@ func clear_view():
 	for c in property_container.get_children():
 		c.queue_free()
 	for c in breadcrumb_container.get_children():
+		if c == root_button or c == res_list_btn:
+			continue
 		c.queue_free()
 	tag_group.clear()
 	$"%TreeMapModeButton".set_pressed_direct(false)
-	$"%NodeNameLabel".text = "..."
-	$"%KindLabelButton".text = "..."
+	$"%NodeNameLabel".set("custom_colors/font_color", Color.transparent)
+	$"%KindLabelButton".set("custom_colors/font_color", Color.transparent)
 	set_successor_button(false)
 	set_predecessor_button(false)
 	n_icon_protected.hide()
@@ -200,17 +203,15 @@ func set_predecessor_button(_enabled:bool):
 onready var breadcrumb_container = find_node("BreadcrumbContainer")
 onready var bc_button = find_node("BreadcrumbButton")
 onready var root_button = find_node("RootButton")
+onready var res_list_btn = find_node("ResourceListButton")
 onready var bc_arrow = find_node("BreadcrumbArrow")
 func update_breadcrumbs():
 	for c in breadcrumb_container.get_children():
+		if c == root_button or c == res_list_btn:
+			continue
 		c.queue_free()
 	
 	var next:String = "root"
-	
-	var new_root_button = root_button.duplicate()
-	breadcrumb_container.add_child(new_root_button)
-	new_root_button.hint_tooltip = "Root"
-	new_root_button.connect("pressed", self, "on_id_button_pressed", ["root"])
 	
 	if breadcrumbs.edges.size() > 0:
 		var root_arrow = bc_arrow.duplicate()
@@ -238,6 +239,7 @@ func update_breadcrumbs():
 					breadcrumb_container.add_child(new_arrow)
 		if not found_result:
 			break
+	breadcrumb_container.move_child(res_list_btn, breadcrumb_container.get_child_count())
 
 
 func main_node_display(node_data):
@@ -253,6 +255,9 @@ func main_node_display(node_data):
 	$"%NodeNameLabel".text = r_name if r_name == r_id else r_name + " (%s)" % r_id
 	var r_kind = node_data.reported.kind
 	$"%KindLabelButton".text = r_kind
+	
+	$"%NodeNameLabel".set("custom_colors/font_color", null)
+	$"%KindLabelButton".set("custom_colors/font_color", null)
 	
 	var has_meta:bool =  node_data.has("metadata")
 	var has_reported:bool = node_data.has("reported")
@@ -334,12 +339,12 @@ func _on_get_node_from_id_done(_error:int, _r:ResotoAPI.Response) -> void:
 
 
 func _on_PredecessorsButton_pressed():
-	var search_command = "id(\"" + current_main_node.id + "\") <-- limit 500"
+	var search_command = "id(\"" + current_main_node.id + "\") <--"
 	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "<--")
 
 
 func _on_SuccessorsButton_pressed():
-	var search_command = "id(\"" + current_main_node.id + "\") --> limit 500"
+	var search_command = "id(\"" + current_main_node.id + "\") -->"
 	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "-->")
 
 
@@ -397,3 +402,7 @@ func _on_get_node_by_id_for_tags_done(_error:int, _r:ResotoAPI.Response) -> void
 	tag_group.clear()
 	var node_info = _r.transformed.result.reported.tags
 	tag_group.create_tags(node_info)
+
+
+func _on_ResourceListButton_pressed():
+	_g.emit_signal("explore_node_list")

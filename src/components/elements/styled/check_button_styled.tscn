@@ -74,7 +74,9 @@ custom_styles/panel = SubResource( 3 )
 
 [node name="Box" type="PanelContainer" parent="."]
 modulate = Color( 0, 0.329412, 0.639216, 1 )
+margin_right = 10.0
 margin_bottom = 25.0
+rect_min_size = Vector2( 10, 0 )
 mouse_filter = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
@@ -94,4 +96,4 @@ enabled_focus_mode = 0
 
 [node name="Tween" type="Tween" parent="."]
 
-[connection signal="toggled" from="CheckButtonStyled" to="." method="_on_CheckButtonStyled_toggled"]
+[connection signal="pressed" from="CheckButtonStyled" to="." method="_on_CheckButtonStyled_pressed"]

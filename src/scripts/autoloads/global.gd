@@ -22,6 +22,7 @@ signal nav_change_section_explore
 
 # Explorer Signals
 signal explore_node_by_id
+signal explore_node_list
 signal explore_node_list_data
 signal explore_node_list_search
 signal explore_node_list_from_node
@@ -32,6 +33,7 @@ const TOP_MARGIN:int = 48
 const tsdb_metric_prefix:String		 = "resoto_"
 const dashboard_config_prefix:String = "resoto.ui.dashboard."
 
+var demo_mode: bool = true
 var ui_shrink: float = 1.0 setget set_ui_shrink
 var ui_version:String = "3.0.0a0"
 var resotocore_version:String = "n/a"

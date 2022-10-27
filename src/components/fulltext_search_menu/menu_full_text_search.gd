@@ -42,6 +42,8 @@ func _on_FullTextSearch_text_changed(_command:String) -> void:
 
 func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
+		if error == ERR_PRINTER_ON_FIRE:
+			return
 		if _response.response_code == 400:
 			return
 		return
@@ -58,6 +60,8 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
+		if error == ERR_PRINTER_ON_FIRE:
+			return
 		if _response.response_code == 400:
 			show_search_results([], _response.body.get_string_from_utf8())
 		else:
@@ -129,7 +133,7 @@ func show_search_results(results:Array, error:="") -> void:
 	popup.popup(Rect2(popup_pos, popup_size))
 	yield(VisualServer, "frame_post_draw")
 	popup.rect_size.y = 1
-#	grab_focus()
+	grab_focus()
 
 
 func on_result_button_clicked(_id:String):
@@ -150,6 +154,15 @@ func _on_ListButton_pressed():
 	popup.hide()
 
 
+func text_to_search(_text:String):
+	var _new_search_command = ""
+	if _text.to_lower().begins_with("search "):
+		_new_search_command = _text.trim_prefix("search ")
+	else:
+		_new_search_command = "\"" + _text + "\""
+	return _new_search_command
+
+
 func _on_SearchDelay_timeout():
 	search_command = ""
 	var limited_search_command := ""
@@ -165,3 +178,13 @@ func _on_SearchDelay_timeout():
 	
 	count_request = API.cli_execute(count_command, self)
 	active_request = API.graph_search(limited_search_command, self, "list")
+
+
+func _on_FullTextSearch_text_entered(_new_text):
+	popup.hide()
+	search_delay.stop()
+	if count_request:
+		count_request.cancel(ERR_PRINTER_ON_FIRE)
+	if active_request:
+		active_request.cancel(ERR_PRINTER_ON_FIRE)
+	_g.emit_signal("explore_node_list_search", text_to_search(text))
