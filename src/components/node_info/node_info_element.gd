@@ -406,3 +406,15 @@ func _on_get_node_by_id_for_tags_done(_error:int, _r:ResotoAPI.Response) -> void
 
 func _on_ResourceListButton_pressed():
 	_g.emit_signal("explore_node_list")
+
+
+func _on_RemoveFromCleanupButton_pressed():
+	n_icon_dclean.visible = false
+
+
+func _on_AddToCleanupButton_pressed():
+	n_icon_dclean.visible = true
+
+
+func _on_ProtectButton_pressed():
+	n_icon_protected.visible = !n_icon_protected.visible

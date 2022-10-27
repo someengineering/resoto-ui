@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -29,6 +29,8 @@
 [ext_resource path="res://components/node_info/node_info_element_tag_group.gd" type="Script" id=27]
 [ext_resource path="res://components/elements/styled/check_button_styled.tscn" type="PackedScene" id=28]
 [ext_resource path="res://assets/icons/icon_128_node_list_big.svg" type="Texture" id=29]
+[ext_resource path="res://assets/icons/icon_128_undo_delete.svg" type="Texture" id=30]
+[ext_resource path="res://assets/icons/icon_128_lock_open.svg" type="Texture" id=31]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -212,7 +214,7 @@ icon_align_right = true
 [node name="NodeBaseInfo" type="PanelContainer" parent="Margin/VBox/NodeContent/NodeDetails"]
 margin_top = 53.0
 margin_right = 450.0
-margin_bottom = 97.0
+margin_bottom = 98.0
 mouse_filter = 2
 theme_type_variation = "PanelContainerDark"
 
@@ -220,27 +222,27 @@ theme_type_variation = "PanelContainerDark"
 margin_left = 12.0
 margin_top = 8.0
 margin_right = 438.0
-margin_bottom = 36.0
+margin_bottom = 37.0
 mouse_filter = 2
 
 [node name="PropertyTitle" type="HBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox"]
 margin_right = 426.0
-margin_bottom = 24.0
+margin_bottom = 25.0
 
 [node name="BaseInfoLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle"]
-margin_right = 230.0
-margin_bottom = 24.0
+margin_right = 131.0
+margin_bottom = 25.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_type_variation = "LabelBold"
-text = "Properties"
+text = "Resource Info"
 valign = 1
 
 [node name="NodeIDCopyButton" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle" instance=ExtResource( 21 )]
-margin_left = 234.0
+margin_left = 135.0
 margin_top = 0.0
-margin_right = 314.0
-margin_bottom = 24.0
+margin_right = 215.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 80, 24 )
 hint_tooltip = "Copy Node ID to Clipboard"
 size_flags_vertical = 1
@@ -251,9 +253,9 @@ icon_align = 2
 
 [node name="NodeIconProtected" type="TextureRect" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_left = 318.0
-margin_right = 342.0
-margin_bottom = 24.0
+margin_left = 219.0
+margin_right = 243.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Protected - Resource is protected"
 texture = ExtResource( 23 )
@@ -263,9 +265,9 @@ script = ExtResource( 7 )
 
 [node name="NodeIconCleaned" type="TextureRect" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_left = 346.0
-margin_right = 370.0
-margin_bottom = 24.0
+margin_left = 247.0
+margin_right = 271.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Cleaned - Resource was cleaned."
 texture = ExtResource( 24 )
@@ -275,9 +277,9 @@ script = ExtResource( 7 )
 
 [node name="NodeIconDesiredClean" type="TextureRect" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_left = 374.0
-margin_right = 398.0
-margin_bottom = 24.0
+margin_left = 275.0
+margin_right = 299.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Marked for Cleanup - Resource will be cleaned."
 texture = ExtResource( 22 )
@@ -287,9 +289,9 @@ script = ExtResource( 7 )
 
 [node name="NodeIconPhantom" type="TextureRect" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_left = 402.0
-margin_right = 426.0
-margin_bottom = 24.0
+margin_left = 303.0
+margin_right = 327.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Phantom Resource"
 texture = ExtResource( 25 )
@@ -297,11 +299,47 @@ expand = true
 stretch_mode = 6
 script = ExtResource( 7 )
 
+[node name="VSeparator" type="VSeparator" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle"]
+margin_left = 331.0
+margin_right = 339.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 8, 0 )
+
+[node name="ProtectButton" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle" instance=ExtResource( 15 )]
+margin_left = 343.0
+margin_right = 368.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Protect Resource"
+size_flags_vertical = 0
+icon_tex = ExtResource( 31 )
+icon_margin = 2
+
+[node name="AddToCleanupButton2" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle" instance=ExtResource( 15 )]
+margin_left = 372.0
+margin_right = 397.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Mark Resources for Clean-up"
+size_flags_vertical = 0
+icon_tex = ExtResource( 22 )
+icon_margin = 2
+
+[node name="RemoveFromCleanupButton" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle" instance=ExtResource( 15 )]
+margin_left = 401.0
+margin_right = 426.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Remove Resources from Clean-up queue"
+size_flags_vertical = 0
+icon_tex = ExtResource( 30 )
+icon_margin = 2
+
 [node name="PropertyContainer" type="GridContainer" parent="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox"]
 unique_name_in_owner = true
-margin_top = 28.0
+margin_top = 29.0
 margin_right = 426.0
-margin_bottom = 28.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 400, 0 )
 mouse_filter = 2
 custom_constants/hseparation = 20
@@ -309,9 +347,9 @@ columns = 2
 
 [node name="TagsGroup" type="PanelContainer" parent="Margin/VBox/NodeContent/NodeDetails"]
 unique_name_in_owner = true
-margin_top = 117.0
+margin_top = 118.0
 margin_right = 450.0
-margin_bottom = 162.0
+margin_bottom = 163.0
 theme_type_variation = "PanelContainerDark"
 script = ExtResource( 27 )
 
@@ -398,7 +436,7 @@ text = "Add"
 
 [node name="AllDataGroup" type="PanelContainer" parent="Margin/VBox/NodeContent/NodeDetails" groups=["persistent"]]
 unique_name_in_owner = true
-margin_top = 182.0
+margin_top = 183.0
 margin_right = 450.0
 margin_bottom = 953.0
 size_flags_horizontal = 3
@@ -413,7 +451,7 @@ popup_path = NodePath("../../../../../AllDataPopup")
 margin_left = 12.0
 margin_top = 8.0
 margin_right = 438.0
-margin_bottom = 763.0
+margin_bottom = 762.0
 
 [node name="Title" type="HBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox"]
 margin_right = 426.0
@@ -478,7 +516,7 @@ script = ExtResource( 9 )
 [node name="AllDataTextEdit" type="TextEdit" parent="Margin/VBox/NodeContent/NodeDetails/AllDataGroup/VBox"]
 margin_top = 29.0
 margin_right = 426.0
-margin_bottom = 755.0
+margin_bottom = 754.0
 rect_min_size = Vector2( 0, 160 )
 size_flags_vertical = 3
 custom_styles/focus = SubResource( 6 )
@@ -609,6 +647,9 @@ script = ExtResource( 16 )
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/Actions/PredecessorsButton" to="." method="_on_PredecessorsButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/Actions/SuccessorsButton" to="." method="_on_SuccessorsButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIDCopyButton" to="." method="_on_NodeIDCopyButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/ProtectButton" to="." method="_on_ProtectButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/AddToCleanupButton2" to="." method="_on_AddToCleanupButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/RemoveFromCleanupButton" to="." method="_on_RemoveFromCleanupButton_pressed"]
 [connection signal="tags_request_refresh" from="Margin/VBox/NodeContent/NodeDetails/TagsGroup" to="." method="_on_TagsGroup_tags_request_refresh"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/TagsGroup/VBox/TagTitleBar/AddTagButton" to="Margin/VBox/NodeContent/NodeDetails/TagsGroup" method="_on_AddTagButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData/AddNewTagButton" to="Margin/VBox/NodeContent/NodeDetails/TagsGroup" method="_on_AddNewTagButton_pressed"]
