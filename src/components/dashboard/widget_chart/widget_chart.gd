@@ -60,7 +60,7 @@ func _input(event) -> void:
 		legend.rect_global_position = get_global_mouse_position() + Vector2(24,0)
 		legend.rect_size.y = 0
 		
-		var stacked = 0
+		
 		
 		for label in legend_container.get_children():
 			legend_container.remove_child(label)
@@ -68,35 +68,39 @@ func _input(event) -> void:
 		
 		var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
 		
+		var new_time_label : Label = Label.new()
+		var time_text : Array = Time.get_datetime_string_from_unix_time(int(x_origin+x)).left(16).split("T")
+		new_time_label.text = time_text[0] + "\nTime: %s" % time_text[1].trim_prefix("0")
+		legend_container.add_child(new_time_label)
+		legend_container.add_child(HSeparator.new())
+		# First, grab all the values, set the indicator points, sum up the stacked value
+		var stacked : float = 0.0
+		var sorted_values : Array = []
 		for i in series.size():
 			var index = series.size() - i - 1
-			var l := Label.new()
 			var line : Line2D = graph_area.get_child(index)
 			var closest_point = find_value_at_x(x, series[index])
-			
 			if str(closest_point.y) == "nan":
 				continue
-			
-			l.text = line.name + ": " + str(closest_point.y)
-			l.set_meta("value", closest_point.y)
-			l.set("custom_colors/font_color", line.default_color)
-			
-			legend_container.add_child(l)
 			if line.get_meta("stack"):
 				closest_point.y += stacked
 				stacked = closest_point.y
 			line.show_indicator(transform_point(closest_point, ratio))
+			sorted_values.append( [closest_point.y, line.name, line.default_color] )
 		
-		var child_count = legend_container.get_child_count()
-		legend.visible = child_count > 0
+		sorted_values.sort_custom(self, "sort_label_values")
 		
-		# Sort labels
-		for i in child_count:
-			for j in range(i+1, child_count):
-				if legend_container.get_child(i).get_meta("value") < legend_container.get_child(j).get_meta("value"):
-					var label = legend_container.get_child(i)
-					legend_container.move_child(legend_container.get_child(j), i)
-					legend_container.move_child(label, j)
+		for sv in sorted_values:
+			var l := Label.new()
+			l.text = sv[1] + ": " + str(sv[0])
+			l.set("custom_colors/font_color", sv[2])
+			legend_container.add_child(l)
+		
+		legend.visible = legend_container.get_child_count() > 0
+
+
+static func sort_label_values(a, b):
+	return a[0] < b[0]
 
 
 func set_x_origin(origin : float) -> void:
