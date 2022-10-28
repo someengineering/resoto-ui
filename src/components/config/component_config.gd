@@ -25,6 +25,7 @@ signal config_received
 signal pages_built
 signal config_updated
 signal config_list_refreshed
+signal config_changed(config_id)
 
 var config_req: ResotoAPI.Request
 var config_put_req: ResotoAPI.Request
@@ -51,6 +52,13 @@ onready var config_combo = $VBox/Toolbar/Box/ConfigCombo
 func _input(event:InputEvent):
 	if is_visible_in_tree() and event.is_action_pressed("save_shortcut"):
 		save_config()
+
+
+func history_navigate_to_config(_config_key:String):
+	if active_config_key == "":
+		active_config_key = _config_key
+	else:
+		config_combo.text = _config_key
 
 
 func start() -> void:
@@ -562,11 +570,15 @@ func _on_CloseConfigButton_pressed():
 
 
 func _on_ConfigCombo_option_changed(option):
+	API.get_configs(self)
+	yield(self, "config_list_refreshed")
 	var config_index = config_keys.find(option)
+
 	if config_index == -1:
 		_g.emit_signal("add_toast", "Config not found", "The configuration you tried to open does not exist", 2, self)
 		return
 	open_configuration(option)
+	emit_signal("config_changed", option)
 
 
 func _on_AddConfigButton_pressed():

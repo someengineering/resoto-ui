@@ -29,7 +29,7 @@ signal explore_node_list_from_node
 signal explore_node_list_kind
 signal explore_node_list_id
 
-const TOP_MARGIN:int = 48
+const TOP_MARGIN:int = 50
 const tsdb_metric_prefix:String		 = "resoto_"
 const dashboard_config_prefix:String = "resoto.ui.dashboard."
 

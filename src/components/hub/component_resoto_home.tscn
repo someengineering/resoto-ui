@@ -13,56 +13,63 @@ font_data = ExtResource( 1 )
 
 [sub_resource type="ButtonGroup" id=2]
 
-[node name="ResotoHome" type="MarginContainer"]
-margin_left = 10.0
-margin_top = 48.0
-margin_right = 1910.0
-margin_bottom = 1070.0
-custom_constants/margin_top = 40
+[node name="ResotoHome" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 4 )
 
 [node name="VBox" type="VBoxContainer" parent="."]
-margin_top = 40.0
-margin_right = 1900.0
-margin_bottom = 1022.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
 
+[node name="Spacer3" type="Control" parent="VBox"]
+margin_right = 1920.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+
 [node name="Logo" type="TextureRect" parent="VBox"]
-margin_right = 1900.0
-margin_bottom = 80.0
+margin_top = 54.0
+margin_right = 1920.0
+margin_bottom = 134.0
 rect_min_size = Vector2( 0, 80 )
 mouse_filter = 2
+size_flags_horizontal = 3
 size_flags_vertical = 0
 texture = ExtResource( 2 )
 expand = true
 stretch_mode = 6
 
 [node name="Spacer2" type="Control" parent="VBox"]
-margin_top = 84.0
-margin_right = 1900.0
-margin_bottom = 114.0
+margin_top = 138.0
+margin_right = 1920.0
+margin_bottom = 168.0
 rect_min_size = Vector2( 0, 30 )
 
 [node name="FullTextSearch" parent="VBox" instance=ExtResource( 3 )]
-margin_left = 650.0
-margin_top = 118.0
-margin_right = 1250.0
-margin_bottom = 164.0
+margin_left = 660.0
+margin_top = 172.0
+margin_right = 1260.0
+margin_bottom = 218.0
 rect_min_size = Vector2( 600, 0 )
 size_flags_horizontal = 4
 custom_fonts/font = SubResource( 1 )
+caret_blink = true
+caret_blink_speed = 0.5
 
 [node name="Spacer" type="Control" parent="VBox"]
-margin_top = 168.0
-margin_right = 1900.0
-margin_bottom = 218.0
+margin_top = 222.0
+margin_right = 1920.0
+margin_bottom = 272.0
 rect_min_size = Vector2( 0, 50 )
 
 [node name="VBox" type="GridContainer" parent="VBox"]
-margin_left = 737.0
-margin_top = 222.0
-margin_right = 1162.0
-margin_bottom = 982.0
+margin_left = 747.0
+margin_top = 276.0
+margin_right = 1172.0
+margin_bottom = 1080.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
 custom_constants/vseparation = 20

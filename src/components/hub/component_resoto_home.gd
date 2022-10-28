@@ -1,4 +1,4 @@
-extends MarginContainer
+extends Control
 
 
 func _on_FullTextSearch_text_changed(new_text):
@@ -6,7 +6,7 @@ func _on_FullTextSearch_text_changed(new_text):
 
 
 func _on_ResotoHome_visibility_changed():
-	_g.emit_signal("resoto_home_visible", visible)
+	_g.emit_signal("resoto_home_visible", is_visible_in_tree())
 
 
 func _on_ButtonDashboards_pressed():

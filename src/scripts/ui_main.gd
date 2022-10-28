@@ -5,8 +5,8 @@ func _ready() -> void:
 	_g.connect("fullscreen_hide_menu", self, "_on_fullscreen_hide_menu")
 	SaveLoadSettings.connect("settings_loaded", self, "show_connect_popup", [], 4)
 	SaveLoadSettings.load_settings()
-	
-	
+
+
 func show_connect_popup(_found_settings:bool) -> void:
 	if !_found_settings:
 		var dpi:int = OS.get_screen_dpi()
@@ -33,3 +33,7 @@ func _on_fullscreen_hide_menu(is_fullscreen:bool) -> void:
 	content.add_constant_override("margin_right", side_margin)
 	content.add_constant_override("margin_bottom", side_margin)
 	content.add_constant_override("margin_left", side_margin)
+
+
+func _on_ConnectPopup_connected():
+	UINavigation.on_home_loaded()

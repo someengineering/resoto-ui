@@ -1,7 +1,9 @@
+class_name DashboardManager
 extends TabContainer
 
 signal all_dashboards_loaded
 signal dashboard_saved
+signal dashboard_opened(dashboard_name)
 
 const DefaultDashboardName:= "Resoto Example Dashboard"
 const number_keys : Array = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
@@ -11,6 +13,7 @@ var available_dashboards : Dictionary = {}
 var total_saved_dashboards : int = 0
 var dashboards_loaded : int = 0
 var default_dashboard_found:= false
+var inform_dashboard_selected := true
 
 onready var open_dashboard_btn = $"%OpenDashboard"
 onready var dashboards_list = find_node("DashboardItemList")
@@ -136,6 +139,7 @@ func restore_default_dashboard() -> void:
 
 
 func open_user_dashboards():
+	inform_dashboard_selected = false
 	var dashboard_status = get_user_dashboards()
 	for dashboard in dashboard_status.open_dashboards:
 		if dashboard_status.has("active_dashboard") and dashboard == dashboard_status.active_dashboard:
@@ -143,12 +147,17 @@ func open_user_dashboards():
 			continue
 		add_dashboard_placeholder(dashboard)
 	
+	inform_dashboard_selected = true
 	for i in get_children().size():
 		if get_tab_control(i).name.replace(" ","_") == dashboard_status.active_dashboard:
 			set_current_tab(i)
+	
 
 
 func load_dashboard(dashboard_name : String):
+	if dashboard_name == "ManageDashboards":
+		set_current_tab(get_children().find(manager_tab))
+		return
 	if not available_dashboards.has(dashboard_name):
 		return
 	var data : Dictionary = available_dashboards[dashboard_name]
@@ -157,7 +166,7 @@ func load_dashboard(dashboard_name : String):
 
 func add_dashboard_placeholder(dashboard_name : String):
 	var dashboard_placeholder = Control.new()
-	dashboard_placeholder.name = dashboard_name
+	dashboard_placeholder.name = dashboard_name.replace("_", " ")
 	add_child(dashboard_placeholder, true)
 	move_child(dashboard_placeholder, get_tab_control(current_tab).get_position_in_parent())
 
@@ -288,6 +297,13 @@ func _on_DashBoardManager_tab_changed(_tab):
 	if new_tab_control.get_class() != "DashboardContainer" and new_tab_control != manager_tab:
 		var dashboard_name = new_tab_control.name
 		new_tab_control.name = "loading"
-		load_dashboard(dashboard_name)
+		load_dashboard(dashboard_name.replace(" ", "_"))
 		new_tab_control.queue_free()
 	save_opened_dashboards()
+	
+
+
+func _on_DashBoardManager_tab_selected(tab):
+	if not inform_dashboard_selected:
+		return
+	emit_signal("dashboard_opened", get_child(tab).name.replace(" ","_"))
