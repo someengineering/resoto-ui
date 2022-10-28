@@ -48,12 +48,13 @@ onready var resize_buttons := $ResizeButtons
 onready var resize_tween := $ResizeTween
 onready var last_good_position : Vector2
 onready var last_good_size : Vector2
-onready var title_label := $PanelContainer/TitleLabel
-onready var datetime_label := $PanelContainer/Title/DataTimeLabel
-onready var delete_button := $PanelContainer/Title/DeleteButton
-onready var config_button := $PanelContainer/Title/ConfigButton
-onready var duplicate_button := $PanelContainer/Title/DuplicateButton
-onready var maximize_button := $PanelContainer/Title/MaximizeButton
+onready var titlebar := $TitleBar
+onready var title_label := $TitleBar/TitleLabel
+onready var datetime_label := $TitleBar/Title/DataTimeLabel
+onready var delete_button := $TitleBar/Title/DeleteButton
+onready var config_button := $TitleBar/Title/ConfigButton
+onready var duplicate_button := $TitleBar/Title/DuplicateButton
+onready var maximize_button := $TitleBar/Title/MaximizeButton
 onready var query_warning := $QueryWarning
 onready var widget_content := $MarginContainer
 
@@ -62,7 +63,7 @@ func _ready() -> void:
 	Style.add($ResizeButtons, Style.c.LIGHT)
 	Style.add($QueryWarning/BG, Style.c.BG2)
 	Style.add_self($QueryWarning/VBox/PanelContainer, Style.c.BG)
-	Style.add_self($PanelContainer, Style.c.BG)
+	Style.add_self($TitleBar, Style.c.BG)
 	
 	maximize_button.modulate.a = 0
 	for i in $ResizeButtons.get_child_count():
@@ -80,7 +81,7 @@ func set_grid_size(new_grid_size : Vector2) -> void:
 func set_widget(_widget : BaseWidget) -> void:
 	widget_content.add_child(_widget)
 	widget = _widget
-	$PanelContainer/Title/ExportButton.visible = widget.has_method("get_csv")
+	$TitleBar/Title/ExportButton.visible = widget.has_method("get_csv")
 
 
 func _on_resize_button_released() -> void:
@@ -309,6 +310,7 @@ func _on_ResizeTween_tween_all_completed() -> void:
 
 func lock(locked : bool) -> void:
 	is_locked = locked
+	titlebar.mouse_filter = Control.MOUSE_FILTER_PASS if locked else Control.MOUSE_FILTER_IGNORE
 	resize_buttons.visible = not (is_locked or is_maximized)
 	delete_button.visible = !locked
 	config_button.visible = !locked
@@ -316,9 +318,11 @@ func lock(locked : bool) -> void:
 	maximize_button.visible = locked
 	title_label.modulate.a = 0.1 if !locked else 1.0
 
+
 func set_title(new_title : String) -> void:
 	title = new_title
 	title_label.text = title
+
 
 func execute_query() -> void:
 	widget_content.show()
@@ -499,13 +503,12 @@ func _on_DuplicateButton_pressed():
 	emit_signal("duplicate_widget", self)
 
 
-func _on_PanelContainer_mouse_entered():
-	maximize_button.modulate.a = 1.0 if !is_maximized else 0.1
+func _on_TitleBar_mouse_entered():
+	maximize_button.modulate.a = 0.3 if !is_maximized else 0.7
 
 
-func _on_PanelContainer_mouse_exited():
-	if not is_maximized:
-		maximize_button.modulate.a = 0.0
+func _on_TitleBar_mouse_exited():
+	maximize_button.modulate.a = 0.0 if !is_maximized else 0.5
 
 
 func _on_WidgetContainer_tree_exiting():
