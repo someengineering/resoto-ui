@@ -166,7 +166,7 @@ func load_dashboard(dashboard_name : String):
 
 func add_dashboard_placeholder(dashboard_name : String):
 	var dashboard_placeholder = Control.new()
-	dashboard_placeholder.name = dashboard_name
+	dashboard_placeholder.name = dashboard_name.replace("_", " ")
 	add_child(dashboard_placeholder, true)
 	move_child(dashboard_placeholder, get_tab_control(current_tab).get_position_in_parent())
 
@@ -297,7 +297,7 @@ func _on_DashBoardManager_tab_changed(_tab):
 	if new_tab_control.get_class() != "DashboardContainer" and new_tab_control != manager_tab:
 		var dashboard_name = new_tab_control.name
 		new_tab_control.name = "loading"
-		load_dashboard(dashboard_name)
+		load_dashboard(dashboard_name.replace(" ", "_"))
 		new_tab_control.queue_free()
 	save_opened_dashboards()
 	
