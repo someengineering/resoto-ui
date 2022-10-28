@@ -396,6 +396,7 @@ script = ExtResource( 7 )
 
 [node name="BG" type="ColorRect" parent="Popups"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0.0509804, 0.0980392, 0.941176 )

@@ -30,6 +30,18 @@ func _ready() -> void:
 		$HeaderBG/Header/Description.hide()
 
 
+func make_top_level_headline():
+	$HeaderBG/Header/Top/Name.theme_type_variation = "Label_24"
+
+
+func set_expand_fixed():
+	$HeaderBG.self_modulate.a = 1.0
+	$Margin.visible = true
+	$HeaderBG/Header/Top/Expand.hide()
+	if $HeaderBG/Header.is_connected("gui_input", self, "_on_Header_gui_input"):
+		$HeaderBG/Header.disconnect("gui_input", self, "_on_Header_gui_input")
+
+
 func set_required(_value:bool) -> void:
 	required = _value
 	if is_null:
@@ -118,6 +130,6 @@ func _on_Expand_toggled(button_pressed) -> void:
 	$Margin.visible = expanded
 
 
-func _on_Header_gui_input(event) -> void:
+func _on_Header_gui_input(event:InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		_on_Expand_toggled(!$HeaderBG/Header/Top/Expand.pressed)

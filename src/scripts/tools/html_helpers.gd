@@ -8,6 +8,7 @@ var shortcut_list:Dictionary = {
 	"redo"		: KEY_Z,
 	"del_line"	: KEY_K,
 	"select_all": KEY_A,
+	"save"		: KEY_S,
 	"move_r"	: KEY_F,
 	"move_l"	: KEY_B,
 	"move_u"	: KEY_P,
@@ -78,6 +79,8 @@ func _input(event):
 				simulate_input(KEY_X)
 			if event.is_action_pressed("mac_select_all"):
 				simulate_input(KEY_A)
+			if event.is_action_pressed("mac_save"):
+				simulate_input(KEY_S)
 
 
 func _on_clipboard(args):

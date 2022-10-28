@@ -253,6 +253,14 @@ default_clear_color=false
 theme/custom="res://assets/theme/dark_theme.tres"
 common/snap_controls_to_pixels=false
 
+[input]
+
+save_shortcut={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":83,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
 [network]
 
 limits/debugger_stdout/max_chars_per_second=8192

@@ -9,7 +9,6 @@ var key:String = ""
 onready var config_value_text = $CustomConfigValue
 
 
-
 func set_value(_new_value):
 	value = _new_value
 	config_value_text.text = JSON.print(value, "  ")

@@ -17,49 +17,72 @@ const BASE_KINDS:Array = [
 	]
 const ProtectedConfigs:Array= ["resoto.core", "resoto.worker", "resoto.core.commands", "resoto.metrics"]
 const DashboardPrefix:= "resoto.ui.dashboard."
+const DefaultConfig : String = "resoto.core"
 
 signal model_ready
 signal close_config
 signal config_received
 signal pages_built
 signal config_updated
+signal config_list_refreshed
 
 var config_req: ResotoAPI.Request
 var config_put_req: ResotoAPI.Request
 
-var config_model:Dictionary
-var config_keys:Array
-var unfiltered_keys:Array
-var model_top_level:Array
-var config:Dictionary
-var config_tabs:Array = []
-var default_tab:= "resoto.core"
-var load_tab:= default_tab
-var show_dashboards:= false
+var config_model : Dictionary = {}
+var config_keys : Array
+var unfiltered_keys : Array
 
-var tabs_content: Dictionary = {}
-var tabs_content_keys: Array = []
-var _active_tab_id: int = -1
+var active_config_key : String = ""
+var active_config : Dictionary
+var config_page : Control = null
 
-onready var tabs: Tabs = find_node("Tabs")
+var show_dashboards : bool = false
+
+var tabs_content : Dictionary = {}
+var tabs_content_keys : Array = []
+var _active_tab_id : int = -1
+
+onready var tabs : Tabs = find_node("Tabs")
 onready var content = find_node("Content")
-onready var config_combo = $TabManager/PanelContainer/Box/ConfigCombo
+onready var config_combo = $VBox/Toolbar/Box/ConfigCombo
 
-func load_config() -> void:
-	hide()
-	API.get_configs(self)
+
+func _input(event:InputEvent):
+	if event.is_action_pressed("save_shortcut"):
+		save_config()
 
 
 func start() -> void:
-	load_config()
+	if config_model.empty():
+		API.get_config_model(self)
+	load_configs()
 
 
-func _on_get_configs_done(_error, _response) -> void:
-	if _error != OK:
+func load_configs() -> void:
+	API.get_configs(self)
+	yield(self, "config_list_refreshed")
+	config_combo.set_text(active_config_key)
+	_g.emit_signal("add_toast", "Configs received from Resoto Core", "", 0, self)
+
+
+func _on_get_config_model_done(_error:int, _response:ResotoAPI.Response) -> void:
+	if _error:
 		return
+	config_model = _response.transformed.result.kinds
+	emit_signal("model_ready")
+
+
+func _on_get_configs_done(_error:int, _response:ResotoAPI.Response) -> void:
+	if _error:
+		return
+	
+	# if the model is not received yet, yield for the signal
+	if config_model.empty():
+		yield(self, "model_ready")
+	
+	show()
 	unfiltered_keys = _response.transformed.result
-	API.get_config_model(self)
-	yield(self, "model_ready")
 	config_keys = []
 	for key in unfiltered_keys:
 		if not show_dashboards and key.begins_with(DashboardPrefix):
@@ -70,91 +93,123 @@ func _on_get_configs_done(_error, _response) -> void:
 		_g.emit_signal("add_toast", "Could not get Configs from Resoto Core!", "", 1, self)
 		return
 	
-	for ck in config_keys:
-		config_req = API.get_config_id(self, ck)
-		yield(self, "config_received")
+	config_combo.set_items(config_keys)
+	if not unfiltered_keys.has(active_config_key):
+		active_config_key = DefaultConfig
+		config_combo.set_text(active_config_key)
 	
-	_g.emit_signal("add_toast", "Configs received from Resoto Core", "", 0, self)
-	build_config_pages(load_tab)
+	emit_signal("config_list_refreshed")
 
 
-func _on_get_config_model_done(_error, _response) -> void:
-	config_model = _response.transformed.result.kinds
-	emit_signal("model_ready")
-
-
-func _on_get_config_id_done(_error, _response, config_key) -> void:
-	config[config_key] = _response.transformed.result
-	emit_signal("config_received")
-
-
-func build_config_pages(go_to_tab:String="resoto.core") -> void:
-	tabs_content.clear()
-	config_tabs.clear()
-	for i in tabs.get_tab_count():
-		tabs.remove_tab(0)
-	
+func open_configuration(_config_key:String) -> void:
+	# Cancel the old request if configs are changed in quick succession
+	if config_req:
+		config_req.cancel(ERR_PRINTER_ON_FIRE)
+	active_config_key = _config_key
+	config_page = null
+	active_config = {}
 	for c in content.get_children():
 		c.queue_free()
+	config_req = API.get_config_id(self, _config_key)
+
+
+func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_key:String) -> void:
+	if _error:
+		if _error == ERR_PRINTER_ON_FIRE:
+			return
+		# Handle eventual error... if we arrive here, any other error should be
+		# extremely unlikely
+		return
+	active_config = _response.transformed.result
+	build_config_page()
+
+
+func build_config_page():
+	var new_config_page = add_new_config_page(active_config_key)
+	new_config_page.set_meta("main_level", true)
+	new_config_page.key = active_config_key
+	new_config_page.config_component = self
+	new_config_page.kind = active_config_key
+	new_config_page.value = active_config
+	var new_elements = []
 	
-	var config_elements:Array = []
-	for key in config_keys:
-		var new_tab = add_new_tab(key)
-		new_tab.set_meta("main_level", true)
-		new_tab.key = key
-		new_tab.config_component = self
-		new_tab.kind = key
-		new_tab.value = config[key]
-		config_elements.append(key)
-		var new_elements = []
-		var dict_key = config[key].keys()[0]
-		var new_element = add_element(dict_key, dict_key, config[key], new_tab, false)
+	# If the config is completely empty, just add a raw json display
+	if active_config.keys().empty():
+		var new_element = add_element("_", "", {}, new_config_page, false)
+		new_elements.append(new_element)
+	else:
+		var dict_key = active_config.keys()[0]
+		var new_element = add_element(dict_key, dict_key, active_config, new_config_page, false)
 		if typeof(new_element) == TYPE_ARRAY:
 			new_elements.append_array(new_element)
 		else:
 			new_elements.append(new_element)
-		new_tab.content_elements = new_elements
-		config_tabs.append(new_tab)
 	
-	tabs_content_keys = tabs_content.keys()
-	update_size()
-	var resoto_core_index = config_keys.find(go_to_tab)
-	resoto_core_index = resoto_core_index if resoto_core_index >= 0 else 0
-	var default_key = config_keys[resoto_core_index]
-	change_active_tab(resoto_core_index, true)
+	new_config_page.content_elements = new_elements
 	
-	config_combo.set_items(config_elements)
-	config_combo.set_text(default_key)
-	load_tab = default_tab
-	show()
+	# If there is only one main key in the dictionary / config, expand it when showing the tab.
+	var count_complex:= 0
+	var first_complex:Node= null
+	for c in new_config_page.get_children():
+		if c.name.begins_with("Complex_"):
+			c.make_top_level_headline()
+			first_complex = c
+			count_complex += 1
+	
+	# If there is only one top level "Complex" type, expand it right away
+	# E.g. resoto.core (resotocore), resoto.core.commands (custom_commands)
+	if count_complex == 1:
+		first_complex.set_expand_fixed()
+	config_page = new_config_page
 	emit_signal("pages_built")
 
 
-func save_config() -> void:
-	var new_config:Dictionary = {}
+func add_new_config_page(_title:String) -> Node:
+	var new_config_page = preload("res://components/config/config_templates/component_config_template_config_page.tscn").instance()
+	new_config_page.name = "ConfigPage_" + _title
+	content.add_child(new_config_page)
+	return new_config_page
 
-	for config_element in config_tabs[_active_tab_id].content_elements:
+
+func save_config() -> void:
+	var json_config_result = convert_active_config_to_string()
+	if json_config_result.error != OK:
+		_g.emit_signal("add_toast", "Error saving configuration.", "", 1, self)
+		return
+	if JSON.print(json_config_result.dict).hash() == JSON.print(active_config).hash():
+		_g.emit_signal("add_toast", "No semantic changes.", "", 0, self)
+		return
+	
+	config_put_req = API.put_config_id(self, active_config_key, json_config_result.string)
+	Analytics.event(Analytics.EventsConfig.EDIT, {"config-name": active_config_key})
+
+
+func convert_active_config_to_string() -> Dictionary:
+	var _error : int = OK
+	var result : Dictionary = {"error" : _error, "dict" : null, "string" : ""}
+	
+	var new_config:Dictionary = {}
+	for config_element in config_page.content_elements:
 		if "key" in config_element:
 			new_config[config_element.key] = config_element.value
 		else:
 			new_config = config_element.value
-			
 		if "value_creation_error" in config_element:
 			if config_element.value_creation_error:
-				_g.emit_signal("add_toast", "Error saving configuration.", "", 1, self)
-				return
+				result.error = FAILED
+				return result
+	result.dict = new_config
 	
-	var selected_config = config_keys[_active_tab_id]
-	var json_config = JSON.print(new_config)
-	if json_config.begins_with("{\"\":"):
-		json_config = json_config.trim_prefix("{\"\":").trim_suffix("}")
-	config_put_req = API.put_config_id(self, selected_config, json_config)
+	var json_string = JSON.print(new_config)
+	if json_string.begins_with("{\"\":"):
+		json_string = json_string.trim_prefix("{\"\":").trim_suffix("}")
 	
-	Analytics.event(Analytics.EventsConfig.EDIT, {"config-name": selected_config})
+	result.string = json_string
+	return result
 
 
 func _on_put_config_id_done(_error, _response) -> void:
-	if _error != 0:
+	if _error:
 		_g.emit_signal("add_toast", "Error saving configuration.", "", 1, self)
 		return
 	
@@ -170,7 +225,6 @@ func _on_put_config_id_done(_error, _response) -> void:
 	if "Resoto-Config-Revision" in _response.headers:
 		config_revision = "Revision: " + _response.headers["Resoto-Config-Revision"]
 	_g.emit_signal("add_toast", "Configuration updated successfully.", config_revision, 0, self)
-	emit_signal("close_config")
 	emit_signal("config_updated")
 
 
@@ -258,9 +312,7 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			pass
 		return new_elements
 	else:
-		var error_message = "Configuration was not found in Model."
-		error_message += "\nCustom Configurations are not renderable."
-		error_message += "\n\nRaw JSON:\n"
+		var error_message = "Configuration was not found in model.\nDisplaying configurations in raw JSON:"
 		return create_custom(error_message, _property_value, _parent)
 
 
@@ -472,70 +524,6 @@ func create_dict(_name:String, _kind, _value, _properties, _parent:Control, defa
 	return new_dict_container
 
 
-func update_size() -> void:
-	var tab_count =  tabs.get_tab_count()
-	if tab_count == 0:
-		tabs.rect_min_size.x = 0
-		return
-	
-	var total_size_x : float = 0.0
-	for i in tab_count:
-		total_size_x += tabs.get_tab_rect(i).size.x
-	tabs.rect_min_size.x = clamp(32 + total_size_x, 0, rect_size.x-30)
-
-
-func change_tab_name(_new_name:String) -> void:
-	tabs.set_tab_title(_active_tab_id, _new_name)
-	update_size()
-
-
-func add_new_tab(_title:String) -> Node:
-	var new_element = null
-	tabs.add_tab(_title)
-	var new_config_tab = preload("res://components/config/config_templates/component_config_template_config_tab.tscn").instance()
-	new_config_tab.name = "Tab_" + _title
-	content.add_child(new_config_tab)
-	new_element = new_config_tab
-	tabs_content[_title] = new_element
-	return new_element
-
-
-func change_active_tab(tab:int, update_tab:bool =false) -> void:
-	_active_tab_id = tab
-	if update_tab:
-		tabs.current_tab = tab
-	hide_all_tabs()
-	if tabs_content.empty():
-		return
-	var tab_content = tabs_content[ tabs_content_keys[tab] ]
-	tab_content.show()
-	update_buttons_to_show()
-	
-	# If there is only one main key in the dictionary / config, expand it when showing the tab.
-	var count_complex:= 0
-	var first_complex:Node= null
-	for c in tab_content.get_children():
-		if count_complex > 1:
-			break
-		if c.name.begins_with("Complex_"):
-			first_complex = c
-			count_complex += 1
-	if count_complex == 1:
-		first_complex._on_Expand_toggled(true)
-
-
-func update_buttons_to_show():
-	var filter_for = config_keys[_active_tab_id]
-	var is_protected = ProtectedConfigs.has(filter_for)
-	$TabManager/PanelContainer/Box/RenameConfigButton.visible = !is_protected
-	$TabManager/PanelContainer/Box/DeleteConfigButton.visible = !is_protected
-
-
-func hide_all_tabs() -> void:
-	for tab in tabs_content.values():
-		tab.hide()
-
-
 func build_simple(elements):
 	if elements.empty():
 		return null
@@ -559,16 +547,12 @@ func build_dict(elements):
 	return new_dict
 
 
-func _on_Tabs_tab_changed(tab:int) -> void:
-	change_active_tab(tab)
-
-
 func _on_SaveConfigButton_pressed() -> void:
 	save_config()
 
 
 func _on_LoadConfigFromCoreButton_pressed() -> void:
-	load_config()
+	open_configuration(active_config_key)
 
 
 func _on_CloseConfigButton_pressed():
@@ -578,12 +562,9 @@ func _on_CloseConfigButton_pressed():
 func _on_ConfigCombo_option_changed(option):
 	var config_index = config_keys.find(option)
 	if config_index == -1:
+		_g.emit_signal("add_toast", "Config not found", "The configuration you tried to open does not exist", 2, self)
 		return
-	change_active_tab(config_index, true)
-
-
-func get_current_config_name() -> String:
-	return config_keys[_active_tab_id]
+	open_configuration(option)
 
 
 func _on_AddConfigButton_pressed():
@@ -597,102 +578,121 @@ func _on_AddConfigButton_pressed():
 
 func _on_add_confirm_response(_button_clicked:String, _value:String):
 	if _button_clicked == "left":
-		# If the name already exists as a key
+		# Check if a config with that name already exsits.
+		# To make sure no config was created while editing, check for new config keys:
+		API.get_configs(self)
+		yield(self, "config_list_refreshed")
 		if unfiltered_keys.has(_value):
-			_g.emit_signal("add_toast", "New Config could not be created", "A Configuration with that name already exists in Resoto Core", 1, self)
+			_g.emit_signal("add_toast", "Config Creation failed", "A Configuration with that name already exists in Resoto Core", 1, self)
 			return
-		hide()
 		# Show loading animation
 		config_put_req = API.put_config_id(self, _value, "{\"purple\":\"sheep\"}")
 		Analytics.event(Analytics.EventsConfig.NEW)
 		yield(self, "config_updated")
-		load_tab = _value
-		load_config()
+		active_config_key = _value
+		load_configs()
 
 
 func _on_DeleteConfigButton_pressed():
 	# Dangerzone!
 	var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
 		"Delete Configuration?",
-		"Do you want to delete the following configuration:\n`%s`\n\nThis operation can not be undone!" % get_current_config_name(),
+		"Do you want to delete the following configuration:\n`%s`\n\nThis operation can not be undone!" % active_config_key,
 		"Delete", "Cancel")
 	delete_confirm_popup.connect("response", self, "_on_delete_confirm_response", [], CONNECT_ONESHOT)
 
 
-func _on_delete_confirm_response(_response:String):
+func _on_delete_confirm_response(_response:String, _double_confirm:=false):
 	if _response == "left":
-		hide()
-		# Show loading animation
-		API.delete_config_id(self, get_current_config_name())
+		if ProtectedConfigs.has(active_config_key) and not _double_confirm:
+			_g.popup_manager.on_popup_close()
+			yield(_g.popup_manager, "popup_gone")
+			var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
+			"Delete Configuration?",
+			"`%s` is a sytem configuration, are you sure you want to delete it anyway?\n\nThis operation can not be undone!" % active_config_key,
+			"Delete", "Cancel")
+			
+			delete_confirm_popup.connect("response", self, "_on_delete_confirm_response", [true], CONNECT_ONESHOT)
+			return
+		
+		API.delete_config_id(self, active_config_key)
 		Analytics.event(Analytics.EventsConfig.DELETE)
 
 
 func _on_delete_config_id_done(_error: int, _response):
-	load_config()
+	load_configs()
 	yield(self, "pages_built")
 	if rename_new_name != "":
-		load_tab = rename_new_name
-		change_active_tab(config_keys.find(rename_new_name), true)
+		active_config_key = rename_new_name
 	rename_new_name = ""
 
 
 func _on_DuplicateConfigButton_pressed():
+	duplicate_new_name = ""
 	var duplicate_confirm_popup = _g.popup_manager.show_input_popup(
 		"Duplicate Configuration",
-		"Enter a new name for the duplicate of:\n`%s`" % get_current_config_name(),
-		get_current_config_name(),
+		"Enter a new name for the duplicate of:\n`%s`" % active_config_key,
+		active_config_key+"_duplicate_" + str(OS.get_unix_time()),
 		"Accept", "Cancel")
 	duplicate_confirm_popup.connect("response_with_input", self, "_on_duplicate_confirm_response", [], CONNECT_ONESHOT)
 
 
-var duplicate_new_name:= ""
+var duplicate_new_name : String = ""
 func _on_duplicate_confirm_response(_button_clicked:String, _value:String):
 	if _button_clicked == "left":
-		# If the name already exists as a key
+		# Check if a config with that name already exsits.
+		# To make sure no config was created while editing, check for new config keys:
+		API.get_configs(self)
+		yield(self, "config_list_refreshed")
 		if unfiltered_keys.has(_value):
-			_g.emit_signal("add_toast", "New Config could not be created", "A Configuration with that name already exists in Resoto Core", 1, self)
+			_g.emit_signal("add_toast", "Duplicating Config failed", "A Configuration with that name already exists in Resoto Core", 1, self)
 			return
-		hide()
-		# Show loading animation
+		
 		duplicate_new_name = _value
-		load_tab = _value
-		API.get_config_id(self, get_current_config_name(), "_on_config_duplicate_get_done")
-
-
-func _on_config_duplicate_get_done(_error, _response, _config_key) -> void:
-	var config_backup = _response.transformed.result
-	var json_config = JSON.print(config_backup)
-	config_put_req = API.put_config_id(self, duplicate_new_name, json_config)
-	Analytics.event(Analytics.EventsConfig.DUPLICATE)
-	yield(self, "config_updated")
-	duplicate_new_name = ""
-	load_config()
+		var json_config_result = convert_active_config_to_string()
+		if json_config_result.error != OK:
+			_g.emit_signal("add_toast", "Error duplicating configuration.", "", 1, self)
+			return
+		
+		config_put_req = API.put_config_id(self, duplicate_new_name, json_config_result.string)
+		Analytics.event(Analytics.EventsConfig.DUPLICATE)
+		yield(self, "config_updated")
+		active_config_key = duplicate_new_name
+		duplicate_new_name = ""
+		load_configs()
 
 
 func _on_RenameConfigButton_pressed():
+	rename_new_name = ""
 	var rename_confirm_popup = _g.popup_manager.show_input_popup(
 		"Rename Configuration",
-		"Enter a new name for the configuration:\n`%s`" % get_current_config_name(),
-		get_current_config_name(),
+		"Renaming will omit changes (Save first!)\nEnter a new name for the configuration:\n`%s`" % active_config_key,
+		active_config_key,
 		"Accept", "Cancel")
 	rename_confirm_popup.connect("response_with_input", self, "_on_rename_confirm_response", [], CONNECT_ONESHOT)
 
 
-var rename_new_name:= ""
+var rename_new_name : String= ""
 func _on_rename_confirm_response(_button_clicked:String, _value:String):
 	if _button_clicked == "left":
+		if active_config_key == _value:
+			# No name change happened
+			return
+		# Check if a config with that name already exsits.
+		# To make sure no config was created while editing, check for new config keys:
+		API.get_configs(self)
+		yield(self, "config_list_refreshed")
+		if unfiltered_keys.has(_value):
+			_g.emit_signal("add_toast", "Renaming failed", "A Configuration with that name already exists in Resoto Core", 1, self)
+			return
+		
 		rename_new_name = _value
-		API.get_config_id(self, get_current_config_name(), "_on_config_rename_get_done")
-
-
-func _on_config_rename_get_done(_error, _response, _config_key) -> void:
-	var config_backup = _response.transformed.result
-	var json_config = JSON.print(config_backup)
-	config_put_req = API.put_config_id(self, rename_new_name, json_config)
-	API.delete_config_id(self, get_current_config_name(), "_on_delete_config_id_done")
+		config_put_req = API.put_config_id(self, rename_new_name, JSON.print(active_config))
+		API.delete_config_id(self, active_config_key, "_on_delete_config_id_done")
+		yield(self, "config_updated")
+		active_config_key = rename_new_name
 
 
 func _on_ShowDashboardsButton_toggled(button_pressed):
 	show_dashboards = button_pressed
-	hide()
-	load_config()
+	load_configs()
