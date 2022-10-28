@@ -108,11 +108,19 @@ func set_data(data, type : int):
 		return
 	for d in data:
 		if d.size() != 2:
-			_g.emit_signal("add_toast", "Heatmap Widget error", "Data format is not correct.", 1, self)
-			return
+			if d.size() < 2:
+				_g.emit_signal("add_toast", "Heatmap Widget error", "Aggregation not correct. Required format:\naggregate(y, x: sum(1) as type): is(type))", 1, self)
+				return
+			elif d.size() > 2:
+				_g.emit_signal("add_toast", "Heatmap Widget error", "Aggregation not correct. Required format:\naggregate(y, x: sum(1) as type): is(type))", 1, self)
+				return
 	if not data[0].has("group") or data[0].group.empty() or data[0].group.size() != 2:
-		for d in data:
-			d.group["Missing second axis, add a second grouping\naggregate(y, x: sum(1) as type): is(type))"] = ""
+		if data[0].group.size() < 2:
+			for d in data:
+				d.group["Missing second axis, add a second grouping\naggregate(y, x: sum(1) as type): is(type))"] = ""
+		if data[0].group.size() > 2:
+			_g.emit_signal("add_toast", "Heatmap Widget error", "Aggregation not correct. Required format:\naggregate(y, x: sum(1) as type): is(type))", 1, self)
+			return
 	
 	current_data = data
 	x_categories.clear()
