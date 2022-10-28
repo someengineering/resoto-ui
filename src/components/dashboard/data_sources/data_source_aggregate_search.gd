@@ -17,6 +17,9 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 
 
 func _on_aggregate_search_done(_error : int, response):
+	if _error:
+		emit_signal("query_status", FAILED, "Invalid Aggregate Search", "There is a problem with the aggregate search query.")
+		return
 	if not response.transformed.result is Array or response.transformed.result.size() == 0:
 		_g.emit_signal("add_toast", "Invalid Aggregate Search", "There is a problem with the aggregate search query.", 1, self)
 		emit_signal("query_status", FAILED, "Invalid Aggregate Search", "There is a problem with the aggregate search query.")
