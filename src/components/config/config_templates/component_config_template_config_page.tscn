@@ -2,25 +2,11 @@
 
 [ext_resource path="res://components/config/config_templates/component_config_page.gd" type="Script" id=1]
 
-[node name="TemplateConfigTab" type="VBoxContainer"]
+[node name="TemplateConfigPage" type="VBoxContainer"]
 margin_right = 1900.0
 margin_bottom = 4.0
 custom_constants/separation = 5
 script = ExtResource( 1 )
-
-[node name="Description" type="Label" parent="."]
-visible = false
-margin_right = 1900.0
-margin_bottom = 20.0
-size_flags_horizontal = 3
-text = "Test"
-
-[node name="HSeparator" type="HSeparator" parent="."]
-visible = false
-modulate = Color( 1, 1, 1, 0.501961 )
-margin_top = 24.0
-margin_right = 1900.0
-margin_bottom = 28.0
 
 [node name="Spacer" type="Control" parent="."]
 margin_right = 1900.0

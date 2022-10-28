@@ -88,20 +88,11 @@ margin_bottom = 33.0
 rect_min_size = Vector2( 20, 0 )
 size_flags_horizontal = 3
 
-[node name="CloseConfigButton" type="Button" parent="VBox/Toolbar/Box"]
-visible = false
-margin_left = 1408.0
-margin_right = 1472.0
-margin_bottom = 33.0
-size_flags_horizontal = 4
-size_flags_vertical = 8
-text = "Close"
-
 [node name="SaveConfigButton" type="Button" parent="VBox/Toolbar/Box"]
 margin_left = 1597.0
 margin_right = 1707.0
 margin_bottom = 33.0
-hint_tooltip = "Save the changes to the current configuration in Resoto Core"
+hint_tooltip = "Save this configuration in Resoto Core"
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Save Config"
@@ -109,31 +100,31 @@ text = "Save Config"
 [node name="RenameConfigButton" parent="VBox/Toolbar/Box" instance=ExtResource( 12 )]
 margin_left = 1711.0
 margin_right = 1744.0
-hint_tooltip = "Rename the current configuration"
+hint_tooltip = "Rename configuration"
 icon_tex = ExtResource( 17 )
 
 [node name="DuplicateConfigButton" parent="VBox/Toolbar/Box" instance=ExtResource( 12 )]
 margin_left = 1748.0
 margin_right = 1781.0
-hint_tooltip = "Duplicate the current configuration with a new name"
+hint_tooltip = "Duplicate this configuration with a new name"
 icon_tex = ExtResource( 18 )
 
 [node name="ReloadConfigButton" parent="VBox/Toolbar/Box" instance=ExtResource( 12 )]
 margin_left = 1785.0
 margin_right = 1818.0
-hint_tooltip = "Reload all configurations from Resoto Core"
+hint_tooltip = "Reload configuration from Resoto Core"
 icon_tex = ExtResource( 15 )
 
 [node name="AddConfigButton" parent="VBox/Toolbar/Box" instance=ExtResource( 12 )]
 margin_left = 1822.0
 margin_right = 1855.0
-hint_tooltip = "Add Configuration to Resoto Core"
+hint_tooltip = "Add new configuration to Resoto Core"
 icon_tex = ExtResource( 19 )
 
 [node name="DeleteConfigButton" parent="VBox/Toolbar/Box" instance=ExtResource( 12 )]
 margin_left = 1859.0
 margin_right = 1892.0
-hint_tooltip = "Delete the current configuration from Resoto Core (no undo!)"
+hint_tooltip = "Delete this configuration from Resoto Core (no undo!)"
 icon_tex = ExtResource( 13 )
 
 [node name="MainPanel" type="PanelContainer" parent="VBox"]
@@ -159,12 +150,12 @@ margin_right = 1900.0
 margin_bottom = 990.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/margin_right = 10
-custom_constants/margin_left = 10
+custom_constants/margin_right = 20
+custom_constants/margin_top = 0
+custom_constants/margin_left = 8
 
 [connection signal="option_changed" from="VBox/Toolbar/Box/ConfigCombo" to="." method="_on_ConfigCombo_option_changed"]
 [connection signal="toggled" from="VBox/Toolbar/Box/ShowDashboardsButton" to="." method="_on_ShowDashboardsButton_toggled"]
-[connection signal="pressed" from="VBox/Toolbar/Box/CloseConfigButton" to="." method="_on_CloseConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/SaveConfigButton" to="." method="_on_SaveConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/RenameConfigButton" to="." method="_on_RenameConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/DuplicateConfigButton" to="." method="_on_DuplicateConfigButton_pressed"]
