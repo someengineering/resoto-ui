@@ -170,6 +170,21 @@ margin_bottom = 2.0
 mouse_filter = 2
 size_flags_vertical = 0
 
+[node name="TimeLabel" type="Label" parent="CanvasLayer/PopupLegend/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 21.0
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PopupLegend/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 4.0
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/PopupLegend/VBoxContainer"]
+margin_left = -6.0
+margin_top = -2.0
+margin_right = 34.0
+margin_bottom = 38.0
+columns = 2
+
 [node name="UpdateTween" type="Tween" parent="."]
 
 [connection signal="resized" from="." to="." method="_on_Chart_resized"]
