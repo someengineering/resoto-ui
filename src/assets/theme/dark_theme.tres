@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=89 format=2]
+[gd_resource type="Theme" load_steps=88 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -325,12 +325,6 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 15 )
 
-[sub_resource type="DynamicFont" id=89]
-size = 17
-use_mipmaps = true
-use_filter = true
-font_data = ExtResource( 15 )
-
 [sub_resource type="DynamicFontData" id=41]
 font_path = "res://assets/theme/Barlow-Regular.ttf"
 
@@ -372,6 +366,12 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="DynamicFont" id=79]
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=89]
+size = 17
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 15 )
@@ -597,8 +597,6 @@ font_data = SubResource( 19 )
 
 [sub_resource type="StyleBoxEmpty" id=86]
 
-[sub_resource type="StyleBoxEmpty" id=89]
-
 [sub_resource type="StyleBoxEmpty" id=87]
 
 [sub_resource type="StyleBoxEmpty" id=88]
@@ -726,8 +724,6 @@ Label/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 LabelBold/fonts/font = SubResource( 63 )
 LabelCode/base_type = "Label"
 LabelCode/fonts/font = SubResource( 81 )
-LabelCodeBig/base_type = "Label"
-LabelCodeBig/fonts/font = SubResource( 89 )
 LabelSmall/base_type = "Label"
 LabelSmall/fonts/font = SubResource( 42 )
 LineEdit/colors/clear_button_color = Color( 0, 0.329412, 0.639216, 1 )
@@ -742,13 +738,13 @@ LineEdit/styles/normal = SubResource( 7 )
 LineEdit/styles/read_only = SubResource( 7 )
 LineEditCode/base_type = "LineEdit"
 LineEditCode/fonts/font = SubResource( 79 )
+LineEditCodeConfig/fonts/font = SubResource( 89 )
+LineEditConfig/base_type = "LineEdit"
+LineEditConfig/fonts/font = SubResource( 89 )
 LineEditSmall/base_type = "LineEdit"
 LineEditSmall/styles/focus = SubResource( 72 )
 LineEditSmall/styles/normal = SubResource( 73 )
 LineEditSmall/styles/read_only = SubResource( 74 )
-LineEditCodeConfig/fonts/font = SubResource( 89 )
-LineEditConfig/base_type = "LineEdit"
-LineEditConfig/fonts/font = SubResource( 89 )
 OptionButton/icons/arrow = ExtResource( 13 )
 Panel/styles/panel = SubResource( 36 )
 PanelContainer/styles/panel = SubResource( 21 )
@@ -810,7 +806,7 @@ TextEditTag/base_type = "TextEdit"
 TextEditTag/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 TextEditTag/fonts/font = SubResource( 81 )
 TextEditTag/styles/completion = SubResource( 86 )
-TextEditTag/styles/focus = SubResource( 89 )
+TextEditTag/styles/focus = null
 TextEditTag/styles/normal = SubResource( 87 )
 TextEditTag/styles/read_only = SubResource( 88 )
 TooltipPanel/styles/panel = SubResource( 45 )

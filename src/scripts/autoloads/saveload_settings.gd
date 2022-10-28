@@ -106,5 +106,5 @@ func delete_settings() -> void:
 	var settings : File = File.new()
 	if not settings.file_exists(settings_path):
 		return
-	var dir : Dictionary = Directory.new()
+	var dir : Directory = Directory.new()
 	dir.remove(settings_path)
