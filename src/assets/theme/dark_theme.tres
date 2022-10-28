@@ -370,6 +370,12 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 15 )
 
+[sub_resource type="DynamicFont" id=89]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 15 )
+
 [sub_resource type="StyleBoxFlat" id=72]
 content_margin_left = 6.0
 content_margin_right = 6.0
@@ -581,17 +587,15 @@ corner_radius_top_right = 4
 expand_margin_bottom = 3.0
 
 [sub_resource type="DynamicFontData" id=19]
+override_oversampling = 2.0
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
 
 [sub_resource type="DynamicFont" id=20]
-size = 14
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 19 )
 
 [sub_resource type="StyleBoxEmpty" id=86]
-
-[sub_resource type="StyleBoxEmpty" id=89]
 
 [sub_resource type="StyleBoxEmpty" id=87]
 
@@ -734,6 +738,9 @@ LineEdit/styles/normal = SubResource( 7 )
 LineEdit/styles/read_only = SubResource( 7 )
 LineEditCode/base_type = "LineEdit"
 LineEditCode/fonts/font = SubResource( 79 )
+LineEditCodeConfig/fonts/font = SubResource( 89 )
+LineEditConfig/base_type = "LineEdit"
+LineEditConfig/fonts/font = SubResource( 89 )
 LineEditSmall/base_type = "LineEdit"
 LineEditSmall/styles/focus = SubResource( 72 )
 LineEditSmall/styles/normal = SubResource( 73 )
@@ -785,8 +792,10 @@ Tabs/styles/button = SubResource( 27 )
 Tabs/styles/button_pressed = SubResource( 28 )
 Tabs/styles/tab_bg = SubResource( 70 )
 Tabs/styles/tab_fg = SubResource( 69 )
-TextEdit/colors/font_color = Color( 0.816406, 0.94351, 1, 1 )
+TextEdit/colors/current_line_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+TextEdit/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 TextEdit/colors/font_color_readonly = Color( 0.537255, 0.819608, 0.945098, 1 )
+TextEdit/colors/line_number_color = Color( 0.123871, 0.346745, 0.480469, 1 )
 TextEdit/colors/selection_color = Color( 0, 0.329412, 0.639216, 1 )
 TextEdit/fonts/font = SubResource( 20 )
 TextEdit/styles/completion = SubResource( 6 )
@@ -797,7 +806,7 @@ TextEditTag/base_type = "TextEdit"
 TextEditTag/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 TextEditTag/fonts/font = SubResource( 81 )
 TextEditTag/styles/completion = SubResource( 86 )
-TextEditTag/styles/focus = SubResource( 89 )
+TextEditTag/styles/focus = null
 TextEditTag/styles/normal = SubResource( 87 )
 TextEditTag/styles/read_only = SubResource( 88 )
 TooltipPanel/styles/panel = SubResource( 45 )

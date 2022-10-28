@@ -179,7 +179,8 @@ func set_to_null(to_null:bool) -> void:
 				c.queue_free()
 	is_null = to_null
 	$HeaderBG/Header/Top/Expand.visible = !is_null
-	$HeaderBG/Header/Top/VarValueIsNull.visible = is_null
+	null_value.hide()
+#	null_value.visible = is_null
 	if not required:
 		$HeaderBG/Header/Top/ButtonAddValue.visible = is_null
 		$HeaderBG/Header/Top/ButtonSetToNull.visible = !is_null
