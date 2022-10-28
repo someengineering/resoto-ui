@@ -344,17 +344,17 @@ margin_bottom = 65.0
 text = "Error: Title"
 align = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="TitleBar" type="PanelContainer" parent="."]
 self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
 anchor_right = 1.0
 margin_left = 5.0
 margin_top = 5.0
 margin_right = -5.0
 margin_bottom = 29.0
-mouse_filter = 2
+mouse_filter = 1
 custom_styles/panel = SubResource( 19 )
 
-[node name="TitleLabel" type="Label" parent="PanelContainer"]
+[node name="TitleLabel" type="Label" parent="TitleBar"]
 margin_left = 5.0
 margin_top = 7.0
 margin_right = 241.0
@@ -364,27 +364,27 @@ text = "Title"
 align = 1
 clip_text = true
 
-[node name="Title" type="HBoxContainer" parent="PanelContainer"]
+[node name="Title" type="HBoxContainer" parent="TitleBar"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 241.0
 margin_bottom = 30.0
 mouse_filter = 2
 
-[node name="DataTimeLabel" type="Label" parent="PanelContainer/Title"]
+[node name="DataTimeLabel" type="Label" parent="TitleBar/Title"]
 modulate = Color( 1, 1, 1, 0.498039 )
 margin_top = 4.0
 margin_bottom = 20.0
 theme_type_variation = "LabelSmall"
 
-[node name="Spacer" type="Control" parent="PanelContainer/Title"]
+[node name="Spacer" type="Control" parent="TitleBar/Title"]
 margin_left = 4.0
 margin_right = 92.0
 margin_bottom = 25.0
 mouse_filter = 2
 size_flags_horizontal = 3
 
-[node name="MaximizeButton" type="Button" parent="PanelContainer/Title"]
+[node name="MaximizeButton" type="Button" parent="TitleBar/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
 margin_left = 96.0
 margin_right = 124.0
@@ -399,7 +399,7 @@ flat = true
 expand_icon = true
 script = ExtResource( 3 )
 
-[node name="ExportButton" type="Button" parent="PanelContainer/Title"]
+[node name="ExportButton" type="Button" parent="TitleBar/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
 margin_left = 128.0
 margin_right = 152.0
@@ -413,7 +413,7 @@ flat = true
 expand_icon = true
 script = ExtResource( 3 )
 
-[node name="DuplicateButton" type="Button" parent="PanelContainer/Title"]
+[node name="DuplicateButton" type="Button" parent="TitleBar/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
 margin_left = 156.0
 margin_right = 180.0
@@ -427,7 +427,7 @@ flat = true
 expand_icon = true
 script = ExtResource( 3 )
 
-[node name="ConfigButton" type="Button" parent="PanelContainer/Title"]
+[node name="ConfigButton" type="Button" parent="TitleBar/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
 margin_left = 184.0
 margin_right = 208.0
@@ -441,7 +441,7 @@ flat = true
 expand_icon = true
 script = ExtResource( 3 )
 
-[node name="DeleteButton" type="Button" parent="PanelContainer/Title"]
+[node name="DeleteButton" type="Button" parent="TitleBar/Title"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
 margin_left = 212.0
 margin_right = 236.0
@@ -463,10 +463,10 @@ script = ExtResource( 4 )
 [connection signal="moved_or_resized" from="." to="." method="_on_WidgetContainer_moved_or_resized"]
 [connection signal="tree_exiting" from="." to="." method="_on_WidgetContainer_tree_exiting"]
 [connection signal="pressed" from="QueryWarning/VBox/PanelContainer/VBox/ConfigButton" to="." method="_on_ConfigButton_pressed"]
-[connection signal="mouse_entered" from="PanelContainer" to="." method="_on_PanelContainer_mouse_entered"]
-[connection signal="mouse_exited" from="PanelContainer" to="." method="_on_PanelContainer_mouse_exited"]
-[connection signal="toggled" from="PanelContainer/Title/MaximizeButton" to="." method="_on_MaximizeButton_toggled"]
-[connection signal="pressed" from="PanelContainer/Title/ExportButton" to="." method="_on_ExportButton_pressed"]
-[connection signal="pressed" from="PanelContainer/Title/DuplicateButton" to="." method="_on_DuplicateButton_pressed"]
-[connection signal="pressed" from="PanelContainer/Title/ConfigButton" to="." method="_on_ConfigButton_pressed"]
-[connection signal="pressed" from="PanelContainer/Title/DeleteButton" to="." method="_on_DeleteButton_pressed"]
+[connection signal="mouse_entered" from="TitleBar" to="." method="_on_TitleBar_mouse_entered"]
+[connection signal="mouse_exited" from="TitleBar" to="." method="_on_TitleBar_mouse_exited"]
+[connection signal="toggled" from="TitleBar/Title/MaximizeButton" to="." method="_on_MaximizeButton_toggled"]
+[connection signal="pressed" from="TitleBar/Title/ExportButton" to="." method="_on_ExportButton_pressed"]
+[connection signal="pressed" from="TitleBar/Title/DuplicateButton" to="." method="_on_DuplicateButton_pressed"]
+[connection signal="pressed" from="TitleBar/Title/ConfigButton" to="." method="_on_ConfigButton_pressed"]
+[connection signal="pressed" from="TitleBar/Title/DeleteButton" to="." method="_on_DeleteButton_pressed"]
