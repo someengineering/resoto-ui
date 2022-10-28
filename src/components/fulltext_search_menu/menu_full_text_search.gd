@@ -10,10 +10,11 @@ var count_request: ResotoAPI.Request
 var search_command:= ""
 var buffered_command:= ""
 
-onready var popup := $ResultsPopUp
-onready var popup_results := $ResultsPopUp/VBox
-onready var result_amount_label := $ResultsPopUp/VBox/Title/ResultAmountLabel
-onready var list_btn := $ResultsPopUp/VBox/Title/ListButton
+onready var popup := $PopupLayer/ResultsPopUp
+onready var popup_results := $PopupLayer/ResultsPopUp/VBox
+onready var result_amount_label := $PopupLayer/ResultsPopUp/VBox/Title/ResultAmountLabel
+onready var list_btn := $PopupLayer/ResultsPopUp/VBox/Title/ListButton
+
 onready var single_node_info = _g.content_manager.find_node("NodeSingleInfo")
 onready var search_delay := $SearchDelay
 
@@ -86,7 +87,7 @@ func show_search_results(results:Array, error:="") -> void:
 			result_amount_label.autowrap = true
 			popup.show()
 			yield(VisualServer, "frame_post_draw")
-			popup.rect_size.y = 1
+			popup.rect_size.y = 50
 		else:
 			popup.hide()
 		return
@@ -125,14 +126,13 @@ func show_search_results(results:Array, error:="") -> void:
 		new_result.get_node("VBox/ResultDetails").text = ancestors
 		popup_results.add_child(new_result)
 	
-	yield(get_tree(), "idle_frame")
-	popup.set_as_minsize()
+	yield(VisualServer, "frame_post_draw")
 	var _popup_x_size = max(popup_x_size, rect_size.x)
 	var popup_pos  = rect_global_position + Vector2(-abs(_popup_x_size-rect_size.x), self.rect_size.y)
 	var popup_size = Vector2(_popup_x_size, popup.rect_size.y)
-	popup.popup(Rect2(popup_pos, popup_size))
-	yield(VisualServer, "frame_post_draw")
+	popup.rect_global_position = popup_pos
 	popup.rect_size.y = 1
+	popup.show()
 	grab_focus()
 
 

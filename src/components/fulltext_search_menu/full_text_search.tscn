@@ -68,6 +68,41 @@ text = "more"
 wait_time = 0.3
 one_shot = true
 
+[node name="PopupLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="ResultsPopUp" type="PanelContainer" parent="PopupLayer"]
+visible = false
+margin_left = 1324.0
+margin_top = 41.0
+margin_right = 1909.0
+margin_bottom = 286.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+
+[node name="VBox" type="VBoxContainer" parent="PopupLayer/ResultsPopUp"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 575.0
+margin_bottom = 235.0
+
+[node name="Title" type="HBoxContainer" parent="PopupLayer/ResultsPopUp/VBox"]
+margin_right = 565.0
+margin_bottom = 27.0
+
+[node name="ResultAmountLabel" type="Label" parent="PopupLayer/ResultsPopUp/VBox/Title"]
+margin_right = 499.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 0, 27 )
+size_flags_horizontal = 3
+
+[node name="ListButton" type="Button" parent="PopupLayer/ResultsPopUp/VBox/Title"]
+margin_left = 503.0
+margin_right = 565.0
+margin_bottom = 27.0
+theme_type_variation = "ButtonComboList"
+text = "more"
+
 [connection signal="focus_entered" from="." to="." method="_on_FullTextSearch_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_FullTextSearch_focus_exited"]
 [connection signal="gui_input" from="." to="." method="_on_FullTextSearch_gui_input"]
@@ -75,3 +110,4 @@ one_shot = true
 [connection signal="text_entered" from="." to="." method="_on_FullTextSearch_text_entered"]
 [connection signal="pressed" from="ResultsPopUp/VBox/Title/ListButton" to="." method="_on_ListButton_pressed"]
 [connection signal="timeout" from="SearchDelay" to="." method="_on_SearchDelay_timeout"]
+[connection signal="pressed" from="PopupLayer/ResultsPopUp/VBox/Title/ListButton" to="." method="_on_ListButton_pressed"]
