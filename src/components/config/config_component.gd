@@ -3,9 +3,7 @@ extends ComponentContainer
 
 func apply_navigation_arguments():
 	if "config_id" in navigation_arguments:
-		var combo = component.config_combo as ComboBox
-		combo.text = navigation_arguments["config_id"]
-	
+		component.history_navigate_to_config(navigation_arguments["config_id"])
 
 
 func _on_ConfigManager_config_changed(config_id):
