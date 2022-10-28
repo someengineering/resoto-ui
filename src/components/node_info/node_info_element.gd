@@ -1,5 +1,7 @@
 extends Control
 
+signal node_shown(node_id)
+
 var active_request :ResotoAPI.Request
 var aggregation_request :ResotoAPI.Request
 var current_node_id : String				= ""
@@ -43,6 +45,7 @@ func show_node(node_id:String, _add_to_history:=true):
 	current_node_id = node_id
 	tag_group.node_id = current_node_id
 	active_request = API.graph_search(search_command, self, "graph")
+	emit_signal("node_shown", node_id)
 
 
 func clear_view():

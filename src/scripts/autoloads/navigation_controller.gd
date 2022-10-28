@@ -1,11 +1,15 @@
 extends Node
 
 signal navigate(destination_args)
+signal navigation_index_changed(index)
 
 var popstate_callback = JavaScript.create_callback(self, "_on_popstate_event")
 var navigation_array := [{"view" : "home"}]
-var navigation_index : int = 0
+var navigation_index : int = 0 setget set_navigation_index
 var current_navigation_state := {}
+
+var can_navigate := true
+var can_change_state := true
 
 func _ready():
 	if OS.has_feature("HTML5"):
@@ -25,16 +29,28 @@ func get_url_hash() -> String:
 
 
 func _on_popstate_event(_args):
+	if not can_navigate:
+		return
+		
+	can_change_state = false
 	var url_hash := get_url_hash()
 	url_hash = url_hash.trim_prefix("#")
 
 	var navigation_args = parse_navigation_args(url_hash)
 	
 	emit_signal("navigate", navigation_args)
+	
+	yield(get_tree().create_timer(0.1),"timeout")
+	can_change_state = true
 
 
 func set_current_navigation_state(args : Dictionary):
-	if args == current_navigation_state:
+	if not can_change_state:
+		return
+		
+	can_navigate = false
+	
+	if args.hash() == current_navigation_state.hash():
 		return
 		
 	current_navigation_state = args
@@ -51,9 +67,10 @@ func set_current_navigation_state(args : Dictionary):
 			
 		JavaScript.eval('document.location.hash = "%s"' % view)
 	else:
-		navigation_index += 1
+		self.navigation_index += 1
 		navigation_array.resize(navigation_index)
 		navigation_array.append(args)
+	can_navigate = true
 
 
 func parse_navigation_args(string_args : String) -> Dictionary:
@@ -74,11 +91,28 @@ func parse_navigation_args(string_args : String) -> Dictionary:
 
 func back():
 	if navigation_index > 0:
-		navigation_index -= 1
+		self.navigation_index -= 1
 		emit_signal("navigate", navigation_array[navigation_index])
 
 
 func forward():
 	if navigation_index < navigation_array.size() - 1:
-		navigation_index += 1
+		self.navigation_index += 1
 		emit_signal("navigate", navigation_array[navigation_index])
+		
+
+
+func native_navigate(direction : String):
+	if not can_navigate:
+		return
+		
+	can_change_state = false
+	
+	call(direction)
+	
+	yield(get_tree().create_timer(0.1),"timeout")
+	can_change_state = true
+
+func set_navigation_index(new_index : int):
+	navigation_index = new_index
+	emit_signal("navigation_index_changed", navigation_index)

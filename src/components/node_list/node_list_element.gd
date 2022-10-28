@@ -1,5 +1,7 @@
 extends MarginContainer
 
+signal show(function, arguments)
+
 const NODE_LIMIT:int = 200
 
 const SearchResult = preload("res://components/fulltext_search_menu/full_text_search_result_template.tscn")
@@ -75,6 +77,8 @@ func show_kind_from_node_data(parent_node:Dictionary, kind:String):
 	list_kind_button.text = kind
 	
 	active_request = API.graph_search(search_command, self, "list")
+	
+	emit_signal("show", last_search_type, [parent_node, kind])
 
 
 func show_kind(kind:String):
@@ -96,6 +100,8 @@ func show_kind(kind:String):
 	node_kind_button.text = kind
 	
 	active_request = API.graph_search(search_command, self, "list")
+	
+	emit_signal("show", last_search_type, [kind])
 
 
 func show_kind_from_node_id(id:String, kind:String):
@@ -122,6 +128,9 @@ func show_kind_from_node_id(id:String, kind:String):
 	list_kind_button.text = kind
 	
 	active_request = API.graph_search(search_command, self, "list")
+	
+	
+	emit_signal("show", last_search_type, [id, kind])
 
 
 func show_list_from_search(search_command:String):
@@ -148,6 +157,9 @@ func show_list_from_search(search_command:String):
 	search_type_label.enabled = true
 	
 	active_request = API.graph_search(search_command, self, "list")
+	
+	
+	emit_signal("show", last_search_type, [search_command])
 
 
 func explore_node_list_from_node(parent_node:Dictionary, search_command:String, kind_label_string:String):
@@ -179,6 +191,9 @@ func explore_node_list_from_node(parent_node:Dictionary, search_command:String, 
 		search_type_label.text = kind_label_string
 	
 	active_request = API.graph_search(search_command, self, "list")
+	
+	
+	emit_signal("show", last_search_type, [parent_node, search_command.replace(" limit " + str(NODE_LIMIT), ""), kind_label_string])
 
 
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:

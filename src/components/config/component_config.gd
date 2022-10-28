@@ -568,6 +568,7 @@ func _on_ConfigCombo_option_changed(option):
 		_g.emit_signal("add_toast", "Config not found", "The configuration you tried to open does not exist", 2, self)
 		return
 	open_configuration(option)
+	emit_signal("config_changed", option)
 
 
 func _on_AddConfigButton_pressed():

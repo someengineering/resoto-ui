@@ -13,6 +13,7 @@ var available_dashboards : Dictionary = {}
 var total_saved_dashboards : int = 0
 var dashboards_loaded : int = 0
 var default_dashboard_found:= false
+var inform_dashboard_selected := true
 
 onready var open_dashboard_btn = $"%OpenDashboard"
 onready var dashboards_list = find_node("DashboardItemList")
@@ -138,6 +139,7 @@ func restore_default_dashboard() -> void:
 
 
 func open_user_dashboards():
+	inform_dashboard_selected = false
 	var dashboard_status = get_user_dashboards()
 	for dashboard in dashboard_status.open_dashboards:
 		if dashboard_status.has("active_dashboard") and dashboard == dashboard_status.active_dashboard:
@@ -145,9 +147,11 @@ func open_user_dashboards():
 			continue
 		add_dashboard_placeholder(dashboard)
 	
+	inform_dashboard_selected = true
 	for i in get_children().size():
 		if get_tab_control(i).name.replace(" ","_") == dashboard_status.active_dashboard:
 			set_current_tab(i)
+	
 
 
 func load_dashboard(dashboard_name : String):
@@ -300,4 +304,6 @@ func _on_DashBoardManager_tab_changed(_tab):
 
 
 func _on_DashBoardManager_tab_selected(tab):
+	if not inform_dashboard_selected:
+		return
 	emit_signal("dashboard_opened", get_child(tab).name.replace(" ","_"))

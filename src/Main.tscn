@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://components/popups/connect_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -19,11 +19,14 @@
 [ext_resource path="res://components/node_list/node_list_element.tscn" type="PackedScene" id=17]
 [ext_resource path="res://components/popups/confirm_popup.tscn" type="PackedScene" id=18]
 [ext_resource path="res://components/hub/component_resoto_home.tscn" type="PackedScene" id=19]
-[ext_resource path="res://assets/icons/icon_128_arrow.svg" type="Texture" id=20]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=20]
 [ext_resource path="res://assets/icons/icon_128_external_link.svg" type="Texture" id=21]
 [ext_resource path="res://scripts/tools/html_helpers.gd" type="Script" id=22]
 [ext_resource path="res://components/dashboard/dashboard_component.gd" type="Script" id=23]
 [ext_resource path="res://components/config/config_component.gd" type="Script" id=24]
+[ext_resource path="res://components/node_info/node_single_info_component.gd" type="Script" id=25]
+[ext_resource path="res://components/node_list/node_list_element_component.gd" type="Script" id=26]
+[ext_resource path="res://assets/icons/icon_128_collapse.svg" type="Texture" id=27]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
@@ -119,6 +122,8 @@ margin_left = 10.0
 margin_top = 48.0
 margin_right = 1910.0
 margin_bottom = 1070.0
+script = ExtResource( 25 )
+view = "node_single_info"
 
 [node name="NodeSingleInfo" parent="Content/Content/NodeSingleInfoComponent" instance=ExtResource( 15 )]
 anchor_right = 0.0
@@ -136,6 +141,8 @@ margin_left = 10.0
 margin_top = 48.0
 margin_right = 1910.0
 margin_bottom = 1070.0
+script = ExtResource( 26 )
+view = "node_list_info"
 
 [node name="NodeListElement" parent="Content/Content/NodeListElementComponent" instance=ExtResource( 17 )]
 anchor_right = 0.0
@@ -395,35 +402,33 @@ margin_bottom = 29.0
 rect_min_size = Vector2( 18, 18 )
 size_flags_vertical = 4
 
-[node name="Back" type="Button" parent="MenuBar/MenuContainer/TopMenu/Title"]
+[node name="Back" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 20 )]
+visible = false
 margin_left = 28.0
-margin_right = 68.0
+margin_right = 61.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-rect_pivot_offset = Vector2( 20, 20 )
-icon = ExtResource( 20 )
-flat = true
-expand_icon = true
+disabled = true
+icon_tex = ExtResource( 27 )
+flip_h = true
 
-[node name="Forward" type="Button" parent="MenuBar/MenuContainer/TopMenu/Title"]
-margin_left = 68.0
-margin_right = 108.0
+[node name="Forward" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 20 )]
+visible = false
+margin_left = 61.0
+margin_right = 94.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-icon = ExtResource( 20 )
-flat = true
-expand_icon = true
+disabled = true
+icon_tex = ExtResource( 27 )
 
 [node name="FixedSpacer" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
-margin_left = 108.0
-margin_right = 390.0
+margin_left = 28.0
+margin_right = 310.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 282, 0 )
 mouse_filter = 2
 
 [node name="SpacerMidL" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
-margin_left = 390.0
-margin_right = 957.0
+margin_left = 310.0
+margin_right = 917.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 20, 0 )
 mouse_filter = 2
@@ -431,8 +436,8 @@ size_flags_horizontal = 3
 
 [node name="MainResotoLogo" type="TextureRect" parent="MenuBar/MenuContainer/TopMenu/Title"]
 unique_name_in_owner = true
-margin_left = 957.0
-margin_right = 1042.0
+margin_left = 917.0
+margin_right = 1002.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 85, 32 )
 texture = ExtResource( 4 )
@@ -440,7 +445,7 @@ expand = true
 stretch_mode = 6
 
 [node name="SpacerMidR" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
-margin_left = 1042.0
+margin_left = 1002.0
 margin_right = 1610.0
 margin_bottom = 40.0
 mouse_filter = 2
@@ -480,6 +485,8 @@ __meta__ = {
 [node name="HTMLHelpers" type="Node" parent="."]
 script = ExtResource( 22 )
 
+[connection signal="node_shown" from="Content/Content/NodeSingleInfoComponent/NodeSingleInfo" to="Content/Content/NodeSingleInfoComponent" method="_on_NodeSingleInfo_node_shown"]
+[connection signal="show" from="Content/Content/NodeListElementComponent/NodeListElement" to="Content/Content/NodeListElementComponent" method="_on_NodeListElement_show"]
 [connection signal="config_changed" from="Content/Content/ConfigComponent/ConfigManager" to="Content/Content/ConfigComponent" method="_on_ConfigManager_config_changed"]
 [connection signal="dashboard_opened" from="Content/Content/DashBoardComponent/DashBoardManager" to="Content/Content/DashBoardComponent" method="_on_DashBoardManager_dashboard_opened"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonDashboards" to="MenuBar" method="_on_ButtonDashboards_pressed"]
