@@ -25,6 +25,7 @@ onready var update_delay_timer := $UpdateDelayTimer
 func _ready():
 	Style.add_self($Background, Style.c.BG)
 
+
 func clear_all():
 	for child in header_row.get_children():
 		header_row.remove_child(child)
@@ -127,16 +128,17 @@ func set_data(data, type):
 		
 		for row in rows_array:
 			raw_data.append(row.split(",",false))
-
+	
+	yield(VisualServer, "frame_post_draw")
 	sort_by_column(sorting_column, sorting_type == "asc")
 
 
 func update_table():
+	clear_rows()
 	for data in raw_data:
 		add_row(data)
-		
-	yield(VisualServer, "frame_post_draw")
-	autoadjust_table()
+	update_delay_timer.stop()
+	_on_UpdateDelayTimer_timeout()
 
 
 func _on_Rows_resized():
@@ -151,9 +153,7 @@ func get_column_min_size(column : int):
 		var cell_size = cell.get_min_size()
 		if size < cell_size:
 			size = cell_size
-	
 	size = max(size, header_row.get_child(column).get_min_size() + 24)
-	
 	return size
 
 
@@ -170,7 +170,7 @@ func autoadjust_table():
 		first_update = false
 		_on_UpdateDelayTimer_timeout()
 		return
-	modulate.a = 0.5
+	modulate.a = 0.3
 	update_delay_timer.start()
 
 
@@ -222,15 +222,11 @@ func sort_by_column(column : int, ascending : bool):
 		for header in header_row.get_children():
 			if header.column != column:
 				header.reset_sort()
-		
-		clear_rows()
 		sorting_column = column
-		
 		if ascending:
 			raw_data.sort_custom(self, "sort_ascending")
 		else:
 			raw_data.sort_custom(self, "sort_descending")
-	
 	update_table()
 
 
