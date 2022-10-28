@@ -49,7 +49,7 @@ onready var config_combo = $VBox/Toolbar/Box/ConfigCombo
 
 
 func _input(event:InputEvent):
-	if event.is_action_pressed("save_shortcut"):
+	if is_visible_in_tree() and event.is_action_pressed("save_shortcut"):
 		save_config()
 
 
@@ -187,7 +187,9 @@ func save_config() -> void:
 func convert_active_config_to_string() -> Dictionary:
 	var _error : int = OK
 	var result : Dictionary = {"error" : _error, "dict" : null, "string" : ""}
-	
+	if config_page == null:
+		result.error = FAILED
+		return result
 	var new_config:Dictionary = {}
 	for config_element in config_page.content_elements:
 		if "key" in config_element:
