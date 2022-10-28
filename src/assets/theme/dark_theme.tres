@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=88 format=2]
+[gd_resource type="Theme" load_steps=90 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -333,6 +333,17 @@ size = 13
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 41 )
+
+[sub_resource type="DynamicFontData" id=90]
+font_path = "res://assets/theme/Barlow-Bold.ttf"
+
+[sub_resource type="DynamicFont" id=91]
+size = 20
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = 3
+extra_spacing_bottom = 3
+font_data = SubResource( 90 )
 
 [sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 6.0
@@ -726,6 +737,8 @@ LabelCode/base_type = "Label"
 LabelCode/fonts/font = SubResource( 81 )
 LabelSmall/base_type = "Label"
 LabelSmall/fonts/font = SubResource( 42 )
+Label_24/base_type = "Label"
+Label_24/fonts/font = SubResource( 91 )
 LineEdit/colors/clear_button_color = Color( 0, 0.329412, 0.639216, 1 )
 LineEdit/colors/clear_button_color_pressed = Color( 0.537255, 0.819608, 0.945098, 1 )
 LineEdit/colors/cursor_color = Color( 0.816406, 0.94351, 1, 1 )

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://components/config/config_templates/component_config_tab.gd" type="Script" id=1]
+[ext_resource path="res://components/config/config_templates/component_config_page.gd" type="Script" id=1]
 
 [node name="TemplateConfigTab" type="VBoxContainer"]
 margin_right = 1900.0
