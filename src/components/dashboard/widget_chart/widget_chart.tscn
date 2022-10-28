@@ -25,7 +25,7 @@ void fragment(){
 //	if (coord.x >= 1.0 -  2.0* px_size.x || coord.x <= 2.0*px_size.x || coord.y >= 1.0 - 2.0*px_size.y || coord.y <= 2.0*px_size.y){
 //		COLOR = grid_color;
 //	}
-	COLOR =grid_color*clamp( smoothstep(1.0 - line_width*px_size.x, 1.0, coord.x) + (1.0-smoothstep(0.0, line_width*px_size.x, coord.x)) + 
+	COLOR = grid_color * clamp( smoothstep(1.0 - line_width*px_size.x, 1.0, coord.x) + (1.0-smoothstep(0.0, line_width*px_size.x, coord.x)) + 
 	smoothstep(1.0 - line_width*px_size.y, 1.0, coord.y) + (1.0-smoothstep(0.0, line_width*px_size.y, coord.y)), 0.0, 1.0);
 }"
 
@@ -33,9 +33,9 @@ void fragment(){
 resource_local_to_scene = true
 shader = SubResource( 5 )
 shader_param/grid_divisions = Vector2( 5, 5 )
-shader_param/grid_color = Color( 0.85098, 0.721569, 1, 0.168627 )
+shader_param/grid_color = Color( 1, 1, 1, 0.0784314 )
 shader_param/size = Vector2( 1859, 1003 )
-shader_param/line_width = 3.0
+shader_param/line_width = 4.0
 
 [sub_resource type="ViewportTexture" id=7]
 flags = 4
