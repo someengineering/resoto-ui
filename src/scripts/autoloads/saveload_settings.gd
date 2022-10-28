@@ -16,8 +16,8 @@ func _enter_tree() -> void:
 func check_for_settings() ->bool:
 	if disabled:
 		return false
-	var settings = File.new()
-	var settings_path = SETTINGS_FILE_NAME
+	var settings : File = File.new()
+	var settings_path : String = SETTINGS_FILE_NAME
 	
 	if not settings.file_exists( settings_path ):
 		return false
@@ -28,7 +28,7 @@ func check_for_settings() ->bool:
 func load_settings() -> void:
 	if disabled:
 		return
-	var settings = load_settings_file()
+	var settings : Array = load_settings_file()
 	API.psk = settings[0].psk
 	_g.ui_shrink = settings[0].ui_shrink
 	_g.terminal_scrollback = settings[0].terminal_scrollback
@@ -41,14 +41,14 @@ func load_settings() -> void:
 func load_settings_file() -> Array:
 	if disabled:
 		return [clear_settings(), false]
-	var settings = File.new()
-	var settings_path = SETTINGS_FILE_NAME
+	var settings :File = File.new()
+	var settings_path : String = SETTINGS_FILE_NAME
 	
 	if not settings.file_exists(settings_path):
 		return [clear_settings(), false]
 	
 	settings.open_encrypted_with_pass(settings_path, File.READ, ENC)
-	var settings_data = clear_settings()
+	var settings_data : Dictionary = clear_settings()
 	while(settings.get_position() < settings.get_len()):
 		var settings_var = settings.get_var()
 		for key in settings_data.keys():
@@ -70,8 +70,8 @@ func restore_node_data(_node_data:Dictionary):
 func save_settings() -> void:
 	if disabled:
 		return
-	var settings_path = SETTINGS_FILE_NAME
-	var settings_data = clear_settings()
+	var settings_path : String = SETTINGS_FILE_NAME
+	var settings_data : Dictionary = clear_settings()
 	
 	settings_data.psk = API.psk
 	settings_data.ui_shrink = _g.ui_shrink
@@ -81,11 +81,11 @@ func save_settings() -> void:
 	for n in get_tree().get_nodes_in_group("persistent"):
 		if not n.has_method("get_persistent_data"):
 			continue
-		var node_data = n.get_persistent_data()
+		var node_data : Dictionary = n.get_persistent_data()
 		collected_data[node_data.key] = node_data.data
 	settings_data.persistent_nodes = collected_data
 	
-	var settings = File.new()
+	var settings : File = File.new()
 	settings.open_encrypted_with_pass(settings_path, File.WRITE, ENC)
 	settings.store_var(settings_data)
 	settings.close()
@@ -102,9 +102,9 @@ func clear_settings() -> Dictionary:
 
 
 func delete_settings() -> void:
-	var settings_path = SETTINGS_FILE_NAME
-	var settings = File.new()
+	var settings_path : String = SETTINGS_FILE_NAME
+	var settings : File = File.new()
 	if not settings.file_exists(settings_path):
 		return
-	var dir = Directory.new()
+	var dir : Dictionary = Directory.new()
 	dir.remove(settings_path)

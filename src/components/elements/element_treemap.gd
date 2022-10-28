@@ -5,21 +5,21 @@ const TREEMAP_ELEMENT = preload("res://components/elements/element_tree_map_box.
 signal pressed_lmb
 signal pressed_rmb
 
-export(Gradient) var gradient
-export(Vector2) var treemap_size := Vector2(600, 600)
+export(Gradient) var gradient : Gradient
+export(Vector2) var treemap_size : Vector2 = Vector2(600, 600)
 
-var active_request: ResotoAPI.Request
-var treemap_size_temp := treemap_size
-var datasets := []
+var active_request : ResotoAPI.Request
+var treemap_size_temp : Vector2	= treemap_size
+var datasets : Array			= []
 
-var preview_mode:= false
-var sort_desc:= true setget set_sort_desc
-var start: int = 0
-var end: int = 0
-var offset := Vector2.ZERO
-var is_vert: bool = aspect_vertical(treemap_size_temp)
-var aspect_current: float = 9999999999999.0
-var aspect_last: float = 0.0
+var preview_mode : bool		= false
+var sort_desc : bool		= true setget set_sort_desc
+var start : int				= 0
+var end : int				= 0
+var offset : Vector2		= Vector2.ZERO
+var is_vert : bool			= aspect_vertical(treemap_size_temp)
+var aspect_current : float	= 9999999999999.0
+var aspect_last : float		= 0.0
 
 var test_data: Dictionary = {
 	"example_1": 1035,
@@ -30,17 +30,17 @@ var test_data: Dictionary = {
 }
 
 class Dataset:
-	var ds_id = ""
-	var ds_name = ""
-	var ds_is_zero := false
-	var ds_value_temp = 0.0
-	var ds_displaysize := Vector2.ZERO
-	var ds_displaysize_temp := Vector2.ZERO
-	var ds_displaypos := Vector2.ZERO
-	var ds_value = 0.0
-	var ds_scaled_value = 0.0
-	var ds_color := Color.white
-	var ds_box: Object = null
+	var ds_id : String					= ""
+	var ds_name : String				= ""
+	var ds_is_zero : bool				= false
+	var ds_value_temp : float			= 0.0
+	var ds_displaysize : Vector2		= Vector2.ZERO
+	var ds_displaysize_temp : Vector2	= Vector2.ZERO
+	var ds_displaypos : Vector2			= Vector2.ZERO
+	var ds_value : float				= 0.0
+	var ds_scaled_value : float			= 0.0
+	var ds_color : Color				= Color.white
+	var ds_box: Control					= null
 
 
 func _ready():
@@ -140,7 +140,6 @@ func add_visuals(_animated:=true):
 	tween.remove_all()
 	for d in datasets:
 		var new_element = TREEMAP_ELEMENT.instance()
-		#new_element.hide()
 		new_element.rect_position = d.ds_displaypos
 		if _animated:
 			new_element.modulate = Color.transparent
@@ -334,7 +333,7 @@ func _on_Button_pressed():
 
 func get_treemap_from_api(node_id:String):
 	clear_treemap()
-	var search_command = "id(\"" + node_id + "\") limit 1"
+	var search_command : String = "id(\"" + node_id + "\") limit 1"
 	active_request = API.graph_search(search_command, self, "list")
 
 

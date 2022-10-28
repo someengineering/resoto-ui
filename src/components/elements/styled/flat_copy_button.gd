@@ -3,8 +3,8 @@ extends Button
 const icon_check = preload("res://assets/icons/icon_128_check.svg")
 const icon_copy = preload("res://assets/icons/icon_128_copy.svg")
 
-var orig_alpha:= 1.0
-onready var tween = $ClickEffectTween
+var orig_alpha : float		= 1.0
+onready var tween : Tween	= $ClickEffectTween
 
 func _ready():
 	orig_alpha = modulate.a

@@ -72,7 +72,7 @@ static func err_enum_to_string(_status_code:int) -> String:
 
 
 static func truncate_string(_string:String, font:Font, _max_size:float=30.0) -> String:
-	var truncated_text = ""
+	var truncated_text : String = ""
 	var i : int = 0
 	
 	while font.get_string_size(truncated_text+"...  ").x < _max_size:
@@ -86,7 +86,7 @@ static func truncate_string(_string:String, font:Font, _max_size:float=30.0) -> 
 
 
 static func truncate_string_px(_string:String, letter_size:float, _max_size:float=30.0) -> String:
-	var truncated_text = ""
+	var truncated_text : String = ""
 	var i : int = 0
 	
 	while str(truncated_text+"...  ").length() * letter_size < _max_size:
@@ -100,7 +100,7 @@ static func truncate_string_px(_string:String, letter_size:float, _max_size:floa
 
 
 static func print_dict(_dict:Dictionary, _depth:int) -> void:
-	var _spacing = ""
+	var _spacing : String = ""
 	for i in _depth:
 		_spacing += "  "
 	for d in _dict.keys():
@@ -112,7 +112,7 @@ static func print_dict(_dict:Dictionary, _depth:int) -> void:
 
 
 static func readable_dict(_dict:Dictionary, readable:String="", _depth:int=0) -> String:
-	var _spacing = ""
+	var _spacing : String = ""
 	for i in _depth:
 		_spacing += "  "
 	
@@ -131,7 +131,7 @@ static func readable_dict(_dict:Dictionary, readable:String="", _depth:int=0) ->
 
 
 static func readable_array(_array:Array, readable:String="", _depth:int=0) -> String:
-	var _spacing = ""
+	var _spacing : String = ""
 	for i in _depth:
 		_spacing += "  "
 	
@@ -165,9 +165,9 @@ static func readable_duration(_dur:String) -> String:
 
 
 static func comma_sep(number):
-	var string = str(number)
-	var mod = string.length() % 3
-	var res = ""
+	var string : String = str(number)
+	var mod : int = string.length() % 3
+	var res : String = ""
 
 	for i in range(0, string.length()):
 		if i != 0 && i % 3 == mod:
@@ -177,18 +177,18 @@ static func comma_sep(number):
 
 
 static func load_json(path) -> Array:
-	var file = File.new()
+	var file : File = File.new()
 	if !file.file_exists(path):
 		return []
 	file.open(path, file.READ)
-	var tmp_text = file.get_as_text()
+	var tmp_text : String = file.get_as_text()
 	file.close()
 	var data = parse_json(tmp_text)
 	return data
 
 
 static func save_json(path, data):
-	var file = File.new()
+	var file : File = File.new()
 	file.open(path, file.WRITE)
 	file.store_string(to_json(data))
 	file.close()

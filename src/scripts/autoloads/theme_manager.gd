@@ -26,15 +26,15 @@ var col_map:= {
 }
 
 func update_theme():
-	var nodes_to_style = get_tree().get_nodes_in_group(themed_group_name)
+	var nodes_to_style : Array = get_tree().get_nodes_in_group(themed_group_name)
 	for i in nodes_to_style:
-		var orig_alpha = i.modulate.a
+		var orig_alpha : float = i.modulate.a
 		i.modulate = col_map[i.get_meta(themed_col_name)]
 		i.modulate.a = orig_alpha
 	
-	var nodes_to_style_self = get_tree().get_nodes_in_group(themed_self_group_name)
+	var nodes_to_style_self : Array = get_tree().get_nodes_in_group(themed_self_group_name)
 	for i in nodes_to_style_self:
-		var orig_alpha = i.self_modulate.a
+		var orig_alpha : float = i.self_modulate.a
 		i.self_modulate = col_map[i.get_meta(themed_col_name)]
 		i.self_modulate.a = orig_alpha
 
@@ -42,7 +42,7 @@ func update_theme():
 func style(node:Node, color_id:int):
 	node.add_to_group(themed_group_name)
 	node.set_meta(themed_col_name, color_id)
-	var orig_alpha = node.modulate.a
+	var orig_alpha : float = node.modulate.a
 	node.modulate = col_map[color_id]
 	node.modulate.a = orig_alpha
 
@@ -50,6 +50,6 @@ func style(node:Node, color_id:int):
 func style_self(node:Node, color_id:int):
 	node.add_to_group(themed_self_group_name)
 	node.set_meta(themed_col_name, color_id)
-	var orig_alpha = node.modulate.a
+	var orig_alpha : float = node.modulate.a
 	node.self_modulate = col_map[color_id]
 	node.self_modulate.a = orig_alpha

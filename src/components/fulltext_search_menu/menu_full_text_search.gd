@@ -10,9 +10,9 @@ var count_request: ResotoAPI.Request
 var search_command:= ""
 var buffered_command:= ""
 
-onready var popup = $ResultsPopUp
-onready var popup_results = $ResultsPopUp/VBox
-onready var result_amount_label:= $ResultsPopUp/VBox/Title/ResultAmountLabel
+onready var popup := $ResultsPopUp
+onready var popup_results := $ResultsPopUp/VBox
+onready var result_amount_label := $ResultsPopUp/VBox/Title/ResultAmountLabel
 onready var list_btn := $ResultsPopUp/VBox/Title/ListButton
 onready var single_node_info = _g.content_manager.find_node("NodeSingleInfo")
 onready var search_delay := $SearchDelay
@@ -155,7 +155,7 @@ func _on_ListButton_pressed():
 
 
 func text_to_search(_text:String):
-	var _new_search_command = ""
+	var _new_search_command : String = ""
 	if _text.to_lower().begins_with("search "):
 		_new_search_command = _text.trim_prefix("search ")
 	else:

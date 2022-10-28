@@ -3,17 +3,17 @@ extends MarginContainer
 signal pressed_lmb
 signal pressed_rmb
 
-var element_color := Color.white
-var element_name := ""
-var value := 0.0
-var final_size := Vector2.ZERO
+var element_color : Color	= Color.white
+var element_name : String	= ""
+var value : float			= 0.0
+var final_size : Vector2	= Vector2.ZERO
 
-onready var text_label = $Center/C/Z/Label
-onready var scaler = $Center/C/Z
+onready var text_label := $Center/C/Z/Label
+onready var scaler := $Center/C/Z
 
 
 func _ready():
-	var value_str = Utils.comma_sep(value)
+	var value_str : String = Utils.comma_sep(value)
 	text_label.text = element_name + "\n(" + value_str + ")"
 	$Button.hint_tooltip = element_name + ": " + value_str
 	$Button.modulate = element_color

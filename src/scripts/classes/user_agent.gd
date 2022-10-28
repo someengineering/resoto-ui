@@ -64,7 +64,7 @@ class Request:
 	
 
 	func poll_() ->bool:
-		var err = http_.poll()
+		var err : int = http_.poll()
 		if err != OK:
 			emit_signal("done", err, null)
 			state_ = states.DONE
@@ -101,7 +101,7 @@ class Request:
 					state_ = states.CONNECTED
 			
 			states.CONNECTED:
-				var err = http_.request(method, path, headers, body)
+				var err : int = http_.request(method, path, headers, body)
 				if err != OK:
 					emit_signal("done", err, null)
 					state_ = states.DONE
@@ -141,7 +141,7 @@ class Request:
 						if not poll_():
 							return
 						
-						var chunk = http_.read_response_body_chunk()
+						var chunk : PoolByteArray = http_.read_response_body_chunk()
 						if chunk.size() != 0:
 							emit_signal("pre_data", chunk, response_, self)
 							response_.body = response_.body + chunk
@@ -170,7 +170,7 @@ func _on_request_done_(_err:int, _response:Response) -> void:
 
 func request_(method:int, path:String, headers:Array = [], body:String = "") -> Request:
 	var http_ :HTTPClient = HTTPClient.new()
-	var err = http_.connect_to_host(options.host, options.port, options.use_ssl)
+	var err : int = http_.connect_to_host(options.host, options.port, options.use_ssl)
 	if err != OK:
 		debug_message("Error in connection! Check adress and port!")
 		return null
@@ -186,7 +186,7 @@ func request_(method:int, path:String, headers:Array = [], body:String = "") -> 
 
 func create_headers(headers:RequestHeaders) ->Array:
 	var new_headers: Array = []
-	var properties = headers.get_property_list()
+	var properties : Array = headers.get_property_list()
 	
 	for property in properties:
 		if property.usage == 8192:
