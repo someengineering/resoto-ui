@@ -9,6 +9,9 @@ onready var click_detection = find_node("ClickDetection")
 onready var shadow_side = find_node("ShadowSide")
 onready var search_box = $"%TopMenuFullTextSearch"
 onready var main_logo = $"%MainResotoLogo"
+onready var back_button := $"%HistoryBackButton"
+onready var forward_button := $"%HistoryFwdButton"
+onready var history_buttons := $"%HistoryButtons"
 
 
 func _ready() -> void:
@@ -20,6 +23,10 @@ func _ready() -> void:
 	get_tree().root.connect("size_changed", self, "on_ui_shrink_changed")
 	_g.connect("ui_shrink_changed", self, "on_ui_shrink_changed")
 	init_menu()
+	
+	history_buttons.visible = not OS.has_feature("HTML5")
+	if not OS.has_feature("HTML5"):
+		UINavigation.connect("navigation_index_changed", self, "_on_navigation_index_changed")
 
 
 func init_menu():
@@ -156,3 +163,16 @@ func _on_resoto_home_visible(_visibility:bool) -> void:
 func _on_ButtonExplore_pressed():
 	_g.emit_signal("nav_change_section_explore", "last")
 	close_menu()
+
+
+func _on_HistoryBackButton_pressed():
+	UINavigation.native_navigate("back")
+
+
+func _on_HistoryFwdButton_pressed():
+	UINavigation.native_navigate("forward")
+
+
+func _on_navigation_index_changed(id : int):
+	back_button.can_press = id > 0
+	forward_button.can_press = !(UINavigation.navigation_array.size() <= id + 1)

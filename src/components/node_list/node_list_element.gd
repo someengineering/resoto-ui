@@ -24,12 +24,12 @@ onready var all_kinds_label = $"%AllKindsLabel"
 onready var search_type_label = $"%SearchTypeLabel"
 onready var kind_arrow = find_node("KindLabelArrow")
 onready var template = find_node("ResultTemplate")
-onready var scroll_container = $Margin/VBox/MainPanel/ScrollContainer/Content
-onready var vbox = $Margin/VBox/MainPanel/ScrollContainer/Content/ListContainer
-onready var filter_edit = $Margin/VBox/Filter/FilterLineEdit
-onready var limit_button = $Margin/VBox/TitleBar/LimitButton
-onready var limit_label = $Margin/VBox/TitleBar/LimitLabel
-onready var tags_group := $Margin/VBox/Filter/TagsGroup
+onready var scroll_container = $VBox/MainPanel/ScrollContainer/Content
+onready var vbox = $VBox/MainPanel/ScrollContainer/Content/ListContainer
+onready var filter_edit = $VBox/Filter/FilterLineEdit
+onready var limit_button = $VBox/TitleBar/LimitButton
+onready var limit_label = $VBox/TitleBar/LimitLabel
+onready var tags_group := $VBox/Filter/TagsGroup
 
 
 func _ready():
@@ -42,7 +42,7 @@ func _ready():
 
 
 func change_section_to_self():
-	$Margin/VBox/TitleBar/SearchQueryCopyButton.show()
+	$VBox/TitleBar/SearchQueryCopyButton.show()
 	reset_display()
 	_g.content_manager.change_section_explore("node_list_info")
 

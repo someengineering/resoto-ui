@@ -1,4 +1,4 @@
-extends MarginContainer
+extends Control
 
 const MAX_MESSAGES:int = 30
 

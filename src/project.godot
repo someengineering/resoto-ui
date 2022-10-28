@@ -19,7 +19,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/shared/base_widget.gd"
 }, {
-"base": "Reference",
+"base": "Label",
 "class": "ClippedLabel",
 "language": "GDScript",
 "path": "res://components/elements/utility/clipped_label.gd"
@@ -99,7 +99,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/data_sources/data_source.gd"
 }, {
-"base": "Reference",
+"base": "Label",
 "class": "DynamicLabel",
 "language": "GDScript",
 "path": "res://components/elements/utility/dynamic_label.gd"

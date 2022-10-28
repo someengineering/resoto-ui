@@ -1,4 +1,4 @@
-extends MarginContainer
+extends Control
 
 
 func _on_FullTextSearch_text_changed(new_text):

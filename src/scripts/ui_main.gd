@@ -1,16 +1,10 @@
 extends Control
 
-onready var back_button := $MenuBar/MenuContainer/TopMenu/Title/Back
-onready var forward_button := $MenuBar/MenuContainer/TopMenu/Title/Forward
 
 func _ready() -> void:
 	_g.connect("fullscreen_hide_menu", self, "_on_fullscreen_hide_menu")
 	SaveLoadSettings.connect("settings_loaded", self, "show_connect_popup", [], 4)
 	SaveLoadSettings.load_settings()
-	if not OS.has_feature("HTML5"):
-		back_button.visible = true
-		forward_button.visible = true
-		UINavigation.connect("navigation_index_changed", self, "_on_navigation_index_changed")
 
 
 func show_connect_popup(_found_settings:bool) -> void:
@@ -41,19 +35,5 @@ func _on_fullscreen_hide_menu(is_fullscreen:bool) -> void:
 	content.add_constant_override("margin_left", side_margin)
 
 
-func _on_Back_pressed():
-	UINavigation.native_navigate("back")
-
-
-func _on_Forward_pressed():
-	UINavigation.native_navigate("forward")
-
-
 func _on_ConnectPopup_connected():
 	UINavigation.on_home_loaded()
-
-
-func _on_navigation_index_changed(id : int):
-	$MenuBar/MenuContainer/TopMenu/Title/Back.disabled = id <= 0
-	$MenuBar/MenuContainer/TopMenu/Title/Forward.disabled = UINavigation.navigation_array.size() <= id + 1
-	

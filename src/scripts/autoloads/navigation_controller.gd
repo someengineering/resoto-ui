@@ -74,18 +74,18 @@ func set_current_navigation_state(args : Dictionary):
 
 
 func parse_navigation_args(string_args : String) -> Dictionary:
-	var args : Dictionary
+	var args : Dictionary = {}
 	
 	var view_array := string_args.split("?")
 	args["view"] = view_array[0]
 	
 	if view_array.size() > 1:
 		var args_array := view_array[1].split("&")
-	
+		
 		for arg in args_array:
 			var property = arg.split("=")
 			args[property[0]] = property[1]
-			
+	
 	return args
 
 
