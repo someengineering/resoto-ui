@@ -12,6 +12,7 @@ export var widget_type_id:String = "Not Defined"
 export (int) var max_data_sources : int = 1
 export (bool) var single_value : bool = false
 export (Array, DataSource.TYPES) var supported_types
+export (Array, String) var attributes_to_save := []
 
 var color_controllers_data : Array setget set_color_controllers_data
 
@@ -34,3 +35,12 @@ func set_color_controllers_data(data : Array):
 func set_data(_data, _type : int):
 	pass
 
+func get_attributes_to_save() -> Array:
+	var attributes := []
+	
+	for attribute in attributes_to_save:
+		attributes.append({
+			attribute : get(attribute)
+		})
+	return attributes
+	

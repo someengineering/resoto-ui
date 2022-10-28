@@ -381,7 +381,11 @@ func get_data() -> Dictionary:
 			widget_settings[setting] = var2str(widget[setting])
 		else:
 			widget_settings[setting] = widget[setting]
-		
+	
+	for setting in widget.get_attributes_to_save():
+		for key in setting:
+			widget_settings[key] = setting[key]
+			
 	var _data_sources_data : Array = []
 	for data_source in data_sources:
 		_data_sources_data.append(data_source.get_data())
