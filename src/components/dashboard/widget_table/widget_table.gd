@@ -10,7 +10,7 @@ const HeaderCell = preload("res://components/dashboard/widget_table/widget_table
 const TableCell = preload("res://components/dashboard/widget_table/widget_table_cell.tscn")
 
 var raw_data : Array 
-var sorting_column : int = 0
+var sorting_column : int = -1
 var sorting_type : String = ""
 var first_update:= true
 
@@ -46,6 +46,9 @@ func set_headers(headers : Array):
 		header_row.add_child(header_cell)
 		header_cell.set_cell(header, header_color, c_id)
 		header_cell.connect("sort_requested", self, "sort_by_column")
+		if sorting_column == c_id:
+			header_cell.sorting = header_cell.Sorting.ASC if sorting_type == "asc" else header_cell.Sorting.DESC
+			header_cell.update_sort_icon()
 		c_id += 1
 
 
@@ -126,14 +129,16 @@ func set_data(data, type):
 		for row in rows_array:
 			raw_data.append(row.split(",",false))
 	
-	update_table()
+	yield(VisualServer, "frame_post_draw")
+	sort_by_column(sorting_column, sorting_type == "asc")
 
 
 func update_table():
+	clear_rows()
 	for data in raw_data:
 		add_row(data)
-	yield(VisualServer, "frame_post_draw")
-	autoadjust_table()
+	update_delay_timer.stop()
+	_on_UpdateDelayTimer_timeout()
 
 
 func _on_Rows_resized():
@@ -148,9 +153,7 @@ func get_column_min_size(column : int):
 		var cell_size = cell.get_min_size()
 		if size < cell_size:
 			size = cell_size
-	
 	size = max(size, header_row.get_child(column).get_min_size() + 24)
-	
 	return size
 
 
@@ -167,7 +170,7 @@ func autoadjust_table():
 		first_update = false
 		_on_UpdateDelayTimer_timeout()
 		return
-	modulate.a = 0.5
+	modulate.a = 0.3
 	update_delay_timer.start()
 
 
@@ -214,18 +217,16 @@ func _on_TableWidget_resized():
 
 
 func sort_by_column(column : int, ascending : bool):
-	for header in header_row.get_children():
-		if header.column != column:
-			header.reset_sort()
-	
-	clear_rows()
-	sorting_column = column
-	
-	if ascending:
-		raw_data.sort_custom(self, "sort_ascending")
-	else:
-		raw_data.sort_custom(self, "sort_descending")
-	
+	if column >= 0:
+		sorting_type = "asc" if ascending else "desc"
+		for header in header_row.get_children():
+			if header.column != column:
+				header.reset_sort()
+		sorting_column = column
+		if ascending:
+			raw_data.sort_custom(self, "sort_ascending")
+		else:
+			raw_data.sort_custom(self, "sort_descending")
 	update_table()
 
 
@@ -277,3 +278,4 @@ func get_csv(sepparator := ",", end_of_line := "\n"):
 		csv_array.append(row.join(sepparator))
 		
 	return csv_array.join(end_of_line)
+

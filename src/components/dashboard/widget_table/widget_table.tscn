@@ -14,6 +14,7 @@ mouse_filter = 2
 script = ExtResource( 1 )
 widget_type_id = "Table"
 supported_types = [ 1, 2 ]
+attributes_to_save = [ "sorting_column", "sorting_type" ]
 header_color = Color( 0, 0.301961, 0.584314, 1 )
 row_color = Color( 0.0489686, 0.160932, 0.265625, 1 )
 column_header_color = Color( 0.0588235, 0.2, 0.337255, 1 )
