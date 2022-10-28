@@ -114,7 +114,6 @@ func _on_AddWidgetButton_pressed() -> void:
 		
 	Analytics.event(event, {"widget" : widget.widget_type_id})
 	
-	
 	clear_data_sources()
 	preview_widget.queue_free()
 
@@ -127,7 +126,7 @@ func add_widget_popup():
 func _on_WidgetType_item_selected(_index : int) -> void:
 	if widget_type_options.text == current_widget_preview_name:
 		return
-		
+	
 	create_preview(widget_type_options.text)
 
 
@@ -193,14 +192,14 @@ func create_preview(widget_type : String = "Indicator") -> void:
 			datasource.widget = preview_widget
 		else:
 			datasource.queue_free()
-		
-		
+	
 	data_source_types.clear()
 	for i in preview_widget.supported_types:
 		data_source_types.add_item(DataSource.TYPES.keys()[i].capitalize(), i)
 
 	data_source_types.disabled = data_source_types.get_item_count() <= 1
 	data_source_types.emit_signal("item_selected", 0)
+	update_new_data_vis()
 
 
 func get_control_for_property(property : Dictionary) -> Control:
@@ -355,6 +354,7 @@ func delete_datasource(_data_source:Node) -> void:
 
 
 func update_new_data_vis():
+	yield(VisualServer, "frame_post_draw")
 	new_data_source_container.visible = data_source_container.get_child_count() < preview_widget.max_data_sources
 
 
