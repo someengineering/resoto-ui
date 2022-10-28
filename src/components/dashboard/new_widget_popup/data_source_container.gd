@@ -34,7 +34,6 @@ var interval : int = 3600
 
 
 func _ready() -> void:
-	$"%TitleLabel".text = "Data Source %s" % str(get_parent().get_children().find(self)+1)
 	Style.add_self(self, Style.c.BG)
 	match datasource_type:
 		DataSource.TYPES.TIME_SERIES:
@@ -60,7 +59,9 @@ func _ready() -> void:
 			$VBoxContainer/TextSearchSettings.hide()
 			$VBoxContainer/TwoEntryAggregateSettings.show()
 			API.cli_execute("kinds", self)
-			
+	
+	$"%TitleLabel".text = "Data Source %s - %s" % [str(get_parent().get_children().find(self)+1), DataSource.TYPES.keys()[data_source.type].capitalize()]
+	
 	data_source.widget = widget
 	data_source.connect("query_status", self, "_on_data_source_query_status")
 	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
