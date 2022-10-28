@@ -17,7 +17,10 @@ export (DynamicFont) var font
 export (Color) var low_color := Color.midnightblue setget set_low_color
 export (Color) var high_color := Color.orangered setget set_high_color
 
-onready var grid = $TextureRect/Grid
+onready var grid := $TextureRect/Grid
+onready var tooltip := $ToolTipLabel
+onready var label_y := $LabelY
+onready var label_x := $LabelX
 
 
 func _ready():
@@ -29,7 +32,20 @@ func _ready():
 
 
 func _process(_delta):
+	if current_data.empty():
+		return
 	update_highlighted_cell((grid.get_local_mouse_position() * Vector2(x_categories.size(), y_categories.size()) / grid.rect_size - Vector2(0.5,0.5)).snapped(Vector2.ONE))
+
+
+func reset_highlighted_cell():
+	grid.material.set_shader_param("highlighted_cell", Vector2(-1,-1))
+	var vbox_children = $VBoxContainer.get_children()
+	for label in vbox_children:
+		label.modulate = Color.white
+	var hbox_children = $HBoxContainer.get_children()
+	for label in hbox_children:
+		label.modulate = Color.white
+	tooltip.hide()
 
 
 func update_highlighted_cell(cell_position : Vector2):
@@ -64,29 +80,35 @@ func update_highlighted_cell(cell_position : Vector2):
 			
 	var value = str(value_matrix[cell_position.y][cell_position.x])
 	
-	$ToolTipLabel.visible = value != "nan"
-	
-	$ToolTipLabel.text = "%s: %s\n%s: %s\n%s %s"  % [
-		$LabelY.text,
+	tooltip.visible = value != "nan"
+	var tt_text = "[b]%s[/b]: %s\n[b]%s[/b]: %s\n[b]%s %s[/b]" % [
+		label_y.text,
 		highlighted_y_label,
-		$LabelX.text,
+		label_x.text,
 		highlighted_x_label,
 		str(value_matrix[cell_position.y][cell_position.x]),
 		 heat_variable
 		]
-	$ToolTipLabel.rect_global_position = get_global_mouse_position() + Vector2(24,0)
-	$ToolTipLabel.rect_size = Vector2.ZERO
-	
+	set_tooltip_text(tt_text)
+	tooltip.rect_global_position = get_global_mouse_position() + Vector2(12,0)
+	tooltip.rect_size = Vector2.ONE
+
+
+func set_tooltip_text(_text:String):
+	tooltip.get_node("Text").bbcode_text = _text
+
 
 func set_low_color(new_color : Color):
 	low_color = new_color
 	$TextureRect/ColorRect.color = low_color.darkened(0.5)
 	restore_gradient()
 
+
 func set_high_color(new_color : Color):
 	high_color = new_color
 	restore_gradient()
-	
+
+
 func restore_gradient():
 	for i in range(gradient.get_point_count()-1,0,-1):
 		gradient.remove_point(i)
@@ -131,8 +153,8 @@ func set_data(data, type : int):
 		var vars : Array = data[0].keys()
 		vars.remove(vars.find("group"))
 		
-		$LabelX.text = headers[1]
-		$LabelY.text = headers[0]
+		label_x.text = headers[1]
+		label_y.text = headers[0]
 		
 		var hbox = $HBoxContainer
 		for label in hbox.get_children():
@@ -146,17 +168,19 @@ func set_data(data, type : int):
 			
 		min_value = INF
 		max_value = -INF
-		
 		heat_variable = vars[0]
-		$ToolTipLabel2.text = heat_variable
 		
 		for row in data:
-			
-			if float(row[vars[0]]) < min_value:
-				min_value = row[vars[0]]
+			var heat = -1.0
+			if not str(row[heat_variable]).is_valid_float():
+				heat = 0.0
+			else:
+				heat = float(row[heat_variable])
+			if heat < min_value:
+				min_value = row[heat_variable]
 
-			if float(row[vars[0]]) > max_value:
-				max_value = row[vars[0]]
+			if heat > max_value:
+				max_value = row[heat_variable]
 			
 			if row["group"][headers[1]] != null:
 				var x_category : String = row["group"][headers[1]]
@@ -225,8 +249,8 @@ func update_map():
 		value_matrix[i] = data_row
 	
 	for row in current_data:
-		var j = x_categories.find(row["group"][$LabelX.text])
-		var i = y_categories.find(row["group"][$LabelY.text])
+		var j = x_categories.find(row["group"][label_x.text])
+		var i = y_categories.find(row["group"][label_y.text])
 		
 		var value = row[heat_variable]
 		
@@ -241,7 +265,7 @@ func update_map():
 		image.set_pixel(j, i, color)
 		
 	image.unlock()
-	var grid_material = $TextureRect/Grid.material
+	var grid_material = grid.material
 	grid_material.set_shader_param("grid_count", image.get_size())
 
 	var texture := ImageTexture.new()
@@ -250,13 +274,11 @@ func update_map():
 
 
 func _on_Grid_mouse_entered():
-	$ToolTipLabel.visible = true
 	set_process(true)
 
 
 func _on_Grid_mouse_exited():
-	update_highlighted_cell(Vector2(-1,-1))
-	$ToolTipLabel.visible = false
+	reset_highlighted_cell()
 	set_process(false)
 
 
