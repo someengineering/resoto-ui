@@ -1,6 +1,12 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=2]
+[ext_resource path="res://components/fulltext_search_menu/resource_result_template.gd" type="Script" id=3]
+[ext_resource path="res://assets/icons/icon_128_lock_closed.svg" type="Texture" id=4]
+[ext_resource path="res://assets/icons/icon_128_cleaned.svg" type="Texture" id=5]
+[ext_resource path="res://assets/icons/icon_128_phantom_ghost.svg" type="Texture" id=6]
+[ext_resource path="res://assets/icons/icon_128_desired_clean.svg" type="Texture" id=7]
 
 [sub_resource type="StyleBoxFlat" id=3]
 content_margin_left = 4.0
@@ -26,6 +32,7 @@ margin_right = 400.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 0, 50 )
 size_flags_horizontal = 3
+script = ExtResource( 3 )
 
 [node name="VBox" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -51,11 +58,59 @@ text = "Result Kind"
 
 [node name="ResultName" type="Label" parent="VBox/Top"]
 margin_left = 100.0
-margin_right = 390.0
+margin_right = 382.0
 margin_bottom = 21.0
 size_flags_horizontal = 3
 text = "Result Name"
 clip_text = true
+
+[node name="Icons" type="HBoxContainer" parent="VBox/Top"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 390.0
+margin_right = 390.0
+margin_bottom = 21.0
+mouse_filter = 2
+script = ExtResource( 2 )
+
+[node name="NodeIconProtected" type="TextureRect" parent="VBox/Top/Icons"]
+visible = false
+margin_right = 21.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 21, 21 )
+hint_tooltip = "Protected - Resource is protected"
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="NodeIconCleaned" type="TextureRect" parent="VBox/Top/Icons"]
+visible = false
+margin_right = 21.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 21, 21 )
+hint_tooltip = "Cleaned - Resource was cleaned."
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
+
+[node name="NodeIconDesiredClean" type="TextureRect" parent="VBox/Top/Icons"]
+visible = false
+margin_right = 21.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 21, 21 )
+hint_tooltip = "Marked for Cleanup - Resource will be cleaned."
+texture = ExtResource( 7 )
+expand = true
+stretch_mode = 6
+
+[node name="NodeIconPhantom" type="TextureRect" parent="VBox/Top/Icons"]
+visible = false
+margin_right = 21.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 21, 21 )
+hint_tooltip = "Phantom Resource"
+texture = ExtResource( 6 )
+expand = true
+stretch_mode = 6
 
 [node name="ResultDetails" type="Label" parent="VBox"]
 margin_top = 25.0

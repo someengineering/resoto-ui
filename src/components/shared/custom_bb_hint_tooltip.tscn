@@ -28,10 +28,10 @@ margin_bottom = 20.0
 theme_type_variation = "PanelPopup"
 
 [node name="Text" type="RichTextLabel" parent="."]
-margin_left = 15.0
-margin_top = 10.0
-margin_right = 395.0
-margin_bottom = 29.0
+margin_left = 6.0
+margin_top = 2.0
+margin_right = 386.0
+margin_bottom = 21.0
 rect_min_size = Vector2( 380, 0 )
 custom_colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 custom_fonts/mono_font = SubResource( 2 )

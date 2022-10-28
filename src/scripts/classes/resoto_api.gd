@@ -69,8 +69,10 @@ func handle_bad_response_codes(_response_code:int):
 	match _response_code:
 		401:
 			_g.emit_signal("add_toast", "401: Unauthorized", "[b][url=reconnect]Change your connection settings.[/url][/b]", 1, self, -1)
-		400:
-			_g.emit_signal("add_toast", "400: Bad Request", "", 1, self, 3)
+#		400:
+			# Bad Requests should be handled by components / widgets as it can
+			# Be caused by a lot of different problems
+#			_g.emit_signal("add_toast", "400: Bad Request", "", 3, self, 3)
 
 
 func _transform_nd_json(_chunk:PoolByteArray, response:ResotoAPI.Response, request:ResotoAPI.Request) -> void:
@@ -153,6 +155,13 @@ func post_graph_search(body:String, type:String="graph",
 	section:String=default_section) -> ResotoAPI.Request:
 	refresh_jwt_header(accept_json_headers)
 	var request = req_post("/graph/"+ graph +"/search/"+ type + "?section=%s" % section, body, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func get_node_by_id(node_id:String, graph:String=default_graph) -> ResotoAPI.Request:
+	refresh_jwt_header(accept_json_headers)
+	var request = req_get("/graph/"+ graph +"/node/" + node_id, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
 

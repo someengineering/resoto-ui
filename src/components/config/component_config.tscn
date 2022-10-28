@@ -7,7 +7,7 @@
 [ext_resource path="res://components/config/config_templates/component_config_template_elements_container.tscn" type="PackedScene" id=5]
 [ext_resource path="res://components/config/config_templates/component_config_template_enum.tscn" type="PackedScene" id=6]
 [ext_resource path="res://components/config/config_templates/component_config_template_simple.tscn" type="PackedScene" id=7]
-[ext_resource path="res://scripts/tools/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=8]
+[ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=8]
 [ext_resource path="res://components/config/config_templates/component_config_template_complex.tscn" type="PackedScene" id=9]
 [ext_resource path="res://components/config/config_templates/component_config_template_config_tab.tscn" type="PackedScene" id=10]
 [ext_resource path="res://components/config/config_templates/component_config_template_array_element.tscn" type="PackedScene" id=11]
@@ -19,6 +19,7 @@
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=17]
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=18]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=19]
+
 
 [sub_resource type="StyleBoxFlat" id=18]
 content_margin_left = 4.0

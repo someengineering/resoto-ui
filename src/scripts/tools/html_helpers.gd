@@ -47,7 +47,7 @@ func _physics_process(delta:float):
 
 func add_mac_actions():
 	for key in shortcut_list.keys():
-		var new_event = InputEventKey.new()
+		var new_event : InputEventKey = InputEventKey.new()
 		new_event.scancode = shortcut_list[key]
 		new_event.meta = true
 		new_event.pressed = true
@@ -65,7 +65,7 @@ func _input(event):
 			# Handling default Inputs (Windows)
 			if event.scancode == KEY_V and not copied:
 				copied = true
-				var _obj = navigator.clipboard.readText().then(_clipboard_callback)
+				var _obj : Object = navigator.clipboard.readText().then(_clipboard_callback)
 				get_tree().set_input_as_handled()
 		else:
 			# Handling Mac Input
@@ -73,7 +73,7 @@ func _input(event):
 				simulate_input(KEY_C)
 			if event.is_action_pressed("mac_paste") and not copied:
 				copied = true
-				var _obj = navigator.clipboard.readText().then(_clipboard_callback)
+				var _obj : Object = navigator.clipboard.readText().then(_clipboard_callback)
 			if event.is_action_pressed("mac_cut"):
 				simulate_input(KEY_X)
 			if event.is_action_pressed("mac_select_all"):
@@ -87,7 +87,7 @@ func _on_clipboard(args):
 
 
 func simulate_input(new_scancode):
-	var input_event = InputEventKey.new()
+	var input_event : InputEventKey = InputEventKey.new()
 	input_event.scancode = new_scancode
 	input_event.control = true
 	input_event.pressed = true

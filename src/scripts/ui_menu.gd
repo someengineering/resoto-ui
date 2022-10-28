@@ -29,7 +29,7 @@ func init_menu():
 	$"%HamburgerMenuItems/ResotoUIVersion".text = "Resoto UI v" + _g.ui_version
 
 
-func _input(event:InputEvent) -> void:
+func _unhandled_input(event:InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and Input.is_key_pressed(KEY_CONTROL):
 		if event.button_index == BUTTON_WHEEL_UP:
 			ui_scale_up()
@@ -41,6 +41,7 @@ func _input(event:InputEvent) -> void:
 	
 	if event.is_action_pressed("ui_cancel"):
 		hb_button.pressed = !hb_button.pressed
+		get_tree().set_input_as_handled()
 
 
 func ui_scale_down() -> void:

@@ -1,9 +1,10 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://components/dashboard/widget_indicator/color_controller.tscn" type="PackedScene" id=1]
-[ext_resource path="res://components/dashboard/shared/dynamic_label.tscn" type="PackedScene" id=2]
+[ext_resource path="res://components/elements/utility/dynamic_label.tscn" type="PackedScene" id=2]
 [ext_resource path="res://components/dashboard/widget_indicator/widget_indicator.gd" type="Script" id=3]
 [ext_resource path="res://assets/theme/SourceCodePro-Regular.ttf" type="DynamicFontData" id=4]
+
 
 [sub_resource type="StyleBoxFlat" id=9]
 content_margin_left = 0.0

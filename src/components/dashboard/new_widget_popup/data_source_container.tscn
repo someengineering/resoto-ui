@@ -5,12 +5,13 @@
 [ext_resource path="res://assets/icons/icon_128_expand.svg" type="Texture" id=3]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=4]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=5]
-[ext_resource path="res://components/dashboard/shared/line_edit_update_on_focus_lost.gd" type="Script" id=6]
+[ext_resource path="res://components/elements/utility/line_edit_update_on_focus_lost.gd" type="Script" id=6]
 [ext_resource path="res://components/dashboard/new_widget_popup/data_source_container.gd" type="Script" id=7]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=8]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=9]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=10]
 [ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=11]
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 6.0

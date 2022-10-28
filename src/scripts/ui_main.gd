@@ -25,7 +25,7 @@ func show_connect_popup(_found_settings:bool) -> void:
 
 func _on_fullscreen_hide_menu(is_fullscreen:bool) -> void:
 	$MenuBar.visible = !is_fullscreen
-	var top_margin:int = 0 if is_fullscreen else 48
+	var top_margin:int = 0 if is_fullscreen else _g.TOP_MARGIN
 	var side_margin:int = 0 if is_fullscreen else 10
 	var content:= $Content/Content
 	content.add_constant_override("margin_top", top_margin)

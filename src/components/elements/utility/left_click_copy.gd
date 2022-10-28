@@ -1,6 +1,8 @@
 extends Label
 class_name RightClickCopyLabel
 
+export (bool) var enabled:= true
+
 const COPY_TEXT = "copied!"
 
 var orig_text:String
@@ -8,6 +10,7 @@ var orig_size:Vector2
 var timer := Timer.new()
 
 func _ready():
+	mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(timer)
 	timer.one_shot = true
 	timer.wait_time = 0.5
@@ -16,7 +19,7 @@ func _ready():
 
 
 func _on_gui_input(input:InputEvent):
-	if not (input is InputEventMouseButton and input.pressed and input.button_index == BUTTON_LEFT):
+	if not enabled or not(input is InputEventMouseButton and input.pressed and input.button_index == BUTTON_LEFT):
 		return
 	
 	if text != COPY_TEXT:
