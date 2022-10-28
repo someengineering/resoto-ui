@@ -11,9 +11,6 @@ func apply_navigation_arguments():
 			var_arguments.append(str2var(argument))
 		
 		component.callv(navigation_arguments["function"], var_arguments)
-		
-
-
 
 
 func _on_NodeListElement_show(function : String, arguments : Array):

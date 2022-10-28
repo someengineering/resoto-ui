@@ -99,7 +99,6 @@ func forward():
 	if navigation_index < navigation_array.size() - 1:
 		self.navigation_index += 1
 		emit_signal("navigate", navigation_array[navigation_index])
-		
 
 
 func native_navigate(direction : String):
@@ -112,6 +111,7 @@ func native_navigate(direction : String):
 	
 	yield(get_tree().create_timer(0.1),"timeout")
 	can_change_state = true
+
 
 func set_navigation_index(new_index : int):
 	navigation_index = new_index

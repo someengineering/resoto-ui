@@ -11,9 +11,8 @@ func _ready() -> void:
 		back_button.visible = true
 		forward_button.visible = true
 		UINavigation.connect("navigation_index_changed", self, "_on_navigation_index_changed")
-		
-	
-	
+
+
 func show_connect_popup(_found_settings:bool) -> void:
 	if !_found_settings:
 		var dpi:int = OS.get_screen_dpi()
