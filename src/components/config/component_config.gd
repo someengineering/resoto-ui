@@ -33,7 +33,7 @@ var config_model : Dictionary = {}
 var config_keys : Array
 var unfiltered_keys : Array
 
-var active_config_key : String = DefaultConfig
+var active_config_key : String = ""
 var active_config : Dictionary
 var config_page : Control = null
 
