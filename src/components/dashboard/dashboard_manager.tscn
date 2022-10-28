@@ -96,6 +96,7 @@ size_flags_horizontal = 3
 text = "Open"
 
 [connection signal="tab_changed" from="." to="." method="_on_DashBoardManager_tab_changed"]
+[connection signal="tab_selected" from="." to="." method="_on_DashBoardManager_tab_selected"]
 [connection signal="visibility_changed" from="." to="." method="_on_DashBoardManager_visibility_changed"]
 [connection signal="item_activated" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/DashboardItemList" to="." method="_on_DashboardItemList_item_activated"]
 [connection signal="item_selected" from="ManageDashboards/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/DashboardItemList" to="." method="_on_DashboardItemList_item_selected"]

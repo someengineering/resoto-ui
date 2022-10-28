@@ -290,7 +290,6 @@ func _on_DashboardItemList_nothing_selected():
 
 func _on_DashBoardManager_tab_changed(_tab):
 	var new_tab_control:Node = get_tab_control(_tab)
-	emit_signal("dashboard_opened", new_tab_control.name.replace(" ","_"))
 	if new_tab_control.get_class() != "DashboardContainer" and new_tab_control != manager_tab:
 		var dashboard_name = new_tab_control.name
 		new_tab_control.name = "loading"
@@ -298,3 +297,7 @@ func _on_DashBoardManager_tab_changed(_tab):
 		new_tab_control.queue_free()
 	save_opened_dashboards()
 	
+
+
+func _on_DashBoardManager_tab_selected(tab):
+	emit_signal("dashboard_opened", get_child(tab).name.replace(" ","_"))
