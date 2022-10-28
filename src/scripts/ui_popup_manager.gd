@@ -1,11 +1,14 @@
 extends CanvasLayer
 class_name PopupManager
 
+signal popup_gone
+
 var current_popup: Popup = null
 var popup_connect: Node = null
 
 onready var confirm_popup: Popup = $ConfirmPopup
-onready var popup_bg = $BG
+onready var popup_bg := $BG
+onready var tween := Tween.new()
 
 
 func _enter_tree() -> void:
@@ -13,49 +16,77 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	add_child(tween)
 	get_tree().root.connect("size_changed", self, "on_ui_shrink_changed")
 	_g.connect("ui_shrink_changed", self, "on_ui_shrink_changed")
 
 
-func on_popup_close() -> void:
-	popup_bg.hide()
-	current_popup.hide()
+func open_popup(_name:String) -> void:
+	if current_popup != null:
+		on_popup_close()
+		yield(self, "popup_gone")
+	current_popup = (get_node(_name) as Popup)
+	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
+	current_popup.popup_centered_clamped(Vector2(1,1), 1.8)
+	popup_fade_in()
+
+
+func current_popup_to_null():
 	current_popup = null
-
-
-func show_confirm_popup(_title:String, _text:String, _left_button_text:String="Ok", _right_button_text:String="Cancel") -> Popup:
-	popup_bg.show()
-	if current_popup != null:
-		current_popup.hide()
-	current_popup = confirm_popup
-	confirm_popup.confirm_popup(_title, _text, _left_button_text, _right_button_text)
-	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
-	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
-	return confirm_popup
-
-
-func show_input_popup(_title:String, _text:String, _default_value:String="", _left_button_text:String="Ok", _right_button_text:String="Cancel") -> Popup:
-	popup_bg.show()
-	if current_popup != null:
-		current_popup.hide()
-	current_popup = confirm_popup
-	confirm_popup.input_popup(_title, _text, _default_value, _left_button_text, _right_button_text)
-	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
-	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
-	return confirm_popup
+	emit_signal("popup_gone")
 
 
 func popup_active() ->bool:
 	return current_popup != null
 
 
-func open_popup(_name:String) -> void:
+func on_popup_close() -> void:
+	tween.remove_all()
+	tween.interpolate_property(popup_bg, "modulate:a", popup_bg.modulate.a, 0, 0.2, 0.05)
+	tween.interpolate_property(current_popup, "modulate:a", current_popup.modulate.a, 0, 0.05)
+	tween.interpolate_callback(popup_bg, 0.5, "hide")
+	tween.interpolate_callback(current_popup, 0.05, "hide")
+	tween.interpolate_callback(self, 0.06, "current_popup_to_null")
+	tween.start()
+	popup_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	current_popup.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func popup_fade_in():
+	tween.remove_all()
 	popup_bg.show()
+	popup_bg.mouse_filter = Control.MOUSE_FILTER_STOP
+	tween.interpolate_property(popup_bg, "modulate:a", popup_bg.modulate.a, 1, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
+	current_popup.modulate.a = 0
+	current_popup.mouse_filter = Control.MOUSE_FILTER_STOP
+	tween.interpolate_property(current_popup, "modulate:a", current_popup.modulate.a, 1, 0.1)
+	tween.start()
+
+
+func show_confirm_popup(_title:String, _text:String, _left_button_text:String="Ok", _right_button_text:String="Cancel") -> Popup:
 	if current_popup != null:
-		current_popup.hide()
-	current_popup = (get_node(_name) as Popup)
+		on_popup_close()
+		yield(self, "popup_gone")
+	current_popup = confirm_popup
+	confirm_popup.confirm_popup(_title, _text, _left_button_text, _right_button_text)
+	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
 	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
-	current_popup.popup_centered_clamped(Vector2(1,1), 1.8)
+	
+	popup_fade_in()
+	return confirm_popup
+
+
+func show_input_popup(_title:String, _text:String, _default_value:String="", _left_button_text:String="Ok", _right_button_text:String="Cancel") -> Popup:
+	if current_popup != null:
+		on_popup_close()
+		yield(self, "popup_gone")
+	current_popup = confirm_popup
+	confirm_popup.input_popup(_title, _text, _default_value, _left_button_text, _right_button_text)
+	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
+	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
+	
+	popup_fade_in()
+	return confirm_popup
 
 
 func on_ui_shrink_changed() -> void:

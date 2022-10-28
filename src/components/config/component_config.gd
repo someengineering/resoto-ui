@@ -113,7 +113,7 @@ func open_configuration(_config_key:String) -> void:
 	config_req = API.get_config_id(self, _config_key)
 
 
-func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, config_key:String) -> void:
+func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_key:String) -> void:
 	if _error:
 		if _error == ERR_PRINTER_ON_FIRE:
 			return
@@ -602,8 +602,19 @@ func _on_DeleteConfigButton_pressed():
 	delete_confirm_popup.connect("response", self, "_on_delete_confirm_response", [], CONNECT_ONESHOT)
 
 
-func _on_delete_confirm_response(_response:String):
+func _on_delete_confirm_response(_response:String, _double_confirm:=false):
 	if _response == "left":
+		if ProtectedConfigs.has(active_config_key) and not _double_confirm:
+			_g.popup_manager.on_popup_close()
+			yield(_g.popup_manager, "popup_gone")
+			var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
+			"Delete Configuration?",
+			"`%s` is a sytem configuration, are you sure you want to delete it anyway?\n\nThis operation can not be undone!" % active_config_key,
+			"Delete", "Cancel")
+			
+			delete_confirm_popup.connect("response", self, "_on_delete_confirm_response", [true], CONNECT_ONESHOT)
+			return
+		
 		API.delete_config_id(self, active_config_key)
 		Analytics.event(Analytics.EventsConfig.DELETE)
 
