@@ -201,6 +201,7 @@ func _on_data_source_query_status(_status:int, _title:String, _message:=""):
 	match _status:
 		OK:
 			error_icon.hide()
+			hint_tooltip = ""
 			$Warning.hide()
 		FAILED:
 			error_icon.show()

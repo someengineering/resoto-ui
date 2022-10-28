@@ -223,6 +223,8 @@ func sort_by_column(column : int, ascending : bool):
 			if header.column != column:
 				header.reset_sort()
 		sorting_column = column
+		if sorting_column > raw_data[0].size()-1:
+			sorting_column = raw_data[0].size()-1
 		if ascending:
 			raw_data.sort_custom(self, "sort_ascending")
 		else:
