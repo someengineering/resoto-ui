@@ -78,11 +78,12 @@ func _input(event) -> void:
 			var closest_point = find_value_at_x(x, series[index])
 			if str(closest_point.y) == "nan":
 				continue
+			sorted_values.append( [closest_point.y, line.name, line.default_color] )
 			if line.get_meta("stack"):
 				closest_point.y += stacked
 				stacked = closest_point.y
 			line.show_indicator(transform_point(closest_point, ratio))
-			sorted_values.append( [closest_point.y, line.name, line.default_color] )
+			
 		
 		sorted_values.sort_custom(self, "sort_label_values")
 		
@@ -253,6 +254,7 @@ func set_scale_from_series() -> void:
 				stacked[j] = value.y
 			if maxy < value.y:
 				maxy = value.y
+	
 	
 	max_y_value = maxy + (maxy - miny) * 0.1 if maxy != miny else maxy * 1.1
 	min_y_value = miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9
