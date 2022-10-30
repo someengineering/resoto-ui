@@ -18,6 +18,13 @@ onready var edit := $VBox/AllDataTextEdit
 onready var max_btn := $VBox/Title/AllDataMaximizeButton
 
 
+func _input(event):
+	if event.is_action_pressed("search"):
+		if get_global_rect().has_point(get_global_mouse_position()):
+			combo.grab_focus()
+			get_tree().set_input_as_handled()
+
+
 func set_node_text(_node_text:String):
 	node_text = _node_text
 	node_text_lines = node_text.split("\n")
