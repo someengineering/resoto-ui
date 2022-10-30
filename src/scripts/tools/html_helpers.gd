@@ -46,7 +46,7 @@ func add_mac_actions():
 	emulations.append(KeyEmulation.new("mac_copy", KEY_C, true))
 	emulations.append(KeyEmulation.new("mac_paste", KEY_V, true))
 	emulations.append(KeyEmulation.new("mac_cut", KEY_X, true))
-	emulations.append(KeyEmulation.new("mac_cut", KEY_A, true))
+	emulations.append(KeyEmulation.new("mac_select_all", KEY_A, true))
 	emulations.append(KeyEmulation.new("mac_save", KEY_S, true))
 	emulations.append(KeyEmulation.new("mac_search", KEY_F, true))
 	emulations.append(KeyEmulation.new("mac_undo", KEY_Z, true))
@@ -84,6 +84,7 @@ func _input(event):
 						get_tree().set_input_as_handled()
 				elif event.is_action_pressed(action.action):
 					simulate_input(action.key, action.shift)
+					get_tree().set_input_as_handled()
 
 
 func _on_clipboard(args):

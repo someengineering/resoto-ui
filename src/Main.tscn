@@ -182,7 +182,6 @@ anchor_bottom = 0.0
 margin_left = 10.0
 margin_right = 1910.0
 margin_bottom = 1020.0
-descriptions_as_hints = null
 
 [node name="TerminalComponent" type="MarginContainer" parent="Content/Content"]
 visible = false
