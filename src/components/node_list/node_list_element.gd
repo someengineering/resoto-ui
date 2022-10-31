@@ -7,6 +7,7 @@ const NODE_LIMIT:int = 200
 const SearchResult = preload("res://components/fulltext_search_menu/full_text_search_result_template.tscn")
 
 var active_request : ResotoAPI.Request
+var count_request : ResotoAPI.Request
 var parent_node_id : String
 var parent_node_name : String
 var filter_variables : Dictionary
@@ -30,6 +31,7 @@ onready var filter_edit = $VBox/Filter/FilterLineEdit
 onready var limit_button = $VBox/TitleBar/LimitButton
 onready var limit_label = $VBox/TitleBar/LimitLabel
 onready var tags_group := $VBox/Filter/TagsGroup
+onready var result_amount_label := $"%ResultAmountLabel"
 
 
 func _ready():
@@ -51,17 +53,38 @@ func show_self():
 	_g.content_manager.change_section_explore("node_list_info")
 
 
-func show_kind_from_node_data(parent_node:Dictionary, kind:String):
-	last_search_type = "show_kind_from_node_data"
+func count_search(_search_command) -> void:
+	if count_request:
+		count_request.cancel(ERR_PRINTER_ON_FIRE)
+	result_amount_label.text = ""
+	var count_command : String = "search " + _search_command + " | count"
+	count_request = API.cli_execute(count_command, self)
+
+
+func new_search(_last_search_type:String):
+	last_search_type = _last_search_type
+	if active_request:
+		active_request.cancel(ERR_PRINTER_ON_FIRE)
 	change_section_to_self()
-	var search_command = "id(\"" + parent_node.id + "\") -[1:]-> is(" + kind + ")"
+	
+	node_kind_button.hide()
+	parent_button.hide()
+	all_kinds_label.hide()
+	list_kind_button.hide()
+	search_type_label.hide()
+	arrow_icon_mid.hide()
+
+
+func show_kind_from_node_data(parent_node:Dictionary, kind:String):
+	new_search("show_kind_from_node_data")
+	
+	var search_command : String = "id(\"" + parent_node.id + "\") -[1:]-> is(" + kind + ")"
 	last_query = search_command
+	count_search(search_command)
 	
 	if use_limit:
 		search_command +=  " limit " + str(NODE_LIMIT)
 	
-	search_type_label.hide()
-	all_kinds_label.hide()
 	arrow_icon_mid.show()
 	node_kind_button.show()
 	list_kind_button.show()
@@ -82,42 +105,35 @@ func show_kind_from_node_data(parent_node:Dictionary, kind:String):
 
 
 func show_kind(kind:String):
-	last_search_type = "show_kind"
-	change_section_to_self()
-	var search_command = "is(" + kind + ")"
+	new_search("show_kind")
+	
+	var search_command : String = "is(" + kind + ")"
 	last_query = search_command
+	count_search(search_command)
 	
 	if use_limit:
 		search_command +=  " limit " + str(NODE_LIMIT)
-	
-	search_type_label.hide()
-	list_kind_button.hide()
-	arrow_icon_mid.hide()
-	parent_button.hide()
 	
 	all_kinds_label.show()
 	node_kind_button.show()
 	node_kind_button.text = kind
 	
 	active_request = API.graph_search(search_command, self, "list")
-	
 	emit_signal("show", last_search_type, [kind])
 
 
 func show_kind_from_node_id(id:String, kind:String):
-	last_search_type = "show_kind_from_node_id"
-	change_section_to_self()
+	new_search("show_kind_from_node_id")
+	
 	var search_command = "id(\"" + id + "\") -[1:]-> is(" + kind + ")"
 	last_query = search_command
+	count_search(search_command)
 	
 	if use_limit:
 		search_command +=  " limit " + str(NODE_LIMIT)
 	
 	parent_node_id = id
 	
-	search_type_label.hide()
-	node_kind_button.hide()
-	all_kinds_label.hide()
 	arrow_icon_mid.show()
 	list_kind_button.show()
 	
@@ -128,22 +144,17 @@ func show_kind_from_node_id(id:String, kind:String):
 	list_kind_button.text = kind
 	
 	active_request = API.graph_search(search_command, self, "list")
-	
-	
 	emit_signal("show", last_search_type, [id, kind])
 
 
 func show_list_from_search(search_command:String):
-	last_search_type = "show_list_from_search"
-	change_section_to_self()
-	
-	node_kind_button.hide()
-	parent_button.hide()
-	list_kind_button.hide()
-	search_type_label.show()
-	arrow_icon_mid.hide()
+	new_search("show_list_from_search")
 	
 	last_query = search_command
+	count_search(search_command)
+	
+	search_type_label.show()
+	arrow_icon_mid.hide()
 	
 	if " limit " in search_command:
 		limit_button.disabled = true
@@ -157,30 +168,26 @@ func show_list_from_search(search_command:String):
 	search_type_label.enabled = true
 	
 	active_request = API.graph_search(search_command, self, "list")
-	
-	
 	emit_signal("show", last_search_type, [search_command])
 
 
 func explore_node_list_from_node(parent_node:Dictionary, search_command:String, kind_label_string:String):
-	last_search_type = "explore_node_list_from_node"
-	change_section_to_self()
+	new_search("explore_node_list_from_node")
 	
 	last_query = search_command
+	count_search(search_command)
 	
 	if use_limit:
 		search_command +=  " limit " + str(NODE_LIMIT)
 	
 	parent_node_id = parent_node.id
 	parent_node_name = parent_node.reported.name
-	
-	node_kind_button.hide()
+
 	parent_button.text = parent_node_name
 	parent_button.set_meta("id", parent_node_id)
-	parent_button.show()
-	list_kind_button.hide()
-	search_type_label.show()
 	search_type_label.enabled = false
+	parent_button.show()
+	search_type_label.show()
 	arrow_icon_mid.show()
 	
 	if kind_label_string == "<--":
@@ -191,8 +198,6 @@ func explore_node_list_from_node(parent_node:Dictionary, search_command:String, 
 		search_type_label.text = kind_label_string
 	
 	active_request = API.graph_search(search_command, self, "list")
-	
-	
 	emit_signal("show", last_search_type, [parent_node, search_command.replace(" limit " + str(NODE_LIMIT), ""), kind_label_string])
 
 
@@ -271,6 +276,24 @@ func filter_results(filter_string:String):
 	
 	for c in vbox.get_children():
 		c.visible = filter_variables[c.name].find(filter_string) >= 0
+
+
+func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
+	if error:
+		if error == ERR_PRINTER_ON_FIRE:
+			return
+		if _response.response_code == 400:
+			return
+		return
+	var response_text : String = _response.transformed.result
+	var results_count : int = int(response_text.split("\n")[0].split(": ")[1])
+	var result_count_text:String = Utils.comma_sep(results_count) + " result"
+	if results_count == 0 or results_count > 1:
+		result_count_text += "s"
+	if results_count > NODE_LIMIT:
+		result_count_text += " (showing first " + str(NODE_LIMIT) + ")"
+	
+	result_amount_label.text = result_count_text
 
 
 func _on_ParentNodeButton_pressed():
