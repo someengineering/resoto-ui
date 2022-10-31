@@ -450,14 +450,14 @@ can_press = false
 
 [node name="FixedSpacer" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
 margin_left = 105.0
-margin_right = 387.0
+margin_right = 410.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 282, 0 )
+rect_min_size = Vector2( 305, 0 )
 mouse_filter = 2
 
 [node name="SpacerMidL" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
-margin_left = 387.0
-margin_right = 956.0
+margin_left = 410.0
+margin_right = 917.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 20, 0 )
 mouse_filter = 2
@@ -465,23 +465,27 @@ size_flags_horizontal = 3
 
 [node name="MainResotoLogo" type="TextureRect" parent="MenuBar/MenuContainer/TopMenu/Title"]
 unique_name_in_owner = true
-margin_left = 956.0
-margin_right = 1041.0
-margin_bottom = 40.0
+margin_left = 917.0
+margin_top = 4.0
+margin_right = 1002.0
+margin_bottom = 36.0
 rect_min_size = Vector2( 85, 32 )
+size_flags_vertical = 4
 texture = ExtResource( 4 )
 expand = true
 stretch_mode = 6
 
 [node name="SpacerMidR" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
-margin_left = 1041.0
-margin_right = 1610.0
+margin_left = 1002.0
+margin_right = 1510.0
 margin_bottom = 40.0
 mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="TopMenuFullTextSearch" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 14 )]
 unique_name_in_owner = true
+margin_left = 1510.0
+rect_min_size = Vector2( 400, 0 )
 mouse_filter = 1
 
 [node name="SpacerR" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
