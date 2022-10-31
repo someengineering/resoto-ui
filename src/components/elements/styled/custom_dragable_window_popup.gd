@@ -26,12 +26,12 @@ func _ready():
 	$Content/Titlebar.target = self
 	connect("about_to_show", self, "reset_settings")
 	rect_size = default_size
-	_g.connect("ui_shrink_changed", self, "on_ui_shrink_changed")
+	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
 
 
-func on_ui_shrink_changed() -> void:
+func on_ui_scale_changed() -> void:
 	if visible:
-		var w_size = (OS.window_size / _g.ui_shrink)
+		var w_size = (OS.window_size / _g.ui_scale)
 		var popup_size = rect_size
 		rect_position = (w_size/2 - popup_size/2) - Vector2(0, -TopMenuHeight)
 		rect_size = Vector2(
@@ -58,7 +58,7 @@ func _process(_delta:float):
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 		set_process(false)
 	
-	var w_size = OS.window_size / _g.ui_shrink
+	var w_size = OS.window_size / _g.ui_scale
 	if is_dragging:
 		var m_pos = get_global_mouse_position() - drag_start_position
 		rect_position = Vector2(
@@ -117,7 +117,7 @@ func _on_MaximizeButton_pressed():
 		size_before_max = rect_size
 		pos_before_max = rect_position
 		rect_position = Vector2(0, TopMenuHeight)
-		rect_size = (OS.window_size / _g.ui_shrink) + Vector2(0, -TopMenuHeight)
+		rect_size = (OS.window_size / _g.ui_scale) + Vector2(0, -TopMenuHeight)
 	else:
 		rect_position = pos_before_max
 		rect_size = size_before_max

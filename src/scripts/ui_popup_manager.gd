@@ -17,8 +17,8 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	add_child(tween)
-	get_tree().root.connect("size_changed", self, "on_ui_shrink_changed")
-	_g.connect("ui_shrink_changed", self, "on_ui_shrink_changed")
+	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
+	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
 
 
 func open_popup(_name:String) -> void:
@@ -27,7 +27,7 @@ func open_popup(_name:String) -> void:
 		yield(self, "popup_gone")
 	current_popup = (get_node(_name) as Popup)
 	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
-	current_popup.popup_centered_clamped(Vector2(1,1), 1.8)
+	current_popup.popup_centered_clamped(Vector2(1,1), 0.1)
 	popup_fade_in()
 
 
@@ -69,7 +69,7 @@ func show_confirm_popup(_title:String, _text:String, _left_button_text:String="O
 		yield(self, "popup_gone")
 	current_popup = confirm_popup
 	confirm_popup.confirm_popup(_title, _text, _left_button_text, _right_button_text)
-	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
+	current_popup.popup_centered_clamped(Vector2(1,1), 0.1)
 	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
 	
 	popup_fade_in()
@@ -82,15 +82,15 @@ func show_input_popup(_title:String, _text:String, _default_value:String="", _le
 		yield(self, "popup_gone")
 	current_popup = confirm_popup
 	confirm_popup.input_popup(_title, _text, _default_value, _left_button_text, _right_button_text)
-	confirm_popup.popup_centered_clamped(Vector2(0,0), 2.2)
+	current_popup.popup_centered_clamped(Vector2(1,1), 0.1)
 	current_popup.connect("popup_hide", self, "on_popup_close", [], CONNECT_ONESHOT)
 	
 	popup_fade_in()
 	return confirm_popup
 
 
-func on_ui_shrink_changed() -> void:
+func on_ui_scale_changed() -> void:
 	if current_popup != null:
-		var relative_window_size = OS.window_size / _g.ui_shrink
+		var relative_window_size = OS.window_size / _g.ui_scale
 		var popup_size = current_popup.rect_size
 		current_popup.rect_position = relative_window_size/2 - popup_size/2

@@ -149,8 +149,8 @@ func _on_ConnectTimeoutTimer_timeout():
 		info_request.cancel(24)
 
 
-const show_tex = preload("res://assets/icons/icon_128_show.svg")
-const hide_tex = preload("res://assets/icons/icon_128_hide.svg")
+const hide_tex = preload("res://assets/icons/icon_128_show.svg")
+const show_tex = preload("res://assets/icons/icon_128_hide.svg")
 func _on_ShowPSKIcon_toggled(button_pressed:bool):
 	show_psk_icon.icon_tex = hide_tex if button_pressed else show_tex
 	psk_line_edit.secret = !button_pressed
