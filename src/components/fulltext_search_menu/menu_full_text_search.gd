@@ -10,12 +10,27 @@ var count_request: ResotoAPI.Request
 var search_command:= ""
 var buffered_command:= ""
 
-onready var popup := $ResultsPopUp
-onready var popup_results := $ResultsPopUp/VBox
-onready var result_amount_label := $ResultsPopUp/VBox/Title/ResultAmountLabel
-onready var list_btn := $ResultsPopUp/VBox/Title/ListButton
+onready var popup := $PopupLayer/ResultsPopUp
+onready var popup_results := $PopupLayer/ResultsPopUp/VBox
+onready var result_amount_label := $PopupLayer/ResultsPopUp/VBox/Title/ResultAmountLabel
+onready var list_btn := $PopupLayer/ResultsPopUp/VBox/Title/ListButton
+
 onready var single_node_info = _g.content_manager.find_node("NodeSingleInfo")
 onready var search_delay := $SearchDelay
+onready var error_msg := $"%ErrorMessage"
+
+
+func _input(event:InputEvent):
+	if not popup.visible:
+		return
+	if event.is_action_pressed("ui_cancel"):
+		popup.hide()
+		get_tree().set_input_as_handled()
+	if (event is InputEventMouseButton and event.is_pressed()
+	and not(get_global_rect().has_point(event.position) or popup.get_global_rect().has_point(event.position))):
+		popup.hide()
+		if has_focus():
+			release_focus()
 
 
 func _on_FullTextSearch_focus_entered() -> void:
@@ -33,8 +48,8 @@ func _on_FullTextSearch_text_changed(_command:String) -> void:
 		popup.hide()
 		search_delay.stop()
 	list_btn.hide()
+	result_amount_label.show()
 	result_amount_label.text = ""
-	result_amount_label.autowrap = false
 	result_amount_label.modulate.a = 0.0
 	search_delay.start()
 	grab_focus()
@@ -54,6 +69,8 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 		result_count_text += "s"
 	if results_count > result_limit:
 		result_count_text += " (showing first " + str(result_limit) + ")"
+	error_msg.hide()
+	result_amount_label.show()
 	result_amount_label.text = result_count_text
 	result_amount_label.modulate.a = 1.0
 
@@ -73,6 +90,8 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 
 func show_search_results(results:Array, error:="") -> void:
 	grab_focus()
+	error_msg.hide()
+	result_amount_label.show()
 	# clear old results
 	for c in popup_results.get_children():
 		if c.get_class() == "HBoxContainer":
@@ -81,12 +100,15 @@ func show_search_results(results:Array, error:="") -> void:
 	
 	if text == "" or results.empty():
 		if error != "":
-			result_amount_label.text = error
-			result_amount_label.modulate.a = 1.0
-			result_amount_label.autowrap = true
+			error_msg.show()
+			result_amount_label.hide()
+			var error_a : Array = error.replace("Error: ParseError\nMessage: ", "[b]Parse Error: [/b]").split("\n")
+			error_a[0] = error_a[0].trim_suffix(" limit 10")
+			error = "[color=#f16d4f]%s[/color]\n[code]%s[/code]" % error_a
+			error_msg.bbcode_text = error
 			popup.show()
 			yield(VisualServer, "frame_post_draw")
-			popup.rect_size.y = 1
+			popup.rect_size = Vector2(rect_size.x, 50)
 		else:
 			popup.hide()
 		return
@@ -125,14 +147,12 @@ func show_search_results(results:Array, error:="") -> void:
 		new_result.get_node("VBox/ResultDetails").text = ancestors
 		popup_results.add_child(new_result)
 	
-	yield(get_tree(), "idle_frame")
-	popup.set_as_minsize()
+	yield(VisualServer, "frame_post_draw")
 	var _popup_x_size = max(popup_x_size, rect_size.x)
 	var popup_pos  = rect_global_position + Vector2(-abs(_popup_x_size-rect_size.x), self.rect_size.y)
-	var popup_size = Vector2(_popup_x_size, popup.rect_size.y)
-	popup.popup(Rect2(popup_pos, popup_size))
-	yield(VisualServer, "frame_post_draw")
-	popup.rect_size.y = 1
+	popup.rect_global_position = popup_pos
+	popup.rect_size = Vector2(_popup_x_size, 1)
+	popup.show()
 	grab_focus()
 
 

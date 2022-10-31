@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://components/fulltext_search_menu/menu_full_text_search.gd" type="Script" id=1]
 [ext_resource path="res://assets/icons/search-01.svg" type="Texture" id=2]
+[ext_resource path="res://assets/theme/Barlow-Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=4]
+[ext_resource path="res://assets/theme/Barlow-Bold.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/theme/SourceCodePro-Medium.ttf" type="DynamicFontData" id=6]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 10.0
@@ -14,6 +17,24 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="DynamicFont" id=2]
+size = 15
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 15
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 15
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 3 )
 
 [node name="FullTextSearch" type="LineEdit"]
 margin_left = 1610.0
@@ -68,6 +89,62 @@ text = "more"
 wait_time = 0.3
 one_shot = true
 
+[node name="PopupLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="ResultsPopUp" type="PanelContainer" parent="PopupLayer"]
+visible = false
+margin_left = 1324.0
+margin_top = 41.0
+margin_right = 1909.0
+margin_bottom = 286.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+
+[node name="VBox" type="VBoxContainer" parent="PopupLayer/ResultsPopUp"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 575.0
+margin_bottom = 235.0
+
+[node name="Title" type="HBoxContainer" parent="PopupLayer/ResultsPopUp/VBox"]
+margin_right = 565.0
+margin_bottom = 27.0
+
+[node name="ErrorMessage" type="RichTextLabel" parent="PopupLayer/ResultsPopUp/VBox/Title"]
+unique_name_in_owner = true
+visible = false
+margin_right = 380.0
+margin_bottom = 59.0
+rect_min_size = Vector2( 380, 0 )
+size_flags_horizontal = 3
+custom_colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+custom_fonts/mono_font = SubResource( 2 )
+custom_fonts/bold_font = SubResource( 3 )
+custom_fonts/normal_font = SubResource( 4 )
+bbcode_enabled = true
+bbcode_text = "[b]Error: Parse Error[/b]
+[b]Message: Can not parse[/b]
+[code]Expected one of [/code]"
+text = "Error: Parse Error
+Message: Can not parse
+Expected one of "
+fit_content_height = true
+
+[node name="ResultAmountLabel" type="Label" parent="PopupLayer/ResultsPopUp/VBox/Title"]
+margin_right = 499.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 0, 27 )
+size_flags_horizontal = 3
+
+[node name="ListButton" type="Button" parent="PopupLayer/ResultsPopUp/VBox/Title"]
+margin_left = 503.0
+margin_right = 565.0
+margin_bottom = 27.0
+focus_neighbour_top = NodePath("../../../../..")
+theme_type_variation = "ButtonComboList"
+text = "more"
+
 [connection signal="focus_entered" from="." to="." method="_on_FullTextSearch_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_FullTextSearch_focus_exited"]
 [connection signal="gui_input" from="." to="." method="_on_FullTextSearch_gui_input"]
@@ -75,3 +152,4 @@ one_shot = true
 [connection signal="text_entered" from="." to="." method="_on_FullTextSearch_text_entered"]
 [connection signal="pressed" from="ResultsPopUp/VBox/Title/ListButton" to="." method="_on_ListButton_pressed"]
 [connection signal="timeout" from="SearchDelay" to="." method="_on_SearchDelay_timeout"]
+[connection signal="pressed" from="PopupLayer/ResultsPopUp/VBox/Title/ListButton" to="." method="_on_ListButton_pressed"]
