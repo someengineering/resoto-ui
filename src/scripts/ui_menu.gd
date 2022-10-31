@@ -22,8 +22,8 @@ func _ready() -> void:
 	_g.connect("resoto_home_visible", self, "_on_resoto_home_visible")
 	$"%HamburgerMenuItems/ButtonMessageLog".visible = OS.has_feature("editor") and not force_hide_message_log
 	
-	get_tree().root.connect("size_changed", self, "on_ui_shrink_changed")
-	_g.connect("ui_shrink_changed", self, "on_ui_shrink_changed")
+	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
+	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
 	init_menu()
 	
 	history_buttons.visible = not OS.has_feature("HTML5")
@@ -34,7 +34,7 @@ func _ready() -> void:
 func init_menu():
 	yield(get_tree(), "idle_frame")
 	hb_menu.rect_position.x = -400
-	on_ui_shrink_changed()
+	on_ui_scale_changed()
 	$"%HamburgerMenuItems/ResotoUIVersion".text = "Resoto UI v" + _g.ui_version
 
 
@@ -80,8 +80,8 @@ func close_menu():
 		hb_button.pressed = false
 
 
-func on_ui_shrink_changed():
-	hb_menu.rect_size.y = OS.window_size.y / _g.ui_shrink
+func on_ui_scale_changed():
+	hb_menu.rect_size.y = OS.window_size.y / _g.ui_scale
 
 
 func _on_HamburgerButton_hamburger_button_pressed(pressed:bool):
@@ -135,6 +135,19 @@ func _on_HistoryFwdButton_pressed():
 func _on_navigation_index_changed(id : int):
 	back_button.can_press = id > 0
 	forward_button.can_press = !(UINavigation.navigation_array.size() <= id + 1)
+
+
+func _on_ButtonUISettings_pressed():
+	_g.popup_manager.open_popup("UISettingsPopup")
+	close_menu()
+
+
+func _on_ButtonUIScaleMinus_pressed():
+	_g.emit_signal("ui_scale_increase")
+
+
+func _on_ButtonUIScalePlus_pressed():
+	_g.emit_signal("ui_scale_decrease")
 
 
 # This still needs to be build back into the UI, but for now the PR is on ice.

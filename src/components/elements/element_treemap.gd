@@ -44,8 +44,8 @@ class Dataset:
 
 
 func _ready():
-	get_tree().root.connect("size_changed", self, "on_ui_shrink_changed")
-	_g.connect("ui_shrink_changed", self, "on_ui_shrink_changed")
+	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
+	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
 
 
 func set_treemap_size():
@@ -311,7 +311,7 @@ static func array_sort_desc(a, b) -> bool:
 	return a.ds_value > b.ds_value
 
 
-func on_ui_shrink_changed():
+func on_ui_scale_changed():
 	yield(VisualServer, "frame_post_draw")
 	if not datasets.empty():
 		update_treemap()

@@ -9,13 +9,16 @@ func _ready() -> void:
 
 func _on_settings_loaded(_found_settings:bool) -> void:
 	if !_found_settings:
-		var dpi:int = OS.get_screen_dpi()
-		if dpi >= 130:
-			_g.ui_shrink = 2.0
-		elif dpi >= 90:
-			_g.ui_shrink = 1.5
-		elif dpi >= 70:
-			_g.ui_shrink = 1.0
+		var screen_size := OS.get_screen_size()
+		if screen_size.y < 900:
+			_g.ui_scale = 0.8
+		elif screen_size.y <= 1080:
+			_g.ui_scale = 1.0
+		elif screen_size.y <= 1440:
+			_g.ui_scale = 1.2
+		else:
+			_g.ui_scale = 1.8
+			
 		SaveLoadSettings.save_settings()
 	yield(get_tree(), "idle_frame")
 	_g.popup_manager.open_popup("ConnectPopup")
