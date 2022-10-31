@@ -41,6 +41,8 @@ func popup_active() ->bool:
 
 
 func on_popup_close() -> void:
+	if current_popup == null:
+		return
 	tween.remove_all()
 	tween.interpolate_property(popup_bg, "modulate:a", popup_bg.modulate.a, 0.0, 0.2, Tween.TRANS_EXPO, Tween.EASE_OUT, 0.1)
 	tween.interpolate_property(current_popup, "modulate:a", current_popup.modulate.a, 0, 0.05, Tween.TRANS_EXPO, Tween.EASE_OUT)

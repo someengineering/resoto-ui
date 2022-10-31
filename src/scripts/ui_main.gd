@@ -3,6 +3,8 @@ extends Control
 
 func _ready() -> void:
 	_g.connect("fullscreen_hide_menu", self, "_on_fullscreen_hide_menu")
+	_g.connect("ui_scale_increase", self, "ui_scale_up")
+	_g.connect("ui_scale_decrease", self, "ui_scale_down")
 	SaveLoadSettings.connect("settings_loaded", self, "_on_settings_loaded", [], CONNECT_ONESHOT)
 	SaveLoadSettings.load_settings()
 
@@ -40,16 +42,14 @@ func _input(event:InputEvent) -> void:
 
 
 func ui_scale_down() -> void:
-	var new_shrink = stepify(max(_g.ui_shrink-0.1, 0.5), 0.1)
-	_g.ui_shrink = new_shrink
-	_g.emit_signal("ui_shrink_changed")
+	_g.ui_scale = stepify(max(_g.ui_scale-0.1, 0.5), 0.1)
+	_g.emit_signal("ui_scale_changed")
 	SaveLoadSettings.save_settings()
 
 
 func ui_scale_up() -> void:
-	var new_shrink = stepify(min(_g.ui_shrink+0.1, 4), 0.1)
-	_g.ui_shrink = new_shrink
-	_g.emit_signal("ui_shrink_changed")
+	_g.ui_scale = stepify(min(_g.ui_scale+0.1, 4), 0.1)
+	_g.emit_signal("ui_scale_changed")
 	SaveLoadSettings.save_settings()
 
 

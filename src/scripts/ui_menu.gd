@@ -20,8 +20,6 @@ func _ready() -> void:
 	_g.connect("close_hamburger_menu", self, "close_menu")
 	_g.connect("top_search_update", self, "_on_top_search_update")
 	_g.connect("resoto_home_visible", self, "_on_resoto_home_visible")
-	_g.connect("ui_scale_increase", self, "ui_scale_up")
-	_g.connect("ui_scale_decrease", self, "ui_scale_down")
 	$"%HamburgerMenuItems/ButtonMessageLog".visible = OS.has_feature("editor") and not force_hide_message_log
 	
 	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
@@ -145,11 +143,11 @@ func _on_ButtonUISettings_pressed():
 
 
 func _on_ButtonUIScaleMinus_pressed():
-	_g.emit_signal("ui_scale_increase")
+	_g.emit_signal("ui_scale_decrease")
 
 
 func _on_ButtonUIScalePlus_pressed():
-	_g.emit_signal("ui_scale_decrease")
+	_g.emit_signal("ui_scale_increase")
 
 
 # This still needs to be build back into the UI, but for now the PR is on ice.
