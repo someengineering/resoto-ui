@@ -49,6 +49,10 @@ func _input(event:InputEvent):
 			get_tree().set_input_as_handled()
 
 
+func grab_focus():
+	line_edit.grab_focus()
+
+
 func _on_LineEdit_gui_input(event) -> void:
 	if event is InputEventMouseButton :
 		if event.button_index == BUTTON_LEFT:

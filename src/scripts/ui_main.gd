@@ -3,11 +3,11 @@ extends Control
 
 func _ready() -> void:
 	_g.connect("fullscreen_hide_menu", self, "_on_fullscreen_hide_menu")
-	SaveLoadSettings.connect("settings_loaded", self, "show_connect_popup", [], 4)
+	SaveLoadSettings.connect("settings_loaded", self, "_on_settings_loaded", [], CONNECT_ONESHOT)
 	SaveLoadSettings.load_settings()
 
 
-func show_connect_popup(_found_settings:bool) -> void:
+func _on_settings_loaded(_found_settings:bool) -> void:
 	if !_found_settings:
 		var dpi:int = OS.get_screen_dpi()
 		if dpi >= 130:
@@ -17,11 +17,37 @@ func show_connect_popup(_found_settings:bool) -> void:
 		elif dpi >= 70:
 			_g.ui_shrink = 1.0
 		SaveLoadSettings.save_settings()
+	yield(get_tree(), "idle_frame")
 	_g.popup_manager.open_popup("ConnectPopup")
+	_g.popup_manager.popup_connect.connect("connected", self, "_connected", [], CONNECT_ONESHOT)
 	_g.emit_signal("connect_to_core")
 	
 	# If we ever need Godot to receive URL parameters:
 #	var custom_parameter = JavaScript.eval("getParameter('custom_parameter')")
+
+
+func _input(event:InputEvent) -> void:
+	if (event is InputEventMouseButton
+	and event.is_pressed()
+	and (Input.is_key_pressed(KEY_CONTROL) or Input.is_key_pressed(KEY_META))):
+		if event.button_index == BUTTON_WHEEL_UP:
+			ui_scale_up()
+		elif event.button_index == BUTTON_WHEEL_DOWN:
+			ui_scale_down()
+
+
+func ui_scale_down() -> void:
+	var new_shrink = stepify(max(_g.ui_shrink-0.1, 0.5), 0.1)
+	_g.ui_shrink = new_shrink
+	_g.emit_signal("ui_shrink_changed")
+	SaveLoadSettings.save_settings()
+
+
+func ui_scale_up() -> void:
+	var new_shrink = stepify(min(_g.ui_shrink+0.1, 4), 0.1)
+	_g.ui_shrink = new_shrink
+	_g.emit_signal("ui_shrink_changed")
+	SaveLoadSettings.save_settings()
 
 
 func _on_fullscreen_hide_menu(is_fullscreen:bool) -> void:
@@ -35,5 +61,5 @@ func _on_fullscreen_hide_menu(is_fullscreen:bool) -> void:
 	content.add_constant_override("margin_left", side_margin)
 
 
-func _on_ConnectPopup_connected():
+func _connected():
 	UINavigation.on_home_loaded()

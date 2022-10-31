@@ -1,6 +1,12 @@
 extends Control
 
 
+func _input(event):
+	if event.is_action_pressed("search") and is_visible_in_tree():
+		$VBox/FullTextSearch.grab_focus()
+		get_tree().set_input_as_handled()
+
+
 func _on_FullTextSearch_text_changed(new_text):
 	_g.emit_signal("top_search_update", new_text)
 

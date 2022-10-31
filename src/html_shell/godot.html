@@ -14,8 +14,8 @@
 			text-align: center;
 			background-repeat: no-repeat;
     		background-attachment: fixed;
-			background-color: #242434;
-			background-image: linear-gradient(to bottom, #2a124a, #291e2d);
+			background-color: #0F1926;
+			background-image: linear-gradient(to bottom, #2a124a, #0F1926);
 			color: #e98df7;
 		}
 
@@ -162,6 +162,16 @@
 			console.log(result);
 			return(result);
 		}
+
+		function getDPI() {
+    		for (var i = 56; i < 2000; i++) {
+        	if (matchMedia("(max-resolution: " + i + "dpi)").matches === true) {
+            	return i;
+        		}
+    		}
+			return i;
+		}
+
 		function uploadFile(fileTypes) {
 			input.setAttribute("type", "file");
 			input.setAttribute("accept", fileTypes);
@@ -277,7 +287,6 @@ $GODOT_HEAD_INCLUDE
 			requestAnimationFrame(animate);
 
 			function setStatusMode(mode) {
-
 				if (statusMode === mode || !initializing)
 					return;
 				[statusLogo, statusText, statusProgress, statusIndeterminate, statusNotice].forEach(elem => {

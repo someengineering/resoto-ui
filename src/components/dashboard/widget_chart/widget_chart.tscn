@@ -1,6 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://components/dashboard/widget_chart/widget_chart.gd" type="Script" id=1]
+[ext_resource path="res://assets/generic/blur.gdshader" type="Shader" id=2]
 
 [sub_resource type="StyleBoxFlat" id=10]
 content_margin_left = 0.0
@@ -41,18 +42,8 @@ shader_param/line_width = 4.0
 flags = 4
 viewport_path = NodePath("Viewport")
 
-[sub_resource type="Shader" id=11]
-code = "shader_type canvas_item;
-
-uniform float lod: hint_range(0.0, 5) = 0.0;
-
-void fragment(){
-	vec4 color = texture(TEXTURE, UV, lod);
-	COLOR = color;
-}"
-
 [sub_resource type="ShaderMaterial" id=12]
-shader = SubResource( 11 )
+shader = ExtResource( 2 )
 shader_param/lod = 0.0
 
 [node name="Chart" type="Control"]

@@ -34,7 +34,6 @@ func load_settings() -> void:
 	_g.terminal_scrollback = settings[0].terminal_scrollback
 	if settings[0].has("persistent_nodes"):
 		restore_node_data(settings[0].persistent_nodes)
-	
 	emit_signal("settings_loaded", settings[1])
 
 
