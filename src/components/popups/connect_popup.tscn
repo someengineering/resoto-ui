@@ -3,7 +3,7 @@
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=2]
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=3]
-[ext_resource path="res://assets/icons/icon_128_show.svg" type="Texture" id=4]
+[ext_resource path="res://assets/icons/icon_128_hide.svg" type="Texture" id=4]
 
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 1, 1, 1, 1 )
