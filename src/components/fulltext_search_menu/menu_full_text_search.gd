@@ -64,7 +64,7 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 		return
 	var response_text:String = _response.transformed.result
 	var results_count:int = int(response_text.split("\n")[0].split(": ")[1])
-	var result_count_text:String = str(results_count) + " result"
+	var result_count_text:String = Utils.comma_sep(results_count) + " result"
 	if results_count == 0 or results_count > 1:
 		result_count_text += "s"
 	if results_count > result_limit:
