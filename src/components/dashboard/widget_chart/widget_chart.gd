@@ -191,18 +191,22 @@ func update_graph_area(force := false) -> void:
 		var ny = divisions.y
 		for l in y_labels.get_children():
 			l.queue_free()
-			
+		
+		var zero := min(y_zero_position, 1.0)
+		var delta := round((max_y_value - min_y_value)/ny)
 		for i in ny:
 			var l = dynamic_label_scene.instance()
 			l.max_font_size = 14
 			l.min_font_size = 10
-			l.text = str(int(i*(max_y_value - min_y_value) / ny))
+			var value : int = i * delta
+			if zero == 1.0:
+				value += min_y_value
+			l.text = str(value)
 			l.align = Label.ALIGN_RIGHT
 			l.valign = Label.VALIGN_CENTER
-			l.rect_position.y = y_labels.rect_size.y * (y_zero_position - i/ny) - l.rect_size.y / 2
+			l.rect_position.y = round(y_labels.rect_size.y * (y_zero_position - i/ny)) - l.rect_size.y / 2
 			l.anchor_right = 1
 			l.margin_right = 0
-			print(l.rect_position.y)
 			y_labels.add_child(l)
 
 
@@ -259,11 +263,11 @@ func set_scale_from_series() -> void:
 				maxy = value.y
 	
 	
-	max_y_value = maxy + (maxy - miny) * 0.1 if maxy != miny else maxy * 1.1
-	min_y_value = miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9
-	if miny == 0:
+	max_y_value = round(maxy + (maxy - miny) * 0.1 if maxy != miny else maxy * 1.1)
+	min_y_value = round(miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9)
+	if miny == 0 or maxy == miny:
 		min_y_value = 0
-		
+	
 	y_zero_position = max_y_value / (max_y_value - min_y_value)
 	print(y_zero_position)
 	grid.material.set_shader_param("zero_position", y_zero_position)
