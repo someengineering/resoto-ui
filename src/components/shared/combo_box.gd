@@ -5,7 +5,7 @@ extends Control
 signal option_changed(option)
 signal text_changed(text)
 
-export (Array, String) var items = []
+export (Array, String) var items
 export (bool) var align_items_left:= false
 export (Vector2) var button_min_size:= Vector2(1,1) setget set_button_min_size
 export (bool) var clear_button_enabled:= false
