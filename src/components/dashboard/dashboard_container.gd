@@ -334,6 +334,8 @@ func _on_ExportButton_pressed():
 	kebap_popup.hide()
 	if OS.has_feature("HTML5"):
 		JavaScript.download_buffer(JSON.print(get_data(),"\t").to_utf8(), "%s.json" % dashboard_name)
+	else:
+		Utils.save_string_to_json("user://dashboard_%s.json" % dashboard_name, JSON.print(get_data(),"\t"))
 
 
 func _on_CloseButton_pressed():

@@ -90,6 +90,7 @@ func get_db_config_name(_name:String):
 
 
 func close_dashboard(dashboard : DashboardContainer):
+	dashboard.connect("tree_exited", self, "_on_DashBoardManager_tab_changed", [], CONNECT_ONESHOT)
 	dashboard.queue_free()
 	save_opened_dashboards()
 
@@ -151,7 +152,6 @@ func open_user_dashboards():
 	for i in get_children().size():
 		if get_tab_control(i).name.replace(" ","_") == dashboard_status.active_dashboard:
 			set_current_tab(i)
-	
 
 
 func load_dashboard(dashboard_name : String):
@@ -292,7 +292,7 @@ func _on_DashboardItemList_nothing_selected():
 	open_dashboard_btn.hide()
 
 
-func _on_DashBoardManager_tab_changed(_tab):
+func _on_DashBoardManager_tab_changed(_tab:int=current_tab):
 	var new_tab_control:Node = get_tab_control(_tab)
 	if new_tab_control.get_class() != "DashboardContainer" and new_tab_control != manager_tab:
 		var dashboard_name = new_tab_control.name
