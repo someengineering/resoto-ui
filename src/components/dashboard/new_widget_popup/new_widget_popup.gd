@@ -63,8 +63,10 @@ func set_dashboard_container(_dc:DashboardContainer) -> void:
 
 func _on_AddWidgetButton_pressed() -> void:
 	var widget
+	
 	if widget_to_edit == null or duplicating:
-		widget = dashboard_container.WidgetScenes[widget_type_options.text].instance()
+		var widget_scene_type : String = widget_type_options.text if not duplicating else current_widget_preview_name
+		widget = dashboard_container.WidgetScenes[widget_scene_type].instance()
 	else:
 		widget = widget_to_edit.widget
 		
@@ -265,10 +267,10 @@ func clear_data_sources():
 
 func _on_NewWidgetPopup_about_to_show() -> void:
 	widget_name_label.text = ""
-	
 	clear_data_sources()
 	
 	if widget_to_edit != null:
+		current_widget_preview_name = widget_to_edit.widget.widget_type_id
 		widget_name_label.text = widget_to_edit.title
 		$"%WidgetPreviewTitleLabel".text = widget_to_edit.title
 		for data_source in widget_to_edit.data_sources:
@@ -288,6 +290,7 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 		update_preview()
 		
 	update_new_data_vis()
+
 
 func _on_AddDataSource_pressed() -> void:
 	if data_source_container.get_child_count() >= preview_widget.max_data_sources:
