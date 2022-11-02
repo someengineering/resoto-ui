@@ -19,10 +19,11 @@ uniform vec2 grid_divisions = vec2(5.0);
 uniform vec4 grid_color :  hint_color = vec4(0.14,0.14,0.2, 1.0);
 uniform vec2 size = vec2(1832.0, 1000.0);
 uniform float line_width = 3.0;
+uniform float zero_position = 0.0;
 
 void fragment(){
 	vec2 px_size = 2.0/size;
-	vec2 coord = fract(UV * grid_divisions);
+	vec2 coord = fract((UV - vec2(0.0, zero_position)) * grid_divisions);
 //	if (coord.x >= 1.0 -  2.0* px_size.x || coord.x <= 2.0*px_size.x || coord.y >= 1.0 - 2.0*px_size.y || coord.y <= 2.0*px_size.y){
 //		COLOR = grid_color;
 //	}
@@ -37,6 +38,7 @@ shader_param/grid_divisions = Vector2( 5, 5 )
 shader_param/grid_color = Color( 1, 1, 1, 0.0784314 )
 shader_param/size = Vector2( 1859, 1003 )
 shader_param/line_width = 4.0
+shader_param/zero_position = 0.0
 
 [sub_resource type="ViewportTexture" id=7]
 flags = 4
@@ -75,11 +77,10 @@ render_target_update_mode = 3
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="YLabels" type="VBoxContainer" parent="Viewport/GridContainer"]
+[node name="YLabels" type="Control" parent="Viewport/GridContainer"]
 anchor_bottom = 1.0
 margin_right = 43.0
 margin_bottom = -59.0
-custom_constants/separation = 0
 
 [node name="Grid" type="ColorRect" parent="Viewport/GridContainer"]
 material = SubResource( 6 )

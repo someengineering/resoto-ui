@@ -23,6 +23,8 @@ var dirty_timer:= 0.0
 var step := 144
 var prev_origin : Vector2
 
+var y_zero_position := 0.0;
+
 var colors := [
 	Color.aquamarine,
 	Color.indianred,
@@ -65,8 +67,6 @@ func _input(event) -> void:
 		for label in legend_grid.get_children():
 			label.queue_free()
 		
-		var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
-		
 		var time_text : Array = Time.get_datetime_string_from_unix_time(int(x_origin+x)).left(16).split("T")
 		legend_time_label.text = time_text[0] + "\nTime: %s" % time_text[1].trim_prefix("0")
 		# First, grab all the values, set the indicator points, sum up the stacked value
@@ -82,7 +82,7 @@ func _input(event) -> void:
 			if line.get_meta("stack"):
 				closest_point.y += stacked
 				stacked = closest_point.y
-			line.show_indicator(transform_point(closest_point, ratio))
+			line.show_indicator(transform_point(closest_point))
 			
 		
 		sorted_values.sort_custom(self, "sort_label_values")
@@ -131,7 +131,7 @@ func update_series() -> void:
 	var stacked : PoolRealArray = []
 	stacked.resize(range(0, x_range, step).size())
 	stacked.fill(0)
-	var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
+
 	for i in n:
 		var index = n - i - 1
 		var line : Line2D = graph_area.get_child(index)
@@ -145,8 +145,9 @@ func update_series() -> void:
 			if line.get_meta("stack"):
 				point.y += stacked[j]
 				stacked[j] = point.y
-			values.append(transform_point(point, ratio))
+			values.append(transform_point(point))
 		line.points = values
+		line.zero_position = transform_point(Vector2.ZERO).y
 		line.global_position = origin
 
 
@@ -190,15 +191,22 @@ func update_graph_area(force := false) -> void:
 		var ny = divisions.y
 		for l in y_labels.get_children():
 			l.queue_free()
-			
+		
+		var zero := min(y_zero_position, 1.0)
+		var delta := round((max_y_value - min_y_value)/ny)
 		for i in ny:
 			var l = dynamic_label_scene.instance()
 			l.max_font_size = 14
 			l.min_font_size = 10
-			l.text = str(int(max_y_value - (i+1)*(max_y_value - min_y_value) / ny))
-			l.size_flags_vertical = SIZE_EXPAND_FILL
+			var value : int = i * delta
+			if zero == 1.0:
+				value += min_y_value
+			l.text = str(value)
 			l.align = Label.ALIGN_RIGHT
-			l.valign = Label.VALIGN_BOTTOM
+			l.valign = Label.VALIGN_CENTER
+			l.rect_position.y = round(y_labels.rect_size.y * (y_zero_position - i/ny)) - l.rect_size.y / 2
+			l.anchor_right = 1
+			l.margin_right = 0
 			y_labels.add_child(l)
 
 
@@ -230,7 +238,6 @@ func clear_series() -> void:
 	current_color = 0
 	series.clear()
 
-
 func set_scale_from_series() -> void:
 	if series.size() == 0:
 		return
@@ -256,10 +263,14 @@ func set_scale_from_series() -> void:
 				maxy = value.y
 	
 	
-	max_y_value = maxy + (maxy - miny) * 0.1 if maxy != miny else maxy * 1.1
-	min_y_value = miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9
-	if miny == 0:
+	max_y_value = round(maxy + (maxy - miny) * 0.1 if maxy != miny else maxy * 1.1)
+	min_y_value = round(miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9)
+	if miny == 0 or maxy == miny:
 		min_y_value = 0
+	
+	y_zero_position = max_y_value / (max_y_value - min_y_value)
+	print(y_zero_position)
+	grid.material.set_shader_param("zero_position", y_zero_position)
 
 
 func do_complete_update():
@@ -393,7 +404,8 @@ func _on_Grid_mouse_exited() -> void:
 	set_viewport_mode(false)
 
 
-func transform_point(point : Vector2, ratio : Vector2) -> Vector2:
+func transform_point(point : Vector2) -> Vector2:
+	var ratio := Vector2(x_range / graph_area.rect_size.x,(max_y_value - min_y_value) / graph_area.rect_size.y)
 	point = ((point + Vector2(0, -min_y_value)) / ratio)
 	return Vector2(point.x, min(-point.y, -0.0001))
 
