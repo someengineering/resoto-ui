@@ -176,7 +176,7 @@ static func comma_sep(number):
 	return res
 
 
-static func load_json(path) -> Array:
+static func load_json(path:String) -> Array:
 	var file : File = File.new()
 	if !file.file_exists(path):
 		return []
@@ -187,8 +187,15 @@ static func load_json(path) -> Array:
 	return data
 
 
-static func save_json(path, data):
+static func save_json(path:String, data):
 	var file : File = File.new()
 	file.open(path, file.WRITE)
 	file.store_string(to_json(data))
+	file.close()
+
+
+static func save_string_to_json(path:String, string:String):
+	var file : File = File.new()
+	file.open(path, file.WRITE)
+	file.store_string(string)
 	file.close()
