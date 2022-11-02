@@ -18,11 +18,12 @@ func show_indicator(point : Vector2) -> void:
 func _on_Serie_draw() -> void:
 	indicator.color = default_color
 	self_modulate = default_color
+	var zero : float = min(zero_position, 0.0)
 	if points.size() > 0:
 		update_min_max()
-		poly = [Vector2(points[0].x, zero_position)]
+		poly = [Vector2(points[0].x, zero)]
 		poly.append_array(points)
-		poly.append(Vector2(points[points.size()-1].x, zero_position)) 
+		poly.append(Vector2(points[points.size()-1].x, zero)) 
 		
 		polygon.polygon = poly
 		polygon.color = default_color
