@@ -5,6 +5,8 @@ var poly : PoolVector2Array
 var maximum_y = -INF
 var minimum_y = INF
 
+var zero_position := 0.0
+
 onready var indicator := $Indicator
 onready var polygon := $Polygon2D
 
@@ -18,9 +20,9 @@ func _on_Serie_draw() -> void:
 	self_modulate = default_color
 	if points.size() > 0:
 		update_min_max()
-		poly = [Vector2(points[0].x, 0)]
+		poly = [Vector2(points[0].x, zero_position)]
 		poly.append_array(points)
-		poly.append(Vector2(points[points.size()-1].x, 0)) 
+		poly.append(Vector2(points[points.size()-1].x, zero_position)) 
 		
 		polygon.polygon = poly
 		polygon.color = default_color

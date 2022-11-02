@@ -28,6 +28,7 @@ onready var button := $ExpandButton
 
 
 func _ready():
+	items = items.duplicate()
 	$LineEdit.clear_button_enabled = clear_button_enabled
 
 
