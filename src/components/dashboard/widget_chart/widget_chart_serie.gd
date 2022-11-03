@@ -1,6 +1,6 @@
 tool
 extends Line2D
-var poly : PoolVector2Array
+var poly : PoolVector2Array = []
 
 var maximum_y = -INF
 var minimum_y = INF
@@ -24,13 +24,18 @@ func _on_Serie_draw() -> void:
 		poly = [Vector2(points[0].x, zero)]
 		poly.append_array(points)
 		poly.append(Vector2(points[points.size()-1].x, zero)) 
-		
 		polygon.polygon = poly
 		polygon.color = default_color
-		polygon.color.a = 0.1
-
+		polygon.color.a = 1.0
 	else:
 		polygon.polygon = []
+	
+	var zero_offset = zero / get_viewport().size.y
+	var gradient_width : float = float(maximum_y / get_viewport().size.y)
+	var gradient_offset : float = (zero_offset / gradient_width)-(0.1/gradient_width)
+
+	polygon.material.set_shader_param("offset", gradient_offset)
+	polygon.material.set_shader_param("width", gradient_width)
 
 
 func update_min_max() -> void:

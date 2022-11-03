@@ -44,10 +44,11 @@ onready var legend_time_label := $CanvasLayer/PopupLegend/VBoxContainer/TimeLabe
 onready var x_labels := $Viewport/GridContainer/XLabels
 onready var y_labels := $Viewport/GridContainer/YLabels
 onready var grid := $Viewport/GridContainer/Grid
+onready var grid_tex := $Grid
 onready var legend_pos := $Grid/LegendPosition
 onready var viewport := $Viewport
-onready var update_blur := $UpdateBlur
 onready var update_tween := $UpdateTween
+onready var mouse_marker := $Viewport/GridContainer/Grid/Marker
 
 
 func _ready() -> void:
@@ -55,11 +56,32 @@ func _ready() -> void:
 	if get_parent().get_parent() is WidgetContainer:
 		get_parent().get_parent().connect("moved_or_resized", self, "_on_Grid_resized")
 	_on_Grid_resized()
-	hide()
+
+
+func _process(_delta : float) -> void:
+	if is_dirty:
+		dirty_timer += _delta
+		if dirty_timer > 0.2:
+			do_complete_update()
+	
+	if not mouse_on_graph:
+		return
+	
+	var origin : Vector2 = graph_area.rect_global_position + Vector2(0, graph_area.rect_size.y)
+	
+	if prev_origin != origin:
+		prev_origin = origin
+		for line in graph_area.get_children():
+			if line is Line2D:
+				line.global_position = origin
+				
+	legend_pos.rect_size = graph_area.rect_size
+	legend_pos.rect_position = grid.rect_position
 
 
 func _input(event) -> void:
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
+		mouse_marker.position.x = graph_area.get_local_mouse_position().x + 0.5
 		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x
 		legend.rect_global_position = get_global_mouse_position() + Vector2(24,0)
 		legend.rect_size.y = 0
@@ -200,7 +222,7 @@ func update_graph_area(force := false) -> void:
 			l.min_font_size = 10
 			var value : int = i * delta
 			if zero == 1.0:
-				value += min_y_value
+				value += round(min_y_value)
 			l.text = str(value)
 			l.align = Label.ALIGN_RIGHT
 			l.valign = Label.VALIGN_CENTER
@@ -269,7 +291,6 @@ func set_scale_from_series() -> void:
 		min_y_value = 0
 	
 	y_zero_position = max_y_value / (max_y_value - min_y_value)
-	print(y_zero_position)
 	grid.material.set_shader_param("zero_position", y_zero_position)
 
 
@@ -292,11 +313,10 @@ func do_complete_update():
 	is_dirty = false
 	blur_image_active = false
 	dirty_timer = 0.0
-	update_tween.interpolate_property(update_blur.material, "shader_param/lod", 4, 0, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT, 0.1)
-	update_tween.interpolate_property(update_blur, "modulate:a", 1, 0, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT, 0.1)
-	update_tween.start()
+	yield(VisualServer, "frame_post_draw")
+	yield(VisualServer, "frame_post_draw")
+	grid_tex.modulate.a = 1.0
 	set_viewport_mode(false)
-	show()
 
 
 func set_viewport_mode(_update:bool):
@@ -309,7 +329,6 @@ func set_viewport_mode(_update:bool):
 
 
 func complete_update(_force_update_graph_area:bool=false):
-	set_viewport_mode(true)
 	dirty_timer = 0.0
 	if _force_update_graph_area:
 		force_update_graph_area = true
@@ -319,36 +338,7 @@ func complete_update(_force_update_graph_area:bool=false):
 func _on_Chart_resized():
 	if not viewport:
 		return
-	if not blur_image_active:
-		blur_image_active = true
-		var img:Image = viewport.get_texture().get_data()
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		var tex:ImageTexture = ImageTexture.new()
-		tex.create_from_image(img)
-		update_blur.texture = tex
-		update_blur.show()
-		update_tween.interpolate_property(update_blur.material, "shader_param/lod", 0, 4, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT)
-		update_tween.interpolate_property(update_blur, "modulate:a", 0, 1, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT)
-		update_tween.start()
-
-
-func _process(_delta : float) -> void:
-	if is_dirty:
-		dirty_timer += _delta
-		if dirty_timer > 0.2:
-			do_complete_update()
-	
-	var origin : Vector2 = graph_area.rect_global_position + Vector2(0, graph_area.rect_size.y)
-	
-	if prev_origin != origin:
-		prev_origin = origin
-		for line in graph_area.get_children():
-			if line is Line2D:
-				line.global_position = origin
-				
-	legend_pos.rect_size = graph_area.rect_size
-	legend_pos.rect_position = grid.rect_position
+	grid_tex.modulate.a = 0.2
 
 
 func find_closest_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
@@ -392,14 +382,15 @@ func _on_Grid_mouse_entered() -> void:
 		line.indicator.visible = true
 	mouse_on_graph = true
 	set_viewport_mode(true)
-	yield(VisualServer,"frame_post_draw")
 	legend.visible = true
+	mouse_marker.visible = true
 
 
 func _on_Grid_mouse_exited() -> void:
 	for line in graph_area.get_children():
 		line.indicator.visible = false
 	legend.visible = false
+	mouse_marker.visible = false
 	mouse_on_graph = false
 	set_viewport_mode(false)
 

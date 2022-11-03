@@ -1,18 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://components/dashboard/widget_chart/widget_chart.gd" type="Script" id=1]
-[ext_resource path="res://assets/generic/blur.gdshader" type="Shader" id=2]
 
-[sub_resource type="StyleBoxFlat" id=10]
-content_margin_left = 0.0
-content_margin_right = 0.0
-content_margin_top = 0.0
-content_margin_bottom = 0.0
-bg_color = Color( 1, 1, 1, 1 )
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="Shader" id=5]
+[sub_resource type="Shader" id=10]
 code = "shader_type canvas_item;
 
 uniform vec2 grid_divisions = vec2(5.0);
@@ -22,31 +12,37 @@ uniform float line_width = 3.0;
 uniform float zero_position = 0.0;
 
 void fragment(){
-	vec2 px_size = 2.0/size;
+	vec2 px_size = 1.0/size;
 	vec2 coord = fract((UV - vec2(0.0, zero_position)) * grid_divisions);
-//	if (coord.x >= 1.0 -  2.0* px_size.x || coord.x <= 2.0*px_size.x || coord.y >= 1.0 - 2.0*px_size.y || coord.y <= 2.0*px_size.y){
-//		COLOR = grid_color;
-//	}
-	COLOR = grid_color * clamp( smoothstep(1.0 - line_width*px_size.x, 1.0, coord.x) + (1.0-smoothstep(0.0, line_width*px_size.x, coord.x)) + 
-	smoothstep(1.0 - line_width*px_size.y, 1.0, coord.y) + (1.0-smoothstep(0.0, line_width*px_size.y, coord.y)), 0.0, 1.0);
+	vec2 step_width = 1.0 - (px_size * line_width * grid_divisions);
+	COLOR = grid_color * clamp(step(step_width.y, coord.y) + step(step_width.x, coord.x) + step(step_width.y, abs(1.0-coord.y)) + step(step_width.x, abs(1.0-coord.x)), 0.0, 1.0);
 }"
 
 [sub_resource type="ShaderMaterial" id=6]
 resource_local_to_scene = true
-shader = SubResource( 5 )
+shader = SubResource( 10 )
 shader_param/grid_divisions = Vector2( 5, 5 )
-shader_param/grid_color = Color( 1, 1, 1, 0.0784314 )
+shader_param/grid_color = Color( 1, 1, 1, 0.0392157 )
 shader_param/size = Vector2( 1859, 1003 )
-shader_param/line_width = 4.0
+shader_param/line_width = 1.0
 shader_param/zero_position = 0.0
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	vec3 color_fix = clamp(color.rgb/color.a, 0., 10.);
+	COLOR = vec4(color_fix,color.a);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
 
 [sub_resource type="ViewportTexture" id=7]
 flags = 4
 viewport_path = NodePath("Viewport")
-
-[sub_resource type="ShaderMaterial" id=12]
-shader = ExtResource( 2 )
-shader_param/lod = 0.0
 
 [node name="Chart" type="Control"]
 anchor_right = 1.0
@@ -61,17 +57,19 @@ x_range = 100.0
 divisions = Vector2( 4, 8 )
 
 [node name="Background" type="Panel" parent="."]
-self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 10 )
+theme_type_variation = "PanelWidgetBackground"
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 50, 50 )
+transparent_bg = true
+handle_input_locally = false
 hdr = false
 usage = 0
 render_target_v_flip = true
 render_target_update_mode = 3
+gui_snap_controls_to_pixels = false
 
 [node name="GridContainer" type="Control" parent="Viewport"]
 anchor_right = 1.0
@@ -87,28 +85,48 @@ material = SubResource( 6 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 59.0
-margin_right = -11.0
-margin_bottom = -59.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -60.0
+rect_clip_content = true
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
 
-[node name="BackBufferCopy" type="BackBufferCopy" parent="Viewport/GridContainer/Grid"]
-copy_mode = 2
+[node name="ColorRect" type="ColorRect" parent="Viewport/GridContainer/Grid"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+
+[node name="Marker" type="Line2D" parent="Viewport/GridContainer/Grid"]
+visible = false
+show_behind_parent = true
+position = Vector2( 41, -10 )
+points = PoolVector2Array( 0, 0, 0, 10000 )
+width = 1.0
+default_color = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
+texture_mode = 2
+
+[node name="GraphArea" type="Control" parent="Viewport/GridContainer/Grid"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="ReferenceRect" type="ReferenceRect" parent="Viewport/GridContainer/Grid"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-border_color = Color( 0.85098, 0.721569, 1, 0.168627 )
+border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+border_width = 2.0
 editor_only = false
-
-[node name="GraphArea" type="Control" parent="Viewport/GridContainer/Grid"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
 [node name="XLabels" type="HBoxContainer" parent="Viewport/GridContainer"]
 anchor_top = 1.0
@@ -120,6 +138,7 @@ margin_right = -3.0
 custom_constants/separation = 0
 
 [node name="Grid" type="TextureRect" parent="."]
+material = SubResource( 9 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
@@ -134,15 +153,6 @@ margin_left = 56.0
 margin_top = -3.0
 margin_right = 56.0
 margin_bottom = -3.0
-
-[node name="UpdateBlur" type="TextureRect" parent="."]
-material = SubResource( 12 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-expand = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

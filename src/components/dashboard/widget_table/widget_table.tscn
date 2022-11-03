@@ -1,11 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://components/dashboard/widget_table/widget_table.gd" type="Script" id=1]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 1, 1, 1 )
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [node name="TableWidget" type="Control"]
 anchor_right = 1.0
@@ -20,10 +15,9 @@ row_color = Color( 0.0489686, 0.160932, 0.265625, 1 )
 column_header_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 
 [node name="Background" type="Panel" parent="."]
-self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 1 )
+theme_type_variation = "PanelWidgetBackground"
 
 [node name="Table" type="MarginContainer" parent="."]
 anchor_right = 1.0
