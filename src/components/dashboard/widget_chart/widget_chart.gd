@@ -53,8 +53,6 @@ onready var mouse_marker := $Viewport/GridContainer/Grid/Marker
 
 func _ready() -> void:
 	legend.visible = false
-	if get_parent().get_parent() is WidgetContainer:
-		get_parent().get_parent().connect("moved_or_resized", self, "_on_Grid_resized")
 	_on_Grid_resized()
 
 
@@ -137,8 +135,6 @@ func set_x_range(r : float) -> void:
 func _on_Grid_resized() -> void:
 	if not is_instance_valid(x_labels):
 		return
-	viewport.size = rect_size
-	$Viewport/GridContainer.rect_size = rect_size
 	complete_update(false)
 
 
@@ -329,16 +325,14 @@ func set_viewport_mode(_update:bool):
 
 
 func complete_update(_force_update_graph_area:bool=false):
+	grid_tex.modulate.a = 0.2
+	viewport.size = rect_size
+	$Viewport/GridContainer.rect_size = rect_size
 	dirty_timer = 0.0
+	set_viewport_mode(true)
 	if _force_update_graph_area:
 		force_update_graph_area = true
 	is_dirty = true
-
-
-func _on_Chart_resized():
-	if not viewport:
-		return
-	grid_tex.modulate.a = 0.2
 
 
 func find_closest_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
