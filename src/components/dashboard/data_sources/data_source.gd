@@ -31,9 +31,9 @@ func get_data() -> Dictionary:
 
 func _on_query_status(_type:int=0, _title:="Widget Error", _message:=""):
 	var properties := {
-		"type" : TYPES.keys()[type],
+		"datasource_type" : TYPES.keys()[type],
 		"message" : _message,
 		"title" : _title
 	}
 	if _type != OK:
-		Analytics.event(Analytics.EventsDatasource.FAILED, {"datasource_type" : TYPES.keys()[type], "message" : _message})
+		Analytics.event(Analytics.EventsDatasource.FAILED, properties)
