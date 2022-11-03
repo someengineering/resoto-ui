@@ -22,9 +22,6 @@ onready var scroll_rows := $Table/ScrollContainer/TableVBox/ScrollContainer
 onready var scroll_container := $Table/ScrollContainer
 onready var update_delay_timer := $UpdateDelayTimer
 
-func _ready():
-	Style.add_self($Background, Style.c.BG)
-
 
 func clear_all():
 	for child in header_row.get_children():

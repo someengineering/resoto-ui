@@ -6,32 +6,38 @@
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
+uniform float offset = 0.0;
+uniform float width = 1.0;
+
 void fragment(){
-	COLOR = mix(texture(SCREEN_TEXTURE, SCREEN_UV), COLOR, COLOR.a);
+	float o_s = clamp(offset + (abs(1.0-SCREEN_UV.y) / width), 0.0, 1.0);
+	o_s = ((o_s*0.8)+0.2);
+	COLOR = clamp(COLOR*o_s*0.5, 0.0, 1.0);
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
 shader = SubResource( 1 )
+shader_param/offset = -0.221
+shader_param/width = 0.5
 
 [node name="Serie" type="Line2D"]
-self_modulate = Color( 0, 1, 0.576471, 1 )
 show_behind_parent = true
-width = 1.0
-default_color = Color( 0, 1, 0.576471, 1 )
+width = 2.5
+default_color = Color( 1, 1, 1, 1 )
 texture = ExtResource( 1 )
 texture_mode = 2
-antialiased = true
 script = ExtResource( 2 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 show_behind_parent = true
 material = SubResource( 2 )
-color = Color( 0, 1, 0.576471, 0.160784 )
+z_as_relative = false
+color = Color( 1, 1, 1, 0.156863 )
 antialiased = true
 
 [node name="Indicator" type="Polygon2D" parent="."]
 visible = false
-color = Color( 0, 1, 0.576471, 1 )
 polygon = PoolVector2Array( -4, -4, -4, 4, 4, 4, 4, -4 )
 
 [connection signal="draw" from="." to="." method="_on_Serie_draw"]

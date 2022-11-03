@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=90 format=2]
+[gd_resource type="Theme" load_steps=91 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -489,6 +489,15 @@ shadow_color = Color( 0, 0, 0, 0.117647 )
 shadow_size = 10
 shadow_offset = Vector2( 0, 5 )
 
+[sub_resource type="StyleBoxFlat" id=93]
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [sub_resource type="StyleBoxFlat" id=38]
 content_margin_left = 12.0
 content_margin_right = 12.0
@@ -785,6 +794,8 @@ PanelContainerTagElement/base_type = "PanelContainer"
 PanelContainerTagElement/styles/panel = SubResource( 83 )
 PanelPopup/base_type = "PanelContainer"
 PanelPopup/styles/panel = SubResource( 80 )
+PanelWidgetBackground/base_type = "Panel"
+PanelWidgetBackground/styles/panel = SubResource( 93 )
 PopupMenu/icons/checked = ExtResource( 2 )
 PopupMenu/icons/radio_checked = ExtResource( 11 )
 PopupMenu/icons/radio_unchecked = ExtResource( 10 )

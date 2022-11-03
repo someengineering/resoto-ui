@@ -24,7 +24,6 @@ onready var label_x := $LabelX
 
 
 func _ready():
-	Style.add_self($Background, Style.c.BG)
 	set_low_color(low_color)
 	set_high_color(high_color)
 	restore_gradient()
