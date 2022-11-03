@@ -124,13 +124,13 @@ func lock(_locked : bool) -> void:
 
 func _on_Grid_resized() -> void:
 	var new_x_size = rect_size.x / x_grid_ratio
+	$Grid.material.set_shader_param("dashboard_size", rect_size)
 	if not is_ready or is_equal_approx(new_x_size, _x_grid_size):
 		return
 		
 	_x_grid_size = new_x_size
 	var grid_size := Vector2(_x_grid_size, y_grid_size)
 	$Grid.material.set_shader_param("grid_size", grid_size)
-	$Grid.material.set_shader_param("dashboard_size", rect_size)
 	$ResizeTimer.start()
 
 
