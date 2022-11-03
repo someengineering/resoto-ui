@@ -189,6 +189,6 @@ columns = 2
 
 [node name="UpdateTween" type="Tween" parent="."]
 
-[connection signal="resized" from="." to="." method="_on_Chart_resized"]
+[connection signal="resized" from="." to="." method="_on_Grid_resized"]
 [connection signal="mouse_entered" from="Grid/LegendPosition" to="." method="_on_Grid_mouse_entered"]
 [connection signal="mouse_exited" from="Grid/LegendPosition" to="." method="_on_Grid_mouse_exited"]
