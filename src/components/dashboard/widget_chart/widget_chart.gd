@@ -79,8 +79,8 @@ func _process(_delta : float) -> void:
 
 func _input(event) -> void:
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
-		mouse_marker.position.x = graph_area.get_local_mouse_position().x + 0.5
-		var x = x_range * graph_area.get_local_mouse_position().x / graph_area.rect_size.x
+		mouse_marker.position.x = legend_pos.get_local_mouse_position().x + 0.5
+		var x = x_range * legend_pos.get_local_mouse_position().x / legend_pos.rect_size.x 
 		legend.rect_global_position = get_global_mouse_position() + Vector2(24,0)
 		legend.rect_size.y = 0
 		
