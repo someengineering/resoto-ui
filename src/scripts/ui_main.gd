@@ -7,6 +7,36 @@ func _ready() -> void:
 	_g.connect("ui_scale_decrease", self, "ui_scale_down")
 	SaveLoadSettings.connect("settings_loaded", self, "_on_settings_loaded", [], CONNECT_ONESHOT)
 	SaveLoadSettings.load_settings()
+	
+	# Check errors of previous session
+	if OS.has_feature("HTML5"):
+		var has_errors = JavaScript.eval('"error" in window.localStorage')
+		if has_errors:
+			var errors = JavaScript.eval(
+				'window.localStorage.getItem("error");\n'+
+				'window.localStorage.removeItem("error");'
+				)
+			
+			var properties := {
+				"errors" : var2str(errors)
+			}
+			var counters := {
+				"errors" : errors.size()
+			}
+			
+			Analytics.event(Analytics.EventsUI.ERROR, properties, counters)
+			
+	var properties := {
+		"UI version" : _g.ui_version
+	}
+	
+	if OS.has_feature("HTML5"):
+		properties["OS"] = JavaScript.eval("getOS()")
+		properties["browser"] = JavaScript.eval("getBrowser()")
+	else:
+		properties["OS"] = OS.get_name()
+		
+	Analytics.event(Analytics.EventsUI.STARTED, properties)
 
 
 func _on_settings_loaded(_found_settings:bool) -> void:
@@ -66,3 +96,4 @@ func _on_fullscreen_hide_menu(is_fullscreen:bool) -> void:
 
 func _connected():
 	UINavigation.on_home_loaded()
+	

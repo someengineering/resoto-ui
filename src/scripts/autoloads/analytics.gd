@@ -5,6 +5,7 @@ signal analytics_event_posted
 enum EventsDashboard{ NEW, DELETE, NEW_WIDGET, EDIT_WIDGET, DUPLICATE_WIDGET}
 enum EventsConfig { NEW = 100, DELETE, EDIT, DUPLICATE }
 enum EventsDatasource {NEW = 200, NEW_FROM_TEMPLATE, FAILED, DELETE}
+enum EventsUI {STARTED = 300, EXITED, ERROR}
 
 var events:= {
 	EventsDashboard.NEW : "ui.dashboard.new",
@@ -20,6 +21,9 @@ var events:= {
 	EventsDatasource.NEW_FROM_TEMPLATE : "ui.datasource.new-from-template",
 	EventsDatasource.FAILED : "ui.datasource.failed",
 	EventsDatasource.DELETE : "ui.datasource.delete",
+	EventsUI.STARTED : "ui.started",
+	EventsUI.EXITED: "ui.exited",
+	EventsUI.ERROR: "ui.error"
 }
 
 var api_key : String = ""
@@ -61,8 +65,8 @@ func analytics_event_data(event : int, context := {}, counters := {}) -> Diction
 	return data
 
 
-func event(event, properties := {}):
-	var body = analytics_event_data(event, properties)
+func event(event, properties := {}, counters := {}):
+	var body = analytics_event_data(event, properties, counters)
 	
 	if event_queue and event_queue.size() > max_queue_size:
 		post_events()
@@ -94,4 +98,13 @@ func _on_analytics_done(error : int, response):
 func _notification(what):
 	# If user quits, send all the events
 	if what == NOTIFICATION_WM_QUIT_REQUEST:
+		# TODO: find a way to measure this times in native builds
+		if OS.has_feature("HTML5"):
+			var properties := {
+				"focused time" : JavaScript.eval("focusTime"),
+				"not focused time" : JavaScript.eval("unfocusTime"),
+				"total time" : JavaScript.eval("totalTime")
+			}
+			event(EventsUI.EXITED, properties)
+			
 		post_events()
