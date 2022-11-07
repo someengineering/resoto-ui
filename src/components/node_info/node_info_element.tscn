@@ -415,7 +415,7 @@ script = ExtResource( 7 )
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 416.0
-margin_bottom = 157.0
+margin_bottom = 124.0
 
 [node name="NewTagVariableLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData"]
 margin_right = 418.0
@@ -573,18 +573,19 @@ flat = true
 [node name="TreeMapModeButton" parent="Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar" instance=ExtResource( 28 )]
 unique_name_in_owner = true
 margin_right = 35.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 rect_min_size = Vector2( 35, 20 )
 
 [node name="TreeMapTitle" type="Label" parent="Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar"]
 unique_name_in_owner = true
 margin_left = 39.0
-margin_right = 359.0
+margin_top = 1.0
+margin_right = 360.0
 margin_bottom = 21.0
 text = "Node Successors by their Descendant Count"
 
 [node name="TreeMapCopyButton" parent="Margin/VBox/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar" instance=ExtResource( 21 )]
-margin_left = 363.0
+margin_left = 364.0
 margin_top = 0.0
 margin_right = 1376.0
 margin_bottom = 22.0

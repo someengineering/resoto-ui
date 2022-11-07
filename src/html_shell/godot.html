@@ -260,12 +260,6 @@
 				godotWatchdogTimer = 0.0;
 			}
 		}
-		
-		document.addEventListener("visibilitychange", onchange);
-
-		function onchange(){
-			console.log(document.visibility)
-		}
 
 		console.defaultError = console.error.bind(console);
 		console.error = function(){

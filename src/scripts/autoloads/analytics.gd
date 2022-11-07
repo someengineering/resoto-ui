@@ -6,6 +6,8 @@ enum EventsDashboard{ NEW, DELETE, NEW_WIDGET, EDIT_WIDGET, DUPLICATE_WIDGET}
 enum EventsConfig { NEW = 100, DELETE, EDIT, DUPLICATE }
 enum EventsDatasource {NEW = 200, NEW_FROM_TEMPLATE, FAILED, DELETE}
 enum EventsUI {STARTED = 300, EXITED, ERROR}
+enum EventsExplore {BACK = 400, COPY_QUERY, COPY_NODE, CHANGE_MODE, REMOVE_FROM_CLEANUP, ADD_TO_CLEANUP, PROTECT, EXPLORE_SUCCESSORS, EXPLORE_PREDECESSORS, EXPLORE_NODE_LIST, EXPLORE_NODE}
+enum EventsSearch {SEARCH = 500}
 
 var events:= {
 	EventsDashboard.NEW : "ui.dashboard.new",
@@ -23,7 +25,18 @@ var events:= {
 	EventsDatasource.DELETE : "ui.datasource.delete",
 	EventsUI.STARTED : "ui.started",
 	EventsUI.EXITED: "ui.exited",
-	EventsUI.ERROR: "ui.error"
+	EventsUI.ERROR: "ui.error",
+	EventsExplore.BACK: "ui.explore.back",
+	EventsExplore.COPY_QUERY: "ui.explore.copy-query",
+	EventsExplore.COPY_NODE: "ui.explore.copy-node",
+	EventsExplore.CHANGE_MODE: "ui.explore.change-mode",
+	EventsExplore.REMOVE_FROM_CLEANUP: "ui.explore.remove_from_cleanup",
+	EventsExplore.ADD_TO_CLEANUP: "ui.explore.add-to-cleanup",
+	EventsExplore.PROTECT: "ui.explore.protect",
+	EventsExplore.EXPLORE_SUCCESSORS: "ui.explore.successors",
+	EventsExplore.EXPLORE_PREDECESSORS: "ui.explore.predecessors",
+	EventsExplore.EXPLORE_NODE_LIST: "ui.explore.node-list",
+	EventsSearch.SEARCH: "ui.search"
 }
 
 var api_key : String = ""

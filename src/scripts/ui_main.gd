@@ -12,13 +12,11 @@ func _ready() -> void:
 	if OS.has_feature("HTML5"):
 		var has_errors = JavaScript.eval('"error" in window.localStorage')
 		if has_errors:
-			var errors = JavaScript.eval(
-				'window.localStorage.getItem("error");\n'+
-				'window.localStorage.removeItem("error");'
-				)
+			var errors = str2var(JavaScript.eval('window.localStorage.getItem("error")'))
+			JavaScript.eval('window.localStorage.removeItem("error")')
 			
 			var properties := {
-				"errors" : var2str(errors)
+				"errors" : errors
 			}
 			var counters := {
 				"errors" : errors.size()
