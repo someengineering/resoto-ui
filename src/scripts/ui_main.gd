@@ -13,7 +13,6 @@ func _ready() -> void:
 		var has_errors = JavaScript.eval('"error" in window.localStorage')
 		if has_errors:
 			var errors = str2var(JavaScript.eval('window.localStorage.getItem("error")'))
-			JavaScript.eval('window.localStorage.removeItem("error")')
 			
 			var properties := {
 				"errors" : errors
@@ -23,6 +22,8 @@ func _ready() -> void:
 			}
 			
 			Analytics.event(Analytics.EventsUI.ERROR, properties, counters)
+			
+			JavaScript.eval('window.localStorage.removeItem("error")')
 			
 	var properties := {
 		"UI version" : _g.ui_version
