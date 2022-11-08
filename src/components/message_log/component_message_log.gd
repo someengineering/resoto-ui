@@ -1,6 +1,10 @@
 extends Control
 
+signal unread_logs_changed(count)
+
 const MAX_MESSAGES:int = 30
+
+var unread_log_count : int = 0
 
 onready var container = $VBox/MainPanel/ScrollContainer/Content/ToastContainer
 
@@ -26,3 +30,15 @@ func add_toast(_toast):
 		var children = container.get_children()
 		for c in diff:
 			children[amount_of_toasts-c-1].queue_free()
+	
+	if _toast.status in [1, 2]:
+		new_toast.is_new = true
+		unread_log_count += 1
+		emit_signal("unread_logs_changed", unread_log_count)
+
+func _on_MessageLog_visibility_changed():
+	if not is_visible_in_tree():
+		unread_log_count = 0
+		emit_signal("unread_logs_changed", unread_log_count)
+		for toast in container.get_children():
+			toast.is_new = false

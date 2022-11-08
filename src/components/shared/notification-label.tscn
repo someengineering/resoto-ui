@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://components/shared/notification-label.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="NotificationLabel" type="Label"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -13.0
+margin_top = -13.0
+margin_right = 7.0
+margin_bottom = 7.0
+grow_horizontal = 2
+rect_min_size = Vector2( 20, 20 )
+custom_colors/font_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+custom_styles/normal = SubResource( 1 )
+align = 1
+valign = 1
+script = ExtResource( 1 )
