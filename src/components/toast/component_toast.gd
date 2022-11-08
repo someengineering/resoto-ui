@@ -86,8 +86,7 @@ func _on_Description_meta_clicked(_meta):
 
 
 func _on_Toast_gui_input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and not event.is_pressed():
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and not event.is_pressed():
 			if meta_clicked:
 				meta_clicked = false
 			else:
