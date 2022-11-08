@@ -18,6 +18,8 @@ var duration:float = 4.0
 var is_closable:bool = true
 var from_node:Node = null
 
+var meta_clicked : bool = false
+
 onready var tween:Tween = $Tween
 
 
@@ -79,4 +81,14 @@ func _on_Tween_tween_all_completed():
 
 func _on_Description_meta_clicked(_meta):
 	_g.emit_signal("toast_click", _meta)
+	meta_clicked = true
 	close()
+
+
+func _on_Toast_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT and not event.is_pressed():
+			if meta_clicked:
+				meta_clicked = false
+			else:
+				_g.emit_signal("nav_change_section", "message_log")

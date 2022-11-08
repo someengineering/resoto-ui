@@ -51,6 +51,7 @@ func set_current_navigation_state(args : Dictionary):
 	can_navigate = false
 	
 	if args.hash() == current_navigation_state.hash():
+		can_navigate = true
 		return
 		
 	current_navigation_state = args
