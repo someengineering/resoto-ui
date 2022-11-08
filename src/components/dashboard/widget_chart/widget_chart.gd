@@ -218,7 +218,7 @@ func update_graph_area(force := false) -> void:
 			l.min_font_size = 10
 			var value : int = i * delta
 			if zero == 1.0:
-				value += round(min_y_value)
+				value += int(round(min_y_value))
 			l.text = str(value)
 			l.align = Label.ALIGN_RIGHT
 			l.valign = Label.VALIGN_CENTER
@@ -353,7 +353,7 @@ func find_value_at_x(target_x : float, serie : PoolVector2Array) -> Vector2:
 	var prev = null
 	var next = null
 	
-	if target_x < serie[0].x or target_x > serie[serie.size() -1].x:
+	if target_x < serie[0].x or target_x > serie[-1].x:
 		return Vector2(target_x, NAN)
 	
 	for value in serie:

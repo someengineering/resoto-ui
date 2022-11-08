@@ -208,3 +208,4 @@ func _on_FullTextSearch_text_entered(_new_text):
 	if active_request:
 		active_request.cancel(ERR_PRINTER_ON_FIRE)
 	_g.emit_signal("explore_node_list_search", text_to_search(text))
+	Analytics.event(Analytics.EventsSearch.SEARCH, {"search" : text})

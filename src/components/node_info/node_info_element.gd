@@ -334,6 +334,7 @@ func _on_TreeMap_pressed(click_meta:String) -> void:
 	if treemap_display_mode == 0:
 		# click_meta = kind
 		_g.emit_signal("explore_node_list_data", current_main_node, click_meta)
+		Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "data"})
 	elif treemap_display_mode == 1:
 		# click_meta = id (not node id!)
 		var search_query:= "id(\"%s\") --> name=\"%s\"" % [current_node_id, click_meta]
@@ -350,15 +351,18 @@ func _on_get_node_from_id_done(_error:int, _r:ResotoAPI.Response) -> void:
 func _on_PredecessorsButton_pressed():
 	var search_command = "id(\"" + current_main_node.id + "\") <--"
 	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "<--")
+	Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "from-node"})
 
 
 func _on_SuccessorsButton_pressed():
 	var search_command = "id(\"" + current_main_node.id + "\") -->"
 	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "-->")
+	Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "from-node"})
 
 
 func _on_KindLabelButton_pressed():
 	_g.emit_signal("explore_node_list_kind", current_main_node.reported.kind)
+	Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "kind"})
 
 
 func _on_NodeIDCopyButton_pressed():
@@ -369,6 +373,7 @@ func _on_TreeMap_pressed_lmb(clicked_element:Node) -> void:
 	if treemap_display_mode == 0:
 		# click_meta = kind
 		_g.emit_signal("explore_node_list_data", current_main_node, clicked_element.element_name)
+		Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "data"})
 	elif treemap_display_mode == 1:
 		# click_meta = id (not node id!)
 		var search_query:= "id(\"%s\") --> name=\"%s\"" % [current_node_id, clicked_element.element_name]
@@ -381,6 +386,7 @@ func _on_TreeMap_pressed_rmb(_clicked_element:Node):
 	var last_id = id_history[-1]
 	id_history.pop_back()
 	show_node(last_id, false)
+	Analytics.event(Analytics.EventsExplore.BACK)
 
 
 func _on_LeafPanel_gui_input(event:InputEvent):
@@ -390,6 +396,7 @@ func _on_LeafPanel_gui_input(event:InputEvent):
 
 func _on_TreeMapCopyButton_pressed():
 	OS.set_clipboard(last_aggregation_query)
+	Analytics.event(Analytics.EventsExplore.COPY_QUERY, {"query" : last_aggregation_query})
 
 
 func _on_TreeMapModeButton_toggled(button_pressed:bool):
@@ -399,6 +406,7 @@ func _on_TreeMapModeButton_toggled(button_pressed:bool):
 	default_treemap_mode = 1 if !button_pressed else 0
 	$"%TreeMapTitle".text = "Node Descendants grouped by Kind" if default_treemap_mode == 0 else "Node Successors by their Descendant Count"
 	show_node(current_node_id, false)
+	Analytics.event(Analytics.EventsExplore.CHANGE_MODE, {"mode" : default_treemap_mode})
 
 
 func _on_TagsGroup_tags_request_refresh():
@@ -415,6 +423,7 @@ func _on_get_node_by_id_for_tags_done(_error:int, _r:ResotoAPI.Response) -> void
 
 func _on_ResourceListButton_pressed():
 	_g.emit_signal("explore_node_list")
+	Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST)
 
 
 func _on_RemoveFromCleanupButton_pressed():
@@ -426,6 +435,8 @@ func _on_RemoveFromCleanupButton_pressed():
 		API.cli_execute(remove_from_cleanup_query, self, "_on_remove_cleanup_query_done")
 	else:
 		print(remove_from_cleanup_query)
+		
+	Analytics.event(Analytics.EventsExplore.REMOVE_FROM_CLEANUP, {"query": remove_from_cleanup_query})
 
 
 func _on_AddToCleanupButton_pressed():
@@ -437,6 +448,8 @@ func _on_AddToCleanupButton_pressed():
 		API.cli_execute(cleanup_query, self, "_on_cleanup_query_done")
 	else:
 		print(cleanup_query)
+		
+	Analytics.event(Analytics.EventsExplore.ADD_TO_CLEANUP, {"query": cleanup_query})
 
 
 func _on_ProtectButton_pressed():
@@ -446,6 +459,8 @@ func _on_ProtectButton_pressed():
 		API.cli_execute(protect_query, self, "_on_protect_query_done")
 	else:
 		print(protect_query)
+		
+	Analytics.event(Analytics.EventsExplore.PROTECT, {"query": protect_query})
 
 
 func _on_remove_cleanup_query_done(_error:int, _r:ResotoAPI.Response):

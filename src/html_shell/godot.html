@@ -145,6 +145,21 @@
 			return(os);
 		}
 
+		function getBrowser() {
+			let ua = navigator.userAgent
+			let browser = "Unknown"
+
+			if (ua.indexOf("Seamonkey") >= 0) browser = "Seamonkey";
+			else if (ua.indexOf("Firefox") >= 0) browser = "Firefox";
+			else if (ua.indexOf("Chromium") >= 0) browser = "Chromium";
+			else if (ua.indexOf("Chrome") >= 0) browser = "Chrome";
+			else if (ua.indexOf("Safari") >= 0) browser = "Safari";
+			else if (ua.indexOf("OPR") >= 0 || ua.indexOf("Opera") >= 0) browser = "Opera";
+			else if (ua.indexOf("; MSIE") >= 0 || ua.indexOf("Trident") >= 0) browser = "IE";
+
+			return browser;
+		}
+
 		function getURL() {
 			return(window.location.hostname);
 		}
@@ -210,14 +225,26 @@
 		var godotWatchdogTimer = 0.0;
 		var godotWatchdogDialog = false;
 		var myInterval = setInterval(godotWatchdogCount, 500);
+		var focusTime = 0.0;
+		var unfocusTime = 0.0;
+		var totalTime = 0.0;
 
 		function godotWatchdogCount() {
 			if (document.hasFocus())
 				godotWatchdogTimer += 0.5;
 			if (godotWatchdogTimer >= 3.0 && !godotWatchdogDialog) {
 				godotWatchdogTimer = 3.0;
-				godotWatchdogTimeout()
+				window.localStorage.setItem("crash","true");
+				godotWatchdogTimeout();
 			}
+
+			if (document.visibilityState){
+				focusTime += 0.5;
+			} else {
+				unfocusTime += 0.5;
+			}
+
+			totalTime += 0.5;
 		}
 
 		function godotWatchdogNotification() {
@@ -233,7 +260,14 @@
 				godotWatchdogTimer = 0.0;
 			}
 		}
-		
+
+		console.defaultError = console.error.bind(console);
+		console.error = function(){
+		arg = arguments;
+			console.defaultError.apply(console, arguments);
+			window.localStorage.setItem("error", JSON.stringify(arguments));
+		}
+
 	</script>
 $GODOT_HEAD_INCLUDE
 </head>
