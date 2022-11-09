@@ -43,6 +43,8 @@ func refresh_calendar(date_dict : Dictionary = current_date_dict) -> void:
 		var l = label.duplicate()
 		l.text = d
 		grid_container.add_child(l)
+		
+	label.queue_free()
 	
 	var first = Time.get_unix_time_from_datetime_string("%d-%d-01T%d:%d:00" % [year, month, current_date_dict["hour"], current_date_dict["minute"]])
 	var first_dict = Time.get_date_dict_from_unix_time(first)
