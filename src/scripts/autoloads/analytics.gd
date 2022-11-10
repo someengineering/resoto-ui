@@ -5,7 +5,7 @@ signal analytics_event_posted
 enum EventsDashboard{ NEW, DELETE, NEW_WIDGET, EDIT_WIDGET, DUPLICATE_WIDGET}
 enum EventsConfig { NEW = 100, DELETE, EDIT, DUPLICATE }
 enum EventsDatasource {NEW = 200, NEW_FROM_TEMPLATE, FAILED, DELETE}
-enum EventsUI {STARTED = 300, EXITED, ERROR}
+enum EventsUI {STARTED = 300, EXITED, ERROR, RUNNING}
 enum EventsExplore {BACK = 400, COPY_QUERY, COPY_NODE, CHANGE_MODE, REMOVE_FROM_CLEANUP, ADD_TO_CLEANUP, PROTECT, EXPLORE_SUCCESSORS, EXPLORE_PREDECESSORS, EXPLORE_NODE_LIST, EXPLORE_NODE}
 enum EventsSearch {SEARCH = 500}
 
@@ -26,6 +26,7 @@ var events:= {
 	EventsUI.STARTED : "ui.started",
 	EventsUI.EXITED: "ui.exited",
 	EventsUI.ERROR: "ui.error",
+	EventsUI.RUNNING: "ui.running",
 	EventsExplore.BACK: "ui.explore.back",
 	EventsExplore.COPY_QUERY: "ui.explore.copy-query",
 	EventsExplore.COPY_NODE: "ui.explore.copy-node",
@@ -49,6 +50,10 @@ var max_queue_size : int = 100
 var session_id : String = ""
 var user_id : String = ""
 
+var one_hour_callback_ref = JavaScript.create_callback(self, "one_hour_callback")
+var one_hour_timer : Timer
+var total_time : int = 0
+
 func _ready():
 	var post_timer := Timer.new()
 	post_timer.wait_time = 60
@@ -59,8 +64,16 @@ func _ready():
 	if OS.has_feature("HTML5"):
 		session_id = JavaScript.eval("getSessionId()")
 		user_id = JavaScript.eval("getUserId()")
+		var window := JavaScript.get_interface("window")
+		window.addEventListener("oneHourEvent", one_hour_callback_ref)
 	else:
 		user_id = str(OS.get_unique_id())
+		one_hour_timer = Timer.new()
+		one_hour_timer.wait_time = 3
+		one_hour_timer.connect("timeout", self, "on_one_hour_timer_timeout")
+		one_hour_timer.one_shot = false
+		add_child(one_hour_timer)
+		one_hour_timer.start()
 
 
 func analytics_event_data(event : int, context := {}, counters := {}) -> Dictionary:
@@ -121,3 +134,19 @@ func _notification(what):
 			event(EventsUI.EXITED, properties)
 			
 		post_events()
+
+func one_hour_callback(_args):
+	var properties := {
+		"focused time" : JavaScript.eval("focusTime"),
+		"not focused time" : JavaScript.eval("unfocusTime"),
+		"total time" : JavaScript.eval("totalTime")
+	}
+	event(EventsUI.RUNNING, properties)
+
+func on_one_hour_timer_timeout():
+	total_time += 3600
+	var properties := {
+		# We cannot measure the time the app is visible but not focused in native
+		"total time" : total_time
+	}
+	event(EventsUI.RUNNING, properties)
