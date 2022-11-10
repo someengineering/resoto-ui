@@ -69,9 +69,8 @@ func _ready():
 	else:
 		user_id = str(OS.get_unique_id())
 		one_hour_timer = Timer.new()
-		one_hour_timer.wait_time = 3
+		one_hour_timer.wait_time = 3600
 		one_hour_timer.connect("timeout", self, "on_one_hour_timer_timeout")
-		one_hour_timer.one_shot = false
 		add_child(one_hour_timer)
 		one_hour_timer.start()
 
