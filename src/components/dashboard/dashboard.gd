@@ -1,5 +1,7 @@
 extends Control
 
+signal need_to_resize(y)
+
 export var x_grid_ratio := 10.0 
 export var y_grid_size := 100.0 
 export var grid_margin := Vector2(5,5)
@@ -192,13 +194,12 @@ func refresh(from : int = ts_start, to : int = ts_end, interval : int = step) ->
 
 
 func _on_widget_moved_or_resized():
-	var max_y : float = -INF
+	var max_y = -INF
 	for widget in widgets.get_children():
 		if widget.is_maximized:
 			max_y = get_parent().rect_size.y
 			break
 		if widget.rect_size.y + widget.rect_position.y > max_y:
 			max_y = widget.rect_size.y + widget.rect_position.y
-	yield(VisualServer,"frame_post_draw")
-	rect_min_size.y = min(max_y, get_parent().rect_size.y)
-	rect_size.y = max(max_y, get_parent().rect_size.y)
+	
+	emit_signal("need_to_resize", max_y)
