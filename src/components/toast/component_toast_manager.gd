@@ -30,6 +30,7 @@ func on_add_toast(_title:String, _description:String=description, _status:int=st
 	
 	toast.connect("closed", self, "on_toast_closed", [toast], 4)
 	toast.open(_title, _description, _status, _duration, _is_closable)
+	yield(VisualServer,"frame_post_draw")
 	toast.rect_position = Vector2(-toast.rect_size.x - toast_padding, -toast.rect_size.y - toast_padding)
 	
 	_g.emit_signal("toast_created", toast)
