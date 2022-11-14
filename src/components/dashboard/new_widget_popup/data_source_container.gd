@@ -222,6 +222,7 @@ func _make_custom_tooltip(for_text):
 
 func set_data_source(new_data_source : DataSource) -> void:
 	data_source.copy_data_source(new_data_source)
+	add_child(data_source)
 	match new_data_source.type:
 		DataSource.TYPES.TIME_SERIES:
 			metrics_options.text = new_data_source.metric
@@ -318,6 +319,3 @@ func _on_FunctionAlias_text_entered(new_text):
 	data_source.function_alias = new_text
 	update_query()
 
-
-func _on_DatasourceContainer_tree_exiting():
-	data_source.queue_free()

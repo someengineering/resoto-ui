@@ -368,10 +368,15 @@ func _on_ConfigButton_pressed() -> void:
 func set_data_sources(new_data_sources : Array) -> void:
 	if new_data_sources.empty():
 		return
+		
+	for ds in data_sources:
+		remove_child(ds)
+		ds.queue_free()
 	
 	if new_data_sources[0] is DataSource:
 		data_sources = new_data_sources
 		for ds in data_sources:
+			add_child(ds)
 			if not ds.is_connected("query_status", self, "_on_data_source_query_status"):
 				ds.connect("query_status", self, "_on_data_source_query_status")
 	else:
@@ -456,6 +461,7 @@ func set_data_sources_data(data : Array) -> void:
 		ds.widget = widget
 		ds.connect("query_status", self, "_on_data_source_query_status")
 		data_sources.append(ds)
+		add_child(ds)
 
 
 func get_data_sources_data() -> Array:
