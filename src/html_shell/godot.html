@@ -229,6 +229,9 @@
 		var unfocusTime = 0.0;
 		var totalTime = 0.0;
 
+		const oneHourEvent = new Event("oneHourEvent");
+		var oneHourInterval = setInterval( () => {dispatchEvent(oneHourEvent)}, 3600000);
+
 		function godotWatchdogCount() {
 			if (document.hasFocus())
 				godotWatchdogTimer += 0.5;
