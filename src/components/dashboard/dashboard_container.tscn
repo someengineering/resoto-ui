@@ -135,46 +135,46 @@ margin_right = 1904.0
 margin_bottom = 33.0
 
 [node name="FiltersContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/Content/HFlowContainer"]
-margin_right = 473.0
+margin_right = 475.0
 margin_bottom = 33.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer"]
 margin_top = 6.0
-margin_right = 41.0
-margin_bottom = 27.0
+margin_right = 42.0
+margin_bottom = 26.0
 text = "Cloud"
 
 [node name="CloudsCombo" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer" instance=ExtResource( 18 )]
-margin_left = 45.0
-margin_right = 145.0
+margin_left = 46.0
+margin_right = 146.0
 
 [node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer"]
-margin_left = 149.0
+margin_left = 150.0
 margin_top = 6.0
-margin_right = 211.0
-margin_bottom = 27.0
+margin_right = 212.0
+margin_bottom = 26.0
 text = "Account"
 
 [node name="AccountsCombo" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer" instance=ExtResource( 18 )]
-margin_left = 215.0
-margin_right = 315.0
+margin_left = 216.0
+margin_right = 316.0
 
 [node name="Label3" type="Label" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer"]
-margin_left = 319.0
+margin_left = 320.0
 margin_top = 6.0
-margin_right = 369.0
-margin_bottom = 27.0
+margin_right = 371.0
+margin_bottom = 26.0
 text = "Region"
 
 [node name="RegionsCombo" parent="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer" instance=ExtResource( 18 )]
-margin_left = 373.0
-margin_right = 473.0
+margin_left = 375.0
+margin_right = 475.0
 
 [node name="DateButton" type="Button" parent="VBoxContainer/PanelContainer/Content/HFlowContainer"]
-margin_left = 759.0
-margin_right = 909.0
-margin_bottom = 33.0
+margin_left = 760.0
+margin_right = 910.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 6
 size_flags_vertical = 0
@@ -329,7 +329,7 @@ script = ExtResource( 12 )
 [node name="VBox" type="VBoxContainer" parent="KebapPopup"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 160.0
+margin_right = 163.0
 margin_bottom = 148.0
 
 [node name="RefreshBox" type="PanelContainer" parent="KebapPopup/VBox"]
@@ -416,6 +416,7 @@ icon_tex = ExtResource( 5 )
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/MaximizeButton" to="." method="_on_MaximizeButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/MinimizedBar/MinimizeButton" to="." method="_on_MinimizeButton_pressed"]
+[connection signal="need_to_resize" from="VBoxContainer/ScrollContainer/Content/Dashboard" to="VBoxContainer/ScrollContainer" method="_on_Dashboard_need_to_resize"]
 [connection signal="timeout" from="VBoxContainer/ScrollContainer/Content/Dashboard/ResizeTimer" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="_on_ResizeTimer_timeout"]
 [connection signal="widget_added" from="NewWidgetPopup" to="." method="_on_NewWidgetPopup_widget_added"]
 [connection signal="widget_added" from="NewWidgetPopup" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="add_widget"]
