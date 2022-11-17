@@ -41,6 +41,9 @@ class Request:
 	var state_:int = states.CHECK_CONNECTION
 	var http_:HTTPClient
 	var response_:Response
+	var response_chunks:PoolByteArray = []
+	var chunk_idx:int = 0
+	var chunks_resizes:int = 0
 	
 	var method:int
 	var path:String
@@ -144,12 +147,19 @@ class Request:
 						var chunk : PoolByteArray = http_.read_response_body_chunk()
 						if chunk.size() != 0:
 							emit_signal("pre_data", chunk, response_, self)
-							response_.body = response_.body + chunk
+							while response_chunks.size() <= chunk_idx + chunk.size():
+								response_chunks.resize(int(pow(2,chunks_resizes)))
+								chunks_resizes += 1
+							for byte in chunk:
+								response_chunks[chunk_idx] = byte
+								chunk_idx += 1
 					else:
 						state_ = states.RESPONSE_READY
 						break
 			
 			states.RESPONSE_READY:
+				response_chunks.resize(chunk_idx)
+				response_.body = response_chunks
 				if [401, 400].has(response_.response_code):
 					emit_signal("pre_done", FAILED, response_)
 					emit_signal("done", FAILED, response_)
