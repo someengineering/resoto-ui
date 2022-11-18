@@ -13,7 +13,7 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 		q += " and /ancestors.region.reported.name=\"%s\"" % dashboard_filters["region"]
 	if dashboard_filters["account"] != "" and dashboard_filters["account"] != "All":
 		q += " and /ancestors.account.reported.name=\"%s\"" % dashboard_filters["account"]
-	API.aggregate_search(q, self)
+	set_request(API.aggregate_search(q, self))
 
 
 func _on_aggregate_search_done(_error : int, response):

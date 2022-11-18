@@ -65,6 +65,8 @@ func _ready() -> void:
 	data_source.widget = widget
 	data_source.connect("query_status", self, "_on_data_source_query_status")
 	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
+	
+	add_child(data_source)
 
 
 func _on_cli_execute_done(_error : int, response):
@@ -221,6 +223,10 @@ func _make_custom_tooltip(for_text):
 
 
 func set_data_source(new_data_source : DataSource) -> void:
+	if is_instance_valid(data_source) and data_source.is_inside_tree():
+		remove_child(data_source)
+		data_source.queue_free()
+	
 	data_source.copy_data_source(new_data_source)
 	add_child(data_source)
 	match new_data_source.type:
