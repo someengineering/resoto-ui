@@ -141,8 +141,6 @@ func _on_cli_execute_streamed_data(data:String) -> void:
 	if data.left(3) == "401":
 		_g.popup_manager.open_popup("ConnectPopup")
 		return
-		
-	var tick = OS.get_ticks_msec()
 	
 	data_chunks[chunk_idx] = data
 	chunk_idx += 1
