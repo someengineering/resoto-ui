@@ -18,6 +18,11 @@ signal close_hamburger_menu
 signal resoto_home_visible
 signal top_search_update
 
+# Tooltip Signals
+signal tooltip
+signal tooltip_link
+signal tooltip_hide
+
 # Nav Signals
 signal nav_change_section
 signal nav_change_section_explore
@@ -31,11 +36,20 @@ signal explore_node_list_from_node
 signal explore_node_list_kind
 signal explore_node_list_id
 
+# Setup Wizard Signals
+signal setup_wizard_start
+
+# Websocket
+signal websocket_message
+
+
 const TOP_MARGIN:int = 50
 const tsdb_metric_prefix:String		 = "resoto_"
 const dashboard_config_prefix:String = "resoto.ui.dashboard."
+const discord_link:String			 = "https://discord.gg/someengineering"
 
-var demo_mode: bool = true
+
+var ui_test_mode: bool = false
 var ui_scale: float = 1.0 setget set_ui_scale
 var ui_version:String = "3.0.0a0"
 var resotocore_version:String = "n/a"

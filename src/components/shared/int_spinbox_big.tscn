@@ -16,7 +16,7 @@ script = ExtResource( 2 )
 
 [node name="IntEdit" type="LineEdit" parent="."]
 margin_right = 105.0
-margin_bottom = 33.0
+margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 script = ExtResource( 1 )

@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://components/wizard/wizard_steps/wizard_step_prompt.gd" type="Script" id=1]
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=3]
+
+[node name="WizardStep_StepPrompt" type="ScrollContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+intercept_next = true
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 16
+
+[node name="TextLabel" type="RichTextLabel" parent="VBox"]
+self_modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_right = 1920.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+theme = ExtResource( 3 )
+theme_type_variation = "FontMedium"
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+bbcode_enabled = true
+text = "asdqsqdwasdqw"
+fit_content_height = true
+scroll_active = false
+
+[node name="LineEditMargin" type="MarginContainer" parent="VBox"]
+margin_top = 39.0
+margin_right = 1920.0
+margin_bottom = 93.0
+rect_min_size = Vector2( 450, 0 )
+size_flags_horizontal = 3
+custom_constants/margin_right = 100
+custom_constants/margin_top = 20
+custom_constants/margin_left = 100
+custom_constants/margin_bottom = 0
+
+[node name="LineEdit" type="LineEdit" parent="VBox/LineEditMargin"]
+margin_left = 100.0
+margin_top = 20.0
+margin_right = 1820.0
+margin_bottom = 54.0
+size_flags_horizontal = 3
+theme_type_variation = "LineEditCodeConfig"
+align = 1
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="TextAppearTween" type="Tween" parent="."]
+
+[connection signal="resized" from="." to="." method="_on_WizardStep_StepPrompt_resized"]
+[connection signal="text_changed" from="VBox/LineEditMargin/LineEdit" to="." method="_on_LineEdit_text_changed"]
+[connection signal="text_entered" from="VBox/LineEditMargin/LineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="tween_all_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_all_completed"]
+[connection signal="tween_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_completed"]

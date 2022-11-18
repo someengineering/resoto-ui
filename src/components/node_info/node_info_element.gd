@@ -431,7 +431,7 @@ func _on_RemoveFromCleanupButton_pressed():
 	$"%RemoveFromCleanupButton".hide()
 	$"%AddToCleanupButton".show()
 	var remove_from_cleanup_query : String = "search id(\"%s\") | set_desired clean=false" % [current_node_id]
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(remove_from_cleanup_query, self, "_on_remove_cleanup_query_done")
 	else:
 		print(remove_from_cleanup_query)
@@ -444,7 +444,7 @@ func _on_AddToCleanupButton_pressed():
 	$"%AddToCleanupButton".hide()
 	$"%RemoveFromCleanupButton".show()
 	var cleanup_query : String = "search id(\"%s\") | clean" % [current_node_id]
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(cleanup_query, self, "_on_cleanup_query_done")
 	else:
 		print(cleanup_query)
@@ -455,7 +455,7 @@ func _on_AddToCleanupButton_pressed():
 func _on_ProtectButton_pressed():
 	n_icon_protected.visible = !n_icon_protected.visible
 	var protect_query : String = "search id(\"%s\") | set_metadata protected=%s" % [current_node_id, str(n_icon_protected.visible)]
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(protect_query, self, "_on_protect_query_done")
 	else:
 		print(protect_query)

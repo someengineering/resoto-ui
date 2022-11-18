@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/what_1b.wav-6cacc62d273b5ef0b4631cb7ad5c54ea.sample"
+
+[deps]
+
+source_file="res://components/wizard/assets/what_1b.wav"
+dest_files=[ "res://.import/what_1b.wav-6cacc62d273b5ef0b4631cb7ad5c54ea.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
