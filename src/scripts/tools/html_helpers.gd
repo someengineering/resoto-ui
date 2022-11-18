@@ -33,6 +33,8 @@ func _ready():
 	_g.os = JavaScript.eval("getOS()")
 	if _g.os == "MacOS" and not InputMap.has_action("mac_copy"):
 		add_mac_actions()
+	
+	JavaScript.eval("godotWatchdogStart()")
 
 
 func _physics_process(delta:float):

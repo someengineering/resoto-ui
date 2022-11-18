@@ -224,13 +224,19 @@
 		// A simple Godot watchdog to notify the user when the engine is unresponsive
 		var godotWatchdogTimer = 0.0;
 		var godotWatchdogDialog = false;
-		var myInterval = setInterval(godotWatchdogCount, 500);
+		var godotWatchdogInterval;
 		var focusTime = 0.0;
 		var unfocusTime = 0.0;
 		var totalTime = 0.0;
 
 		const oneHourEvent = new Event("oneHourEvent");
 		var oneHourInterval = setInterval( () => {dispatchEvent(oneHourEvent)}, 3600000);
+
+		function godotWatchdogStart() {
+			if (!godotWatchdogInterval) {
+				godotWatchdogInterval = setInterval(godotWatchdogCount, 500)
+			}
+		}
 
 		function godotWatchdogCount() {
 			if (document.hasFocus())
