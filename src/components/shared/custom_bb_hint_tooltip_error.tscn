@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/theme/Barlow-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/theme/SourceCodePro-Medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://assets/theme/Barlow-Bold.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://components/shared/richtext_uniwidth_resize.gd" type="Script" id=4]
 
 [sub_resource type="StyleBoxFlat" id=5]
 content_margin_left = 15.0
@@ -58,3 +59,4 @@ custom_fonts/bold_font = SubResource( 3 )
 custom_fonts/normal_font = SubResource( 4 )
 bbcode_enabled = true
 fit_content_height = true
+script = ExtResource( 4 )

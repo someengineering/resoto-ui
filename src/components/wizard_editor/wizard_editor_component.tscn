@@ -1,0 +1,342 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://components/wizard_editor/wizard_editor_component.gd" type="Script" id=1]
+[ext_resource path="res://components/wizard_editor/wizard_editor_popup_open.gd" type="Script" id=2]
+[ext_resource path="res://components/wizard_editor/wizard_editor_popup_add.gd" type="Script" id=3]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=4]
+[ext_resource path="res://scripts/tools/html_helpers.gd" type="Script" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0, 1 )
+expand_margin_left = 10.0
+expand_margin_right = 10.0
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_size = 20
+shadow_offset = Vector2( 0, 6 )
+
+[node name="SetupWizardEditor" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="VBox"]
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
+margin_right = 1920.0
+margin_bottom = 40.0
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 4 )
+
+[node name="Shadow" type="Panel" parent="VBox/PanelContainer"]
+modulate = Color( 1, 1, 1, 0.282353 )
+show_behind_parent = true
+margin_left = 10.0
+margin_top = 4.0
+margin_right = 1910.0
+margin_bottom = 36.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Toolbar" type="HBoxContainer" parent="VBox/PanelContainer"]
+margin_left = 10.0
+margin_top = 4.0
+margin_right = 1910.0
+margin_bottom = 36.0
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="VBox/PanelContainer/Toolbar"]
+margin_top = 6.0
+margin_right = 96.0
+margin_bottom = 26.0
+text = "Script Name:"
+
+[node name="ScriptEdit" type="LineEdit" parent="VBox/PanelContainer/Toolbar"]
+margin_left = 106.0
+margin_right = 306.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 200, 0 )
+
+[node name="HSLabel" type="Label" parent="VBox/PanelContainer/Toolbar"]
+margin_left = 316.0
+margin_top = 6.0
+margin_right = 418.0
+margin_bottom = 26.0
+text = "Home screen:"
+
+[node name="HomeScreenEdit" type="OptionButton" parent="VBox/PanelContainer/Toolbar"]
+margin_left = 428.0
+margin_right = 678.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 250, 0 )
+
+[node name="Control" type="Control" parent="VBox/PanelContainer/Toolbar"]
+margin_left = 688.0
+margin_right = 1599.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="SaveGraph" type="Button" parent="VBox/PanelContainer/Toolbar"]
+margin_left = 1609.0
+margin_right = 1668.33
+margin_bottom = 32.0
+text = "Save"
+
+[node name="LoadGraph" type="Button" parent="VBox/PanelContainer/Toolbar"]
+margin_left = 1678.0
+margin_right = 1738.67
+margin_bottom = 32.0
+text = "Load"
+
+[node name="BackBtn" type="Button" parent="VBox/PanelContainer/Toolbar"]
+margin_left = 1748.0
+margin_right = 1900.67
+margin_bottom = 32.0
+text = "Back to Resoto UI"
+
+[node name="GraphEdit" type="GraphEdit" parent="VBox"]
+show_behind_parent = true
+margin_top = 40.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_vertical = 3
+custom_constants/port_grab_distance_vertical = 20
+custom_constants/port_grab_distance_horizontal = 20
+right_disconnects = true
+scroll_offset = Vector2( -9, -44 )
+zoom_min = 0.15
+minimap_enabled = false
+minimap_size = Vector2( 200, 140 )
+minimap_opacity = 0.5
+
+[node name="PopupPanel" type="WindowDialog" parent="."]
+visible = true
+margin_right = 8.0
+margin_bottom = 8.0
+rect_min_size = Vector2( 120, 118 )
+window_title = "Add Step"
+script = ExtResource( 3 )
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PopupPanel/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 188.0
+margin_bottom = 570.0
+
+[node name="SectionLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_right = 178.0
+margin_bottom = 20.0
+text = "Sections"
+align = 1
+
+[node name="SectionStartButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 24.0
+margin_right = 178.0
+margin_bottom = 56.0
+theme_type_variation = "ButtonSmall"
+text = "New Section"
+
+[node name="GotoSectionButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 60.0
+margin_right = 178.0
+margin_bottom = 92.0
+theme_type_variation = "ButtonSmall"
+text = "Go to Section"
+
+[node name="FrontendLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 96.0
+margin_right = 178.0
+margin_bottom = 116.0
+text = "Fontend Steps"
+align = 1
+
+[node name="TextStepButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 120.0
+margin_right = 178.0
+margin_bottom = 152.0
+theme_type_variation = "ButtonSmall"
+text = "Text"
+
+[node name="QuestionStepButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 156.0
+margin_right = 178.0
+margin_bottom = 188.0
+theme_type_variation = "ButtonSmall"
+text = "Question"
+
+[node name="AnswerButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 192.0
+margin_right = 178.0
+margin_bottom = 224.0
+theme_type_variation = "ButtonSmall"
+text = "Answer"
+
+[node name="PromptButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 228.0
+margin_right = 178.0
+margin_bottom = 260.0
+theme_type_variation = "ButtonSmall"
+text = "Prompt"
+
+[node name="CustomSceneButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 264.0
+margin_right = 178.0
+margin_bottom = 296.0
+theme_type_variation = "ButtonSmall"
+text = "Custom Scene"
+
+[node name="BackendLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 300.0
+margin_right = 178.0
+margin_bottom = 320.0
+text = "Backend Steps"
+align = 1
+
+[node name="SetVarButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 324.0
+margin_right = 178.0
+margin_bottom = 356.0
+theme_type_variation = "ButtonSmall"
+text = "Set Wizard Variable"
+
+[node name="ConfigUpdateButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 360.0
+margin_right = 178.0
+margin_bottom = 392.0
+theme_type_variation = "ButtonSmall"
+text = "Change Config Value"
+
+[node name="CreateObjectButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 396.0
+margin_right = 178.0
+margin_bottom = 428.0
+theme_type_variation = "ButtonSmall"
+text = "Create JSON Object"
+
+[node name="HandleObjectButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 432.0
+margin_right = 178.0
+margin_bottom = 464.0
+theme_type_variation = "ButtonSmall"
+text = "Handle JSON Object"
+
+[node name="SaveConfigsButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 468.0
+margin_right = 178.0
+margin_bottom = 500.0
+theme_type_variation = "ButtonSmall"
+text = "Save Configs on Core"
+
+[node name="OtherLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 504.0
+margin_right = 178.0
+margin_bottom = 524.0
+text = "Others"
+align = 1
+
+[node name="CommentButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 528.0
+margin_right = 178.0
+margin_bottom = 560.0
+theme_type_variation = "ButtonSmall"
+text = "#Comment"
+
+[node name="ScriptSelection" type="PopupPanel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="Margin" type="MarginContainer" parent="ScriptSelection"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="ScriptSelection/Margin"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1890.0
+margin_bottom = 1050.0
+custom_constants/separation = 30
+
+[node name="Buttons" type="HBoxContainer" parent="ScriptSelection/Margin/VBox"]
+margin_right = 1880.0
+margin_bottom = 33.0
+
+[node name="Label" type="Label" parent="ScriptSelection/Margin/VBox/Buttons"]
+margin_top = 6.0
+margin_right = 1842.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Open Script"
+
+[node name="CloseButton" type="Button" parent="ScriptSelection/Margin/VBox/Buttons"]
+margin_left = 1846.0
+margin_right = 1880.0
+margin_bottom = 33.0
+text = "X"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ScriptSelection/Margin/VBox"]
+margin_top = 63.0
+margin_right = 1880.0
+margin_bottom = 263.0
+rect_min_size = Vector2( 0, 200 )
+scroll_vertical_enabled = false
+
+[node name="ScriptList" type="VBoxContainer" parent="ScriptSelection/Margin/VBox/ScrollContainer"]
+margin_right = 1880.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HTMLHelpers" type="Node" parent="."]
+script = ExtResource( 5 )
+
+[connection signal="text_changed" from="VBox/PanelContainer/Toolbar/ScriptEdit" to="." method="_on_ScriptEdit_text_changed"]
+[connection signal="item_selected" from="VBox/PanelContainer/Toolbar/HomeScreenEdit" to="." method="_on_HomeScreenEdit_item_selected"]
+[connection signal="pressed" from="VBox/PanelContainer/Toolbar/SaveGraph" to="." method="_on_SaveGraph_pressed"]
+[connection signal="pressed" from="VBox/PanelContainer/Toolbar/LoadGraph" to="." method="_on_LoadGraph_pressed"]
+[connection signal="pressed" from="VBox/PanelContainer/Toolbar/BackBtn" to="." method="_on_BackBtn_pressed"]
+[connection signal="connection_request" from="VBox/GraphEdit" to="." method="_on_GraphEdit_connection_request"]
+[connection signal="connection_to_empty" from="VBox/GraphEdit" to="." method="_on_GraphEdit_connection_to_empty"]
+[connection signal="disconnection_request" from="VBox/GraphEdit" to="." method="_on_GraphEdit_disconnection_request"]
+[connection signal="gui_input" from="VBox/GraphEdit" to="." method="_on_GraphEdit_gui_input"]
+[connection signal="popup_hide" from="PopupPanel" to="." method="_on_PopupPanel_popup_hide"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/SectionStartButton" to="." method="_on_AddSectionStart_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/GotoSectionButton" to="." method="_on_AddGoToSection_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/TextStepButton" to="." method="_on_AddTextButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/QuestionStepButton" to="." method="_on_AddQuestionButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/AnswerButton" to="." method="_on_AddAnswerButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/PromptButton" to="." method="_on_AddPromptButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/CustomSceneButton" to="." method="_on_CustomSceneButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/SetVarButton" to="." method="_on_SetVarButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/ConfigUpdateButton" to="." method="_on_AddUpdateConfigButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/CreateObjectButton" to="." method="_on_AddCreateObjectButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HandleObjectButton" to="." method="_on_AddSendObjectButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/SaveConfigsButton" to="." method="_on_SaveConfigsButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/CommentButton" to="." method="_on_AddComment_pressed"]
+[connection signal="open_script_file" from="ScriptSelection" to="." method="_on_ScriptSelection_open_script_file"]
+[connection signal="pressed" from="ScriptSelection/Margin/VBox/Buttons/CloseButton" to="ScriptSelection" method="_on_CloseButton_pressed"]

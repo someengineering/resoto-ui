@@ -176,10 +176,36 @@ static func comma_sep(number):
 	return res
 
 
+static func set_path(dict, keypath, value):
+	var current = keypath[0]
+	if dict.has(current):
+		if typeof(dict[current]) == TYPE_DICTIONARY:
+			keypath.remove(0)
+			set_path(dict[current],keypath, value)
+			return true
+		else:
+			dict[current] = value
+			return true
+	else:
+		print("Config variable not found")
+		return false
+
+
 static func load_json(path:String) -> Array:
 	var file : File = File.new()
 	if !file.file_exists(path):
 		return []
+	file.open(path, file.READ)
+	var tmp_text : String = file.get_as_text()
+	file.close()
+	var data = parse_json(tmp_text)
+	return data
+
+
+static func load_json_dict(path:String) -> Dictionary:
+	var file : File = File.new()
+	if !file.file_exists(path):
+		return {}
 	file.open(path, file.READ)
 	var tmp_text : String = file.get_as_text()
 	file.close()

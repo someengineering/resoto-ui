@@ -8,6 +8,7 @@ onready var sections = {
 	"message_log": $Content/LogComponent,
 	"node_single_info": $Content/NodeSingleInfoComponent,
 	"node_list_info": $Content/NodeListElementComponent,
+	"setup_wizard": $Content/SetupWizardComponent,
 	"home": $Content/HomeComponent
 }
 

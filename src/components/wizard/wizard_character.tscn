@@ -1,0 +1,338 @@
+[gd_scene load_steps=25 format=2]
+
+[ext_resource path="res://components/wizard/assets/wizard_bg_alt.png" type="Texture" id=1]
+[ext_resource path="res://components/wizard/assets/wizard_head.png" type="Texture" id=2]
+[ext_resource path="res://components/wizard/assets/wizard_mouth_neutral-sheet.png" type="Texture" id=3]
+[ext_resource path="res://components/wizard/assets/wizard_eyebrows.png" type="Texture" id=4]
+[ext_resource path="res://components/wizard/assets/wizard_eyes-sheet.png" type="Texture" id=5]
+[ext_resource path="res://components/wizard/wizard_character.gd" type="Script" id=6]
+[ext_resource path="res://components/wizard/assets/wizard_sheep_5.wav" type="AudioStream" id=7]
+[ext_resource path="res://components/wizard/assets/wizard_sheep_6.wav" type="AudioStream" id=8]
+[ext_resource path="res://components/wizard/assets/wizard_sheep_7.wav" type="AudioStream" id=9]
+[ext_resource path="res://components/wizard/assets/wizard_sheep_2.wav" type="AudioStream" id=10]
+[ext_resource path="res://components/wizard/assets/wizard_sheep_3.wav" type="AudioStream" id=11]
+[ext_resource path="res://components/wizard/assets/wizard_sheep_4.wav" type="AudioStream" id=12]
+[ext_resource path="res://components/wizard/assets/wizard_sheep_1.wav" type="AudioStream" id=13]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 5
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 491, 200 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 5
+atlas = ExtResource( 5 )
+region = Rect2( 0, 200, 491, 200 )
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "blink",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 2 ) ],
+"loop": true,
+"name": "normal",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 5
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 369, 239 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 5
+atlas = ExtResource( 3 )
+region = Rect2( 369, 0, 369, 239 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 5
+atlas = ExtResource( 3 )
+region = Rect2( 0, 239, 369, 239 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 5
+atlas = ExtResource( 3 )
+region = Rect2( 369, 239, 369, 239 )
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [ SubResource( 4 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 6 ) ],
+"loop": true,
+"name": "talk",
+"speed": 15.0
+} ]
+
+[sub_resource type="Animation" id=9]
+resource_name = "Idle"
+length = 1.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("WizardHead:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7, 1.2, 1.4 ),
+"transitions": PoolRealArray( -2, -2, -2, -2 ),
+"update": 0,
+"values": [ Vector2( 50, 220 ), Vector2( 53, 215 ), Vector2( 50, 220 ), Vector2( 50, 220 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("WizardHead:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.7, 1.2, 1.4 ),
+"transitions": PoolRealArray( -2, -2, -2, -2 ),
+"update": 0,
+"values": [ 0.0, 0.8, 0.0, 0.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("WizardHead/Eyebrows:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.7, 1.2, 1.4 ),
+"transitions": PoolRealArray( -1.5, -1.5, -1.5, -1.5 ),
+"update": 0,
+"values": [ Vector2( 37, -455 ), Vector2( 37.9301, -460.013 ), Vector2( 37, -455 ), Vector2( 37, -455 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("WizardHead/Eyebrows:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( -1.5 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("WizardHead/Mouth:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.7, 1.2, 1.4 ),
+"transitions": PoolRealArray( -1.5, -1.5, -1.5, -1.5 ),
+"update": 0,
+"values": [ Vector2( 151.5, -835 ), Vector2( 147.431, -839.944 ), Vector2( 151.5, -835 ), Vector2( 151.5, -835 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("WizardHead/Eyes:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.7, 1.2, 1.4 ),
+"transitions": PoolRealArray( -1.5, -1.5, -1.5, -1.5 ),
+"update": 0,
+"values": [ Vector2( 146.5, -814 ), Vector2( 146.5, -816 ), Vector2( 146.5, -814 ), Vector2( 146.5, -814 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("WizardHead:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 50, 220 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("WizardHead:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.37906 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("WizardHead/Eyebrows:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 146.5, -814 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("WizardHead/Eyebrows:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.4688 ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "Talk"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/path = NodePath("WizardHead:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1.5, 1.5, 1.5, 1.5 ),
+"update": 0,
+"values": [ Vector2( 50, 220 ), Vector2( 43, 210 ), Vector2( 60, 210 ), Vector2( 50, 220 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("WizardHead:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1.5, 1.5, 1.5, 1.5 ),
+"update": 0,
+"values": [ 0.0, -1.94682, 0.447051, 0.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("WizardHead/Eyebrows:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 37, -455 ), Vector2( 34.2509, -453.182 ), Vector2( 38.2117, -458.213 ), Vector2( 37, -455 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("WizardHead/Eyebrows:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.220512, -2.48662, 0.0 ]
+}
+
+[node name="Wizard" type="Node2D"]
+script = ExtResource( 6 )
+
+[node name="WizardBg" type="Sprite" parent="."]
+position = Vector2( 71, 274 )
+texture = ExtResource( 1 )
+
+[node name="WizardHead" type="Sprite" parent="."]
+position = Vector2( 50, 220 )
+rotation = 0.0240691
+texture = ExtResource( 2 )
+offset = Vector2( 25, -497 )
+
+[node name="Eyebrows" type="Sprite" parent="WizardHead"]
+position = Vector2( 146.5, -814 )
+rotation = 0.0256354
+texture = ExtResource( 4 )
+offset = Vector2( -9.18799, -3.46773 )
+
+[node name="Eyes" type="AnimatedSprite" parent="WizardHead"]
+position = Vector2( 146.5, -815.712 )
+frames = SubResource( 3 )
+animation = "normal"
+offset = Vector2( -110, 450 )
+
+[node name="Mouth" type="AnimatedSprite" parent="WizardHead"]
+position = Vector2( 148.018, -839.231 )
+frames = SubResource( 8 )
+animation = "neutral"
+playing = true
+offset = Vector2( -79, 732 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Idle"
+anims/Idle = SubResource( 9 )
+anims/RESET = SubResource( 10 )
+anims/Talk = SubResource( 11 )
+
+[node name="BlinkTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="NormalEyeTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="TalkSounds" type="Node" parent="."]
+
+[node name="TalkSound1" type="AudioStreamPlayer" parent="TalkSounds"]
+stream = ExtResource( 13 )
+volume_db = -20.0
+pitch_scale = 1.25
+
+[node name="TalkSound2" type="AudioStreamPlayer" parent="TalkSounds"]
+stream = ExtResource( 10 )
+volume_db = -20.0
+pitch_scale = 1.25
+
+[node name="TalkSound3" type="AudioStreamPlayer" parent="TalkSounds"]
+stream = ExtResource( 11 )
+volume_db = -20.0
+pitch_scale = 1.25
+
+[node name="TalkSound4" type="AudioStreamPlayer" parent="TalkSounds"]
+stream = ExtResource( 12 )
+volume_db = -20.0
+pitch_scale = 1.25
+
+[node name="TalkSound5" type="AudioStreamPlayer" parent="TalkSounds"]
+stream = ExtResource( 7 )
+volume_db = -20.0
+pitch_scale = 1.25
+
+[node name="TalkSound6" type="AudioStreamPlayer" parent="TalkSounds"]
+stream = ExtResource( 8 )
+volume_db = -20.0
+pitch_scale = 1.25
+
+[node name="TalkSound7" type="AudioStreamPlayer" parent="TalkSounds"]
+stream = ExtResource( 9 )
+volume_db = -20.0
+pitch_scale = 1.25
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="timeout" from="BlinkTimer" to="." method="_on_BlinkTimer_timeout"]
+[connection signal="timeout" from="NormalEyeTimer" to="." method="_on_NormalEyeTimer_timeout"]

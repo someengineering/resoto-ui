@@ -5,10 +5,15 @@ signal popup_gone
 
 var current_popup: Popup = null
 var popup_connect: Node = null
+var tooltip_link_active:= false
+var tooltip_active:= false
 
+onready var n_tooltip_link:= $TooltipLayer/TooltipLink
+onready var n_tooltip:= $TooltipLayer/Tooltip
 onready var confirm_popup: Popup = $ConfirmPopup
 onready var popup_bg := $BG
 onready var tween := Tween.new()
+onready var main = get_parent()
 
 
 func _enter_tree() -> void:
@@ -19,6 +24,53 @@ func _ready() -> void:
 	add_child(tween)
 	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
 	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
+	_g.connect("tooltip", self, "tooltip")
+	_g.connect("tooltip_link", self, "tooltip_link")
+	_g.connect("tooltip_hide", self, "tooltip_hide")
+
+
+func _process(_delta:float):
+	if tooltip_active or tooltip_link_active:
+		var tt : Control = null
+		if tooltip_active:
+			tt = n_tooltip
+		if tooltip_link_active:
+			tt = n_tooltip_link
+		tt.rect_position = main.get_global_mouse_position() + Vector2(20,20)
+		var w_rect := OS.get_window_safe_area()
+		w_rect.size /= _g.ui_scale
+		var tt_rect := tt.get_global_rect()
+		# If the tooltip is outside the window
+		if not w_rect.encloses(tt_rect):
+			if tt_rect.end.x > w_rect.end.x:
+				tt.rect_position.x = w_rect.end.x - tt_rect.size.x
+			elif tt_rect.position.x < 0:
+				tt.rect_position.x = 0
+			if tt_rect.end.y > w_rect.end.y:
+				tt.rect_position.y = w_rect.end.y - tt_rect.size.y
+			elif tt_rect.position.y < 0:
+				tt.rect_position.y = 0
+		tt.show()
+
+
+func tooltip(_text:String) -> void:
+	n_tooltip.get_node("Text").set_bbcode(_text)
+	tooltip_active = true
+
+
+func tooltip_link(_title:String, _link:String) -> void:
+	n_tooltip_link.get_node("VBox/HBox/DescrLabel").text = _title
+	# LINK NOT WORKING!
+	n_tooltip_link.get_node("VBox/UrlLabel").text = _link
+	n_tooltip_link.rect_size = Vector2.ONE
+	tooltip_link_active = true
+
+
+func tooltip_hide() -> void:
+	tooltip_link_active = false
+	n_tooltip_link.visible = false
+	tooltip_active = false
+	n_tooltip.visible = false
 
 
 func open_popup(_name:String) -> void:

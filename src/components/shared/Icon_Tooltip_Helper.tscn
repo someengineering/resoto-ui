@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/icons/icon_128_questionmark.svg" type="Texture" id=1]
+[ext_resource path="res://components/shared/icon_tooltip_helper.gd" type="Script" id=2]
+
+[node name="IconTooltipHelper" type="TextureRect"]
+margin_left = 28.0
+margin_top = 2.0
+margin_right = 48.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 20, 20 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 1 )
+expand = true
+script = ExtResource( 2 )

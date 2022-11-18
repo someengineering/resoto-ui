@@ -19,7 +19,7 @@ onready var max_btn := $VBox/Title/AllDataMaximizeButton
 
 
 func _input(event):
-	if event.is_action_pressed("search"):
+	if event.is_action_pressed("search") and is_visible_in_tree():
 		if get_global_rect().has_point(get_global_mouse_position()):
 			combo.grab_focus()
 			get_tree().set_input_as_handled()

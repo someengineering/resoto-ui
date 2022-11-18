@@ -378,7 +378,7 @@ func _on_AddToCleanupButton_pressed():
 				c.is_desired_cleaned = true
 				node_ids_to_clean.append(c.node_id)
 		cleanup_query = "json %s | clean" % JSON.print(node_ids_to_clean)
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(cleanup_query, self, "_on_cleanup_query_done")
 	else:
 		print(cleanup_query)
@@ -397,7 +397,7 @@ func _on_RemoveFromCleanupButton_pressed():
 				c.is_desired_cleaned = false
 				node_ids_to_clean.append(c.node_id)
 		remove_from_cleanup_query = "json %s | set_desired clean=false" % JSON.print(node_ids_to_clean)
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(remove_from_cleanup_query, self, "_on_remove_cleanup_query_done")
 	else:
 		print(remove_from_cleanup_query)
@@ -417,7 +417,7 @@ func _on_ProtectButton_pressed():
 				c.is_protected = do_protect
 				node_ids_to_clean.append(c.node_id)
 		protect_query = "json %s | set_metadata protected=%s" % [JSON.print(node_ids_to_clean), str(do_protect)]
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(protect_query, self, "_on_protect_query_done")
 	else:
 		print(protect_query)
@@ -451,7 +451,7 @@ func _on_TagsGroup_delete_tags(_tag_variable:String):
 				node_ids_to_tag_delete.append(c.node_id)
 		delete_tag_query = "json %s | %s" % [JSON.print(node_ids_to_tag_delete), delete_tag_end]
 	
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(delete_tag_query, self, "_on_delete_tag_query_done")
 	else:
 		print(delete_tag_query)
@@ -474,7 +474,7 @@ func _on_TagsGroup_update_tags(_tag_variable:String, _tag_value:String):
 				node_ids_to_tag_update.append(c.node_id)
 		change_tag_query = "json %s | %s" % [JSON.print(node_ids_to_tag_update), change_tag_end]
 	
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(change_tag_query, self, "_on_change_tag_query_done")
 	else:
 		print(change_tag_query)

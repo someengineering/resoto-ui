@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://components/wizard/wizard_steps/wizard_step_text.gd" type="Script" id=1]
+
+[node name="WizardStep_StepText" type="ScrollContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextLabel" type="RichTextLabel" parent="VBox"]
+self_modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = "FontMedium"
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+bbcode_enabled = true
+
+[node name="TextAppearTween" type="Tween" parent="."]
+
+[connection signal="tween_all_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_all_completed"]
+[connection signal="tween_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_completed"]
