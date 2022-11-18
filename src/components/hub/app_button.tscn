@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/icons/icon_128_circle_big.svg" type="Texture" id=2]
+[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://components/hub/component_resoto_home_app_button.gd" type="Script" id=4]
+
+[sub_resource type="DynamicFont" id=3]
+size = 21
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 3 )
+
+[node name="AppButton" type="ToolButton"]
+modulate = Color( 0.8, 0.85, 0.85, 1 )
+margin_right = 110.0
+margin_bottom = 110.0
+rect_min_size = Vector2( 140, 140 )
+script = ExtResource( 4 )
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -28.0
+margin_bottom = 8.0
+rect_min_size = Vector2( 110, 100 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="IconCenter" type="CenterContainer" parent="VBox"]
+margin_right = 140.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+
+[node name="Icon" type="TextureRect" parent="VBox/IconCenter"]
+self_modulate = Color( 0.462745, 0.176471, 0.843137, 1 )
+margin_left = 29.0
+margin_top = 4.0
+margin_right = 111.0
+margin_bottom = 86.0
+rect_min_size = Vector2( 82, 82 )
+rect_pivot_offset = Vector2( 41, 41 )
+mouse_filter = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand = true
+stretch_mode = 6
+
+[node name="IconBg" type="TextureRect" parent="VBox/IconCenter/Icon"]
+modulate = Color( 0.85098, 0.721569, 1, 1 )
+show_behind_parent = true
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 80.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 78, 78 )
+mouse_filter = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="VBox"]
+margin_top = 93.0
+margin_right = 140.0
+margin_bottom = 118.333
+rect_min_size = Vector2( 140, 0 )
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
+custom_constants/line_spacing = -3
+custom_fonts/font = SubResource( 3 )
+text = "Resoto App"
+align = 1
+autowrap = true
+
+[node name="Tween" type="Tween" parent="."]

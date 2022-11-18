@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://components/popups/connect_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://components/popups/confirm_popup.tscn" type="PackedScene" id=18]
 [ext_resource path="res://components/hub/component_resoto_home.tscn" type="PackedScene" id=19]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=20]
+[ext_resource path="res://assets/icons/icon_128_main_dashboards.svg" type="Texture" id=21]
 [ext_resource path="res://scripts/tools/html_helpers.gd" type="Script" id=22]
 [ext_resource path="res://components/dashboard/dashboard_component.gd" type="Script" id=23]
 [ext_resource path="res://components/config/config_component.gd" type="Script" id=24]
@@ -36,6 +37,10 @@
 [ext_resource path="res://components/shared/custom_bb_hint_tooltip.tscn" type="PackedScene" id=35]
 [ext_resource path="res://assets/icons/icon_128_notification.svg" type="Texture" id=36]
 [ext_resource path="res://components/shared/notification-label.tscn" type="PackedScene" id=37]
+[ext_resource path="res://assets/icons/icon_128_main_terminal.svg" type="Texture" id=38]
+[ext_resource path="res://assets/icons/icon_128_main_explore.svg" type="Texture" id=39]
+[ext_resource path="res://assets/icons/icon_128_main_config.svg" type="Texture" id=40]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=41]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
@@ -57,8 +62,6 @@ colors = PoolColorArray( 0, 0, 0, 1, 0.12549, 0.0862745, 0.247059, 0 )
 gradient = SubResource( 22 )
 height = 20
 fill_to = Vector2( 0, 1 )
-
-[sub_resource type="ButtonGroup" id=19]
 
 [sub_resource type="DynamicFontData" id=29]
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
@@ -315,72 +318,85 @@ margin_left = 20.0
 margin_top = 60.0
 margin_right = 330.0
 margin_bottom = 1060.0
-custom_constants/separation = 8
+custom_constants/separation = 4
 
-[node name="ButtonDashboards" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+[node name="Buttons" type="VBoxContainer" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_right = 310.0
-margin_bottom = 32.0
-group = SubResource( 19 )
+margin_bottom = 195.0
+custom_constants/separation = 17
+
+[node name="ButtonDashboards" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 41 )]
+margin_right = 310.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = "ButtonFlatDefault"
 text = "Dashboards"
+icon_tex = ExtResource( 21 )
+icon_margin = -5
 
-[node name="ButtonExplore" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_top = 40.0
+[node name="ButtonExplore" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 41 )]
+margin_top = 53.0
 margin_right = 310.0
-margin_bottom = 72.0
-group = SubResource( 19 )
+margin_bottom = 89.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = "ButtonFlatDefault"
 text = "Explore"
+icon_tex = ExtResource( 39 )
+icon_margin = -5
 
-[node name="ButtonConfig" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_top = 80.0
+[node name="ButtonTerminals" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 41 )]
+margin_top = 106.0
 margin_right = 310.0
-margin_bottom = 112.0
+margin_bottom = 142.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = "ButtonFlatDefault"
+text = "Resoto Shell Lite"
+icon_tex = ExtResource( 38 )
+icon_margin = -5
+
+[node name="ButtonConfig" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 41 )]
+margin_top = 159.0
+margin_right = 310.0
+margin_bottom = 195.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = "ButtonFlatDefault"
 text = "Configuration"
-
-[node name="ButtonTerminals" type="Button" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_top = 120.0
-margin_right = 310.0
-margin_bottom = 152.0
-group = SubResource( 19 )
-text = "Terminals"
+icon_tex = ExtResource( 40 )
+icon_margin = -5
 
 [node name="Spacer" type="Control" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_top = 160.0
+margin_top = 199.0
 margin_right = 310.0
-margin_bottom = 946.0
+margin_bottom = 943.0
 size_flags_vertical = 3
 
 [node name="UISettings" type="HBoxContainer" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_top = 954.0
+margin_top = 947.0
 margin_right = 310.0
-margin_bottom = 976.0
+margin_bottom = 980.0
 alignment = 1
 
 [node name="ButtonUISettings" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
-margin_bottom = 22.0
-rect_min_size = Vector2( 33, 20 )
 hint_tooltip = "Settings"
 size_flags_horizontal = 0
 icon_tex = ExtResource( 27 )
-icon_margin = 2
 
 [node name="ButtonDocs" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
 margin_left = 37.0
 margin_right = 70.0
-margin_bottom = 22.0
-rect_min_size = Vector2( 33, 20 )
 hint_tooltip = "Documentation (external link)"
 icon_tex = ExtResource( 11 )
-icon_margin = 2
 
 [node name="ButtonMessageLog" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
 margin_left = 74.0
 margin_right = 107.0
-margin_bottom = 22.0
-rect_min_size = Vector2( 33, 20 )
 hint_tooltip = "Notifications"
 size_flags_horizontal = 2
 icon_tex = ExtResource( 36 )
-icon_margin = 2
 
 [node name="NotificationAnchor" type="Control" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog"]
 margin_left = 26.0
@@ -394,26 +410,23 @@ visible = false
 margin_right = 10.0
 
 [node name="ButtonUIScaleMinus" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
-margin_left = 224.0
-margin_right = 248.0
-margin_bottom = 22.0
+margin_left = 215.0
+margin_right = 239.0
 rect_min_size = Vector2( 24, 20 )
 hint_tooltip = "Change UI Scale"
 icon_tex = ExtResource( 29 )
 
 [node name="ZoomScaleLabel" type="Label" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings"]
 unique_name_in_owner = true
-margin_left = 252.0
-margin_top = 3.0
+margin_left = 243.0
+margin_top = 6.0
 margin_right = 282.0
-margin_bottom = 18.3333
-theme_type_variation = "LabelSmall"
+margin_bottom = 26.0
 text = "100%"
 
 [node name="ButtonUIScalePlus" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
 margin_left = 286.0
 margin_right = 310.0
-margin_bottom = 22.0
 rect_min_size = Vector2( 24, 20 )
 hint_tooltip = "Change UI Scale"
 icon_tex = ExtResource( 20 )
@@ -642,10 +655,10 @@ script = ExtResource( 22 )
 [connection signal="unread_logs_changed" from="Content/Content/LogComponent/MessageLog" to="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog/NotificationAnchor/NotificationLabel" method="set_notification_count"]
 [connection signal="dashboard_opened" from="Content/Content/DashBoardComponent/DashBoardManager" to="Content/Content/DashBoardComponent" method="_on_DashBoardManager_dashboard_opened"]
 [connection signal="setup_wizard_finished" from="Content/Content/SetupWizardComponent/WizardControl" to="Content/Content/SetupWizardComponent" method="_on_WizardControl_setup_wizard_finished"]
-[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonDashboards" to="MenuBar" method="_on_ButtonDashboards_pressed"]
-[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonExplore" to="MenuBar" method="_on_ButtonExplore_pressed"]
-[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonConfig" to="MenuBar" method="_on_ButtonConfig_pressed"]
-[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/ButtonTerminals" to="MenuBar" method="_on_ButtonTerminals_pressed"]
+[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonDashboards" to="MenuBar" method="_on_ButtonDashboards_pressed"]
+[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonExplore" to="MenuBar" method="_on_ButtonExplore_pressed"]
+[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonTerminals" to="MenuBar" method="_on_ButtonTerminals_pressed"]
+[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonConfig" to="MenuBar" method="_on_ButtonConfig_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonUISettings" to="MenuBar" method="_on_ButtonUISettings_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonDocs" to="MenuBar" method="_on_ButtonDocs_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog" to="MenuBar" method="_on_ButtonMessageLog_pressed"]

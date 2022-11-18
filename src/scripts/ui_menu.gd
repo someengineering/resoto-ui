@@ -54,18 +54,23 @@ func _on_ButtonDocs_pressed() -> void:
 	OS.shell_open("https://resoto.com/docs")
 
 
-func _on_ButtonConfig_pressed():
-	_g.emit_signal("nav_change_section", "config")
-	close_menu()
-
-
 func _on_ButtonDashboards_pressed():
 	_g.emit_signal("nav_change_section", "dashboards")
 	close_menu()
 
 
+func _on_ButtonExplore_pressed():
+	_g.emit_signal("nav_change_section_explore", "last")
+	close_menu()
+
+
 func _on_ButtonTerminals_pressed():
 	_g.emit_signal("nav_change_section", "terminals")
+	close_menu()
+
+
+func _on_ButtonConfig_pressed():
+	_g.emit_signal("nav_change_section", "config")
 	close_menu()
 
 
@@ -117,11 +122,6 @@ func _on_resoto_home_visible(_visibility:bool) -> void:
 	search_box.mouse_filter = Control.MOUSE_FILTER_IGNORE if _visibility else Control.MOUSE_FILTER_PASS
 	main_logo.modulate.a = 0 if _visibility else 1
 	main_logo.mouse_filter = Control.MOUSE_FILTER_IGNORE if _visibility else Control.MOUSE_FILTER_PASS
-
-
-func _on_ButtonExplore_pressed():
-	_g.emit_signal("nav_change_section_explore", "last")
-	close_menu()
 
 
 func _on_HistoryBackButton_pressed():

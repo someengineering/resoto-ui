@@ -52,8 +52,8 @@ func _ready() -> void:
 	console.push_align(RichTextLabel.ALIGN_CENTER)
 	console.add_image(image, 200, 200)
 	console.newline()
-	console.append_bbcode("[b]Resoto[/b]\nVersion: " + _g.resotocore_version)
-	console.append_bbcode("\n[i]We recommend using the Resoto Shell for a much better CLI experience.[/i]")
+	console.append_bbcode("[b]Resoto Shell Lite[/b]\nResoto Core Version: " + _g.resotocore_version)
+	console.append_bbcode("\n[i]We recommend using the full Resoto Shell for a better CLI experience.[/i]")
 	console.append_bbcode("\n[url=url::https://resoto.com/docs/concepts/components/shell]Learn more about the Resoto Shell[img=8x8]res://assets/icons/icon_128_external_link_colored.svg[/img][/url]")
 	for i in 5:
 		console.newline()
