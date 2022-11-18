@@ -27,5 +27,5 @@ func _on_ButtonConfig_pressed():
 	_g.emit_signal("nav_change_section", "config")
 
 
-func _on_ButtonTerminals_pressed():
+func _on_ButtonResotoShellLite_pressed():
 	_g.emit_signal("nav_change_section", "terminals")
