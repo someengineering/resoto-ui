@@ -36,6 +36,7 @@ icon_tex = null
 [node name="ChangeTimer" type="Timer" parent="."]
 wait_time = 0.3
 
+[connection signal="text_entered" from="IntEdit" to="IntEdit" method="_on_IntEdit_text_entered"]
 [connection signal="button_down" from="MinusButton" to="." method="_on_MinusButton_button_down"]
 [connection signal="button_up" from="MinusButton" to="." method="_on_MinusButton_button_up"]
 [connection signal="mouse_exited" from="MinusButton" to="." method="_on_MinusButton_mouse_exited"]

@@ -406,6 +406,7 @@ text = "       Delete"
 align = 0
 icon_tex = ExtResource( 5 )
 
+[connection signal="visibility_changed" from="." to="." method="_on_DashboardContainer_visibility_changed"]
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer/CloudsCombo" to="." method="_on_CloudsCombo_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer/AccountsCombo" to="." method="_on_AccountsCombo_option_changed"]
 [connection signal="option_changed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/FiltersContainer/RegionsCombo" to="." method="_on_RegionsCombo_option_changed"]

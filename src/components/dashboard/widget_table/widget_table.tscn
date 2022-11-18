@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://components/dashboard/widget_table/widget_table.gd" type="Script" id=1]
+[ext_resource path="res://components/shared/int_spinbox_big.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/icons/icon_128_back_thin.svg" type="Texture" id=3]
 
 [node name="TableWidget" type="Control"]
 anchor_right = 1.0
@@ -22,7 +24,6 @@ theme_type_variation = "PanelWidgetBackground"
 [node name="Table" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_bottom = -38.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 4
@@ -33,14 +34,14 @@ custom_constants/margin_bottom = 4
 [node name="ScrollContainer" type="ScrollContainer" parent="Table"]
 margin_left = 4.0
 margin_right = 1916.0
-margin_bottom = 1038.0
+margin_bottom = 1076.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
 [node name="TableVBox" type="VBoxContainer" parent="Table/ScrollContainer"]
 margin_right = 1912.0
-margin_bottom = 1038.0
+margin_bottom = 1076.0
 mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -56,14 +57,14 @@ custom_constants/separation = 0
 [node name="ScrollContainer" type="ScrollContainer" parent="Table/ScrollContainer/TableVBox"]
 margin_top = 24.0
 margin_right = 1912.0
-margin_bottom = 1038.0
+margin_bottom = 1076.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Rows" type="VBoxContainer" parent="Table/ScrollContainer/TableVBox/ScrollContainer"]
 margin_right = 1912.0
-margin_bottom = 1014.0
+margin_bottom = 1052.0
 mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -73,17 +74,37 @@ custom_constants/separation = 0
 wait_time = 0.2
 one_shot = true
 
-[node name="SpinBox" type="SpinBox" parent="."]
+[node name="Pagination" parent="." instance=ExtResource( 2 )]
+visible = false
 anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 3.0
-margin_top = -35.0
-margin_right = 243.0
-margin_bottom = -3.0
+anchor_right = 0.0
+margin_top = -33.0
+margin_right = 250.0
+margin_bottom = 0.0
 prefix = "Page"
 suffix = "of 0"
+use_max_value = true
+
+[node name="IntEdit" parent="Pagination" index="0"]
+margin_right = 176.0
+update_on_writing = false
+
+[node name="MinusButton" parent="Pagination" index="1"]
+margin_left = 180.0
+margin_right = 213.0
+text = ""
+icon_tex = ExtResource( 3 )
+
+[node name="PlusButton" parent="Pagination" index="2"]
+margin_left = 217.0
+margin_right = 250.0
+text = ""
+icon_tex = ExtResource( 3 )
+flip_h = true
 
 [connection signal="resized" from="." to="." method="_on_TableWidget_resized"]
 [connection signal="resized" from="Table/ScrollContainer/TableVBox/ScrollContainer/Rows" to="." method="_on_Rows_resized"]
 [connection signal="timeout" from="UpdateDelayTimer" to="." method="_on_UpdateDelayTimer_timeout"]
-[connection signal="value_changed" from="SpinBox" to="." method="_on_SpinBox_value_changed"]
+[connection signal="value_changed" from="Pagination" to="." method="_on_Pagination_value_changed"]
+
+[editable path="Pagination"]
