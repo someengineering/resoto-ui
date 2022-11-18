@@ -39,7 +39,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 		making_query = true
 		q += "&time=%d" % attr["to"]
-		API.query_tsdb(q, self)
+		set_request(API.query_tsdb(q, self))
 	else:
 		var from = attr["from"]
 		var to = attr["to"]
@@ -47,7 +47,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 		widget.x_origin = from
 		widget.x_range = to - from
 		making_query = true
-		API.query_range_tsdb(q, self, from, to, interval)
+		set_request(API.query_range_tsdb(q, self, from, to, interval))
 
 
 func _on_query_tsdb_done(_error: int, response:ResotoAPI.Response) -> void:

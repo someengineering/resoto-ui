@@ -47,23 +47,18 @@ func refresh_jwt_header(header:Headers) -> void:
 
 
 func _transform_json(error:int, response:ResotoAPI.Response) -> void:
-	if error == OK:
-		var string_to_parse:String = response.body.get_string_from_utf8()
-		if (string_to_parse.begins_with("Error")
-		or string_to_parse.begins_with("Invalid")
-		or string_to_parse.empty()):
-			# Handle error gracefully... 
-			response.transformed["result"] = string_to_parse
-			return
-		else:
-			var json_result:JSONParseResult = JSON.parse(string_to_parse)
-			if json_result.error == OK:
-				response.transformed["result"] = json_result.result
-				return
-		
-		response.transformed["result"] = string_to_parse
-	else:
+	if error != OK:
 		handle_bad_response_codes(response.response_code)
+		return
+	
+	var string_to_parse:String = response.body.get_string_from_utf8()
+	var json_result:JSONParseResult = JSON.parse(string_to_parse)
+	if json_result.error == OK:
+		response.transformed["result"] = json_result.result
+		return
+	
+	response.transformed["result"] = string_to_parse
+
 
 func handle_bad_response_codes(_response_code:int):
 	match _response_code:
@@ -209,9 +204,10 @@ func get_config_id(_config_id:String="resoto.core") -> ResotoAPI.Request:
 	return request
 
 
-func put_config_id(_config_id:String="resoto.core", _config_body:String="") -> ResotoAPI.Request:
+func put_config_id(_config_id:String="resoto.core", _config_body:String="", _dry_run:bool=false) -> ResotoAPI.Request:
 	refresh_jwt_header(config_put_headers)
-	var config_id = "/config/" + _config_id
+	var dry_run_mode = "" if not _dry_run else "?dry_run=true"
+	var config_id = "/config/" + _config_id + dry_run_mode
 	var request = req_put(config_id, _config_body, config_put_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request

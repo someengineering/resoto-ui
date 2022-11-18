@@ -1,0 +1,255 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://components/collect_run_display/collect_run_display.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=3]
+[ext_resource path="res://components/elements/styled/styled_icon_button_hover.gd" type="Script" id=4]
+[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=6]
+[ext_resource path="res://assets/icons/icon_128_close_thin.svg" type="Texture" id=7]
+[ext_resource path="res://assets/theme/dynamic_font_one_px.tres" type="DynamicFont" id=8]
+[ext_resource path="res://components/elements/styled/flat_copy_button.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/icons/icon_128_search.svg" type="Texture" id=10]
+[ext_resource path="res://components/collect_run_display/collect_run_display_error_view.gd" type="Script" id=11]
+[ext_resource path="res://components/collect_run_display/collect_run_display_error_button.gd" type="Script" id=12]
+[ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=13]
+
+[sub_resource type="DynamicFont" id=1]
+size = 15
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = -3
+extra_spacing_bottom = -3
+extra_spacing_char = 1
+font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color( 0.79, 0.26, 0.14, 0.8 )
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 3.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[node name="CollectRunDisplay" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Flip" type="Timer" parent="."]
+wait_time = 0.01
+one_shot = true
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_type_variation = "PanelContainerDark"
+
+[node name="Content" type="VBoxContainer" parent="PanelContainer"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1908.0
+margin_bottom = 1072.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content"]
+margin_right = 1896.0
+margin_bottom = 34.0
+
+[node name="Label" type="Label" parent="PanelContainer/Content/HBoxContainer"]
+margin_right = 120.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 120, 34 )
+theme_type_variation = "Label_24"
+text = "Current Task"
+
+[node name="Button" type="Button" parent="PanelContainer/Content/HBoxContainer/Label"]
+visible = false
+modulate = Color( 1, 1, 1, 0.0862745 )
+margin_left = -195.0
+margin_top = -1.0
+margin_right = -71.6667
+margin_bottom = 31.0
+text = "start example"
+
+[node name="Done" type="TextureRect" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
+modulate = Color( 0.265427, 0.957031, 0.438328, 1 )
+margin_left = 155.0
+margin_right = 185.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 30, 24 )
+size_flags_horizontal = 0
+size_flags_vertical = 3
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Control" type="Control" parent="PanelContainer/Content/HBoxContainer"]
+margin_left = 124.0
+margin_right = 1896.0
+margin_bottom = 34.0
+size_flags_horizontal = 3
+
+[node name="ErrorNumber" type="Label" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
+margin_left = 789.0
+margin_top = 11.0
+margin_right = 800.0
+margin_bottom = 23.0
+custom_colors/font_color = Color( 1, 0.803436, 0.777344, 1 )
+custom_fonts/font = SubResource( 1 )
+custom_styles/normal = SubResource( 2 )
+text = "1"
+
+[node name="ErrorBtn" type="Button" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
+self_modulate = Color( 0.788235, 0.258824, 0.141176, 1 )
+margin_left = 767.0
+margin_right = 800.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 33, 33 )
+hint_tooltip = "Show Errors"
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_type_variation = "ButtonBigText"
+icon = ExtResource( 3 )
+flat = true
+expand_icon = true
+script = ExtResource( 12 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Content"]
+margin_top = 38.0
+margin_right = 1896.0
+margin_bottom = 1064.0
+rect_min_size = Vector2( 800, 0 )
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+script = ExtResource( 13 )
+extra_space = 0
+
+[node name="Content" type="MarginContainer" parent="PanelContainer/Content/ScrollContainer"]
+margin_right = 1896.0
+margin_bottom = 1026.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Elements" type="VBoxContainer" parent="PanelContainer/Content/ScrollContainer/Content"]
+margin_right = 1896.0
+margin_bottom = 1026.0
+rect_min_size = Vector2( 800, 0 )
+size_flags_vertical = 3
+
+[node name="ErrorPopup" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="ErrorPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+custom_constants/margin_right = 100
+custom_constants/margin_top = 100
+custom_constants/margin_left = 100
+custom_constants/margin_bottom = 100
+
+[node name="AllErrorsGroup" type="PanelContainer" parent="ErrorPopup/MarginContainer"]
+unique_name_in_owner = true
+visible = false
+margin_left = 100.0
+margin_top = 100.0
+margin_right = 1820.0
+margin_bottom = 980.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = "PanelContainerDark"
+script = ExtResource( 11 )
+
+[node name="VBox" type="VBoxContainer" parent="ErrorPopup/MarginContainer/AllErrorsGroup"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1708.0
+margin_bottom = 872.0
+
+[node name="Title" type="HBoxContainer" parent="ErrorPopup/MarginContainer/AllErrorsGroup/VBox"]
+margin_right = 1696.0
+margin_bottom = 32.0
+custom_constants/separation = 5
+
+[node name="AllDataLabel" type="Label" parent="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title"]
+margin_right = 1356.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = "LabelBold"
+text = "Error Log"
+
+[node name="AllDataSearchIcon" type="TextureRect" parent="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 1361.0
+margin_top = 6.0
+margin_right = 1381.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 20, 20 )
+size_flags_vertical = 6
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 6 )
+
+[node name="AllDataFilter" type="LineEdit" parent="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title"]
+margin_left = 1386.0
+margin_right = 1636.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 250, 0 )
+clear_button_enabled = true
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="AllDataCopyButton" parent="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title" instance=ExtResource( 9 )]
+modulate = Color( 0.537255, 0.819608, 0.945098, 0.768627 )
+margin_left = 1641.0
+margin_top = 0.0
+margin_right = 1666.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 25, 25 )
+size_flags_vertical = 5
+
+[node name="AllDataMaximizeButton" type="Button" parent="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 0.768627 )
+margin_left = 1671.0
+margin_right = 1696.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Close Error Log"
+mouse_filter = 1
+size_flags_vertical = 5
+theme_type_variation = "ButtonBorderless"
+custom_fonts/font = ExtResource( 8 )
+toggle_mode = true
+icon = ExtResource( 7 )
+flat = true
+expand_icon = true
+script = ExtResource( 4 )
+
+[node name="AllDataTextEdit" type="TextEdit" parent="ErrorPopup/MarginContainer/AllErrorsGroup/VBox"]
+margin_top = 36.0
+margin_right = 1696.0
+margin_bottom = 864.0
+rect_min_size = Vector2( 0, 160 )
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 3 )
+text = "..."
+readonly = true
+highlight_all_occurrences = true
+wrap_enabled = true
+
+[connection signal="timeout" from="Flip" to="." method="_on_Flip_timeout"]
+[connection signal="pressed" from="PanelContainer/Content/HBoxContainer/Label/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/HBoxContainer/ErrorBtn" to="." method="_on_ErrorBtn_pressed"]
+[connection signal="text_changed" from="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title/AllDataFilter" to="ErrorPopup/MarginContainer/AllErrorsGroup" method="_on_AllDataFilter_text_changed"]
+[connection signal="pressed" from="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title/AllDataMaximizeButton" to="ErrorPopup/MarginContainer/AllErrorsGroup" method="_on_AllDataMaximizeButton_pressed"]

@@ -1,0 +1,139 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/icons/icon_128_refresh_thick.svg" type="Texture" id=1]
+[ext_resource path="res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_change_value.gd" type="Script" id=2]
+
+[node name="StepUpdateConfig" type="GraphNode"]
+margin_top = 44.0
+margin_right = 180.0
+margin_bottom = 278.0
+mouse_filter = 1
+title = "Change Value"
+show_close = true
+resizable = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color( 1, 1, 1, 1 )
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color( 1, 1, 1, 1 )
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color( 1, 1, 1, 1 )
+slot/4/right_enabled = false
+slot/4/right_type = 0
+slot/4/right_color = Color( 1, 1, 1, 1 )
+slot/5/left_enabled = false
+slot/5/left_type = 0
+slot/5/left_color = Color( 1, 1, 1, 1 )
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color( 1, 1, 1, 1 )
+slot/6/left_enabled = false
+slot/6/left_type = 0
+slot/6/left_color = Color( 1, 1, 1, 1 )
+slot/6/right_enabled = false
+slot/6/right_type = 0
+slot/6/right_color = Color( 1, 1, 1, 1 )
+slot/7/left_enabled = false
+slot/7/left_type = 0
+slot/7/left_color = Color( 1, 1, 1, 1 )
+slot/7/right_enabled = false
+slot/7/right_type = 0
+slot/7/right_color = Color( 1, 1, 1, 1 )
+slot/8/left_enabled = false
+slot/8/left_type = 0
+slot/8/left_color = Color( 1, 1, 1, 1 )
+slot/8/right_enabled = false
+slot/8/right_type = 0
+slot/8/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 2 )
+
+[node name="Icon" type="TextureRect" parent="."]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 107.0
+margin_top = 34.0
+margin_right = 128.0
+margin_bottom = 55.0
+rect_min_size = Vector2( 21, 21 )
+size_flags_horizontal = 4
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6
+
+[node name="ConfigLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 59.0
+margin_right = 228.0
+margin_bottom = 79.0
+text = "config key:"
+
+[node name="ConfigEdit" type="LineEdit" parent="."]
+margin_left = 8.0
+margin_top = 83.0
+margin_right = 228.0
+margin_bottom = 115.0
+placeholder_text = "e.g. resoto.core"
+
+[node name="PathLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 119.0
+margin_right = 228.0
+margin_bottom = 139.0
+text = "path in config:"
+
+[node name="PathEdit" type="LineEdit" parent="."]
+margin_left = 8.0
+margin_top = 143.0
+margin_right = 228.0
+margin_bottom = 175.0
+rect_min_size = Vector2( 220, 0 )
+placeholder_text = "e.g. resotocore.api.ui_path"
+
+[node name="ValueLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 179.0
+margin_right = 228.0
+margin_bottom = 199.0
+text = "value (json string):"
+
+[node name="ValueEdit" type="LineEdit" parent="."]
+margin_left = 8.0
+margin_top = 203.0
+margin_right = 228.0
+margin_bottom = 235.0
+placeholder_text = "e.g. [\"foo\", \"bar\"]"
+
+[node name="ActionLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 239.0
+margin_right = 228.0
+margin_bottom = 259.0
+text = "action:"
+
+[node name="ActionOption" type="OptionButton" parent="."]
+margin_left = 8.0
+margin_top = 263.0
+margin_right = 228.0
+margin_bottom = 295.0
+text = "merge"
+items = [ "merge", null, false, 0, null, "append", null, false, 1, null, "set", null, false, 2, null ]
+selected = 0

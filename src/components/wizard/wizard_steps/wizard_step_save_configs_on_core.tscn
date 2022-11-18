@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://components/wizard/wizard_steps/wizard_step_save_configs_on_core.gd" type="Script" id=1]
+
+[node name="WizardStep_SaveConfigsOnCore" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[connection signal="config_save_fail" from="." to="." method="_on_WizardStep_SaveConfigsOnCore_config_save_fail"]
+[connection signal="config_save_success" from="." to="." method="_on_WizardStep_SaveConfigsOnCore_config_save_success"]

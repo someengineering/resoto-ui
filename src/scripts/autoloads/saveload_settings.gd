@@ -31,6 +31,7 @@ func load_settings() -> void:
 	var settings : Array = load_settings_file()
 	API.psk = settings[0].psk
 	_g.ui_scale = settings[0].ui_scale
+	_g.ui_test_mode = settings[0].ui_test_mode
 	_g.terminal_scrollback = settings[0].terminal_scrollback
 	if settings[0].has("persistent_nodes"):
 		restore_node_data(settings[0].persistent_nodes)
@@ -73,6 +74,7 @@ func save_settings() -> void:
 	var settings_data : Dictionary = clear_settings()
 	
 	settings_data.psk = API.psk
+	settings_data.ui_test_mode = _g.ui_test_mode
 	settings_data.ui_scale = _g.ui_scale
 	settings_data.terminal_scrollback = _g.terminal_scrollback
 	
@@ -94,6 +96,7 @@ func clear_settings() -> Dictionary:
 	var game_save_struct:Dictionary = {
 		"psk" : "changeme",
 		"ui_scale" : 1.0,
+		"ui_test_mode" : false,
 		"terminal_scrollback" : [],
 		"persistent_nodes" : {}
 	}

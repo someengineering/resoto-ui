@@ -20,15 +20,15 @@ onready var footerbar := $Content/Footer/Footerbar
 
 func _on_CancelButton_pressed() -> void:
 	is_dirty = false
-	config_keys = []
-	config_dicts = {}
+	config_keys.clear()
+	config_dicts.clear()
 	_close_popup()
 
 
 func _close_popup() -> void:
 	is_dirty = false
-	config_keys = []
-	config_dicts = {}
+	config_keys.clear()
+	config_dicts.clear()
 	hide()
 
 
@@ -50,6 +50,7 @@ func _on_AddWidgetButton_pressed() -> void:
 		API.connection_config(adress[0], int(port), psk, use_ssl)
 		_g.popup_manager.open_popup("ConnectPopup")
 		_g.emit_signal("connect_to_core")
+	SaveLoadSettings.save_settings()
 	hide()
 
 
@@ -58,13 +59,13 @@ func _on_UISettings_about_to_show() -> void:
 		footerbar.move_child(accept_button, 1)
 	else:
 		footerbar.move_child(accept_button, 0)
-	
 	is_dirty = false
-	config_keys = []
-	config_dicts = {}
 	$Content/Content/SettingsTabs.current_tab = 0
 	$"%ScaleLevelLabel".text = str(_g.ui_scale*100) + " %"
+	config_keys.clear()
+	config_dicts.clear()
 	API.get_configs(self)
+	set_ui_test_mode(_g.ui_test_mode)
 	get_config_value("resoto.worker", ["resotoworker", "cleanup"], "set_cleanup")
 	get_config_value("resoto.worker", ["resotoworker", "cleanup_dry_run"], "set_cleanup_dry_run")
 	psk_line_edit.text = API.psk
@@ -88,6 +89,12 @@ func set_cleanup(_cleanup:bool) -> void:
 	rect_size.y = 1
 	$"%CleanupButton".pressed = cleanup
 	$"%CleanupButton"._on_toggle(cleanup)
+
+
+func set_ui_test_mode(_ui_test_mode:bool) -> void:
+	_g.ui_test_mode = _ui_test_mode
+	$"%UITestModeButton".pressed = _g.ui_test_mode
+	$"%UITestModeButton"._on_toggle(_g.ui_test_mode)
 
 
 func _on_get_configs_done(_error:int, _response:ResotoAPI.Response) -> void:
@@ -124,7 +131,7 @@ func set_config_value(_config_key:String, _config_path:Array, _new_value) -> voi
 		yield(self, "configs_received")
 	API.get_config_id(self, _config_key)
 	yield(self, "config_id_received")
-	var set_success : bool = _set_path(config_dicts[_config_key], _config_path, _new_value)
+	var set_success : bool = Utils.set_path(config_dicts[_config_key], _config_path, _new_value)
 	if set_success:
 		is_dirty = true
 
@@ -152,21 +159,6 @@ func _on_CleanupButton_pressed() -> void:
 	set_config_value("resoto.worker", ["resotoworker", "cleanup"], cleanup)
 
 
-func _set_path(dict, keypath, value):
-	var current = keypath[0]
-	if dict.has(current):
-		if typeof(dict[current]) == TYPE_DICTIONARY:
-			keypath.remove(0)
-			_set_path(dict[current],keypath, value)
-			return true
-		else:
-			dict[current] = value
-			return true
-	else:
-		print("Config variable not found")
-		return false
-
-
 const hide_tex = preload("res://assets/icons/icon_128_show.svg")
 const show_tex = preload("res://assets/icons/icon_128_hide.svg")
 func _on_ShowPSKIcon_toggled(button_pressed:bool) -> void:
@@ -186,3 +178,16 @@ func _on_ButtonUIScalePlus_pressed() -> void:
 
 func _on_SettingsTabs_tab_changed(_tab) -> void:
 	rect_size = Vector2.ONE
+
+
+func _on_SetupWizardStartButton_pressed():
+	_g.emit_signal("setup_wizard_start")
+	_close_popup()
+
+
+func _on_UITestModeButton_pressed():
+	_g.ui_test_mode = !_g.ui_test_mode
+
+
+func _on_WizardEditorStartButton_pressed():
+	get_tree().change_scene("res://components/wizard_editor/wizard_editor_component.tscn")

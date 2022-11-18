@@ -58,7 +58,7 @@ func add_tag(_variable:="purple", _value:="sheep"):
 		return
 	var add_tag_query : String = "search id(\"%s\") | tag update \"%s\" \"%s\"" % [node_id, _variable, _value]
 	
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(add_tag_query, self, "_on_add_tag_query_done")
 	else:
 		create_tag(_variable, _value)
@@ -78,7 +78,7 @@ func delete_tag(_tag_variable:String):
 		return
 	var delete_tag_query : String = "search id(\"%s\") | tag delete \"%s\"" % [node_id, _tag_variable]
 	
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(delete_tag_query, self, "_on_delete_tag_query_done")
 	else:
 		for c in tags_content.get_children():
@@ -100,7 +100,7 @@ func change_tag(_tag_variable:String, _tag_value:String):
 		return
 	var change_tag_query : String = "search id(\"%s\") | tag update \"%s\" \"%s\"" % [node_id, _tag_variable, _tag_value]
 	
-	if not _g.demo_mode:
+	if not _g.ui_test_mode:
 		API.cli_execute(change_tag_query, self, "_on_change_tag_query_done")
 	else:
 		for c in tags_content.get_children():

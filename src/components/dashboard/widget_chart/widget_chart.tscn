@@ -15,7 +15,8 @@ void fragment(){
 	vec2 px_size = 1.0/size;
 	vec2 coord = fract((UV - vec2(0.0, zero_position)) * grid_divisions);
 	vec2 step_width = 1.0 - (px_size * line_width * grid_divisions);
-	COLOR = grid_color * clamp(step(step_width.y, coord.y) + step(step_width.x, coord.x) + step(step_width.y, abs(1.0-coord.y)) + step(step_width.x, abs(1.0-coord.x)), 0.0, 1.0);
+	COLOR = grid_color;
+	COLOR.a *= clamp(step(step_width.y, coord.y) + step(step_width.x, coord.x) + step(step_width.y, abs(1.0-coord.y)) + step(step_width.x, abs(1.0-coord.x)), 0.0, 1.0);
 }"
 
 [sub_resource type="ShaderMaterial" id=6]
@@ -114,6 +115,7 @@ default_color = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
 texture_mode = 2
 
 [node name="GraphArea" type="Control" parent="Viewport/GridContainer/Grid"]
+show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_clip_content = true

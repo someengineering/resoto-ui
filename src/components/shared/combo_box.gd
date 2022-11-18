@@ -99,6 +99,7 @@ func populate_options(filter : String = "") -> void:
 	if filter.strip_edges() == "":
 		for item in items:
 			add_option(item)
+		matching_items = items.duplicate()
 	else:
 		matching_items.clear()
 		for item in items:
@@ -149,14 +150,15 @@ func _on_option_pressed(option_name : String) -> void:
 
 
 func show_options() -> void:
-	if items.size() == 0:
+	if items.empty() or matching_items.empty():
+		button.flip_v = false
+		options_popup.hide()
 		return
 	button.flip_v = true
 	options_popup.popup()
 	options_popup.rect_global_position = rect_global_position + Vector2(0, rect_size.y + 2)
 	options_popup.rect_size.x = rect_size.x
-	options_popup.rect_size.y = min(410, items.size()*(40) + 15)
-
+	options_popup.rect_size.y = min(415, matching_items.size() * 37 + 15)
 
 func set_items(new_items : Array) -> void:
 	items.clear()

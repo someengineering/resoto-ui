@@ -1,0 +1,213 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://components/wizard/wizard_component.gd" type="Script" id=1]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://components/shared/icon_button_url_tooltip.gd" type="Script" id=3]
+[ext_resource path="res://assets/icons/icon_128_home.svg" type="Texture" id=4]
+[ext_resource path="res://assets/icons/icon_128_help_external_link.svg" type="Texture" id=5]
+[ext_resource path="res://assets/icons/icon_128_questionmark.svg" type="Texture" id=6]
+[ext_resource path="res://components/shared/icon_button_bb_tooltip.gd" type="Script" id=7]
+[ext_resource path="res://assets/icons/icon_128_discord.svg" type="Texture" id=8]
+[ext_resource path="res://components/wizard/wizard_character.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/icons/icon_128_sound_on.svg" type="Texture" id=10]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.137255 )
+shadow_size = 15
+shadow_offset = Vector2( 0, 6 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=92]
+bg_color = Color( 0, 0.329412, 0.639216, 0.0784314 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0, 0.329412, 0.639216, 0.470588 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="WizardControl" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 100
+custom_constants/margin_top = 250
+custom_constants/margin_left = 100
+custom_constants/margin_bottom = 40
+script = ExtResource( 1 )
+text_scroll_speed = 200.0
+
+[node name="BG" type="PanelContainer" parent="."]
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
+margin_left = 100.0
+margin_top = 250.0
+margin_right = 1820.0
+margin_bottom = 1040.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="Character" type="Control" parent="BG"]
+show_behind_parent = true
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 20.0
+margin_bottom = 20.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="WizardCharacter" parent="BG/Character" instance=ExtResource( 9 )]
+position = Vector2( 92, -111 )
+scale = Vector2( 0.2, 0.2 )
+
+[node name="StepDisplay" type="VBoxContainer" parent="BG"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1700.0
+margin_bottom = 770.0
+custom_constants/separation = 20
+
+[node name="Titlebar" type="HBoxContainer" parent="BG/StepDisplay"]
+margin_right = 1680.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+custom_constants/separation = 10
+
+[node name="SectionTitleLabel" type="Label" parent="BG/StepDisplay/Titlebar"]
+margin_right = 1630.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_type_variation = "FontBig"
+
+[node name="HelpHintButton" parent="BG/StepDisplay/Titlebar" instance=ExtResource( 2 )]
+visible = false
+margin_left = 1440.0
+margin_right = 1480.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+size_flags_vertical = 0
+theme_type_variation = "ButtonFlatDefault"
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 5 )
+custom_styles/focus = SubResource( 5 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 5 )
+disabled = true
+icon_tex = ExtResource( 6 )
+icon_margin = 6
+
+[node name="HelpURLButton" parent="BG/StepDisplay/Titlebar" instance=ExtResource( 2 )]
+visible = false
+margin_left = 1490.0
+margin_right = 1530.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+size_flags_vertical = 0
+theme_type_variation = "ButtonFlatDefault"
+script = ExtResource( 3 )
+icon_tex = ExtResource( 5 )
+icon_margin = 6
+
+[node name="HomeButton" parent="BG/StepDisplay/Titlebar" instance=ExtResource( 2 )]
+visible = false
+margin_left = 1540.0
+margin_right = 1580.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "Back to Section Start"
+size_flags_vertical = 0
+theme_type_variation = "ButtonFlatDefault"
+icon_tex = ExtResource( 4 )
+icon_margin = 2
+
+[node name="MuteButton" parent="BG/StepDisplay/Titlebar" instance=ExtResource( 2 )]
+visible = false
+margin_left = 1590.0
+margin_right = 1630.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "Mute Wizard Sound"
+size_flags_vertical = 0
+theme_type_variation = "ButtonFlatDefault"
+icon_tex = ExtResource( 10 )
+icon_margin = 3
+
+[node name="HelpDiscordButton" parent="BG/StepDisplay/Titlebar" instance=ExtResource( 2 )]
+margin_left = 1640.0
+margin_right = 1680.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "[center][img=200x60]res://assets/resoto/Resoto_logo_and_text.svg[/img]
+[b]Join our Discord community![/b] [img=8x8]res://assets/icons/icon_128_external_link_colored.svg[/img]
+
+Get help with Resoto and connect with a growing community of cloud engineers in the Some Engineering Discord server.
+
+We are looking forward to meeting you!
+[center]"
+size_flags_vertical = 0
+theme_type_variation = "ButtonFlatDefault"
+script = ExtResource( 7 )
+icon_tex = ExtResource( 8 )
+icon_margin = 3
+
+[node name="StepContent" type="Control" parent="BG/StepDisplay"]
+margin_top = 70.0
+margin_right = 1680.0
+margin_bottom = 694.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="StepButtons" type="HBoxContainer" parent="BG/StepDisplay"]
+margin_top = 714.0
+margin_right = 1680.0
+margin_bottom = 750.0
+custom_constants/separation = 20
+alignment = 2
+
+[node name="PrevBtn" type="Button" parent="BG/StepDisplay/StepButtons"]
+visible = false
+margin_left = 1380.0
+margin_right = 1520.0
+margin_bottom = 34.6667
+rect_min_size = Vector2( 140, 0 )
+theme_type_variation = "ButtonFlatDefault"
+custom_styles/focus = SubResource( 92 )
+disabled = true
+text = "Previous"
+
+[node name="NextBtn" type="Button" parent="BG/StepDisplay/StepButtons"]
+margin_left = 1540.0
+margin_right = 1680.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 140, 0 )
+theme_type_variation = "ButtonFlatDefault"
+custom_styles/focus = SubResource( 92 )
+disabled = true
+text = "Next"
+
+[connection signal="pressed" from="BG/StepDisplay/Titlebar/HelpURLButton" to="." method="_on_HelpButton_pressed"]
+[connection signal="pressed" from="BG/StepDisplay/Titlebar/HomeButton" to="." method="_on_HomeButton_pressed"]
+[connection signal="pressed" from="BG/StepDisplay/Titlebar/MuteButton" to="." method="_on_MuteButton_pressed"]
+[connection signal="pressed" from="BG/StepDisplay/Titlebar/HelpDiscordButton" to="." method="_on_HelpDiscordButton_pressed"]
+[connection signal="pressed" from="BG/StepDisplay/StepButtons/PrevBtn" to="." method="_on_PrevBtn_pressed"]
+[connection signal="pressed" from="BG/StepDisplay/StepButtons/NextBtn" to="." method="_on_NextBtn_pressed"]

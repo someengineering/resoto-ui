@@ -19,7 +19,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/shared/base_widget.gd"
 }, {
-"base": "Label",
+"base": "Reference",
 "class": "ClippedLabel",
 "language": "GDScript",
 "path": "res://components/elements/utility/clipped_label.gd"
@@ -99,7 +99,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/data_sources/data_source.gd"
 }, {
-"base": "Label",
+"base": "Reference",
 "class": "DynamicLabel",
 "language": "GDScript",
 "path": "res://components/elements/utility/dynamic_label.gd"
@@ -183,6 +183,16 @@ _global_script_classes=[ {
 "class": "WidgetContainer",
 "language": "GDScript",
 "path": "res://components/dashboard/container/widget_container.gd"
+}, {
+"base": "GraphNode",
+"class": "WizardEditorNode",
+"language": "GDScript",
+"path": "res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node.gd"
+}, {
+"base": "Control",
+"class": "WizardStep",
+"language": "GDScript",
+"path": "res://components/wizard/wizard_steps/wizard_step.gd"
 } ]
 _global_script_class_icons={
 "AggregateSearchDataSource": "",
@@ -219,7 +229,9 @@ _global_script_class_icons={
 "TwoEntryAggregateDataSource": "",
 "UserAgent": "",
 "Utils": "",
-"WidgetContainer": ""
+"WidgetContainer": "",
+"WizardEditorNode": "",
+"WizardStep": ""
 }
 
 [application]
@@ -239,6 +251,7 @@ HtmlFiles="*res://scripts/autoloads/html_files.gd"
 InfrastructureInformation="*res://scripts/autoloads/infrastructure_information.gd"
 Analytics="*res://scripts/autoloads/analytics.gd"
 UINavigation="*res://scripts/autoloads/navigation_controller.gd"
+Websockets="*res://scripts/autoloads/websockets.gd"
 
 [debug]
 

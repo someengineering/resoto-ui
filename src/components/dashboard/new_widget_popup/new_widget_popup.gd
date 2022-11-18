@@ -268,7 +268,6 @@ func clear_data_sources():
 func _on_NewWidgetPopup_about_to_show() -> void:
 	widget_name_label.text = ""
 	clear_data_sources()
-	
 	if widget_to_edit != null:
 		current_widget_preview_name = widget_to_edit.widget.widget_type_id
 		widget_name_label.text = widget_to_edit.title
@@ -403,6 +402,7 @@ func _on_NewWidgetPopup_popup_hide():
 	widget_to_edit = null
 	hide()
 	preview_widget.queue_free()
+	clear_data_sources()
 
 
 func _on_DataSourceTypeOptionButton_item_selected(_index):

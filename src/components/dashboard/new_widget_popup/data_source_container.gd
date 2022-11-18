@@ -65,6 +65,8 @@ func _ready() -> void:
 	data_source.widget = widget
 	data_source.connect("query_status", self, "_on_data_source_query_status")
 	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
+	
+	add_child(data_source)
 
 
 func _on_cli_execute_done(_error : int, response):
@@ -216,12 +218,17 @@ func _on_data_source_query_status(_status:int, _title:String, _message:=""):
 
 func _make_custom_tooltip(for_text):
 	var tooltip = preload("res://components/shared/custom_bb_hint_tooltip_error.tscn").instance()
-	tooltip.get_node("Text").bbcode_text = for_text
+	tooltip.get_node("Text").set_bbcode(for_text)
 	return tooltip
 
 
 func set_data_source(new_data_source : DataSource) -> void:
+	if is_instance_valid(data_source) and data_source.is_inside_tree():
+		remove_child(data_source)
+		data_source.queue_free()
+	
 	data_source.copy_data_source(new_data_source)
+	add_child(data_source)
 	match new_data_source.type:
 		DataSource.TYPES.TIME_SERIES:
 			metrics_options.text = new_data_source.metric
@@ -318,6 +325,3 @@ func _on_FunctionAlias_text_entered(new_text):
 	data_source.function_alias = new_text
 	update_query()
 
-
-func _on_DatasourceContainer_tree_exiting():
-	data_source.queue_free()

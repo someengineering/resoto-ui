@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=91 format=2]
+[gd_resource type="Theme" load_steps=114 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -15,6 +15,11 @@
 [ext_resource path="res://assets/icons/icon_special_option_icon.svg" type="Texture" id=13]
 [ext_resource path="res://assets/theme/Barlow-Bold.ttf" type="DynamicFontData" id=14]
 [ext_resource path="res://assets/theme/SourceCodePro-Medium.ttf" type="DynamicFontData" id=15]
+[ext_resource path="res://assets/theme/icon_collapsed.png" type="Texture" id=16]
+[ext_resource path="res://assets/theme/icon_expanded.png" type="Texture" id=17]
+[ext_resource path="res://assets/icons/icon_128_circle.svg" type="Texture" id=18]
+[ext_resource path="res://assets/icons/icon_128_corner_grab_rounded_small.svg" type="Texture" id=19]
+[ext_resource path="res://assets/icons/icon_128_close_thick_small.svg" type="Texture" id=20]
 
 [sub_resource type="StyleBoxFlat" id=3]
 content_margin_left = 12.0
@@ -180,6 +185,35 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxEmpty" id=56]
 
+[sub_resource type="DynamicFontData" id=1]
+override_oversampling = 1.5
+font_path = "res://assets/theme/Barlow-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=107]
+size = 20
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=108]
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id=109]
+
+[sub_resource type="DynamicFont" id=110]
+size = 19
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
+
 [sub_resource type="StyleBoxFlat" id=92]
 content_margin_left = 12.0
 content_margin_right = 12.0
@@ -239,15 +273,121 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="DynamicFontData" id=1]
-override_oversampling = 1.5
-font_path = "res://assets/theme/Barlow-Medium.ttf"
-
 [sub_resource type="DynamicFont" id=71]
 size = 30
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=66]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=97]
+size = 19
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=98]
+size = 19
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=99]
+size = 19
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=100]
+bg_color = Color( 0.0901961, 0.113725, 0.129412, 1 )
+
+[sub_resource type="DynamicFont" id=101]
+size = 20
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 14 )
+
+[sub_resource type="StyleBoxFlat" id=102]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 34.0
+content_margin_bottom = 10.0
+bg_color = Color( 1, 0.584314, 0, 0.164706 )
+border_width_top = 28
+border_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=103]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 34.0
+content_margin_bottom = 10.0
+bg_color = Color( 1, 0.654902, 0, 0.372549 )
+border_width_top = 28
+border_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=104]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 34.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+border_width_top = 28
+border_color = Color( 0, 0.329412, 0.639216, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 6 )
+
+[sub_resource type="StyleBoxFlat" id=105]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 34.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+border_width_top = 28
+border_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 6 )
+
+[sub_resource type="StyleBoxFlat" id=106]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 34.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+border_width_left = 1
+border_width_top = 28
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0.329412, 0.639216, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 6 )
 
 [sub_resource type="StyleBoxFlat" id=14]
 content_margin_left = 5.0
@@ -348,6 +488,7 @@ font_data = ExtResource( 15 )
 size = 13
 use_mipmaps = true
 use_filter = true
+font_data = ExtResource( 12 )
 
 [sub_resource type="DynamicFontData" id=90]
 override_oversampling = 1.5
@@ -489,6 +630,20 @@ shadow_color = Color( 0, 0, 0, 0.117647 )
 shadow_size = 10
 shadow_offset = Vector2( 0, 5 )
 
+[sub_resource type="StyleBoxFlat" id=111]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 5 )
+
 [sub_resource type="StyleBoxFlat" id=93]
 content_margin_left = 0.0
 content_margin_right = 0.0
@@ -579,12 +734,6 @@ corner_radius_top_right = 6
 expand_margin_top = 3.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="DynamicFont" id=66]
-size = 17
-use_mipmaps = true
-use_filter = true
-font_data = SubResource( 1 )
-
 [sub_resource type="StyleBoxFlat" id=27]
 draw_center = false
 
@@ -651,6 +800,25 @@ shadow_color = Color( 0, 0, 0, 0.117647 )
 shadow_size = 3
 shadow_offset = Vector2( 0, 5 )
 
+[sub_resource type="DynamicFont" id=94]
+size = 18
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
+
+[sub_resource type="StyleBoxEmpty" id=95]
+
+[sub_resource type="StyleBoxFlat" id=96]
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [sub_resource type="StyleBoxFlat" id=10]
 content_margin_top = 5.0
 content_margin_bottom = 5.0
@@ -705,12 +873,14 @@ Button/styles/focus = SubResource( 43 )
 Button/styles/hover = SubResource( 4 )
 Button/styles/normal = SubResource( 5 )
 Button/styles/pressed = SubResource( 4 )
+ButtonBigText/base_type = "Button"
 ButtonBigText/fonts/font = SubResource( 46 )
 ButtonBigText/styles/disabled = SubResource( 47 )
 ButtonBigText/styles/focus = SubResource( 43 )
 ButtonBigText/styles/hover = SubResource( 48 )
 ButtonBigText/styles/normal = SubResource( 49 )
 ButtonBigText/styles/pressed = SubResource( 50 )
+ButtonBorderless/base_type = "Button"
 ButtonBorderless/styles/disabled = SubResource( 54 )
 ButtonBorderless/styles/focus = SubResource( 54 )
 ButtonBorderless/styles/hover = SubResource( 59 )
@@ -723,7 +893,13 @@ ButtonComboList/styles/hover = SubResource( 77 )
 ButtonComboList/styles/normal = SubResource( 78 )
 ButtonComboList/styles/pressed = SubResource( 4 )
 ButtonFlat/styles/focus = SubResource( 56 )
+ButtonFlatDefault/base_type = "Button"
+ButtonFlatDefault/fonts/font = SubResource( 107 )
+ButtonFlatDefault/styles/disabled = SubResource( 108 )
+ButtonFlatDefault/styles/focus = SubResource( 109 )
+ButtonFlatDefault/styles/normal = SubResource( 5 )
 ButtonFocusBorder/base_type = "Button"
+ButtonFocusBorder/fonts/font = SubResource( 110 )
 ButtonFocusBorder/styles/focus = SubResource( 92 )
 ButtonKindLabel/colors/font_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 ButtonKindLabel/colors/font_color_disabled = Color( 0.0588235, 0.2, 0.337255, 1 )
@@ -740,10 +916,37 @@ CheckBox/icons/checked = ExtResource( 2 )
 CheckBox/icons/radio_checked = ExtResource( 11 )
 CheckBox/icons/radio_unchecked = ExtResource( 10 )
 CheckBox/icons/unchecked = ExtResource( 4 )
+CheckBoxFlat/base_type = "CheckBox"
 CheckBoxFlat/styles/focus = SubResource( 39 )
 CheckButton/icons/off = ExtResource( 1 )
 CheckButton/icons/on = ExtResource( 3 )
 FontBig/fonts/font = SubResource( 71 )
+FontDefault/base_type = "TextEdit"
+FontDefault/fonts/font = SubResource( 66 )
+FontMedium/base_type = "RichTextLabel"
+FontMedium/fonts/bold_font = SubResource( 97 )
+FontMedium/fonts/mono_font = SubResource( 98 )
+FontMedium/fonts/normal_font = SubResource( 99 )
+GraphEdit/colors/grid_major = Color( 0.376471, 0.431373, 0.466667, 0.117647 )
+GraphEdit/colors/grid_minor = Color( 0.411765, 0.443137, 0.462745, 0.0392157 )
+GraphEdit/styles/bg = SubResource( 100 )
+GraphNode/colors/close_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+GraphNode/colors/resizer_color = Color( 0, 0.329412, 0.639216, 1 )
+GraphNode/colors/title_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+GraphNode/constants/close_offset = 22
+GraphNode/constants/port_offset = -1
+GraphNode/constants/separation = 4
+GraphNode/constants/title_offset = 24
+GraphNode/fonts/title_font = SubResource( 101 )
+GraphNode/icons/close = ExtResource( 20 )
+GraphNode/icons/port = ExtResource( 18 )
+GraphNode/icons/resizer = ExtResource( 19 )
+GraphNode/styles/comment = SubResource( 102 )
+GraphNode/styles/commentfocus = SubResource( 103 )
+GraphNode/styles/defaultfocus = SubResource( 104 )
+GraphNode/styles/defaultframe = SubResource( 105 )
+GraphNode/styles/frame = SubResource( 105 )
+GraphNode/styles/selectedframe = SubResource( 106 )
 HScrollBar/styles/grabber = SubResource( 14 )
 HScrollBar/styles/grabber_highlight = SubResource( 40 )
 HScrollBar/styles/grabber_pressed = SubResource( 40 )
@@ -759,6 +962,7 @@ ItemList/styles/cursor_unfocused = SubResource( 35 )
 ItemList/styles/selected = SubResource( 5 )
 ItemList/styles/selected_focus = SubResource( 4 )
 Label/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+LabelBold/base_type = "Label"
 LabelBold/fonts/font = SubResource( 63 )
 LabelCode/base_type = "Label"
 LabelCode/fonts/font = SubResource( 81 )
@@ -794,6 +998,8 @@ PanelContainerTagElement/base_type = "PanelContainer"
 PanelContainerTagElement/styles/panel = SubResource( 83 )
 PanelPopup/base_type = "PanelContainer"
 PanelPopup/styles/panel = SubResource( 80 )
+PanelTooltip/base_type = "PanelContainer"
+PanelTooltip/styles/panel = SubResource( 111 )
 PanelWidgetBackground/base_type = "Panel"
 PanelWidgetBackground/styles/panel = SubResource( 93 )
 PopupMenu/icons/checked = ExtResource( 2 )
@@ -852,7 +1058,24 @@ TextEditTag/styles/focus = null
 TextEditTag/styles/normal = SubResource( 87 )
 TextEditTag/styles/read_only = SubResource( 88 )
 TooltipPanel/styles/panel = SubResource( 45 )
-Tree/colors/font_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+Tree/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+Tree/colors/relationship_line_color = Color( 0, 0.329412, 0.639216, 0.301961 )
+Tree/colors/title_button_color = Color( 0.816406, 0.94351, 1, 1 )
+Tree/constants/draw_guides = 0
+Tree/constants/draw_relationship_lines = 1
+Tree/constants/hseparation = 8
+Tree/constants/item_margin = 16
+Tree/fonts/font = SubResource( 94 )
+Tree/icons/arrow = ExtResource( 17 )
+Tree/icons/arrow_collapsed = ExtResource( 16 )
+Tree/icons/checked = ExtResource( 2 )
+Tree/icons/unchecked = ExtResource( 4 )
+Tree/icons/updown = ExtResource( 13 )
+Tree/styles/bg = SubResource( 7 )
+Tree/styles/bg_focus = SubResource( 95 )
+Tree/styles/title_button_hover = SubResource( 4 )
+Tree/styles/title_button_normal = SubResource( 96 )
+Tree/styles/title_button_pressed = SubResource( 4 )
 VScrollBar/styles/grabber = SubResource( 10 )
 VScrollBar/styles/grabber_highlight = SubResource( 39 )
 VScrollBar/styles/grabber_pressed = SubResource( 39 )

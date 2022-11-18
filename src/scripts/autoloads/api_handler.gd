@@ -89,6 +89,14 @@ func put_config_id(_connect_to:Node, _config_id:String="resoto.core",
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
 
+
+func put_config_id_dry_run(_connect_to:Node, _config_id:String="resoto.core",
+	_config_body:String="", _connect_function:String="_on_put_config_id_dry_run_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.put_config_id(_config_id, _config_body, true)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+
+
 func patch_config_id(_connect_to:Node, _config_id:String="resoto.core",
 	_config_body:String="", _connect_function:String="_on_patch_config_id_done") -> ResotoAPI.Request:
 	_req_res = _resoto_api.patch_config_id(_config_id, _config_body)
@@ -191,3 +199,5 @@ func analytics(_query : String, _connect_to : Node, _connect_function:String="_o
 	_req_res = _resoto_api.analytics(_query)
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
+
+
