@@ -149,7 +149,6 @@ func _on_cli_execute_streamed_data(data:String) -> void:
 	line_count += data.count("\n")
 	
 	if line_count > write_line_count:
-		prints(chunk_idx, line_count)
 		data_chunks.resize(chunk_idx)
 		console.append_bbcode(data_chunks)
 		data_chunks.resize(max_data_chunks)
@@ -157,8 +156,6 @@ func _on_cli_execute_streamed_data(data:String) -> void:
 		line_count = 0
 		
 	elif chunk_idx == max_data_chunks:
-		
-		prints(chunk_idx, line_count)
 		console.append_bbcode(data_chunks.join(""))
 		chunk_idx = 0
 		line_count = 0
