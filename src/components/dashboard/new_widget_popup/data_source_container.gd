@@ -223,12 +223,7 @@ func _make_custom_tooltip(for_text):
 
 
 func set_data_source(new_data_source : DataSource) -> void:
-	if is_instance_valid(data_source) and data_source.is_inside_tree():
-		remove_child(data_source)
-		data_source.queue_free()
-	
 	data_source.copy_data_source(new_data_source)
-	add_child(data_source)
 	match new_data_source.type:
 		DataSource.TYPES.TIME_SERIES:
 			metrics_options.text = new_data_source.metric
