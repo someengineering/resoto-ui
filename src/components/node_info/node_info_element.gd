@@ -84,7 +84,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		var current_result = _response.transformed.result
 		
 		if not current_result.empty() and current_result[0].has("reported"):
-			$"%AllDataGroup".node_text = Utils.readable_dict(current_result[0].reported)
+			$Margin/VBox/NodeContent/NodeDetails/AllDataGroup.node_text = Utils.readable_dict(current_result[0].reported)
 		breadcrumbs.clear()
 		breadcrumbs["edges"] = []
 		breadcrumbs["nodes"] = {}
