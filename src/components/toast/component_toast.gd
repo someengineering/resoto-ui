@@ -17,10 +17,12 @@ var status:int = STATUS_SUCCESS
 var duration:float = 4.0
 var is_closable:bool = true
 var from_node:Node = null
+var is_new :bool = false setget set_is_new
 
 var meta_clicked : bool = false
 
 onready var tween:Tween = $Tween
+onready var new_label : Label = $Main/NewLabel
 
 
 func open(_title:String, _description:String=description, _status:int=status, _duration:float = duration, _is_closable:bool=is_closable):
@@ -40,6 +42,7 @@ func open(_title:String, _description:String=description, _status:int=status, _d
 		STATUS_INFO:
 			self_modulate = INFO_COLOR
 	
+	status = _status
 	if _duration > 0:
 		$DisappearTimer.wait_time = _duration
 		$DisappearTimer.start()
@@ -91,3 +94,8 @@ func _on_Toast_gui_input(event):
 				meta_clicked = false
 			else:
 				_g.emit_signal("nav_change_section", "message_log")
+
+
+func set_is_new(new : bool):
+	is_new = new
+	new_label.visible = new

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://components/shared/notification-label.gd" type="Script" id=1]
+[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 15
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = -4
+extra_spacing_bottom = -3
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 1.0
+bg_color = Color( 0, 0.329412, 0.639216, 1 )
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 3.0
+expand_margin_bottom = 3.0
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 3
+shadow_offset = Vector2( -1, 1 )
+
+[node name="NotificationLabel" type="Label"]
+margin_right = 11.0
+margin_bottom = 11.0
+grow_horizontal = 2
+rect_min_size = Vector2( 11, 11 )
+custom_colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+custom_fonts/font = SubResource( 1 )
+custom_styles/normal = SubResource( 2 )
+align = 1
+valign = 1
+script = ExtResource( 1 )
