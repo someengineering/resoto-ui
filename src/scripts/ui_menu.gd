@@ -20,7 +20,6 @@ func _ready() -> void:
 	_g.connect("close_hamburger_menu", self, "close_menu")
 	_g.connect("top_search_update", self, "_on_top_search_update")
 	_g.connect("resoto_home_visible", self, "_on_resoto_home_visible")
-	$"%HamburgerMenuItems/ButtonMessageLog".visible = OS.has_feature("editor") and not force_hide_message_log
 	
 	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
 	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
