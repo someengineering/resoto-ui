@@ -52,10 +52,11 @@ func _transform_json(error:int, response:ResotoAPI.Response) -> void:
 		return
 	
 	var string_to_parse:String = response.body.get_string_from_utf8()
-	var json_result:JSONParseResult = JSON.parse(string_to_parse)
-	if json_result.error == OK:
-		response.transformed["result"] = json_result.result
-		return
+	if string_to_parse != "":
+		var json_result:JSONParseResult = JSON.parse(string_to_parse)
+		if json_result.error == OK:
+			response.transformed["result"] = json_result.result
+			return
 	
 	response.transformed["result"] = string_to_parse
 
