@@ -6,9 +6,10 @@ signal value_change_done(_int)
 export (bool) var update_on_writing := true
 export (String) var prefix := ""
 export (String) var suffix := ""
-export (bool) var negative_allowed:= false setget set_negative_allowed
 export (int) var max_value := 1000000000 setget set_max_value
 export (bool) var use_max_value := false
+export (int) var min_value := 0 setget set_min_value
+export (bool) var use_min_value := true
 
 var old_text:String = ""
 
@@ -16,15 +17,9 @@ onready var LineEditRegEx = RegEx.new()
 
 
 func _ready():
-	set_negative_allowed(negative_allowed)
+	LineEditRegEx.compile("^[-]?[0-9]*$")
 	connect("text_changed", self, "on_text_changed")
 	set_number(old_text)
-
-
-func set_negative_allowed(_negative_allowed:bool):
-	negative_allowed = _negative_allowed
-	var regex = "^[-]?[0-9]*$" if negative_allowed else "^[0-9]*$"
-	LineEditRegEx.compile(regex)
 
 
 func set_number(new_number:String):
@@ -39,6 +34,12 @@ func set_max_value(_max_value:int):
 		old_text = str(max_value)
 
 
+func set_min_value(_min_value:int):
+	min_value = _min_value
+	if int(old_text) < min_value:
+		old_text = str(min_value)
+
+
 func on_text_changed(new_text:String):
 	if not update_on_writing:
 		return
@@ -50,6 +51,8 @@ func check_text(new_text:String):
 	if LineEditRegEx.search(new_text):
 		if use_max_value and int(new_text) > max_value:
 			new_text = str(max_value)
+		if use_min_value and int(new_text) < min_value:
+			new_text = str(min_value)
 		old_text = str(new_text)
 		text = "%s %s %s" % [prefix, old_text, suffix]
 	else:
@@ -59,6 +62,6 @@ func check_text(new_text:String):
 	emit_signal("value_change_done", int(old_text))
 
 
-func _on_IntEdit_text_entered(new_text):
+func _on_IntEdit_text_entered(_new_text):
 	check_text(text)
 	release_focus()

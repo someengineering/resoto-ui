@@ -136,12 +136,12 @@ func set_data(data, type):
 		raw_data.resize(rows_array.size())
 		
 		page_count = int(ceil(n / max_allowed_rows))
-		if page_count > 0:
+		if page_count > 1:
 			table.margin_bottom = -33
 			pagination.show()
-			pagination.max_value = max(0, page_count - 1)
+			pagination.max_value = max(0, page_count)
 			pagination.suffix = "of %d" % pagination.max_value
-			pagination.value = 0
+			pagination.value = 1
 			current_page = 0
 		else:
 			table.margin_bottom = 0
@@ -173,7 +173,8 @@ func update_table():
 		clear_rows()
 		
 		for i in n:
-			add_row(raw_data[i + max_allowed_rows * current_page])
+			var row_index = clamp(i + max_allowed_rows * current_page, 0, raw_data.size()-1)
+			add_row(raw_data[row_index])
 			
 	else:
 		for i in n:
@@ -329,5 +330,5 @@ func get_csv(sepparator := ",", end_of_line := "\n"):
 
 
 func _on_Pagination_value_changed(value):
-	current_page = value
+	current_page = value-1
 	update_table()
