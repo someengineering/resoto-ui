@@ -16,15 +16,17 @@ var first_update:= true
 
 var header_columns_count := 0
 
-var max_allowed_rows:int = 1000
+var max_allowed_rows:int = 30
 var page_count:int = 0
 var current_page:int = 0
 
+onready var table = $Table
 onready var header_row := $Table/ScrollContainer/TableVBox/Header
 onready var rows := $Table/ScrollContainer/TableVBox/ScrollContainer/Rows
 onready var scroll_rows := $Table/ScrollContainer/TableVBox/ScrollContainer
 onready var scroll_container := $Table/ScrollContainer
 onready var update_delay_timer := $UpdateDelayTimer
+onready var pagination := $Pagination
 
 
 func clear_all():
@@ -104,6 +106,8 @@ func set_data(data, type):
 	clear_all()
 	
 	if type == DataSource.TYPES.AGGREGATE_SEARCH:
+		table.margin_bottom = 0
+		pagination.hide()
 		var headers : Array = data[0]["group"].keys()
 		var vars : Array = data[0].keys()
 		vars.remove(vars.find("group"))
@@ -132,9 +136,16 @@ func set_data(data, type):
 		raw_data.resize(rows_array.size())
 		
 		page_count = int(ceil(n / max_allowed_rows))
-		$SpinBox.max_value = max(0, page_count - 1)
-		$SpinBox.suffix = "of %d" % $SpinBox.max_value
-		current_page = 0
+		if page_count > 0:
+			table.margin_bottom = -33
+			pagination.show()
+			pagination.max_value = max(0, page_count - 1)
+			pagination.suffix = "of %d" % pagination.max_value
+			pagination.value = 0
+			current_page = 0
+		else:
+			table.margin_bottom = 0
+			pagination.hide()
 		
 		if not rows_array.empty():
 		
@@ -153,6 +164,8 @@ func set_data(data, type):
 
 
 func update_table():
+	if not rows or raw_data.empty() or raw_data[0] == null:
+		return
 	var rows_count = rows.get_child_count()
 	var n:int = max_allowed_rows if current_page < page_count - 1 else raw_data.size() % max_allowed_rows
 	
@@ -315,7 +328,6 @@ func get_csv(sepparator := ",", end_of_line := "\n"):
 	return csv_array.join(end_of_line)
 
 
-
-func _on_SpinBox_value_changed(value):
+func _on_Pagination_value_changed(value):
 	current_page = value
 	update_table()

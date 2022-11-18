@@ -415,7 +415,7 @@ script = ExtResource( 7 )
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 416.0
-margin_bottom = 124.0
+margin_bottom = 154.0
 
 [node name="NewTagVariableLabel" type="Label" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData"]
 margin_right = 418.0

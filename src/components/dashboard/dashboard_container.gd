@@ -400,3 +400,8 @@ func _on_KebapButton_pressed():
 
 func _on_NewWidgetPopup_widget_edited():
 	emit_signal("dashboard_changed", self)
+
+
+func _on_DashboardContainer_visibility_changed():
+	if not visible:
+		_on_DashboardEditButton_toggled(false)
