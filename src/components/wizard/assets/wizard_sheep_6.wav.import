@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/wizard_sheep_3.wav-a6f31412874e789767a42bff9863ed8a.sample"
+path="res://.import/wizard_sheep_6.wav-1abca572dd22a5adaed80c77451dbd91.sample"
 
 [deps]
 
-source_file="res://assets/audio/wizard_sheep_3.wav"
-dest_files=[ "res://.import/wizard_sheep_3.wav-a6f31412874e789767a42bff9863ed8a.sample" ]
+source_file="res://components/wizard/assets/wizard_sheep_6.wav"
+dest_files=[ "res://.import/wizard_sheep_6.wav-1abca572dd22a5adaed80c77451dbd91.sample" ]
 
 [params]
 

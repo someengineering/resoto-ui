@@ -8,7 +8,7 @@
 [ext_resource path="res://components/config/config_templates/component_config_line_edit_int.gd" type="Script" id=6]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=7]
 [ext_resource path="res://assets/icons/icon_128_substract_minus_remove.svg" type="Texture" id=8]
-[ext_resource path="res://components/shared/Icon_Tooltip_Helper.tscn" type="PackedScene" id=9]
+[ext_resource path="res://components/shared/icon_tooltip_helper.tscn" type="PackedScene" id=9]
 
 [node name="UISettings" instance=ExtResource( 1 )]
 margin_right = 640.0

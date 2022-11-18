@@ -27,7 +27,6 @@ func set_state(_state:int):
 			play_talk_sound()
 	elif state == States.IDLE:
 		$WizardHead/Mouth.animation = "neutral"
-		#current_talk_sound.stop()
 
 
 func _on_AnimationPlayer_animation_finished(_anim_name):
@@ -59,6 +58,7 @@ func play_talk_sound():
 	while new_talk_sound == current_talk_sound:
 		new_talk_sound = talk_sounds[randi()%talk_sounds.size()]
 	current_talk_sound = new_talk_sound
+	current_talk_sound.pitch_scale = rand_range(1.2, 1.3)
 	current_talk_sound.play()
 
 
