@@ -58,8 +58,9 @@ class Request:
 	
 	
 	func cancel(err_code:int=1) -> void:
-		emit_signal("done", err_code, null)
-		state_ = states.DONE
+		if state_ != states.DONE:
+			emit_signal("done", err_code, null)
+			state_ = states.DONE
 	
 	
 	func abort() -> void:
