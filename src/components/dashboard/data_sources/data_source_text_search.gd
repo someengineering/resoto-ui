@@ -25,15 +25,20 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 
 
 func _on_cli_execute_done(_error : int, response):
-	if _error == OK:
-		var result : String = response.transformed.result
-		if "Error: " in response.transformed.result:
-			_g.emit_signal("add_toast", "Invalid query", result, 1, self)
-			emit_signal("query_status", FAILED, "Invalid query", result)
-			return
-		if is_instance_valid(widget):
-			widget.set_data(result, type)
-			emit_signal("query_status", OK, "")
+	if _error:
+		emit_signal("query_status", FAILED, "Invalid Full Text Search", "There is a problem with the search query.")
+		return
+	var result : String = response.transformed.result
+	if "Error: " in response.transformed.result:
+		_g.emit_signal("add_toast", "Invalid query", result, 1, self)
+		emit_signal("query_status", FAILED, "Invalid query", result)
+		return
+	if is_instance_valid(widget):
+		result = result.trim_suffix("\n")
+		widget.set_data(result, type)
+		if result.find("\n") < 0:
+			_g.emit_signal("add_toast", "Empty result", "The query result has no data.", 2, self)
+		emit_signal("query_status", OK, "")
 
 	
 func copy_data_source(other : TextSearchDataSource):

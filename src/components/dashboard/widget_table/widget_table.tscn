@@ -22,6 +22,7 @@ theme_type_variation = "PanelWidgetBackground"
 [node name="Table" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_bottom = -38.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 4
@@ -32,14 +33,14 @@ custom_constants/margin_bottom = 4
 [node name="ScrollContainer" type="ScrollContainer" parent="Table"]
 margin_left = 4.0
 margin_right = 1916.0
-margin_bottom = 1076.0
+margin_bottom = 1038.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
 [node name="TableVBox" type="VBoxContainer" parent="Table/ScrollContainer"]
 margin_right = 1912.0
-margin_bottom = 1076.0
+margin_bottom = 1038.0
 mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -55,14 +56,14 @@ custom_constants/separation = 0
 [node name="ScrollContainer" type="ScrollContainer" parent="Table/ScrollContainer/TableVBox"]
 margin_top = 24.0
 margin_right = 1912.0
-margin_bottom = 1076.0
+margin_bottom = 1038.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Rows" type="VBoxContainer" parent="Table/ScrollContainer/TableVBox/ScrollContainer"]
 margin_right = 1912.0
-margin_bottom = 1052.0
+margin_bottom = 1014.0
 mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -72,6 +73,17 @@ custom_constants/separation = 0
 wait_time = 0.2
 one_shot = true
 
+[node name="SpinBox" type="SpinBox" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = -35.0
+margin_right = 243.0
+margin_bottom = -3.0
+prefix = "Page"
+suffix = "of 0"
+
 [connection signal="resized" from="." to="." method="_on_TableWidget_resized"]
 [connection signal="resized" from="Table/ScrollContainer/TableVBox/ScrollContainer/Rows" to="." method="_on_Rows_resized"]
 [connection signal="timeout" from="UpdateDelayTimer" to="." method="_on_UpdateDelayTimer_timeout"]
+[connection signal="value_changed" from="SpinBox" to="." method="_on_SpinBox_value_changed"]

@@ -16,6 +16,10 @@ var first_update:= true
 
 var header_columns_count := 0
 
+var max_allowed_rows:int = 1000
+var page_count:int = 0
+var current_page:int = 0
+
 onready var header_row := $Table/ScrollContainer/TableVBox/Header
 onready var rows := $Table/ScrollContainer/TableVBox/ScrollContainer/Rows
 onready var scroll_rows := $Table/ScrollContainer/TableVBox/ScrollContainer
@@ -123,17 +127,49 @@ func set_data(data, type):
 		set_headers(rows_array[0].split(",",false))
 		rows_array.remove(0)
 		
-		for row in rows_array:
-			raw_data.append(row.split(",",false))
+		var n : float = rows_array.size()
+		
+		raw_data.resize(rows_array.size())
+		
+		page_count = int(ceil(n / max_allowed_rows))
+		$SpinBox.max_value = max(0, page_count - 1)
+		$SpinBox.suffix = "of %d" % $SpinBox.max_value
+		current_page = 0
+		
+		if not rows_array.empty():
+		
+			var tmp_array : PoolStringArray = []
+			var cells_count = rows_array[0].count(",") + 1
+			tmp_array.resize(cells_count)
+			
+			for i in rows_array.size():
+				raw_data[i] = tmp_array
+				for j in cells_count:
+					raw_data[i][j] = rows_array[i].get_slice(",", j)
+			
 	
 	yield(VisualServer, "frame_post_draw")
 	sort_by_column(sorting_column, sorting_type == "asc")
 
 
 func update_table():
-	clear_rows()
-	for data in raw_data:
-		add_row(data)
+	var rows_count = rows.get_child_count()
+	var n:int = max_allowed_rows if current_page < page_count - 1 else raw_data.size() % max_allowed_rows
+	
+	if rows_count < 0 or n != rows_count:
+		clear_rows()
+		
+		for i in n:
+			add_row(raw_data[i + max_allowed_rows * current_page])
+			
+	else:
+		for i in n:
+			var row = rows.get_child(i)
+			var k = i + max_allowed_rows * current_page
+			for j in raw_data[k].size():
+				var cell = row.get_child(j)
+				cell.cell_text = raw_data[k][j]
+		
 	update_delay_timer.stop()
 	_on_UpdateDelayTimer_timeout()
 
@@ -278,3 +314,8 @@ func get_csv(sepparator := ",", end_of_line := "\n"):
 		
 	return csv_array.join(end_of_line)
 
+
+
+func _on_SpinBox_value_changed(value):
+	current_page = value
+	update_table()
