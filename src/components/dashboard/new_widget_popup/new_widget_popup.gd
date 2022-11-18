@@ -401,7 +401,8 @@ func _on_NewWidgetPopup_popup_hide():
 	duplicating = false
 	widget_to_edit = null
 	hide()
-	preview_widget.queue_free()
+	if preview_widget != null and is_instance_valid(preview_widget):
+		preview_widget.queue_free()
 	clear_data_sources()
 
 
