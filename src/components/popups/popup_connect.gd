@@ -68,9 +68,10 @@ func start_connect() -> void:
 		if adress.size() > 1:
 			port = int(adress[1])
 		API.connection_config(adress[0], int(port), psk, use_ssl)
-
 	
+	psk_line_edit.text = API.psk
 	var protocol:= "https://" if API.use_ssl else "http://"
+	adress_line_edit.text = protocol + API.adress + ":" + str(API.port)
 	status.text = CONNECT_TEXT % [(protocol + API.adress), API.port]
 	yield(VisualServer, "frame_post_draw")
 	$ConnectTimeoutTimer.start()
