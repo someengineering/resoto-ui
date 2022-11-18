@@ -402,6 +402,7 @@ func _on_NewWidgetPopup_popup_hide():
 	widget_to_edit = null
 	hide()
 	preview_widget.queue_free()
+	clear_data_sources()
 
 
 func _on_DataSourceTypeOptionButton_item_selected(_index):

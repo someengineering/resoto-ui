@@ -8,6 +8,7 @@ enum TYPES {TIME_SERIES, AGGREGATE_SEARCH, SEARCH, TWO_ENTRIES_AGGREGATE}
 var query : String
 var widget 
 var type : int = TYPES.TIME_SERIES
+var _request : UserAgent.Request = null
 
 
 func _init():
@@ -37,3 +38,9 @@ func _on_query_status(_type:int=0, _title:="Widget Error", _message:=""):
 	}
 	if _type != OK:
 		Analytics.event(Analytics.EventsDatasource.FAILED, properties)
+		
+func set_request(new_request : UserAgent.Request):
+	if is_instance_valid(_request) and _request != null:
+		_request.cancel()
+		
+	_request = new_request
