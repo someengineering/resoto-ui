@@ -15,6 +15,12 @@ var connected:bool = false
 var cmd_rename:UITerminalCommand = UITerminalCommand.new("name ", "terminal_cmd_rename")
 var terminal_commands:Array = [cmd_rename]
 
+var data_chunks:PoolStringArray = []
+var chunk_idx:int = 0
+var line_count:int = 0
+var max_data_chunks:int = 1000
+var write_line_count:int = 1000
+
 onready var console = find_node("RichResponseText")
 onready var command = find_node("CommandEdit")
 onready var console_v_scroll: VScrollBar = console.get_v_scroll()
@@ -32,7 +38,6 @@ class UITerminalCommand:
 	func exec(_parent:Node, _params:Array):
 		if _parent.has_method(command_function_name):
 			_parent.call(command_function_name, _params)
-
 
 func _ready() -> void:
 	loading.console = console
@@ -54,6 +59,8 @@ func _ready() -> void:
 		console.newline()
 	console.pop()
 
+	data_chunks.resize(max_data_chunks)
+	
 
 func _input(event:InputEvent) -> void:
 	if (not is_visible_in_tree()
@@ -122,6 +129,9 @@ func _on_cli_execute_streamed_done(error:int, _response:UserAgent.Response) -> v
 		console.append_bbcode("\nError: [color=red]" + Utils.err_enum_to_string(error) + "[/color]")
 		loading.stop()
 	else:
+		data_chunks.resize(chunk_idx)
+		console.append_bbcode(data_chunks.join(""))
+		data_chunks.resize(max_data_chunks)
 		if console.text.ends_with("\n"):
 			console.text.trim_suffix("\n")
 		loading.stop()
@@ -131,7 +141,22 @@ func _on_cli_execute_streamed_data(data:String) -> void:
 	if data.left(3) == "401":
 		_g.popup_manager.open_popup("ConnectPopup")
 		return
-	console.append_bbcode(str(data))
+	
+	data_chunks[chunk_idx] = data
+	chunk_idx += 1
+	line_count += data.count("\n")
+	
+	if line_count > write_line_count:
+		data_chunks.resize(chunk_idx)
+		console.append_bbcode(data_chunks)
+		data_chunks.resize(max_data_chunks)
+		chunk_idx = 0
+		line_count = 0
+		
+	elif chunk_idx == max_data_chunks:
+		console.append_bbcode(data_chunks.join(""))
+		chunk_idx = 0
+		line_count = 0
 
 
 func set_terminal_active(_terminal_active:bool) -> void:
