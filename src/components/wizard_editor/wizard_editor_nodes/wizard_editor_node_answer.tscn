@@ -60,7 +60,8 @@ margin_right = 248.0
 margin_bottom = 78.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-negative_allowed = true
+min_value = -100000000
+use_min_value = false
 
 [node name="VarsLabel" type="Label" parent="Grid" groups=["min"]]
 margin_top = 82.0
