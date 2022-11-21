@@ -105,12 +105,12 @@ icon_tex = ExtResource( 4 )
 visible = false
 margin_top = 37.0
 margin_right = 511.0
-margin_bottom = 435.0
+margin_bottom = 453.0
 size_flags_horizontal = 3
 
 [node name="MetricsVBox" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
 margin_right = 511.0
-margin_bottom = 45.0
+margin_bottom = 54.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/MetricsVBox"]
@@ -121,12 +121,13 @@ text = "Metric"
 [node name="MetricsOptions" parent="VBoxContainer/DatasourceSettings/MetricsVBox" instance=ExtResource( 9 )]
 margin_top = 21.0
 margin_right = 511.0
-margin_bottom = 45.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 100, 33 )
 
 [node name="FunctionVBox" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 49.0
+margin_top = 58.0
 margin_right = 511.0
-margin_bottom = 94.0
+margin_bottom = 112.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/FunctionVBox"]
@@ -137,13 +138,14 @@ text = "Aggregator"
 [node name="FunctionComboBox" parent="VBoxContainer/DatasourceSettings/FunctionVBox" instance=ExtResource( 9 )]
 margin_top = 21.0
 margin_right = 511.0
-margin_bottom = 45.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 100, 33 )
 items = [ "", "sum", "min", "max", "avg", "count", "sum_over_time", "min_over_time", "max_over_time", "avg_over_time", "count_over_time" ]
 
 [node name="FilterHBox" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 98.0
+margin_top = 116.0
 margin_right = 511.0
-margin_bottom = 191.0
+margin_bottom = 209.0
 
 [node name="FilterWidget" parent="VBoxContainer/DatasourceSettings/FilterHBox" instance=ExtResource( 1 )]
 anchor_right = 0.0
@@ -153,9 +155,9 @@ margin_bottom = 93.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 195.0
+margin_top = 213.0
 margin_right = 511.0
-margin_bottom = 248.0
+margin_bottom = 266.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer"]
@@ -170,9 +172,9 @@ margin_bottom = 53.0
 script = ExtResource( 6 )
 
 [node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 252.0
+margin_top = 270.0
 margin_right = 511.0
-margin_bottom = 305.0
+margin_bottom = 323.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
@@ -187,9 +189,9 @@ margin_bottom = 53.0
 script = ExtResource( 6 )
 
 [node name="VBoxContainer5" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 309.0
+margin_top = 327.0
 margin_right = 511.0
-margin_bottom = 362.0
+margin_bottom = 380.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer5"]
@@ -204,9 +206,9 @@ margin_bottom = 53.0
 script = ExtResource( 6 )
 
 [node name="StackedCheckBox" type="CheckBox" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 366.0
+margin_top = 384.0
 margin_right = 511.0
-margin_bottom = 398.0
+margin_bottom = 416.0
 pressed = true
 text = "Stacked"
 
@@ -236,17 +238,19 @@ margin_bottom = 93.0
 
 [node name="Label2" type="Label" parent="VBoxContainer/TextSearchSettings/HBoxContainer"]
 margin_top = 6.0
-margin_right = 235.0
+margin_right = 253.0
 margin_bottom = 26.0
 size_flags_horizontal = 3
 text = "Kinds"
 
 [node name="KindsComboBox" parent="VBoxContainer/TextSearchSettings/HBoxContainer" instance=ExtResource( 9 )]
-margin_left = 239.0
-margin_right = 474.0
+margin_left = 257.0
+margin_right = 511.0
+rect_min_size = Vector2( 100, 33 )
 size_flags_horizontal = 3
 
 [node name="Add" parent="VBoxContainer/TextSearchSettings/HBoxContainer" instance=ExtResource( 10 )]
+visible = false
 margin_left = 478.0
 margin_right = 511.0
 hint_tooltip = "Add Kind"
@@ -397,7 +401,7 @@ script = ExtResource( 6 )
 [node name="QueryEditVBox" type="VBoxContainer" parent="VBoxContainer"]
 margin_top = 37.0
 margin_right = 511.0
-margin_bottom = 127.0
+margin_bottom = 133.0
 
 [node name="QueryLabel" type="Label" parent="VBoxContainer/QueryEditVBox"]
 margin_right = 511.0
@@ -407,16 +411,16 @@ text = "Query"
 [node name="QueryEdit" type="TextEdit" parent="VBoxContainer/QueryEditVBox"]
 margin_top = 24.0
 margin_right = 511.0
-margin_bottom = 54.0
-rect_min_size = Vector2( 0, 30 )
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 36 )
 wrap_enabled = true
 caret_blink = true
 
 [node name="QueryUpdateButton" type="Button" parent="VBoxContainer/QueryEditVBox"]
 margin_left = 389.667
-margin_top = 58.0
+margin_top = 64.0
 margin_right = 511.0
-margin_bottom = 90.0
+margin_bottom = 96.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 text = "Update Query"
