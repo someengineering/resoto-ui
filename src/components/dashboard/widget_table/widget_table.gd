@@ -33,7 +33,7 @@ var current_page:int = 0
 
 var data_source_type : int
 
-var headers_array : Array = []
+var headers_array : PoolStringArray = []
 
 onready var table = $Table
 onready var header_row := $Table/ScrollContainer/TableVBox/Header
@@ -312,15 +312,13 @@ func set_header_color(_new_color:Color):
 
 func get_csv(sepparator := ",", end_of_line := "\n") -> String:
 	var csv_array : PoolStringArray = []
-	var header_array : PoolStringArray = []
-	for i in range(1, header_row.get_child_count()):
-		header_array.append('"%s"' % header_row.get_child(i).text)
+
+	csv_array.append(headers_array.join(sepparator))
 	
-	csv_array.append(header_array.join(sepparator))
-	
-	for i in range(0, raw_data.size()):
-		var row = raw_data[i] as PoolStringArray
-		row.remove(0)
+	for data in raw_data:
+		var row : PoolStringArray = []
+		for i in headers_array.size():
+			row.append('"%s"' % str(get_value(data, i)))
 		csv_array.append(row.join(sepparator))
 		
 	return csv_array.join(end_of_line)
@@ -337,12 +335,14 @@ func get_data_count(data : Dictionary) -> int:
 	
 func get_value(data : Dictionary, index : int):
 	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
-		var group_keys : Array = data["group"].keys()
+		var keys : Array = data["group"].keys()
+		var group_keys : Array = keys.duplicate()
+		var all_keys : Array = data.keys()
+		all_keys.erase("group")
+		keys.append_array(all_keys)
 		if index < group_keys.size():
 			return data["group"][group_keys[index]]
-			
-		index = index - group_keys.size() + 1
-		return data[data.keys()[index]]
+		return data[keys[index]]
 	elif data_source_type == DataSource.TYPES.SEARCH:
 		var key : String = DefaultSearchAttributes.keys()[index]
 		var path : Array = DefaultSearchAttributes[key]
