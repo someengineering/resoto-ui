@@ -288,8 +288,9 @@ func set_scale_from_series() -> void:
 	if miny == 0 or maxy == miny:
 		min_y_value = 0
 	
-	y_zero_position = max_y_value / (max_y_value - min_y_value)
-	grid.material.set_shader_param("zero_position", y_zero_position)
+	if max_y_value != min_y_value:
+		y_zero_position = max_y_value / (max_y_value - min_y_value)
+		grid.material.set_shader_param("zero_position", y_zero_position)
 
 
 func do_complete_update():

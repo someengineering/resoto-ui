@@ -18,8 +18,8 @@ void fragment(){
 [sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
 shader = SubResource( 1 )
-shader_param/offset = -0.221
-shader_param/width = 0.5
+shader_param/offset = 0.0
+shader_param/width = inf_neg
 
 [node name="Serie" type="Line2D"]
 show_behind_parent = true
