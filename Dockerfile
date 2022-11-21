@@ -66,7 +66,8 @@ RUN /build/godot/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux_headless.64 --pa
 RUN echo "${SOURCE_COMMIT:-unknown}" > /usr/local/resoto/ui/git-commit.HEAD
 
 # Upload resotoui
-RUN if [ -n "$SPACES_NAME" ]; then resoto-ui-upload --verbose; fi
+# Created problems with Digital Ocean and is also not neccessary anymore since we have the other action now.
+#RUN if [ -n "$SPACES_NAME" ]; then resoto-ui-upload --verbose; fi
 
 
 # Setup main image
