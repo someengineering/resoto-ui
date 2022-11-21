@@ -181,6 +181,7 @@ func execute_query_edit():
 
 func _on_QueryEdit_text_changed():
 	_on_QueryEdit_item_rect_changed()
+	expand_button.pressed = false
 
 
 func _on_QueryEdit_gui_input(event:InputEventKey):
