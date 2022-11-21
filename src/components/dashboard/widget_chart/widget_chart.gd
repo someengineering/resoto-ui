@@ -268,13 +268,15 @@ func set_scale_from_series() -> void:
 	stacked.fill(0)
 	
 	for j in stacked.size():
-		for serie in series:
+		for i in series.size():
+			var serie : Array = series[i]
+			var line : Line2D = graph_area.get_child(i)
 			var value = find_value_at_x(j*step, serie)
 			if str(value.y) == "nan":
 				continue
 			if miny > value.y:
 				miny = value.y
-			if stacked:
+			if line.get_meta("stack"):
 				value.y += stacked[j]
 				stacked[j] = value.y
 			if maxy < value.y:
