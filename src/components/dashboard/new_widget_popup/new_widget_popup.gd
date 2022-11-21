@@ -280,6 +280,8 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 			ds.set_metrics(metrics)
 			ds.connect("source_changed", self, "update_preview")
 			ds.connect("delete_source", self, "delete_datasource")
+	else:
+		current_widget_preview_name = widget_type_options.text
 			
 	$"%WidgetTypeVBox".visible = widget_to_edit == null
 	create_preview(current_widget_preview_name)
