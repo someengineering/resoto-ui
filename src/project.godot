@@ -104,6 +104,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/elements/utility/dynamic_label.gd"
 }, {
+"base": "Node",
+"class": "GraphAStar",
+"language": "GDScript",
+"path": "res://scripts/classes/graph_a_star.gd"
+}, {
 "base": "BaseWidget",
 "class": "Indicator",
 "language": "GDScript",
@@ -214,6 +219,7 @@ _global_script_class_icons={
 "DashboardManager": "",
 "DataSource": "",
 "DynamicLabel": "",
+"GraphAStar": "",
 "Indicator": "",
 "JWTGenerator": "",
 "LineEditFloat": "",
