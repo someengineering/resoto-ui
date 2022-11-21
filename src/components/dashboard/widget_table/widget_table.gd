@@ -8,6 +8,17 @@ var column_header_color: Color
 
 const HeaderCell = preload("res://components/dashboard/widget_table/widget_table_header_cell.tscn")
 const TableCell = preload("res://components/dashboard/widget_table/widget_table_cell.tscn")
+const DefaultSearchAttributes : Dictionary = {
+	"kind" : ["reported", "kind"],
+	"id" : ["reported", "id"],
+	"name" : ["reported", "name"],
+	"age" : ["reported", "age"],
+	"last_update" : ["reported", "last_update"],
+	"cloud" : ["ancestors", "cloud", "reported", "name"],
+	"account" : ["ancestors", "account", "reported", "name"],
+	"region" : ["ancestors", "region", "reported", "name"],
+	"zone" : ["ancestors", "zone", "reported", "name"],
+}
 
 var raw_data : Array 
 var sorting_column : int = -1
@@ -19,6 +30,10 @@ var header_columns_count := 0
 var max_allowed_rows:int = 30
 var page_count:int = 0
 var current_page:int = 0
+
+var data_source_type : int
+
+var headers_array : PoolStringArray = []
 
 onready var table = $Table
 onready var header_row := $Table/ScrollContainer/TableVBox/Header
@@ -43,6 +58,7 @@ func clear_rows():
 
 
 func set_headers(headers : Array):
+	headers_array = headers
 	var c_id:= 0
 	for header in headers:
 		var header_cell = HeaderCell.instance()
@@ -55,23 +71,30 @@ func set_headers(headers : Array):
 		c_id += 1
 
 
-func add_row(data : Array):
+func add_row(data):
 	var row = HBoxContainer.new()
 	row.set("custom_constants/separation", 0)
 	row.size_flags_vertical = SIZE_EXPAND_FILL
-	var c_id:= 0
-	var r_count:= rows.get_child_count()
 	rows.add_child(row)
-	for value in data:
-		var is_header_column:bool = c_id <= header_columns_count
-		var color:Color = column_header_color if is_header_column else row_color
-		var table_cell = TableCell.instance()
-		table_cell.data_cell = is_header_column
-		table_cell.even_row = r_count % 2 == 0
-		row.add_child(table_cell)
-		table_cell.set_cell(str(value), color, c_id)
-		c_id += 1
+	
+	var n := headers_array.size()
+	
+	for i in n:
+		var value = get_value(data, i)
+		add_table_cell(row, value)
+	
 
+func add_table_cell(row, value):
+	var c_id = row.get_child_count()
+	var r_count = row.get_position_in_parent() % 2
+	var is_header_column:bool = c_id <= header_columns_count
+	var color:Color = column_header_color if is_header_column else row_color
+	var table_cell = TableCell.instance()
+	table_cell.data_cell = is_header_column
+	table_cell.even_row = r_count == 0
+	row.add_child(table_cell)
+	table_cell.set_cell(str(value), color, c_id)
+	
 
 func _get_property_list() -> Array:
 	var properties = []
@@ -105,95 +128,68 @@ func set_data(data, type):
 		raw_data.clear()
 	clear_all()
 	
-	if type == DataSource.TYPES.AGGREGATE_SEARCH:
-		table.margin_bottom = 0
-		pagination.hide()
-		var headers : Array = data[0]["group"].keys()
-		var vars : Array = data[0].keys()
-		vars.remove(vars.find("group"))
-		headers.append_array(vars)
+	data_source_type = type
+	
+	raw_data = data
+	
+	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
+		var headers = raw_data[0]["group"].keys()
+		headers.append_array(raw_data[0].keys())
+		headers.erase("group")
 		set_headers(headers)
+	elif data_source_type == DataSource.TYPES.SEARCH:
+		set_headers(DefaultSearchAttributes.keys())
 		
-		for data_row in data:
-			var data_array : Array = []#[" "]
-			for key in data_row["group"]:
-				data_array.append(data_row["group"][key])
-				
-			for key in data_row:
-				if key == "group":
-					continue
-				data_array.append(data_row[key])
-			
-			raw_data.append(data_array)
-	
-	elif type == DataSource.TYPES.SEARCH:
-		var rows_array : Array = data.split("\n",false)
-		set_headers(rows_array[0].split(",",false))
-		rows_array.remove(0)
-		
-		var n : float = rows_array.size()
-		
-		raw_data.resize(rows_array.size())
-		
-		page_count = int(ceil(n / max_allowed_rows))
-		if page_count > 1:
-			table.margin_bottom = -33
-			pagination.show()
-			pagination.max_value = max(0, page_count)
-			pagination.suffix = "of %d" % pagination.max_value
-			pagination.value = 1
-			current_page = 0
-		else:
-			table.margin_bottom = 0
-			pagination.hide()
-		
-		if not rows_array.empty():
-		
-			var tmp_array : PoolStringArray = []
-			var cells_count = rows_array[0].count(",") + 1
-			tmp_array.resize(cells_count)
-			
-			for i in rows_array.size():
-				raw_data[i] = tmp_array
-				for j in cells_count:
-					raw_data[i][j] = rows_array[i].get_slice(",", j)
-			
-	
+	update_page_count(raw_data.size())
 	yield(VisualServer, "frame_post_draw")
 	sort_by_column(sorting_column, sorting_type == "asc")
+
+
+func update_page_count(row_count : int):
+	page_count = int(ceil(float(row_count) / max_allowed_rows))
+	if page_count > 1:
+		table.margin_bottom = -33
+		pagination.show()
+		pagination.max_value = max(1, page_count)
+		pagination.suffix = "of %d" % pagination.max_value
+		current_page = 1
+		pagination.value = 1
+	else:
+		table.margin_bottom = 0
+		pagination.hide()
 
 
 func update_table():
 	if not rows or raw_data.empty() or raw_data[0] == null:
 		return
-	var rows_count = rows.get_child_count()
+		
 	var n:int = max_allowed_rows if current_page < page_count - 1 else raw_data.size() % max_allowed_rows
 	
-	if rows_count < 0 or n != rows_count:
-		clear_rows()
-		
-		for i in n:
-			var row_index = clamp(i + max_allowed_rows * current_page, 0, raw_data.size()-1)
-			add_row(raw_data[row_index])
-			
-	else:
-		for i in n:
-			var row = rows.get_child(i)
-			var k = i + max_allowed_rows * current_page
-			for j in raw_data[k].size():
-				var cell = row.get_child(j)
-				cell.cell_text = raw_data[k][j]
+	for i in n:
+		var row_index = clamp(i + max_allowed_rows * current_page, 0, raw_data.size()-1)
+		set_row(raw_data[row_index], i)
 		
 	update_delay_timer.stop()
 	_on_UpdateDelayTimer_timeout()
 
+
+func set_row(data, i):
+	if i < rows.get_child_count():
+		
+		var row = rows.get_child(i)
+		
+		var n = headers_array.size()
+		for j in n:
+			row.get_child(j).cell_text = str(get_value(data, j))
+	else:
+		add_row(data)
 
 func _on_Rows_resized():
 	if is_instance_valid(rows):
 		header_row.rect_size.x = rows.rect_size.x
 
 
-func get_column_min_size(column : int):
+func get_column_min_size(column : int) -> int:
 	var size = -100000000000
 	for row in rows.get_children():
 		var cell = row.get_child(column)
@@ -223,7 +219,7 @@ func autoadjust_table():
 
 func _on_UpdateDelayTimer_timeout():
 	modulate.a = 1.0
-	var columns = header_row.get_child_count()
+	var columns = headers_array.size()
 	var columns_sizes : Array = []
 	
 	var total_column_width:= 0.0
@@ -269,26 +265,27 @@ func sort_by_column(column : int, ascending : bool):
 		for header in header_row.get_children():
 			if header.column != column:
 				header.reset_sort()
-		sorting_column = column
-		if sorting_column > raw_data[0].size()-1:
-			sorting_column = raw_data[0].size()-1
+		
+		sorting_column = int(min(column, header_row.get_child_count()-1))
+	
 		if ascending:
 			raw_data.sort_custom(self, "sort_ascending")
 		else:
 			raw_data.sort_custom(self, "sort_descending")
+				
 	update_table()
 
 
-func sort_ascending(a, b):
-	if a[sorting_column] < b[sorting_column]:
-		return true
-	return false
+func sort_ascending(a, b) -> bool:
+	var va = get_value(a, sorting_column)
+	var vb = get_value(b, sorting_column)
+	return va < vb
 
 
-func sort_descending(a, b):
-	if a[sorting_column] > b[sorting_column]:
-		return true
-	return false
+func sort_descending(a, b) -> bool:
+	var va = get_value(a, sorting_column)
+	var vb = get_value(b, sorting_column)
+	return va > vb
 
 
 func set_column_header_color(_new_color:Color):
@@ -313,22 +310,47 @@ func set_header_color(_new_color:Color):
 		header.cell_color = header_color
 
 
-func get_csv(sepparator := ",", end_of_line := "\n"):
+func get_csv(sepparator := ",", end_of_line := "\n") -> String:
 	var csv_array : PoolStringArray = []
-	var header_array : PoolStringArray = []
-	for i in range(1, header_row.get_child_count()):
-		header_array.append(header_row.get_child(i).text)
+
+	csv_array.append(headers_array.join(sepparator))
 	
-	csv_array.append(header_array.join(sepparator))
-	
-	for i in range(0, raw_data.size()):
-		var row = raw_data[i] as PoolStringArray
-		row.remove(0)
+	for data in raw_data:
+		var row : PoolStringArray = []
+		for i in headers_array.size():
+			row.append('"%s"' % str(get_value(data, i)))
 		csv_array.append(row.join(sepparator))
 		
 	return csv_array.join(end_of_line)
 
 
 func _on_Pagination_value_changed(value):
-	current_page = value-1
+	current_page = value - 1
 	update_table()
+
+	
+func get_data_count(data : Dictionary) -> int:
+	return data["reported"].size()
+	
+	
+func get_value(data : Dictionary, index : int):
+	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
+		var keys : Array = data["group"].keys()
+		var group_keys : Array = keys.duplicate()
+		var all_keys : Array = data.keys()
+		all_keys.erase("group")
+		keys.append_array(all_keys)
+		if index < group_keys.size():
+			return data["group"][group_keys[index]]
+		return data[keys[index]]
+	elif data_source_type == DataSource.TYPES.SEARCH:
+		var key : String = DefaultSearchAttributes.keys()[index]
+		var path : Array = DefaultSearchAttributes[key]
+		var result = data
+		for part in path:
+			if part in result:
+				result = result[part]
+			else:
+				result = ""
+				break
+		return result

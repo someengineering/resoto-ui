@@ -267,6 +267,7 @@ func clear_data_sources():
 
 func _on_NewWidgetPopup_about_to_show() -> void:
 	widget_name_label.text = ""
+	$"%WidgetPreviewTitleLabel".text = ""
 	clear_data_sources()
 	if widget_to_edit != null:
 		current_widget_preview_name = widget_to_edit.widget.widget_type_id

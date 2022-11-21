@@ -172,7 +172,7 @@ func _on_QueryEdit_focus_exited():
 
 func _on_QueryEdit_item_rect_changed():
 	var row_count = query_edit.get_total_visible_rows()
-	query_edit.rect_min_size.y = (row_count*25)+10
+	query_edit.rect_min_size.y = max((row_count*25)+10, 36)
 
 func execute_query_edit():
 	data_source.query = query_edit.text
