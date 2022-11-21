@@ -260,6 +260,7 @@ func get_data() -> Dictionary:
 	
 	var data = {
 		"dashboard_name" : dashboard_name,
+		"ui_version" : _g.ui_version,
 		"refresh_time_option" : refresh_option.selected,
 		"time_range" : date_button.text,
 		"cloud" : cloud,

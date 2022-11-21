@@ -1,14 +1,17 @@
 class_name DashboardManager
 extends TabContainer
 
+const DashboardContainerScene := preload("res://components/dashboard/dashboard_container.tscn")
+const DashboardContainerPlaceholderScene := preload("res://components/dashboard/dashboard_container_placeholder.tscn")
+
 signal all_dashboards_loaded
 signal dashboard_saved
 signal dashboard_opened(dashboard_name)
+signal dashboard_deleted
 
 const DefaultDashboardName:= "Resoto Example Dashboard"
 const number_keys : Array = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
 
-var dashboard_container_scene := preload("res://components/dashboard/dashboard_container.tscn")
 var available_dashboards : Dictionary = {}
 var total_saved_dashboards : int = 0
 var dashboards_loaded : int = 0
@@ -16,12 +19,15 @@ var default_dashboard_found:= false
 var inform_dashboard_selected := true
 
 onready var open_dashboard_btn = $"%OpenDashboard"
+onready var del_dashboard_btn = $"%DeleteDashboard"
+onready var dupe_dashboard_btn = $"%DuplicateDashboard"
 onready var dashboards_list = find_node("DashboardItemList")
 onready var manager_tab = $ManageDashboards
 
 
 func _ready():
 	set_tab_title(0, "Manage Dashboards")
+	set_tab_icon(0, load("res://assets/icons/icon_small_dashboard.svg"))
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	connect("all_dashboards_loaded", self, "open_user_dashboards", [], CONNECT_ONESHOT)
 
@@ -37,9 +43,24 @@ func _unhandled_input(event):
 
 
 func add_dashboard(dashboard_name : String = ""):
-	var new_tab = dashboard_container_scene.instance()
+	var new_tab = DashboardContainerScene.instance()
 	if dashboard_name != "":
 		new_tab.dashboard_name = dashboard_name
+	else:
+		var new_name = "New_Dashboard"
+		var names:= []
+		for c in get_children():
+			names.append(c.name.to_lower().replace(" ", "_"))
+		
+		if names.has(new_name.to_lower()):
+			var new_number := 1
+			while names.has(new_name.to_lower() + "_" +  str(new_number)):
+				new_number += 1
+			new_tab.dashboard_name = new_name + "_" +  str(new_number)
+			new_tab.name = (new_name + "_" +  str(new_number)).replace("_", " ")
+		else:
+			new_tab.dashboard_name = new_name
+			new_tab.name = new_name.replace("_", " ")
 
 	new_tab.connect("deleted", self, "_on_tab_deleted")
 	add_child(new_tab, true)
@@ -50,13 +71,12 @@ func add_dashboard(dashboard_name : String = ""):
 	new_tab.connect("dashboard_closed", self, "close_dashboard")
 	
 	yield(VisualServer,"frame_post_draw")
-
 	new_tab.dashboard._on_Grid_resized()
 
 
-func _on_tab_deleted(tab:int, _db_last_saved_name:String) -> void:
+func _on_tab_deleted(tab:int, _db_last_saved_name:String, change_tab:=true) -> void:
 	API.delete_config_id(self, get_db_config_name(_db_last_saved_name))
-	if tab > 0:
+	if tab != -1 and change_tab and tab > 0:
 		current_tab = tab-1
 	if get_child_count() <= 2:
 		request_saved_dashboards()
@@ -72,17 +92,23 @@ func maximize_dashboard(is_maximized:bool) -> void:
 
 
 func _on_delete_config_id_done(_error: int, _response):
-	pass
+	if _error:
+		return
+	emit_signal("dashboard_deleted")
 
 
 func save_dashboard(dashboard : DashboardContainer):
 	var data = dashboard.get_data()
+	var old_name = dashboard.name
+	var old_dashboard_name = dashboard.dashboard_name
 	if dashboard.last_saved_name != DefaultDashboardName:
 		API.delete_config_id(self, get_db_config_name(dashboard.last_saved_name))
 		available_dashboards.erase(dashboard.last_saved_name.replace(" ", "_"))
-	API.patch_config_id(self, get_db_config_name(dashboard.name), JSON.print(data))
-	dashboard.last_saved_name = dashboard.dashboard_name
-	available_dashboards[dashboard.dashboard_name.replace(" ", "_")] = data
+	
+	yield(self, "dashboard_deleted")
+	API.patch_config_id(self, get_db_config_name(old_name), JSON.print(data))
+	dashboard.last_saved_name = old_dashboard_name
+	available_dashboards[old_dashboard_name.replace(" ", "_")] = data
 
 
 func get_db_config_name(_name:String):
@@ -143,10 +169,12 @@ func open_user_dashboards():
 	inform_dashboard_selected = false
 	var dashboard_status = get_user_dashboards()
 	for dashboard in dashboard_status.open_dashboards:
-		if dashboard_status.has("active_dashboard") and dashboard == dashboard_status.active_dashboard:
-			load_dashboard(dashboard_status.active_dashboard)
+		if not available_dashboards.keys().has(dashboard):
 			continue
-		add_dashboard_placeholder(dashboard)
+		if dashboard_status.has("active_dashboard") and dashboard == dashboard_status.active_dashboard:
+			load_dashboard(dashboard)
+		else:
+			add_dashboard_placeholder(dashboard)
 	
 	inform_dashboard_selected = true
 	for i in get_children().size():
@@ -165,10 +193,44 @@ func load_dashboard(dashboard_name : String):
 
 
 func add_dashboard_placeholder(dashboard_name : String):
-	var dashboard_placeholder = Control.new()
+	var dashboard_placeholder = DashboardContainerPlaceholderScene.instance()
+	dashboard_placeholder.last_saved_name = dashboard_name
+	dashboard_placeholder.dashboard_name = dashboard_name
 	dashboard_placeholder.name = dashboard_name.replace("_", " ")
 	add_child(dashboard_placeholder, true)
 	move_child(dashboard_placeholder, get_tab_control(current_tab).get_position_in_parent())
+
+
+var import_rename_new_name := ""
+func import_dashboard_from_data(data):
+	if not data.has("dashboard_name"):
+		return
+	
+	import_rename_new_name = ""
+	var rename_confirm_popup = _g.popup_manager.show_input_popup(
+		"Name imported dashboard",
+		"Enter a name for the imported dashboard:\n`%s`" % data.dashboard_name,
+		data.dashboard_name + " import-" + str(OS.get_unix_time()),
+		"Accept", "Cancel")
+	rename_confirm_popup.connect("response_with_input", self, "_on_import_rename_confirm_response", [data], CONNECT_ONESHOT)
+
+
+func _on_import_rename_confirm_response(_button_clicked:String, _value:String, data:Dictionary):
+	if _button_clicked == "left":
+		if data.dashboard_name == _value:
+			# No name change happened
+			return
+		# Check if a config with that name already exsits.
+		# To make sure no config was created while editing, check for new config keys:
+		request_saved_dashboards()
+		yield(self, "all_dashboards_loaded")
+		if available_dashboards.has(_value.replace(" ", "_")):
+			_g.emit_signal("add_toast", "Import failed", "A dashboard with that name already exists.", 1, self)
+			return
+		
+		rename_new_name = _value
+		data.dashboard_name = rename_new_name.replace("_", " ")
+		API.put_config_id(self, get_db_config_name(rename_new_name), JSON.print(data))
 
 
 func create_dashboard_with_data(data, save_dashboard:bool=true):
@@ -230,7 +292,7 @@ func save_opened_dashboards():
 	}
 	
 	for dashboard in get_children():
-		if dashboard is DashboardContainer:
+		if dashboard is DashboardContainer or dashboard is DashboardContainerPlaceholder:
 			dashboard_status.open_dashboards.append(dashboard.name.replace(" ","_"))
 			
 	if OS.has_feature("HTML5"):
@@ -257,7 +319,9 @@ func _on_files_dropped(files, _screen):
 	var file = File.new()
 	if not file.open(files[0], File.READ):
 		var data = parse_json(file.get_as_text())
-		create_dashboard_with_data(data)
+		var json_result : JSONParseResult = JSON.parse(file.get_as_text())
+		if not json_result.error:
+			import_dashboard_from_data(data)
 
 
 func _on_DashboardItemList_item_activated(_index):
@@ -285,11 +349,15 @@ func _refresh_dashboard_list():
 
 func _on_DashboardItemList_item_selected(_index):
 	open_dashboard_btn.show()
+	del_dashboard_btn.show()
+	dupe_dashboard_btn.show()
 
 
 func _on_DashboardItemList_nothing_selected():
 	dashboards_list.unselect_all()
 	open_dashboard_btn.hide()
+	del_dashboard_btn.hide()
+	dupe_dashboard_btn.hide()
 
 
 func _on_DashBoardManager_tab_changed(_tab:int=current_tab):
@@ -300,10 +368,85 @@ func _on_DashBoardManager_tab_changed(_tab:int=current_tab):
 		load_dashboard(dashboard_name.replace(" ", "_"))
 		new_tab_control.queue_free()
 	save_opened_dashboards()
-	
 
 
 func _on_DashBoardManager_tab_selected(tab):
 	if not inform_dashboard_selected:
 		return
 	emit_signal("dashboard_opened", get_child(tab).name.replace(" ","_"))
+
+
+func _on_DuplicateDashboard_pressed():
+	var selected_idx = dashboards_list.get_selected_items()[0]
+	var dashboard_name = dashboards_list.get_item_text(selected_idx)
+	rename_new_name = ""
+	var rename_confirm_popup = _g.popup_manager.show_input_popup(
+		"Name duplicated dashboard",
+		"Enter a name for the duplicated dashboard:\n`%s`" % dashboard_name,
+		dashboard_name + " " + str(OS.get_unix_time()),
+		"Accept", "Cancel")
+	rename_confirm_popup.connect("response_with_input", self, "_on_rename_confirm_response", [], CONNECT_ONESHOT)
+
+
+var rename_new_name : String= ""
+func _on_rename_confirm_response(_button_clicked:String, _value:String):
+	var selected_idx = dashboards_list.get_selected_items()[0]
+	var dashboard_name = dashboards_list.get_item_text(selected_idx)
+	if _button_clicked == "left":
+		if dashboard_name == _value:
+			# No name change happened
+			return
+		# Check if a config with that name already exsits.
+		# To make sure no config was created while editing, check for new config keys:
+		request_saved_dashboards()
+		yield(self, "all_dashboards_loaded")
+		if available_dashboards.has(_value.replace(" ", "_")):
+			_g.emit_signal("add_toast", "Duplicate failed", "A dashboard with that name already exists.", 1, self)
+			return
+		
+		rename_new_name = _value
+		var dashboard_data :Dictionary = available_dashboards[dashboards_list.get_item_metadata(selected_idx)].duplicate(true)
+		dashboard_data.dashboard_name = rename_new_name.replace("_", " ")
+		API.put_config_id(self, get_db_config_name(rename_new_name), JSON.print(dashboard_data))
+
+
+func _on_put_config_id_done(_error, _response) -> void:
+	if _error:
+		_g.emit_signal("add_toast", "Error saving dashboard.", "", 1, self)
+		return
+	request_saved_dashboards()
+	yield(self, "all_dashboards_loaded")
+	_refresh_dashboard_list()
+
+
+func _on_DeleteDashboard_pressed():
+	var selected_idx = dashboards_list.get_selected_items()[0]
+	var delete_title = "Delete Dashboard?"
+	var delete_message = "Do you want to delete the dashboard \"" + dashboards_list.get_item_text(selected_idx) + "\"?"
+
+	if dashboards_list.get_item_text(selected_idx) == DefaultDashboardName:
+		delete_title = "Reset Dashboard?"
+		delete_message = "%s can not be deleted. Do you want to reset the dashboard?" % DefaultDashboardName
+
+	var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
+		delete_title,
+		delete_message,
+		"Yes", "Cancel")
+	delete_confirm_popup.connect("response", self, "_on_delete_confirm_response", [], CONNECT_ONESHOT)
+
+
+func _on_delete_confirm_response(_response:String):
+	if _response == "left":
+		var selected_idx = dashboards_list.get_selected_items()[0]
+		var dashboard_node = get_node_or_null(dashboards_list.get_item_text(selected_idx))
+		var parent_pos := -1
+		if dashboard_node:
+			parent_pos = dashboard_node.get_position_in_parent()
+		_on_tab_deleted(parent_pos, dashboards_list.get_item_text(selected_idx), false)
+		available_dashboards.erase(dashboards_list.get_item_metadata(selected_idx))
+		if dashboard_node:
+			dashboard_node.queue_free()
+		dashboards_list.remove_item(selected_idx)
+		yield(get_tree(), "idle_frame")
+		save_opened_dashboards()
+		Analytics.event(Analytics.EventsDashboard.DELETE)
