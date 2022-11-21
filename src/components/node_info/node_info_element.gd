@@ -7,7 +7,7 @@ var aggregation_request :ResotoAPI.Request
 var current_node_id : String				= ""
 var id_history : Array						= []
 var current_main_node : Dictionary			= {}
-var breadcrumbs : Dictionary				= {}
+var breadcrumbs : Array						= []
 var treemap_display_mode : int				= 1
 var last_aggregation_query	: String		= ""
 var default_treemap_mode : int				= 1
@@ -21,6 +21,7 @@ onready var n_icon_phantom := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/
 onready var property_container := $"%PropertyContainer"
 onready var leaf_panel := $Margin/VBox/NodeContent/LeafPanel
 onready var tag_group := $"%TagsGroup"
+onready var graph_a_star := GraphAStar.new()
 
 
 func _ready():
@@ -72,10 +73,12 @@ func clear_view():
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
 		if error == ERR_PRINTER_ON_FIRE:
+			# Request was cancelled
 			return
 		_g.emit_signal("add_toast", "Error in Node Info", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
 		show()
 		return
+	
 	if _response.transformed.has("result"):
 		if _response.transformed.result is String and _response.transformed.result.begins_with("Error"):
 			_g.emit_signal("add_toast", "Error in Node Info", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
@@ -83,64 +86,54 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		
 		var current_result = _response.transformed.result
 		
+		breadcrumbs = graph_a_star.get_shortest_path(current_result, "root", current_node_id)
+		update_breadcrumbs()
+		
 		if not current_result.empty() and current_result[0].has("reported"):
 			$Margin/VBox/NodeContent/NodeDetails/AllDataGroup.node_text = Utils.readable_dict(current_result[0].reported)
-		breadcrumbs.clear()
-		breadcrumbs["edges"] = []
-		breadcrumbs["nodes"] = {}
+		
 		for r in current_result:
-			if r.type == "edge":
-				breadcrumbs.edges.append(r)
-			
-			if r.type == "node":
-				breadcrumbs.nodes[r.id] = (r)
-				
-				if r.id == current_node_id:
-					main_node_display(r)
-					set_successor_button(false)
-					set_predecessor_button(true)
-					hide_treemap()
-					treemap_display_mode = default_treemap_mode
-					$"%TreeMapModeButton".disabled = false
-					$"%TreeMapModeButton".modulate.a = 0.3
-					# Not used anymore at the moment
-					if treemap_display_mode == 0:
-						var descendants_query:= "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
+			if r.type == "node" and r.id == current_node_id:
+				main_node_display(r)
+				set_successor_button(false)
+				set_predecessor_button(true)
+				hide_treemap()
+				treemap_display_mode = default_treemap_mode
+				$"%TreeMapModeButton".disabled = false
+				$"%TreeMapModeButton".modulate.a = 0.3
+				if treemap_display_mode == 0:
+					var descendants_query:= "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
+					last_aggregation_query = descendants_query
+					if r.id != "root":
+						aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
+					else:
+						aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
+						set_predecessor_button(false)
+						set_successor_button(true)
+				elif treemap_display_mode == 1:
+					if r.has("reported") and r.reported.has("kind"):
+						var descendants_query:= "aggregate(/ancestors.%s.reported.name: sum(1) as count): /ancestors.%s.reported.id%s and /ancestors.%s.reported.name!=null"
+						match r.reported.kind:
+							"graph_root":
+								set_predecessor_button(false)
+								set_successor_button(true)
+								descendants_query = descendants_query % ["cloud", "cloud", "!=null", "cloud"]
+							"cloud":
+								descendants_query = descendants_query % ["account", "cloud", "=\"" + r.reported.id + "\"", "account"]
+							"account", "gcp_project", "aws_account", "digitalocean_team", "slack_team", "kubernetes_cluster", "onelogin_account":
+								descendants_query = descendants_query % ["region", "account", "="+r.reported.id, "region"]
+							"-":
+								# not yet in use, this would eventually be neccessary for gcp
+								descendants_query = descendants_query % ["zone", "region", "="+r.reported.id, "zone"]
+							_:
+								treemap_display_mode = 0
+								$"%TreeMapModeButton".disabled = true
+								descendants_query = "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
 						last_aggregation_query = descendants_query
-						if r.id != "root":
-	#						if (r.has("metadata") and r.metadata.has("descendant_summary")):
-	#							update_treemap(r.metadata.descendant_summary)
-	#						else:
-							aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
-						else:
-							aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
-							set_predecessor_button(false)
-							set_successor_button(true)
-					elif treemap_display_mode == 1:
-						if r.has("reported") and r.reported.has("kind"):
-							var descendants_query:= "aggregate(/ancestors.%s.reported.name: sum(1) as count): /ancestors.%s.reported.id%s and /ancestors.%s.reported.name!=null"
-							match r.reported.kind:
-								"graph_root":
-									set_predecessor_button(false)
-									set_successor_button(true)
-									descendants_query = descendants_query % ["cloud", "cloud", "!=null", "cloud"]
-								"cloud":
-									descendants_query = descendants_query % ["account", "cloud", "=\"" + r.reported.id + "\"", "account"]
-								"account", "gcp_project", "aws_account", "digitalocean_team", "slack_team", "kubernetes_cluster", "onelogin_account":
-									descendants_query = descendants_query % ["region", "account", "="+r.reported.id, "region"]
-								"-":
-									# not yet in use, this would eventually be neccessary for gcp
-									descendants_query = descendants_query % ["zone", "region", "="+r.reported.id, "zone"]
-								_:
-									treemap_display_mode = 0
-									$"%TreeMapModeButton".disabled = true
-									descendants_query = "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
-							last_aggregation_query = descendants_query
-							aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
-						else:
-							# use fallback
-							pass
-		update_breadcrumbs()
+						aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
+					else:
+						# use fallback
+						pass
 		show()
 
 
@@ -214,34 +207,17 @@ func update_breadcrumbs():
 			continue
 		c.queue_free()
 	
-	var next:String = "root"
-	
-	if breadcrumbs.edges.size() > 0:
-		var root_arrow = bc_arrow.duplicate()
-		breadcrumb_container.add_child(root_arrow)
-	
-	while breadcrumbs.edges.size() > 0:
-		var found_result:bool = false
+	for b in breadcrumbs:
+		if b.id == "root":
+			continue
+		var new_arrow = bc_arrow.duplicate()
+		breadcrumb_container.add_child(new_arrow)
+		var new_button = bc_button.duplicate()
+		breadcrumb_container.add_child(new_button)
+		new_button.text = b.reported.name
+		new_button.hint_tooltip = b.reported.kind
+		new_button.connect("pressed", self, "on_id_button_pressed", [b.id])
 		
-		for e in breadcrumbs.edges:
-			if e.from == next:
-				found_result = true
-				next = e.to
-				var new_button = bc_button.duplicate()
-				breadcrumb_container.add_child(new_button)
-				new_button.text = breadcrumbs.nodes[next].reported.name
-				new_button.hint_tooltip = breadcrumbs.nodes[next].reported.kind
-				new_button.connect("pressed", self, "on_id_button_pressed", [breadcrumbs.nodes[next].id])
-				breadcrumbs.edges.erase(e)
-				
-				if breadcrumbs.nodes[next].id == current_node_id:
-					continue
-				
-				if not breadcrumbs.edges.empty():
-					var new_arrow = bc_arrow.duplicate()
-					breadcrumb_container.add_child(new_arrow)
-		if not found_result:
-			break
 	breadcrumb_container.move_child(res_list_btn, breadcrumb_container.get_child_count())
 
 
