@@ -89,6 +89,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/dashboard_container.gd"
 }, {
+"base": "Control",
+"class": "DashboardContainerPlaceholder",
+"language": "GDScript",
+"path": "res://components/dashboard/dashboard_container_placeholder.gd"
+}, {
 "base": "TabContainer",
 "class": "DashboardManager",
 "language": "GDScript",
@@ -211,6 +216,7 @@ _global_script_class_icons={
 "ContentManager": "",
 "CustomPopupWindow": "",
 "DashboardContainer": "",
+"DashboardContainerPlaceholder": "",
 "DashboardManager": "",
 "DataSource": "",
 "DynamicLabel": "",
