@@ -105,108 +105,108 @@ icon_tex = ExtResource( 4 )
 visible = false
 margin_top = 37.0
 margin_right = 511.0
-margin_bottom = 448.0
+margin_bottom = 435.0
 size_flags_horizontal = 3
 
 [node name="MetricsVBox" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
 margin_right = 511.0
-margin_bottom = 47.0
+margin_bottom = 45.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/MetricsVBox"]
 margin_right = 511.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 text = "Metric"
 
 [node name="MetricsOptions" parent="VBoxContainer/DatasourceSettings/MetricsVBox" instance=ExtResource( 9 )]
-margin_top = 22.0
+margin_top = 21.0
 margin_right = 511.0
-margin_bottom = 47.0
+margin_bottom = 45.0
 
 [node name="FunctionVBox" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 51.0
+margin_top = 49.0
 margin_right = 511.0
-margin_bottom = 98.0
+margin_bottom = 94.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/FunctionVBox"]
 margin_right = 511.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 text = "Aggregator"
 
 [node name="FunctionComboBox" parent="VBoxContainer/DatasourceSettings/FunctionVBox" instance=ExtResource( 9 )]
-margin_top = 22.0
+margin_top = 21.0
 margin_right = 511.0
-margin_bottom = 47.0
+margin_bottom = 45.0
 items = [ "", "sum", "min", "max", "avg", "count", "sum_over_time", "min_over_time", "max_over_time", "avg_over_time", "count_over_time" ]
 
 [node name="FilterHBox" type="HBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 102.0
+margin_top = 98.0
 margin_right = 511.0
-margin_bottom = 197.0
+margin_bottom = 191.0
 
 [node name="FilterWidget" parent="VBoxContainer/DatasourceSettings/FilterHBox" instance=ExtResource( 1 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 511.0
-margin_bottom = 95.0
+margin_bottom = 93.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 201.0
+margin_top = 195.0
 margin_right = 511.0
-margin_bottom = 256.0
+margin_bottom = 248.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer"]
 margin_right = 511.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 text = "Date Offset"
 
 [node name="DateOffsetLineEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer"]
-margin_top = 22.0
+margin_top = 21.0
 margin_right = 511.0
-margin_bottom = 55.0
+margin_bottom = 53.0
 script = ExtResource( 6 )
 
 [node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 260.0
+margin_top = 252.0
 margin_right = 511.0
-margin_bottom = 315.0
+margin_bottom = 305.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
 margin_right = 511.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 text = "Sum by"
 
 [node name="ByLineEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer4"]
-margin_top = 22.0
+margin_top = 21.0
 margin_right = 511.0
-margin_bottom = 55.0
+margin_bottom = 53.0
 script = ExtResource( 6 )
 
 [node name="VBoxContainer5" type="VBoxContainer" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 319.0
+margin_top = 309.0
 margin_right = 511.0
-margin_bottom = 374.0
+margin_bottom = 362.0
 custom_constants/separation = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/DatasourceSettings/VBoxContainer5"]
 margin_right = 511.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 text = "Legend"
 
 [node name="LegendEdit" type="LineEdit" parent="VBoxContainer/DatasourceSettings/VBoxContainer5"]
-margin_top = 22.0
+margin_top = 21.0
 margin_right = 511.0
-margin_bottom = 55.0
+margin_bottom = 53.0
 script = ExtResource( 6 )
 
 [node name="StackedCheckBox" type="CheckBox" parent="VBoxContainer/DatasourceSettings"]
-margin_top = 378.0
+margin_top = 366.0
 margin_right = 511.0
-margin_bottom = 411.0
+margin_bottom = 398.0
 pressed = true
 text = "Stacked"
 
@@ -214,30 +214,30 @@ text = "Stacked"
 visible = false
 margin_top = 37.0
 margin_right = 511.0
-margin_bottom = 293.0
+margin_bottom = 226.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TextSearchSettings"]
 margin_right = 511.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Text"
 
 [node name="TextLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 25.0
+margin_top = 24.0
 margin_right = 511.0
-margin_bottom = 58.0
+margin_bottom = 56.0
 size_flags_horizontal = 3
 script = ExtResource( 6 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 62.0
+margin_top = 60.0
 margin_right = 511.0
-margin_bottom = 95.0
+margin_bottom = 93.0
 
 [node name="Label2" type="Label" parent="VBoxContainer/TextSearchSettings/HBoxContainer"]
 margin_top = 6.0
 margin_right = 235.0
-margin_bottom = 27.0
+margin_bottom = 26.0
 size_flags_horizontal = 3
 text = "Kinds"
 
@@ -254,33 +254,35 @@ icon_tex = ExtResource( 5 )
 icon_margin = 5
 
 [node name="LineEditKinds" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 99.0
+margin_top = 97.0
 margin_right = 511.0
-margin_bottom = 132.0
+margin_bottom = 129.0
 script = ExtResource( 6 )
 
 [node name="Label2" type="Label" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 136.0
+margin_top = 133.0
 margin_right = 511.0
-margin_bottom = 157.0
+margin_bottom = 153.0
 text = "Filters"
 
 [node name="TextFiltersLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 161.0
+margin_top = 157.0
 margin_right = 511.0
-margin_bottom = 194.0
+margin_bottom = 189.0
 script = ExtResource( 6 )
 
 [node name="Label3" type="Label" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 198.0
+visible = false
+margin_top = 193.0
 margin_right = 511.0
-margin_bottom = 219.0
+margin_bottom = 213.0
 text = "List"
 
 [node name="ListLineEdit" type="LineEdit" parent="VBoxContainer/TextSearchSettings"]
-margin_top = 223.0
+visible = false
+margin_top = 217.0
 margin_right = 511.0
-margin_bottom = 256.0
+margin_bottom = 249.0
 script = ExtResource( 6 )
 
 [node name="TwoEntryAggregateSettings" type="VBoxContainer" parent="VBoxContainer"]
