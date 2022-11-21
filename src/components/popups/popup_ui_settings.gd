@@ -191,3 +191,7 @@ func _on_UITestModeButton_pressed():
 
 func _on_WizardEditorStartButton_pressed():
 	get_tree().change_scene("res://components/wizard_editor/wizard_editor_component.tscn")
+
+
+func _on_LinkButton_pressed():
+	OS.shell_open("https://godotengine.org/license")
