@@ -2,7 +2,7 @@ extends CanvasLayer
 class_name ContentManager
 
 onready var sections = {
-	"terminals": $Content/TerminalComponent,
+	"resoto_shell_lite": $Content/TerminalComponent,
 	"dashboards": $Content/DashBoardComponent,
 	"config": $Content/ConfigComponent,
 	"message_log": $Content/LogComponent,

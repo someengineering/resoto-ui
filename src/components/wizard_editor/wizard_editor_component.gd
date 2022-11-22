@@ -60,6 +60,7 @@ static func save_json(path:String, file_name:String, _data):
 
 
 func _ready():
+	UINavigation.change_title("Wizard Editor")
 	var start_section = add_step("StepSection")
 	start_section.section_name = "start"
 	current_homescreen = "start"

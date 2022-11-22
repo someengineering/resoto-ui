@@ -65,7 +65,7 @@ func _on_ButtonExplore_pressed():
 
 
 func _on_ButtonTerminals_pressed():
-	_g.emit_signal("nav_change_section", "terminals")
+	_g.emit_signal("nav_change_section", "resoto_shell_lite")
 	close_menu()
 
 
