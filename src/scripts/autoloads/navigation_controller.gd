@@ -38,8 +38,6 @@ func _on_popstate_event(_args):
 
 	var navigation_args = parse_navigation_args(url_hash)
 	
-	JavaScript.eval('document.title = "Resoto - %s"' % "Home" if navigation_args["view"] == "" else navigation_args["view"])
-	
 	emit_signal("navigate", navigation_args)
 	
 	yield(get_tree().create_timer(0.1),"timeout")
@@ -65,7 +63,6 @@ func set_current_navigation_state(args : Dictionary):
 		for key in args:
 			args_array.append("%s=%s" % [key, args[key]])
 		
-		JavaScript.eval('document.title = "Resoto - %s"' % view)
 		if args_array.size() > 0:
 			view += "?%s" % args_array.join("&")
 			
@@ -120,3 +117,8 @@ func native_navigate(direction : String):
 func set_navigation_index(new_index : int):
 	navigation_index = new_index
 	emit_signal("navigation_index_changed", navigation_index)
+
+
+func change_title(new_title : String):
+	if OS.has_feature("HTML5"):
+		JavaScript.eval('document.title = "Resoto - %s"' % new_title)

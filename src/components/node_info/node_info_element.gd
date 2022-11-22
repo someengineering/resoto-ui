@@ -45,7 +45,6 @@ func show_node(node_id:String, _add_to_history:=true):
 	current_node_id = node_id
 	tag_group.node_id = current_node_id
 	active_request = API.graph_search(search_command, self, "graph")
-	emit_signal("node_shown", node_id)
 
 
 func clear_view():
@@ -142,6 +141,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 							pass
 		update_breadcrumbs()
 		show()
+		emit_signal("node_shown", tag_group.node_id)
 
 
 func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> void:

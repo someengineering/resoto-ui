@@ -1,4 +1,4 @@
-extends ComponentContainer
+extends MarginContainer
 
 
 func _ready():
