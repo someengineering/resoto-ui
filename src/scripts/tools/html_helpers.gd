@@ -45,6 +45,8 @@ func _physics_process(delta:float):
 
 
 func add_mac_actions():
+	emulations.append(KeyEmulation.new("mac_ui_zoom_plus", KEY_EQUAL, true))
+	emulations.append(KeyEmulation.new("mac_ui_zoom_minus", KEY_MINUS, true))
 	emulations.append(KeyEmulation.new("mac_copy", KEY_C, true))
 	emulations.append(KeyEmulation.new("mac_paste", KEY_V, true))
 	emulations.append(KeyEmulation.new("mac_cut", KEY_X, true))
