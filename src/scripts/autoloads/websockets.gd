@@ -1,11 +1,19 @@
 extends Node
 
 var ws : WebSocketClient = null
+var ws_header : PoolStringArray = []
+
 
 func _ready():
 	ws = WebSocketClient.new()
 	ws.verify_ssl = false
 	_g.connect("connected_to_resotocore", self, "connect_websockets")
+
+
+func refresh_jwt_header() -> void:
+	if JWT.token == "" or JWT.token_expired():
+		JWT.create_jwt("")
+	ws_header = ["Authorization: Bearer %s" % JWT.token]
 
 
 func _process(_delta):
@@ -32,7 +40,8 @@ func connect_websockets():
 	var ws_url = "ws://%s:%s/events" if not API.use_ssl else "wss://%s:%s/events"
 	ws_url = ws_url % [API.adress, API.port]
 	print("Websocket: Connecting to " + ws_url)
-	var err = ws.connect_to_url(ws_url)
+	refresh_jwt_header()
+	var err = ws.connect_to_url(ws_url, [], false, ws_header)
 	if err != OK:
 		print("Websocket: Unable to connect")
 		set_process(false)
