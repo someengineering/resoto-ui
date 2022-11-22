@@ -652,6 +652,7 @@ script = ExtResource( 22 )
 
 [connection signal="node_shown" from="Content/Content/NodeSingleInfoComponent/NodeSingleInfo" to="Content/Content/NodeSingleInfoComponent" method="_on_NodeSingleInfo_node_shown"]
 [connection signal="show" from="Content/Content/NodeListElementComponent/NodeListElement" to="Content/Content/NodeListElementComponent" method="_on_NodeListElement_show"]
+[connection signal="config_changed" from="Content/Content/ConfigComponent/ConfigManager" to="Content/Content/ConfigComponent" method="_on_ConfigManager_config_changed"]
 [connection signal="unread_logs_changed" from="Content/Content/LogComponent/MessageLog" to="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog/NotificationAnchor/NotificationLabel" method="set_notification_count"]
 [connection signal="dashboard_opened" from="Content/Content/DashBoardComponent/DashBoardManager" to="Content/Content/DashBoardComponent" method="_on_DashBoardManager_dashboard_opened"]
 [connection signal="setup_wizard_finished" from="Content/Content/SetupWizardComponent/WizardControl" to="Content/Content/SetupWizardComponent" method="_on_WizardControl_setup_wizard_finished"]

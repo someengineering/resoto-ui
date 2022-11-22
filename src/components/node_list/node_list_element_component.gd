@@ -11,6 +11,7 @@ func apply_navigation_arguments():
 			var_arguments.append(str2var(argument))
 		
 		component.callv(navigation_arguments["function"], var_arguments)
+		update_title()
 
 
 func _on_NodeListElement_show(function : String, arguments : Array):
@@ -24,3 +25,10 @@ func _on_NodeListElement_show(function : String, arguments : Array):
 	data["args"] = pool.join("|")
 
 	update_navigation_arguments(data)
+	update_title()
+	
+
+func update_title():
+	var search_type : String = component.get_node("%SearchTypeLabel").text
+	var parent_node : String = component.parent_node_name
+	UINavigation.change_title("Explore: %s - %s" % [parent_node, search_type])

@@ -117,3 +117,8 @@ func native_navigate(direction : String):
 func set_navigation_index(new_index : int):
 	navigation_index = new_index
 	emit_signal("navigation_index_changed", navigation_index)
+
+
+func change_title(new_title : String):
+	if OS.has_feature("HTML5"):
+		JavaScript.eval('document.title = "Resoto - %s"' % new_title)
