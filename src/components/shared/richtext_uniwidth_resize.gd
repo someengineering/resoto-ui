@@ -8,7 +8,7 @@ func set_bbcode(_new:String):
 
 func adjust_size() -> void:
 	var new_rect_min_size_x := 0.0
-	for line in bbcode_text.split("\n"):
+	for line in text.split("\n"):
 		new_rect_min_size_x = max(new_rect_min_size_x, get_font("normal_font").get_string_size(line).x)
 	rect_min_size.x = new_rect_min_size_x
 	rect_size.x = new_rect_min_size_x
