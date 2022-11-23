@@ -135,6 +135,9 @@ func _on_cli_execute_streamed_done(error:int, _response:UserAgent.Response) -> v
 		if console.text.ends_with("\n"):
 			console.text.trim_suffix("\n")
 		loading.stop()
+		
+	data_chunks = []
+	data_chunks.resize(max_data_chunks)
 
 
 func _on_cli_execute_streamed_data(data:String) -> void:
