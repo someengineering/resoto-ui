@@ -13,13 +13,13 @@ margin_bottom = -1042.0
 script = ExtResource( 2 )
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-margin_right = 374.0
+margin_right = 368.0
 margin_bottom = 53.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 364.0
+margin_right = 358.0
 margin_bottom = 43.0
 
 [node name="HexColorPicker" parent="PanelContainer/HBoxContainer" instance=ExtResource( 4 )]
@@ -32,22 +32,23 @@ margin_bottom = 33.0
 margin_left = 184.0
 margin_top = 6.0
 margin_right = 249.0
-margin_bottom = 27.0
+margin_bottom = 26.0
 rect_min_size = Vector2( 65, 0 )
 text = "at value"
 align = 1
 
 [node name="SpinBox" type="SpinBox" parent="PanelContainer/HBoxContainer"]
 margin_left = 253.0
-margin_right = 317.0
+margin_right = 311.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 max_value = inf
 
-[node name="Button" parent="PanelContainer/HBoxContainer" instance=ExtResource( 3 )]
-margin_left = 321.0
-margin_right = 354.0
+[node name="DeleteButton" parent="PanelContainer/HBoxContainer" instance=ExtResource( 3 )]
+margin_left = 315.0
+margin_right = 348.0
 icon_tex = ExtResource( 1 )
 
 [connection signal="color_changed" from="PanelContainer/HBoxContainer/HexColorPicker" to="." method="_on_HexColorPicker_color_changed"]
 [connection signal="value_changed" from="PanelContainer/HBoxContainer/SpinBox" to="." method="_on_SpinBox_value_changed"]
+[connection signal="pressed" from="PanelContainer/HBoxContainer/DeleteButton" to="." method="_on_DeleteButton_pressed"]
