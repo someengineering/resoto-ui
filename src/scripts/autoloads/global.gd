@@ -8,6 +8,7 @@ signal connect_to_core
 signal add_toast
 signal toast_created
 signal toast_click
+signal toast_show_saved
 
 # UI and fullscreen
 signal ui_scale_changed

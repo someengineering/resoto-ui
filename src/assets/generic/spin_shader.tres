@@ -1,0 +1,32 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_add;
+
+const float PI = 3.1415926;
+const float TAU = 6.2831853;
+
+uniform sampler2D gradient_texture;
+uniform vec4 albedo : hint_color;
+uniform float power = 1.0;
+uniform vec2 pos = vec2(0.5, 0.5);
+uniform float turn_speed = 2.0;
+uniform float grad_length = 2.0;
+
+
+float turning(in float time, in float offset, in vec2 uv, in vec2 center, in float speed, in float gl){
+    time *= speed;
+    uv -= center;
+    float x = length(uv);
+    float y = mod(atan(uv.y, uv.x) + time + offset, TAU);
+    y /= gl;
+    
+    return clamp(1.0 - y, 0, 1);
+}
+
+void fragment() {
+	float turn_value = turning(TIME, 0.0, UV, pos, turn_speed, grad_length*PI) + turning(TIME, PI, UV, pos, turn_speed, grad_length*PI);
+	COLOR = textureLod(gradient_texture, vec2(turn_value, 0.0), 0.0) * albedo * power;
+	COLOR.a *= clamp(texture(TEXTURE, UV).a, 0.0, 1.0);
+}"

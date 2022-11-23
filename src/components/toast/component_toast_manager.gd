@@ -19,7 +19,13 @@ onready var tween:Tween = $MoveToastsTween
 
 func _ready():
 	_g.connect("add_toast", self, "on_add_toast")
+	_g.connect("toast_show_saved", self, "_on_show_saved")
 	_g.connect("toast_click", self, "_on_toast_clicked")
+
+
+func _on_show_saved():
+	$SaveIconMargin/SavingAnimationPlayer.play("saving")
+	$SaveIconMargin/SavingAnimationPlayer.seek(0.0, true)
 
 
 func on_add_toast(_title:String, _description:String=description, _status:int=status, _from:Node=null, _duration:float = duration, _is_closable:bool=is_closable):
