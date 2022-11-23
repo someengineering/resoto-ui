@@ -71,7 +71,7 @@ func add_mac_actions():
 func _input(event):
 	if not is_web:
 		return
-	if event is InputEventKey and event.is_pressed() and (event.control or event.alt or event.shift or event.meta):
+	if event is InputEventKey and event.is_pressed() and (event.control or event.alt or event.meta):
 		if _g.os != "MacOS":
 			# Handling default Inputs (Windows)
 			if event.scancode == KEY_V and not refreshing_clipboard:
