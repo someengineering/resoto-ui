@@ -8,6 +8,7 @@ func _ready():
 
 
 func _start_wizard():
+	Analytics.event(Analytics.EventWizard.START)
 	_g.emit_signal("nav_change_section", "setup_wizard")
 
 
@@ -17,6 +18,7 @@ func _on_SetupWizardComponent_visibility_changed():
 
 
 func _on_WizardControl_setup_wizard_finished():
+	Analytics.event(Analytics.EventWizard.FINISH)
 	_g.emit_signal("nav_change_section", "home")
 
 

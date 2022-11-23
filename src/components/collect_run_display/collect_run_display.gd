@@ -92,6 +92,10 @@ func parse_message(_m:Dictionary):
 		# handle error
 		if _m.data.has("message"):
 			run_errors.append(_m.data.message)
+			
+			var properties := {"error" : _m.data.message}
+			Analytics.event(Analytics.EventWizard.ERROR, properties)
+			
 			refresh_error_tooltip()
 	
 	elif m_type == message_types[MessageTypes.PROGRESS]:
