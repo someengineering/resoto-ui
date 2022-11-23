@@ -1,7 +1,80 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://components/toast/component_toast_manager.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
+[ext_resource path="res://assets/icons/icon_128_save_disc.svg" type="Texture" id=3]
+[ext_resource path="res://assets/generic/spin_shader.tres" type="Shader" id=4]
+
+[sub_resource type="Gradient" id=31]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.462366, 1 )
+colors = PoolColorArray( 0.164063, 0.164063, 0.164063, 1, 1, 1, 1, 1, 0.164706, 0.164706, 0.164706, 1 )
+
+[sub_resource type="GradientTexture" id=30]
+gradient = SubResource( 31 )
+
+[sub_resource type="ShaderMaterial" id=32]
+shader = ExtResource( 4 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, -1 )
+shader_param/turn_speed = 3.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 30 )
+
+[sub_resource type="Animation" id=33]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("SaveIconMargin/Saving:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SaveIconMargin/Saving:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=34]
+resource_name = "saving"
+tracks/0/type = "value"
+tracks/0/path = NodePath("SaveIconMargin/Saving:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SaveIconMargin/Saving:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 1 ),
+"transitions": PoolRealArray( 1, 1.51572, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.619608 ), Color( 1, 1, 1, 0 ) ]
+}
 
 [node name="ToastManager" type="Control"]
 anchor_right = 1.0
@@ -18,3 +91,33 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="MoveToastsTween" type="Tween" parent="."]
+
+[node name="SaveIconMargin" type="Control" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -36.0
+margin_top = -36.0
+rect_min_size = Vector2( 36, 36 )
+mouse_filter = 2
+
+[node name="Saving" type="TextureRect" parent="SaveIconMargin"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+self_modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+material = SubResource( 32 )
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="SavingAnimationPlayer" type="AnimationPlayer" parent="SaveIconMargin"]
+root_node = NodePath("../..")
+anims/RESET = SubResource( 33 )
+anims/saving = SubResource( 34 )

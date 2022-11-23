@@ -17,6 +17,7 @@ var total_saved_dashboards : int = 0
 var dashboards_loaded : int = 0
 var default_dashboard_found:= false
 var inform_dashboard_selected := true
+var is_saving := false
 
 onready var open_dashboard_btn = $"%OpenDashboard"
 onready var del_dashboard_btn = $"%DeleteDashboard"
@@ -97,15 +98,17 @@ func _on_delete_config_id_done(_error: int, _response):
 	emit_signal("dashboard_deleted")
 
 
-func save_dashboard(dashboard : DashboardContainer):
+func save_dashboard(dashboard : DashboardContainer, where_from:String):
+	if is_saving:
+		return
+	is_saving = true
 	var data = dashboard.get_data()
 	var old_name = dashboard.name
 	var old_dashboard_name = dashboard.dashboard_name
 	if dashboard.last_saved_name != DefaultDashboardName:
 		API.delete_config_id(self, get_db_config_name(dashboard.last_saved_name))
 		available_dashboards.erase(dashboard.last_saved_name.replace(" ", "_"))
-	
-	yield(self, "dashboard_deleted")
+		yield(self, "dashboard_deleted")
 	API.patch_config_id(self, get_db_config_name(old_name), JSON.print(data))
 	dashboard.last_saved_name = old_dashboard_name
 	available_dashboards[old_dashboard_name.replace(" ", "_")] = data
@@ -122,8 +125,11 @@ func close_dashboard(dashboard : DashboardContainer):
 
 
 func _on_patch_config_id_done(_error : int, _response):
-	_g.emit_signal("add_toast", "Your Dashboard has been saved!", "", 0, self, 0.7)
+	# Removed the "success" toast as it was more confusing than helpful...
+#	_g.emit_signal("add_toast", "Dashboard saved!", "", 0, self, 0.7)
+	_g.emit_signal("toast_show_saved")
 	emit_signal("dashboard_saved")
+	is_saving = false
 	_refresh_dashboard_list()
 
 
@@ -265,7 +271,7 @@ func create_dashboard_with_data(data, save_dashboard:bool=true):
 	if save_dashboard:
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
-		save_dashboard(dashboard)
+		save_dashboard(dashboard, "create_dashboard_with_data + save_dashboard")
 
 
 func get_user_dashboards() -> Dictionary:

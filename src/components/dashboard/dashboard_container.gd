@@ -131,7 +131,7 @@ func _on_DashboardEditButton_toggled(button_pressed : bool) -> void:
 	$"%DashboardAddWidgetButton".visible = is_editing
 	dashboard.lock(!is_editing)
 	if !is_editing:
-		emit_signal("dashboard_changed", self)
+		emit_signal("dashboard_changed", self, "_on_DashboardEditButton_toggled")
 
 
 func _on_OptionButton_item_selected(_index : int) -> void:
@@ -388,8 +388,7 @@ func _on_rename_confirm_response(_button_clicked:String, _value:String):
 	if _button_clicked == "left":
 		set_dashboard_name(_value)
 		if initial_load:
-			emit_signal("dashboard_changed", self)
-			
+			emit_signal("dashboard_changed", self, "_on_rename_confirm_response")
 		last_saved_name = _value
 
 
@@ -404,6 +403,7 @@ func _on_NewWidgetPopup_widget_edited():
 
 
 func _on_DashboardContainer_visibility_changed():
-	if not visible:
+	if not visible and is_editing:
 		add_widget_popup._close_popup()
 		_on_DashboardEditButton_toggled(false)
+		$"%DashboardEditButton".pressed = false
