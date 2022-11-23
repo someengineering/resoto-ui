@@ -266,6 +266,28 @@ func clear_data_sources():
 
 
 func _on_NewWidgetPopup_about_to_show() -> void:
+	# Check for dashboard filters:
+	var has_filters := false
+	if dashboard_filters.cloud != "":
+		has_filters = true
+		$"%CloudFilterLabel".text = dashboard_filters.cloud
+	if dashboard_filters.account != "":
+		has_filters = true
+		$"%AccountFilterLabel".text = dashboard_filters.account
+	if dashboard_filters.region != "":
+		has_filters = true
+		$"%RegionFilterLabel".text = dashboard_filters.region
+	
+	$"%CloudLabel".visible = dashboard_filters.cloud != ""
+	$"%CloudFilterLabel".visible = dashboard_filters.cloud != ""
+	$"%AccountLabel".visible = dashboard_filters.account != ""
+	$"%AccountFilterLabel".visible = dashboard_filters.account != ""
+	$"%RegionLabel".visible = dashboard_filters.region != ""
+	$"%RegionFilterLabel".visible = dashboard_filters.region != ""
+	$"%AppliedFilterBox".visible = has_filters
+	$"%ExpandGlobalFiltersButton".pressed = false
+	$"%DashboardFilters".hide()
+	
 	widget_name_label.text = ""
 	$"%WidgetPreviewTitleLabel".text = ""
 	clear_data_sources()
@@ -371,7 +393,7 @@ func update_preview() -> void:
 		
 	if preview_widget.has_method("clear_series"):
 		preview_widget.clear_series()
-		
+	
 	for datasource in data_source_container.get_children():
 		var attr := {}
 		match datasource.data_source.type:
@@ -425,3 +447,7 @@ func _on_DataSourceTypeOptionButton_item_selected(_index):
 			template_options.add_child(new_template)
 			templates_available = true
 	$"%TemplatesAvailableLabel".visible = templates_available
+
+
+func _on_ExpandGlobalFiltersButton_pressed():
+	$"%DashboardFilters".visible = $"%ExpandGlobalFiltersButton".pressed
