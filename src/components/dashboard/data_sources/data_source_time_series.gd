@@ -38,6 +38,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 		
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 		making_query = true
+		q = q.http_escape()
 		q += "&time=%d" % attr["to"]
 		set_request(API.query_tsdb(q, self))
 	else:
@@ -47,7 +48,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 		widget.x_origin = from
 		widget.x_range = to - from
 		making_query = true
-		set_request(API.query_range_tsdb(q, self, from, to, interval))
+		set_request(API.query_range_tsdb(q.http_escape(), self, from, to, interval))
 
 
 func _on_query_tsdb_done(_error: int, response:ResotoAPI.Response) -> void:
@@ -181,6 +182,10 @@ func update_query() -> void:
 			query = "%s[$interval]" % [query]
 		query = "%s(%s)" % [aggregator, query]
 	if sum_by != "":
+		if not sum_by.begins_with("("):
+			sum_by = "(" + sum_by
+		if not sum_by.ends_with(")"):
+			sum_by += ")"
 		query = "sum(%s) by %s" % [query, sum_by]
 		
 
