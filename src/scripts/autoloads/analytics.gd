@@ -8,6 +8,7 @@ enum EventsDatasource {NEW = 200, NEW_FROM_TEMPLATE, FAILED, DELETE}
 enum EventsUI {STARTED = 300, EXITED, ERROR, RUNNING}
 enum EventsExplore {BACK = 400, COPY_QUERY, COPY_NODE, CHANGE_MODE, REMOVE_FROM_CLEANUP, ADD_TO_CLEANUP, PROTECT, EXPLORE_SUCCESSORS, EXPLORE_PREDECESSORS, EXPLORE_NODE_LIST, EXPLORE_NODE}
 enum EventsSearch {SEARCH = 500}
+enum EventWizard {START = 600, FINISH, COLLECT_DONE, ERROR}
 
 var events:= {
 	EventsDashboard.NEW : "ui.dashboard.new",
@@ -37,7 +38,11 @@ var events:= {
 	EventsExplore.EXPLORE_SUCCESSORS: "ui.explore.successors",
 	EventsExplore.EXPLORE_PREDECESSORS: "ui.explore.predecessors",
 	EventsExplore.EXPLORE_NODE_LIST: "ui.explore.node-list",
-	EventsSearch.SEARCH: "ui.search"
+	EventsSearch.SEARCH: "ui.search",
+	EventWizard.START: "ui.wizard.start",
+	EventWizard.FINISH: "ui.wizard.finish",
+	EventWizard.ERROR: "ui.wizard.error",
+	EventWizard.COLLECT_DONE: "ui.wizard.collect-done"
 }
 
 var api_key : String = ""
