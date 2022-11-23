@@ -94,7 +94,7 @@ func update_highlighted_cell(cell_position : Vector2):
 
 
 func set_tooltip_text(_text:String):
-	tooltip.get_node("Text").bbcode_text = _text
+	tooltip.get_node("Text").set_bbcode(_text)
 
 
 func set_low_color(new_color : Color):
