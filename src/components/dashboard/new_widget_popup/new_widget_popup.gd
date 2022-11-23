@@ -178,6 +178,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 			controller_ui.color_controller = child
 			controller_ui.size_flags_horizontal |= SIZE_EXPAND
 			controller_container.add_child(controller_ui)
+			controller_ui.connect("reset_color", self, "reset_widget_color")
 			
 			for i in child.conditions.size():
 				var condition = child.conditions[i]
@@ -383,6 +384,11 @@ func delete_datasource(_data_source:Node) -> void:
 func update_new_data_vis():
 	yield(VisualServer, "frame_post_draw")
 	new_data_source_container.visible = data_source_container.get_child_count() < preview_widget.max_data_sources
+
+
+func reset_widget_color():
+	if preview_widget != null and preview_widget.has_method("reset_color"):
+		preview_widget.reset_color()
 
 
 func update_preview() -> void:

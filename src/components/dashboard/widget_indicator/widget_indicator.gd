@@ -57,6 +57,10 @@ func set_background_color(new_color) -> void:
 		grad_bg.self_modulate = new_color
 
 
+func reset_color():
+	set_background_color(Style.col_map[Style.c.BG])
+
+
 func set_value(new_value) -> void:
 	if new_value == null:
 		new_value = 0

@@ -23,6 +23,7 @@ func set_value(new_value : float):
 func set_color(new_color : Color):
 	color = new_color
 	condition[1] = color
+	emit_signal("condition_changed")
 	$PanelContainer/HBoxContainer/HexColorPicker.color = color
 
 func _on_SpinBox_value_changed(new_value):
@@ -38,3 +39,7 @@ func set_variable_name(new_name : String):
 func _on_HexColorPicker_color_changed(new_color):
 	condition[1] = new_color
 	emit_signal("condition_changed")
+
+
+func _on_DeleteButton_pressed():
+	queue_free()
