@@ -401,6 +401,8 @@ func _on_DashboardContainer_visibility_changed():
 
 
 func _on_RefreshTimer_timeout():
+	if not is_visible_in_tree():
+		return
 	var current_time := Time.get_unix_time_from_system()
 	if current_time - last_refresh > refresh_time or force_refresh:
 		print("send refresh")
