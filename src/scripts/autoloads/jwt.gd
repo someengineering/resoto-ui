@@ -1,7 +1,8 @@
 extends Node
 class_name JWTGenerator
 
-const EXPIRE_THRESHOLD:int = 5
+const TOKEN_EXPIRATION_TIME:int = 3600 # one hour expiration
+const EXPIRE_THRESHOLD:int = TOKEN_EXPIRATION_TIME - 300 # refresh the token every 5 minutes
 
 signal jwt_generated
 
@@ -12,7 +13,7 @@ var print_token: bool = false
 
 
 func token_expired() ->bool:
-	var token_expired = OS.get_unix_time() - EXPIRE_THRESHOLD > token_expire
+	var token_expired = (token_expire - OS.get_unix_time()) < EXPIRE_THRESHOLD
 	return token_expired
 
 
@@ -24,7 +25,7 @@ func create_jwt(data: String, _psk: String = psk) -> void:
 
 
 func jwt(data: String, _psk: String) -> String:
-	var expire = OS.get_unix_time() + 300
+	var expire = OS.get_unix_time() + TOKEN_EXPIRATION_TIME
 	token_expire = expire
 	var crypto = Crypto.new()
 
@@ -100,3 +101,8 @@ static func key_from_psk(_psk: String, salt: PoolByteArray = []) -> Dictionary:
 		salt = new_crypto.generate_random_bytes(16)
 	var key = pbkdf2(HashingContext.HASH_SHA256, _psk.to_utf8(), salt, 100000)
 	return {"key": key, "salt": salt}
+
+
+func _notification(what):
+	if what == NOTIFICATION_WM_FOCUS_IN:
+		token_expire = 0
