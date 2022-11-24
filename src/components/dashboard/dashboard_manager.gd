@@ -98,7 +98,7 @@ func _on_delete_config_id_done(_error: int, _response):
 	emit_signal("dashboard_deleted")
 
 
-func save_dashboard(dashboard : DashboardContainer, where_from:String):
+func save_dashboard(dashboard : DashboardContainer):
 	if is_saving:
 		return
 	is_saving = true
@@ -271,7 +271,7 @@ func create_dashboard_with_data(data, save_dashboard:bool=true):
 	if save_dashboard:
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
-		save_dashboard(dashboard, "create_dashboard_with_data + save_dashboard")
+		save_dashboard(dashboard)
 
 
 func get_user_dashboards() -> Dictionary:
