@@ -108,9 +108,8 @@ func _on_metrics_query_finished(_error:int, response) -> void:
 		if not label.begins_with("__") and not label == "cloud" and not label == "region" and not label == "account":
 			labels.append(label)
 	
-	filters_widget.labels.set_items(labels)
-	
-	filters_widget.value.set_items([])
+	filters_widget.set_labels(labels)
+	filters_widget.set_values([])
 
 
 func update_query(force_query := false) -> void:
@@ -146,8 +145,9 @@ func _on_FunctionComboBox_option_changed(option) -> void:
 	update_query()
 
 
-func _on_FilterWidget_filter_changed(filter) -> void:
+func _on_FilterWidget_filter_changed(filter:String, filter_dicts:Array) -> void:
 	data_source.filters = filter
+	data_source.filter_dicts = filter_dicts
 	update_query()
 
 
@@ -228,7 +228,8 @@ func set_data_source(new_data_source : DataSource) -> void:
 	match new_data_source.type:
 		DataSource.TYPES.TIME_SERIES:
 			metrics_options.text = new_data_source.metric
-			filters_widget.line_edit.text = new_data_source.filters
+			filters_widget.filter_dicts = new_data_source.filter_dicts
+			filters_widget.filters = new_data_source.filters
 			date_offset_edit.text = new_data_source.offset
 			by_line_edit.text = new_data_source.sum_by
 			function_options.text = new_data_source.aggregator

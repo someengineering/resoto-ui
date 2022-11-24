@@ -5,6 +5,7 @@ extends DataSource
 var metric : String = ""
 var aggregator : String = ""
 var filters : String = ""
+var filter_dicts : Array = []
 var offset : String = ""
 var legend : String = ""
 var sum_by : String = ""
@@ -161,12 +162,14 @@ func copy_data_source(other : TimeSeriesDataSource) -> void:
 	metric = other.metric
 	aggregator = other.aggregator
 	filters = other.filters
+	filter_dicts = other.filter_dicts
 	query = other.query
 	stacked = other.stacked
 	offset = other.offset
 	sum_by = other.sum_by
 	legend = other.legend
-	
+
+
 func update_query() -> void:
 	query = _g.tsdb_metric_prefix + metric
 	
@@ -194,6 +197,7 @@ func get_data() -> Dictionary:
 		"metric" : metric,
 		"aggregator" : aggregator,
 		"filters" : filters,
+		"filter_dicts" : filter_dicts,
 		"stacked" : stacked,
 		"offset" : offset,
 		"sum_by" : sum_by,

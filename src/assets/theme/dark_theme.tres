@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=114 format=2]
+[gd_resource type="Theme" load_steps=115 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -668,6 +668,17 @@ corner_radius_bottom_left = 4
 [sub_resource type="StyleBoxLine" id=37]
 color = Color( 0.313726, 0.223529, 0.435294, 1 )
 
+[sub_resource type="StyleBoxFlat" id=112]
+content_margin_left = 6.0
+content_margin_right = 6.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0.0313726, 0.121569, 0.207843, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [sub_resource type="StyleBoxFlat" id=8]
 bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 border_width_left = 1
@@ -1010,6 +1021,8 @@ PopupMenu/styles/hover = SubResource( 38 )
 PopupMenu/styles/panel = SubResource( 21 )
 PopupMenu/styles/separator = SubResource( 37 )
 PopupPanel/styles/panel = SubResource( 21 )
+PopupPanelComboBox/base_type = "PopupPanel"
+PopupPanelComboBox/styles/panel = SubResource( 112 )
 ProgressBar/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 ProgressBar/styles/bg = SubResource( 8 )
 ProgressBar/styles/fg = SubResource( 9 )
