@@ -30,17 +30,16 @@ text = "Settings"
 [node name="Content" parent="Content" index="1"]
 margin_top = 32.0
 margin_right = 640.0
-margin_bottom = 400.0
+margin_bottom = 441.0
 
 [node name="SettingsTabs" type="TabContainer" parent="Content/Content" index="0"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 630.0
-margin_bottom = 358.0
+margin_bottom = 399.0
 tab_align = 0
 
 [node name="General Settings" type="MarginContainer" parent="Content/Content/SettingsTabs" index="0"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 38.0
@@ -211,6 +210,7 @@ size_flags_horizontal = 0
 text = "Start Setup Wizard"
 
 [node name="UI Settings" type="MarginContainer" parent="Content/Content/SettingsTabs" index="1"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 38.0
@@ -223,7 +223,7 @@ custom_constants/margin_bottom = 10
 margin_left = 20.0
 margin_top = 10.0
 margin_right = 610.0
-margin_bottom = 300.0
+margin_bottom = 341.0
 
 [node name="GeneralUILabel" type="Label" parent="Content/Content/SettingsTabs/UI Settings/VBox" index="0"]
 margin_right = 590.0
@@ -331,31 +331,83 @@ margin_bottom = 26.0
 tooltip_text = "[b]For contributor purposes.[/b]
 Starts the Wizard Script Editor."
 
-[node name="LicensesLabel" type="Label" parent="Content/Content/SettingsTabs/UI Settings/VBox" index="2"]
-margin_top = 140.0
+[node name="About" type="MarginContainer" parent="Content/Content/SettingsTabs" index="2"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 38.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="Content/Content/SettingsTabs/About" index="0"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 610.0
+margin_bottom = 341.0
+
+[node name="LicensesLabel" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="0"]
 margin_right = 590.0
-margin_bottom = 200.0
-rect_min_size = Vector2( 0, 60 )
+margin_bottom = 30.0
 theme_type_variation = "Label_24"
-text = "License Information"
+text = "Resoto UI"
 valign = 2
 
-[node name="Godot" type="Label" parent="Content/Content/SettingsTabs/UI Settings/VBox" index="3"]
-margin_top = 204.0
+[node name="ResotoUIVersionLabel" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="1"]
+unique_name_in_owner = true
+margin_top = 34.0
 margin_right = 590.0
-margin_bottom = 224.0
+margin_bottom = 54.0
+text = "Version Number"
+
+[node name="ResotoLinkButton2" type="LinkButton" parent="Content/Content/SettingsTabs/About/VBox" index="2"]
+margin_top = 58.0
+margin_right = 590.0
+margin_bottom = 98.0
+rect_min_size = Vector2( 0, 40 )
+focus_mode = 2
+text = "www.resoto.com"
+
+[node name="ResotoUIInfoLabel" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="3"]
+margin_top = 102.0
+margin_right = 590.0
+margin_bottom = 122.0
+text = "Copyright 2022 Some Engineering Inc."
+
+[node name="ResotoLinkButton" type="LinkButton" parent="Content/Content/SettingsTabs/About/VBox" index="4"]
+margin_top = 126.0
+margin_right = 590.0
+margin_bottom = 146.0
+focus_mode = 2
+text = "View the Resoto UI Apache 2.0 license"
+
+[node name="ThirdPartyLabel" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="5"]
+margin_top = 150.0
+margin_right = 590.0
+margin_bottom = 210.0
+rect_min_size = Vector2( 0, 60 )
+theme_type_variation = "Label_24"
+text = "Third Party Licenses"
+valign = 2
+
+[node name="Godot" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="6"]
+margin_top = 214.0
+margin_right = 590.0
+margin_bottom = 234.0
 text = "Resoto UI was built using the Godot Engine"
 
-[node name="LinkButton" type="LinkButton" parent="Content/Content/SettingsTabs/UI Settings/VBox" index="4"]
-margin_top = 228.0
+[node name="LinkButton" type="LinkButton" parent="Content/Content/SettingsTabs/About/VBox" index="7"]
+margin_top = 238.0
 margin_right = 590.0
-margin_bottom = 248.0
-text = "View the Godot Engine license and third party license information"
+margin_bottom = 258.0
+focus_mode = 2
+text = "View the Godot Engine MIT license and third party license information"
 
 [node name="Footer" parent="Content" index="2"]
-margin_top = 404.0
+margin_top = 445.0
 margin_right = 640.0
-margin_bottom = 450.0
+margin_bottom = 491.0
 
 [node name="Footerbar" parent="Content/Footer" index="0"]
 margin_right = 630.0
@@ -382,5 +434,7 @@ margin_bottom = 32.0
 [connection signal="pressed" from="Content/Content/SettingsTabs/UI Settings/VBox/GeneralUISettings/ScaleGroup/ButtonUIScalePlus" to="." method="_on_ButtonUIScalePlus_pressed"]
 [connection signal="pressed" from="Content/Content/SettingsTabs/UI Settings/VBox/GeneralUISettings/UITestModeGroup/UITestModeButton" to="." method="_on_UITestModeButton_pressed"]
 [connection signal="pressed" from="Content/Content/SettingsTabs/UI Settings/VBox/GeneralUISettings/WizardEditorGroup/WizardEditorStartButton" to="." method="_on_WizardEditorStartButton_pressed"]
-[connection signal="pressed" from="Content/Content/SettingsTabs/UI Settings/VBox/LinkButton" to="." method="_on_LinkButton_pressed"]
+[connection signal="pressed" from="Content/Content/SettingsTabs/About/VBox/ResotoLinkButton2" to="." method="_on_ResotoLinkButton2_pressed"]
+[connection signal="pressed" from="Content/Content/SettingsTabs/About/VBox/ResotoLinkButton" to="." method="_on_ResotoLinkButton_pressed"]
+[connection signal="pressed" from="Content/Content/SettingsTabs/About/VBox/LinkButton" to="." method="_on_LinkButton_pressed"]
 [connection signal="pressed" from="Content/Footer/Footerbar/CancelButton" to="." method="_on_CancelButton_pressed"]
