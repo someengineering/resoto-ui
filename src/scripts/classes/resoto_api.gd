@@ -64,7 +64,7 @@ func _transform_json(error:int, response:ResotoAPI.Response) -> void:
 func handle_bad_response_codes(_response_code:int):
 	match _response_code:
 		401:
-			_g.emit_signal("add_toast", "401: Unauthorized", "[b][url=reconnect]Change your connection settings.[/url][/b]", 1, self, -1)
+			_g.emit_signal("add_toast", "401: Unauthorized", "[b][url=reconnect]Check your connection settings.[/url][/b]", 1, self, -1)
 #		400:
 			# Bad Requests should be handled by components / widgets as it can
 			# Be caused by a lot of different problems

@@ -403,7 +403,6 @@ func _on_DashboardContainer_visibility_changed():
 func _on_RefreshTimer_timeout():
 	var current_time := Time.get_unix_time_from_system()
 	if current_time - last_refresh > refresh_time or force_refresh:
-		print("send refresh")
 		print("Refresh dashboard (%s): %s - forced: %s" % [last_saved_name, Time.get_datetime_string_from_system(false,true), force_refresh])
 		last_refresh = current_time
 		dashboard.refresh()

@@ -1,7 +1,8 @@
 extends Node
 class_name JWTGenerator
 
-const EXPIRE_THRESHOLD:int = 5
+const TOKEN_EXPIRATION_TIME:int = 3600 # one hour expiration
+const EXPIRE_THRESHOLD:int = 300 # refresh the token every 5 minutes
 
 signal jwt_generated
 
@@ -24,7 +25,7 @@ func create_jwt(data: String, _psk: String = psk) -> void:
 
 
 func jwt(data: String, _psk: String) -> String:
-	var expire = OS.get_unix_time() + 300
+	var expire = OS.get_unix_time() + TOKEN_EXPIRATION_TIME
 	token_expire = expire
 	var crypto = Crypto.new()
 
