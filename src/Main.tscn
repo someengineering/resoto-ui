@@ -610,6 +610,7 @@ __meta__ = {
 [node name="ConfirmPopup" parent="Popups" instance=ExtResource( 18 )]
 
 [node name="UISettingsPopup" parent="Popups" instance=ExtResource( 31 )]
+visible = false
 
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 

@@ -16,6 +16,14 @@ func refresh_jwt_header() -> void:
 	ws_header = ["Authorization: Bearer %s" % JWT.token]
 
 
+func refresh_auth_cookie() -> void:
+	if JWT.token == "" or JWT.token_expired():
+		JWT.create_jwt("")
+	
+	var cookie_content : String = "\"resoto_authorization=\\\"Bearer %s\\\"; path=/events\"" % JWT.token
+	JavaScript.eval("setCookie(%s)" % cookie_content)
+
+
 func _process(_delta):
 	if ws.get_connection_status() == ws.CONNECTION_CONNECTING || ws.get_connection_status() == ws.CONNECTION_CONNECTED:
 		ws.poll()
@@ -28,6 +36,8 @@ func _exit_tree():
 func connect_websockets():
 	if ws.get_connection_status() == ws.CONNECTION_CONNECTING || ws.get_connection_status() == ws.CONNECTION_CONNECTED:
 		return
+	
+	# Connect signals
 	if not ws.is_connected("connection_established", self, "_connection_established"):
 		ws.connect("connection_established", self, "_connection_established")
 	if not ws.is_connected("connection_closed", self, "_connection_closed"):
@@ -39,9 +49,17 @@ func connect_websockets():
 	
 	var ws_url = "ws://%s:%s/events" if not API.use_ssl else "wss://%s:%s/events"
 	ws_url = ws_url % [API.adress, API.port]
-	print("Websocket: Connecting to " + ws_url)
-	refresh_jwt_header()
-	var err = ws.connect_to_url(ws_url, [], false, ws_header)
+	
+	var err : int
+	if OS.has_feature("HTML5"):
+		refresh_auth_cookie()
+		print("Websocket (HTML5): Connecting to " + ws_url)
+		err = ws.connect_to_url(ws_url)
+	else:
+		refresh_jwt_header()
+		print("Websocket (Native): Connecting to " + ws_url)
+		err = ws.connect_to_url(ws_url, [], false, ws_header)
+	
 	if err != OK:
 		print("Websocket: Unable to connect")
 		set_process(false)

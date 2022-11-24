@@ -187,6 +187,10 @@
 			return i;
 		}
 
+		function setCookie(name) {
+			document.cookie = name;
+		}
+
 		function uploadFile(fileTypes) {
 			input.setAttribute("type", "file");
 			input.setAttribute("accept", fileTypes);
