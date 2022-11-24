@@ -2,7 +2,7 @@ extends Node
 class_name JWTGenerator
 
 const TOKEN_EXPIRATION_TIME:int = 3600 # one hour expiration
-const EXPIRE_THRESHOLD:int = 300 # refresh the token every 5 minutes
+const EXPIRE_THRESHOLD:int = TOKEN_EXPIRATION_TIME - 300 # refresh the token every 5 minutes
 
 signal jwt_generated
 
@@ -13,7 +13,7 @@ var print_token: bool = false
 
 
 func token_expired() ->bool:
-	var token_expired = OS.get_unix_time() - EXPIRE_THRESHOLD > token_expire
+	var token_expired = (token_expire - OS.get_unix_time()) < EXPIRE_THRESHOLD
 	return token_expired
 
 
