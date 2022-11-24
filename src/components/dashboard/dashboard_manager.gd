@@ -119,6 +119,8 @@ func get_db_config_name(_name:String):
 
 
 func close_dashboard(dashboard : DashboardContainer):
+	if is_saving:
+		yield(self, "dashboard_saved")
 	dashboard.connect("tree_exited", self, "_on_DashBoardManager_tab_changed", [], CONNECT_ONESHOT)
 	dashboard.queue_free()
 	save_opened_dashboards()
