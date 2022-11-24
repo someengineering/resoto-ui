@@ -73,15 +73,6 @@ func _ready() -> void:
 	add_widget_popup.connect("popup_hide", self, "hide_popup_bg")
 
 
-func _process(_delta : float) -> void:
-	var current_time := Time.get_unix_time_from_system()
-	if current_time - last_refresh > refresh_time or force_refresh:
-		print("Refresh dashboard (%s): %s - forced: %s" % [last_saved_name, Time.get_datetime_string_from_system(false,true), force_refresh])
-		last_refresh = current_time
-		dashboard.refresh()
-		force_refresh = false
-
-
 func show_popup_bg():
 	$PopupBG.show()
 
@@ -407,3 +398,17 @@ func _on_DashboardContainer_visibility_changed():
 		add_widget_popup._close_popup()
 		_on_DashboardEditButton_toggled(false)
 		$"%DashboardEditButton".pressed = false
+
+
+func _on_RefreshTimer_timeout():
+	var current_time := Time.get_unix_time_from_system()
+	if current_time - last_refresh > refresh_time or force_refresh:
+		print("send refresh")
+		print("Refresh dashboard (%s): %s - forced: %s" % [last_saved_name, Time.get_datetime_string_from_system(false,true), force_refresh])
+		last_refresh = current_time
+		dashboard.refresh()
+		force_refresh = false
+
+func _notification(what):
+	if what == NOTIFICATION_WM_FOCUS_IN:
+		$RefreshTimer.start()

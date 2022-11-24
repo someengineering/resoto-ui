@@ -100,3 +100,8 @@ static func key_from_psk(_psk: String, salt: PoolByteArray = []) -> Dictionary:
 		salt = new_crypto.generate_random_bytes(16)
 	var key = pbkdf2(HashingContext.HASH_SHA256, _psk.to_utf8(), salt, 100000)
 	return {"key": key, "salt": salt}
+
+
+func _notification(what):
+	if what == NOTIFICATION_WM_FOCUS_IN:
+		token_expire = 0
