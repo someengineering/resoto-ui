@@ -24,7 +24,7 @@ func add_condition(value : float = 0.0, color : Color = Color(0,0,0,0)):
 	
 	
 func _on_condition_changed():
-	if color_controller == null:
+	if not is_instance_valid(color_controller):
 		return
 	color_controller.conditions.clear()
 	for condition in conditions_container.get_children():
@@ -35,13 +35,8 @@ func _on_condition_changed():
 
 func set_color_controller(controller : ColorController):
 	color_controller = controller
-	controller.connect("tree_exiting", self, "_on_color_controller_tree_exiting")
 	$VBoxContainer/HBoxContainer/PropertyLabel.text = color_controller.property.capitalize()
 
 
 func _on_AddButton_pressed():
 	add_condition()
-
-
-func _on_color_controller_tree_exiting():
-	color_controller = null
