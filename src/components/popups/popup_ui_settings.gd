@@ -62,6 +62,7 @@ func _on_UISettings_about_to_show() -> void:
 	is_dirty = false
 	$Content/Content/SettingsTabs.current_tab = 0
 	$"%ScaleLevelLabel".text = str(_g.ui_scale*100) + " %"
+	$"%ResotoUIVersionLabel".text = "Version %s" % _g.ui_version
 	config_keys.clear()
 	config_dicts.clear()
 	API.get_configs(self)
@@ -195,3 +196,11 @@ func _on_WizardEditorStartButton_pressed():
 
 func _on_LinkButton_pressed():
 	OS.shell_open("https://godotengine.org/license")
+
+
+func _on_ResotoLinkButton_pressed():
+	OS.shell_open("https://github.com/someengineering/resoto-ui/blob/main/LICENSE")
+
+
+func _on_ResotoLinkButton2_pressed():
+	OS.shell_open("https://www.resoto.com/")
