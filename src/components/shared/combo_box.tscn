@@ -34,6 +34,7 @@ margin_left = 290.0
 margin_right = 312.0
 margin_bottom = 33.0
 focus_mode = 1
+theme_type_variation = "PopupPanelComboBox"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PopupPanel"]
 margin_left = 10.0

@@ -158,7 +158,8 @@ func show_options() -> void:
 	options_popup.popup()
 	options_popup.rect_global_position = rect_global_position + Vector2(0, rect_size.y + 2)
 	options_popup.rect_size.x = rect_size.x
-	options_popup.rect_size.y = min(415, matching_items.size() * 37 + 15)
+	options_popup.rect_size.y = min(415, matching_items.size() * 37 + 8)
+
 
 func set_items(new_items : Array) -> void:
 	items.clear()
