@@ -335,6 +335,8 @@ func _on_ListKindButton_pressed():
 
 func _on_IconButton_pressed():
 	_g.content_manager.change_section_explore("node_single_info")
+	var node_single_info := _g.content_manager.find_node("NodeSingleInfo")
+	node_single_info.emit_signal("node_shown", node_single_info.current_node_id)
 
 
 func _on_LimitButton_toggled(_pressed:bool):

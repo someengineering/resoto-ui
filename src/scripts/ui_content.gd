@@ -45,8 +45,6 @@ func change_section(new_section:String, update_navigation_state := true):
 			
 			UINavigation.change_title(active_section.capitalize())
 			UINavigation.set_current_navigation_state(args)
-		else:
-			sections[active_section].apply_navigation_arguments()
 
 
 func change_section_explore(type:String):
