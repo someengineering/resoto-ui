@@ -180,10 +180,14 @@ func create_preview(widget_type : String = "Indicator") -> void:
 			controller_container.add_child(controller_ui)
 			controller_ui.connect("reset_color", self, "reset_widget_color")
 			
+			var conditions_array := []
+			
 			for i in child.conditions.size():
-				var condition = child.conditions[i]
+				conditions_array.append(child.conditions[i])
+				
+			for condition in conditions_array:
 				controller_ui.add_condition(condition[0], condition[1])
-	
+				
 	$"%WidgetOptionsLabel".visible = show_widget_options_label
 	$"%WidgetOptionsPanelContainer".visible = show_widget_options_label
 	

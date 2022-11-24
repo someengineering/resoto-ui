@@ -4,7 +4,7 @@ extends MarginContainer
 signal reset_color
 
 var random_colors : PoolStringArray = ["#264653", "#2A9D8F", "#E9C46A", "#F4A261", "#E76F51"]
-var color_controller : ColorController setget set_color_controller
+var color_controller : ColorController = null setget set_color_controller
 
 onready var conditions_container := $VBoxContainer/ConditionsContainer
 onready var condition_scene := preload("res://components/dashboard/new_widget_popup/color_condition.tscn")
@@ -24,6 +24,8 @@ func add_condition(value : float = 0.0, color : Color = Color(0,0,0,0)):
 	
 	
 func _on_condition_changed():
+	if not is_instance_valid(color_controller):
+		return
 	color_controller.conditions.clear()
 	for condition in conditions_container.get_children():
 		color_controller.conditions.append(condition.condition)
