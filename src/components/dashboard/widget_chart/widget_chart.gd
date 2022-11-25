@@ -289,9 +289,12 @@ func set_scale_from_series() -> void:
 		min_y_value = 0
 	
 	
-	y_zero_position = max_y_value / (max_y_value - min_y_value)
-	if max_y_value != min_y_value and min_y_value == 0:
+	y_zero_position = 0 if max_y_value == min_y_value else max_y_value / (max_y_value - min_y_value)
+	
+	if min_y_value <= 0:
 		grid.material.set_shader_param("zero_position", y_zero_position)
+	else:
+		grid.material.set_shader_param("zero_position", 0)
 
 
 func do_complete_update():
