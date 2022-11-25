@@ -51,6 +51,7 @@ func _on_VarValueEnum_item_selected(index:int) -> void:
 
 func set_value(_value) -> void:
 	value = _value
+	enum_button.select(enum_values.find(value))
 	if not self.is_inside_tree():
 		yield(self, "ready")
 	
