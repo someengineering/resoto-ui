@@ -3,6 +3,7 @@ extends TextureRect
 export var darker_color := false
 export (String, MULTILINE) var tooltip_text := ""
 export var link := ""
+export var tooltip := "tooltip"
 
 
 func _ready() -> void:
@@ -18,7 +19,7 @@ func _ready() -> void:
 		$Button.queue_free()
 
 func _on_mouse_entered() -> void:
-	_g.emit_signal("tooltip", tooltip_text)
+	_g.emit_signal(tooltip, tooltip_text)
 
 
 func _on_mouse_exited() -> void:
