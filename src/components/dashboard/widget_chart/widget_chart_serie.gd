@@ -6,6 +6,7 @@ var maximum_y = -INF
 var minimum_y = INF
 
 var zero_position := 0.0
+var series_name := ""
 
 onready var indicator := $Indicator
 onready var polygon := $Polygon2D

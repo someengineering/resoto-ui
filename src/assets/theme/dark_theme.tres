@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=115 format=2]
+[gd_resource type="Theme" load_steps=116 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -302,6 +302,9 @@ size = 19
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=113]
+size = 1
 
 [sub_resource type="StyleBoxFlat" id=100]
 bg_color = Color( 0.0901961, 0.113725, 0.129412, 1 )
@@ -938,6 +941,7 @@ FontMedium/base_type = "RichTextLabel"
 FontMedium/fonts/bold_font = SubResource( 97 )
 FontMedium/fonts/mono_font = SubResource( 98 )
 FontMedium/fonts/normal_font = SubResource( 99 )
+FontZero/fonts/font = SubResource( 113 )
 GraphEdit/colors/grid_major = Color( 0.376471, 0.431373, 0.466667, 0.117647 )
 GraphEdit/colors/grid_minor = Color( 0.411765, 0.443137, 0.462745, 0.0392157 )
 GraphEdit/styles/bg = SubResource( 100 )

@@ -18,31 +18,39 @@ script = ExtResource( 2 )
 margin_right = 616.0
 margin_bottom = 72.0
 size_flags_horizontal = 3
-custom_constants/separation = 1
+custom_constants/separation = -5
 
 [node name="Headline" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 616.0
 margin_bottom = 33.0
 
 [node name="FilterLabel" type="Label" parent="VBoxContainer/Headline"]
-margin_top = 6.0
-margin_right = 588.0
-margin_bottom = 26.0
-size_flags_horizontal = 3
+margin_right = 49.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 0, 33 )
 theme_type_variation = "LabelBold"
 text = "Filters"
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Headline"]
+modulate = Color( 1, 1, 1, 0.501961 )
+margin_left = 53.0
+margin_right = 590.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
 
 [node name="AddFilterButton" parent="VBoxContainer/Headline" instance=ExtResource( 4 )]
-margin_left = 592.0
+margin_left = 594.0
 margin_right = 616.0
-rect_min_size = Vector2( 24, 33 )
+rect_min_size = Vector2( 22, 33 )
+size_flags_vertical = 4
 icon_tex = ExtResource( 1 )
-icon_margin = 1
+icon_margin = 2
 
 [node name="Margin" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 34.0
+margin_top = 28.0
 margin_right = 616.0
-margin_bottom = 34.0
+margin_bottom = 28.0
 custom_constants/margin_right = 0
 custom_constants/margin_top = 0
 custom_constants/margin_left = 10
