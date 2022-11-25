@@ -1,10 +1,47 @@
 extends MarginContainer
 
+signal leave_request_handled
+
+var can_leave_section := true setget set_can_leave_section
+var is_collecting := false
 
 func _ready():
 	_g.connect("setup_wizard_start", self, "_start_wizard")
+	$WizardControl.connect("setup_wizard_collecting", self, "_on_is_collecting")
+	$WizardControl.connect("setup_wizard_changed_config", self, "set_can_leave_section", [false])
 	_g.connect("connected_to_resotocore", self, "_check_for_setup_wizard_autostart")
 	connect("visibility_changed", self, "_on_SetupWizardComponent_visibility_changed")
+
+
+func leave_section():
+	if is_collecting:
+		_g.emit_signal("setup_wizard_minimized", true)
+
+
+func leave_section_request():
+	# Check if the user in in the middle of the setup wizard
+	var confirm_popup = _g.popup_manager.show_confirm_popup(
+	"Close Setup Wizard?",
+	"Do you want to close the Setup Wizard before finishing the Resoto Setup?\n\nChanges will not be saved until finishing the Setup Wizard.",
+	"Yes", "No")
+	confirm_popup.connect("response", self, "_on_leave_request_response", [], CONNECT_ONESHOT)
+
+
+func _on_leave_request_response(_response:String):
+	if _response == "left":
+		can_leave_section = true
+		emit_signal("leave_request_handled")
+	else:
+		emit_signal("leave_request_handled")
+
+
+func _on_is_collecting():
+	can_leave_section = true
+	is_collecting = true
+
+
+func set_can_leave_section(_value:bool):
+	can_leave_section = _value
 
 
 func _start_wizard():
@@ -18,6 +55,7 @@ func _on_SetupWizardComponent_visibility_changed():
 
 
 func _on_WizardControl_setup_wizard_finished():
+	is_collecting = false
 	Analytics.event(Analytics.EventWizard.FINISH)
 	_g.emit_signal("nav_change_section", "home")
 

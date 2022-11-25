@@ -56,6 +56,7 @@ func update_config_string_separator(_value:String, _separator:String):
 
 func update_config(new_value):
 	wizard.config_changed = true
+	wizard.emit_signal("setup_wizard_changed_config")
 	var path_keys = config_value_path.split(".")
 	var current = wizard.remote_configs[config_key]
 	var value_key = path_keys[-1]
@@ -116,6 +117,7 @@ func update_config(new_value):
 
 
 func save_configs():
+	wizard.emit_signal("setup_wizard_collecting")
 	for config_id in wizard.remote_configs.keys():
 		if _g.ui_test_mode:
 			print(Utils.readable_dict(wizard.remote_configs[config_id]))
