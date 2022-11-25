@@ -122,6 +122,7 @@ func parse_message(_m:Dictionary):
 		refresh_elements()
 		$PanelContainer/Content/HBoxContainer/Done.show()
 		var new_progress_element = ProgressElement.instance().init("Finished!", 1, 1)
+		_g.emit_signal("collect_run_finished")
 		elements.add_child(new_progress_element)
 		emit_signal("all_done")
 		display_messages = false

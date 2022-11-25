@@ -31,7 +31,7 @@ interpolation_mode = 2
 offsets = PoolRealArray( 0, 0.0310421, 1 )
 colors = PoolColorArray( 0.164063, 0.164063, 0.164063, 1, 1, 1, 1, 1, 0.164706, 0.164706, 0.164706, 1 )
 
-[sub_resource type="GradientTexture" id=3]
+[sub_resource type="GradientTexture" id=7]
 gradient = SubResource( 2 )
 
 [sub_resource type="ShaderMaterial" id=4]
@@ -41,7 +41,7 @@ shader_param/power = 1.0
 shader_param/pos = Vector2( 0.5, 0.5 )
 shader_param/turn_speed = -6.0
 shader_param/grad_length = 1.0
-shader_param/gradient_texture = SubResource( 3 )
+shader_param/gradient_texture = SubResource( 7 )
 
 [node name="ProgressElement" type="PanelContainer"]
 margin_right = 113.0

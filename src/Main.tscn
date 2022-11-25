@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://components/popups/connect_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -42,6 +42,11 @@
 [ext_resource path="res://assets/icons/icon_128_main_config.svg" type="Texture" id=40]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=41]
 [ext_resource path="res://components/shared/custom_bb_hint_tooltip_error.tscn" type="PackedScene" id=42]
+[ext_resource path="res://components/wizard/wizard_character.tscn" type="PackedScene" id=43]
+[ext_resource path="res://components/wizard/wizard_mini_notification.gd" type="Script" id=44]
+[ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=45]
+[ext_resource path="res://assets/generic/spin_shader.tres" type="Shader" id=46]
+[ext_resource path="res://assets/icons/icon_128_circle_thick.svg" type="Texture" id=47]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
@@ -90,6 +95,23 @@ fill_to = Vector2( 0, 1 )
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+
+[sub_resource type="Gradient" id=31]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.0310421, 1 )
+colors = PoolColorArray( 0.164063, 0.164063, 0.164063, 1, 1, 1, 1, 1, 0.164706, 0.164706, 0.164706, 1 )
+
+[sub_resource type="GradientTexture" id=32]
+gradient = SubResource( 31 )
+
+[sub_resource type="ShaderMaterial" id=33]
+shader = ExtResource( 46 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 32 )
 
 [node name="Main" type="Control"]
 anchor_right = 1.0
@@ -611,7 +633,6 @@ __meta__ = {
 [node name="ConfirmPopup" parent="Popups" instance=ExtResource( 18 )]
 
 [node name="UISettingsPopup" parent="Popups" instance=ExtResource( 31 )]
-visible = false
 
 [node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
 
@@ -626,6 +647,46 @@ visible = false
 
 [node name="ToolTipError" parent="Popups/TooltipLayer" instance=ExtResource( 42 )]
 visible = false
+
+[node name="WizardButton" type="ToolButton" parent="Popups"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -64.0
+margin_top = -64.0
+rect_min_size = Vector2( 64, 64 )
+mouse_filter = 1
+script = ExtResource( 44 )
+
+[node name="Wizard" parent="Popups/WizardButton" instance=ExtResource( 43 )]
+position = Vector2( 27, 42 )
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Done" type="TextureRect" parent="Popups/WizardButton"]
+visible = false
+modulate = Color( 0.265427, 0.957031, 0.438328, 1 )
+margin_left = -30.0
+margin_top = 35.0
+margin_bottom = 59.0
+rect_min_size = Vector2( 30, 24 )
+size_flags_vertical = 3
+texture = ExtResource( 45 )
+expand = true
+stretch_mode = 6
+
+[node name="Progressing" type="TextureRect" parent="Popups/WizardButton"]
+modulate = Color( 1, 1, 1, 0.501961 )
+material = SubResource( 33 )
+margin_left = -30.0
+margin_top = 32.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 30, 24 )
+size_flags_vertical = 4
+texture = ExtResource( 47 )
+expand = true
+stretch_mode = 6
 
 [node name="Debug" type="CanvasLayer" parent="."]
 layer = 100
@@ -676,3 +737,4 @@ script = ExtResource( 22 )
 [connection signal="pressed" from="MenuBar/MenuContainer/TopMenu/Title/HistoryButtons/HistoryBackButton" to="MenuBar" method="_on_HistoryBackButton_pressed"]
 [connection signal="pressed" from="MenuBar/MenuContainer/TopMenu/Title/HistoryButtons/HistoryFwdButton" to="MenuBar" method="_on_HistoryFwdButton_pressed"]
 [connection signal="gui_input" from="MenuBar/MenuContainer/TopMenu/Title/MainResotoLogo" to="MenuBar" method="_on_ResotoLogo_gui_input"]
+[connection signal="pressed" from="Popups/WizardButton" to="Popups/WizardButton" method="_on_WizardButton_pressed"]

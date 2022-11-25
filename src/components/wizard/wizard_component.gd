@@ -1,6 +1,8 @@
 extends MarginContainer
 
 signal setup_wizard_finished
+signal setup_wizard_collecting
+signal setup_wizard_changed_config
 
 var data:Dictionary
 

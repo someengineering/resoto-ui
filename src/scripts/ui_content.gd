@@ -12,7 +12,7 @@ onready var sections = {
 	"home": $Content/HomeComponent
 }
 
-var active_section:= "terminal"
+var active_section:= "home"
 var last_visited_explore_section:= "none"
 onready var content_sections = $Content
 
@@ -30,6 +30,17 @@ func _ready():
 func change_section(new_section:String, update_navigation_state := true):
 	if new_section == active_section or not sections.has(new_section):
 		return
+	
+	if "can_leave_section" in sections[active_section] and not sections[active_section].can_leave_section:
+		sections[active_section].leave_section_request()
+		yield(sections[active_section], "leave_request_handled")
+		if sections[active_section].can_leave_section:
+			change_section(new_section, update_navigation_state)
+		else:
+			return
+	
+	if sections[active_section].has_method("leave_section"):
+		sections[active_section].leave_section()
 	
 	active_section = new_section
 	for c in content_sections.get_children():

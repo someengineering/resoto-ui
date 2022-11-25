@@ -173,30 +173,6 @@ tracks/1/keys = {
 "update": 0,
 "values": [ 1.37906 ]
 }
-tracks/2/type = "value"
-tracks/2/path = NodePath("WizardHead/Eyebrows:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 146.5, -814 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("WizardHead/Eyebrows:rotation_degrees")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 1.4688 ]
-}
 
 [sub_resource type="Animation" id=11]
 resource_name = "Talk"
@@ -264,19 +240,18 @@ texture = ExtResource( 2 )
 offset = Vector2( 25, -497 )
 
 [node name="Eyebrows" type="Sprite" parent="WizardHead"]
-position = Vector2( 146.5, -814 )
-rotation = 0.0256354
+position = Vector2( 37, -455 )
 texture = ExtResource( 4 )
 offset = Vector2( -9.18799, -3.46773 )
 
 [node name="Eyes" type="AnimatedSprite" parent="WizardHead"]
-position = Vector2( 146.5, -815.712 )
+position = Vector2( 146.5, -814 )
 frames = SubResource( 3 )
 animation = "normal"
 offset = Vector2( -110, 450 )
 
 [node name="Mouth" type="AnimatedSprite" parent="WizardHead"]
-position = Vector2( 148.018, -839.231 )
+position = Vector2( 151.5, -835 )
 frames = SubResource( 8 )
 animation = "neutral"
 playing = true

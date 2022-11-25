@@ -25,6 +25,10 @@ func apply_navigation_arguments():
 	pass
 
 
+func leave_section():
+	pass
+
+
 func update_navigation_arguments(args : Dictionary):
 	if not enabled:
 		return
