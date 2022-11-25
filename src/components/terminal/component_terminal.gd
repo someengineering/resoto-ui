@@ -21,6 +21,8 @@ var line_count:int = 0
 var max_data_chunks:int = 1000
 var write_line_count:int = 1000
 
+var esc_pressed := false
+
 onready var console = find_node("RichResponseText")
 onready var command = find_node("CommandEdit")
 onready var console_v_scroll: VScrollBar = console.get_v_scroll()
@@ -70,7 +72,7 @@ func _input(event:InputEvent) -> void:
 	or _g.focus_in_search):
 		return
 	
-	if not command.has_focus() and event.pressed and not MODIFIER_KEYS.has(event.scancode):
+	if not command.has_focus() and event.pressed and not MODIFIER_KEYS.has(event.scancode) and event.scancode != KEY_ESCAPE:
 		just_grabbed_focus = true
 		yield(get_tree(), "idle_frame")
 		console.selection_enabled = false
@@ -99,16 +101,101 @@ func _input(event:InputEvent) -> void:
 			active_request.abort()
 		return
 	
+	elif event is InputEventWithModifiers and event.is_pressed():
+		if event.control:
+			var handled := true
+			match event.scancode:
+				KEY_A:
+					command.selecting_enabled = false
+					command.call_deferred("cursor_set_column", 0)
+					command.set_deferred("selecting_enabled", true)
+				KEY_E:
+					command.call_deferred("cursor_set_column", command.text.length())
+				KEY_U:
+					var current_text : String = command.text
+					current_text.erase(0, command.cursor_get_column())
+					command.text = current_text
+				KEY_L:
+					console.text = ""
+				KEY_K:
+					var current_text : String = command.text
+					current_text.erase(command.cursor_get_column(), current_text.length())
+					command.text = current_text
+					command.call_deferred("cursor_set_column", command.text.length())
+				KEY_H:
+					var c : int = command.cursor_get_column()
+					var current_text : String = command.text
+					current_text.erase(c-1, 1)
+					command.text = current_text
+					command.cursor_set_column(c-1)
+				KEY_D:
+					var c : int = command.cursor_get_column()
+					var current_text : String = command.text
+					current_text.erase(c, 1)
+					command.text = current_text
+					command.cursor_set_column(c)
+				KEY_B:
+					command.cursor_set_column(command.cursor_get_column() - 1)
+				KEY_F:
+					command.cursor_set_column(command.cursor_get_column() + 1)
+				_:
+					handled = false
+					
+			if handled:
+				get_tree().set_input_as_handled()
+			
+		elif event.alt:
+			var handled := true
+			match event.scancode:
+				KEY_LEFT:
+					command.cursor_set_column(command.text.left(command.cursor_get_column() - 1).find_last(" ") + 1)
+				KEY_RIGHT:
+					command.cursor_set_column(command.text.find(" ", command.cursor_get_column() + 1) + 1)
+				_:
+					handled = false
+			get_tree().set_input_as_handled()
+		
+	
+	if event.scancode == KEY_ESCAPE:
+		if event.is_pressed() and command.has_focus() and not esc_pressed:
+			esc_pressed = true
+			get_tree().set_input_as_handled()
+		else:
+			esc_pressed = false
+	
+	if esc_pressed and event.is_pressed():
+		match event.scancode:
+			KEY_BACKSPACE:
+				var text : String = command.text
+				var c : int = command.cursor_get_column()
+				var start : int = command.text.left(c - 1).find_last(" ")
+				text.erase(start + 1, c - start - 2)
+				command.text = text
+				command.cursor_set_column(start + 2)
+			KEY_D:
+				command.readonly = true
+				var text : String = command.text
+				var c : int = command.cursor_get_column()
+				var end : int = text.find(" ", c + 1)
+				if end < 0:
+					end = text.length()
+				text.erase(c, end - c)
+				command.text = text
+				command.cursor_set_column(c)
+				command.set_deferred("readonly", false)
+	
 	just_grabbed_focus = false
 	
 	if (event is InputEventKey and event.shift):
 		return
 	
-	if command.has_focus() and ((event.scancode == KEY_UP or event.scancode == KEY_DOWN) and event.pressed):
+	var up : bool = event.scancode == KEY_UP or (event is InputEventWithModifiers and event.control and event.scancode == KEY_P)
+	var down : bool = event.scancode == KEY_DOWN or (event is InputEventWithModifiers and event.control and event.scancode == KEY_N)
+	if command.has_focus() and ((up or down) and event.pressed):
 		if last_command_id == -1:
 			current_command = command.text
 		
-		var change_id = 1 if event.scancode == KEY_UP else -1
+		var change_id = 1 if up else -1
 		last_command_id = int(clamp(last_command_id+change_id, -2, _g.terminal_scrollback.size()-1))
 		
 		if current_command == "" and last_command_id == -2:
