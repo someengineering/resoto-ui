@@ -265,7 +265,6 @@ func update_map():
 			color = gradient.interpolate((value - min_value)/(max_value - min_value))
 
 		color.a = 1.0;
-		#prints("image.set_pixel", j, i)
 		image.set_pixel(j, i, color)
 		
 	image.unlock()
