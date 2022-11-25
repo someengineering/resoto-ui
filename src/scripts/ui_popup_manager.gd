@@ -5,10 +5,13 @@ signal popup_gone
 
 var current_popup: Popup = null
 var popup_connect: Node = null
+
 var tooltip_link_active:= false
 var tooltip_active:= false
+var tooltip_error_active:= false
 
 onready var n_tooltip_link:= $TooltipLayer/TooltipLink
+onready var n_tooltip_error:= $TooltipLayer/ToolTipError
 onready var n_tooltip:= $TooltipLayer/Tooltip
 onready var confirm_popup: Popup = $ConfirmPopup
 onready var popup_bg := $BG
@@ -25,17 +28,21 @@ func _ready() -> void:
 	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
 	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
 	_g.connect("tooltip", self, "tooltip")
+	_g.connect("tooltip_error", self, "tooltip_error")
 	_g.connect("tooltip_link", self, "tooltip_link")
 	_g.connect("tooltip_hide", self, "tooltip_hide")
 
 
 func _process(_delta:float):
-	if tooltip_active or tooltip_link_active:
+	if tooltip_active or tooltip_link_active or tooltip_error_active:
 		var tt : Control = null
 		if tooltip_active:
 			tt = n_tooltip
-		if tooltip_link_active:
+		elif tooltip_link_active:
 			tt = n_tooltip_link
+		elif tooltip_error_active:
+			tt = n_tooltip_error
+		
 		tt.rect_position = main.get_global_mouse_position() + Vector2(20,20)
 		var w_rect := OS.get_window_safe_area()
 		w_rect.size /= _g.ui_scale
@@ -58,6 +65,11 @@ func tooltip(_text:String) -> void:
 	tooltip_active = true
 
 
+func tooltip_error(_text:String) -> void:
+	n_tooltip_error.get_node("Text").set_bbcode(_text)
+	tooltip_error_active = true
+
+
 func tooltip_link(_title:String, _link:String) -> void:
 	n_tooltip_link.get_node("VBox/HBox/DescrLabel").text = _title
 	# LINK NOT WORKING!
@@ -71,6 +83,8 @@ func tooltip_hide() -> void:
 	n_tooltip_link.visible = false
 	tooltip_active = false
 	n_tooltip.visible = false
+	tooltip_error_active = false
+	n_tooltip_error.visible = false
 
 
 func open_popup(_name:String) -> void:

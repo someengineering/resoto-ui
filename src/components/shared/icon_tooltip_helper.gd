@@ -1,6 +1,7 @@
 extends TextureRect
 
 export (String, MULTILINE) var tooltip_text := ""
+export var tooltip := "tooltip"
 
 
 func _ready() -> void:
@@ -10,7 +11,7 @@ func _ready() -> void:
 
 
 func _on_mouse_entered() -> void:
-	_g.emit_signal("tooltip", tooltip_text)
+	_g.emit_signal(tooltip, tooltip_text)
 
 
 func _on_mouse_exited() -> void:

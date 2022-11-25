@@ -23,6 +23,7 @@ signal top_search_update
 signal tooltip
 signal tooltip_link
 signal tooltip_hide
+signal tooltip_error
 
 # Nav Signals
 signal nav_change_section
