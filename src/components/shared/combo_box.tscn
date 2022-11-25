@@ -37,14 +37,14 @@ focus_mode = 1
 theme_type_variation = "PopupPanelComboBox"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PopupPanel"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 12.0
-margin_bottom = 23.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 16.0
+margin_bottom = 27.0
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PopupPanel/ScrollContainer"]
-margin_right = 2.0
+margin_right = 10.0
 size_flags_horizontal = 3
 
 [node name="JustHiddenTimer" type="Timer" parent="."]

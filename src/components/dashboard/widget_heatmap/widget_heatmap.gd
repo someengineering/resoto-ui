@@ -170,6 +170,7 @@ func set_data(data, type : int):
 		heat_variable = vars[0]
 		
 		for row in data:
+			print("row", row)
 			var heat = -1.0
 			if not str(row[heat_variable]).is_valid_float():
 				heat = 0.0
@@ -181,53 +182,57 @@ func set_data(data, type : int):
 			if heat > max_value:
 				max_value = row[heat_variable]
 			
-			if row["group"][headers[1]] != null:
-				var x_category : String = row["group"][headers[1]]
-				if not x_category in x_categories:
-					x_categories.append(x_category)
-					var label := ClippedLabel.new()
-					var control := Control.new()
-					
-					control.add_child(label)
-					control.mouse_filter = Control.MOUSE_FILTER_IGNORE
-					hbox.add_child(control)
-					label.add_font_override("font", font)
-					label.rect_rotation = 53
-					label.anchor_right = 0.5
-					label.anchor_left = 0.5
-					label.margin_right = 0
-					label.margin_left = 0
-					label.mouse_filter = Control.MOUSE_FILTER_PASS
-					label.hint_tooltip = x_category
-					label.rect_size.x = 90
-					label.rect_position.x += 10
-					control.size_flags_horizontal = SIZE_EXPAND_FILL
-					
-					label.raw_text = x_category
-			
-			if row["group"][headers[0]] != null:
-				var y_category : String = row["group"][headers[0]]
-				if not y_category in y_categories:
-					y_categories.append(y_category)
-					var label := preload("res://components/elements/utility/clipped_label.tscn").instance()
-					var control := Control.new()
-					
-					vbox.add_child(control)
-					control.add_child(label)
-					control.rect_min_size = Vector2(0,0)
-					
-					
-					label.hint_tooltip = y_category
-					control.size_flags_vertical = SIZE_EXPAND_FILL
-			
-					label.add_font_override("font", font)
-					label.valign = Label.VALIGN_CENTER
-					label.mouse_filter = Control.MOUSE_FILTER_PASS
-					
-					label.raw_text = y_category
+#			if row["group"][headers[1]] != null:
+			if typeof(row["group"][headers[1]]) == TYPE_REAL:
+				row["group"][headers[1]] = str(stepify(row["group"][headers[1]], 0.01))
+			var x_category : String = str(row["group"][headers[1]])
+			if not x_category in x_categories:
+				x_categories.append(x_category)
+				var label := ClippedLabel.new()
+				var control := Control.new()
 				
+				control.add_child(label)
+				control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				hbox.add_child(control)
+				label.add_font_override("font", font)
+				label.rect_rotation = 53
+				label.anchor_right = 0.5
+				label.anchor_left = 0.5
+				label.margin_right = 0
+				label.margin_left = 0
+				label.mouse_filter = Control.MOUSE_FILTER_PASS
+				label.hint_tooltip = x_category
+				label.rect_size.x = 90
+				label.rect_position.x += 10
+				control.size_flags_horizontal = SIZE_EXPAND_FILL
+				
+				label.raw_text = x_category
+			
+#			if row["group"][headers[0]] != null:
+			if typeof(row["group"][headers[0]]) == TYPE_REAL:
+				row["group"][headers[0]] = str(stepify(row["group"][headers[0]], 0.01))
+			var y_category : String = str(row["group"][headers[0]])
+			if not y_category in y_categories:
+				y_categories.append(y_category)
+				var label := preload("res://components/elements/utility/clipped_label.tscn").instance()
+				var control := Control.new()
+				
+				vbox.add_child(control)
+				control.add_child(label)
+				control.rect_min_size = Vector2(0,0)
+				
+				label.hint_tooltip = y_category
+				control.size_flags_vertical = SIZE_EXPAND_FILL
+		
+				label.add_font_override("font", font)
+				label.valign = Label.VALIGN_CENTER
+				label.mouse_filter = Control.MOUSE_FILTER_PASS
+				
+				label.raw_text = y_category
+		
 		update_map()
-				
+
+
 func update_map():
 	if x_categories.size() == 0 or y_categories.size() == 0:
 		return
@@ -248,8 +253,8 @@ func update_map():
 		value_matrix[i] = data_row
 	
 	for row in current_data:
-		var j = x_categories.find(row["group"][label_x.text])
-		var i = y_categories.find(row["group"][label_y.text])
+		var j : int = int(max(x_categories.find(str(row["group"][label_x.text])), 0))
+		var i : int = int(max(y_categories.find(str(row["group"][label_y.text])), 0))
 		
 		var value = row[heat_variable]
 		
@@ -260,7 +265,6 @@ func update_map():
 			color = gradient.interpolate((value - min_value)/(max_value - min_value))
 
 		color.a = 1.0;
-		
 		image.set_pixel(j, i, color)
 		
 	image.unlock()

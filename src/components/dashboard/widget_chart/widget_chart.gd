@@ -98,12 +98,11 @@ func _input(event) -> void:
 			var closest_point = find_value_at_x(x, series[index])
 			if str(closest_point.y) == "nan":
 				continue
-			sorted_values.append( [closest_point.y, line.name, line.default_color] )
+			sorted_values.append( [closest_point.y, line.series_name, line.default_color] )
 			if line.get_meta("stack"):
 				closest_point.y += stacked
 				stacked = closest_point.y
 			line.show_indicator(transform_point(closest_point))
-			
 		
 		sorted_values.sort_custom(self, "sort_label_values")
 		
@@ -245,7 +244,7 @@ func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack :=
 	if serie_name == "":
 		serie_name = "Serie %d" % series.size()
 		
-	serie.name = serie_name
+	serie.series_name = serie_name
 
 
 func clear_series() -> void:
@@ -316,7 +315,10 @@ func do_complete_update():
 	yield(VisualServer, "frame_post_draw")
 	yield(VisualServer, "frame_post_draw")
 	grid_tex.modulate.a = 1.0
-	set_viewport_mode(false)
+	if not mouse_on_graph:
+		set_viewport_mode(false)
+	else:
+		_on_Grid_mouse_entered()
 
 
 func set_viewport_mode(_update:bool):
@@ -407,7 +409,7 @@ func get_csv(separator := ",", end_of_line := "\n") -> String:
 	var header : PoolStringArray = ["Date"]
 	
 	for line in graph_area.get_children():
-		header.append(line.name)
+		header.append(line.series_name)
 	
 	data.append(header.join(separator))
 	

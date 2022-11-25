@@ -18,11 +18,17 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 
 func _on_aggregate_search_done(_error : int, response):
 	if _error:
-		emit_signal("query_status", FAILED, "Invalid Aggregate Search", "There is a problem with the aggregate search query.")
+		var error_detail := ""
+		if response:
+			error_detail = "\n\n" + response.body.get_string_from_utf8()
+		emit_signal("query_status", FAILED, "Invalid Aggregate Search", "There is a problem with the aggregate search query.%s" % error_detail)
 		return
 	if not response.transformed.result is Array or response.transformed.result.size() == 0:
+		var error_detail := ""
+		if response:
+			error_detail = "\n\n" + response.body.get_string_from_utf8()
 		_g.emit_signal("add_toast", "Invalid Aggregate Search", "There is a problem with the aggregate search query.", 1, self)
-		emit_signal("query_status", FAILED, "Invalid Aggregate Search", "There is a problem with the aggregate search query.")
+		emit_signal("query_status", FAILED, "Invalid Aggregate Search", "There is a problem with the aggregate search query.%s" % error_detail)
 		return
 	if widget is TableWidget:
 		widget.header_columns_count = response.transformed.result[0]["group"].size()-1
