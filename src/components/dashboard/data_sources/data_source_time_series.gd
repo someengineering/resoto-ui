@@ -10,6 +10,7 @@ var offset : String = ""
 var legend : String = ""
 var sum_by : String = ""
 var stacked : bool = true
+var last_metric_keys : Array = []
 # query, now saved to display correctly in toasts and log
 var q: String
 
@@ -19,6 +20,7 @@ func _init():
 	type = TYPES.TIME_SERIES
 
 func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
+	last_metric_keys.clear()
 	var interval = attr["interval"]
 	if making_query:
 		return
@@ -39,9 +41,8 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 		
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 		making_query = true
-		q = q.http_escape()
 		q += "&time=%d" % attr["to"]
-		set_request(API.query_tsdb(q, self))
+		set_request(API.query_tsdb(q.http_escape(), self))
 	else:
 		var from = attr["from"]
 		var to = attr["to"]
@@ -132,11 +133,17 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 		return
 		
 	if data["status"] == "success":
+		var temp_last_metric_keys : Dictionary = {}
 		var regex = RegEx.new()
 		regex.compile("(?<={)(.*?)(?=})")
 		var legend_labels : Array = regex.search_all(legend)
 		
 		for serie in data.data.result:
+			# generate "last metric keys"
+			for metric_key in serie.metric:
+				if metric_key != "__name__":
+					temp_last_metric_keys[metric_key] = null
+			
 			var array : PoolVector2Array = []
 			array.resize(serie.values.size())
 			for i in array.size():
@@ -150,6 +157,7 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 				l = l.replace("{%s}"%label.strings[0], replace)
 			widget.add_serie(array, null, l, stacked)
 		
+			last_metric_keys = temp_last_metric_keys.keys()
 		emit_signal("query_status", OK, "")
 		widget.complete_update(true)
 	else:
@@ -168,6 +176,7 @@ func copy_data_source(other : TimeSeriesDataSource) -> void:
 	offset = other.offset
 	sum_by = other.sum_by
 	legend = other.legend
+	custom_query = other.custom_query
 
 
 func update_query() -> void:
@@ -202,6 +211,7 @@ func get_data() -> Dictionary:
 		"offset" : offset,
 		"sum_by" : sum_by,
 		"legend" : legend,
+		"custom_query" : custom_query
 	}
 	
 	data.merge(.get_data())

@@ -1,7 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/icons/icon_128_questionmark.svg" type="Texture" id=1]
 [ext_resource path="res://components/shared/icon_tooltip_helper.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
 
 [node name="IconTooltipHelper" type="TextureRect"]
 margin_left = 28.0
@@ -14,3 +24,16 @@ size_flags_vertical = 4
 texture = ExtResource( 1 )
 expand = true
 script = ExtResource( 2 )
+
+[node name="Button" type="ToolButton" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+focus_mode = 0
+mouse_filter = 1
+theme_type_variation = "FontZero"
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+enabled_focus_mode = 0

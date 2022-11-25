@@ -5,59 +5,74 @@ signal delete_source(node)
 
 var widget : BaseWidget setget set_widget
 var datasource_type : int =  DataSource.TYPES.TIME_SERIES
+
 onready var data_source : DataSource setget set_data_source
 
-onready var metrics_options := $VBoxContainer/DatasourceSettings/MetricsVBox/MetricsOptions
-onready var filters_widget := $VBoxContainer/DatasourceSettings/FilterHBox/FilterWidget
-onready var legend_edit := $VBoxContainer/DatasourceSettings/VBoxContainer5/LegendEdit
-onready var function_options := $VBoxContainer/DatasourceSettings/FunctionVBox/FunctionComboBox
-onready var date_offset_edit := $VBoxContainer/DatasourceSettings/VBoxContainer/DateOffsetLineEdit
-onready var stacked_check_box := $VBoxContainer/DatasourceSettings/StackedCheckBox
-onready var by_line_edit := $VBoxContainer/DatasourceSettings/VBoxContainer4/ByLineEdit
-onready var query_edit := $VBoxContainer/QueryEditVBox/QueryEdit
-onready var expand_button := $VBoxContainer/HBoxContainer/ExpandButton
-onready var kinds_combo_box := $VBoxContainer/TextSearchSettings/HBoxContainer/KindsComboBox
-onready var kinds_line_edit := $VBoxContainer/TextSearchSettings/LineEditKinds
-onready var text_line_edit := $VBoxContainer/TextSearchSettings/TextLineEdit
-onready var text_filters_line_edit := $VBoxContainer/TextSearchSettings/TextFiltersLineEdit
-onready var list_line_edit := $VBoxContainer/TextSearchSettings/ListLineEdit
+# Title Bar
+onready var expand_button := $VBox/Title/ExpandButton
 
-onready var entry_1_line_edit := $VBoxContainer/TwoEntryAggregateSettings/EntryContainer1/Entry1LineEdit
-onready var entry_2_line_edit := $VBoxContainer/TwoEntryAggregateSettings/EntryContainer2/Entry2LineEdit
-onready var entry_1_alias_line_edit := $VBoxContainer/TwoEntryAggregateSettings/EntryContainer1/Entry1Alias
-onready var entry_2_alias_line_edit := $VBoxContainer/TwoEntryAggregateSettings/EntryContainer2/Entry2Alias
-onready var function_line_edit := $VBoxContainer/TwoEntryAggregateSettings/FunctionContainer/FunctionLineEdit
-onready var function_alias_line_edit := $VBoxContainer/TwoEntryAggregateSettings/FunctionContainer/FunctionAlias
-onready var kinds_combobox_two_entries_datasource := $VBoxContainer/TwoEntryAggregateSettings/KindComboBox
+# Time Series Data Source
+onready var function_options := $VBox/TimeSeries/MainPart/FunctionVBox/FunctionComboBox
+onready var metrics_options := $VBox/TimeSeries/MainPart/MetricsVBox/MetricsOptions
+onready var filters_widget := $VBox/TimeSeries/FilterWidget
+onready var date_offset_edit := $VBox/TimeSeries/DateOffset/DateOffsetLineEdit
+onready var by_line_edit := $VBox/TimeSeries/SumBy/SumByLineEdit
+onready var sum_by_help := $VBox/TimeSeries/SumBy/SumByTitle/SumByHelp
+onready var legend_edit := $VBox/TimeSeries/Legend/LegendEdit
+onready var legend_help := $VBox/TimeSeries/Legend/LegendTitle/LegendHelp
+onready var stacked_check_box := $VBox/TimeSeries/StackedCheckBox
+
+# Search Data Source
+onready var kinds_combo_box := $VBox/Search/HBoxContainer/KindsComboBox
+onready var kinds_line_edit := $VBox/Search/LineEditKinds
+onready var text_line_edit := $VBox/Search/TextLineEdit
+onready var text_filters_line_edit := $VBox/Search/TextFiltersLineEdit
+onready var list_line_edit := $VBox/Search/ListLineEdit
+
+# Two Entries Aggregate
+onready var entry_1_line_edit := $VBox/TwoEntriesAggregate/EntryContainer1/Entry1LineEdit
+onready var entry_2_line_edit := $VBox/TwoEntriesAggregate/EntryContainer2/Entry2LineEdit
+onready var entry_1_alias_line_edit := $VBox/TwoEntriesAggregate/EntryContainer1/Entry1Alias
+onready var entry_2_alias_line_edit := $VBox/TwoEntriesAggregate/EntryContainer2/Entry2Alias
+onready var function_line_edit := $VBox/TwoEntriesAggregate/FunctionContainer/FunctionLineEdit
+onready var function_alias_line_edit := $VBox/TwoEntriesAggregate/FunctionContainer/FunctionAlias
+onready var kinds_combobox_two_entries_datasource := $VBox/TwoEntriesAggregate/KindComboBox
+
+# Aggregation would make sense!
+
+
+# Resulting Query Box
+onready var resulting_query_sep := $VBox/ResultingQueryBox
+
+# Query Edit
+onready var query_edit := $VBox/QueryEditVBox/QueryEdit
 
 var interval : int = 3600
 
 
 func _ready() -> void:
 	Style.add_self(self, Style.c.BG)
+	
+	$VBox/TimeSeries.visible = datasource_type == DataSource.TYPES.TIME_SERIES
+	$VBox/Search.visible = datasource_type == DataSource.TYPES.SEARCH
+	$VBox/TwoEntriesAggregate.visible = datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
+	show_query_separator(false)
+	update_time_series_legend()
+	
 	match datasource_type:
 		DataSource.TYPES.TIME_SERIES:
 			data_source = TimeSeriesDataSource.new()
-			$VBoxContainer/DatasourceSettings.show()
-			$VBoxContainer/TextSearchSettings.hide()
-			$VBoxContainer/TwoEntryAggregateSettings.hide()
+			show_query_separator(true)
 		DataSource.TYPES.AGGREGATE_SEARCH:
 			data_source = AggregateSearchDataSource.new()
-			$VBoxContainer/DatasourceSettings.hide()
-			$VBoxContainer/TextSearchSettings.hide()
-			$VBoxContainer/TwoEntryAggregateSettings.hide()
 			expand_button.hide()
 		DataSource.TYPES.SEARCH:
 			data_source = TextSearchDataSource.new()
-			$VBoxContainer/DatasourceSettings.hide()
-			$VBoxContainer/TextSearchSettings.show()
-			$VBoxContainer/TwoEntryAggregateSettings.hide()
+			show_query_separator(true)
 			API.cli_execute("kinds", self)
 		DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
+			show_query_separator(true)
 			data_source = TwoEntryAggregateDataSource.new()
-			$VBoxContainer/DatasourceSettings.hide()
-			$VBoxContainer/TextSearchSettings.hide()
-			$VBoxContainer/TwoEntryAggregateSettings.show()
 			API.cli_execute("kinds", self)
 	
 	$"%TitleLabel".text = "Data Source %s - %s" % [str(get_parent().get_children().find(self)+1), DataSource.TYPES.keys()[data_source.type].capitalize()]
@@ -73,8 +88,8 @@ func _on_cli_execute_done(_error : int, response):
 	var kinds = response.transformed.result.split("\n")
 	
 	if kinds.size() > 0:
-		$VBoxContainer/TextSearchSettings/HBoxContainer/KindsComboBox.set_items(kinds)
-		$VBoxContainer/TwoEntryAggregateSettings/KindComboBox.set_items(kinds)
+		$VBox/Search/HBoxContainer/KindsComboBox.set_items(kinds)
+		$VBox/TwoEntriesAggregate/KindComboBox.set_items(kinds)
 
 func _on_DeleteButton_pressed() -> void:
 	emit_signal("delete_source", self)
@@ -114,6 +129,7 @@ func _on_metrics_query_finished(_error:int, response) -> void:
 
 func update_query(force_query := false) -> void:
 	var query = data_source.query
+	data_source.custom_query = false
 	
 	data_source.update_query()
 	if data_source.query != query or force_query:
@@ -181,6 +197,7 @@ func execute_query_edit():
 
 func _on_QueryEdit_text_changed():
 	_on_QueryEdit_item_rect_changed()
+	data_source.custom_query = true
 	expand_button.pressed = false
 
 
@@ -192,18 +209,23 @@ func _on_QueryEdit_gui_input(event:InputEventKey):
 		query_edit.cursor_set_column(query_text_edit_cursor_pos[1])
 		get_tree().set_input_as_handled()
 
+
 var query_text_edit_cursor_pos:= []
 func _on_QueryEdit_cursor_changed():
 	query_text_edit_cursor_pos = [query_edit.cursor_get_line(), query_edit.cursor_get_column()]
 
 
 func _on_data_source_query_status(_status:int, _title:String, _message:=""):
+	update_time_series_legend()
 	var error_icon = $"%ErrorIcon"
 	var tooltip = "[b][color=#%s]%s[/color][/b]" % [Style.col_map[Style.c.ERR_MSG].to_html(), _title]
 	if _message != "":
 		tooltip += "\n" + _message
 	match _status:
 		OK:
+			# Update the Help for time series legends
+			if "last_metric_keys" in data_source:
+				update_time_series_legend(data_source.last_metric_keys)
 			error_icon.hide()
 			hint_tooltip = ""
 			$Warning.hide()
@@ -234,14 +256,17 @@ func set_data_source(new_data_source : DataSource) -> void:
 			by_line_edit.text = new_data_source.sum_by
 			function_options.text = new_data_source.aggregator
 			data_source.query = new_data_source.query
+			data_source.custom_query = new_data_source.custom_query
 			legend_edit.text = new_data_source.legend
 			stacked_check_box.pressed = new_data_source.stacked
 		DataSource.TYPES.SEARCH:
+			data_source.custom_query = new_data_source.custom_query
 			kinds_line_edit.text = new_data_source.kinds
 			text_line_edit.text = new_data_source.text_to_search
 			text_filters_line_edit.text = new_data_source.filters
 			list_line_edit.text = new_data_source.list
 		DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
+			data_source.custom_query = new_data_source.custom_query
 			entry_1_line_edit.text = new_data_source.category_1
 			entry_2_line_edit.text = new_data_source.category_2
 			entry_1_alias_line_edit.text = new_data_source.category_1_alias
@@ -250,7 +275,8 @@ func set_data_source(new_data_source : DataSource) -> void:
 			function_alias_line_edit.text = new_data_source.function_alias
 			kinds_combobox_two_entries_datasource.text = new_data_source.kind 
 			
-		
+	$VBox/Title/ExpandButton.pressed = !new_data_source.custom_query
+	show_query_separator(!new_data_source.custom_query)
 	query_edit.text = new_data_source.query
 	_on_QueryEdit_item_rect_changed()
 
@@ -284,8 +310,11 @@ func _on_KindsComboBox_option_changed(option):
 
 
 func _on_ExpandButton_toggled(button_pressed:bool):
-	$VBoxContainer/DatasourceSettings.visible = button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
-	$VBoxContainer/TextSearchSettings.visible = button_pressed and datasource_type == DataSource.TYPES.SEARCH
+	$VBox/TimeSeries.visible = button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
+	$VBox/Search.visible = button_pressed and datasource_type == DataSource.TYPES.SEARCH
+	$VBox/TwoEntriesAggregate.visible = button_pressed and datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
+	if [DataSource.TYPES.TWO_ENTRIES_AGGREGATE, DataSource.TYPES.SEARCH, DataSource.TYPES.TIME_SERIES].has(datasource_type):
+		show_query_separator(button_pressed)
 
 
 func _on_KindComboBox_option_changed(option):
@@ -303,12 +332,16 @@ func _on_Entry2LineEdit_text_entered(new_text):
 	update_query()
 
 
-func _on_Entry1Alias_text_entered(new_text):
+func _on_Entry1Alias_text_entered(new_text:String):
+	new_text = new_text.replace(" ", "_")
+	$VBox/TwoEntriesAggregate/EntryContainer1/Entry1Alias.text = new_text
 	data_source.category_1_alias = new_text
 	update_query()
 
 
-func _on_Entry2Alias_text_entered(new_text):
+func _on_Entry2Alias_text_entered(new_text:String):
+	new_text = new_text.replace(" ", "_")
+	$VBox/TwoEntriesAggregate/EntryContainer2/Entry2Alias.text = new_text
 	data_source.category_2_alias = new_text
 	update_query()
 
@@ -322,3 +355,24 @@ func _on_FunctionAlias_text_entered(new_text):
 	data_source.function_alias = new_text
 	update_query()
 
+
+func update_time_series_legend(last_metric_keys:Array=[]):
+	var help_text_legend := "[b]Set the legend on the widget.[/b]\nIf the result contains labels, you can display them by wrapping it in curly braces.\n"
+	help_text_legend += "[b]Examples[/b]\n- [code]{label_name}[/code]\n- [code]Cloud: {cloud}[/code]%s"
+	var help_text_sum_by := "[b]Sum by a label in the metric.[/b]%s"
+	if not last_metric_keys.empty():
+		var last_metric_string : PoolStringArray = []
+		for key in last_metric_keys:
+			last_metric_string.append("[code]{%s}[/code]" % key)
+		help_text_legend = help_text_legend % str("\n\nThe last query returned the following labels:\n[code]%s[/code]" % last_metric_string.join(", "))
+		help_text_sum_by = help_text_sum_by % str("\n\nThe last query returned the following labels:\n[code]%s[/code]" % last_metric_string.join(", "))
+	else:
+		help_text_legend = help_text_legend % ""
+		help_text_sum_by = help_text_sum_by % ""
+	legend_help.tooltip_text = help_text_legend
+	sum_by_help.tooltip_text = help_text_sum_by
+
+
+func show_query_separator(_show:bool=false):
+	resulting_query_sep.visible = _show
+	$VBox/QueryEditVBox/QueryLabel.visible = !_show

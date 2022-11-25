@@ -26,7 +26,10 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 
 func _on_graph_search_done(_error : int, response):
 	if _error:
-		emit_signal("query_status", FAILED, "Invalid Full Text Search", "There is a problem with the search query.")
+		var error_detail := ""
+		if response:
+			error_detail = "\n\n" + response.body.get_string_from_utf8()
+		emit_signal("query_status", FAILED, "Invalid Search", "There is a problem with the search query.%s" % error_detail)
 		return
 	var result : Array = response.transformed.result
 	if "Error: " in response.transformed.result:
@@ -44,6 +47,7 @@ func copy_data_source(other : TextSearchDataSource):
 	filters = other.filters
 	list = other.list
 	query = other.query
+	custom_query = other.custom_query
 
 
 func update_query():
@@ -61,10 +65,6 @@ func update_query():
 	
 	if filters != "":
 		query += " and %s" % filters
-		
-#	query += " | list --csv %s" % list
-		
-#	query = "search " + query
 
 
 func get_data() -> Dictionary:

@@ -145,8 +145,7 @@ func _on_option_pressed(option_name : String) -> void:
 	options_popup.hide()
 	previous_option = option_name
 	emit_signal("option_changed", option_name)
-	line_edit.grab_focus()
-	line_edit.set_cursor_position(line_edit.text.length())
+	line_edit.caret_position = 0
 
 
 func show_options() -> void:
@@ -159,6 +158,7 @@ func show_options() -> void:
 	options_popup.rect_global_position = rect_global_position + Vector2(0, rect_size.y + 2)
 	options_popup.rect_size.x = rect_size.x
 	options_popup.rect_size.y = min(415, matching_items.size() * 37 + 8)
+	line_edit.set_cursor_position(line_edit.text.length())
 
 
 func set_items(new_items : Array) -> void:

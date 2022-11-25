@@ -9,6 +9,7 @@ var query : String
 var widget 
 var type : int = TYPES.TIME_SERIES
 var _request : UserAgent.Request = null
+var custom_query : bool = false
 
 
 func _init():
@@ -26,7 +27,8 @@ func update_query():
 func get_data() -> Dictionary:
 	var data = {
 		"type" : type,
-		"query" : query
+		"query" : query,
+		"custom_query" : custom_query
 	}
 	return data
 
