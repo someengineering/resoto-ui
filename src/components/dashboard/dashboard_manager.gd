@@ -176,7 +176,9 @@ func restore_default_dashboard() -> void:
 func open_user_dashboards():
 	inform_dashboard_selected = false
 	var dashboard_status = get_user_dashboards()
-	for dashboard in dashboard_status.open_dashboards:
+	var open_dashboards : Array = dashboard_status.open_dashboards
+	open_dashboards.invert()
+	for dashboard in open_dashboards:
 		if not available_dashboards.keys().has(dashboard):
 			continue
 		if dashboard_status.has("active_dashboard") and dashboard == dashboard_status.active_dashboard:
