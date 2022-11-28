@@ -58,6 +58,7 @@ func _on_WizardControl_setup_wizard_finished():
 	is_collecting = false
 	Analytics.event(Analytics.EventWizard.FINISH)
 	_g.emit_signal("nav_change_section", "home")
+	$WizardControl.current_step = null
 
 
 func _check_for_setup_wizard_autostart():

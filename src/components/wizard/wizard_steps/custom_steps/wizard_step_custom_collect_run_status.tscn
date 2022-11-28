@@ -36,3 +36,4 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [connection signal="all_done" from="VBoxContainer/CollectRunDisplay" to="." method="_on_CollectRunDisplay_all_done"]
+[connection signal="started" from="VBoxContainer/CollectRunDisplay" to="." method="_on_CollectRunDisplay_started"]

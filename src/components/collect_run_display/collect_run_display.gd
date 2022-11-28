@@ -1,5 +1,6 @@
 extends Control
 
+signal started
 signal all_done
 
 const ProgressElement = preload("res://components/collect_run_display/collect_run_display_progress_element.tscn")
@@ -55,6 +56,29 @@ func receive_websocket_message(_m:String):
 		parse_message(json_res.result)
 
 
+func wait_for_core():
+	refresh_elements()
+	$PanelContainer/Content/HBoxContainer/Done.hide()
+	var new_progress_element = ProgressElement.instance().init("Waiting for Resoto Core to finish other workflows...", 1, 0)
+	elements.add_child(new_progress_element)
+	display_messages = false
+	$CheckForWorkflows.start()
+
+
+func _on_CheckForWorkflows_timeout():
+	if not display_messages:
+		API.cli_execute("workflow running", self)
+
+
+func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
+	if error:
+		return
+	if not display_messages:
+		var workflow_running_name : String = _response.transformed.result.split("\n")[0]
+		var new_progress_element = ProgressElement.instance().init("Running " + workflow_running_name, 1, 0)
+		elements.add_child(new_progress_element)
+
+
 func refresh_elements():
 	elements.queue_free()
 	var new_elements : VBoxContainer = VBoxContainer.new()
@@ -78,13 +102,15 @@ func refresh_error_tooltip():
 
 func parse_message(_m:Dictionary):
 	var m_type : String = _m.message_type
-	if not display_messages and m_type == message_types[MessageTypes.TASK_STARTED]:
+	if not display_messages and m_type != message_types[MessageTypes.TASK_STARTED]:
 		return
 	
 	if m_type == message_types[MessageTypes.TASK_STARTED]:
+		$CheckForWorkflows.stop()
+		emit_signal("started")
 		refresh_elements()
 		$PanelContainer/Content/HBoxContainer/Done.hide()
-		var new_progress_element = ProgressElement.instance().init("Starting...", 0, 1)
+		var new_progress_element = ProgressElement.instance().init("Starting Task", 1, 0)
 		elements.add_child(new_progress_element)
 		display_messages = true
 	
@@ -129,7 +155,7 @@ func parse_message(_m:Dictionary):
 	else:
 		if _m.data.has("step"):
 			refresh_elements()
-			var new_progress_element = ProgressElement.instance().init(_m.data.step, 0, 1)
+			var new_progress_element = ProgressElement.instance().init(_m.data.step, 1, 0)
 			elements.add_child(new_progress_element)
 
 

@@ -38,6 +38,7 @@ var remote_configs := {}
 var config_changed := false
 var start_step_id := ""
 var muted := false
+var wizard_complete := false
 
 onready var character = $BG/Character/WizardCharacter
 onready var step_content = $BG/StepDisplay/StepContent
@@ -113,6 +114,7 @@ func _on_get_config_id_done(_error:int, _r:ResotoAPI.Response, _config_key:Strin
 
 
 func start_wizard():
+	wizard_complete = false
 	$BG/StepDisplay/Titlebar/HomeButton.hide()
 	can_previous(true)
 	for n_key in data.nodes:
@@ -304,6 +306,7 @@ func _on_NextBtn_pressed():
 		return
 	
 	if not data.connections_from.has(current_step.step_id):
+		wizard_complete = true
 		emit_signal("setup_wizard_finished")
 		return
 	next_step()

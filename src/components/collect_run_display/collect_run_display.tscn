@@ -248,8 +248,13 @@ readonly = true
 highlight_all_occurrences = true
 wrap_enabled = true
 
+[node name="CheckForWorkflows" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
 [connection signal="timeout" from="Flip" to="." method="_on_Flip_timeout"]
 [connection signal="pressed" from="PanelContainer/Content/HBoxContainer/Label/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/HBoxContainer/ErrorBtn" to="." method="_on_ErrorBtn_pressed"]
 [connection signal="text_changed" from="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title/AllDataFilter" to="ErrorPopup/MarginContainer/AllErrorsGroup" method="_on_AllDataFilter_text_changed"]
 [connection signal="pressed" from="ErrorPopup/MarginContainer/AllErrorsGroup/VBox/Title/AllDataMaximizeButton" to="ErrorPopup/MarginContainer/AllErrorsGroup" method="_on_AllDataMaximizeButton_pressed"]
+[connection signal="timeout" from="CheckForWorkflows" to="." method="_on_CheckForWorkflows_timeout"]
