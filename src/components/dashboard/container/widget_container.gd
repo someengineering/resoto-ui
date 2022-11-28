@@ -31,7 +31,7 @@ var dashboard : Control
 var widget : BaseWidget
 
 var position_on_grid : Vector2
-var size_on_grid : Vector2
+var size_on_grid : Vector2 = Vector2.ONE
 
 var check_rect : Rect2
 export var title : String = "" setget set_title
@@ -101,8 +101,14 @@ func _on_resize_button_released() -> void:
 
 
 func refresh_pos_and_size_on_grid():
+	if rect_position.x < 0 or rect_position.y < 0:
+		rect_position = dashboard.find_empty_slot(get_rect())
+		
 	position_on_grid = (rect_position / grid_size).snapped(Vector2.ONE)
+	
 	size_on_grid = (rect_size / grid_size).snapped(Vector2.ONE)
+	size_on_grid.x = max(size_on_grid.x, 1)
+	size_on_grid.y = max(size_on_grid.y, 1)
 
 
 func set_anchors() -> void:
