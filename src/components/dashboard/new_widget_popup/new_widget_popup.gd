@@ -146,15 +146,37 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		for child in widget_to_edit.widget.get_children():
 			if child is ColorController:
 				preview_widget.get_node(child.name).conditions = child.conditions.duplicate()
-		
+	
+	create_properties_options()
+	
+	preview_container.add_child(preview_widget)
+	preview_widget.connect("available_properties_changed", self, "create_properties_options")
+	preview_widget.connect("available_properties_changed", self, "update_preview")
+	current_widget_preview_name = widget_type
+	
+	for datasource in data_source_container.get_children():
+		if datasource.data_source.type in preview_widget.supported_types:
+			datasource.widget = preview_widget
+		else:
+			datasource.queue_free()
+	
+	data_source_types.clear()
+	for i in preview_widget.supported_types:
+		data_source_types.add_item(DataSource.TYPES.keys()[i].capitalize(), i)
+
+	data_source_types.disabled = data_source_types.get_item_count() <= 1
+	data_source_types.emit_signal("item_selected", 0)
+	update_new_data_vis()
+
+
+func create_properties_options():
 	preview_widget.size_flags_vertical = SIZE_EXPAND_FILL
 	for option in options_container.get_children():
 		option.queue_free()
 		
 	for controller in controller_container.get_children():
 		controller.queue_free()
-	
-	# create properties options
+		
 	var found_settings := false
 	var show_widget_options_label := false
 	for property in preview_widget.get_property_list():
@@ -190,24 +212,6 @@ func create_preview(widget_type : String = "Indicator") -> void:
 				
 	$"%WidgetOptionsLabel".visible = show_widget_options_label
 	$"%WidgetOptionsPanelContainer".visible = show_widget_options_label
-	
-	preview_container.add_child(preview_widget)
-	current_widget_preview_name = widget_type
-	
-	for datasource in data_source_container.get_children():
-		if datasource.data_source.type in preview_widget.supported_types:
-			datasource.widget = preview_widget
-		else:
-			datasource.queue_free()
-	
-	data_source_types.clear()
-	for i in preview_widget.supported_types:
-		data_source_types.add_item(DataSource.TYPES.keys()[i].capitalize(), i)
-
-	data_source_types.disabled = data_source_types.get_item_count() <= 1
-	data_source_types.emit_signal("item_selected", 0)
-	update_new_data_vis()
-
 
 func get_control_for_property(property : Dictionary) -> Control:
 	var control : Control

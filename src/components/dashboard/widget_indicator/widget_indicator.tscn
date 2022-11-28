@@ -50,8 +50,9 @@ single_value = true
 supported_types = [ 0, 1 ]
 unit = "[unit]"
 decimal_digits = 2
-unit = "[unit]"
 show_comma = false
+number_as_bytes = false
+unit = "[unit]"
 
 [node name="IndicatorBackground" type="Panel" parent="."]
 anchor_right = 1.0
