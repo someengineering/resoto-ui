@@ -1,7 +1,11 @@
 class_name BaseWidget
 extends Control
 
+signal available_properties_changed
+
 enum DATA_TYPE {INSTANT, RANGE}
+
+const UnitsBytes := ["B", "KB", "MB", "GB", "TB", "PB"]
 
 export (DATA_TYPE) var data_type = DATA_TYPE.INSTANT
 
@@ -44,3 +48,14 @@ func get_attributes_to_save() -> Array:
 		})
 	return attributes
 	
+func get_scaled_value(_value : float, factor : float = 1024.0) -> Dictionary:
+	var new_value = _value
+	var power : int = 0
+	while true:
+		new_value /= factor
+		if new_value < 1 or power == 4:
+			break
+		power += 1
+		_value = new_value
+	
+	return {"value" : _value, "unit": UnitsBytes[power]}

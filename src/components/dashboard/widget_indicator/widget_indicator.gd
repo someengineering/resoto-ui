@@ -7,6 +7,7 @@ export (String) var unit := "" setget set_unit
 
 var decimal_digits := 2 setget set_decimal_digits
 var show_comma		:= false setget set_show_comma
+var number_as_bytes := false setget set_number_as_bytes
 var color := Color.white setget set_color
 var background_color := Color("#0a253f") setget set_background_color
 
@@ -64,14 +65,24 @@ func reset_color():
 func set_value(new_value) -> void:
 	if new_value == null:
 		new_value = 0
+	
+	
 	value = float(new_value)
+	
+	var show_value : float = value
+	
+	if number_as_bytes:
+		var scaled = get_scaled_value(value)
+		show_value = scaled.value
+		self.unit = scaled.unit
+		
 	if is_instance_valid(value_label):
 		if new_value is String and not new_value.is_valid_float():
 			value_label.text = new_value
 			value_label._on_DynamicLabel_resized()
 		else:
 			var format := "%."+str(decimal_digits)+"f"
-			var stringified = format % stepify(value, 1.0/pow(10, decimal_digits))
+			var stringified = format % stepify(show_value, 1.0/pow(10, decimal_digits))
 			
 			if show_comma:
 				if decimal_digits > 0:
@@ -79,7 +90,7 @@ func set_value(new_value) -> void:
 					sep[0] = Utils.comma_sep(int(sep[0]))
 					value_label.text = sep[0] + "." + sep[1]
 				else:
-					value_label.text = Utils.comma_sep(value)
+					value_label.text = Utils.comma_sep(show_value)
 			else:
 				value_label.text = stringified
 			
@@ -117,14 +128,20 @@ func _get_property_list() -> Array:
 	})
 	
 	properties.append({
-		"name" : "unit",
-		"type" : TYPE_STRING
-	})
-	
-	properties.append({
 		"name" : "show_comma",
 		"type" : TYPE_BOOL
 	})
+	
+	properties.append({
+		"name" : "number_as_bytes",
+		"type" : TYPE_BOOL
+	})
+	
+	if not number_as_bytes:
+		properties.append({
+			"name" : "unit",
+			"type" : TYPE_STRING
+		})
 	
 	return properties
 
@@ -145,5 +162,14 @@ func set_data(data, type):
 		self.value = row[variables[0]]
 		
 		
+		
 	elif type == DataSource.TYPES.SEARCH:
 		pass
+
+
+func set_number_as_bytes(b : bool):
+	number_as_bytes = b
+	if b:
+		self.unit = "B"
+	emit_signal("available_properties_changed")
+

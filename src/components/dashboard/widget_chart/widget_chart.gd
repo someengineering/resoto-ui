@@ -20,6 +20,8 @@ var blur_image_active:= false
 var force_update_graph_area:= false
 var dirty_timer:= 0.0
 
+var number_as_bytes:bool = false setget set_number_as_bytes
+
 var step := 144
 var prev_origin : Vector2
 
@@ -110,7 +112,11 @@ func _input(event) -> void:
 			var l_variable := Label.new()
 			var l_value := Label.new()
 			l_variable.text = sv[1] + ":"
-			l_value.text = str(sv[0])
+			if number_as_bytes:
+				var scaled = get_scaled_value(sv[0])
+				l_value.text = "%.*f %s" % [2 - int(log(scaled.value) / log(10)), scaled.value, scaled.unit]
+			else:
+				l_value.text = str(sv[0])
 			l_variable.set("custom_colors/font_color", sv[2])
 			l_value.set("custom_colors/font_color", sv[2])
 			legend_grid.add_child(l_variable)
@@ -202,7 +208,12 @@ func update_graph_area(force := false) -> void:
 			x_labels.add_child(l)
 
 		x_labels.add_child(dummy_label.duplicate())
-		
+	
+	var scaled = get_scaled_value(max_y_value)
+	var max_scaled_value = scaled.value
+	var unit = scaled.unit
+	var ratio = max_scaled_value / max_y_value
+	
 	if divisions.y != new_divisions.y or force:
 		divisions.y = new_divisions.y
 		var ny = divisions.y
@@ -218,7 +229,12 @@ func update_graph_area(force := false) -> void:
 			var value : int = i * delta
 			if zero == 1.0:
 				value += int(round(min_y_value))
-			l.text = str(value)
+				
+			if number_as_bytes:
+				l.text = "%.2f%s" % [value * ratio, unit]
+			else:
+				l.text = str(value)
+				
 			l.align = Label.ALIGN_RIGHT
 			l.valign = Label.VALIGN_CENTER
 			l.rect_position.y = round(y_labels.rect_size.y * (zero - i/ny)) - l.rect_size.y / 2
@@ -425,3 +441,25 @@ func get_csv(separator := ",", end_of_line := "\n") -> String:
 		data.append(row.join(separator))
 	
 	return data.join(end_of_line)
+
+
+func set_number_as_bytes(b : bool):
+	number_as_bytes = b
+	emit_signal("available_properties_changed")
+
+
+func _get_property_list() -> Array:
+	var properties = []
+	
+	properties.append({
+		name = "Widget Settings",
+		type = TYPE_NIL,
+		usage = PROPERTY_USAGE_CATEGORY | PROPERTY_USAGE_SCRIPT_VARIABLE
+	})
+	
+	properties.append({
+		"name" : "number_as_bytes",
+		"type" : TYPE_BOOL
+	})
+	
+	return properties
