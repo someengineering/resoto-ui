@@ -42,7 +42,7 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 	if widget.data_type == BaseWidget.DATA_TYPE.INSTANT:
 		making_query = true
 		q += "&time=%d" % attr["to"]
-		set_request(API.query_tsdb(q.http_escape(), self))
+		set_request(API.query_tsdb(q.replace(" ",""), self))
 	else:
 		var from = attr["from"]
 		var to = attr["to"]
