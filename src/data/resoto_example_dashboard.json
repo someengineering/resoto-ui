@@ -1,7 +1,8 @@
 {
 	"dashboard_name": "Resoto Example Dashboard",
+	"ui_version": "3.0.0",
 	"refresh_time_option": 0,
-	"time_range": "Last 15 minutes",
+	"time_range": "Last 7 days",
 	"cloud": "",
 	"account": "",
 	"region": "",
@@ -9,103 +10,258 @@
 		{
 			"position:x": 0,
 			"position:y": 0,
-			"size:x": 3,
-			"size:y": 3,
+			"size:x": 1,
+			"size:y": 1,
 			"widget_data": {
 				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 0,
-					"unit": "accounts",
+					"unit": "",
 					"show_comma": false
 				},
-				"title": "Accounts Total - Count",
+				"title": "Accounts",
 				"color_controllers_data": [
-					"[ [ 0, Color( 0.0941176, 0.188235, 0.337255, 1 ) ], [ 100.0, Color( 0.164706, 0.423529, 0.533333, 1 ) ] ]"
+					"[  ]"
 				]
 			},
 			"data_sources_data": [
 				{
-					"metric": "accounts_total",
-					"aggregator": "sum",
-					"filters": "",
-					"stacked": true,
-					"offset": "",
-					"sum_by": "",
-					"legend": "",
-					"type": 0,
-					"query": "sum(resoto_accounts_total{$dashboard_filters})"
+					"type": 1,
+					"query": "aggregate(sum(1) as accounts_total): is(account)",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 1,
+			"position:y": 0,
+			"size:x": 1,
+			"size:y": 1,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 0,
+					"unit": "",
+					"show_comma": false
+				},
+				"title": "Instances",
+				"color_controllers_data": [
+					"[  ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(sum(1) as instances_total): is(instance)",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 2,
+			"position:y": 0,
+			"size:x": 1,
+			"size:y": 1,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 0,
+					"unit": "",
+					"show_comma": false
+				},
+				"title": "Volumes",
+				"color_controllers_data": [
+					"[  ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(sum(1) as volumes_total): is(volume)",
+					"custom_query": false
 				}
 			]
 		},
 		{
 			"position:x": 3,
 			"position:y": 0,
-			"size:x": 3,
-			"size:y": 5,
+			"size:x": 1,
+			"size:y": 1,
 			"widget_data": {
-				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
-				"widget_type": "Chart",
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
 				"settings": {
-
+					"decimal_digits": 0,
+					"unit": "",
+					"show_comma": false
 				},
-				"title": "Accounts Total",
+				"title": "Unused Volumes",
 				"color_controllers_data": [
-
-				]
-			},
-			"data_sources_data": [
-				{
-					"metric": "accounts_total",
-					"aggregator": "",
-					"filters": "",
-					"stacked": true,
-					"offset": "",
-					"sum_by": "",
-					"legend": "{cloud}",
-					"type": 0,
-					"query": "resoto_accounts_total{$dashboard_filters}"
-				}
-			]
-		},
-		{
-			"position:x": 0,
-			"position:y": 3,
-			"size:x": 3,
-			"size:y": 3,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
-				"widget_type": "Table",
-				"settings": {
-					"header_color": "Color( 0.14902, 0.356863, 0.509804, 1 )",
-					"row_color": "Color( 0.117647, 0.196078, 0.282353, 1 )",
-					"column_header_color": "Color( 0.0901961, 0.215686, 0.329412, 1 )"
-				},
-				"title": "Instance cores by kind",
-				"color_controllers_data": [
-
+					"[ [ 50.0, Color( 0.752941, 0.0941176, 0.0941176, 1 ) ], [ 0, Color( 0.113725, 0.611765, 0.27451, 1 ) ] ]"
 				]
 			},
 			"data_sources_data": [
 				{
 					"type": 1,
-					"query": "aggregate(kind, /ancestors.cloud.reported.name: sum(1) as nodes, sum(instance_cores) as cores): is(instance)"
+					"query": "aggregate(sum(1) as volumes_total): is(volume) and volume_status = available and age > 2h",
+					"custom_query": false
 				}
 			]
 		},
 		{
 			"position:x": 6,
 			"position:y": 0,
-			"size:x": 3,
-			"size:y": 5,
+			"size:x": 1,
+			"size:y": 1,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 2,
+					"unit": "TB",
+					"show_comma": false
+				},
+				"title": "Instance Memory",
+				"color_controllers_data": [
+					"[  ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(sum(instance_memory / 1024) as instances_memory): is(instance)",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 7,
+			"position:y": 0,
+			"size:x": 1,
+			"size:y": 1,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 2,
+					"unit": "TB",
+					"show_comma": false
+				},
+				"title": "Volume Size",
+				"color_controllers_data": [
+					"[  ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(sum(volume_size / 1024) as instances_memory): is(volume)",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 9,
+			"position:y": 0,
+			"size:x": 1,
+			"size:y": 1,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 2,
+					"unit": "USD",
+					"show_comma": false
+				},
+				"title": "Monthly Volume Cost",
+				"color_controllers_data": [
+					"[  ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(sum(/ancestors.volume_type.reported.ondemand_cost) as volumes_monthly_cost_estimate): is(volume)",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 8,
+			"position:y": 0,
+			"size:x": 1,
+			"size:y": 1,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 2,
+					"unit": "USD",
+					"show_comma": false
+				},
+				"title": "Hourly Instance Cost est.",
+				"color_controllers_data": [
+					"[  ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(sum(/ancestors.instance_type.reported.ondemand_cost) as instances_hourly_cost_estimate): is(instance) and instance_status == running",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 0,
+			"position:y": 1,
+			"size:x": 4,
+			"size:y": 4,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+				"widget_type": "Chart",
+				"settings": {
+
+				},
+				"title": "Instances Total",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"metric": "instances_total",
+					"aggregator": "",
+					"filters": "",
+					"filter_dicts": [
+
+					],
+					"stacked": true,
+					"offset": "",
+					"sum_by": "(account)",
+					"legend": "{account}",
+					"custom_query": false,
+					"type": 0,
+					"query": "sum(resoto_instances_total{$dashboard_filters}) by (account)"
+				}
+			]
+		},
+		{
+			"position:x": 0,
+			"position:y": 5,
+			"size:x": 5,
+			"size:y": 4,
 			"widget_data": {
 				"scene": "res://components/dashboard/widget_heatmap/widget_heatmap.tscn",
 				"widget_type": "Heatmap",
 				"settings": {
-					"low_color": "Color( 0.0705882, 0.203922, 0.411765, 1 )",
-					"high_color": "Color( 1, 0.988235, 0.356863, 1 )"
+					"low_color": "Color( 0.0980392, 0.0980392, 0.439216, 1 )",
+					"high_color": "Color( 1, 0.270588, 0, 1 )"
 				},
-				"title": "Instances in Accounts",
+				"title": "Instance Types by Account",
 				"color_controllers_data": [
 
 				]
@@ -113,7 +269,288 @@
 			"data_sources_data": [
 				{
 					"type": 1,
-					"query": "aggregate(instance_type, /ancestors.account.reported.name: sum(1) as instances): is(instance)"
+					"query": "aggregate(/ancestors.account.reported.name as account, instance_type: sum(1) as instances): is(instance) and instance_status == running",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 4,
+			"position:y": 1,
+			"size:x": 3,
+			"size:y": 4,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+				"widget_type": "Chart",
+				"settings": {
+
+				},
+				"title": "Instance Cores",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"metric": "cores_total",
+					"aggregator": "",
+					"filters": "",
+					"filter_dicts": [
+
+					],
+					"stacked": true,
+					"offset": "",
+					"sum_by": "(account)",
+					"legend": "{account}",
+					"custom_query": false,
+					"type": 0,
+					"query": "sum(resoto_cores_total{$dashboard_filters}) by (account)"
+				}
+			]
+		},
+		{
+			"position:x": 7,
+			"position:y": 1,
+			"size:x": 3,
+			"size:y": 4,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+				"widget_type": "Chart",
+				"settings": {
+
+				},
+				"title": "Instance Memory",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"metric": "memory_bytes",
+					"aggregator": "",
+					"filters": "",
+					"filter_dicts": [
+
+					],
+					"stacked": true,
+					"offset": "",
+					"sum_by": "(account)",
+					"legend": "{account}",
+					"custom_query": false,
+					"type": 0,
+					"query": "sum(resoto_memory_bytes{$dashboard_filters}) by (account)"
+				}
+			]
+		},
+		{
+			"position:x": 5,
+			"position:y": 9,
+			"size:x": 5,
+			"size:y": 4,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+				"widget_type": "Table",
+				"settings": {
+					"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
+					"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
+					"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
+					"sorting_column": -1,
+					"sorting_type": ""
+				},
+				"title": "Unused  Volumes older than 1 week",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"text_to_search": "",
+					"kinds": "aws_ec2_volume",
+					"filters": "volume_status = available and age > 30d and last_access > 7d",
+					"list": "",
+					"type": 2,
+					"query": "is(volume){global_filters} and volume_status = available and age > \"1 week\"",
+					"custom_query": true
+				}
+			]
+		},
+		{
+			"position:x": 5,
+			"position:y": 13,
+			"size:x": 5,
+			"size:y": 4,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+				"widget_type": "Table",
+				"settings": {
+					"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
+					"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
+					"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
+					"sorting_column": -1,
+					"sorting_type": ""
+				},
+				"title": "Load balancers with no backends",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"text_to_search": "",
+					"kinds": "",
+					"filters": "",
+					"list": "",
+					"type": 2,
+					"query": "is(load_balancer) and backends = []",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 0,
+			"position:y": 9,
+			"size:x": 5,
+			"size:y": 4,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+				"widget_type": "Chart",
+				"settings": {
+
+				},
+				"title": "Volumes Size",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"metric": "volume_bytes",
+					"aggregator": "",
+					"filters": "",
+					"filter_dicts": [
+
+					],
+					"stacked": true,
+					"offset": "",
+					"sum_by": "(account)",
+					"legend": "{account}",
+					"custom_query": false,
+					"type": 0,
+					"query": "sum(resoto_volume_bytes{$dashboard_filters}) by (account)"
+				}
+			]
+		},
+		{
+			"position:x": 5,
+			"position:y": 5,
+			"size:x": 5,
+			"size:y": 4,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+				"widget_type": "Table",
+				"settings": {
+					"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
+					"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
+					"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
+					"sorting_column": 3,
+					"sorting_type": "desc"
+				},
+				"title": "Instances by Region",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(/ancestors.cloud.reported.name as cloud, /ancestors.account.reported.name as account, /ancestors.region.reported.name as region: sum(1) as instances): is(instance)",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 5,
+			"position:y": 0,
+			"size:x": 1,
+			"size:y": 1,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 0,
+					"unit": "",
+					"show_comma": false
+				},
+				"title": "Databases",
+				"color_controllers_data": [
+					"[  ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(sum(1) as databases_total): is(database)",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 4,
+			"position:y": 0,
+			"size:x": 1,
+			"size:y": 1,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+				"widget_type": "Indicator",
+				"settings": {
+					"decimal_digits": 0,
+					"unit": "",
+					"show_comma": false
+				},
+				"title": "Storage Buckets",
+				"color_controllers_data": [
+					"[  ]"
+				]
+			},
+			"data_sources_data": [
+				{
+					"type": 1,
+					"query": "aggregate(sum(1) as instances_memory): is(bucket)",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 0,
+			"position:y": 13,
+			"size:x": 5,
+			"size:y": 4,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+				"widget_type": "Chart",
+				"settings": {
+
+				},
+				"title": "Load balancers total",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"metric": "load_balancers_total",
+					"aggregator": "",
+					"filters": "",
+					"filter_dicts": [
+
+					],
+					"stacked": true,
+					"offset": "",
+					"sum_by": "(account)",
+					"legend": "{account}",
+					"custom_query": false,
+					"type": 0,
+					"query": "sum(resoto_load_balancers_total{$dashboard_filters}) by (account)"
 				}
 			]
 		}
