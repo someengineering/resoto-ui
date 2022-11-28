@@ -105,6 +105,9 @@ func add_widget(widget_data : Dictionary, _show_after_creation:=false) -> Widget
 	if _show_after_creation:
 		widget_reveal_timer.connect("timeout", self, "reveal_widget", [container], CONNECT_ONESHOT)
 		widget_reveal_timer.start()
+		
+	if empty_slot.y + container.rect_size.y > get_parent().rect_size.y:
+		_on_widget_moved_or_resized()
 	
 	return container
 
