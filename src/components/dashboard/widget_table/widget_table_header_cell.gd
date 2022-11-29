@@ -8,6 +8,7 @@ var column:int = -1
 var sorting:int = Sorting.NONE
 var cell_text:= "" setget set_cell_text
 var cell_color:= Color.white setget set_cell_color
+var min_size := 0.0
 
 onready var sort_icon = $HBox/SortIcon
 onready var label = $HBox/Label
@@ -38,6 +39,8 @@ func on_mouse_exited() -> void:
 func set_cell_text(_new:String) -> void:
 	cell_text = _new.replace('"', "")
 	label.text = cell_text
+	min_size = label.get_font("font").get_string_size(cell_text).x + 21
+	rect_min_size.x = max(min_size, rect_min_size.x)
 
 func set_cell_color(_new:Color) -> void:
 	cell_color = _new
