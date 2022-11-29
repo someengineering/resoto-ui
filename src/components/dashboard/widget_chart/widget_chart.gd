@@ -83,7 +83,12 @@ func _input(event) -> void:
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
 		mouse_marker.position.x = legend_pos.get_local_mouse_position().x + 0.5
 		var x = x_range * legend_pos.get_local_mouse_position().x / legend_pos.rect_size.x 
-		legend.rect_global_position = get_global_mouse_position() + Vector2(24,0)
+		
+		var new_position : Vector2 = get_global_mouse_position() + Vector2(24,0)
+		if new_position.x + legend.rect_size.x > OS.get_window_size().x:
+			new_position.x -= legend.rect_size.x + 48
+			
+		legend.rect_global_position = new_position
 		legend.rect_size.y = 0
 		
 		for label in legend_grid.get_children():
@@ -212,7 +217,7 @@ func update_graph_area(force := false) -> void:
 	var scaled = get_scaled_value(max_y_value)
 	var max_scaled_value = scaled.value
 	var unit = scaled.unit
-	var ratio = max_scaled_value / max_y_value
+	var ratio = 1.0 if max_y_value == 0.0 else max_scaled_value / max_y_value
 	
 	if divisions.y != new_divisions.y or force:
 		divisions.y = new_divisions.y
