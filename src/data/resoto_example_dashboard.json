@@ -2,7 +2,7 @@
 	"dashboard_name": "Resoto Example Dashboard",
 	"ui_version": "3.0.0",
 	"refresh_time_option": 0,
-	"time_range": "Last 7 days",
+	"time_range": "Last 2 days",
 	"cloud": "",
 	"account": "",
 	"region": "",
@@ -17,8 +17,9 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": false,
+					"unit": ""
 				},
 				"title": "Accounts",
 				"color_controllers_data": [
@@ -43,8 +44,9 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": false,
+					"unit": ""
 				},
 				"title": "Instances",
 				"color_controllers_data": [
@@ -69,8 +71,9 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": false,
+					"unit": ""
 				},
 				"title": "Volumes",
 				"color_controllers_data": [
@@ -95,8 +98,9 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": false,
+					"unit": ""
 				},
 				"title": "Unused Volumes",
 				"color_controllers_data": [
@@ -121,8 +125,8 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 2,
-					"unit": "TB",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": true
 				},
 				"title": "Instance Memory",
 				"color_controllers_data": [
@@ -132,7 +136,7 @@
 			"data_sources_data": [
 				{
 					"type": 1,
-					"query": "aggregate(sum(instance_memory / 1024) as instances_memory): is(instance)",
+					"query": "aggregate(sum(instance_memory  * 1024 * 1024 * 1024) as instances_memory): is(instance)",
 					"custom_query": false
 				}
 			]
@@ -147,8 +151,8 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 2,
-					"unit": "TB",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": true
 				},
 				"title": "Volume Size",
 				"color_controllers_data": [
@@ -158,7 +162,7 @@
 			"data_sources_data": [
 				{
 					"type": 1,
-					"query": "aggregate(sum(volume_size / 1024) as instances_memory): is(volume)",
+					"query": "aggregate(sum(volume_size  * 1024 * 1024 * 1024) as instances_memory): is(volume)",
 					"custom_query": false
 				}
 			]
@@ -173,8 +177,9 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 2,
-					"unit": "USD",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": false,
+					"unit": "USD"
 				},
 				"title": "Monthly Volume Cost",
 				"color_controllers_data": [
@@ -199,8 +204,9 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 2,
-					"unit": "USD",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": false,
+					"unit": "USD"
 				},
 				"title": "Hourly Instance Cost est.",
 				"color_controllers_data": [
@@ -224,7 +230,7 @@
 				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
 				"widget_type": "Chart",
 				"settings": {
-
+					"number_as_bytes": false
 				},
 				"title": "Instances Total",
 				"color_controllers_data": [
@@ -283,7 +289,7 @@
 				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
 				"widget_type": "Chart",
 				"settings": {
-
+					"number_as_bytes": false
 				},
 				"title": "Instance Cores",
 				"color_controllers_data": [
@@ -317,7 +323,7 @@
 				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
 				"widget_type": "Chart",
 				"settings": {
-
+					"number_as_bytes": true
 				},
 				"title": "Instance Memory",
 				"color_controllers_data": [
@@ -415,7 +421,7 @@
 				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
 				"widget_type": "Chart",
 				"settings": {
-
+					"number_as_bytes": true
 				},
 				"title": "Volumes Size",
 				"color_controllers_data": [
@@ -478,8 +484,9 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": false,
+					"unit": ""
 				},
 				"title": "Databases",
 				"color_controllers_data": [
@@ -504,8 +511,9 @@
 				"widget_type": "Indicator",
 				"settings": {
 					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+					"show_comma": false,
+					"number_as_bytes": false,
+					"unit": ""
 				},
 				"title": "Storage Buckets",
 				"color_controllers_data": [
@@ -529,7 +537,7 @@
 				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
 				"widget_type": "Chart",
 				"settings": {
-
+					"number_as_bytes": false
 				},
 				"title": "Load balancers total",
 				"color_controllers_data": [
