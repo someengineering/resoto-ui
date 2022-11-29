@@ -153,7 +153,9 @@ func _input(event:InputEvent) -> void:
 					command.cursor_set_column(command.text.find(" ", command.cursor_get_column() + 1) + 1)
 				_:
 					handled = false
-			get_tree().set_input_as_handled()
+			
+			if handled:
+				get_tree().set_input_as_handled()
 		
 	
 	if event.scancode == KEY_ESCAPE:
