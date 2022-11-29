@@ -35,12 +35,16 @@ var is_maximized: bool = false setget set_is_maximized
 
 var initial_load : bool = true
 
+var previous_scroll : int = 0
+
 onready var date_button := $VBoxContainer/PanelContainer/Content/HFlowContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Content/Dashboard
 onready var add_widget_popup := $NewWidgetPopup
 onready var range_selector := $DateRangeSelector
 onready var refresh_option := $"%RefreshOptionButton"
 onready var lock_button := $"%DashboardEditButton"
+onready var dashboard_scroll := $VBoxContainer/ScrollContainer
+onready var references := $VBoxContainer/ScrollContainer/Content/Dashboard/References
 
 onready var clouds_combo := find_node("CloudsCombo")
 onready var accounts_combo := find_node("AccountsCombo")
@@ -72,6 +76,12 @@ func _ready() -> void:
 	add_widget_popup.connect("about_to_show", self, "show_popup_bg")
 	add_widget_popup.connect("popup_hide", self, "hide_popup_bg")
 
+
+func _process(_delta):
+	if dashboard_scroll.scroll_vertical != previous_scroll:
+		previous_scroll = dashboard_scroll.scroll_vertical
+		references.mouse_filter = MOUSE_FILTER_STOP
+		$VBoxContainer/ScrollContainer/ScrollTimer.start()
 
 func show_popup_bg():
 	$PopupBG.show()
@@ -413,3 +423,7 @@ func _on_RefreshTimer_timeout():
 func _notification(what):
 	if what == NOTIFICATION_WM_FOCUS_IN:
 		$RefreshTimer.start()
+
+
+func _on_ScrollTimer_timeout():
+	references.mouse_filter = MOUSE_FILTER_IGNORE
