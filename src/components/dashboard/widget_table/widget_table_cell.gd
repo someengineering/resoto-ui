@@ -5,6 +5,7 @@ var data_cell:= false
 var even_row:= false
 var cell_text:= "" setget set_cell_text
 var cell_color:= Color.white setget set_cell_color
+var min_size := 0.0
 
 onready var label = $Label
 onready var cell_bg = $CellBG
@@ -32,6 +33,9 @@ func on_mouse_exited() -> void:
 func set_cell_text(_new:String) -> void:
 	cell_text = _new.replace('"', "")
 	label.text = cell_text
+	min_size = label.rect_min_size.x
+	rect_min_size.x = max(min_size, rect_min_size.x)
+
 
 func set_cell_color(_new:Color) -> void:
 	cell_color = _new if even_row else _new.darkened(0.15)
