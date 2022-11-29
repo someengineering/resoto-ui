@@ -212,7 +212,7 @@ func update_graph_area(force := false) -> void:
 	var scaled = get_scaled_value(max_y_value)
 	var max_scaled_value = scaled.value
 	var unit = scaled.unit
-	var ratio = max_scaled_value / max_y_value
+	var ratio = 1.0 if max_y_value == 0.0 else max_scaled_value / max_y_value
 	
 	if divisions.y != new_divisions.y or force:
 		divisions.y = new_divisions.y
