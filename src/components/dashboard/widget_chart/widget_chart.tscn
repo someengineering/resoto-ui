@@ -79,7 +79,7 @@ anchor_bottom = 1.0
 [node name="YLabels" type="Control" parent="Viewport/GridContainer"]
 anchor_bottom = 1.0
 margin_top = 10.0
-margin_right = 43.0
+margin_right = 56.0
 margin_bottom = -60.0
 
 [node name="Grid" type="ColorRect" parent="Viewport/GridContainer"]

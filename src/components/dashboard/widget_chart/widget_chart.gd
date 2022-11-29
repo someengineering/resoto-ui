@@ -231,7 +231,7 @@ func update_graph_area(force := false) -> void:
 				value += int(round(min_y_value))
 				
 			if number_as_bytes:
-				l.text = "%.2f%s" % [value * ratio, unit]
+				l.text = "%.2f %s" % [value * ratio, unit]
 			else:
 				l.text = str(value)
 				
