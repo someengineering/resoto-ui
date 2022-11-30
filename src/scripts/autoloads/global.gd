@@ -9,6 +9,7 @@ signal add_toast
 signal toast_created
 signal toast_click
 signal toast_show_saved
+signal toast_close_all
 
 # UI and fullscreen
 signal ui_scale_changed
