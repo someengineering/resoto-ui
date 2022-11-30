@@ -154,6 +154,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/widget_heatmap/rotated_label.gd"
 }, {
+"base": "ScrollContainer",
+"class": "ScrollContainerScrollbarClaimSpaceVertical",
+"language": "GDScript",
+"path": "res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd"
+}, {
 "base": "BaseWidget",
 "class": "TableWidget",
 "language": "GDScript",
@@ -234,6 +239,7 @@ _global_script_class_icons={
 "ResotoAPI": "",
 "RightClickCopyLabel": "",
 "RotatedLabel": "",
+"ScrollContainerScrollbarClaimSpaceVertical": "",
 "TableWidget": "",
 "TerminalComponent": "",
 "TextSearchDataSource": "",
