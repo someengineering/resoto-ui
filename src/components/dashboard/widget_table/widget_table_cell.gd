@@ -6,6 +6,7 @@ var even_row:= false
 var cell_text:= "" setget set_cell_text
 var cell_color:= Color.white setget set_cell_color
 var min_size := 0.0
+var node_id : String = ""
 
 onready var label = $Label
 onready var cell_bg = $CellBG
@@ -13,6 +14,14 @@ onready var cell_bg = $CellBG
 func _ready() -> void:
 	connect("mouse_entered", self, "on_mouse_entered")
 	connect("mouse_exited", self, "on_mouse_exited")
+	if node_id != "":
+		$ToolButton.connect("pressed", self, "on_pressed")
+	else:
+		$ToolButton.queue_free()
+
+func on_pressed():
+	if node_id != "":
+		_g.emit_signal("explore_node_by_id", node_id)
 
 func set_cell(_cell_text:String, _cell_color:Color, _column:int=-1) -> void:
 	self.cell_color = _cell_color

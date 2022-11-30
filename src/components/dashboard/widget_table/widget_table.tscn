@@ -13,9 +13,6 @@ script = ExtResource( 1 )
 widget_type_id = "Table"
 supported_types = [ 1, 2 ]
 attributes_to_save = [ "sorting_column", "sorting_type" ]
-header_color = Color( 0, 0, 0, 1 )
-row_color = Color( 0, 0, 0, 1 )
-column_header_color = Color( 0, 0, 0, 1 )
 
 [node name="Background" type="Panel" parent="."]
 anchor_right = 1.0
