@@ -57,7 +57,7 @@ class Request:
 		body = _body
 	
 	
-	func cancel(err_code:int=1) -> void:
+	func cancel(err_code:int=ERR_PRINTER_ON_FIRE) -> void:
 		if state_ != states.DONE:
 			emit_signal("done", err_code, null)
 			state_ = states.DONE

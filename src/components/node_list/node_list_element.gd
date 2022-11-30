@@ -55,7 +55,7 @@ func show_self():
 
 func count_search(_search_command) -> void:
 	if count_request:
-		count_request.cancel(ERR_PRINTER_ON_FIRE)
+		count_request.cancel()
 	result_amount_label.text = ""
 	var count_command : String = "search " + _search_command + " | count"
 	count_request = API.cli_execute(count_command, self)
@@ -64,7 +64,7 @@ func count_search(_search_command) -> void:
 func new_search(_last_search_type:String):
 	last_search_type = _last_search_type
 	if active_request:
-		active_request.cancel(ERR_PRINTER_ON_FIRE)
+		active_request.cancel()
 	change_section_to_self()
 	
 	node_kind_button.hide()
@@ -345,7 +345,7 @@ func _on_LimitButton_toggled(_pressed:bool):
 	use_limit = _pressed
 	if last_query == "":
 		return
-	active_request.cancel(ERR_PRINTER_ON_FIRE)
+	active_request.cancel()
 	var search_command : String = last_query
 	if use_limit:
 		search_command +=  " limit " + str(NODE_LIMIT)
