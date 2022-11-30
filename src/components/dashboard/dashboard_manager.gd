@@ -148,6 +148,8 @@ func _on_get_configs_done(_error: int, response):
 		if config.begins_with("resoto.ui.dashboard"):
 			API.get_config_id(self, config)
 			total_saved_dashboards += 1
+	if total_saved_dashboards == 0:
+		restore_default_dashboard()
 
 
 func _on_get_config_id_done(_error : int, _response, _config):
