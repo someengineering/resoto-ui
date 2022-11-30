@@ -170,7 +170,6 @@ func set_data(data, type : int):
 		heat_variable = vars[0]
 		
 		for row in data:
-			print("row", row)
 			var heat = -1.0
 			if not str(row[heat_variable]).is_valid_float():
 				heat = 0.0
