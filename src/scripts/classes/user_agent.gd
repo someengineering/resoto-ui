@@ -161,7 +161,7 @@ class Request:
 			states.RESPONSE_READY:
 				response_chunks.resize(chunk_idx)
 				response_.body = response_chunks
-				if [401, 400].has(response_.response_code):
+				if response_.response_code >= 400:
 					emit_signal("pre_done", FAILED, response_)
 					emit_signal("done", FAILED, response_)
 				else:

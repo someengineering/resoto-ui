@@ -112,6 +112,12 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 	if _error:
 		if response.response_code == 400:
 			emit_signal("query_status", FAILED, "400: Bad Request", "Is the time series database running?\nIs resoto.core.api.tsdb_proxy_url correctly configured?")
+		
+		if not response.headers.has("ViaResoto"):
+			if response.response_code == 502:
+				emit_signal("query_status", FAILED, "502: TSDB not reachable.", "")
+			elif response.response_code == 404:
+				emit_signal("query_status", FAILED, "404: TSDB not configured.", "")
 		return
 	if not is_instance_valid(widget):
 		return
