@@ -69,7 +69,7 @@ func _on_AddWidgetButton_pressed() -> void:
 		widget = dashboard_container.WidgetScenes[widget_scene_type].instance()
 	else:
 		widget = widget_to_edit.widget
-		
+	
 	var properties = get_preview_widget_properties()
 	
 	for key in get_preview_widget_properties():
@@ -146,9 +146,9 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		for child in widget_to_edit.widget.get_children():
 			if child is ColorController:
 				preview_widget.get_node(child.name).conditions = child.conditions.duplicate()
-	
 	create_properties_options()
 	
+	preview_widget.is_preview_widget = true
 	preview_container.add_child(preview_widget)
 	preview_widget.connect("available_properties_changed", self, "create_properties_options")
 	preview_widget.connect("available_properties_changed", self, "update_preview")

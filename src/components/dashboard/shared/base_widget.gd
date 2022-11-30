@@ -19,6 +19,7 @@ export (Array, DataSource.TYPES) var supported_types
 export (Array, String) var attributes_to_save := []
 
 var color_controllers_data : Array setget set_color_controllers_data
+var is_preview_widget : bool = false
 
 func set_color_controllers_data(data : Array):
 	color_controllers_data = data

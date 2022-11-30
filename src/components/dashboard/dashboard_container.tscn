@@ -3,7 +3,7 @@
 [ext_resource path="res://components/dashboard/new_widget_popup/new_widget_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://components/shared/date_range_selector.tscn" type="PackedScene" id=2]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=3]
-[ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=4]
+[ext_resource path="res://components/dashboard/dashboard_scroll_container.gd" type="Script" id=4]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=5]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=6]
 [ext_resource path="res://components/dashboard/dashboard.gd" type="Script" id=7]
@@ -298,6 +298,10 @@ mouse_filter = 2
 wait_time = 0.2
 one_shot = true
 
+[node name="ScrollTimer" type="Timer" parent="VBoxContainer/ScrollContainer"]
+wait_time = 0.3
+one_shot = true
+
 [node name="PopupBG" type="ColorRect" parent="."]
 visible = false
 anchor_right = 1.0
@@ -421,7 +425,9 @@ autostart = true
 [connection signal="pressed" from="VBoxContainer/PanelContainer/Content/HFlowContainer/ToolButtons/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/MinimizedBar/MinimizeButton" to="." method="_on_MinimizeButton_pressed"]
 [connection signal="need_to_resize" from="VBoxContainer/ScrollContainer/Content/Dashboard" to="VBoxContainer/ScrollContainer" method="_on_Dashboard_need_to_resize"]
+[connection signal="widget_scrolling" from="VBoxContainer/ScrollContainer/Content/Dashboard" to="VBoxContainer/ScrollContainer" method="_on_Dashboard_widget_scrolling"]
 [connection signal="timeout" from="VBoxContainer/ScrollContainer/Content/Dashboard/ResizeTimer" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="_on_ResizeTimer_timeout"]
+[connection signal="timeout" from="VBoxContainer/ScrollContainer/ScrollTimer" to="." method="_on_ScrollTimer_timeout"]
 [connection signal="widget_added" from="NewWidgetPopup" to="." method="_on_NewWidgetPopup_widget_added"]
 [connection signal="widget_added" from="NewWidgetPopup" to="VBoxContainer/ScrollContainer/Content/Dashboard" method="add_widget"]
 [connection signal="widget_edited" from="NewWidgetPopup" to="." method="_on_NewWidgetPopup_widget_edited"]

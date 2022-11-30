@@ -7,106 +7,91 @@
 [node name="TableWidget" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+rect_clip_content = true
 mouse_filter = 2
 script = ExtResource( 1 )
 widget_type_id = "Table"
 supported_types = [ 1, 2 ]
 attributes_to_save = [ "sorting_column", "sorting_type" ]
-header_color = Color( 0, 0.301961, 0.584314, 1 )
-row_color = Color( 0.0489686, 0.160932, 0.265625, 1 )
-column_header_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 
 [node name="Background" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme_type_variation = "PanelWidgetBackground"
 
-[node name="Table" type="MarginContainer" parent="."]
+[node name="Content" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_constants/margin_right = 4
-custom_constants/margin_top = 0
-custom_constants/margin_left = 4
-custom_constants/margin_bottom = 4
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Table"]
-margin_left = 4.0
-margin_right = 1916.0
-margin_bottom = 1076.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-scroll_vertical_enabled = false
-
-[node name="TableVBox" type="VBoxContainer" parent="Table/ScrollContainer"]
-margin_right = 1912.0
-margin_bottom = 1076.0
-mouse_filter = 0
+rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
 
-[node name="Header" type="HBoxContainer" parent="Table/ScrollContainer/TableVBox"]
-margin_right = 1912.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 0, 24 )
-mouse_filter = 0
+[node name="Control" type="Control" parent="Content"]
+margin_right = 1920.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+rect_clip_content = true
+size_flags_horizontal = 3
+
+[node name="Headers" type="HBoxContainer" parent="Content/Control"]
+margin_right = 1920.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
 custom_constants/separation = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Table/ScrollContainer/TableVBox"]
-margin_top = 24.0
-margin_right = 1912.0
-margin_bottom = 1076.0
+[node name="Table" type="ScrollContainer" parent="Content"]
+margin_top = 20.0
+margin_right = 1920.0
+margin_bottom = 1075.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
-[node name="Rows" type="VBoxContainer" parent="Table/ScrollContainer/TableVBox/ScrollContainer"]
-margin_right = 1912.0
-margin_bottom = 1052.0
-mouse_filter = 0
+[node name="Rows" type="GridContainer" parent="Content/Table"]
+margin_right = 1920.0
+margin_bottom = 1055.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 0
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 3
 
-[node name="UpdateDelayTimer" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true
+[node name="PaginationSpacer" type="Control" parent="Content"]
+margin_top = 1075.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+rect_min_size = Vector2( 0, 5 )
 
-[node name="Pagination" parent="." instance=ExtResource( 2 )]
+[node name="Pagination" parent="Content" instance=ExtResource( 2 )]
 visible = false
-anchor_top = 1.0
 anchor_right = 0.0
-margin_top = -33.0
-margin_right = 250.0
-margin_bottom = 0.0
+anchor_bottom = 0.0
+margin_top = 1047.0
+margin_right = 180.0
+margin_bottom = 1080.0
 prefix = "Page"
 suffix = "of 0"
 use_max_value = true
 min_value = 1
 value_to_set = 1.0
 
-[node name="IntEdit" parent="Pagination" index="0"]
-margin_right = 176.0
+[node name="IntEdit" parent="Content/Pagination" index="0"]
+margin_right = 106.0
 update_on_writing = false
 
-[node name="MinusButton" parent="Pagination" index="1"]
-margin_left = 180.0
-margin_right = 213.0
+[node name="MinusButton" parent="Content/Pagination" index="1"]
+margin_left = 110.0
+margin_right = 143.0
 text = ""
 icon_tex = ExtResource( 3 )
 
-[node name="PlusButton" parent="Pagination" index="2"]
-margin_left = 217.0
-margin_right = 250.0
+[node name="PlusButton" parent="Content/Pagination" index="2"]
+margin_left = 147.0
 text = ""
 icon_tex = ExtResource( 3 )
 flip_h = true
 
 [connection signal="resized" from="." to="." method="_on_TableWidget_resized"]
-[connection signal="resized" from="Table/ScrollContainer/TableVBox/ScrollContainer/Rows" to="." method="_on_Rows_resized"]
-[connection signal="timeout" from="UpdateDelayTimer" to="." method="_on_UpdateDelayTimer_timeout"]
-[connection signal="value_changed" from="Pagination" to="." method="_on_Pagination_value_changed"]
+[connection signal="value_changed" from="Content/Pagination" to="." method="_on_Pagination_value_changed"]
 
-[editable path="Pagination"]
+[editable path="Content/Pagination"]

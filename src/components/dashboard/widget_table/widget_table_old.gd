@@ -1,11 +1,10 @@
-class_name TableWidget
+tool
+#class_name TableWidget
 extends BaseWidget
 
-signal scrolling
-
-var header_color: Color = Color(0, 0.3, 0.58)
-var row_color: Color = Color(0.05, 0.16, 0.27)
-var column_header_color: Color = Color(0.06, 0.2, 0.34)
+var header_color: Color
+var row_color: Color
+var column_header_color: Color
 
 const HeaderCell = preload("res://components/dashboard/widget_table/widget_table_header_cell.tscn")
 const TableCell = preload("res://components/dashboard/widget_table/widget_table_cell.tscn")
@@ -24,27 +23,78 @@ const DefaultSearchAttributes : Dictionary = {
 var raw_data : Array 
 var sorting_column : int = -1
 var sorting_type : String = ""
-var is_dirty := false
+var first_update:= true
 
 var header_columns_count := 0
+
 var max_allowed_rows:int = 30
 var page_count:int = 0
 var current_page:int = 0
+
 var data_source_type : int
+
 var headers_array : PoolStringArray = []
 
-onready var table = $Content
-onready var header_row := $Content/Control/Headers
-onready var rows := $Content/Table/Rows
-onready var pagination := $Content/Pagination
-onready var pagination_spacer := $Content/PaginationSpacer
-onready var table_scroll := $Content/Table
+onready var table = $Table
+onready var header_row := $Table/ScrollContainer/TableVBox/Header
+onready var rows := $Table/ScrollContainer/TableVBox/ScrollContainer/Rows
+onready var scroll_rows := $Table/ScrollContainer/TableVBox/ScrollContainer
+onready var scroll_container := $Table/ScrollContainer
+onready var update_delay_timer := $UpdateDelayTimer
+onready var pagination := $Pagination
 
 
-func _ready():
-	table_scroll.get_v_scrollbar().connect("value_changed", self, "_on_table_scrolling")
-	table_scroll.get_h_scrollbar().connect("value_changed", self, "_on_table_scrolling")
+func clear_all():
+	for child in header_row.get_children():
+		header_row.remove_child(child)
+		child.queue_free()
+	clear_rows()
 
+
+func clear_rows():
+	for child in rows.get_children():
+		rows.remove_child(child)
+		child.queue_free()
+
+
+func set_headers(headers : Array):
+	headers_array = headers
+	var c_id:= 0
+	for header in headers:
+		var header_cell = HeaderCell.instance()
+		header_row.add_child(header_cell)
+		header_cell.set_cell(header, header_color, c_id)
+		header_cell.connect("sort_requested", self, "sort_by_column")
+		if sorting_column == c_id:
+			header_cell.sorting = header_cell.Sorting.ASC if sorting_type == "asc" else header_cell.Sorting.DESC
+			header_cell.update_sort_icon()
+		c_id += 1
+
+
+func add_row(data):
+	var row = HBoxContainer.new()
+	row.set("custom_constants/separation", 0)
+	row.size_flags_vertical = SIZE_EXPAND_FILL
+	rows.add_child(row)
+	
+	var n := headers_array.size()
+	
+	for i in n:
+		var value = get_value(data, i)
+		add_table_cell(row, value)
+	
+
+func add_table_cell(row, value):
+	var c_id = row.get_child_count()
+	var r_count = row.get_position_in_parent() % 2
+	var is_header_column:bool = c_id <= header_columns_count
+	var color:Color = column_header_color if is_header_column else row_color
+	var table_cell = TableCell.instance()
+	table_cell.data_cell = is_header_column
+	table_cell.even_row = r_count == 0
+	row.add_child(table_cell)
+	table_cell.set_cell(str(value), color, c_id)
+	
 
 func _get_property_list() -> Array:
 	var properties = []
@@ -73,21 +123,13 @@ func _get_property_list() -> Array:
 	return properties
 
 
-func _process(delta):
-	if is_visible_in_tree():
-		autoadjust_table()
-
-
-func _on_table_scrolling(_value):
-	emit_signal("scrolling")
-
-
 func set_data(data, type):
 	if raw_data.size() > 0:
 		raw_data.clear()
 	clear_all()
 	
 	data_source_type = type
+	
 	raw_data = data
 	
 	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
@@ -103,120 +145,121 @@ func set_data(data, type):
 	sort_by_column(sorting_column, sorting_type == "asc")
 
 
-func set_headers(headers : Array):
-	headers_array = headers
-	var c_id:= 0
-	for header in headers:
-		var header_cell = HeaderCell.instance()
-		header_row.add_child(header_cell)
-		header_cell.set_cell(header, header_color, c_id)
-		header_cell.connect("sort_requested", self, "sort_by_column")
-		if sorting_column == c_id:
-			header_cell.sorting = header_cell.Sorting.ASC if sorting_type == "asc" else header_cell.Sorting.DESC
-			header_cell.update_sort_icon()
-		c_id += 1
-	rows.columns = headers.size()
-
-
 func update_page_count(row_count : int):
 	page_count = int(ceil(float(row_count) / max_allowed_rows))
 	if page_count > 1:
+		table.margin_bottom = -33
 		pagination.show()
-		pagination_spacer.show()
 		pagination.max_value = max(1, page_count)
 		pagination.suffix = "of %d" % pagination.max_value
 		current_page = 1
 		pagination.value = 1
 	else:
+		table.margin_bottom = 0
 		pagination.hide()
-		pagination_spacer.hide()
-
-
-func clear_all():
-	for child in header_row.get_children():
-		header_row.remove_child(child)
-		child.queue_free()
-	clear_rows()
-
-
-func clear_rows():
-	for child in rows.get_children():
-		rows.remove_child(child)
-		child.queue_free()
-
-
-var row_data := {}
-func add_row(data : Dictionary, row_idx : int, row_node_id : String):
-	row_data[row_idx] = data
-	# this could be moved out of the loop
-	var n := headers_array.size()
-	
-	for cell_idx in n:
-		var value = get_value(data, cell_idx)
-		add_cell(row_idx, cell_idx, value, row_node_id)
-	
-
-func add_cell(row, cell_idx, value, cell_node_id):
-	var table_cell = TableCell.instance()
-	var is_header_column:bool = cell_idx <= header_columns_count
-	table_cell.node_id = cell_node_id
-	table_cell.data_cell = is_header_column
-	table_cell.even_row = row % 2 == 0
-	rows.add_child(table_cell)
-	var color:Color = column_header_color if is_header_column else row_color
-	table_cell.set_cell(str(value), color, row)
 
 
 func update_table():
 	if not rows or raw_data.empty() or raw_data[0] == null:
 		return
-	for c in rows.get_children():
-		c.queue_free()
-	yield(get_tree(), "idle_frame")
+		
 	var n:int = max_allowed_rows if current_page < page_count - 1 else raw_data.size() % max_allowed_rows
+	
 	for i in n:
 		var row_index = clamp(i + max_allowed_rows * current_page, 0, raw_data.size()-1)
-		var row_node_id : String = get_node_id(raw_data[row_index]) if not is_preview_widget else ""
-		add_row(raw_data[row_index], i, row_node_id)
-	yield(VisualServer, "frame_post_draw")
-	is_dirty = true
-	autoadjust_table()
+		set_row(raw_data[row_index], i)
+		
+	update_delay_timer.stop()
+	_on_UpdateDelayTimer_timeout()
 
+
+func set_row(data, i):
+	if i < rows.get_child_count():
+		
+		var row = rows.get_child(i)
+		
+		var n = headers_array.size()
+		for j in n:
+			row.get_child(j).cell_text = str(get_value(data, j))
+	else:
+		add_row(data)
 
 func _on_Rows_resized():
 	if is_instance_valid(rows):
 		header_row.rect_size.x = rows.rect_size.x
 
 
-func autoadjust_table():
-	if rows.get_child_count()==0 or raw_data.empty() or raw_data[0] == null:
-		return
-	header_row.rect_position.x = -table_scroll.scroll_horizontal
-	if not is_dirty:
-		return
-	var last_width := 0.0
-	
-	for h in header_row.get_child_count():
-		var header_cell = header_row.get_child(h)
-		var body_cell = rows.get_child(h)
+func get_column_min_size(column : int) -> int:
+	var size = -100000000000
+	for row in rows.get_children():
+		var cell = row.get_child(column)
+		var cell_size = cell.get_min_size()
+		if size < cell_size:
+			size = cell_size
+	size = max(size, header_row.get_child(column).get_min_size() + 24)
+	return size
+
+
+func set_column_size(column, size):
+	for row in rows.get_children():
+		var cell = row.get_child(column)
+		cell.rect_min_size.x = size
 		
-		body_cell.rect_min_size.x = max(body_cell.min_size, header_cell.min_size)
-		header_cell.rect_min_size.x = max(body_cell.rect_size.x, header_cell.min_size)
-	is_dirty = false
+	header_row.get_child(column).rect_min_size.x = size
 
 
-func _process(delta):
-	autoadjust_table()
+func autoadjust_table():
+	if first_update and header_row.get_child_count() > 0:
+		first_update = false
+		_on_UpdateDelayTimer_timeout()
+		return
+	modulate.a = 0.3
+	update_delay_timer.start()
 
 
-var is_dirty := false
+func _on_UpdateDelayTimer_timeout():
+	modulate.a = 1.0
+	var columns = headers_array.size()
+	var columns_sizes : Array = []
+	
+	var total_column_width:= 0.0
+	var scrollbar_size = 0 if !scroll_rows.get_v_scrollbar().visible else scroll_rows.get_v_scrollbar().rect_size.x
+	for i in columns:
+		var col_w = get_column_min_size(i) if i > 0 else get_column_min_size(i) + scrollbar_size
+		columns_sizes.append(col_w)
+		total_column_width += col_w
+	
+	var container_width : float = scroll_container.rect_size.x
+	
+	if total_column_width == 0.0:
+		return
+	
+	if container_width > total_column_width:
+		var ratio = (container_width-0.001 * header_row.get_child_count()) / total_column_width
+		
+		for i in columns:
+			columns_sizes[i] *= ratio
+	
+	total_column_width = 0.0
+	for i in columns_sizes:
+		i = floor(i)
+		total_column_width += i
+		
+	columns_sizes[0] += max(container_width - total_column_width, 0)
+	
+	for i in columns:
+		var s = columns_sizes[i] if i > 0 else columns_sizes[i] - scrollbar_size
+		set_column_size(i, s)
+	
+	scroll_container.scroll_horizontal = container_width < total_column_width
+
+
 func _on_TableWidget_resized():
 	if is_instance_valid(header_row):
-		is_dirty = true
+		autoadjust_table()
 
 
 func sort_by_column(column : int, ascending : bool):
-	
 	if column >= 0:
 		sorting_type = "asc" if ascending else "desc"
 		for header in header_row.get_children():
@@ -229,6 +272,7 @@ func sort_by_column(column : int, ascending : bool):
 			raw_data.sort_custom(self, "sort_ascending")
 		else:
 			raw_data.sort_custom(self, "sort_descending")
+				
 	update_table()
 
 
@@ -246,16 +290,18 @@ func sort_descending(a, b) -> bool:
 
 func set_column_header_color(_new_color:Color):
 	column_header_color = _new_color
-	for cell in rows.get_children():
-		if cell.data_cell:
-			cell.cell_color = column_header_color
+	for row in rows.get_children():
+		for cell in row.get_children():
+			if cell.data_cell:
+				cell.cell_color = column_header_color
 
 
 func set_row_color(_new_color:Color):
 	row_color = _new_color
-	for cell in rows.get_children():
-		if not cell.data_cell:
-			cell.cell_color = row_color
+	for row in rows.get_children():
+		for cell in row.get_children():
+			if not cell.data_cell:
+				cell.cell_color = row_color
 
 
 func set_header_color(_new_color:Color):
@@ -285,15 +331,8 @@ func _on_Pagination_value_changed(value):
 	
 func get_data_count(data : Dictionary) -> int:
 	return data["reported"].size()
-
-
-func get_node_id(data : Dictionary) -> String:
-	if data_source_type == DataSource.TYPES.SEARCH:
-		if data.has("id"):
-			return data.id
-	return ""
-
-
+	
+	
 func get_value(data : Dictionary, index : int):
 	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
 		var keys : Array = data["group"].keys()
@@ -315,4 +354,3 @@ func get_value(data : Dictionary, index : int):
 				result = ""
 				break
 		return result
-

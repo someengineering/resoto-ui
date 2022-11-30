@@ -33,6 +33,7 @@ expand = true
 margin_right = 83.0
 margin_bottom = 21.0
 mouse_filter = 2
+size_flags_horizontal = 3
 custom_constants/separation = 5
 alignment = 1
 
@@ -43,16 +44,16 @@ margin_bottom = 21.0
 
 [node name="Label" type="Label" parent="HBox"]
 margin_left = 14.0
-margin_right = 69.0
-margin_bottom = 21.0
+margin_right = 68.0
+margin_bottom = 20.0
 size_flags_horizontal = 4
 theme_type_variation = "LabelBold"
 text = "Header"
 
 [node name="SortIcon" type="TextureRect" parent="HBox"]
 visible = false
-margin_left = 93.0
-margin_right = 109.0
+margin_left = 64.0
+margin_right = 80.0
 margin_bottom = 21.0
 rect_min_size = Vector2( 16, 21 )
 texture = ExtResource( 1 )
@@ -60,8 +61,8 @@ expand = true
 stretch_mode = 6
 
 [node name="SpacerR" type="Control" parent="HBox"]
-margin_left = 74.0
-margin_right = 74.0
+margin_left = 73.0
+margin_right = 73.0
 margin_bottom = 21.0
 
 [connection signal="gui_input" from="." to="." method="_on_Cell_gui_input"]
