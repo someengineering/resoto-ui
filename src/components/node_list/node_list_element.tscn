@@ -283,7 +283,8 @@ texture = null
 tooltip_text = "Mark the displayed resources for clean-up
 
 [b]Warning![/b]
-If [code]cleanup[/code] is enabled, this will [b]delete these resources from your infrastructure[/b] on the next cleanup run!"
+This will [b]delete the displayed resources from your infrastructure[/b] on the next cleanup run!
+Marking resources for cleanup will [b]not have any effect[/b] until [code]cleanup[/code] is enabled in the [code]resoto.worker[/code] configuration"
 tooltip = "tooltip_error"
 
 [node name="RemoveFromCleanupButton" parent="VBox/Filter/ResotoActionGroup/TagTitleBar" instance=ExtResource( 3 )]
