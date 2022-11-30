@@ -95,16 +95,26 @@ func update_config(new_value):
 						
 					elif config_action == "append":
 						current[value_key].append(new_value)
-						
+				
 				else:
-					var idx = current[value_key].find(new_value)
-					if idx == -1 or config_action == "append":
+					if config_action == "set":
+						current[value_key] = new_value
+					
+					elif config_action == "append":
 						if typeof(new_value) == TYPE_ARRAY:
 							current[value_key].append_array(new_value)
 						else:
 							current[value_key].append(new_value)
+					
 					elif config_action == "merge":
-						current[value_key][idx] = new_value
+						if typeof(new_value) == TYPE_ARRAY:
+							for elem in new_value:
+								if not current[value_key].has(elem):
+									current[value_key].append(elem)
+						else:
+							if not current[value_key].has(value_key):
+								current[value_key].append(value_key)
+				
 			_:
 				if typeof(new_value) == TYPE_DICTIONARY:
 					current[value_key].merge(new_value)
