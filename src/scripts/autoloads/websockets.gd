@@ -2,7 +2,7 @@ extends Node
 
 var ws : WebSocketClient = null
 var ws_header : PoolStringArray = []
-
+var auto_reconnect := true
 
 func _ready():
 	ws = WebSocketClient.new()
@@ -69,6 +69,8 @@ func _connection_closed(_error):
 	print("Websocket: Connection closed")
 	print(_error)
 	set_process(false)
+	if auto_reconnect:
+		connect_websockets()
 
 
 func _connection_error():
