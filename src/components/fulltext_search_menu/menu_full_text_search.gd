@@ -204,8 +204,8 @@ func _on_FullTextSearch_text_entered(_new_text):
 	popup.hide()
 	search_delay.stop()
 	if count_request:
-		count_request.cancel(ERR_PRINTER_ON_FIRE)
+		count_request.cancel()
 	if active_request:
-		active_request.cancel(ERR_PRINTER_ON_FIRE)
+		active_request.cancel()
 	_g.emit_signal("explore_node_list_search", text_to_search(text))
 	Analytics.event(Analytics.EventsSearch.SEARCH, {"search" : text})

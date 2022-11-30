@@ -17,6 +17,8 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 
 
 func _on_aggregate_search_done(_error : int, response):
+	if _error == ERR_PRINTER_ON_FIRE:
+		return
 	if _error:
 		var error_detail := ""
 		if response:

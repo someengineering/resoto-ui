@@ -35,9 +35,9 @@ func show_node(node_id:String, _add_to_history:=true):
 		clear_view()
 	# cancel the active request... this created problems with the signal returning old requests
 	if active_request:
-		active_request.cancel(ERR_PRINTER_ON_FIRE)
+		active_request.cancel()
 	if aggregation_request:
-		aggregation_request.cancel(ERR_PRINTER_ON_FIRE)
+		aggregation_request.cancel()
 	
 	_g.content_manager.change_section_explore("node_single_info")
 	var search_command = "id(\"" + node_id + "\") <-[0:]-"

@@ -112,7 +112,7 @@ func _on_get_configs_done(_error:int, _response:ResotoAPI.Response) -> void:
 func open_configuration(_config_key:String) -> void:
 	# Cancel the old request if configs are changed in quick succession
 	if config_req:
-		config_req.cancel(ERR_PRINTER_ON_FIRE)
+		config_req.cancel()
 	active_config_key = _config_key
 	config_page = null
 	active_config = {}
