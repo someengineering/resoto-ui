@@ -1,6 +1,7 @@
 extends Control
 
 signal need_to_resize(y)
+signal widget_scrolling
 
 export var x_grid_ratio := 10.0 
 export var y_grid_size := 100.0 
@@ -71,6 +72,9 @@ func add_widget(widget_data : Dictionary, _show_after_creation:=false) -> Widget
 		if not widget_data.has("widget_type"):
 			widget_data["widget_type"] = remap_old_data[widget_data.scene]
 		widget = dashboard_container.WidgetScenes[widget_data.widget_type].instance()
+	
+	if widget.has_signal("scrolling"):
+		widget.connect("scrolling", self, "_on_widget_scrolling")
 	
 	container.call_deferred("set_widget", widget)
 	container.call_deferred("set_data_sources", widget_data.data_sources)
@@ -206,3 +210,7 @@ func _on_widget_moved_or_resized():
 			max_y = widget.rect_size.y + widget.rect_position.y
 	
 	emit_signal("need_to_resize", max_y)
+	
+	
+func _on_widget_scrolling():
+	emit_signal("widget_scrolling")

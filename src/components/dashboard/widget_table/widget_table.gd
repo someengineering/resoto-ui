@@ -1,6 +1,7 @@
-tool
 class_name TableWidget
 extends BaseWidget
+
+signal scrolling
 
 var header_color: Color
 var row_color: Color
@@ -41,6 +42,15 @@ onready var rows := $Content/Table/Rows
 onready var pagination := $Content/Pagination
 onready var pagination_spacer := $Content/PaginationSpacer
 onready var table_scroll := $Content/Table
+
+
+func _ready():
+	table_scroll.get_v_scrollbar().connect("value_changed", self, "_on_table_scrolling")
+	table_scroll.get_h_scrollbar().connect("value_changed", self, "_on_table_scrolling")
+
+
+func _on_table_scrolling(_value):
+	emit_signal("scrolling")
 
 
 func clear_all():
