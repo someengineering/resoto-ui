@@ -16,11 +16,10 @@ var tree_content := {
 onready var tree := $Tree
 
 
-func _ready():
+func refresh_results():
+	tree.clear()
 	tree.set_column_title(0, "Name")
 	tree.set_column_title(1, "Descendants")
-	#tree.set_column_expand(1, false)
-	#tree.set_column_min_width(1, 200)
 	var query := "is(cloud) -[0:2]-> is(cloud, account, region)"
 	API.graph_search(query, self, "list")
 

@@ -56,6 +56,14 @@ func receive_websocket_message(_m:String):
 		parse_message(json_res.result)
 
 
+func wait_for_config_update():
+	refresh_elements()
+	$PanelContainer/Content/HBoxContainer/Done.hide()
+	var new_progress_element = ProgressElement.instance().init("Waiting for configuration update.", 1, 0)
+	elements.add_child(new_progress_element)
+	display_messages = false
+
+
 func wait_for_core():
 	refresh_elements()
 	$PanelContainer/Content/HBoxContainer/Done.hide()
