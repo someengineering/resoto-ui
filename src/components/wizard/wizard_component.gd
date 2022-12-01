@@ -220,6 +220,7 @@ func can_previous(_can:bool):
 	prev_button.disabled = !_can
 	next_button.focus_mode = Control.FOCUS_ALL if _can else Control.FOCUS_NONE
 	$BG/StepDisplay/Titlebar/HomeButton.disabled = !_can
+	$BG/StepDisplay/Titlebar/HomeButton.modulate.a = 0.1 if !_can else 1.0
 
 
 func next_step(_next_on_slot:int=0):
