@@ -102,9 +102,21 @@ func show_search_results(results:Array, error:="") -> void:
 		if error != "":
 			error_msg.show()
 			result_amount_label.hide()
+			
 			var error_a : Array = error.replace("Error: ParseError\nMessage: ", "[b]Parse Error: [/b]").split("\n")
 			error_a[0] = error_a[0].trim_suffix(" limit 10")
-			error = "[color=#f16d4f]%s[/color]\n[code]%s[/code]" % error_a
+			if error_a.size() == 1:
+				if error_a.find("Navigation traversal"):
+					error_a = error_a[0].split(" Navigation traversal")
+					error_a[1] = "Navigation traversal" + error_a[1]
+					error = "[color=#f16d4f]%s[/color]\n[code]%s[/code]" % error_a
+				else:
+					error = "[color=#f16d4f]%s[/color]" % error_a
+			elif error_a.size() > 1:
+				error = "[color=#f16d4f]%s[/color]\n[code]%s[/code]" % error_a
+			else:
+				error = "[color=#f16d4f]Undefined error[/color]"
+				
 			error_msg.bbcode_text = error
 			popup.show()
 			yield(VisualServer, "frame_post_draw")
