@@ -45,5 +45,3 @@ expand = true
 stretch_mode = 6
 
 [node name="Tween" type="Tween" parent="."]
-
-[connection signal="pressed" from="." to="." method="_on_HistoryButton_pressed"]

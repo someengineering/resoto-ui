@@ -47,6 +47,10 @@ signal collect_run_finished
 # Websocket
 signal websocket_message
 
+# Resh Lite Popup
+signal resh_lite_popup
+signal resh_lite_popup_hide
+
 
 const TOP_MARGIN:int = 50
 const tsdb_metric_prefix:String		 = "resoto_"

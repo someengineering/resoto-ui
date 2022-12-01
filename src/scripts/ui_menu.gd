@@ -150,6 +150,10 @@ func _on_ButtonUIScalePlus_pressed():
 	_g.emit_signal("ui_scale_increase")
 
 
+func _on_ReshLiteBtn_pressed():
+	_g.emit_signal("resh_lite_popup")
+
+
 # This still needs to be build back into the UI, but for now the PR is on ice.
 #func _on_config_menu_id_pressed(id : int) -> void:
 #	match id:

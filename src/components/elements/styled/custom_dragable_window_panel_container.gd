@@ -1,5 +1,5 @@
-extends PopupPanel
-class_name CustomPopupWindow
+extends PanelContainer
+class_name CustomPopupWindowContainer
 
 signal close_popup
 
@@ -25,8 +25,9 @@ onready var close_btn = $Content/Titlebar/Label/TitleButtons/CloseButton
 onready var resize_btn = $ResizeButtonContainer/ResizeButton
 
 func _ready():
+	hide()
 	$Content/Titlebar.target = self
-	connect("about_to_show", self, "reset_settings")
+	connect("visibility_changed", self, "_on_change_visibility")
 	rect_size = default_size
 	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
 
@@ -44,6 +45,11 @@ func on_ui_scale_changed() -> void:
 
 func set_window_title(_new_title:String):
 	$Content/Titlebar/Label.text = _new_title
+
+
+func _on_change_visibility():
+	if visible:
+		reset_settings()
 
 
 func reset_settings():

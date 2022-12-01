@@ -1,6 +1,6 @@
 extends PanelContainer
 
-var target:CustomPopupWindow = null
+var target:Node = null
 
 
 func _ready():
