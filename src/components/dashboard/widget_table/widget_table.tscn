@@ -43,13 +43,13 @@ custom_constants/separation = 0
 [node name="Table" type="ScrollContainer" parent="Content"]
 margin_top = 20.0
 margin_right = 1920.0
-margin_bottom = 1075.0
+margin_bottom = 1042.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Rows" type="GridContainer" parent="Content/Table"]
 margin_right = 1920.0
-margin_bottom = 1055.0
+margin_bottom = 1022.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/vseparation = 0
@@ -57,18 +57,19 @@ custom_constants/hseparation = 0
 columns = 3
 
 [node name="PaginationSpacer" type="Control" parent="Content"]
-margin_top = 1075.0
+margin_top = 1042.0
 margin_right = 1920.0
-margin_bottom = 1080.0
+margin_bottom = 1047.0
 rect_min_size = Vector2( 0, 5 )
 
 [node name="Pagination" parent="Content" instance=ExtResource( 2 )]
-visible = false
 anchor_right = 0.0
 anchor_bottom = 0.0
+margin_left = 1740.0
 margin_top = 1047.0
-margin_right = 180.0
+margin_right = 1920.0
 margin_bottom = 1080.0
+size_flags_horizontal = 8
 prefix = "Page"
 suffix = "of 0"
 use_max_value = true
