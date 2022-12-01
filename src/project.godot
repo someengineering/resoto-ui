@@ -84,6 +84,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/elements/styled/custom_dragable_window_popup.gd"
 }, {
+"base": "PanelContainer",
+"class": "CustomPopupWindowContainer",
+"language": "GDScript",
+"path": "res://components/elements/styled/custom_dragable_window_panel_container.gd"
+}, {
 "base": "Control",
 "class": "DashboardContainer",
 "language": "GDScript",
@@ -225,6 +230,7 @@ _global_script_class_icons={
 "ConfigComponentSimple": "",
 "ContentManager": "",
 "CustomPopupWindow": "",
+"CustomPopupWindowContainer": "",
 "DashboardContainer": "",
 "DashboardContainerPlaceholder": "",
 "DashboardManager": "",
