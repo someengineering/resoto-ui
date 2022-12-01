@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const DEFAULT_POSITION := Vector2(130, 50)
+
 var terminal_popup_rect := Rect2(0,0,0,0)
 var hiding := false
 
@@ -26,15 +28,15 @@ func show_terminal_popup():
 	if terminal_popup_rect.size == Vector2(0,0):
 		terminal_popup.show()
 		tween.interpolate_property(terminal_popup, "modulate:a", terminal_popup.modulate.a, 1, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
-		tween.interpolate_property(terminal_popup, "rect_position", Vector2(50, 20)+Vector2(0, -20), Vector2(50, 20), 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
+		tween.interpolate_property(terminal_popup, "rect_position", DEFAULT_POSITION+Vector2(0, 30), DEFAULT_POSITION, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.interpolate_property(terminal_popup, "rect_scale", Vector2(1, 0.4), Vector2.ONE, 0.1, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.start()
-		terminal_popup.rect_size = Vector2(640, 320)
+		terminal_popup.rect_size = Vector2(900, 620)
 	else:
 		terminal_popup.show()
 		terminal_popup.rect_pivot_offset = terminal_popup_rect.size/2
 		tween.interpolate_property(terminal_popup, "modulate:a", terminal_popup.modulate.a, 1, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
-		tween.interpolate_property(terminal_popup, "rect_position", terminal_popup_rect.position+Vector2(0, -30), terminal_popup_rect.position, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
+		tween.interpolate_property(terminal_popup, "rect_position", terminal_popup_rect.position+Vector2(0, 30), terminal_popup_rect.position, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.interpolate_property(terminal_popup, "rect_scale", Vector2(1, 0.4), Vector2.ONE, 0.1, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.start()
 		terminal_popup.rect_size = terminal_popup_rect.size
