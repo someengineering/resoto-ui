@@ -304,6 +304,8 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 		current_widget_preview_name = widget_to_edit.widget.widget_type_id
 		widget_name_label.text = widget_to_edit.title
 		$"%WidgetPreviewTitleLabel".text = widget_to_edit.title
+		var current_widget_index : int = dashboard_container.WidgetScenes.keys().find(widget_to_edit.widget.widget_type_id)
+		widget_type_options.select(current_widget_index)
 		for data_source in widget_to_edit.data_sources:
 			var ds = DataSourceWidget.instance()
 			ds.datasource_type = data_source.type
