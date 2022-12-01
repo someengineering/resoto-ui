@@ -205,11 +205,6 @@ func autoadjust_table():
 	is_dirty = false
 
 
-func _process(delta):
-	autoadjust_table()
-
-
-var is_dirty := false
 func _on_TableWidget_resized():
 	if is_instance_valid(header_row):
 		is_dirty = true
