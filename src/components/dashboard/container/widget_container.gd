@@ -71,6 +71,8 @@ func _ready() -> void:
 		button.connect("button_up", self, "_on_resize_button_released")
 		button.connect("button_down", self, "_on_resize_button_pressed", [i])
 	set_process(false)
+	
+	refresh_pos_and_size_on_grid()
 
 
 func set_grid_size(new_grid_size : Vector2) -> void:
