@@ -63,3 +63,7 @@ func send_response(_button_pressed:String):
 func _on_LineEdit_text_entered(_new_text):
 	send_response("left")
 	hide()
+
+
+func _on_ConfirmPopup_about_to_show():
+	_g.emit_signal("resh_lite_popup_hide")

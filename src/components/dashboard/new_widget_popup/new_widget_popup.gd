@@ -1,4 +1,4 @@
-extends CustomPopupWindow
+extends CustomPopupWindowContainer
 
 signal widget_added(widget_data)
 signal widget_edited
@@ -61,7 +61,7 @@ func set_dashboard_container(_dc:DashboardContainer) -> void:
 		widget_type_options.add_item(key)
 
 
-func _on_AddWidgetButton_pressed() -> void:
+func _on_AcceptButton_pressed() -> void:
 	var widget
 	
 	if widget_to_edit == null or duplicating:
@@ -104,7 +104,7 @@ func _on_AddWidgetButton_pressed() -> void:
 		widget_to_edit = null
 		emit_signal("widget_edited")
 	
-	hide()
+	_hide_popup()
 	
 	var event : int 
 	if duplicating:
@@ -225,7 +225,6 @@ func get_control_for_property(property : Dictionary) -> Control:
 			control_signal = "value_changed"
 		TYPE_BOOL:
 			control = CheckBoxStyled.instance()
-			#control.size_flags_horizontal = 0
 			control.pressed = preview_widget[property.name]
 			control_signal = "toggled"
 		TYPE_STRING:
@@ -240,7 +239,7 @@ func get_control_for_property(property : Dictionary) -> Control:
 	
 	control.connect(control_signal, preview_widget, "set_"+property.name)
 	control.size_flags_horizontal |= SIZE_EXPAND
-			
+	
 	return control
 
 
@@ -441,7 +440,6 @@ func _close_popup():
 func _on_NewWidgetPopup_popup_hide():
 	duplicating = false
 	widget_to_edit = null
-	hide()
 	if preview_widget != null and is_instance_valid(preview_widget):
 		preview_widget.queue_free()
 	clear_data_sources()

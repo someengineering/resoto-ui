@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://components/elements/styled/custom_dragable_window_popup.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=2]
-[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=3]
-[ext_resource path="res://components/dashboard/new_widget_popup/new_widget_popup.gd" type="Script" id=4]
-[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/icons/icon_128_expand.svg" type="Texture" id=6]
-[ext_resource path="res://assets/icons/icon_128_collapse.svg" type="Texture" id=7]
-[ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=8]
+[ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/icons/icon_128_collapse.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_128_expand.svg" type="Texture" id=3]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=4]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=5]
+[ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=6]
+[ext_resource path="res://components/dashboard/new_widget_popup/new_widget_popup.gd" type="Script" id=7]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=8]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 5.0
@@ -33,63 +33,50 @@ shadow_size = 10
 shadow_offset = Vector2( 0, 4 )
 
 [node name="NewWidgetPopup" instance=ExtResource( 1 )]
-visible = true
-margin_right = 800.0
-margin_bottom = 600.0
-script = ExtResource( 4 )
-
-[node name="Titlebar" parent="Content" index="0"]
-margin_right = 800.0
-margin_bottom = 28.0
-
-[node name="Label" parent="Content/Titlebar" index="0"]
-margin_right = 800.0
-margin_bottom = 24.0
-
-[node name="Content" parent="Content" index="1"]
-margin_top = 32.0
-margin_right = 800.0
-margin_bottom = 550.0
+script = ExtResource( 7 )
+default_size = Vector2( 800, 600 )
+window_title = "Add Widget"
+content_margin_top_bottom = Vector2( 4, 10 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Content/Content" index="0"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 790.0
-margin_bottom = 508.0
+margin_right = 1183.0
+margin_bottom = 564.0
 custom_constants/separation = 10
 
 [node name="WidgetOptions" type="MarginContainer" parent="Content/Content/HBoxContainer" index="0"]
-margin_right = 385.0
-margin_bottom = 498.0
+margin_right = 581.0
+margin_bottom = 554.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": true
 }
 
 [node name="VBox" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions" index="0"]
-margin_right = 385.0
-margin_bottom = 498.0
+margin_right = 581.0
+margin_bottom = 554.0
 custom_constants/separation = 20
 
 [node name="WidgetBaseData" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="0"]
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 113.0
 custom_constants/separation = 7
 
 [node name="WidgetNameVBox" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData" index="0"]
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 53.0
 custom_constants/separation = 1
 
 [node name="WidgetNameLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetNameVBox" index="0"]
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 20.0
 theme_type_variation = "LabelBold"
 text = "Widget Name"
 
 [node name="WidgetNameEdit" type="LineEdit" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetNameVBox" index="1"]
 margin_top = 21.0
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 53.0
 caret_blink = true
 caret_blink_speed = 0.5
@@ -97,19 +84,19 @@ caret_blink_speed = 0.5
 [node name="WidgetTypeVBox" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData" index="1"]
 unique_name_in_owner = true
 margin_top = 60.0
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 113.0
 custom_constants/separation = 1
 
 [node name="WidgetTypeLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetTypeVBox" index="0"]
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 20.0
 theme_type_variation = "LabelBold"
 text = "Widget Type"
 
 [node name="WidgetType" type="OptionButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/WidgetBaseData/WidgetTypeVBox" index="1"]
 margin_top = 21.0
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 53.0
 
 [node name="HSeparator" type="HSeparator" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="1"]
@@ -122,11 +109,11 @@ margin_bottom = 124.0
 [node name="AppliedFilterBox" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="2"]
 unique_name_in_owner = true
 margin_top = 133.0
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 154.0
 
 [node name="DashboardFilterTitle" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/AppliedFilterBox" index="0"]
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 21.0
 
 [node name="ExpandGlobalFiltersButton" type="TextureButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/AppliedFilterBox/DashboardFilterTitle" index="0"]
@@ -136,8 +123,8 @@ margin_right = 14.0
 margin_bottom = 21.0
 rect_min_size = Vector2( 14, 21 )
 toggle_mode = true
-texture_normal = ExtResource( 7 )
-texture_pressed = ExtResource( 6 )
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
 expand = true
 stretch_mode = 5
 
@@ -151,13 +138,13 @@ rect_min_size = Vector2( 20, 18 )
 mouse_filter = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource( 8 )
+texture = ExtResource( 6 )
 expand = true
 stretch_mode = 6
 
 [node name="TitleLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/AppliedFilterBox/DashboardFilterTitle" index="2"]
 margin_left = 42.0
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 theme_type_variation = "LabelBold"
@@ -228,12 +215,12 @@ clip_text = true
 [node name="NewDataSourceHBox" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="3"]
 unique_name_in_owner = true
 margin_top = 174.0
-margin_right = 385.0
+margin_right = 581.0
 margin_bottom = 207.0
 
 [node name="Label" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox" index="0"]
 margin_top = 6.0
-margin_right = 224.0
+margin_right = 420.0
 margin_bottom = 26.0
 size_flags_horizontal = 3
 theme_type_variation = "LabelBold"
@@ -241,22 +228,22 @@ text = "Data Sources"
 
 [node name="DataSourceTypeOptionButton" type="OptionButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox" index="1"]
 unique_name_in_owner = true
-margin_left = 228.0
-margin_right = 348.667
+margin_left = 424.0
+margin_right = 544.667
 margin_bottom = 33.0
 disabled = true
 text = "Time Series"
 items = [ "Time Series", null, false, 0, null, "Aggregate Search", null, false, 1, null, "Resoto Search", null, false, 2, null ]
 selected = 0
 
-[node name="AddDataSourceButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox" index="2" instance=ExtResource( 5 )]
+[node name="AddDataSourceButton" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox" index="2" instance=ExtResource( 8 )]
 unique_name_in_owner = true
-margin_left = 352.0
-margin_right = 385.0
+margin_left = 548.0
+margin_right = 581.0
 hint_tooltip = "Add Data Source"
 size_flags_horizontal = 8
 size_flags_vertical = 1
-icon_tex = ExtResource( 2 )
+icon_tex = ExtResource( 4 )
 icon_margin = 6
 
 [node name="TemplatesAvailableLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox/AddDataSourceButton" index="1"]
@@ -271,61 +258,61 @@ text = "..."
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox" index="4"]
 margin_top = 227.0
-margin_right = 385.0
-margin_bottom = 498.0
+margin_right = 581.0
+margin_bottom = 554.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="DataSources" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetOptions/VBox/ScrollContainer" index="0"]
-margin_right = 385.0
+margin_right = 581.0
 size_flags_horizontal = 3
 
 [node name="WidgetPreview" type="MarginContainer" parent="Content/Content/HBoxContainer" index="1"]
-margin_left = 395.0
-margin_right = 780.0
-margin_bottom = 498.0
+margin_left = 591.0
+margin_right = 1173.0
+margin_bottom = 554.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": true
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview" index="0"]
-margin_right = 385.0
-margin_bottom = 498.0
+margin_right = 582.0
+margin_bottom = 554.0
 custom_constants/separation = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="0"]
-margin_right = 385.0
-margin_bottom = 464.0
+margin_right = 582.0
+margin_bottom = 520.0
 size_flags_vertical = 3
 custom_constants/separation = 1
 
 [node name="WidgetPreviewLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer" index="0"]
-margin_right = 385.0
+margin_right = 582.0
 margin_bottom = 20.0
 theme_type_variation = "LabelBold"
 text = "Widget Preview"
 
 [node name="PreviewContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer" index="1"]
 margin_top = 21.0
-margin_right = 385.0
-margin_bottom = 464.0
+margin_right = 582.0
+margin_bottom = 520.0
 size_flags_vertical = 3
 custom_constants/separation = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer" index="0"]
 self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
-margin_right = 385.0
+margin_right = 582.0
 margin_bottom = 30.0
 mouse_filter = 1
 custom_styles/panel = SubResource( 1 )
-script = ExtResource( 3 )
+script = ExtResource( 5 )
 
 [node name="WidgetPreviewTitleLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer/PreviewContainer/PanelContainer" index="0"]
 unique_name_in_owner = true
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 380.0
+margin_right = 577.0
 margin_bottom = 25.0
 size_flags_horizontal = 3
 align = 1
@@ -339,20 +326,20 @@ margin_bottom = 461.0
 
 [node name="WidgetOptionsLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="2"]
 unique_name_in_owner = true
-margin_top = 469.0
-margin_right = 385.0
-margin_bottom = 489.0
+margin_top = 525.0
+margin_right = 582.0
+margin_bottom = 545.0
 theme_type_variation = "LabelBold"
 text = "Widget Options"
 
 [node name="WidgetOptionsPanelContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="3"]
 unique_name_in_owner = true
-margin_top = 494.0
-margin_right = 385.0
-margin_bottom = 498.0
+margin_top = 550.0
+margin_right = 582.0
+margin_bottom = 554.0
 
 [node name="Options" type="GridContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="0"]
-margin_right = 385.0
+margin_right = 582.0
 size_flags_horizontal = 3
 custom_constants/hseparation = 30
 columns = 2
@@ -360,22 +347,8 @@ columns = 2
 [node name="ColorControllersContainer" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="1"]
 unique_name_in_owner = true
 margin_top = 4.0
-margin_right = 385.0
+margin_right = 582.0
 margin_bottom = 4.0
-
-[node name="Footer" parent="Content" index="2"]
-margin_top = 554.0
-margin_right = 800.0
-margin_bottom = 600.0
-
-[node name="Footerbar" parent="Content/Footer" index="0"]
-margin_right = 790.0
-margin_bottom = 32.0
-
-[node name="AddWidgetButton" parent="Content/Footer/Footerbar" index="0"]
-margin_left = 704.0
-margin_right = 780.0
-margin_bottom = 32.0
 
 [node name="TemplatePopup" type="PopupPanel" parent="." index="2"]
 self_modulate = Color( 0.0588235, 0.2, 0.337255, 1 )
@@ -384,7 +357,7 @@ anchor_right = 1.0
 margin_left = -800.0
 margin_bottom = 600.0
 custom_styles/panel = SubResource( 2 )
-script = ExtResource( 3 )
+script = ExtResource( 5 )
 
 [node name="VBox" type="VBoxContainer" parent="TemplatePopup" index="0"]
 margin_left = 4.0
@@ -428,4 +401,5 @@ margin_bottom = 57.0
 [connection signal="pressed" from="Content/Content/HBoxContainer/WidgetOptions/VBox/AppliedFilterBox/DashboardFilterTitle/ExpandGlobalFiltersButton" to="." method="_on_ExpandGlobalFiltersButton_pressed"]
 [connection signal="item_selected" from="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox/DataSourceTypeOptionButton" to="." method="_on_DataSourceTypeOptionButton_item_selected"]
 [connection signal="pressed" from="Content/Content/HBoxContainer/WidgetOptions/VBox/NewDataSourceHBox/AddDataSourceButton" to="." method="_on_AddDataSource_pressed"]
+[connection signal="pressed" from="Content/Footer/Footerbar/AcceptButton" to="." method="_on_AcceptButton_pressed"]
 [connection signal="pressed" from="TemplatePopup/VBox/AddEmptyButton" to="." method="_on_AddDataSource"]
