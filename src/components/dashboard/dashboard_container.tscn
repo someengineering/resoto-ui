@@ -277,6 +277,7 @@ margin_bottom = 1039.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 7 )
+scrollcontainer_path = NodePath("../..")
 
 [node name="Grid" type="ColorRect" parent="VBoxContainer/ScrollContainer/Content/Dashboard"]
 material = SubResource( 2 )
