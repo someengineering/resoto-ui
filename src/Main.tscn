@@ -28,7 +28,7 @@
 [ext_resource path="res://components/node_list/node_list_element_component.gd" type="Script" id=26]
 [ext_resource path="res://assets/icons/icon_128_settings.svg" type="Texture" id=27]
 [ext_resource path="res://components/elements/history_button.tscn" type="PackedScene" id=28]
-[ext_resource path="res://assets/icons/icon_128_substract_minus_remove.svg" type="Texture" id=29]
+[ext_resource path="res://components/shared/zoom_group.tscn" type="PackedScene" id=29]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=30]
 [ext_resource path="res://components/popups/popup_ui_settings.tscn" type="PackedScene" id=31]
 [ext_resource path="res://components/wizard/setup_wizard_component.gd" type="Script" id=32]
@@ -429,31 +429,42 @@ icon_margin = -5
 [node name="Spacer" type="Control" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 199.0
 margin_right = 310.0
-margin_bottom = 943.0
+margin_bottom = 963.0
 size_flags_vertical = 3
 
 [node name="UISettings" type="HBoxContainer" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_top = 947.0
+margin_top = 967.0
 margin_right = 310.0
-margin_bottom = 980.0
+margin_bottom = 1000.0
 alignment = 1
 
+[node name="UIZoomGroup" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 29 )]
+margin_right = 96.0
+
+[node name="Spacer" type="Control" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings"]
+margin_left = 100.0
+margin_right = 199.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+
 [node name="ButtonUISettings" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
+margin_left = 203.0
+margin_right = 236.0
 hint_tooltip = "Settings"
 size_flags_horizontal = 0
 icon_tex = ExtResource( 27 )
 
 [node name="ButtonDocs" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
-margin_left = 37.0
-margin_right = 70.0
+margin_left = 240.0
+margin_right = 273.0
 hint_tooltip = "Documentation (external link)"
 icon_tex = ExtResource( 11 )
 
 [node name="ButtonMessageLog" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
-margin_left = 74.0
-margin_right = 107.0
+margin_left = 277.0
+margin_right = 310.0
 hint_tooltip = "Notifications"
-size_flags_horizontal = 2
+size_flags_horizontal = 0
 icon_tex = ExtResource( 36 )
 
 [node name="NotificationAnchor" type="Control" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog"]
@@ -467,29 +478,8 @@ mouse_filter = 2
 visible = false
 margin_right = 10.0
 
-[node name="ButtonUIScaleMinus" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
-margin_left = 215.0
-margin_right = 239.0
-rect_min_size = Vector2( 24, 20 )
-hint_tooltip = "Change UI Scale"
-icon_tex = ExtResource( 29 )
-
-[node name="ZoomScaleLabel" type="Label" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings"]
-unique_name_in_owner = true
-margin_left = 243.0
-margin_top = 6.0
-margin_right = 282.0
-margin_bottom = 26.0
-text = "100%"
-
-[node name="ButtonUIScalePlus" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 30 )]
-margin_left = 286.0
-margin_right = 310.0
-rect_min_size = Vector2( 24, 20 )
-hint_tooltip = "Change UI Scale"
-icon_tex = ExtResource( 20 )
-
 [node name="ResotoUIVersion" type="Label" parent="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+visible = false
 modulate = Color( 1, 1, 1, 0.196078 )
 margin_top = 984.0
 margin_right = 310.0
@@ -814,8 +804,6 @@ script = ExtResource( 22 )
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonUISettings" to="MenuBar" method="_on_ButtonUISettings_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonDocs" to="MenuBar" method="_on_ButtonDocs_pressed"]
 [connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog" to="MenuBar" method="_on_ButtonMessageLog_pressed"]
-[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonUIScaleMinus" to="MenuBar" method="_on_ButtonUIScaleMinus_pressed"]
-[connection signal="pressed" from="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonUIScalePlus" to="MenuBar" method="_on_ButtonUIScalePlus_pressed"]
 [connection signal="gui_input" from="MenuBar/HamburgerMenu/ShadowSide" to="MenuBar" method="_on_click_detection_gui_input"]
 [connection signal="gui_input" from="MenuBar/HamburgerMenu/ClickDetection" to="MenuBar" method="_on_click_detection_gui_input"]
 [connection signal="hamburger_button_pressed" from="MenuBar/MenuContainer/TopMenu/Title/HamburgerButton" to="MenuBar" method="_on_HamburgerButton_hamburger_button_pressed"]
