@@ -5,13 +5,13 @@ const DEFAULT_POSITION := Vector2(130, 50)
 var terminal_popup_rect := Rect2(0,0,0,0)
 var hiding := false
 
-onready var terminal_popup := $TerminalPopup
+onready var terminal_popup := $TerminalPanel
 onready var tween = $VisibilityTween
 
 func _ready():
 	terminal_popup.modulate.a = 0.0
 	_g.connect("resh_lite_popup", self, "change_terminal_popup_visibility")
-	_g.connect("resh_lite_popup_hide", self, "hide_terminal_popup()")
+	_g.connect("resh_lite_popup_hide", self, "hide_terminal_popup")
 	terminal_popup.set_window_title("Resoto Shell Lite")
 
 
@@ -31,7 +31,6 @@ func show_terminal_popup():
 		tween.interpolate_property(terminal_popup, "rect_position", DEFAULT_POSITION+Vector2(0, 30), DEFAULT_POSITION, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.interpolate_property(terminal_popup, "rect_scale", Vector2(1, 0.4), Vector2.ONE, 0.1, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.start()
-		terminal_popup.rect_size = Vector2(900, 620)
 	else:
 		terminal_popup.show()
 		terminal_popup.rect_pivot_offset = terminal_popup_rect.size/2
@@ -50,11 +49,6 @@ func hide_terminal_popup():
 	tween.interpolate_property(terminal_popup, "rect_scale", Vector2.ONE, Vector2(1, 0.4), 0.2, Tween.TRANS_EXPO, Tween.EASE_OUT)
 	tween.start()
 	hiding = true
-	
-
-
-func _on_TerminalPopup_close_popup():
-	hide_terminal_popup()
 
 
 func _on_VisibilityTween_tween_all_completed():

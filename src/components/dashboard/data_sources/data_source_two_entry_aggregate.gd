@@ -56,5 +56,4 @@ func get_data() -> Dictionary:
 	}
 	
 	data.merge(.get_data())
-	print(JSON.print(data,"\t"))
 	return data

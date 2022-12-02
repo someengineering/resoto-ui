@@ -69,7 +69,8 @@ func _input(event:InputEvent) -> void:
 	or !terminal_active
 	or _g.popup_manager.popup_active()
 	or not event is InputEventKey
-	or _g.focus_in_search):
+	or _g.focus_in_search
+	or not get_global_rect().has_point(get_global_mouse_position())):
 		return
 	
 	if not command.has_focus() and event.pressed and not MODIFIER_KEYS.has(event.scancode) and event.scancode != KEY_ESCAPE:

@@ -55,12 +55,12 @@ func _ready() -> void:
 	Style.add($VBoxContainer/MinimizedBar/MinimizeButton, Style.c.LIGHT)
 	Style.add(find_node("RefreshIcon"), Style.c.LIGHT)
 	
-	dashboard.dashboard_container = self
 	add_widget_popup.dashboard_container = self
-	
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
 	add_widget_popup.interval = 144
+	
+	dashboard.dashboard_container = self
 	dashboard.ts_start = $DateRangeSelector.from.unix_time
 	dashboard.ts_end = $DateRangeSelector.to.unix_time
 	dashboard.step = 144
@@ -72,9 +72,6 @@ func _ready() -> void:
 	InfrastructureInformation.connect("infra_info_updated", self, "_on_infra_info_updated")
 	
 	dashboard.lock(true)
-	
-	add_widget_popup.connect("about_to_show", self, "show_popup_bg")
-	add_widget_popup.connect("popup_hide", self, "hide_popup_bg")
 
 
 func _process(_delta):

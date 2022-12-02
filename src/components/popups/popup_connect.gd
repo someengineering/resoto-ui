@@ -37,6 +37,7 @@ func _on_ConnectPopup_about_to_show() -> void:
 	$Content/Margin/Connect/Adress.show()
 	connect_button.show()
 	status.text = "Resoto Core connection settings."
+	_g.emit_signal("resh_lite_popup_hide")
 
 
 func connect_to_core() -> void:
