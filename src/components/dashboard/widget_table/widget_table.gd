@@ -145,26 +145,17 @@ func clear_rows():
 		child.queue_free()
 
 
-var row_data := {}
-func add_row(data : Dictionary, row_idx : int, row_node_id : String):
-	row_data[row_idx] = data
-	# this could be moved out of the loop
-	var n := headers_array.size()
-	
-	for cell_idx in n:
+func add_row(data : Dictionary, row_idx : int, row_node_id : String, header_array_size:int):
+	for cell_idx in header_array_size:
+		var table_cell = TableCell.instance()
+		var is_header_column:bool = cell_idx <= header_columns_count
+		table_cell.node_id = row_node_id
+		table_cell.data_cell = is_header_column
+		table_cell.even_row = row_idx % 2 == 0
+		rows.add_child(table_cell)
+		var color:Color = column_header_color if is_header_column else row_color
 		var value = get_value(data, cell_idx)
-		add_cell(row_idx, cell_idx, value, row_node_id)
-	
-
-func add_cell(row, cell_idx, value, cell_node_id):
-	var table_cell = TableCell.instance()
-	var is_header_column:bool = cell_idx <= header_columns_count
-	table_cell.node_id = cell_node_id
-	table_cell.data_cell = is_header_column
-	table_cell.even_row = row % 2 == 0
-	rows.add_child(table_cell)
-	var color:Color = column_header_color if is_header_column else row_color
-	table_cell.set_cell(str(value), color, row)
+		table_cell.set_cell(str(value), color, row_idx)
 
 
 func update_table():
@@ -173,11 +164,12 @@ func update_table():
 	for c in rows.get_children():
 		c.queue_free()
 	yield(get_tree(), "idle_frame")
-	var n:int = max_allowed_rows if current_page < page_count - 1 else raw_data.size() % max_allowed_rows
-	for i in n:
-		var row_index = clamp(i + max_allowed_rows * current_page, 0, raw_data.size()-1)
+	var row_amount:int = max_allowed_rows if current_page < page_count - 1 else raw_data.size() % max_allowed_rows
+	var header_array_size := headers_array.size()
+	for r_idx in row_amount:
+		var row_index = clamp(r_idx + max_allowed_rows * current_page, 0, raw_data.size()-1)
 		var row_node_id : String = get_node_id(raw_data[row_index]) if not is_preview_widget else ""
-		add_row(raw_data[row_index], i, row_node_id)
+		add_row(raw_data[row_index], r_idx, row_node_id, header_array_size)
 	yield(VisualServer, "frame_post_draw")
 	is_dirty = true
 	autoadjust_table()
@@ -211,7 +203,6 @@ func _on_TableWidget_resized():
 
 
 func sort_by_column(column : int, ascending : bool):
-	
 	if column >= 0:
 		sorting_type = "asc" if ascending else "desc"
 		for header in header_row.get_children():
@@ -283,9 +274,8 @@ func get_data_count(data : Dictionary) -> int:
 
 
 func get_node_id(data : Dictionary) -> String:
-	if data_source_type == DataSource.TYPES.SEARCH:
-		if data.has("id"):
-			return data.id
+	if data_source_type == DataSource.TYPES.SEARCH and data.has("id"):
+		return data.id
 	return ""
 
 

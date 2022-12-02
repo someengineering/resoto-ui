@@ -47,6 +47,9 @@ signal collect_run_finished
 # Websocket
 signal websocket_message
 
+# Messaging
+signal text_to_clipboard
+
 # Resh Lite Popup
 signal resh_lite_popup
 signal resh_lite_popup_hide
