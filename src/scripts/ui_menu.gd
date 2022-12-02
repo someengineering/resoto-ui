@@ -86,7 +86,6 @@ func close_menu():
 
 func on_ui_scale_changed():
 	hb_menu.rect_size.y = OS.window_size.y / _g.ui_scale
-	$"%ZoomScaleLabel".text = str(_g.ui_scale*100) + "%"
 
 
 func _on_HamburgerButton_hamburger_button_pressed(pressed:bool):
@@ -140,14 +139,6 @@ func _on_navigation_index_changed(id : int):
 func _on_ButtonUISettings_pressed():
 	_g.popup_manager.open_popup("UISettingsPopup")
 	close_menu()
-
-
-func _on_ButtonUIScaleMinus_pressed():
-	_g.emit_signal("ui_scale_decrease")
-
-
-func _on_ButtonUIScalePlus_pressed():
-	_g.emit_signal("ui_scale_increase")
 
 
 func _on_ReshLiteBtn_pressed():
