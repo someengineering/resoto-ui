@@ -161,8 +161,6 @@ func update_series() -> void:
 	var stacked : PoolRealArray = []
 	stacked.resize(range(0, x_range, step).size())
 	stacked.fill(0)
-	
-#	get_series_max_min()
 
 	var maxy := -INF
 	var miny := INF
@@ -344,7 +342,6 @@ func get_series_max_min():
 
 					
 	max_min = {"max" : max(maximum, maximum_stacked), "min": min(minimum_stacked, minimum)}
-	print(max_min)
 	
 
 func set_scale_from_series() -> void:
