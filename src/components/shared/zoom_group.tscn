@@ -6,8 +6,9 @@
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=4]
 
 [node name="UIZoomGroup" type="HBoxContainer"]
-margin_right = 95.0
+margin_right = 88.0
 margin_bottom = 33.0
+custom_constants/separation = 0
 script = ExtResource( 3 )
 
 [node name="ButtonUIScaleMinus" parent="." instance=ExtResource( 4 )]
@@ -18,19 +19,18 @@ icon_tex = ExtResource( 2 )
 icon_margin = 2
 
 [node name="LabelSpacer" type="CenterContainer" parent="."]
-margin_left = 28.0
-margin_right = 68.0
+margin_left = 24.0
+margin_right = 69.0
 margin_bottom = 33.0
-rect_min_size = Vector2( 40, 0 )
+rect_min_size = Vector2( 45, 0 )
 
 [node name="Control" type="Control" parent="LabelSpacer"]
-margin_left = 20.0
+margin_left = 22.0
 margin_top = 16.0
-margin_right = 20.0
+margin_right = 22.0
 margin_bottom = 16.0
 
 [node name="Attach" type="Node2D" parent="LabelSpacer/Control"]
-z_index = 1
 
 [node name="ZoomScaleLabel" type="Label" parent="LabelSpacer/Control/Attach"]
 unique_name_in_owner = true
@@ -44,8 +44,8 @@ text = "100%"
 align = 1
 
 [node name="ButtonUIScalePlus" parent="." instance=ExtResource( 4 )]
-margin_left = 72.0
-margin_right = 96.0
+margin_left = 69.0
+margin_right = 93.0
 rect_min_size = Vector2( 24, 20 )
 hint_tooltip = "Change UI Scale"
 icon_tex = ExtResource( 1 )

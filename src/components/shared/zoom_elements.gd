@@ -21,7 +21,7 @@ func _on_ButtonUIScalePlus_pressed():
 
 func on_ui_scale_changed():
 	zoom_label.text = str(_g.ui_scale*100) + "%"
-	zoom_spacer.rect_min_size.x = 40 / _g.ui_scale
+	zoom_spacer.rect_min_size.x = 45 / _g.ui_scale
 	zoom_scaler.scale = Vector2.ONE / _g.ui_scale
 	$ButtonUIScaleMinus.rect_min_size.x = 24 / _g.ui_scale
 	$ButtonUIScalePlus.rect_min_size.x = 24 / _g.ui_scale
