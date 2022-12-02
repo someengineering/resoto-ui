@@ -27,6 +27,7 @@ func _ready() -> void:
 	add_child(tween)
 	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
 	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
+	_g.connect("text_to_clipboard", self, "on_text_to_clipboard")
 	_g.connect("tooltip", self, "tooltip")
 	_g.connect("tooltip_error", self, "tooltip_error")
 	_g.connect("tooltip_link", self, "tooltip_link")
@@ -58,6 +59,11 @@ func _process(_delta:float):
 			elif tt_rect.position.y < 0:
 				tt.rect_position.y = 0
 		tt.show()
+
+
+func on_text_to_clipboard(_text:String):
+	OS.set_clipboard(_text)
+	$CopyToClipboard.play()
 
 
 func tooltip(_text:String) -> void:

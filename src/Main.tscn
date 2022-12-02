@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=2]
+[gd_scene load_steps=79 format=2]
 
 [ext_resource path="res://components/popups/connect_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -56,6 +56,7 @@
 [ext_resource path="res://components/elements/drag_and_drop_control.gd" type="Script" id=54]
 [ext_resource path="res://components/elements/styled/custom_dragable_window_panel_container.gd" type="Script" id=55]
 [ext_resource path="res://assets/generic/screenspace_blur.tres" type="Shader" id=56]
+[ext_resource path="res://components/popups/copy_to_clipboard.tscn" type="PackedScene" id=57]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
@@ -105,33 +106,6 @@ fill_to = Vector2( 0, 1 )
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
 
-[sub_resource type="StyleBoxFlat" id=34]
-bg_color = Color( 1, 1, 1, 1 )
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-shadow_color = Color( 0, 0, 0, 0.117647 )
-shadow_size = 20
-shadow_offset = Vector2( 0, 5 )
-
-[sub_resource type="Gradient" id=31]
-interpolation_mode = 2
-offsets = PoolRealArray( 0, 0.0310421, 1 )
-colors = PoolColorArray( 0.164063, 0.164063, 0.164063, 1, 1, 1, 1, 1, 0.164706, 0.164706, 0.164706, 1 )
-
-[sub_resource type="GradientTexture" id=32]
-gradient = SubResource( 31 )
-
-[sub_resource type="ShaderMaterial" id=33]
-shader = ExtResource( 46 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
-shader_param/power = 1.0
-shader_param/pos = Vector2( 0.5, 0.5 )
-shader_param/turn_speed = -6.0
-shader_param/grad_length = 1.0
-shader_param/gradient_texture = SubResource( 32 )
-
 [sub_resource type="StyleBoxFlat" id=37]
 bg_color = Color( 1, 1, 1, 0.305882 )
 corner_radius_top_left = 4
@@ -162,6 +136,33 @@ corner_radius_top_right = 4
 
 [sub_resource type="DynamicFont" id=4]
 size = 1
+
+[sub_resource type="StyleBoxFlat" id=34]
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 20
+shadow_offset = Vector2( 0, 5 )
+
+[sub_resource type="Gradient" id=31]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.0310421, 1 )
+colors = PoolColorArray( 0.164063, 0.164063, 0.164063, 1, 1, 1, 1, 1, 0.164706, 0.164706, 0.164706, 1 )
+
+[sub_resource type="GradientTexture" id=32]
+gradient = SubResource( 31 )
+
+[sub_resource type="ShaderMaterial" id=33]
+shader = ExtResource( 46 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 32 )
 
 [node name="Main" type="Control"]
 anchor_right = 1.0
@@ -682,83 +683,8 @@ margin_bottom = 40.0
 rect_min_size = Vector2( 10, 0 )
 mouse_filter = 2
 
-[node name="Popups" type="CanvasLayer" parent="."]
-layer = 30
-script = ExtResource( 7 )
-
-[node name="BG" type="ColorRect" parent="Popups"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0.0509804, 0.0980392, 0.941176 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ConnectPopup" parent="Popups" instance=ExtResource( 1 )]
-
-[node name="ConfirmPopup" parent="Popups" instance=ExtResource( 18 )]
-
-[node name="UISettingsPopup" parent="Popups" instance=ExtResource( 31 )]
-custom_styles/panel = SubResource( 34 )
-
-[node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
-
-[node name="TooltipLayer" type="CanvasLayer" parent="Popups"]
-layer = 31
-
-[node name="Tooltip" parent="Popups/TooltipLayer" instance=ExtResource( 35 )]
-visible = false
-
-[node name="TooltipLink" parent="Popups/TooltipLayer" instance=ExtResource( 34 )]
-visible = false
-
-[node name="ToolTipError" parent="Popups/TooltipLayer" instance=ExtResource( 42 )]
-visible = false
-
-[node name="WizardButton" type="ToolButton" parent="Popups"]
-visible = false
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -64.0
-margin_top = -64.0
-rect_min_size = Vector2( 64, 64 )
-mouse_filter = 1
-script = ExtResource( 44 )
-
-[node name="Wizard" parent="Popups/WizardButton" instance=ExtResource( 43 )]
-position = Vector2( 27, 42 )
-scale = Vector2( 0.05, 0.05 )
-
-[node name="Done" type="TextureRect" parent="Popups/WizardButton"]
-visible = false
-modulate = Color( 0.265427, 0.957031, 0.438328, 1 )
-margin_left = -30.0
-margin_top = 35.0
-margin_bottom = 59.0
-rect_min_size = Vector2( 30, 24 )
-size_flags_vertical = 3
-texture = ExtResource( 45 )
-expand = true
-stretch_mode = 6
-
-[node name="Progressing" type="TextureRect" parent="Popups/WizardButton"]
-modulate = Color( 1, 1, 1, 0.501961 )
-material = SubResource( 33 )
-margin_left = -30.0
-margin_top = 32.0
-margin_bottom = 60.0
-rect_min_size = Vector2( 30, 24 )
-size_flags_vertical = 4
-texture = ExtResource( 47 )
-expand = true
-stretch_mode = 6
-
 [node name="TerminalPopup" type="CanvasLayer" parent="."]
-layer = 32
+layer = 28
 script = ExtResource( 48 )
 
 [node name="TerminalPopup" type="PanelContainer" parent="TerminalPopup"]
@@ -896,30 +822,83 @@ script = ExtResource( 49 )
 
 [node name="VisibilityTween" type="Tween" parent="TerminalPopup"]
 
-[node name="Debug" type="CanvasLayer" parent="."]
-layer = 100
+[node name="Popups" type="CanvasLayer" parent="."]
+layer = 30
+script = ExtResource( 7 )
+
+[node name="BG" type="ColorRect" parent="Popups"]
 visible = false
-script = ExtResource( 20 )
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0.0509804, 0.0980392, 0.941176 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="DebugInfo" type="PanelContainer" parent="Debug"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -371.5
-margin_top = -275.5
-margin_right = 371.5
-margin_bottom = 275.5
+[node name="ConnectPopup" parent="Popups" instance=ExtResource( 1 )]
 
-[node name="DebugLabel" type="Label" parent="Debug/DebugInfo"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 733.0
-margin_bottom = 541.0
-size_flags_horizontal = 3
+[node name="ConfirmPopup" parent="Popups" instance=ExtResource( 18 )]
+
+[node name="UISettingsPopup" parent="Popups" instance=ExtResource( 31 )]
+custom_styles/panel = SubResource( 34 )
+
+[node name="ToastManager" parent="Popups" instance=ExtResource( 10 )]
+
+[node name="TooltipLayer" type="CanvasLayer" parent="Popups"]
+layer = 31
+
+[node name="Tooltip" parent="Popups/TooltipLayer" instance=ExtResource( 35 )]
+visible = false
+
+[node name="TooltipLink" parent="Popups/TooltipLayer" instance=ExtResource( 34 )]
+visible = false
+
+[node name="ToolTipError" parent="Popups/TooltipLayer" instance=ExtResource( 42 )]
+visible = false
+
+[node name="WizardButton" type="ToolButton" parent="Popups"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -64.0
+margin_top = -64.0
+rect_min_size = Vector2( 64, 64 )
+mouse_filter = 1
+script = ExtResource( 44 )
+
+[node name="Wizard" parent="Popups/WizardButton" instance=ExtResource( 43 )]
+position = Vector2( 27, 42 )
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Done" type="TextureRect" parent="Popups/WizardButton"]
+visible = false
+modulate = Color( 0.265427, 0.957031, 0.438328, 1 )
+margin_left = -30.0
+margin_top = 35.0
+margin_bottom = 59.0
+rect_min_size = Vector2( 30, 24 )
 size_flags_vertical = 3
-theme_type_variation = "Label_24"
-text = "debug info"
+texture = ExtResource( 45 )
+expand = true
+stretch_mode = 6
+
+[node name="Progressing" type="TextureRect" parent="Popups/WizardButton"]
+modulate = Color( 1, 1, 1, 0.501961 )
+material = SubResource( 33 )
+margin_left = -30.0
+margin_top = 32.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 30, 24 )
+size_flags_vertical = 4
+texture = ExtResource( 47 )
+expand = true
+stretch_mode = 6
+
+[node name="CopyToClipboard" parent="Popups" instance=ExtResource( 57 )]
+visible = false
 
 [node name="HTMLHelpers" type="Node" parent="."]
 script = ExtResource( 22 )
@@ -946,11 +925,11 @@ script = ExtResource( 22 )
 [connection signal="pressed" from="MenuBar/MenuContainer/TopMenu/Title/HistoryButtons/HistoryFwdButton" to="MenuBar" method="_on_HistoryFwdButton_pressed"]
 [connection signal="pressed" from="MenuBar/MenuContainer/TopMenu/Title/ReshLiteBtn" to="MenuBar" method="_on_ReshLiteBtn_pressed"]
 [connection signal="gui_input" from="MenuBar/MenuContainer/TopMenu/Title/MainResotoLogo" to="MenuBar" method="_on_ResotoLogo_gui_input"]
-[connection signal="pressed" from="Popups/WizardButton" to="Popups/WizardButton" method="_on_WizardButton_pressed"]
 [connection signal="close_popup" from="TerminalPopup/TerminalPopup" to="TerminalPopup" method="_on_TerminalPopup_close_popup"]
 [connection signal="pressed" from="TerminalPopup/TerminalPopup/Content/Titlebar/Label/TitleButtons/MaximizeButton" to="TerminalPopup/TerminalPopup" method="_on_MaximizeButton_pressed"]
 [connection signal="pressed" from="TerminalPopup/TerminalPopup/Content/Titlebar/Label/TitleButtons/CloseButton" to="TerminalPopup/TerminalPopup" method="_on_IconButton_pressed"]
 [connection signal="button_down" from="TerminalPopup/TerminalPopup/ResizeButtonContainer/ResizeButton" to="TerminalPopup/TerminalPopup" method="_on_ResizeButton_button_down"]
 [connection signal="tween_all_completed" from="TerminalPopup/VisibilityTween" to="TerminalPopup" method="_on_VisibilityTween_tween_all_completed"]
+[connection signal="pressed" from="Popups/WizardButton" to="Popups/WizardButton" method="_on_WizardButton_pressed"]
 
 [editable path="MenuBar/MenuContainer/TopMenu/Title/ReshLiteBtn"]

@@ -11,6 +11,9 @@ signal toast_click
 signal toast_show_saved
 signal toast_close_all
 
+# Messaging
+signal text_to_clipboard
+
 # UI and fullscreen
 signal ui_scale_changed
 signal ui_scale_increase
