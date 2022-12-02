@@ -3,6 +3,8 @@ extends Control
 signal need_to_resize(y)
 signal widget_scrolling
 
+export (NodePath) var scrollcontainer_path : NodePath = ""
+
 export var x_grid_ratio := 10.0 
 export var y_grid_size := 100.0 
 export var grid_margin := Vector2(5,5)
@@ -16,6 +18,7 @@ var ts_end : int
 var step : int
 var widget_reveal_timer:= Timer.new()
 var appear_tween:= Tween.new()
+var scroll_container:ScrollContainer
 
 var filters : Dictionary = {
 	"cloud" : "",
@@ -37,6 +40,7 @@ onready var widget_container_scene := preload("res://components/dashboard/contai
 
 
 func _ready():
+	scroll_container = get_node(scrollcontainer_path)
 	add_child(widget_reveal_timer)
 	widget_reveal_timer.wait_time = 0.1
 	widget_reveal_timer.one_shot = true
