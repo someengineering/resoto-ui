@@ -31,6 +31,7 @@ func _ready() -> void:
 	_g.connect("tooltip_error", self, "tooltip_error")
 	_g.connect("tooltip_link", self, "tooltip_link")
 	_g.connect("tooltip_hide", self, "tooltip_hide")
+	_g.connect("text_to_clipboard", self, "on_text_to_clipboard")
 
 
 func _process(_delta:float):
@@ -85,6 +86,11 @@ func tooltip_hide() -> void:
 	n_tooltip.visible = false
 	tooltip_error_active = false
 	n_tooltip_error.visible = false
+
+
+func on_text_to_clipboard(_text:String):
+	OS.set_clipboard(_text)
+	$TooltipLayer/CopyToClipboard.play()
 
 
 func open_popup(_name:String) -> void:
