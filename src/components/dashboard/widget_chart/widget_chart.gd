@@ -193,6 +193,10 @@ func update_series() -> void:
 		all_values[index] = values
 	max_min["max"] = maxy
 	max_min["min"] = maxy
+	
+	if auto_scale:
+		set_scale_from_series()
+	
 	for i in n:
 		var line : Line2D = graph_area.get_child(i)
 		var values = all_values[i]
@@ -364,10 +368,6 @@ func set_scale_from_series() -> void:
 
 func do_complete_update():
 	update_series()
-	
-	if auto_scale:
-		set_scale_from_series()
-		
 	update_graph_area(force_update_graph_area)
 	
 	var n = x_labels.get_child_count()
