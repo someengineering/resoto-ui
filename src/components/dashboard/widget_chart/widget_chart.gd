@@ -189,6 +189,8 @@ func update_series() -> void:
 				maxy = point.y
 				
 			values.append(point)
+			
+		
 		
 		all_values[index] = values
 	max_min["max"] = maxy
@@ -206,7 +208,7 @@ func update_series() -> void:
 		for j in values.size():
 			transformed_values[j] = transform_point(values[j])
 	
-		line.points = transformed_values
+		line.points = optimize_data(transformed_values)
 		line.zero_position = transform_point(Vector2.ZERO).y
 		line.global_position = origin
 
@@ -515,3 +517,15 @@ func _get_property_list() -> Array:
 	})
 	
 	return properties
+	
+	
+func optimize_data(data_points:PoolVector2Array):
+	var cleaned_points : PoolVector2Array = [data_points[0]]
+	var data_points_size: int = data_points.size()-1
+	for i in data_points.size():
+		if i == 0 or i == data_points_size:
+			continue
+		if not data_points[i].direction_to(data_points[i-1]) == -data_points[i].direction_to(data_points[i+1]):
+			cleaned_points.append(data_points[i])
+	cleaned_points.append(data_points[data_points_size])
+	return cleaned_points
