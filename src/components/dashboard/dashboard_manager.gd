@@ -287,7 +287,13 @@ func get_user_dashboards() -> Dictionary:
 	}
 	
 	if OS.has_feature("HTML5"):
-		dashboard_status = HtmlFiles.load_from_local_storage("dashboard_status")
+		var data = HtmlFiles.load_from_local_storage("dashboard_status")
+		if data != null:
+			var json_parse_result = JSON.parse(data).result
+			if typeof(json_parse_result) == TYPE_DICTIONARY:
+				dashboard_status = json_parse_result
+			else:
+				_g.emit_signal("add_toast", "Error while reading local dashboards status", 1)
 	else:
 		var file := File.new()
 		if not file.open("user://dashboard_status", File.READ):
