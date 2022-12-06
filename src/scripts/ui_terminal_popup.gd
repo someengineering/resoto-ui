@@ -27,15 +27,14 @@ func show_terminal_popup():
 	hiding = false
 	if terminal_popup_rect.size == Vector2(0,0):
 		terminal_popup.show()
+		terminal_popup.rect_position = DEFAULT_POSITION
 		tween.interpolate_property(terminal_popup, "modulate:a", terminal_popup.modulate.a, 1, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
-		tween.interpolate_property(terminal_popup, "rect_position", DEFAULT_POSITION, DEFAULT_POSITION, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.interpolate_property(terminal_popup, "rect_scale", Vector2(1, 0.4), Vector2.ONE, 0.1, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.start()
 	else:
 		terminal_popup.show()
 		terminal_popup.rect_pivot_offset = terminal_popup_rect.size/2
 		tween.interpolate_property(terminal_popup, "modulate:a", terminal_popup.modulate.a, 1, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
-		tween.interpolate_property(terminal_popup, "rect_position", terminal_popup_rect.position, terminal_popup_rect.position, 0.4, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.interpolate_property(terminal_popup, "rect_scale", Vector2(1, 0.4), Vector2.ONE, 0.1, Tween.TRANS_EXPO, Tween.EASE_OUT)
 		tween.start()
 		terminal_popup.rect_size = terminal_popup_rect.size
