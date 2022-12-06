@@ -15,7 +15,7 @@ func _ready() -> void:
 	connect("mouse_exited", self, "on_mouse_exited")
 
 func _on_TableCell_gui_input(event):
-	if event is InputEventMouseButton and event.pressed:
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		if node_id != "":
 			_g.emit_signal("explore_node_by_id", node_id)
 		else:
