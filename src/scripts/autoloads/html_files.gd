@@ -48,8 +48,7 @@ func get_local_storage_keys() -> Array:
 
 
 func load_from_local_storage(item_name : String):
-	var data
-	data = JSON.parse(local_storage.getItem(item_name)).result
+	var data = local_storage.getItem(item_name)
 	return data
 
 
