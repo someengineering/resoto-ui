@@ -19,6 +19,7 @@ func show_add_popup(incoming_type:int, show_pos:Vector2):
 	$MarginContainer/VBoxContainer/SaveConfigsButton.visible = normal_type
 	$MarginContainer/VBoxContainer/SetVarButton.visible = normal_type
 	$MarginContainer/VBoxContainer/CustomSceneButton.visible = normal_type
+	$MarginContainer/VBoxContainer/ConfigConditionalButton.visible = normal_type
 		
 	popup(Rect2(show_pos, Vector2.ONE))
 	rect_size = $MarginContainer.rect_size

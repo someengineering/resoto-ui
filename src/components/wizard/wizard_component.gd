@@ -24,7 +24,8 @@ var wizard_step_scenes:Dictionary = {
 	"StepCreateObject" : preload("res://components/wizard/wizard_steps/wizard_step_create_object.tscn"),
 	"StepHandleObject" : preload("res://components/wizard/wizard_steps/wizard_step_handle_object.tscn"),
 	"StepSaveConfigsOnCore" : preload("res://components/wizard/wizard_steps/wizard_step_save_configs_on_core.tscn"),
-	"StepSetVariable" : preload("res://components/wizard/wizard_steps/wizard_step_set_variable.tscn")
+	"StepSetVariable" : preload("res://components/wizard/wizard_steps/wizard_step_set_variable.tscn"),
+	"StepConfigConditional" : preload("res://components/wizard/wizard_steps/wizard_step_config_conditional.tscn")
 }
 
 var current_step:Node = null
