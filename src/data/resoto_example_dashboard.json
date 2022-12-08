@@ -561,6 +561,70 @@
 					"query": "sum(resoto_load_balancers_total{$dashboard_filters}) by (account)"
 				}
 			]
+		},
+		{
+			"position:x": 5,
+			"position:y": 17,
+			"size:x": 5,
+			"size:y": 3,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+				"widget_type": "Table",
+				"settings": {
+					"header_color": "Color( 0, 0.3, 0.58, 1 )",
+					"row_color": "Color( 0.05, 0.16, 0.27, 1 )",
+					"column_header_color": "Color( 0.06, 0.2, 0.34, 1 )",
+					"sorting_column": -1,
+					"sorting_type": ""
+				},
+				"title": "Certificates about to expire",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"text_to_search": "is(certificate) and expires > \"@now@\" and expires < 1mo",
+					"kinds": "",
+					"filters": "",
+					"list": "",
+					"type": 2,
+					"query": "is(certificate) and expires > \"@now@\" and expires < 1mo{global_filters}",
+					"custom_query": false
+				}
+			]
+		},
+		{
+			"position:x": 0,
+			"position:y": 17,
+			"size:x": 5,
+			"size:y": 3,
+			"widget_data": {
+				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+				"widget_type": "Table",
+				"settings": {
+					"header_color": "Color( 0, 0.3, 0.58, 1 )",
+					"row_color": "Color( 0.05, 0.16, 0.27, 1 )",
+					"column_header_color": "Color( 0.06, 0.2, 0.34, 1 )",
+					"sorting_column": -1,
+					"sorting_type": ""
+				},
+				"title": "Expired Certificates",
+				"color_controllers_data": [
+
+				]
+			},
+			"data_sources_data": [
+				{
+					"text_to_search": "is(certificate) and expires > \"@now@\" and expires < 1mo",
+					"kinds": "",
+					"filters": "",
+					"list": "",
+					"type": 2,
+					"query": "is(certificate) and expires < \"@now@\"{global_filters}",
+					"custom_query": true
+				}
+			]
 		}
 	],
 	"uuid": ""
