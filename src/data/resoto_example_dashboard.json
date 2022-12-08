@@ -616,13 +616,13 @@
 			},
 			"data_sources_data": [
 				{
-					"text_to_search": "is(certificate) and expires > \"@now@\" and expires < 1mo",
+					"text_to_search": "is(certificate) and expires < \"@now@\"",
 					"kinds": "",
 					"filters": "",
 					"list": "",
 					"type": 2,
 					"query": "is(certificate) and expires < \"@now@\"{global_filters}",
-					"custom_query": true
+					"custom_query": false
 				}
 			]
 		}
