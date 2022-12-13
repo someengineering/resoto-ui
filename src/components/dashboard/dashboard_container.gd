@@ -51,6 +51,10 @@ onready var accounts_combo := find_node("AccountsCombo")
 onready var regions_combo := find_node("RegionsCombo")
 
 
+func _unhandled_input(event):
+	if add_widget_popup.visible:
+		get_tree().set_input_as_handled()
+
 func _ready() -> void:
 	Style.add($VBoxContainer/MinimizedBar/MinimizeButton, Style.c.LIGHT)
 	Style.add(find_node("RefreshIcon"), Style.c.LIGHT)
