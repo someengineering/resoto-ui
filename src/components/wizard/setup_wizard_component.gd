@@ -55,9 +55,14 @@ func _on_SetupWizardComponent_visibility_changed():
 
 
 func _on_WizardControl_setup_wizard_finished():
+	_g.emit_signal("nav_change_section", "home")
+	if not can_leave_section:
+		yield(self, "leave_request_handled")
+		if can_leave_section:
+			_on_WizardControl_setup_wizard_finished()
+		return
 	is_collecting = false
 	Analytics.event(Analytics.EventWizard.FINISH)
-	_g.emit_signal("nav_change_section", "home")
 	$WizardControl.current_step = null
 
 

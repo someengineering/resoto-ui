@@ -16,7 +16,8 @@ var wizard_graph_node_scenes:Dictionary = {
 	"StepComment" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_comment.tscn"),
 	"StepSetVariable" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_set_variable.tscn"),
 	"StepSaveConfigsOnCore" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_save_configs_on_core.tscn"),
-	"StepCustomScene" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_custom_scene.tscn")
+	"StepCustomScene" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_custom_scene.tscn"),
+	"StepConfigConditional" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_config_conditional.tscn")
 }
 
 var initial_position:= Vector2(60,60)
@@ -79,6 +80,9 @@ func _on_AddQuestionButton_pressed():
 
 func _on_AddAnswerButton_pressed():
 	add_step("StepAnswer")
+
+func _on_ConfigConditionalButton_pressed():
+	add_step("StepConfigConditional")
 
 func _on_AddPromptButton_pressed():
 	add_step("StepPrompt")
@@ -265,3 +269,4 @@ func _on_ScriptSelection_open_script_file(_file_name:String):
 
 func _on_BackBtn_pressed():
 	get_tree().change_scene("res://Main.tscn")
+
