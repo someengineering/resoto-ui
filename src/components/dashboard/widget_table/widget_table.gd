@@ -73,7 +73,7 @@ func _get_property_list() -> Array:
 	return properties
 
 
-func _process(delta):
+func _process(_delta):
 	if is_visible_in_tree():
 		autoadjust_table()
 

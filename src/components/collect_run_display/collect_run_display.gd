@@ -90,7 +90,7 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 func refresh_elements():
 	elements.queue_free()
 	var new_elements : VBoxContainer = VBoxContainer.new()
-	new_elements.rect_min_size = Vector2(800, 0)
+	new_elements.rect_min_size = Vector2(1, 1)
 	$PanelContainer/Content/ScrollContainer/Content.add_child(new_elements)
 	elements = new_elements
 

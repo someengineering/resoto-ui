@@ -12,7 +12,7 @@ export var is_collector_config_wizard := false
 export var wizard_script_name := ""
 export var text_scroll_speed := 0.005
 
-var visible_step_scene_names := ["StepText", "StepQuestion", "StepPrompt"]
+var visible_step_scene_names := ["StepText", "StepQuestion", "StepPrompt", "StepCustomScene"]
 
 var wizard_step_scenes:Dictionary = {
 	"StepSection" : preload("res://components/wizard/wizard_steps/wizard_step_section.tscn"),
@@ -176,10 +176,11 @@ func show_step(_step_id:String):
 
 
 func check_if_can_finish_wizard(step_data:Dictionary):
-	if not is_collector_config_wizard or step_data.res_name == "StepSection":
+	if not is_collector_config_wizard or not visible_step_scene_names.has(step_data.res_name):
 		return
 	# Show the Finish Setup button
 	# This is very specific to the "Setup Wizard"
+	
 	if (step_data.has("uid")
 	and step_data.uid == "configured_collectors"
 	and config_changed):

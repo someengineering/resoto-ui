@@ -94,7 +94,7 @@ rect_min_size = Vector2( 0, 50 )
 custom_constants/separation = 10
 
 [node name="SectionTitleLabel" type="Label" parent="BG/StepDisplay/Titlebar"]
-margin_right = 1527.0
+margin_right = 1477.0
 margin_bottom = 36.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -142,9 +142,8 @@ icon_tex = ExtResource( 4 )
 icon_margin = 2
 
 [node name="MuteButton" parent="BG/StepDisplay/Titlebar" instance=ExtResource( 2 )]
-visible = false
-margin_left = 1590.0
-margin_right = 1630.0
+margin_left = 1487.0
+margin_right = 1527.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 hint_tooltip = "Mute Wizard Sound"
