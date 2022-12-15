@@ -103,15 +103,23 @@ func save_dashboard(dashboard : DashboardContainer):
 		return
 	is_saving = true
 	var data = dashboard.get_data()
-	var old_name = dashboard.name
-	var old_dashboard_name = dashboard.dashboard_name
-	if dashboard.last_saved_name != DefaultDashboardName:
+	var current_name = dashboard.name
+	var current_dashboard_name = dashboard.dashboard_name
+	if dashboard.last_saved_name != DefaultDashboardName and dashboard.last_saved_name != current_dashboard_name:
 		API.delete_config_id(self, get_db_config_name(dashboard.last_saved_name))
 		available_dashboards.erase(dashboard.last_saved_name.replace(" ", "_"))
 		yield(self, "dashboard_deleted")
-	API.patch_config_id(self, get_db_config_name(old_name), JSON.print(data))
-	dashboard.last_saved_name = old_dashboard_name
-	available_dashboards[old_dashboard_name.replace(" ", "_")] = data
+	
+	var name_to_save : String = current_dashboard_name.replace(" ", "_")
+	
+	if name_to_save in available_dashboards and available_dashboards[name_to_save].hash() == data.hash():
+		is_saving = false
+	else:
+		API.patch_config_id(self, get_db_config_name(current_name), JSON.print(data))
+		available_dashboards[name_to_save] = data
+		
+	dashboard.last_saved_name = current_dashboard_name
+	
 
 
 func get_db_config_name(_name:String):
