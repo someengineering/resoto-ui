@@ -43,21 +43,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 theme = ExtResource( 1 )
-custom_constants/margin_right = 5
-custom_constants/margin_left = 5
-custom_constants/margin_bottom = 5
 
 [node name="BG" type="Panel" parent="."]
 modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )
-margin_left = 5.0
-margin_right = 1915.0
-margin_bottom = 1075.0
+margin_right = 1920.0
+margin_bottom = 1080.0
 custom_styles/panel = SubResource( 22 )
 
 [node name="VBox" type="VBoxContainer" parent="."]
-margin_left = 5.0
-margin_right = 1915.0
-margin_bottom = 1075.0
+margin_right = 1920.0
+margin_bottom = 1080.0
 alignment = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="VBox"]
@@ -88,11 +83,3 @@ size_flags_vertical = 4
 texture = ExtResource( 3 )
 expand = true
 stretch_mode = 6
-
-[node name="Loading" type="Label" parent="VBox/PanelContainer/VBox"]
-modulate = Color( 1, 1, 1, 0.588235 )
-margin_top = 25.0
-margin_right = 74.0
-margin_bottom = 45.0
-text = "Loading..."
-align = 1
