@@ -18,7 +18,7 @@ func _ready() -> void:
 				"errors" : errors
 			}
 			var counters := {
-				"errors" : errors.size()
+				"errors-number" : errors.size()
 			}
 			
 			Analytics.event(Analytics.EventsUI.ERROR, properties, counters)
