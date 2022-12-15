@@ -46,3 +46,10 @@ func set_request(new_request : UserAgent.Request):
 		_request.cancel()
 		
 	_request = new_request
+
+
+func is_executing_query() -> bool:
+	if _request == null:
+		return false
+	
+	return _request.state_ == UserAgent.Request.states.DONE

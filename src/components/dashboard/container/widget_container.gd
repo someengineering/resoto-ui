@@ -57,6 +57,7 @@ onready var duplicate_button := $TitleBar/Title/DuplicateButton
 onready var maximize_button := $TitleBar/Title/MaximizeButton
 onready var query_warning := $QueryWarning
 onready var widget_content := $MarginContainer
+onready var loading_overlay := $LoadingOverlay
 
 
 func _ready() -> void:
@@ -335,6 +336,7 @@ func set_title(new_title : String) -> void:
 func execute_query() -> void:
 	widget_content.show()
 	query_warning.hide()
+	loading_overlay.show()
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	
@@ -482,6 +484,13 @@ func get_data_sources_data() -> Array:
 onready var query_warning_title = $QueryWarning/VBox/PanelContainer/VBox/QueryStatusTitle
 func _on_data_source_query_status(_type:int=0, _title:="Widget Error", _message:=""):
 	if _type == OK:
+		var querying = false
+		for datasource in data_sources:
+			if datasource.is_executing_query():
+				querying = true
+				break
+		if not querying:
+			loading_overlay.visible = false
 		return
 	query_warning_title.visible = _title != ""
 	query_warning_title.text = _title

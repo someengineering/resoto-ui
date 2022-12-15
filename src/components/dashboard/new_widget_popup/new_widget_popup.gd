@@ -36,6 +36,8 @@ var query : String = ""
 
 var data_sources_templates : Array = []
 
+var loading_overlay_scene := preload("res://components/dashboard/shared/loading_overlay.tscn")
+
 onready var data_source_container := find_node("DataSources")
 onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
@@ -149,6 +151,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 	create_properties_options()
 	
 	preview_widget.is_preview_widget = true
+	preview_widget.add_child(loading_overlay_scene.instance())
 	preview_container.add_child(preview_widget)
 	preview_widget.connect("available_properties_changed", self, "create_properties_options")
 	preview_widget.connect("available_properties_changed", self, "update_preview")
@@ -418,8 +421,20 @@ func update_preview() -> void:
 				attr["to"] = to_date
 			
 		datasource.data_source.make_query(dashboard_filters, attr)
+		datasource.data_source.connect("query_status", self, "_on_data_source_query_status", [], CONNECT_ONESHOT)
+		preview_widget.get_node("LoadingOverlay").show()
 
 
+func _on_data_source_query_status(_status:int, _title:String, _message:=""):
+	var querying := false
+	for datasource in data_sources:
+		if datasource.is_executing_query():
+			querying = true
+			break
+			
+	if not querying:
+		preview_widget.get_node("LoadingOverlay").hide()
+	
 func duplicate_widget(widget) -> void:
 	duplicating = true
 	widget_to_edit = widget
