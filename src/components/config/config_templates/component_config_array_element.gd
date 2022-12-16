@@ -36,7 +36,12 @@ func set_value(_value) -> void:
 		set_to_null(true)
 		return
 	
-	var new_element = config_component.add_element(model.fqn, model.fqn, value, self, default)
+	var new_element = null
+	if not model.empty():
+		new_element = config_component.add_element(model.fqn, model.fqn, value, self, default)
+	else:
+		new_element = config_component.create_custom("", _value, self)
+	
 	if default:
 		default = false
 	
@@ -53,7 +58,10 @@ func get_value():
 	if is_null:
 		return null
 	
-	var kind_type = config_component.get_kind_type(model.fqn)
+	var kind_type = "any"
+	if not model.empty():
+		kind_type = config_component.get_kind_type(model.fqn)
+	
 	match kind_type:
 		"simple":
 			return config_component.build_simple(content_elements)
@@ -66,6 +74,8 @@ func get_value():
 		"complex":
 			var new_value:Dictionary = config_component.build_dict(content_elements)
 			return new_value
+		"any":
+			return content_elements[0].value
 
 
 func set_to_null(to_null:bool) -> void:
