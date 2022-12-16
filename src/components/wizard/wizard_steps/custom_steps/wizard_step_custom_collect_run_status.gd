@@ -11,7 +11,7 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 		return
 
 
-func _on_CollectRunDisplay_all_done():
+func _on_CollectRunDisplay_all_done(_e):
 	$VBoxContainer/CenterContainer/Loading.stop()
 	Analytics.event(Analytics.EventWizard.COLLECT_DONE)
 	emit_signal("can_continue")

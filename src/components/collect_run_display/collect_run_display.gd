@@ -1,6 +1,8 @@
 extends Control
 
 signal started
+signal message_new
+signal progress_message
 signal all_done
 
 const ProgressElement = preload("res://components/collect_run_display/collect_run_display_progress_element.tscn")
@@ -9,6 +11,7 @@ enum Kinds {EVENT, ACTION}
 enum MessageTypes {TASK_STARTED, PROGRESS, ERROR, MERGE_OUTER_EDGES, POST_COLLECT, PRE_GENERATE_METRICS, GENERATE_METRICS, TASK_END}
 
 export (bool) var test_mode := false
+export (bool) var wait_for_task_started := true
 
 const message_types : Dictionary = {
 	MessageTypes.TASK_STARTED : "task_started",
@@ -42,10 +45,17 @@ onready var elements := $PanelContainer/Content/ScrollContainer/Content/Elements
 
 
 func _ready():
+	if not wait_for_task_started:
+		display_messages = true
+	
 	if test_mode:
 		start_test()
 	else:
 		_g.connect("websocket_message", self, "receive_websocket_message")
+
+
+func update_title_text(_new:String):
+	$PanelContainer/Content/HBoxContainer/Label.text = _new
 
 
 func receive_websocket_message(_m:String):
@@ -96,6 +106,11 @@ func refresh_elements():
 
 
 func refresh_error_tooltip():
+	if run_errors.empty():
+		$PanelContainer/Content/HBoxContainer/ErrorBtn.hide()
+		$PanelContainer/Content/HBoxContainer/ErrorNumber.hide()
+		return
+		
 	$PanelContainer/Content/HBoxContainer/ErrorBtn.show()
 	$PanelContainer/Content/HBoxContainer/ErrorNumber.show()
 	$PanelContainer/Content/HBoxContainer/ErrorNumber.text = str(run_errors.size())
@@ -113,9 +128,13 @@ func parse_message(_m:Dictionary):
 	if not display_messages and m_type != message_types[MessageTypes.TASK_STARTED]:
 		return
 	
+	emit_signal("message_new")
+	
 	if m_type == message_types[MessageTypes.TASK_STARTED]:
 		$CheckForWorkflows.stop()
 		emit_signal("started")
+		run_errors.clear()
+		refresh_error_tooltip()
 		refresh_elements()
 		$PanelContainer/Content/HBoxContainer/Done.hide()
 		var new_progress_element = ProgressElement.instance().init("Starting Task", 1, 0)
@@ -126,10 +145,8 @@ func parse_message(_m:Dictionary):
 		# handle error
 		if _m.data.has("message"):
 			run_errors.append(_m.data.message)
-			
 			var properties := {"error" : _m.data.message}
 			Analytics.event(Analytics.EventWizard.ERROR, properties)
-			
 			refresh_error_tooltip()
 	
 	elif m_type == message_types[MessageTypes.PROGRESS]:
@@ -139,7 +156,7 @@ func parse_message(_m:Dictionary):
 			msg = _m.data.message
 		else:
 			return
-		
+		emit_signal("progress_message")
 		refresh_elements()
 		for p in msg.parts:
 			var part_parent : Node = elements
@@ -158,7 +175,7 @@ func parse_message(_m:Dictionary):
 		var new_progress_element = ProgressElement.instance().init("Finished!", 1, 1)
 		_g.emit_signal("collect_run_finished")
 		elements.add_child(new_progress_element)
-		emit_signal("all_done")
+		emit_signal("all_done", run_errors.empty())
 		display_messages = false
 	else:
 		if _m.data.has("step"):

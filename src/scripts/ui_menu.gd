@@ -145,30 +145,5 @@ func _on_ReshLiteBtn_pressed():
 	_g.emit_signal("resh_lite_popup")
 
 
-# This still needs to be build back into the UI, but for now the PR is on ice.
-#func _on_config_menu_id_pressed(id : int) -> void:
-#	match id:
-#		0:
-#			pass
-#		1:
-#			# Download the model
-#			API.get_model(self)
-#		2:
-#			# Patch model by upload
-#			HtmlFiles.upload_file(self)
-#		3:
-#			# Upload Graph popup
-#			_g.popup_manager.open_popup("GraphPopup")
-#
-#
-## Download the model
-#func _on_get_model_done(_error:int, response) -> void:
-#	JavaScript.download_buffer(response.body,"model.json")
-#
-## Patch model by upload
-#func _on_upload_file_done(_filename:String, data) -> void:
-#	API.patch_model(data, self)
-#
-#
-#func _on_patch_model_done(_error:int, _response) -> void:
-#	print("Done patching model")
+func _on_JobsBtn_pressed():
+	$MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup.visible = !$MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup.visible
