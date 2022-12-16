@@ -411,14 +411,14 @@ func _on_ProtectButton_pressed():
 	if filter_edit.text == "":
 		for c in vbox.get_children():
 			c.is_protected = do_protect
-		protect_query = "search " + last_query + " | set_metadata protected=%s" % str(do_protect)
+		protect_query = "search " + last_query + " | set_metadata protected=%s" % JSON.print(do_protect)
 	else:
 		var node_ids_to_clean : PoolStringArray = []
 		for c in vbox.get_children():
 			if c.visible:
 				c.is_protected = do_protect
 				node_ids_to_clean.append(c.node_id)
-		protect_query = "json %s | set_metadata protected=%s" % [JSON.print(node_ids_to_clean), str(do_protect)]
+		protect_query = "json %s | set_metadata protected=%s" % [JSON.print(node_ids_to_clean), JSON.print(do_protect)]
 	if not _g.ui_test_mode:
 		API.cli_execute(protect_query, self, "_on_protect_query_done")
 	else:
