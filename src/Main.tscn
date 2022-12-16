@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=2]
+[gd_scene load_steps=79 format=2]
 
 [ext_resource path="res://components/popups/connect_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -50,6 +50,10 @@
 [ext_resource path="res://scripts/ui_terminal_popup.gd" type="Script" id=48]
 [ext_resource path="res://components/popups/copy_to_clipboard.tscn" type="PackedScene" id=49]
 [ext_resource path="res://assets/icons/icon_128_terminal.svg" type="Texture" id=50]
+[ext_resource path="res://assets/icons/icon_128_cleanup_job.svg" type="Texture" id=51]
+[ext_resource path="res://assets/generic/spin_shader_mix.tres" type="Shader" id=52]
+[ext_resource path="res://components/popups/popup_workflows.tscn" type="PackedScene" id=53]
+[ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=54]
 [ext_resource path="res://assets/generic/screenspace_blur.tres" type="Shader" id=56]
 [ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=57]
 
@@ -121,6 +125,24 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="Gradient" id=38]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.0310421, 1 )
+colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.674586, 0.429688, 1, 1, 0.243137, 0.141176, 0.372549, 1 )
+
+[sub_resource type="GradientTexture" id=39]
+gradient = SubResource( 38 )
+
+[sub_resource type="ShaderMaterial" id=40]
+shader = ExtResource( 52 )
+shader_param/shader_effect_mix = 1.0
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 39 )
 
 [sub_resource type="StyleBoxFlat" id=34]
 bg_color = Color( 1, 1, 1, 1 )
@@ -609,6 +631,7 @@ margin_top = 6.0
 margin_right = 34.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 28, 28 )
+rect_pivot_offset = Vector2( 14, 14 )
 texture = ExtResource( 50 )
 
 [node name="FixedSpacer" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
@@ -620,7 +643,7 @@ mouse_filter = 2
 
 [node name="SpacerMidL" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
 margin_left = 450.0
-margin_right = 937.0
+margin_right = 918.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 20, 0 )
 mouse_filter = 2
@@ -628,9 +651,9 @@ size_flags_horizontal = 3
 
 [node name="MainResotoLogo" type="TextureRect" parent="MenuBar/MenuContainer/TopMenu/Title"]
 unique_name_in_owner = true
-margin_left = 937.0
+margin_left = 918.0
 margin_top = 4.0
-margin_right = 1022.0
+margin_right = 1003.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 85, 32 )
 size_flags_vertical = 4
@@ -639,17 +662,113 @@ expand = true
 stretch_mode = 6
 
 [node name="SpacerMidR" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
-margin_left = 1022.0
-margin_right = 1510.0
+margin_left = 1003.0
+margin_right = 1472.0
 margin_bottom = 40.0
 mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="TopMenuFullTextSearch" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 14 )]
 unique_name_in_owner = true
-margin_left = 1510.0
+margin_left = 1472.0
+margin_right = 1872.0
 rect_min_size = Vector2( 400, 0 )
 mouse_filter = 1
+
+[node name="SpacerR2" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
+margin_left = 1872.0
+margin_right = 1880.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 8, 0 )
+mouse_filter = 2
+
+[node name="JobsBtn" parent="MenuBar/MenuContainer/TopMenu/Title" instance=ExtResource( 28 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 1880.0
+margin_right = 1910.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 30, 40 )
+px_offset = 0.0
+
+[node name="ArrowIcon" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn/Button" index="0"]
+self_modulate = Color( 0.462745, 0.176471, 0.843137, 0.556863 )
+margin_left = 0.0
+margin_top = 6.0
+margin_right = 30.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 30, 28 )
+rect_pivot_offset = Vector2( 20, 14 )
+texture = ExtResource( 51 )
+
+[node name="WorkflowsPopup" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn" instance=ExtResource( 53 )]
+visible = false
+self_modulate = Color( 0.0901961, 0.113725, 0.129412, 1 )
+margin_left = -500.0
+margin_top = 45.0
+margin_right = 35.0
+margin_bottom = 380.0
+custom_styles/panel = SubResource( 35 )
+status_icon_path = NodePath("../StatusIcons")
+
+[node name="BlurEffect" type="Panel" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup"]
+show_behind_parent = true
+material = SubResource( 36 )
+margin_right = 535.0
+margin_bottom = 335.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 37 )
+
+[node name="StatusIcons" type="Control" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -15.0
+margin_top = -15.0
+margin_right = 15.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 30 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Error" type="TextureRect" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn/StatusIcons"]
+visible = false
+modulate = Color( 0.788235, 0.258824, 0.141176, 1 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -14.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 14, 14 )
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 54 )
+expand = true
+stretch_mode = 6
+
+[node name="Progressing" type="TextureRect" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn/StatusIcons"]
+visible = false
+material = SubResource( 40 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -12.0
+margin_top = -12.0
+margin_right = 12.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 24, 24 )
+mouse_filter = 2
+size_flags_vertical = 4
+texture = ExtResource( 47 )
+expand = true
+stretch_mode = 6
 
 [node name="SpacerR" type="MarginContainer" parent="MenuBar/MenuContainer/TopMenu/Title"]
 margin_left = 1910.0
@@ -679,8 +798,8 @@ content_margin_top_bottom = Vector2( 0, 0 )
 [node name="BlurEffect" type="Panel" parent="TerminalPopup/TerminalPanel"]
 show_behind_parent = true
 material = SubResource( 36 )
-margin_right = 1193.0
-margin_bottom = 656.0
+margin_right = 900.0
+margin_bottom = 620.0
 mouse_filter = 2
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
@@ -815,9 +934,11 @@ script = ExtResource( 22 )
 [connection signal="pressed" from="MenuBar/MenuContainer/TopMenu/Title/HistoryButtons/HistoryFwdButton" to="MenuBar" method="_on_HistoryFwdButton_pressed"]
 [connection signal="pressed" from="MenuBar/MenuContainer/TopMenu/Title/ReshLiteBtn" to="MenuBar" method="_on_ReshLiteBtn_pressed"]
 [connection signal="gui_input" from="MenuBar/MenuContainer/TopMenu/Title/MainResotoLogo" to="MenuBar" method="_on_ResotoLogo_gui_input"]
+[connection signal="pressed" from="MenuBar/MenuContainer/TopMenu/Title/JobsBtn" to="MenuBar" method="_on_JobsBtn_pressed"]
 [connection signal="popup_hide" from="TerminalPopup/TerminalPanel" to="TerminalPopup" method="hide_terminal_popup"]
 [connection signal="tween_all_completed" from="TerminalPopup/VisibilityTween" to="TerminalPopup" method="_on_VisibilityTween_tween_all_completed"]
 [connection signal="about_to_show" from="Popups/ConfirmPopup" to="Popups/ConfirmPopup" method="_on_ConfirmPopup_about_to_show"]
 [connection signal="pressed" from="Popups/WizardButton" to="Popups/WizardButton" method="_on_WizardButton_pressed"]
 
 [editable path="MenuBar/MenuContainer/TopMenu/Title/ReshLiteBtn"]
+[editable path="MenuBar/MenuContainer/TopMenu/Title/JobsBtn"]
