@@ -184,9 +184,6 @@ func save_config() -> void:
 	if json_config_result.error != OK:
 		_g.emit_signal("add_toast", "Error saving configuration.", "", 1, self)
 		return
-	if JSON.print(json_config_result.dict).hash() == JSON.print(active_config).hash():
-		_g.emit_signal("add_toast", "No semantic changes.", "", 0, self)
-		return
 	
 	config_put_req = API.put_config_id(self, active_config_key, json_config_result.string)
 	Analytics.event(Analytics.EventsConfig.EDIT, {"config-name": active_config_key})
@@ -209,7 +206,6 @@ func convert_active_config_to_string() -> Dictionary:
 				result.error = FAILED
 				return result
 	result.dict = new_config
-	
 	var json_string = JSON.print(new_config)
 	if json_string.begins_with("{\"\":"):
 		json_string = json_string.trim_prefix("{\"\":").trim_suffix("}")
@@ -270,7 +266,7 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_simple(_name, _property_value, kind, simple_property, _parent, default)
 	
-	elif kind.begins_with("dictionary"):
+	elif kind.begins_with("dictionary") and not kind.ends_with("[]"):
 		# Create a new Dictionary 
 #		print("=> Dict :", _name, ">", kind)
 		var simple_property = null
@@ -278,7 +274,7 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_dict(_name, kind, _property_value, simple_property, _parent, default)
 	
-	elif "[]" in kind:
+	elif kind.ends_with("[]"):
 		# Create a new Array
 		var simple_property = null
 		if _parent.model and _parent.model.has("properties"):
@@ -346,7 +342,10 @@ func create_custom(_text:String, _property_value, _parent:Control):
 		_parent.add_child(new_custom)
 	
 	new_custom.value = _property_value
-	new_custom.get_node("MessageLabel").text = _text
+	if _text != "":
+		new_custom.get_node("MessageLabel").text = _text
+	else:
+		new_custom.get_node("MessageLabel").hide()
 	
 	return new_custom
 	
