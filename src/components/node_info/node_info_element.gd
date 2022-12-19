@@ -278,7 +278,7 @@ func main_node_display(node_data):
 				var descr_node:= Label.new()
 				descr_node.text = visible_properties[vp_key][0]
 				var value_node = load("res://components/elements/utility/clipped_label.tscn").instance()
-				value_node.script = load("res://components/elements/utility/clipped_label_copy_lmb.gd")
+				value_node.add_child(preload("res://components/shared/label_left_click_copy.tscn").instance())
 				var value_text = str(node_data.reported[vp_key])
 				
 				if vp_key == "name":
