@@ -41,6 +41,7 @@ signal explore_node_list_id
 
 # Setup Wizard Signals
 signal setup_wizard_start
+signal setup_wizard_done
 signal setup_wizard_minimized
 signal collect_run_finished
 

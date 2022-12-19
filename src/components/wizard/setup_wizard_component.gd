@@ -61,6 +61,7 @@ func _on_WizardControl_setup_wizard_finished():
 		if can_leave_section:
 			_on_WizardControl_setup_wizard_finished()
 		return
+	_g.emit_signal("setup_wizard_done")
 	is_collecting = false
 	Analytics.event(Analytics.EventWizard.FINISH)
 	$WizardControl.current_step = null
