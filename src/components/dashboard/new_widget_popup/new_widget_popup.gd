@@ -421,7 +421,9 @@ func update_preview() -> void:
 				attr["to"] = to_date
 			
 		datasource.data_source.make_query(dashboard_filters, attr)
-		datasource.data_source.connect("query_status", self, "_on_data_source_query_status", [], CONNECT_ONESHOT)
+		
+		if not datasource.data_source.is_connected("query_status", self, "_on_data_source_query_status"):
+			datasource.data_source.connect("query_status", self, "_on_data_source_query_status", [], CONNECT_ONESHOT)
 		preview_widget.get_node("LoadingOverlay").show()
 
 

@@ -56,11 +56,18 @@ func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 func _on_query_tsdb_done(_error: int, response:ResotoAPI.Response) -> void:
 	making_query = false
 	if _error == ERR_PRINTER_ON_FIRE:
+		emit_signal("query_status", _error, "Query canceled")
 		return
 	if _error:
 		if response.response_code == 400:
 			emit_signal("query_status", FAILED, "400: Bad Request", "Is the time series database running?\nIs resoto.core.api.tsdb_proxy_url correctly configured?")
+		else:
+			var error_detail := ""
+			if response:
+				error_detail = "\n\n" + response.body.get_string_from_utf8()
+			emit_signal("query_status", FAILED, "Invalid Search", "There is a problem with the search query.%s" % error_detail)
 		return
+	
 	if not is_instance_valid(widget):
 		return
 	
@@ -75,30 +82,26 @@ func _on_query_tsdb_done(_error: int, response:ResotoAPI.Response) -> void:
 			emit_signal("query_status", FAILED, "Request Error", data)
 		return
 	
-	if not data.has("data"):
-		widget.value = 0
-		return
-	
-	if data.data.result.size() == 0:
+	if not data.has("data") or data.data.result.size() == 0:
 		_g.emit_signal("add_toast", "Empty TSDB result.", "", 2, self)
 		emit_signal("query_status", ERR_QUERY_FAILED, "Empty TSDB result.")
 		widget.value = 0
 		return
 
 	if data["status"] == "success":
+		# No need to check n > 0. If it wasnt the case, the previous if would have returned
 		var n : int = data["data"]["result"].size()
-		if n > 0:
-			if widget.single_value:
-				if n == 1:
-					emit_signal("query_status", OK, "")
-					widget.value = data["data"]["result"][0]["value"][1]
-				else:
-					var warning_title := "Multiple values for single value widget."
-					var warning_body := "This widget accept just one value, but the query result has %d" % n
-					_g.emit_signal("add_toast", warning_title, warning_body, 2, self)
-					emit_signal("query_status", ERR_QUERY_FAILED, warning_title, warning_body)
-			else:
+		if widget.single_value:
+			if n == 1:
 				emit_signal("query_status", OK, "")
+				widget.value = data["data"]["result"][0]["value"][1]
+			else:
+				var warning_title := "Multiple values for single value widget."
+				var warning_body := "This widget accept just one value, but the query result has %d" % n
+				_g.emit_signal("add_toast", warning_title, warning_body, 2, self)
+				emit_signal("query_status", ERR_QUERY_FAILED, warning_title, warning_body)
+		else:
+			emit_signal("query_status", OK, "")
 	else:
 		_g.emit_signal("add_toast", "TSDB Query Error %s" % data["errorType"], data["error"], 1, self)
 		emit_signal("query_status", FAILED, "TSDB Query Error %s" % data["errorType"], data["error"])
@@ -108,6 +111,7 @@ func _on_query_tsdb_done(_error: int, response:ResotoAPI.Response) -> void:
 func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 	making_query = false
 	if _error == ERR_PRINTER_ON_FIRE:
+		emit_signal("query_status", _error, "Query canceled")
 		return
 	if _error:
 		if response.response_code == 400:
@@ -119,6 +123,7 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 			elif response.response_code == 404:
 				emit_signal("query_status", FAILED, "404: TSDB not configured.", "")
 		return
+
 	if not is_instance_valid(widget):
 		return
 	
@@ -133,10 +138,7 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 			emit_signal("query_status", FAILED, "Request Error", data)
 		return
 	
-	if not data.has("data"):
-		return
-	
-	if data.data.result.size() == 0:
+	if not data.has("data") or data.data.result.size() == 0:
 		widget.clear_series()
 		_g.emit_signal("add_toast", "Empty TSDB result.", "", 2, self)
 		emit_signal("query_status", FAILED, "Empty TSDB result.")

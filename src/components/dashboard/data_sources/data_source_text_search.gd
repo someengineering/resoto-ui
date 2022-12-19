@@ -26,6 +26,7 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 
 func _on_graph_search_done(_error : int, response):
 	if _error == ERR_PRINTER_ON_FIRE:
+		emit_signal("query_status", _error, "Query canceled")
 		return
 	if _error:
 		var error_detail := ""
