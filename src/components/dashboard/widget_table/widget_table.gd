@@ -186,7 +186,6 @@ func autoadjust_table():
 	header_row.rect_position.x = -table_scroll.scroll_horizontal
 	if not is_dirty:
 		return
-	var last_width := 0.0
 	
 	for h in header_row.get_child_count():
 		var header_cell = header_row.get_child(h)

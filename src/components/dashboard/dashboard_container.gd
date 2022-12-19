@@ -51,7 +51,7 @@ onready var accounts_combo := find_node("AccountsCombo")
 onready var regions_combo := find_node("RegionsCombo")
 
 
-func _unhandled_input(event):
+func _unhandled_input(_event):
 	if add_widget_popup.visible:
 		get_tree().set_input_as_handled()
 
