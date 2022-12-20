@@ -9,6 +9,7 @@ enum Kinds {EVENT, ACTION}
 enum MessageTypes {TASK_STARTED, PROGRESS, ERROR, MERGE_OUTER_EDGES, POST_COLLECT, PRE_GENERATE_METRICS, GENERATE_METRICS, TASK_END}
 
 export (bool) var test_mode := false
+export (bool) var test_mode_manual := false
 
 const message_types : Dictionary = {
 	MessageTypes.TASK_STARTED : "task_started",
@@ -109,6 +110,8 @@ func refresh_error_tooltip():
 
 
 func parse_message(_m:Dictionary):
+	if test_mode:
+		print(Utils.readable_dict(_m))
 	var m_type : String = _m.message_type
 	if not display_messages and m_type != message_types[MessageTypes.TASK_STARTED]:
 		return
@@ -184,7 +187,7 @@ func find_or_create_parent(_path:Array, par:Node) -> Node:
 				par.add_sub_element(new_progress_element)
 			else:
 				par.add_child(new_progress_element)
-			return new_progress_element
+			par = new_progress_element
 		else:
 			par = new_par
 	return par
@@ -214,7 +217,22 @@ func start_test():
 		var jr : JSONParseResult = JSON.parse(tfe)
 		if !jr.error:
 			full_run_events.append(jr.result)
-	$Flip.start()
+	if not test_mode_manual:
+		$Flip.start()
+	else:
+		parse_message(full_run_events[0])
+
+# commented out so it doesn't trigger all the time.
+# Can be uncommented to manually test.
+#func _input(event):
+#	if not test_mode_manual:
+#		return
+#	if event.is_action_pressed("ui_right"):
+#		full_run_events_id = int(clamp(full_run_events_id+1, 0, full_run_events.size()))
+#		parse_message(full_run_events[full_run_events_id])
+#	if event.is_action_pressed("ui_left"):
+#		full_run_events_id = int(clamp(full_run_events_id-1, 0, full_run_events.size()))
+#		parse_message(full_run_events[full_run_events_id])
 
 
 var full_run_events_id := 0
