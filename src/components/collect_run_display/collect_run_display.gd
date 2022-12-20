@@ -202,7 +202,7 @@ func _on_ErrorBtn_pressed():
 
 
 func start_test():
-	var path := "res://data/test_data/websocket_workflow_collect_run_2.txt"
+	var path := "res://data/test_data/websocket_workflow_collect_run.txt"
 	var file : File = File.new()
 	if !file.file_exists(path):
 		return []
