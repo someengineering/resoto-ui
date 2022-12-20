@@ -344,7 +344,7 @@ size_flags_horizontal = 3
 custom_constants/hseparation = 30
 columns = 2
 
-[node name="ColorControllersContainer" type="HBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="1"]
+[node name="ColorControllersContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="1"]
 unique_name_in_owner = true
 margin_top = 4.0
 margin_right = 582.0
