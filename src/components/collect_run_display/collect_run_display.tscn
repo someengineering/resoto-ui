@@ -145,6 +145,7 @@ margin_bottom = 1026.0
 size_flags_vertical = 3
 
 [node name="ErrorPopup" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="ErrorPopup"]
 anchor_right = 1.0

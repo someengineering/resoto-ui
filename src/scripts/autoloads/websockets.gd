@@ -4,10 +4,11 @@ var ws : WebSocketClient = null
 var ws_header : PoolStringArray = []
 var auto_reconnect := true
 
+
 func _ready():
 	ws = WebSocketClient.new()
 	ws.verify_ssl = false
-	_g.connect("connected_to_resotocore", self, "connect_websockets")
+	_g.connect("connected_to_resotocore", self, "connect_websockets", [true])
 
 
 func refresh_jwt_header() -> void:
@@ -33,8 +34,8 @@ func _exit_tree():
 	ws.disconnect_from_host()
 
 
-func connect_websockets():
-	if ws.get_connection_status() == ws.CONNECTION_CONNECTING || ws.get_connection_status() == ws.CONNECTION_CONNECTED:
+func connect_websockets(_forced:=false):
+	if not _forced and (ws.get_connection_status() == ws.CONNECTION_CONNECTING or ws.get_connection_status() == ws.CONNECTION_CONNECTED):
 		return
 	
 	# Connect signals

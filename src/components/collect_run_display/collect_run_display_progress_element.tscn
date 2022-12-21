@@ -46,6 +46,7 @@ shader_param/gradient_texture = SubResource( 7 )
 [node name="ProgressElement" type="PanelContainer"]
 margin_right = 113.0
 margin_bottom = 27.0
+rect_min_size = Vector2( 113, 27 )
 size_flags_horizontal = 3
 theme_type_variation = "PanelContainerTagElement"
 custom_styles/panel = SubResource( 6 )

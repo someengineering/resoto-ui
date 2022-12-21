@@ -94,6 +94,7 @@ margin_right = 590.0
 margin_bottom = 68.0
 size_flags_horizontal = 3
 script = ExtResource( 6 )
+update_on_writing = false
 
 [node name="PSKLabel" type="Label" parent="Content/Content/SettingsTabs/General Settings/VBox/ConnectionSettings" index="4"]
 margin_top = 78.0
