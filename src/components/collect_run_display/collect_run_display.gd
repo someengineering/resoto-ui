@@ -131,8 +131,6 @@ func parse_message(_m:Dictionary):
 	if not display_messages and m_type != message_types[MessageTypes.TASK_STARTED]:
 		return
 	
-	emit_signal("message_new")
-	
 	if m_type == message_types[MessageTypes.TASK_STARTED]:
 		$CheckForWorkflows.stop()
 		emit_signal("started")
@@ -182,6 +180,7 @@ func parse_message(_m:Dictionary):
 		display_messages = false
 	else:
 		if _m.data.has("step"):
+			emit_signal("message_new")
 			refresh_elements()
 			var new_progress_element = ProgressElement.instance().init(_m.data.step, 1, 0)
 			elements.add_child(new_progress_element)
