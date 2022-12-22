@@ -357,8 +357,11 @@ func update_legends():
 			var legend_ui = LegendUIScene.instance()
 			legend_ui.index = idx
 			legend_ui.text = ds.legend
+			legend_ui.stack = ds.stacked
 			legends_container.add_child(legend_ui)
+			ds.connect("last_metric_keys_changed", legend_ui, "update_legend_help")
 			legend_ui.connect("legend_changed", datasource, "_on_legend_changed")
+			legend_ui.connect("stack_changed", datasource, "_on_stack_changed")
 		idx += 1
 
 func _on_TemplateButton_pressed(_template_id:int) -> void:
@@ -451,8 +454,9 @@ func update_preview() -> void:
 
 func _on_data_source_query_status(_status:int, _title:String, _message:=""):
 	var querying := false
-	for datasource in data_sources:
-		if datasource.is_executing_query():
+	for datasource in data_source_container.get_children():
+		var ds = datasource.data_source
+		if ds.is_executing_query():
 			querying = true
 			break
 			

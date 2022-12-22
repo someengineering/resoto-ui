@@ -18,7 +18,6 @@ content_margin_left = 6.0
 content_margin_right = 6.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
-bg_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -52,7 +51,7 @@ script = ExtResource( 7 )
 margin_left = 6.0
 margin_top = 6.0
 margin_right = 517.0
-margin_bottom = 629.0
+margin_bottom = 593.0
 
 [node name="Title" type="HBoxContainer" parent="VBox"]
 margin_right = 511.0
@@ -105,7 +104,7 @@ icon_tex = ExtResource( 4 )
 [node name="TimeSeries" type="VBoxContainer" parent="VBox"]
 margin_top = 37.0
 margin_right = 511.0
-margin_bottom = 283.0
+margin_bottom = 247.0
 size_flags_horizontal = 3
 
 [node name="MainPart" type="HBoxContainer" parent="VBox/TimeSeries"]
@@ -244,13 +243,6 @@ margin_right = 511.0
 margin_bottom = 53.0
 script = ExtResource( 6 )
 
-[node name="StackedCheckBox" type="CheckBox" parent="VBox/TimeSeries"]
-margin_top = 214.0
-margin_right = 511.0
-margin_bottom = 246.0
-pressed = true
-text = "Stacked"
-
 [node name="Search" type="VBoxContainer" parent="VBox"]
 visible = false
 margin_top = 37.0
@@ -328,9 +320,9 @@ margin_bottom = 249.0
 script = ExtResource( 6 )
 
 [node name="TwoEntriesAggregate" type="VBoxContainer" parent="VBox"]
-margin_top = 287.0
+margin_top = 251.0
 margin_right = 511.0
-margin_bottom = 523.0
+margin_bottom = 487.0
 
 [node name="Label" type="Label" parent="VBox/TwoEntriesAggregate"]
 margin_right = 511.0
@@ -499,9 +491,9 @@ size_flags_horizontal = 3
 script = ExtResource( 6 )
 
 [node name="ResultingQueryBox" type="HBoxContainer" parent="VBox"]
-margin_top = 527.0
+margin_top = 491.0
 margin_right = 511.0
-margin_bottom = 547.0
+margin_bottom = 511.0
 
 [node name="Label" type="Label" parent="VBox/ResultingQueryBox"]
 margin_right = 118.0
@@ -516,9 +508,9 @@ margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="QueryEditVBox" type="VBoxContainer" parent="VBox"]
-margin_top = 551.0
+margin_top = 515.0
 margin_right = 511.0
-margin_bottom = 623.0
+margin_bottom = 587.0
 
 [node name="QueryLabel" type="Label" parent="VBox/QueryEditVBox"]
 visible = false
@@ -558,7 +550,6 @@ custom_styles/panel = SubResource( 2 )
 [connection signal="filter_changed" from="VBox/TimeSeries/FilterWidget" to="." method="_on_FilterWidget_filter_changed"]
 [connection signal="text_entered" from="VBox/TimeSeries/DateOffset/DateOffsetLineEdit" to="." method="_on_DateOffsetLineEdit_text_entered"]
 [connection signal="text_entered" from="VBox/TimeSeries/SumBy/SumByLineEdit" to="." method="_on_ByLineEdit_text_entered"]
-[connection signal="toggled" from="VBox/TimeSeries/StackedCheckBox" to="." method="_on_StackedCheckBox_toggled"]
 [connection signal="text_entered" from="VBox/Search/TextLineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="text_entered" from="VBox/Search/LineEditKinds" to="." method="_on_LineEdit2_text_entered"]
 [connection signal="option_changed" from="VBox/Search/HBoxContainer/KindsComboBox" to="." method="_on_KindsComboBox_option_changed"]

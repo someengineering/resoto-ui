@@ -1,6 +1,8 @@
 class_name TimeSeriesDataSource
 extends DataSource
 
+signal last_metric_keys_changed(last_metric_keys)
+
 # Variables for data source container
 var metric : String = ""
 var aggregator : String = ""
@@ -21,6 +23,7 @@ func _init():
 
 func make_query(dashboard_filters : Dictionary, attr : Dictionary) -> void:
 	last_metric_keys.clear()
+	emit_signal("last_metric_keys_changed", [])
 	var interval = attr["interval"]
 	if making_query:
 		return
@@ -170,6 +173,7 @@ func _on_query_range_tsdb_done(_error:int, response:ResotoAPI.Response) -> void:
 			widget.add_serie(array, null, l, stacked)
 		
 			last_metric_keys = temp_last_metric_keys.keys()
+			emit_signal("last_metric_keys_changed", last_metric_keys)
 		emit_signal("query_status", OK, "")
 		widget.complete_update(true)
 	else:
