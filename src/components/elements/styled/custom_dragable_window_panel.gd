@@ -40,6 +40,7 @@ func _ready():
 	$Content/Content.add_constant_override("margin_bottom", content_margin_top_bottom.y)
 	$Content/Titlebar.target = self
 	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
+	get_tree().root.connect("size_changed", self, "recalculate_size")
 	connect("visibility_changed", self, "_on_change_visibility")
 	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
 	set_window_title(window_title)
@@ -155,11 +156,22 @@ func _on_MaximizeButton_pressed():
 	if is_maximized:
 		size_before_max = rect_size
 		pos_before_max = rect_position
-		rect_position = Vector2(0, TopMenuHeight)
+	
+	recalculate_size()
+
+
+func recalculate_size():
+	if is_maximized:
+		rect_global_position = Vector2(0, TopMenuHeight)
 		rect_size = (OS.window_size / _g.ui_scale) + Vector2(0, -TopMenuHeight)
 	else:
 		rect_position = pos_before_max
 		rect_size = size_before_max
+		
+		var end_point := get_global_rect().end
+		var window_end := OS.window_size / _g.ui_scale
+		rect_size.x -= max(0, end_point.x - window_end.x)
+		rect_size.y -= max(0, end_point.y - window_end.y)
 
 
 func _on_CloseButton_pressed():
