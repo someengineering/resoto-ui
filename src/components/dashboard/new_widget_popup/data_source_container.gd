@@ -18,8 +18,6 @@ onready var filters_widget := $VBox/TimeSeries/FilterWidget
 onready var date_offset_edit := $VBox/TimeSeries/DateOffset/DateOffsetLineEdit
 onready var by_line_edit := $VBox/TimeSeries/SumBy/SumByLineEdit
 onready var sum_by_help := $VBox/TimeSeries/SumBy/SumByTitle/SumByHelp
-onready var legend_edit := $VBox/TimeSeries/Legend/LegendEdit
-onready var legend_help := $VBox/TimeSeries/Legend/LegendTitle/LegendHelp
 onready var stacked_check_box := $VBox/TimeSeries/StackedCheckBox
 
 # Search Data Source
@@ -143,7 +141,6 @@ func set_widget(new_widget : BaseWidget) -> void:
 	data_source.widget = new_widget
 	var ranged : bool = widget.data_type == BaseWidget.DATA_TYPE.RANGE
 	stacked_check_box.visible = ranged
-	legend_edit.get_parent().visible = ranged
 
 
 func _on_StackedCheckBox_toggled(button_pressed : bool) -> void:
@@ -151,7 +148,7 @@ func _on_StackedCheckBox_toggled(button_pressed : bool) -> void:
 	update_query(true)
 
 
-func _on_LegendEdit_text_entered(new_text : String) -> void:
+func _on_legend_changed(new_text : String) -> void:
 	data_source.legend = new_text
 	update_query(true)
 
@@ -257,7 +254,6 @@ func set_data_source(new_data_source : DataSource) -> void:
 			function_options.text = new_data_source.aggregator
 			data_source.query = new_data_source.query
 			data_source.custom_query = new_data_source.custom_query
-			legend_edit.text = new_data_source.legend
 			stacked_check_box.pressed = new_data_source.stacked
 		DataSource.TYPES.SEARCH:
 			data_source.custom_query = new_data_source.custom_query
@@ -368,8 +364,8 @@ func update_time_series_legend(last_metric_keys:Array=[]):
 		help_text_sum_by = help_text_sum_by % str("\n\nThe last query returned the following labels:\n[code]%s[/code]" % last_metric_string.join(", "))
 	else:
 		help_text_legend = help_text_legend % ""
-		help_text_sum_by = help_text_sum_by % ""
-	legend_help.tooltip_text = help_text_legend
+#		help_text_sum_by = help_text_sum_by % ""
+#	legend_help.tooltip_text = help_text_legend
 	sum_by_help.tooltip_text = help_text_sum_by
 
 

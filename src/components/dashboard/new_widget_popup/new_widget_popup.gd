@@ -12,12 +12,12 @@ const CheckBoxStyled := preload("res://components/elements/styled/icon_check_but
 const IntSpinBoxBig := preload("res://components/shared/int_spinbox_big.tscn")
 const DataSourceWidget := preload("res://components/dashboard/new_widget_popup/data_source_container.tscn")
 const ColorControllerUIScene := preload("res://components/dashboard/new_widget_popup/color_controller_ui.tscn")
+const LegendUIScene := preload("res://components/dashboard/new_widget_popup/legend_ui.tscn")
 
 var dashboard_container:DashboardContainer = null setget set_dashboard_container
 var current_widget_preview_name : String = "Indicator"
 var current_wdiget_properties : Dictionary = {}
 var preview_widget : BaseWidget = null
-var data_sources : Array = []
 var metrics : Dictionary = {}
 
 var widget_to_edit:Node	= null
@@ -44,6 +44,7 @@ onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("WidgetNameEdit")
 onready var options_container := find_node("Options")
 onready var controller_container := $"%ColorControllersContainer"
+onready var legends_container := $"%LegendsContainer"
 onready var data_source_types := $"%DataSourceTypeOptionButton"
 onready var new_data_source_container := $"%NewDataSourceHBox"
 onready var template_popup:= $TemplatePopup
@@ -132,6 +133,7 @@ func _on_WidgetType_item_selected(_index : int) -> void:
 		return
 	
 	create_preview(widget_type_options.text)
+	update_legends()
 
 
 func create_preview(widget_type : String = "Indicator") -> void:
@@ -327,6 +329,7 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 		update_preview()
 		
 	update_new_data_vis()
+	update_legends()
 
 
 func _on_AddDataSource_pressed() -> void:
@@ -341,6 +344,22 @@ func _on_AddDataSource_pressed() -> void:
 	
 	template_popup.popup(Rect2(add_data_source_button.rect_global_position, Vector2.ONE))
 
+
+func update_legends():
+	for legend in legends_container.get_children():
+		legends_container.remove_child(legend)
+		legend.queue_free()
+		
+	var idx := 0
+	for datasource in data_source_container.get_children():
+		var ds = datasource.data_source
+		if "legend" in ds and preview_widget.widget_type_id == "Chart":
+			var legend_ui = LegendUIScene.instance()
+			legend_ui.index = idx
+			legend_ui.text = ds.legend
+			legends_container.add_child(legend_ui)
+			legend_ui.connect("legend_changed", datasource, "_on_legend_changed")
+		idx += 1
 
 func _on_TemplateButton_pressed(_template_id:int) -> void:
 	_on_AddDataSource(_template_id)
@@ -384,6 +403,8 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 		context["template"] = data_sources_templates[template_id]["Name"]
 
 	Analytics.event(event, context)
+	
+	update_legends()
 
 
 func delete_datasource(_data_source:Node) -> void:
@@ -391,6 +412,7 @@ func delete_datasource(_data_source:Node) -> void:
 	yield(_data_source, "tree_exited")
 	update_preview()
 	Analytics.event(Analytics.EventsDatasource.DELETE)
+	update_legends()
 
 
 func update_new_data_vis():
