@@ -165,7 +165,6 @@ func show_list_from_search(search_command:String):
 		search_command +=  " limit " + str(NODE_LIMIT)
 		
 	search_type_label.text = "search " + search_command
-	search_type_label.enabled = true
 	
 	active_request = API.graph_search(search_command, self, "list")
 	emit_signal("show", last_search_type, [search_command])
@@ -185,7 +184,6 @@ func explore_node_list_from_node(parent_node:Dictionary, search_command:String, 
 
 	parent_button.text = parent_node_name
 	parent_button.set_meta("id", parent_node_id)
-	search_type_label.enabled = false
 	parent_button.show()
 	search_type_label.show()
 	arrow_icon_mid.show()
