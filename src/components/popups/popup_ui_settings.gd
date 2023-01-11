@@ -205,3 +205,7 @@ func _on_ResotoLinkButton_pressed():
 
 func _on_ResotoLinkButton2_pressed():
 	OS.shell_open("https://www.resoto.com/")
+
+
+func _on_ResotoLinkButton3_pressed():
+	OS.shell_open("https://github.com/someengineering/resoto-ui")
