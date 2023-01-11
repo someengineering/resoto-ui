@@ -283,7 +283,7 @@ custom_constants/separation = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="0"]
 margin_right = 582.0
-margin_bottom = 520.0
+margin_bottom = 516.0
 size_flags_vertical = 3
 custom_constants/separation = 1
 
@@ -296,7 +296,7 @@ text = "Widget Preview"
 [node name="PreviewContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/VBoxContainer" index="1"]
 margin_top = 21.0
 margin_right = 582.0
-margin_bottom = 520.0
+margin_bottom = 516.0
 size_flags_vertical = 3
 custom_constants/separation = 0
 
@@ -326,15 +326,15 @@ margin_bottom = 461.0
 
 [node name="WidgetOptionsLabel" type="Label" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="2"]
 unique_name_in_owner = true
-margin_top = 525.0
+margin_top = 521.0
 margin_right = 582.0
-margin_bottom = 545.0
+margin_bottom = 541.0
 theme_type_variation = "LabelBold"
 text = "Widget Options"
 
 [node name="WidgetOptionsPanelContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer" index="3"]
 unique_name_in_owner = true
-margin_top = 550.0
+margin_top = 546.0
 margin_right = 582.0
 margin_bottom = 554.0
 
@@ -349,6 +349,12 @@ unique_name_in_owner = true
 margin_top = 4.0
 margin_right = 582.0
 margin_bottom = 4.0
+
+[node name="LegendsContainer" type="VBoxContainer" parent="Content/Content/HBoxContainer/WidgetPreview/VBoxContainer/WidgetOptionsPanelContainer" index="2"]
+unique_name_in_owner = true
+margin_top = 8.0
+margin_right = 582.0
+margin_bottom = 8.0
 
 [node name="TemplatePopup" type="PopupPanel" parent="." index="2"]
 self_modulate = Color( 0.0588235, 0.2, 0.337255, 1 )

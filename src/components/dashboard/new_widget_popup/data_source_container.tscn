@@ -18,7 +18,6 @@ content_margin_left = 6.0
 content_margin_right = 6.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
-bg_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -52,7 +51,7 @@ script = ExtResource( 7 )
 margin_left = 6.0
 margin_top = 6.0
 margin_right = 517.0
-margin_bottom = 379.0
+margin_bottom = 593.0
 
 [node name="Title" type="HBoxContainer" parent="VBox"]
 margin_right = 511.0
@@ -103,10 +102,9 @@ size_flags_vertical = 1
 icon_tex = ExtResource( 4 )
 
 [node name="TimeSeries" type="VBoxContainer" parent="VBox"]
-visible = false
 margin_top = 37.0
 margin_right = 511.0
-margin_bottom = 340.0
+margin_bottom = 247.0
 size_flags_horizontal = 3
 
 [node name="MainPart" type="HBoxContainer" parent="VBox/TimeSeries"]
@@ -245,46 +243,6 @@ margin_right = 511.0
 margin_bottom = 53.0
 script = ExtResource( 6 )
 
-[node name="Legend" type="VBoxContainer" parent="VBox/TimeSeries"]
-margin_top = 214.0
-margin_right = 511.0
-margin_bottom = 267.0
-custom_constants/separation = 1
-
-[node name="LegendTitle" type="HBoxContainer" parent="VBox/TimeSeries/Legend"]
-margin_right = 511.0
-margin_bottom = 20.0
-
-[node name="LegendLabel" type="Label" parent="VBox/TimeSeries/Legend/LegendTitle"]
-margin_right = 55.0
-margin_bottom = 20.0
-text = "Legend"
-
-[node name="LegendHelp" parent="VBox/TimeSeries/Legend/LegendTitle" instance=ExtResource( 12 )]
-modulate = Color( 0, 0.329412, 0.639216, 1 )
-margin_left = 59.0
-margin_right = 75.0
-margin_bottom = 18.0
-rect_min_size = Vector2( 16, 16 )
-darker_color = true
-tooltip_text = "The legend to use in the widget. Using curly braces will replace the content with the label value of the response.
-[b]Examples[/b]
-- [code]{instance_count}[/code]
-- [code]Instance cores: {instance_count}[/code]"
-
-[node name="LegendEdit" type="LineEdit" parent="VBox/TimeSeries/Legend"]
-margin_top = 21.0
-margin_right = 511.0
-margin_bottom = 53.0
-script = ExtResource( 6 )
-
-[node name="StackedCheckBox" type="CheckBox" parent="VBox/TimeSeries"]
-margin_top = 271.0
-margin_right = 511.0
-margin_bottom = 303.0
-pressed = true
-text = "Stacked"
-
 [node name="Search" type="VBoxContainer" parent="VBox"]
 visible = false
 margin_top = 37.0
@@ -362,9 +320,9 @@ margin_bottom = 249.0
 script = ExtResource( 6 )
 
 [node name="TwoEntriesAggregate" type="VBoxContainer" parent="VBox"]
-margin_top = 37.0
+margin_top = 251.0
 margin_right = 511.0
-margin_bottom = 273.0
+margin_bottom = 487.0
 
 [node name="Label" type="Label" parent="VBox/TwoEntriesAggregate"]
 margin_right = 511.0
@@ -533,9 +491,9 @@ size_flags_horizontal = 3
 script = ExtResource( 6 )
 
 [node name="ResultingQueryBox" type="HBoxContainer" parent="VBox"]
-margin_top = 277.0
+margin_top = 491.0
 margin_right = 511.0
-margin_bottom = 297.0
+margin_bottom = 511.0
 
 [node name="Label" type="Label" parent="VBox/ResultingQueryBox"]
 margin_right = 118.0
@@ -550,9 +508,9 @@ margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="QueryEditVBox" type="VBoxContainer" parent="VBox"]
-margin_top = 301.0
+margin_top = 515.0
 margin_right = 511.0
-margin_bottom = 373.0
+margin_bottom = 587.0
 
 [node name="QueryLabel" type="Label" parent="VBox/QueryEditVBox"]
 visible = false
@@ -592,8 +550,6 @@ custom_styles/panel = SubResource( 2 )
 [connection signal="filter_changed" from="VBox/TimeSeries/FilterWidget" to="." method="_on_FilterWidget_filter_changed"]
 [connection signal="text_entered" from="VBox/TimeSeries/DateOffset/DateOffsetLineEdit" to="." method="_on_DateOffsetLineEdit_text_entered"]
 [connection signal="text_entered" from="VBox/TimeSeries/SumBy/SumByLineEdit" to="." method="_on_ByLineEdit_text_entered"]
-[connection signal="text_entered" from="VBox/TimeSeries/Legend/LegendEdit" to="." method="_on_LegendEdit_text_entered"]
-[connection signal="toggled" from="VBox/TimeSeries/StackedCheckBox" to="." method="_on_StackedCheckBox_toggled"]
 [connection signal="text_entered" from="VBox/Search/TextLineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="text_entered" from="VBox/Search/LineEditKinds" to="." method="_on_LineEdit2_text_entered"]
 [connection signal="option_changed" from="VBox/Search/HBoxContainer/KindsComboBox" to="." method="_on_KindsComboBox_option_changed"]

@@ -18,9 +18,6 @@ onready var filters_widget := $VBox/TimeSeries/FilterWidget
 onready var date_offset_edit := $VBox/TimeSeries/DateOffset/DateOffsetLineEdit
 onready var by_line_edit := $VBox/TimeSeries/SumBy/SumByLineEdit
 onready var sum_by_help := $VBox/TimeSeries/SumBy/SumByTitle/SumByHelp
-onready var legend_edit := $VBox/TimeSeries/Legend/LegendEdit
-onready var legend_help := $VBox/TimeSeries/Legend/LegendTitle/LegendHelp
-onready var stacked_check_box := $VBox/TimeSeries/StackedCheckBox
 
 # Search Data Source
 onready var kinds_combo_box := $VBox/Search/HBoxContainer/KindsComboBox
@@ -57,7 +54,7 @@ func _ready() -> void:
 	$VBox/Search.visible = datasource_type == DataSource.TYPES.SEARCH
 	$VBox/TwoEntriesAggregate.visible = datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
 	show_query_separator(false)
-	update_time_series_legend()
+	update_time_series_sum_by()
 	
 	match datasource_type:
 		DataSource.TYPES.TIME_SERIES:
@@ -141,17 +138,16 @@ func update_query(force_query := false) -> void:
 func set_widget(new_widget : BaseWidget) -> void:
 	widget = new_widget
 	data_source.widget = new_widget
-	var ranged : bool = widget.data_type == BaseWidget.DATA_TYPE.RANGE
-	stacked_check_box.visible = ranged
-	legend_edit.get_parent().visible = ranged
 
 
-func _on_StackedCheckBox_toggled(button_pressed : bool) -> void:
+func _on_stack_changed(button_pressed : bool) -> void:
+	if data_source.stacked == button_pressed:
+		return
 	data_source.stacked = button_pressed
 	update_query(true)
 
 
-func _on_LegendEdit_text_entered(new_text : String) -> void:
+func _on_legend_changed(new_text : String) -> void:
 	data_source.legend = new_text
 	update_query(true)
 
@@ -216,7 +212,7 @@ func _on_QueryEdit_cursor_changed():
 
 
 func _on_data_source_query_status(_status:int, _title:String, _message:=""):
-	update_time_series_legend()
+	update_time_series_sum_by()
 	var error_icon = $"%ErrorIcon"
 	var tooltip = "[b][color=#%s]%s[/color][/b]" % [Style.col_map[Style.c.ERR_MSG].to_html(), _title]
 	if _message != "":
@@ -225,7 +221,7 @@ func _on_data_source_query_status(_status:int, _title:String, _message:=""):
 		OK:
 			# Update the Help for time series legends
 			if "last_metric_keys" in data_source:
-				update_time_series_legend(data_source.last_metric_keys)
+				update_time_series_sum_by(data_source.last_metric_keys)
 			error_icon.hide()
 			hint_tooltip = ""
 			$Warning.hide()
@@ -257,8 +253,6 @@ func set_data_source(new_data_source : DataSource) -> void:
 			function_options.text = new_data_source.aggregator
 			data_source.query = new_data_source.query
 			data_source.custom_query = new_data_source.custom_query
-			legend_edit.text = new_data_source.legend
-			stacked_check_box.pressed = new_data_source.stacked
 		DataSource.TYPES.SEARCH:
 			data_source.custom_query = new_data_source.custom_query
 			kinds_line_edit.text = new_data_source.kinds
@@ -356,7 +350,7 @@ func _on_FunctionAlias_text_entered(new_text):
 	update_query()
 
 
-func update_time_series_legend(last_metric_keys:Array=[]):
+func update_time_series_sum_by(last_metric_keys:Array=[]):
 	var help_text_legend := "[b]Set the legend on the widget.[/b]\nIf the result contains labels, you can display them by wrapping it in curly braces.\n"
 	help_text_legend += "[b]Examples[/b]\n- [code]{label_name}[/code]\n- [code]Cloud: {cloud}[/code]%s"
 	var help_text_sum_by := "[b]Sum by a label in the metric.[/b]%s"
@@ -368,8 +362,8 @@ func update_time_series_legend(last_metric_keys:Array=[]):
 		help_text_sum_by = help_text_sum_by % str("\n\nThe last query returned the following labels:\n[code]%s[/code]" % last_metric_string.join(", "))
 	else:
 		help_text_legend = help_text_legend % ""
-		help_text_sum_by = help_text_sum_by % ""
-	legend_help.tooltip_text = help_text_legend
+#		help_text_sum_by = help_text_sum_by % ""
+#	legend_help.tooltip_text = help_text_legend
 	sum_by_help.tooltip_text = help_text_sum_by
 
 
