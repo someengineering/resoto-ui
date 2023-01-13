@@ -6,7 +6,7 @@ var world_speed := initial_world_speed
 var mouse_pressed : bool = false
 var max_value : float = 0.0
 
-var regions = {
+const regions := {
 	"gcp": {
 		"us-west1": {
 			"short_name": "us-west1",
@@ -369,9 +369,16 @@ var regions = {
 		}
 }
 
+var used_regions := {}
+
 onready var world := $ViewportContainer/Viewport/WorldMesh
 onready var camera_origin := $ViewportContainer/Viewport/CameraOrigin
 onready var camera := $ViewportContainer/Viewport/CameraOrigin/Camera
+onready var hint := $VBoxContainer/Hint
+onready var sepparator := $VBoxContainer/HSeparator
+onready var total_label := $VBoxContainer/Total
+onready var hint_container := $VBoxContainer
+onready var combo_box := $HBoxContainer/ComboBox
 
 
 func _physics_process(delta):
@@ -386,9 +393,6 @@ func _input(event):
 		mouse_pressed = false
 		return
 		
-	if event.is_action("F1"):
-		add_cyllinder(Vector2(-38.4192641, -63.5989206))
-		
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		mouse_pressed = event.is_pressed()
 		
@@ -396,11 +400,13 @@ func _input(event):
 		world.rotate(Vector3.UP, event.relative.x * 2 * PI / rect_size.x)
 		var camera_rotation = clamp(camera_origin.rotation.z + event.relative.y * PI / rect_size.y, -PI/2+0.2, PI/2-0.2)
 		camera_origin.rotation.z = camera_rotation
+		combo_box.text = ""
 
 
 func add_cyllinder(coordinates : Vector2, height := 1.0):
 	var c := preload("res://components/dashboard/widget_world_map/world_map_column.tscn").instance()
 	c.value = height
+	c.coordinates = coordinates
 	world.add_child(c)
 	
 	c.rotate(Vector3.FORWARD, PI/2)
@@ -409,6 +415,13 @@ func add_cyllinder(coordinates : Vector2, height := 1.0):
 	
 	c.translation -= c.transform.basis.y
 	
+	for cyllinder in world.get_children():
+		if cyllinder == c:
+			continue
+			
+		if cyllinder.coordinates == coordinates:
+			c.translation -= c.transform.basis.y * cyllinder.value
+		
 	go_to_coordinate(coordinates)
 	
 	return c
@@ -417,6 +430,7 @@ func add_cyllinder(coordinates : Vector2, height := 1.0):
 func set_data(_data, _type : int):
 	for column in world.get_children():
 		column.queue_free()
+		world.remove_child(column)
 	
 	if _type == DataSource.TYPES.AGGREGATE_SEARCH:
 		var first_data : Dictionary = _data[0].duplicate()
@@ -432,39 +446,86 @@ func set_data(_data, _type : int):
 				
 		if max_value == 0.0:
 			max_value = 1.0
+			
+		used_regions.clear()
 				
 		for data in _data:
 			data = data as Dictionary
 			if "region" in data["group"] and "cloud" in data["group"]:
 				var cloud = data["group"]["cloud"]
 				var region = data["group"]["region"]
+				
 				if not cloud in regions:
 					return
 				var coordinates = Vector2(regions[cloud][region]["latitude"], regions[cloud][region]["longitude"])
-				var cyllinder = add_cyllinder(coordinates, data[variable_name] / max_value)
 				
-				cyllinder.connect("start_hovering", self, "_on_cyllinder_hovering_started", [data[variable_name], cloud, region, variable_name])
+				used_regions["%s (%s)" % [region, cloud]] = coordinates
+			
+				var cyllinder = add_cyllinder(coordinates, data[variable_name] / max_value)
+				cyllinder.cloud = cloud
+				cyllinder.region = region
+				
+				cyllinder.connect("start_hovering", self, "_on_cyllinder_hovering_started", [coordinates, variable_name, cyllinder])
 				cyllinder.connect("end_hovering", self, "_on_cyllinder_hovering_ended")
+				cyllinder.connect("clicked", self, "go_to_coordinate")
+				
+		combo_box.items = used_regions.keys()
 
 
-func _on_cyllinder_hovering_started(value : float, cloud, region, variable_name):
-	$Hint.show()
-	$Hint.text = "%s %s in %s (%s)" % [str(value), variable_name, region, cloud]
+func _on_cyllinder_hovering_started(coordinates, variable_name, c):
+	hint_container.show()
+	var lines : PoolStringArray = []
+	var total : float = 0.0
+	for cyllinder in world.get_children():
+		prints(cyllinder.coordinates == coordinates, cyllinder.coordinates, coordinates)
+		if cyllinder.coordinates == coordinates:
+			var value : float = cyllinder.value * max_value
+			var line : String =  "%s %s in %s (%s)" % [str(value), variable_name, cyllinder.region, cyllinder.cloud]
+			if c == cyllinder:
+				line = "→ " + line
+			lines.append(line)
+			total += value
+			
+	
+	hint.rect_min_size.y = 24 * lines.size()
+	hint.text = lines.join("\n")
+	
+	if lines.size() > 1:
+		total_label.show()
+		sepparator.show()
+		total_label.text = "Total %s: %s" % [variable_name, str(total)]
+	else:
+		total_label.hide()
+		sepparator.hide()
+		hint.text = hint.text.replace("→ ","")
+		
+	
 	world_speed = 0.0
 
 
 func _on_cyllinder_hovering_ended():
-	$Hint.hide()
+	hint_container.hide()
 	world_speed = initial_world_speed
 
 
-func go_to_coordinate(coordinates : Vector2):
+func go_to_coordinate(coordinates : Vector2, cloud := "", region := ""):
+	if not "" in [cloud, region]:
+		combo_box.text = "%s (%s)" % [region, cloud]
+		
 	var tween := create_tween()
-	tween.tween_property(world, "rotation_degrees:y", -coordinates.y - 90, 1).set_trans(Tween.TRANS_SINE)
+	var target_rotation := Vector2(coordinates.x - 5, -coordinates.y - 90)
+	if is_equal_approx(camera_origin.rotation_degrees.z, target_rotation.x) and is_equal_approx(world.rotation_degrees.y, target_rotation.y):
+		return
+		
+	tween.tween_property(world, "rotation_degrees:y", target_rotation.y, 1).set_trans(Tween.TRANS_SINE)
 	tween.parallel()
-	tween.tween_property(camera_origin, "rotation_degrees:z", coordinates.x, 1).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(camera_origin, "rotation_degrees:z", target_rotation.x, 1).set_trans(Tween.TRANS_SINE)
 	
 	var translation_tween := create_tween()
 	translation_tween.tween_property(camera, "translation:x", 4.0, 0.5).set_trans(Tween.TRANS_SINE)
 	translation_tween.tween_property(camera, "translation:x", 3.0, 0.5).set_trans(Tween.TRANS_SINE)
-	
+
+
+func _on_ComboBox_option_changed(option):
+	if option in used_regions:
+		go_to_coordinate(used_regions[option])
