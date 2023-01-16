@@ -519,7 +519,7 @@ func _on_MaximizeButton_toggled(button_pressed):
 func _on_WidgetContainer_moved_or_resized():  
 	if is_maximized:
 		maximize_button.modulate.a = 0.1
-		rect_global_position = get_parent().get_parent().get_parent().rect_global_position
+		rect_global_position = dashboard.get_node(dashboard.scrollcontainer_path).rect_global_position
 		rect_size = dashboard.scroll_container.rect_size
 	else:
 		rect_position = position_on_grid * grid_size
