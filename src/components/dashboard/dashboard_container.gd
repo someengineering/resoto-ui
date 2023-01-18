@@ -7,7 +7,7 @@ const WidgetScenes := {
 	"Chart" : preload("res://components/dashboard/widget_chart/widget_chart.tscn"),
 	"Table" : preload("res://components/dashboard/widget_table/widget_table.tscn"),
 	"Heatmap" : preload("res://components/dashboard/widget_heatmap/widget_heatmap.tscn"),
-	"WorldMap" : preload("res://components/dashboard/widget_world_map/world_map_widget.tscn")
+	"WorldMap" : preload("res://components/dashboard/widget_world_map/widget_world_map.tscn")
 }
 
 signal deleted

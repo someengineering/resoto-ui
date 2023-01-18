@@ -1,7 +1,7 @@
 extends BaseWidget
 
-var initial_world_speed := 0.0
-var world_speed := initial_world_speed
+var initial_world_speed := 0.5
+var world_speed := 0.0
 
 var mouse_pressed : bool = false
 var max_value : float = 0.0
@@ -371,6 +371,8 @@ const regions := {
 
 var used_regions := {}
 
+export (bool) var auto_rotate := false setget set_auto_rotate
+
 onready var world := $ViewportContainer/Viewport/WorldMesh
 onready var camera_origin := $ViewportContainer/Viewport/CameraOrigin
 onready var camera := $ViewportContainer/Viewport/CameraOrigin/Camera
@@ -384,7 +386,7 @@ onready var combo_box := $HBoxContainer/ComboBox
 func _physics_process(delta):
 	world.rotation.y += world_speed*delta
 	
-func _process(delta):
+func _process(_delta):
 	camera.look_at(world.transform.origin, Vector3.UP)
 	
 	
@@ -402,9 +404,12 @@ func _input(event):
 		camera_origin.rotation.z = camera_rotation
 		combo_box.text = ""
 
+func set_auto_rotate(rotate : bool):
+	auto_rotate = rotate
+	world_speed = initial_world_speed if rotate else 0.0
 
 func add_cyllinder(coordinates : Vector2, height := 1.0):
-	var c := preload("res://components/dashboard/widget_world_map/world_map_column.tscn").instance()
+	var c := preload("res://components/dashboard/widget_world_map/widget_world_map_column.tscn").instance()
 	c.value = height
 	c.coordinates = coordinates
 	world.add_child(c)
@@ -505,7 +510,8 @@ func _on_cyllinder_hovering_started(coordinates, variable_name, c):
 
 func _on_cyllinder_hovering_ended():
 	hint_container.hide()
-	world_speed = initial_world_speed
+	if auto_rotate:
+		world_speed = initial_world_speed
 
 
 func go_to_coordinate(coordinates : Vector2, cloud := "", region := ""):
@@ -529,3 +535,20 @@ func go_to_coordinate(coordinates : Vector2, cloud := "", region := ""):
 func _on_ComboBox_option_changed(option):
 	if option in used_regions:
 		go_to_coordinate(used_regions[option])
+
+
+func _get_property_list() -> Array:
+	var properties = []
+	
+	properties.append({
+		name = "Widget Settings",
+		type = TYPE_NIL,
+		usage = PROPERTY_USAGE_CATEGORY | PROPERTY_USAGE_SCRIPT_VARIABLE
+	})
+	
+	properties.append({
+		"name" : "auto_rotate",
+		"type" : TYPE_BOOL
+	})
+	
+	return properties
