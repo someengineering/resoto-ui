@@ -371,7 +371,13 @@ const regions := {
 
 var used_regions := {}
 
+var raw_data : Array = []
+
+var mouse_from := Vector3.ZERO
+var sprite_size := Vector2.ZERO
+
 export (bool) var auto_rotate := false setget set_auto_rotate
+export (bool) var _3d_view := true setget set__3d_view
 
 onready var world := $ViewportContainer/Viewport/WorldMesh
 onready var camera_origin := $ViewportContainer/Viewport/CameraOrigin
@@ -381,7 +387,14 @@ onready var sepparator := $VBoxContainer/HSeparator
 onready var total_label := $VBoxContainer/Total
 onready var hint_container := $VBoxContainer
 onready var combo_box := $HBoxContainer/ComboBox
+onready var camera_for_2d := $ViewportContainer2/Viewport/Camera
+onready var sprite := $ViewportContainer2/Viewport/Sprite3D
+onready var viewport := $ViewportContainer2/Viewport
 
+func _ready():
+	sprite_size = sprite.texture.get_size() * sprite.pixel_size
+	set__3d_view(_3d_view)
+#	add_cyllinder(Vector2(-38.4161, -63.6167))
 
 func _physics_process(delta):
 	world.rotation.y += world_speed*delta
@@ -395,14 +408,35 @@ func _input(event):
 		mouse_pressed = false
 		return
 		
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
-		mouse_pressed = event.is_pressed()
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT:
+			mouse_pressed = event.is_pressed()
+			if mouse_pressed:
+				mouse_from = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
+		if event.button_index == BUTTON_WHEEL_DOWN:
+			camera_for_2d.fov = max(camera_for_2d.fov * 0.9, 10)
+			camera.fov = max(camera_for_2d.fov * 0.9, 10)
+		if event.button_index == BUTTON_WHEEL_UP:
+			camera_for_2d.fov = min(camera_for_2d.fov / 0.9, 90)
+			camera.fov = min(camera_for_2d.fov / 0.9, 90)
 		
 	if event is InputEventMouseMotion and mouse_pressed:
 		world.rotate(Vector3.UP, event.relative.x * 2 * PI / rect_size.x)
 		var camera_rotation = clamp(camera_origin.rotation.z + event.relative.y * PI / rect_size.y, -PI/2+0.2, PI/2-0.2)
 		camera_origin.rotation.z = camera_rotation
 		combo_box.text = ""
+		var new_mouse_pos : Vector3 = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
+		var r : float = viewport.size.y / viewport.size.x
+		
+		var delta : float = 3 * tan(deg2rad(camera_for_2d.fov / 2))
+		var delta_pos : Vector2 = Vector2(delta / r, delta)
+		var max_pos : Vector2 = sprite_size / 2 - delta_pos
+		
+		camera_for_2d.translation.z += mouse_from.z - new_mouse_pos.z
+		camera_for_2d.translation.y += mouse_from.y - new_mouse_pos.y
+		
+		camera_for_2d.translation.z = clamp(camera_for_2d.translation.z, -max_pos.x, max_pos.x)
+		camera_for_2d.translation.y = clamp(camera_for_2d.translation.y, -max_pos.y, max_pos.y)
 
 func set_auto_rotate(rotate : bool):
 	auto_rotate = rotate
@@ -412,20 +446,28 @@ func add_cyllinder(coordinates : Vector2, height := 1.0):
 	var c := preload("res://components/dashboard/widget_world_map/widget_world_map_column.tscn").instance()
 	c.value = height
 	c.coordinates = coordinates
-	world.add_child(c)
 	
-	c.rotate(Vector3.FORWARD, PI/2)
-	c.rotate(Vector3.UP, deg2rad(coordinates.y-90))
-	c.rotate(Vector3.UP.cross(c.transform.basis.y), deg2rad(coordinates.x))
-	
-	c.translation -= c.transform.basis.y
-	
-	for cyllinder in world.get_children():
-		if cyllinder == c:
-			continue
-			
-		if cyllinder.coordinates == coordinates:
-			c.translation -= c.transform.basis.y * cyllinder.value
+	if _3d_view:
+		world.add_child(c)
+		c.rotate(Vector3.FORWARD, PI/2)
+		c.rotate(Vector3.UP, deg2rad(coordinates.y-90))
+		c.rotate(Vector3.UP.cross(c.transform.basis.y), deg2rad(coordinates.x))
+		
+		c.translation -= c.transform.basis.y
+		
+		for cyllinder in world.get_children():
+			if cyllinder == c:
+				continue
+				
+			if cyllinder.coordinates == coordinates:
+				c.translation -= c.transform.basis.y * cyllinder.value
+				
+	else:
+		sprite.add_child(c)
+		c.rotate(Vector3.LEFT, 3*PI/4)
+		c.translation.y = sprite_size.y * coordinates.x / 180 
+		c.translation.x = sprite_size.x * coordinates.y / 360 
+		c.translation.z = 0.02
 		
 	go_to_coordinate(coordinates)
 	
@@ -433,55 +475,69 @@ func add_cyllinder(coordinates : Vector2, height := 1.0):
 
 
 func set_data(_data, _type : int):
+	raw_data = _data
+	if _type == DataSource.TYPES.AGGREGATE_SEARCH:
+		create_columns_from_data(_data)
+		
+
+func clear_maps():
 	for column in world.get_children():
 		column.queue_free()
 		world.remove_child(column)
+	for column in sprite.get_children():
+		column.queue_free()
+		sprite.remove_child(column)
+
+
+func create_columns_from_data(_data : Array):
+	clear_maps()
+	var first_data : Dictionary = _data[0].duplicate()
+	first_data.erase("group")
+	var variable_name = first_data.keys()[0]
 	
-	if _type == DataSource.TYPES.AGGREGATE_SEARCH:
-		var first_data : Dictionary = _data[0].duplicate()
-		first_data.erase("group")
-		var variable_name = first_data.keys()[0]
-		
-		# Look for max value to set column scales
-		max_value = 0.0
-		
-		for data in _data:
-			if data[variable_name] > max_value:
-				max_value = data[variable_name]
-				
-		if max_value == 0.0:
-			max_value = 1.0
+	# Look for max value to set column scales
+	max_value = 0.0
+	
+	for data in _data:
+		if data[variable_name] > max_value:
+			max_value = data[variable_name]
 			
-		used_regions.clear()
-				
-		for data in _data:
-			data = data as Dictionary
-			if "region" in data["group"] and "cloud" in data["group"]:
-				var cloud = data["group"]["cloud"]
-				var region = data["group"]["region"]
-				
-				if not cloud in regions:
-					return
-				var coordinates = Vector2(regions[cloud][region]["latitude"], regions[cloud][region]["longitude"])
-				
-				used_regions["%s (%s)" % [region, cloud]] = coordinates
+	if max_value == 0.0:
+		max_value = 1.0
+		
+	used_regions.clear()
 			
-				var cyllinder = add_cyllinder(coordinates, data[variable_name] / max_value)
-				cyllinder.cloud = cloud
-				cyllinder.region = region
-				
-				cyllinder.connect("start_hovering", self, "_on_cyllinder_hovering_started", [coordinates, variable_name, cyllinder])
-				cyllinder.connect("end_hovering", self, "_on_cyllinder_hovering_ended")
-				cyllinder.connect("clicked", self, "go_to_coordinate")
-				
-		combo_box.items = used_regions.keys()
+	for data in _data:
+		data = data as Dictionary
+		if "region" in data["group"] and "cloud" in data["group"]:
+			var cloud = data["group"]["cloud"]
+			var region = data["group"]["region"]
+			
+			if not cloud in regions:
+				return
+			var coordinates = Vector2(regions[cloud][region]["latitude"], regions[cloud][region]["longitude"])
+			
+			used_regions["%s (%s)" % [region, cloud]] = coordinates
+		
+			var cyllinder = add_cyllinder(coordinates, data[variable_name] / max_value)
+			cyllinder.cloud = cloud
+			cyllinder.region = region
+			
+			cyllinder.connect("start_hovering", self, "_on_cyllinder_hovering_started", [coordinates, variable_name, cyllinder])
+			cyllinder.connect("end_hovering", self, "_on_cyllinder_hovering_ended")
+			cyllinder.connect("clicked", self, "go_to_coordinate")
+			
+	combo_box.items = used_regions.keys()
 
 
 func _on_cyllinder_hovering_started(coordinates, variable_name, c):
 	hint_container.show()
 	var lines : PoolStringArray = []
 	var total : float = 0.0
-	for cyllinder in world.get_children():
+	
+	var map = world if _3d_view else sprite
+	
+	for cyllinder in map.get_children():
 		prints(cyllinder.coordinates == coordinates, cyllinder.coordinates, coordinates)
 		if cyllinder.coordinates == coordinates:
 			var value : float = cyllinder.value * max_value
@@ -517,19 +573,25 @@ func _on_cyllinder_hovering_ended():
 func go_to_coordinate(coordinates : Vector2, cloud := "", region := ""):
 	if not "" in [cloud, region]:
 		combo_box.text = "%s (%s)" % [region, cloud]
-		
-	var tween := create_tween()
-	var target_rotation := Vector2(coordinates.x - 5, -coordinates.y - 90)
-	if is_equal_approx(camera_origin.rotation_degrees.z, target_rotation.x) and is_equal_approx(world.rotation_degrees.y, target_rotation.y):
-		return
-		
-	tween.tween_property(world, "rotation_degrees:y", target_rotation.y, 1).set_trans(Tween.TRANS_SINE)
-	tween.parallel()
-	tween.tween_property(camera_origin, "rotation_degrees:z", target_rotation.x, 1).set_trans(Tween.TRANS_SINE)
 	
-	var translation_tween := create_tween()
-	translation_tween.tween_property(camera, "translation:x", 4.0, 0.5).set_trans(Tween.TRANS_SINE)
-	translation_tween.tween_property(camera, "translation:x", 3.0, 0.5).set_trans(Tween.TRANS_SINE)
+	if _3d_view:
+		var target_rotation := Vector2(coordinates.x - 5, -coordinates.y - 90)
+		if is_equal_approx(camera_origin.rotation_degrees.z, target_rotation.x) and is_equal_approx(world.rotation_degrees.y, target_rotation.y):
+			return
+		var tween := create_tween()
+		var translation_tween := create_tween()
+			
+		tween.tween_property(world, "rotation_degrees:y", target_rotation.y, 1).set_trans(Tween.TRANS_SINE)
+		tween.parallel()
+		tween.tween_property(camera_origin, "rotation_degrees:z", target_rotation.x, 1).set_trans(Tween.TRANS_SINE)
+		
+		translation_tween.tween_property(camera, "translation:x", 4.0, 0.5).set_trans(Tween.TRANS_SINE)
+		translation_tween.tween_property(camera, "translation:x", 3.0, 0.5).set_trans(Tween.TRANS_SINE)
+	else:
+		var translation_tween := create_tween()
+		translation_tween.tween_property(camera_for_2d, "translation:y", sprite_size.y * (coordinates.x / 360), 1).set_trans(Tween.TRANS_SINE)
+		translation_tween.parallel()
+		translation_tween.tween_property(camera_for_2d, "translation:z", -sprite_size.x * (coordinates.y / 360), 1).set_trans(Tween.TRANS_SINE)
 
 
 func _on_ComboBox_option_changed(option):
@@ -547,8 +609,25 @@ func _get_property_list() -> Array:
 	})
 	
 	properties.append({
-		"name" : "auto_rotate",
+		"name" : "_3d_view",
 		"type" : TYPE_BOOL
 	})
 	
+	if _3d_view:
+		properties.append({
+			"name" : "auto_rotate",
+			"type" : TYPE_BOOL
+		})
+	
 	return properties
+	
+func set__3d_view(_3d : bool):
+	_3d_view = _3d
+	if not is_inside_tree():
+		return
+	$ViewportContainer.visible = _3d
+	$ViewportContainer2.visible = !_3d
+	if not raw_data.empty():
+		create_columns_from_data(raw_data)
+		
+	emit_signal("available_properties_changed")
