@@ -1,5 +1,7 @@
 extends BaseWidget
 
+signal scrolling
+
 var initial_world_speed := 0.5
 var world_speed := 0.0
 
@@ -408,6 +410,8 @@ func _input(event):
 		mouse_pressed = false
 		return
 		
+	get_tree().set_input_as_handled()
+		
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
 			mouse_pressed = event.is_pressed()
@@ -421,6 +425,8 @@ func _input(event):
 			camera.fov = max(camera_for_2d.fov * 0.9, 10)
 			
 		camera_for_2d.translation = clamp_2d_camera(camera_for_2d.translation)
+		
+		emit_signal("scrolling")
 		
 	if event is InputEventMouseMotion and mouse_pressed:
 		world.rotate(Vector3.UP, event.relative.x * 2 * PI / rect_size.x)
