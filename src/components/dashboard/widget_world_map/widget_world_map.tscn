@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/theme/pt-root-ui_bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/theme/pt-root-ui_regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://components/dashboard/widget_world_map/viewport_container.gd" type="Script" id=3]
 [ext_resource path="res://assets/images/8081_earthmap2k.jpg" type="Texture" id=4]
 [ext_resource path="res://components/dashboard/widget_world_map/widget_world_map.gd" type="Script" id=5]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=6]
@@ -36,6 +37,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 stretch = true
+script = ExtResource( 3 )
 
 [node name="Viewport" type="Viewport" parent="ViewportContainer"]
 size = Vector2( 1920, 1080 )
@@ -64,6 +66,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 stretch = true
+script = ExtResource( 3 )
 
 [node name="Viewport" type="Viewport" parent="ViewportContainer2"]
 size = Vector2( 1920, 1080 )
