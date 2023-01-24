@@ -29,7 +29,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 5 )
 widget_type_id = "WorldMap"
-supported_types = [ 1 ]
+supported_types = [ 4, 1 ]
 _3d_view = false
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]

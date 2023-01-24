@@ -40,7 +40,6 @@ onready var group_variables := $VBox/AggregateSearch/GroupVariables
 onready var group_functions := $VBox/AggregateSearch/GroupFunctions
 onready var search_query := $VBox/AggregateSearch/AggregateSearchQuery
 
-
 # Resulting Query Box
 onready var resulting_query_sep := $VBox/ResultingQueryBox
 onready var resulting_query_label := $VBox/ResultingQueryBox/QueryLabel
@@ -60,6 +59,8 @@ func _ready() -> void:
 	$VBox/Search.visible = datasource_type == DataSource.TYPES.SEARCH
 	$VBox/TwoEntriesAggregate.visible = datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
 	$VBox/AggregateSearch.visible = datasource_type == DataSource.TYPES.AGGREGATE_SEARCH
+	$VBox/FixedAggregate.visible = datasource_type == DataSource.TYPES.FIXED_AGGREGATE
+	show_query_separator(false)
 	update_time_series_sum_by()
 	
 	match datasource_type:
@@ -73,6 +74,9 @@ func _ready() -> void:
 		DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
 			data_source = TwoEntryAggregateDataSource.new()
 			API.cli_execute("kinds", self)
+		DataSource.TYPES.FIXED_AGGREGATE:
+			data_source = FixedAggregateSearch.new()
+			show_query_separator(true)
 	
 	$"%TitleLabel".text = "Data Source %s - %s" % [str(get_parent().get_children().find(self)+1), DataSource.TYPES.keys()[data_source.type].capitalize()]
 	
@@ -406,3 +410,8 @@ func update_query_label_text():
 			
 	query_editbox_label.text = label_text
 	resulting_query_label.text = label_text
+
+
+func _on_SearchLineEdit_text_entered(new_text):
+	data_source.search = new_text
+	update_query()

@@ -414,11 +414,13 @@ func _input(event):
 			if mouse_pressed:
 				mouse_from = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
 		if event.button_index == BUTTON_WHEEL_DOWN:
-			camera_for_2d.fov = max(camera_for_2d.fov * 0.9, 10)
-			camera.fov = max(camera_for_2d.fov * 0.9, 10)
-		if event.button_index == BUTTON_WHEEL_UP:
 			camera_for_2d.fov = min(camera_for_2d.fov / 0.9, 90)
 			camera.fov = min(camera_for_2d.fov / 0.9, 90)
+		if event.button_index == BUTTON_WHEEL_UP:
+			camera_for_2d.fov = max(camera_for_2d.fov * 0.9, 10)
+			camera.fov = max(camera_for_2d.fov * 0.9, 10)
+			
+		camera_for_2d.translation = clamp_2d_camera(camera_for_2d.translation)
 		
 	if event is InputEventMouseMotion and mouse_pressed:
 		world.rotate(Vector3.UP, event.relative.x * 2 * PI / rect_size.x)
@@ -426,17 +428,24 @@ func _input(event):
 		camera_origin.rotation.z = camera_rotation
 		combo_box.text = ""
 		var new_mouse_pos : Vector3 = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
+		
+		camera_for_2d.translation.z += mouse_from.z - new_mouse_pos.z
+		camera_for_2d.translation.y += mouse_from.y - new_mouse_pos.y
+		
+		camera_for_2d.translation = clamp_2d_camera(camera_for_2d.translation)
+		
+		
+func clamp_2d_camera(translation : Vector3) -> Vector3:
 		var r : float = viewport.size.y / viewport.size.x
 		
 		var delta : float = 3 * tan(deg2rad(camera_for_2d.fov / 2))
 		var delta_pos : Vector2 = Vector2(delta / r, delta)
 		var max_pos : Vector2 = sprite_size / 2 - delta_pos
 		
-		camera_for_2d.translation.z += mouse_from.z - new_mouse_pos.z
-		camera_for_2d.translation.y += mouse_from.y - new_mouse_pos.y
+		translation.z = clamp(translation.z, -max_pos.x, max_pos.x)
+		translation.y = clamp(translation.y, -max_pos.y, max_pos.y)
 		
-		camera_for_2d.translation.z = clamp(camera_for_2d.translation.z, -max_pos.x, max_pos.x)
-		camera_for_2d.translation.y = clamp(camera_for_2d.translation.y, -max_pos.y, max_pos.y)
+		return translation
 
 func set_auto_rotate(rotate : bool):
 	auto_rotate = rotate
@@ -476,7 +485,7 @@ func add_cyllinder(coordinates : Vector2, height := 1.0):
 
 func set_data(_data, _type : int):
 	raw_data = _data
-	if _type == DataSource.TYPES.AGGREGATE_SEARCH:
+	if _type in [DataSource.TYPES.AGGREGATE_SEARCH, DataSource.TYPES.FIXED_AGGREGATE]:
 		create_columns_from_data(_data)
 		
 
@@ -588,11 +597,18 @@ func go_to_coordinate(coordinates : Vector2, cloud := "", region := ""):
 		translation_tween.tween_property(camera, "translation:x", 4.0, 0.5).set_trans(Tween.TRANS_SINE)
 		translation_tween.tween_property(camera, "translation:x", 3.0, 0.5).set_trans(Tween.TRANS_SINE)
 	else:
+		var translation_target : Vector3 = camera_for_2d.translation
+		translation_target.y =  sprite_size.y * (coordinates.x / 360)
+		translation_target.z = -sprite_size.x * (coordinates.y / 360)
+		
+		translation_target = clamp_2d_camera(translation_target)
+		
 		var translation_tween := create_tween()
-		translation_tween.tween_property(camera_for_2d, "translation:y", sprite_size.y * (coordinates.x / 360), 1).set_trans(Tween.TRANS_SINE)
+		translation_tween.tween_property(camera_for_2d, "translation:y", translation_target.y, 1).set_trans(Tween.TRANS_SINE)
 		translation_tween.parallel()
-		translation_tween.tween_property(camera_for_2d, "translation:z", -sprite_size.x * (coordinates.y / 360), 1).set_trans(Tween.TRANS_SINE)
-
+		translation_tween.tween_property(camera_for_2d, "translation:z", translation_target.z, 1).set_trans(Tween.TRANS_SINE)
+		
+		
 
 func _on_ComboBox_option_changed(option):
 	if option in used_regions:
