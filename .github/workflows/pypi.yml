@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build Docker Images
+    name: Build Python Package
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
