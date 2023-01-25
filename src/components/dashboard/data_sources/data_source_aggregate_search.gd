@@ -1,8 +1,16 @@
 class_name AggregateSearchDataSource
 extends DataSource
 
+var grouping_variables := ""
+var grouping_functions := ""
+var search_query := ""
+
 func _init():
 	type = TYPES.AGGREGATE_SEARCH
+	
+
+func update_query():
+	query = 'aggregate(%s: %s): %s' % [grouping_variables, grouping_functions, search_query]
 
 func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 	var q : String = query

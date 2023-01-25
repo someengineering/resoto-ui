@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://components/dashboard/new_widget_popup/filter_widget.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/icons/icon_128_collapse.svg" type="Texture" id=2]
 [ext_resource path="res://assets/icons/icon_128_expand.svg" type="Texture" id=3]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=4]
+[ext_resource path="res://components/dashboard/new_widget_popup/group_variables_widget.tscn" type="PackedScene" id=5]
 [ext_resource path="res://components/elements/utility/line_edit_update_on_focus_lost.gd" type="Script" id=6]
 [ext_resource path="res://components/dashboard/new_widget_popup/data_source_container.gd" type="Script" id=7]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=8]
@@ -51,7 +52,7 @@ script = ExtResource( 7 )
 margin_left = 6.0
 margin_top = 6.0
 margin_right = 517.0
-margin_bottom = 593.0
+margin_bottom = 349.0
 
 [node name="Title" type="HBoxContainer" parent="VBox"]
 margin_right = 511.0
@@ -102,6 +103,7 @@ size_flags_vertical = 1
 icon_tex = ExtResource( 4 )
 
 [node name="TimeSeries" type="VBoxContainer" parent="VBox"]
+visible = false
 margin_top = 37.0
 margin_right = 511.0
 margin_bottom = 247.0
@@ -245,9 +247,8 @@ script = ExtResource( 6 )
 
 [node name="Search" type="VBoxContainer" parent="VBox"]
 visible = false
-margin_top = 37.0
 margin_right = 511.0
-margin_bottom = 250.0
+margin_bottom = 213.0
 
 [node name="Label" type="Label" parent="VBox/Search"]
 margin_right = 511.0
@@ -320,9 +321,10 @@ margin_bottom = 249.0
 script = ExtResource( 6 )
 
 [node name="TwoEntriesAggregate" type="VBoxContainer" parent="VBox"]
-margin_top = 251.0
+visible = false
+margin_top = 37.0
 margin_right = 511.0
-margin_bottom = 487.0
+margin_bottom = 273.0
 
 [node name="Label" type="Label" parent="VBox/TwoEntriesAggregate"]
 margin_right = 511.0
@@ -490,10 +492,38 @@ margin_bottom = 32.0
 size_flags_horizontal = 3
 script = ExtResource( 6 )
 
-[node name="ResultingQueryBox" type="HBoxContainer" parent="VBox"]
-margin_top = 491.0
+[node name="AggregateSearch" type="VBoxContainer" parent="VBox"]
+visible = false
 margin_right = 511.0
-margin_bottom = 511.0
+margin_bottom = 160.0
+
+[node name="GroupVariables" parent="VBox/AggregateSearch" instance=ExtResource( 5 )]
+margin_right = 511.0
+margin_bottom = 48.0
+
+[node name="GroupFunctions" parent="VBox/AggregateSearch" instance=ExtResource( 5 )]
+margin_top = 52.0
+margin_right = 511.0
+margin_bottom = 100.0
+title = "Grouping Functions"
+element_name = "Function"
+
+[node name="Label" type="Label" parent="VBox/AggregateSearch"]
+margin_top = 104.0
+margin_right = 511.0
+margin_bottom = 124.0
+text = "Search Query"
+
+[node name="AggregateSearchQuery" type="LineEdit" parent="VBox/AggregateSearch"]
+margin_top = 128.0
+margin_right = 511.0
+margin_bottom = 160.0
+script = ExtResource( 6 )
+
+[node name="ResultingQueryBox" type="HBoxContainer" parent="VBox"]
+margin_top = 37.0
+margin_right = 511.0
+margin_bottom = 57.0
 
 [node name="Label" type="Label" parent="VBox/ResultingQueryBox"]
 margin_right = 118.0
@@ -508,9 +538,9 @@ margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="QueryEditVBox" type="VBoxContainer" parent="VBox"]
-margin_top = 515.0
+margin_top = 61.0
 margin_right = 511.0
-margin_bottom = 587.0
+margin_bottom = 133.0
 
 [node name="QueryLabel" type="Label" parent="VBox/QueryEditVBox"]
 visible = false
@@ -562,6 +592,9 @@ custom_styles/panel = SubResource( 2 )
 [connection signal="text_entered" from="VBox/TwoEntriesAggregate/EntryContainer2/Entry2Alias" to="." method="_on_Entry2Alias_text_entered"]
 [connection signal="text_entered" from="VBox/TwoEntriesAggregate/FunctionContainer/FunctionLineEdit" to="." method="_on_FunctionLineEdit_text_entered"]
 [connection signal="text_entered" from="VBox/TwoEntriesAggregate/FunctionContainer/FunctionAlias" to="." method="_on_FunctionAlias_text_entered"]
+[connection signal="group_variables_changed" from="VBox/AggregateSearch/GroupVariables" to="." method="_on_GroupVariables_group_variables_changed"]
+[connection signal="group_variables_changed" from="VBox/AggregateSearch/GroupFunctions" to="." method="_on_GroupFunctions_group_variables_changed"]
+[connection signal="text_entered" from="VBox/AggregateSearch/AggregateSearchQuery" to="." method="_on_AggregateSearchQuery_text_entered"]
 [connection signal="cursor_changed" from="VBox/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_cursor_changed"]
 [connection signal="gui_input" from="VBox/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_gui_input"]
 [connection signal="item_rect_changed" from="VBox/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_item_rect_changed"]

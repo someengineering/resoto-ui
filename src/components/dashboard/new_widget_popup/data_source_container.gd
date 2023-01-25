@@ -53,6 +53,7 @@ func _ready() -> void:
 	$VBox/TimeSeries.visible = datasource_type == DataSource.TYPES.TIME_SERIES
 	$VBox/Search.visible = datasource_type == DataSource.TYPES.SEARCH
 	$VBox/TwoEntriesAggregate.visible = datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
+	$VBox/AggregateSearch.visible = datasource_type == DataSource.TYPES.AGGREGATE_SEARCH
 	show_query_separator(false)
 	update_time_series_sum_by()
 	
@@ -62,7 +63,7 @@ func _ready() -> void:
 			show_query_separator(true)
 		DataSource.TYPES.AGGREGATE_SEARCH:
 			data_source = AggregateSearchDataSource.new()
-			expand_button.hide()
+			show_query_separator(true)
 		DataSource.TYPES.SEARCH:
 			data_source = TextSearchDataSource.new()
 			show_query_separator(true)
@@ -307,6 +308,7 @@ func _on_ExpandButton_toggled(button_pressed:bool):
 	$VBox/TimeSeries.visible = button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
 	$VBox/Search.visible = button_pressed and datasource_type == DataSource.TYPES.SEARCH
 	$VBox/TwoEntriesAggregate.visible = button_pressed and datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
+	$VBox/AggregateSearch.visible = button_pressed and datasource_type == DataSource.TYPES.AGGREGATE_SEARCH
 	if [DataSource.TYPES.TWO_ENTRIES_AGGREGATE, DataSource.TYPES.SEARCH, DataSource.TYPES.TIME_SERIES].has(datasource_type):
 		show_query_separator(button_pressed)
 
@@ -370,3 +372,18 @@ func update_time_series_sum_by(last_metric_keys:Array=[]):
 func show_query_separator(_show:bool=false):
 	resulting_query_sep.visible = _show
 	$VBox/QueryEditVBox/QueryLabel.visible = !_show
+
+
+func _on_GroupVariables_group_variables_changed(grouping_variables):
+	data_source.grouping_variables = grouping_variables
+	update_query()
+
+
+func _on_GroupFunctions_group_variables_changed(grouping_variables):
+	data_source.grouping_functions = grouping_variables
+	update_query()
+
+
+func _on_AggregateSearchQuery_text_entered(new_text):
+	data_source.search_query = new_text
+	update_query()
