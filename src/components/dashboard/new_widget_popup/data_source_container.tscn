@@ -525,14 +525,14 @@ margin_top = 37.0
 margin_right = 511.0
 margin_bottom = 57.0
 
-[node name="Label" type="Label" parent="VBox/ResultingQueryBox"]
-margin_right = 118.0
+[node name="QueryLabel" type="Label" parent="VBox/ResultingQueryBox"]
+margin_right = 136.0
 margin_bottom = 20.0
 theme_type_variation = "LabelBold"
-text = "Resulting Query"
+text = "Aggregate Search"
 
 [node name="HSeparator" type="HSeparator" parent="VBox/ResultingQueryBox"]
-margin_left = 122.0
+margin_left = 140.0
 margin_right = 511.0
 margin_bottom = 20.0
 size_flags_horizontal = 3

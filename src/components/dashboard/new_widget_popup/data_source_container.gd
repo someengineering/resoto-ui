@@ -40,6 +40,9 @@ onready var kinds_combobox_two_entries_datasource := $VBox/TwoEntriesAggregate/K
 
 # Resulting Query Box
 onready var resulting_query_sep := $VBox/ResultingQueryBox
+onready var resulting_query_label := $VBox/ResultingQueryBox/QueryLabel
+
+onready var query_editbox_label := $VBox/QueryEditVBox/QueryLabel
 
 # Query Edit
 onready var query_edit := $VBox/QueryEditVBox/QueryEdit
@@ -54,22 +57,17 @@ func _ready() -> void:
 	$VBox/Search.visible = datasource_type == DataSource.TYPES.SEARCH
 	$VBox/TwoEntriesAggregate.visible = datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
 	$VBox/AggregateSearch.visible = datasource_type == DataSource.TYPES.AGGREGATE_SEARCH
-	show_query_separator(false)
 	update_time_series_sum_by()
 	
 	match datasource_type:
 		DataSource.TYPES.TIME_SERIES:
 			data_source = TimeSeriesDataSource.new()
-			show_query_separator(true)
 		DataSource.TYPES.AGGREGATE_SEARCH:
 			data_source = AggregateSearchDataSource.new()
-			show_query_separator(true)
 		DataSource.TYPES.SEARCH:
 			data_source = TextSearchDataSource.new()
-			show_query_separator(true)
 			API.cli_execute("kinds", self)
 		DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
-			show_query_separator(true)
 			data_source = TwoEntryAggregateDataSource.new()
 			API.cli_execute("kinds", self)
 	
@@ -79,6 +77,7 @@ func _ready() -> void:
 	data_source.connect("query_status", self, "_on_data_source_query_status")
 	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
 	
+	update_query_label_text()
 	add_child(data_source)
 
 
@@ -309,8 +308,7 @@ func _on_ExpandButton_toggled(button_pressed:bool):
 	$VBox/Search.visible = button_pressed and datasource_type == DataSource.TYPES.SEARCH
 	$VBox/TwoEntriesAggregate.visible = button_pressed and datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
 	$VBox/AggregateSearch.visible = button_pressed and datasource_type == DataSource.TYPES.AGGREGATE_SEARCH
-	if [DataSource.TYPES.TWO_ENTRIES_AGGREGATE, DataSource.TYPES.SEARCH, DataSource.TYPES.TIME_SERIES].has(datasource_type):
-		show_query_separator(button_pressed)
+	show_query_separator(button_pressed)
 
 
 func _on_KindComboBox_option_changed(option):
@@ -371,7 +369,7 @@ func update_time_series_sum_by(last_metric_keys:Array=[]):
 
 func show_query_separator(_show:bool=false):
 	resulting_query_sep.visible = _show
-	$VBox/QueryEditVBox/QueryLabel.visible = !_show
+	query_editbox_label.visible = !_show
 
 
 func _on_GroupVariables_group_variables_changed(grouping_variables):
@@ -387,3 +385,17 @@ func _on_GroupFunctions_group_variables_changed(grouping_variables):
 func _on_AggregateSearchQuery_text_entered(new_text):
 	data_source.search_query = new_text
 	update_query()
+
+
+func update_query_label_text():
+	var label_text : String = ""
+	match datasource_type:
+		DataSource.TYPES.TIME_SERIES:
+			label_text = "Query"
+		DataSource.TYPES.SEARCH:
+			label_text = "Resoto Search"
+		_:
+			label_text = "Aggregate Search"
+			
+	query_editbox_label.text = label_text
+	resulting_query_label.text = label_text
