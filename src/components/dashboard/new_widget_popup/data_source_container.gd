@@ -35,7 +35,10 @@ onready var function_line_edit := $VBox/TwoEntriesAggregate/FunctionContainer/Fu
 onready var function_alias_line_edit := $VBox/TwoEntriesAggregate/FunctionContainer/FunctionAlias
 onready var kinds_combobox_two_entries_datasource := $VBox/TwoEntriesAggregate/KindComboBox
 
-# Aggregation would make sense!
+# Aggregate Search
+onready var group_variables := $VBox/AggregateSearch/GroupVariables
+onready var group_functions := $VBox/AggregateSearch/GroupFunctions
+onready var search_query := $VBox/AggregateSearch/AggregateSearchQuery
 
 
 # Resulting Query Box
@@ -268,6 +271,10 @@ func set_data_source(new_data_source : DataSource) -> void:
 			function_line_edit.text = new_data_source.function
 			function_alias_line_edit.text = new_data_source.function_alias
 			kinds_combobox_two_entries_datasource.text = new_data_source.kind 
+		DataSource.TYPES.AGGREGATE_SEARCH:
+			group_variables.grouping_variables = data_source.grouping_variables
+			group_functions.grouping_variables = data_source.grouping_functions
+			search_query.text = data_source.search_query
 			
 	$VBox/Title/ExpandButton.pressed = !new_data_source.custom_query
 	show_query_separator(!new_data_source.custom_query)
