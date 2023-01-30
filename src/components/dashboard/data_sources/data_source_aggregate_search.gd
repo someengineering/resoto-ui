@@ -49,6 +49,9 @@ func _on_aggregate_search_done(_error : int, response):
 
 
 func copy_data_source(other : AggregateSearchDataSource):
+	grouping_variables = other.grouping_variables
+	grouping_functions = other.grouping_functions
+	search_query = other.search_query
 	query = other.query
 
 
