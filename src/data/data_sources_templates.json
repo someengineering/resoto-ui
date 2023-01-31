@@ -36,6 +36,9 @@
         "Widgets": ["Table", "Heatmap"],
         "data": {
             "type": 1,
+            "search_query": "is(instance)",
+            "grouping_variables": "kind, /ancestors.cloud.reported.name",
+            "grouping_functions": "sum(1) as nodes",
             "query": "aggregate(kind, /ancestors.cloud.reported.name: sum(1) as nodes): is(instance)"
         }
     },
@@ -45,6 +48,9 @@
         "Description": "Gets the number of instances per instance type and account name",
         "data": {
             "type": 1,
+            "search_query": "is(instance)",
+            "grouping_variables": "instance_type, /ancestors.account.reported.name",
+            "grouping_functions": "sum(1) as instances",
             "query": "aggregate(instance_type, /ancestors.account.reported.name: sum(1) as instances): is(instance)"
         }
     },

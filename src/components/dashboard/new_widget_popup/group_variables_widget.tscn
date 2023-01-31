@@ -1,0 +1,67 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=2]
+[ext_resource path="res://components/dashboard/new_widget_popup/group_variables_widget.gd" type="Script" id=3]
+
+[node name="group_variables_widget" type="PanelContainer"]
+margin_right = 20.0
+margin_bottom = 20.0
+script = ExtResource( 3 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 184.0
+margin_bottom = 38.0
+size_flags_horizontal = 3
+custom_constants/separation = -5
+
+[node name="Headline" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 174.0
+margin_bottom = 33.0
+
+[node name="Label" type="Label" parent="VBoxContainer/Headline"]
+margin_right = 141.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 0, 33 )
+theme_type_variation = "LabelBold"
+text = "Grouping Variables"
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Headline"]
+modulate = Color( 1, 1, 1, 0.501961 )
+margin_left = 145.0
+margin_right = 148.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+
+[node name="AddVariableButton" parent="VBoxContainer/Headline" instance=ExtResource( 1 )]
+margin_left = 152.0
+margin_right = 174.0
+rect_min_size = Vector2( 22, 33 )
+size_flags_vertical = 4
+icon_tex = ExtResource( 2 )
+icon_margin = 2
+
+[node name="Margin" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 28.0
+margin_right = 174.0
+margin_bottom = 28.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 0
+
+[node name="VariablesContainer" type="VBoxContainer" parent="VBoxContainer/Margin"]
+margin_left = 10.0
+margin_right = 174.0
+custom_constants/separation = 1
+
+[node name="UpdateDelay" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="tree_exiting" from="." to="." method="_on_group_variables_widget_tree_exiting"]
+[connection signal="pressed" from="VBoxContainer/Headline/AddVariableButton" to="." method="_on_AddVariableButton_pressed"]
+[connection signal="timeout" from="UpdateDelay" to="." method="_on_UpdateDelay_timeout"]

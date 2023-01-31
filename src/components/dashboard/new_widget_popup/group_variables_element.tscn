@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=1]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://components/dashboard/new_widget_popup/group_variables_element.gd" type="Script" id=3]
+[ext_resource path="res://components/elements/utility/line_edit_update_on_focus_lost.gd" type="Script" id=4]
+
+[node name="GroupVariablesElement" type="GridContainer"]
+margin_right = 352.0
+margin_bottom = 56.0
+columns = 4
+script = ExtResource( 3 )
+
+[node name="Label" type="Label" parent="."]
+margin_right = 150.0
+margin_bottom = 15.0
+theme_type_variation = "LabelSmall"
+text = "Grouping variable"
+
+[node name="Spacer" type="Control" parent="."]
+margin_left = 154.0
+margin_right = 171.0
+margin_bottom = 15.0
+
+[node name="Label2" type="Label" parent="."]
+margin_left = 175.0
+margin_right = 324.0
+margin_bottom = 15.0
+theme_type_variation = "LabelSmall"
+text = "Alias"
+
+[node name="Spacer2" type="Control" parent="."]
+margin_left = 328.0
+margin_right = 352.0
+margin_bottom = 15.0
+
+[node name="GroupingVariableLineEdit" type="LineEdit" parent="."]
+margin_top = 19.0
+margin_right = 150.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+script = ExtResource( 4 )
+
+[node name="Label3" type="Label" parent="."]
+margin_left = 154.0
+margin_top = 27.0
+margin_right = 171.0
+margin_bottom = 47.0
+text = "as"
+
+[node name="AliasLineEdit" type="LineEdit" parent="."]
+margin_left = 175.0
+margin_top = 19.0
+margin_right = 324.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+script = ExtResource( 4 )
+
+[node name="DeleteFilterButton" parent="." instance=ExtResource( 2 )]
+margin_left = 328.0
+margin_top = 19.0
+margin_right = 352.0
+margin_bottom = 56.0
+rect_min_size = Vector2( 24, 28 )
+hint_tooltip = "Add Filter"
+icon_tex = ExtResource( 1 )
+icon_margin = 1
+
+[connection signal="text_entered" from="GroupingVariableLineEdit" to="." method="_on_GroupingVariableLineEdit_text_entered"]
+[connection signal="text_entered" from="AliasLineEdit" to="." method="_on_AliasLineEdit_text_entered"]
+[connection signal="pressed" from="DeleteFilterButton" to="." method="_on_DeleteFilterButton_pressed"]
