@@ -56,7 +56,7 @@ static func save_json(path:String, file_name:String, _data):
 	
 	var file = File.new()
 	file.open(path+file_name, file.WRITE)
-	file.store_string(to_json(_data))
+	file.store_string(JSON.print(_data, "\t"))
 	file.close()
 
 

@@ -1,1 +1,2056 @@
-{"connections":[{"from":"4050","from_port":0,"to":"6896","to_port":0},{"from":"4050","from_port":0,"to":"8770","to_port":0},{"from":"4050","from_port":0,"to":"10406","to_port":0},{"from":"3573","from_port":0,"to":"6750","to_port":0},{"from":"14015","from_port":0,"to":"4050","to_port":0},{"from":"2330","from_port":0,"to":"14015","to_port":0},{"from":"6896","from_port":0,"to":"34704","to_port":0},{"from":"8770","from_port":0,"to":"43219","to_port":0},{"from":"10406","from_port":0,"to":"13400","to_port":0},{"from":"4050","from_port":0,"to":"15992","to_port":0},{"from":"15992","from_port":0,"to":"19854","to_port":0},{"from":"4050","from_port":0,"to":"37287","to_port":0},{"from":"37287","from_port":0,"to":"44107","to_port":0},{"from":"69306","from_port":0,"to":"76525","to_port":0},{"from":"76525","from_port":0,"to":"81056","to_port":0},{"from":"81056","from_port":0,"to":"84670","to_port":0},{"from":"76525","from_port":0,"to":"92219","to_port":0},{"from":"92219","from_port":0,"to":"94485","to_port":0},{"from":"76525","from_port":0,"to":"99489","to_port":0},{"from":"76525","from_port":0,"to":"100530","to_port":0},{"from":"76525","from_port":0,"to":"102377","to_port":0},{"from":"99489","from_port":0,"to":"107012","to_port":0},{"from":"107012","from_port":0,"to":"114670","to_port":0},{"from":"100530","from_port":0,"to":"148056","to_port":0},{"from":"102377","from_port":0,"to":"155747","to_port":0},{"from":"7433","from_port":0,"to":"23560","to_port":0},{"from":"7433","from_port":0,"to":"26844","to_port":0},{"from":"23560","from_port":0,"to":"30694","to_port":0},{"from":"26844","from_port":0,"to":"40002","to_port":0},{"from":"49866","from_port":0,"to":"58881","to_port":0},{"from":"49866","from_port":0,"to":"63220","to_port":0},{"from":"63220","from_port":0,"to":"69475","to_port":0},{"from":"60651","from_port":0,"to":"119788","to_port":0},{"from":"119788","from_port":0,"to":"13714","to_port":0},{"from":"13714","from_port":0,"to":"22432","to_port":0},{"from":"22432","from_port":0,"to":"26404","to_port":0},{"from":"26404","from_port":0,"to":"37535","to_port":0},{"from":"37535","from_port":0,"to":"47535","to_port":0},{"from":"37535","from_port":0,"to":"49370","to_port":0},{"from":"13714","from_port":0,"to":"64714","to_port":0},{"from":"61346","from_port":0,"to":"93915","to_port":0},{"from":"93915","from_port":0,"to":"97618","to_port":0},{"from":"97618","from_port":0,"to":"102826","to_port":0},{"from":"97618","from_port":0,"to":"106362","to_port":0},{"from":"109673","from_port":0,"to":"124668","to_port":0},{"from":"124668","from_port":0,"to":"128215","to_port":0},{"from":"124668","from_port":0,"to":"129548","to_port":0},{"from":"102826","from_port":0,"to":"32354","to_port":0},{"from":"32354","from_port":0,"to":"109673","to_port":0},{"from":"128215","from_port":0,"to":"5492","to_port":0},{"from":"5492","from_port":0,"to":"32354","to_port":0},{"from":"129548","from_port":0,"to":"14598","to_port":0},{"from":"32691","from_port":0,"to":"42350","to_port":0},{"from":"42350","from_port":0,"to":"44684","to_port":0},{"from":"42350","from_port":0,"to":"46009","to_port":0},{"from":"26904","from_port":0,"to":"148682","to_port":0},{"from":"148682","from_port":0,"to":"35925","to_port":0},{"from":"35925","from_port":0,"to":"48328","to_port":0},{"from":"48328","from_port":0,"to":"57110","to_port":0},{"from":"61929","from_port":0,"to":"64951","to_port":0},{"from":"61929","from_port":0,"to":"65559","to_port":0},{"from":"57110","from_port":0,"to":"61929","to_port":0},{"from":"65559","from_port":0,"to":"12260","to_port":0},{"from":"106362","from_port":0,"to":"26904","to_port":0},{"from":"12260","from_port":0,"to":"26904","to_port":0},{"from":"64951","from_port":0,"to":"36411","to_port":0},{"from":"6270","from_port":0,"to":"32588","to_port":0},{"from":"32588","from_port":0,"to":"33697","to_port":0},{"from":"32588","from_port":0,"to":"35691","to_port":0},{"from":"47535","from_port":0,"to":"44887","to_port":0},{"from":"14598","from_port":0,"to":"45237","to_port":0},{"from":"36411","from_port":0,"to":"45237","to_port":0},{"from":"40002","from_port":0,"to":"13529","to_port":0},{"from":"17446","from_port":0,"to":"97446","to_port":0},{"from":"13529","from_port":0,"to":"17446","to_port":0},{"from":"13529","from_port":0,"to":"16908","to_port":0},{"from":"46009","from_port":0,"to":"53647","to_port":0},{"from":"44684","from_port":0,"to":"32691","to_port":0},{"from":"61921","from_port":0,"to":"8115","to_port":0},{"from":"8115","from_port":0,"to":"32691","to_port":0},{"from":"64714","from_port":0,"to":"6270","to_port":0},{"from":"49370","from_port":0,"to":"6270","to_port":0},{"from":"33697","from_port":0,"to":"44887","to_port":0},{"from":"35691","from_port":0,"to":"6270","to_port":0},{"from":"32172","from_port":0,"to":"7078","to_port":0},{"from":"7078","from_port":0,"to":"164195","to_port":0},{"from":"44887","from_port":0,"to":"13296","to_port":0},{"from":"13296","from_port":0,"to":"77730","to_port":0},{"from":"45237","from_port":0,"to":"21137","to_port":0},{"from":"21137","from_port":0,"to":"133408","to_port":0},{"from":"53647","from_port":0,"to":"26588","to_port":0},{"from":"26588","from_port":0,"to":"56941","to_port":0},{"from":"6770","from_port":0,"to":"13364","to_port":0},{"from":"71307","from_port":1,"to":"6770","to_port":0},{"from":"7789","from_port":0,"to":"71307","to_port":0},{"from":"1444","from_port":0,"to":"7512","to_port":0},{"from":"7512","from_port":0,"to":"2330","to_port":0},{"from":"8229","from_port":0,"to":"11453","to_port":0},{"from":"11453","from_port":0,"to":"14271","to_port":0},{"from":"11453","from_port":0,"to":"20399","to_port":0},{"from":"14271","from_port":0,"to":"29978","to_port":0},{"from":"20399","from_port":0,"to":"27678","to_port":0},{"from":"71307","from_port":0,"to":"8170","to_port":0},{"from":"8170","from_port":0,"to":"15676","to_port":0},{"from":"15676","from_port":0,"to":"14821","to_port":0},{"from":"14821","from_port":0,"to":"8229","to_port":0},{"from":"59950","from_port":0,"to":"69306","to_port":0},{"from":"17418","from_port":0,"to":"49866","to_port":0},{"from":"69475","from_port":0,"to":"7433","to_port":0},{"from":"58881","from_port":0,"to":"7433","to_port":0},{"from":"30694","from_port":0,"to":"102181","to_port":0},{"from":"102181","from_port":0,"to":"114327","to_port":0},{"from":"102181","from_port":0,"to":"114995","to_port":0},{"from":"114327","from_port":0,"to":"122981","to_port":0},{"from":"122981","from_port":0,"to":"128981","to_port":0},{"from":"128981","from_port":0,"to":"32172","to_port":0},{"from":"114995","from_port":0,"to":"134957","to_port":0},{"from":"16908","from_port":0,"to":"32172","to_port":0},{"from":"97446","from_port":0,"to":"32172","to_port":0},{"from":"134957","from_port":0,"to":"138039","to_port":0},{"from":"138039","from_port":0,"to":"32172","to_port":0},{"from":"17418","from_port":1,"to":"7433","to_port":0},{"from":"84670","from_port":0,"to":"17418","to_port":0},{"from":"94485","from_port":0,"to":"17418","to_port":0},{"from":"114670","from_port":0,"to":"17418","to_port":0},{"from":"148056","from_port":0,"to":"17418","to_port":0}],"info":{"home_screen":"resoto_setup","script_name":"setup_wizard"},"nodes":{"1444":{"id":1444,"offset":"Vector2( -440, -100 )","rect_size":"Vector2( 225, 189 )","res_name":"StepSection","section_display_title":"Welcome to Resoto!","section_name":"start"},"2330":{"docs_link":"","id":2330,"offset":"Vector2( 260, -100 )","previous_allowed":false,"rect_size":"Vector2( 380, 680 )","res_name":"StepText","step_text":"Hello and welcome!\n\n[b]I am [color=#e98df7]C.K.[/color] and I am a Wizard![/b]\n\nI will help you to set up your Resoto  installation.\n\nYou can always [url=ui_help://You can open this Setup Wizard from the 'Settings' popup in the main menu]come back here later[/url] and use my help to setup different cloud providers.\n\n\nThis setup wizard is shown on start-up until a Collector is configured.","uid":""},"3573":{"id":3573,"offset":"Vector2( 0, -700 )","rect_size":"Vector2( 225.001, 189 )","res_name":"StepSection","section_display_title":"Setup Complete!","section_name":"setup_complete"},"3717":{"headline_text":"Resoto Setup","id":3717,"offset":"Vector2( 680, -200 )","rect_size":"Vector2( 355, 80.001 )","res_name":"StepComment"},"4050":{"docs_link":"","highlight_ids":"","id":4050,"offset":"Vector2( 940, -100 )","previous_allowed":false,"rect_size":"Vector2( 400, 680 )","res_name":"StepQuestion","step_text":"Resoto is able to talk to and collect data from different cloud providers.\n\nIn order to setup the system, you need to select at least one provider.\n\nAfter each setup, you will return here.","uid":"configured_collectors"},"5492":{"action":"","config_key":"resoto.worker","id":5492,"offset":"Vector2( 3060, 5120 )","rect_size":"Vector2( 350.2, 349.999 )","res_name":"StepHandleObject","value_path":"k8s.config_files","variable_name":"k8s_config_file","wrap_as_array":true},"6270":{"action":"merge","config_key":"resoto.worker","docs_link":"https://cloud.google.com/iam/docs/creating-managing-service-account-keys","id":6270,"offset":"Vector2( 3220, 4220 )","previous_allowed":true,"rect_size":"Vector2( 366, 559.999 )","res_name":"StepPrompt","separator":",","special_scene_path":"","step_text":"Enter the path to the GCP service account file.\n\nPlease make sure that this file is accessible to ResotoWorker.","uid":"","value_path":"gcp.service_account"},"6750":{"docs_link":"","id":6750,"offset":"Vector2( 300, -700 )","previous_allowed":false,"rect_size":"Vector2( 600, 320 )","res_name":"StepText","step_text":"Have fun and enjoy Resoto!\n\nJoin our Discord if you have questions, need support, or want to chat about Infrastructure Intelligence!","uid":""},"6770":{"docs_link":"","id":6770,"offset":"Vector2( 4200, 0 )","previous_allowed":false,"rect_size":"Vector2( 420, 320 )","res_name":"StepText","step_text":"There was a problem saving your configuration.\n\nPlease check if all data you entered is correct!","uid":""},"6896":{"custom_order":10,"docs_link":"","id":6896,"offset":"Vector2( 1800, -600 )","rect_size":"Vector2( 344, 196 )","res_name":"StepAnswer","step_text":"Amazon Web Services (AWS)","variable_check":"aws_done==true"},"7078":{"id":7078,"offset":"Vector2( 9020, 2360 )","rect_size":"Vector2( 225, 185 )","res_name":"StepSetVariable","variable_name":"aws_done","variable_value":"true"},"7433":{"docs_link":"https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws","highlight_ids":"","id":7433,"offset":"Vector2( 5460, 2300 )","previous_allowed":true,"rect_size":"Vector2( 505.126, 386.346 )","res_name":"StepQuestion","step_text":"Do you want to scrape your accounts from the organizations?\nScraping the organization requires specific permissions.\n\nPlease find additional information in the help at the top right.","uid":""},"7512":{"docs_link":"","id":7512,"offset":"Vector2( -160, -100 )","rect_size":"Vector2( 366, 280 )","res_name":"StepCustomScene","special_scene_path":"res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_prefill_cloud_provider_vars.tscn","uid":""},"7789":{"id":7789,"offset":"Vector2( 3400, -260 )","rect_size":"Vector2( 225, 185 )","res_name":"StepSection","section_display_title":"","section_name":"finish_setup"},"8115":{"action":"merge","config_key":"resoto.worker","id":8115,"offset":"Vector2( 320, 6900 )","rect_size":"Vector2( 236, 313.001 )","res_name":"StepUpdateConfig","value":"[\"digitalocean\"]","value_path":"resotoworker.collector"},"8170":{"id":8170,"offset":"Vector2( 4200, -440 )","rect_size":"Vector2( 225, 185 )","res_name":"StepSection","section_display_title":"Collecting Resources","section_name":"collect_run"},"8229":{"docs_link":"","id":8229,"offset":"Vector2( 5200, -440 )","rect_size":"Vector2( 366.001, 288 )","res_name":"StepCustomScene","special_scene_path":"res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_collect_run_result.tscn","uid":""},"8770":{"custom_order":8,"docs_link":"","id":8770,"offset":"Vector2( 1800, -380 )","rect_size":"Vector2( 345, 196 )","res_name":"StepAnswer","step_text":"Google Cloud Platform (GCP)","variable_check":"gcp_done==true"},"10406":{"custom_order":7,"docs_link":"","id":10406,"offset":"Vector2( 1800, -160 )","rect_size":"Vector2( 348, 196 )","res_name":"StepAnswer","step_text":"Kubernetes","variable_check":"k8s_done==true"},"11223":{"headline_text":"Setup Complete","id":11223,"offset":"Vector2( 0, -800 )","rect_size":"Vector2( 355, 80 )","res_name":"StepComment"},"11453":{"docs_link":"","highlight_ids":"","id":11453,"offset":"Vector2( 5620, -440 )","previous_allowed":true,"rect_size":"Vector2( 359.998, 399.999 )","res_name":"StepQuestion","step_text":"Do you want to finish the setup wizard or go back and change settings?","uid":""},"12260":{"action":"merge","config_key":"resoto.worker","id":12260,"offset":"Vector2( 4560, 5840 )","rect_size":"Vector2( 380.001, 349.999 )","res_name":"StepHandleObject","value_path":"k8s.configs","variable_name":"k8s_config","wrap_as_array":true},"13296":{"id":13296,"offset":"Vector2( 5040, 3860 )","rect_size":"Vector2( 225, 185 )","res_name":"StepSetVariable","variable_name":"gcp_done","variable_value":"true"},"13364":{"id":13364,"offset":"Vector2( 4660, 0 )","rect_size":"Vector2( 225, 125 )","res_name":"StepSectionGoto","section_goto":"resoto_setup"},"13400":{"id":13400,"offset":"Vector2( 2180, -160 )","rect_size":"Vector2( 225, 127 )","res_name":"StepSectionGoto","section_goto":"k8s_setup"},"13529":{"docs_link":"","highlight_ids":"","id":13529,"offset":"Vector2( 6880, 2620 )","previous_allowed":true,"rect_size":"Vector2( 469.8, 467.563 )","res_name":"StepQuestion","step_text":"It is possible to scrape different accounts.\n\nSince the organization should not be scraped, do you want to define the list of accounts to scrape?","uid":""},"13714":{"docs_link":"https://resoto.com/docs/getting-started/configure-cloud-provider-access/gcp","highlight_ids":"","id":13714,"offset":"Vector2( 540, 3800 )","previous_allowed":true,"rect_size":"Vector2( 591, 389 )","res_name":"StepQuestion","step_text":"Google Cloud is using service account files in order to connect to an account.\nResoto Worker needs access to such a file to scrape the account.\nIf you have multiple accounts, you need to provide a service account file for each account.\n\nIf Resoto is running inside Google Cloud, it is possible to autodetect the accounts to scrape. In this case permissions need to be set for the instance Resoto is running on.\n\nSee help for more information.","uid":""},"14015":{"id":14015,"offset":"Vector2( 680, -100 )","rect_size":"Vector2( 225, 189 )","res_name":"StepSection","section_display_title":"Cloud Provider Setup","section_name":"resoto_setup"},"14271":{"custom_order":4,"docs_link":"","id":14271,"offset":"Vector2( 6080, -440 )","rect_size":"Vector2( 264.001, 196 )","res_name":"StepAnswer","step_text":"Finish setup!","variable_check":""},"14598":{"action":"","config_key":"resoto.worker","id":14598,"offset":"Vector2( 3060, 5500 )","rect_size":"Vector2( 352, 350 )","res_name":"StepHandleObject","value_path":"k8s.config_files","variable_name":"k8s_config_file","wrap_as_array":true},"14821":{"id":14821,"offset":"Vector2( 4900, -440 )","rect_size":"Vector2( 225, 185 )","res_name":"StepSection","section_display_title":"Collect Results","section_name":"result_screen"},"15676":{"docs_link":"","id":15676,"offset":"Vector2( 4480, -440 )","rect_size":"Vector2( 366, 288 )","res_name":"StepCustomScene","special_scene_path":"res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_collect_run_status.tscn","uid":""},"15731":{"headline_text":"DigitalOcean Setup","id":15731,"offset":"Vector2( 0, 6800 )","rect_size":"Vector2( 355, 80.0015 )","res_name":"StepComment"},"15919":{"headline_text":"Setup Intro","id":15919,"offset":"Vector2( -440, -200 )","rect_size":"Vector2( 355, 80.001 )","res_name":"StepComment"},"15992":{"custom_order":4,"docs_link":"","id":15992,"offset":"Vector2( 1800, 60 )","rect_size":"Vector2( 347.4, 196 )","res_name":"StepAnswer","step_text":"DigitalOcean","variable_check":"do_done==true"},"16908":{"custom_order":10,"docs_link":"","id":16908,"offset":"Vector2( 7400, 2620 )","rect_size":"Vector2( 264.001, 196 )","res_name":"StepAnswer","step_text":"No","variable_check":""},"17418":{"config":"resoto.worker","id":17418,"kind":"element_count","offset":"Vector2( 3480, 2060 )","operation":"<=","rect_size":"Vector2( 260.001, 260 )","res_name":"StepConfigConditional","variable_name":"aws.profiles","variable_value":"1"},"17446":{"custom_order":0,"docs_link":"","id":17446,"offset":"Vector2( 7400, 2900 )","rect_size":"Vector2( 264.001, 196 )","res_name":"StepAnswer","step_text":"Yes","variable_check":""},"19854":{"id":19854,"offset":"Vector2( 2180, 60 )","rect_size":"Vector2( 225, 127 )","res_name":"StepSectionGoto","section_goto":"digitalocean_setup"},"20399":{"custom_order":0,"docs_link":"","id":20399,"offset":"Vector2( 6080, -200 )","rect_size":"Vector2( 264.001, 240 )","res_name":"StepAnswer","step_text":"Go back and change settings","variable_check":""},"21137":{"id":21137,"offset":"Vector2( 5640, 5500 )","rect_size":"Vector2( 224.999, 185 )","res_name":"StepSetVariable","variable_name":"k8s_done","variable_value":"true"},"22432":{"custom_order":10,"docs_link":"","id":22432,"offset":"Vector2( 1180, 3800 )","rect_size":"Vector2( 478, 196 )","res_name":"StepAnswer","step_text":"Discover GCP projects automatically","variable_check":""},"23560":{"custom_order":0,"docs_link":"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_security_iam.html","id":23560,"offset":"Vector2( 6080, 1820 )","rect_size":"Vector2( 361, 196 )","res_name":"StepAnswer","step_text":"Yes","variable_check":""},"24906":{"headline_text":"Show collect progress","id":24906,"offset":"Vector2( 4200, -600 )","rect_size":"Vector2( 355.001, 80 )","res_name":"StepComment"},"26404":{"action":"merge","config_key":"resoto.worker","id":26404,"offset":"Vector2( 1700, 3800 )","rect_size":"Vector2( 382.001, 313 )","res_name":"StepUpdateConfig","value":"[]","value_path":"gcp.service_account"},"26588":{"id":26588,"offset":"Vector2( 2540, 6900 )","rect_size":"Vector2( 225, 185 )","res_name":"StepSetVariable","variable_name":"do_done","variable_value":"true"},"26844":{"custom_order":10,"docs_link":"","id":26844,"offset":"Vector2( 6080, 2620 )","rect_size":"Vector2( 363, 196 )","res_name":"StepAnswer","step_text":"No (default)","variable_check":""},"26904":{"id":26904,"offset":"Vector2( 1640, 6020 )","rect_size":"Vector2( 225, 126.999 )","res_name":"StepCreateObject","variable_name":"k8s_config"},"27678":{"id":27678,"offset":"Vector2( 6400, -200 )","rect_size":"Vector2( 225, 125 )","res_name":"StepSectionGoto","section_goto":"resoto_setup"},"29978":{"id":29978,"offset":"Vector2( 6400, -440 )","rect_size":"Vector2( 225, 127 )","res_name":"StepSectionGoto","section_goto":"setup_complete"},"30694":{"action":"set","config_key":"resoto.worker","id":30694,"offset":"Vector2( 6480, 1820 )","rect_size":"Vector2( 342, 313 )","res_name":"StepUpdateConfig","value":"true","value_path":"aws.scrape_org"},"32172":{"docs_link":"","id":32172,"offset":"Vector2( 8600, 2360 )","previous_allowed":true,"rect_size":"Vector2( 400, 480.001 )","res_name":"StepText","step_text":"The AWS Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].","uid":""},"32354":{"id":32354,"offset":"Vector2( 1660, 5300 )","rect_size":"Vector2( 225, 127 )","res_name":"StepCreateObject","variable_name":"k8s_config_file"},"32588":{"docs_link":"","highlight_ids":"","id":32588,"offset":"Vector2( 3660, 4220 )","previous_allowed":true,"rect_size":"Vector2( 223.922, 300 )","res_name":"StepQuestion","step_text":"Do you want to add more GCP service accounts?","uid":""},"32691":{"action":"replace","config_key":"resoto.worker","docs_link":"","id":32691,"offset":"Vector2( 680, 6900 )","previous_allowed":true,"rect_size":"Vector2( 519.999, 539.998 )","res_name":"StepPrompt","separator":",","special_scene_path":"","step_text":"Please enter the token to access your account.\n\n[url=https://cloud.digitalocean.com/account/api/tokens]Click here[/url] to get help retrieving the access token.","uid":"","value_path":"digitalocean.api_tokens"},"33697":{"custom_order":10,"docs_link":"","id":33697,"offset":"Vector2( 3920, 4220 )","rect_size":"Vector2( 264.001, 196 )","res_name":"StepAnswer","step_text":"No","variable_check":""},"34704":{"id":34704,"offset":"Vector2( 2180, -580 )","rect_size":"Vector2( 225, 127 )","res_name":"StepSectionGoto","section_goto":"aws_setup"},"35691":{"custom_order":0,"docs_link":"","id":35691,"offset":"Vector2( 3920, 4620 )","rect_size":"Vector2( 264.001, 196 )","res_name":"StepAnswer","step_text":"Yes","variable_check":""},"35925":{"action":"replace","config_key":"resoto.worker","docs_link":"","id":35925,"offset":"Vector2( 2340, 6020 )","previous_allowed":true,"rect_size":"Vector2( 419.999, 560.001 )","res_name":"StepPrompt","separator":"","special_scene_path":"","step_text":"Please enter the url of the Kubernetes API server.\n\nThis is usually something like:\n[code]https://<host>:<port>[/code]\nExample: [code]https://k8s-cluster-server.example.com[/code]","uid":"","value_path":"[k8s_config].server"},"36398":{"headline_text":"Finish Setup and Save Config to Core","id":36398,"offset":"Vector2( 3400, -400 )","rect_size":"Vector2( 500, 80 )","res_name":"StepComment"},"36411":{"action":"merge","config_key":"resoto.worker","id":36411,"offset":"Vector2( 4560, 6260 )","rect_size":"Vector2( 376.646, 350 )","res_name":"StepHandleObject","value_path":"k8s.configs","variable_name":"k8s_config","wrap_as_array":true},"37287":{"custom_order":2,"docs_link":"","id":37287,"offset":"Vector2( 1800, 280 )","rect_size":"Vector2( 344.445, 211.668 )","res_name":"StepAnswer","step_text":"My cloud provider is not listed here","variable_check":""},"37535":{"docs_link":"","highlight_ids":"","id":37535,"offset":"Vector2( 2120, 3800 )","previous_allowed":true,"rect_size":"Vector2( 360, 320 )","res_name":"StepQuestion","step_text":"Resoto will detect the accounts to scrape based on the instance profile Resoto Worker is running on.\n\nYou are all set!","uid":""},"40002":{"action":"set","config_key":"resoto.worker","id":40002,"offset":"Vector2( 6500, 2620 )","rect_size":"Vector2( 344, 313.001 )","res_name":"StepUpdateConfig","value":"false","value_path":"aws.scrape_org"},"42350":{"docs_link":"","highlight_ids":"","id":42350,"offset":"Vector2( 1260, 6900 )","previous_allowed":true,"rect_size":"Vector2( 380, 300.001 )","res_name":"StepQuestion","step_text":"Do you have more cluster tokens to add?","uid":""},"43219":{"id":43219,"offset":"Vector2( 2180, -380 )","rect_size":"Vector2( 225, 127 )","res_name":"StepSectionGoto","section_goto":"gcp_setup"},"44107":{"docs_link":"https://resoto.com/docs/getting-started","id":44107,"offset":"Vector2( 2220, 280 )","previous_allowed":true,"rect_size":"Vector2( 860, 360 )","res_name":"StepText","step_text":"We are working hard on expanding our plugins every day.\n\nIt could also be that the provider or plugin you want to use is not available here but in other ways of setting up Resoto.\n\nPlease check out the docs (click the ? in the upper right corner) and join our Discord to get direct support!","uid":""},"44684":{"custom_order":0,"docs_link":"","id":44684,"offset":"Vector2( 1740, 7200 )","rect_size":"Vector2( 264, 196.001 )","res_name":"StepAnswer","step_text":"Yes","variable_check":""},"44887":{"docs_link":"","id":44887,"offset":"Vector2( 4580, 3860 )","previous_allowed":true,"rect_size":"Vector2( 420, 420 )","res_name":"StepText","step_text":"The Google Cloud Platform Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].","uid":""},"45237":{"docs_link":"","id":45237,"offset":"Vector2( 5220, 5500 )","previous_allowed":true,"rect_size":"Vector2( 399.999, 380 )","res_name":"StepText","step_text":"The Kubernetes Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].","uid":""},"46009":{"custom_order":10,"docs_link":"","id":46009,"offset":"Vector2( 1740, 6900 )","rect_size":"Vector2( 264, 196 )","res_name":"StepAnswer","step_text":"No","variable_check":""},"47535":{"custom_order":10,"docs_link":"","id":47535,"offset":"Vector2( 2540, 3800 )","rect_size":"Vector2( 348.845, 196 )","res_name":"StepAnswer","step_text":"Fantastic!","variable_check":""},"48328":{"action":"replace","config_key":"resoto.worker","docs_link":"","id":48328,"offset":"Vector2( 2820, 6020 )","previous_allowed":true,"rect_size":"Vector2( 460, 560.001 )","res_name":"StepPrompt","separator":"","special_scene_path":"","step_text":"Please enter the certificate authority data.\nThis is the base64 encoded certificate authority data of the cluster.\n\nYou can find this data in the kubeconfig file in the related cluster section.\n\nOnly required in case of a custom certificate.\nLeave the field empty, if this is not the case.","uid":"","value_path":"[k8s_config].certificate_authority_data"},"49370":{"custom_order":0,"docs_link":"https://resoto.com/docs/getting-started/configure-cloud-provider-access/gcp","id":49370,"offset":"Vector2( 2540, 4040 )","rect_size":"Vector2( 345.959, 209.799 )","res_name":"StepAnswer","step_text":"Add additional GCP service account files","variable_check":""},"49866":{"docs_link":"","highlight_ids":"","id":49866,"offset":"Vector2( 3880, 1680 )","previous_allowed":true,"rect_size":"Vector2( 589, 365 )","res_name":"StepQuestion","step_text":"Do you want Resoto to use a specific role that you have setup in AWS?\n\nThis is not required.","uid":""},"53647":{"docs_link":"","id":53647,"offset":"Vector2( 2120, 6900 )","previous_allowed":true,"rect_size":"Vector2( 400, 419.998 )","res_name":"StepText","step_text":"The DigitalOcean Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].","uid":""},"56941":{"id":56941,"offset":"Vector2( 2820, 6900 )","rect_size":"Vector2( 225.001, 126.999 )","res_name":"StepSectionGoto","section_goto":"resoto_setup"},"57110":{"action":"replace","config_key":"resoto.worker","docs_link":"","id":57110,"offset":"Vector2( 3320, 6020 )","previous_allowed":true,"rect_size":"Vector2( 456, 492 )","res_name":"StepPrompt","separator":"","special_scene_path":"","step_text":"Please enter the personal user access token.","uid":"","value_path":"[k8s_config].token"},"58881":{"custom_order":0,"docs_link":"","id":58881,"offset":"Vector2( 4560, 1980 )","rect_size":"Vector2( 300.002, 196 )","res_name":"StepAnswer","step_text":"No","variable_check":""},"59950":{"id":59950,"offset":"Vector2( -180, 2400 )","rect_size":"Vector2( 224.999, 189 )","res_name":"StepSection","section_display_title":"Resoto AWS Collector","section_name":"aws_setup"},"60651":{"id":60651,"offset":"Vector2( 0, 3800 )","rect_size":"Vector2( 225, 189 )","res_name":"StepSection","section_display_title":"Resoto GCP Collector","section_name":"gcp_setup"},"61346":{"id":61346,"offset":"Vector2( 0, 5300 )","rect_size":"Vector2( 225, 189 )","res_name":"StepSection","section_display_title":"Resoto Kubernetes Collector","section_name":"k8s_setup"},"61921":{"id":61921,"offset":"Vector2( 0, 6900 )","rect_size":"Vector2( 225, 189 )","res_name":"StepSection","section_display_title":"Resoto DigitalOcean Collector","section_name":"digitalocean_setup"},"61929":{"docs_link":"","highlight_ids":"","id":61929,"offset":"Vector2( 3820, 6020 )","previous_allowed":true,"rect_size":"Vector2( 401, 300 )","res_name":"StepQuestion","step_text":"Do you have more cluster configurations to add?","uid":""},"63220":{"custom_order":10,"docs_link":"","id":63220,"offset":"Vector2( 4560, 1680 )","rect_size":"Vector2( 294.002, 196.001 )","res_name":"StepAnswer","step_text":"Yes","variable_check":""},"64714":{"custom_order":0,"docs_link":"","id":64714,"offset":"Vector2( 1180, 4220 )","rect_size":"Vector2( 479.88, 270.277 )","res_name":"StepAnswer","step_text":"Use service account file(s) to connect","variable_check":""},"64951":{"custom_order":10,"docs_link":"","id":64951,"offset":"Vector2( 4260, 6260 )","rect_size":"Vector2( 264, 196.001 )","res_name":"StepAnswer","step_text":"No","variable_check":""},"65559":{"custom_order":0,"docs_link":"","id":65559,"offset":"Vector2( 4260, 6020 )","rect_size":"Vector2( 264, 196 )","res_name":"StepAnswer","step_text":"Yes","variable_check":""},"69306":{"action":"merge","config_key":"resoto.worker","id":69306,"offset":"Vector2( 100, 2400 )","rect_size":"Vector2( 296.041, 313 )","res_name":"StepUpdateConfig","value":"[\"aws\"]","value_path":"resotoworker.collector"},"69475":{"action":"set","config_key":"resoto.worker","docs_link":"","id":69475,"offset":"Vector2( 4960, 1680 )","previous_allowed":true,"rect_size":"Vector2( 420.001, 492 )","res_name":"StepPrompt","separator":"","special_scene_path":"","step_text":"Please enter the role name you want to use.","uid":"","value_path":"aws.role"},"71307":{"id":71307,"offset":"Vector2( 3680, -260 )","rect_size":"Vector2( 219, 188 )","res_name":"StepSaveConfigsOnCore"},"76525":{"docs_link":"https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws#authentication","highlight_ids":"","id":76525,"offset":"Vector2( 460, 2400 )","previous_allowed":true,"rect_size":"Vector2( 340, 340 )","res_name":"StepQuestion","step_text":"AWS allows several access methods to connect to your account(s).\n\nWhich one do you want to use?","uid":""},"77730":{"id":77730,"offset":"Vector2( 5340, 3860 )","rect_size":"Vector2( 225.001, 127 )","res_name":"StepSectionGoto","section_goto":"resoto_setup"},"81056":{"custom_order":10,"docs_link":"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html","id":81056,"offset":"Vector2( 1080, 1500 )","rect_size":"Vector2( 275.399, 238.605 )","res_name":"StepAnswer","step_text":"Resoto is running on a machine with a configured InstanceProfile","variable_check":""},"83857":{"headline_text":"GCP Setup","id":83857,"offset":"Vector2( 0, 3680 )","rect_size":"Vector2( 355, 80.0005 )","res_name":"StepComment"},"84670":{"docs_link":"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html","id":84670,"offset":"Vector2( 1420, 1500 )","previous_allowed":true,"rect_size":"Vector2( 600, 240 )","res_name":"StepText","step_text":"Using an instance profile does not require any additional configuration.\n\nPlease make sure the permissions are set correctly in IAM for the instance Resoto Worker is running on.","uid":""},"91169":{"headline_text":"Kubernetes Setup","id":91169,"offset":"Vector2( 0, 5200 )","rect_size":"Vector2( 355, 80 )","res_name":"StepComment"},"92219":{"custom_order":8,"docs_link":"https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#environment-variables","id":92219,"offset":"Vector2( 1080, 1760 )","rect_size":"Vector2( 280, 260 )","res_name":"StepAnswer","step_text":"AWS access environment variables are provided to Resoto","variable_check":""},"93915":{"action":"merge","config_key":"resoto.worker","id":93915,"offset":"Vector2( 280, 5300 )","rect_size":"Vector2( 236, 312.999 )","res_name":"StepUpdateConfig","value":"[\"k8s\"]","value_path":"resotoworker.collector"},"94485":{"docs_link":"","id":94485,"offset":"Vector2( 1420, 1760 )","previous_allowed":true,"rect_size":"Vector2( 600, 260 )","res_name":"StepText","step_text":"Using environment variables does not require any additional configuration.\n\nPlease make sure the variables are available to the Resoto Worker process.","uid":""},"97446":{"action":"set","config_key":"resoto.worker","docs_link":"","id":97446,"offset":"Vector2( 7720, 2900 )","previous_allowed":true,"rect_size":"Vector2( 577.245, 518.682 )","res_name":"StepPrompt","separator":",","special_scene_path":"","step_text":"Enter all account ids to be scraped, separated by comma.","uid":"","value_path":"aws.account"},"97618":{"docs_link":"","highlight_ids":"","id":97618,"offset":"Vector2( 540, 5300 )","previous_allowed":true,"rect_size":"Vector2( 514.438, 421.478 )","res_name":"StepQuestion","step_text":"The simplest way to connect to your cluster is using a kubeconfig file.\n\nFor this method to work, Resoto Worker needs to have access to the configured file.\n\nIn case this is not possible, or difficult to achieve, you can configure the access directly.","uid":""},"99489":{"custom_order":6,"docs_link":"Configure Access and Secret Key","id":99489,"offset":"Vector2( 1080, 2040 )","rect_size":"Vector2( 280, 240 )","res_name":"StepAnswer","step_text":"Use an AWS AccessKey and Secret Key","variable_check":""},"100530":{"custom_order":4,"docs_link":"Usually located at ~/.aws/config","id":100530,"offset":"Vector2( 1080, 2660 )","rect_size":"Vector2( 282.601, 253 )","res_name":"StepAnswer","step_text":"Use AWS Profiles","variable_check":""},"102181":{"docs_link":"","highlight_ids":"","id":102181,"offset":"Vector2( 6880, 1820 )","previous_allowed":true,"rect_size":"Vector2( 240.001, 400 )","res_name":"StepQuestion","step_text":"Should Resoto assume that role inside the current account as well?","uid":""},"102377":{"custom_order":0,"docs_link":"","id":102377,"offset":"Vector2( 1080, 3220 )","rect_size":"Vector2( 300, 240 )","res_name":"StepAnswer","step_text":"The Option I would like to use is not listed here","variable_check":""},"102826":{"custom_order":10,"docs_link":"","id":102826,"offset":"Vector2( 1140, 5300 )","rect_size":"Vector2( 410.76, 196 )","res_name":"StepAnswer","step_text":"Resoto has access to a kubeconfig file","variable_check":""},"106362":{"custom_order":0,"docs_link":"","id":106362,"offset":"Vector2( 1140, 6020 )","rect_size":"Vector2( 410.76, 196 )","res_name":"StepAnswer","step_text":"Configure the access directly","variable_check":""},"107012":{"action":"set","config_key":"resoto.worker","docs_link":"","id":107012,"offset":"Vector2( 1420, 2040 )","previous_allowed":true,"rect_size":"Vector2( 393.799, 492 )","res_name":"StepPrompt","separator":"","special_scene_path":"","step_text":"Enter the AWS Access Key ID","uid":"","value_path":"aws.access_key_id"},"109673":{"action":"replace","config_key":"resoto.worker","docs_link":"","id":109673,"offset":"Vector2( 1920, 5300 )","previous_allowed":true,"rect_size":"Vector2( 480, 539.999 )","res_name":"StepPrompt","separator":"","special_scene_path":"","step_text":"Resoto can use a kubeconfig file to access your Kubernetes cluster(s).\n\nPlease enter the path to the kubeconfig file.","uid":"","value_path":"[k8s_config_file].path"},"114327":{"custom_order":10,"docs_link":"","id":114327,"offset":"Vector2( 7200, 1820 )","rect_size":"Vector2( 264, 196 )","res_name":"StepAnswer","step_text":"Yes","variable_check":""},"114670":{"action":"set","config_key":"resoto.worker","docs_link":"","id":114670,"offset":"Vector2( 1840, 2040 )","previous_allowed":true,"rect_size":"Vector2( 418.279, 492 )","res_name":"StepPrompt","separator":"","special_scene_path":"","step_text":"Enter the AWS Secret Access Key","uid":"","value_path":"aws.secret_access_key"},"114995":{"custom_order":0,"docs_link":"","id":114995,"offset":"Vector2( 7200, 2060 )","rect_size":"Vector2( 264, 196 )","res_name":"StepAnswer","step_text":"No","variable_check":""},"119788":{"action":"merge","config_key":"resoto.worker","id":119788,"offset":"Vector2( 280, 3800 )","rect_size":"Vector2( 236, 313 )","res_name":"StepUpdateConfig","value":"[\"gcp\"]","value_path":"resotoworker.collector"},"122981":{"action":"set","config_key":"resoto.worker","id":122981,"offset":"Vector2( 7500, 1720 )","rect_size":"Vector2( 236.001, 305 )","res_name":"StepUpdateConfig","value":"true","value_path":"aws.assume_current"},"124668":{"docs_link":"","highlight_ids":"","id":124668,"offset":"Vector2( 2440, 5300 )","previous_allowed":true,"rect_size":"Vector2( 260, 359.999 )","res_name":"StepQuestion","step_text":"Do you have more kubeconfig files to access other Kubernetes clusters?","uid":""},"128215":{"custom_order":0,"docs_link":"","id":128215,"offset":"Vector2( 2760, 5300 )","rect_size":"Vector2( 264.001, 196 )","res_name":"StepAnswer","step_text":"Yes","variable_check":""},"128981":{"action":"set","config_key":"resoto.worker","id":128981,"offset":"Vector2( 7760, 1720 )","rect_size":"Vector2( 236, 305 )","res_name":"StepUpdateConfig","value":"true","value_path":"aws.do_not_scrape_current"},"129548":{"custom_order":10,"docs_link":"","id":129548,"offset":"Vector2( 2760, 5500 )","rect_size":"Vector2( 264.001, 196 )","res_name":"StepAnswer","step_text":"No","variable_check":""},"133408":{"id":133408,"offset":"Vector2( 5920, 5500 )","rect_size":"Vector2( 224.999, 127 )","res_name":"StepSectionGoto","section_goto":"resoto_setup"},"134957":{"action":"set","config_key":"resoto.worker","id":134957,"offset":"Vector2( 7500, 2060 )","rect_size":"Vector2( 236.001, 305 )","res_name":"StepUpdateConfig","value":"false","value_path":"aws.assume_current"},"138039":{"action":"set","config_key":"resoto.worker","id":138039,"offset":"Vector2( 7760, 2060 )","rect_size":"Vector2( 236, 305 )","res_name":"StepUpdateConfig","value":"false","value_path":"aws.do_not_scrape_current"},"139063":{"headline_text":"AWS Setup","id":139063,"offset":"Vector2( -180, 2300 )","rect_size":"Vector2( 355, 80 )","res_name":"StepComment"},"148056":{"action":"set","config_key":"resoto.worker","docs_link":"","id":148056,"offset":"Vector2( 1420, 2640 )","previous_allowed":true,"rect_size":"Vector2( 600, 540 )","res_name":"StepPrompt","separator":",","special_scene_path":"","step_text":"Enter the name of your profile.\n\nYou can enter multiple profiles separated by a comma.","uid":"","value_path":"aws.profiles"},"148682":{"action":"replace","config_key":"resoto.worker","docs_link":"","id":148682,"offset":"Vector2( 1920, 6020 )","previous_allowed":true,"rect_size":"Vector2( 366, 560.001 )","res_name":"StepPrompt","separator":"","special_scene_path":"","step_text":"Please enter the name of the cluster.\n\nThis name can be chosen freely, but should be unique.","uid":"","value_path":"[k8s_config].name"},"155747":{"docs_link":"https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws","id":155747,"offset":"Vector2( 1420, 3220 )","previous_allowed":true,"rect_size":"Vector2( 600, 440 )","res_name":"StepText","step_text":"I am able to handle the most common cases to connect to AWS.\n\nIt looks we do not cover your use case.\n\nSince most options to connect to AWS are implemented, you might be able to configure the access yourself by adjusting the configuration.\n\nPlease check out the docs (click the ? in the upper right corner) and join our Discord to get direct support!","uid":""},"164195":{"id":164195,"offset":"Vector2( 9320, 2360 )","rect_size":"Vector2( 225, 127 )","res_name":"StepSectionGoto","section_goto":"resoto_setup"},"180243":{"headline_text":"Check for aws.profiles and show Role Prompt if profiles <= 1","id":180243,"offset":"Vector2( 3860, 1420 )","rect_size":"Vector2( 798, 80 )","res_name":"StepComment"},"186585":{"headline_text":"scrape org = false","id":186585,"offset":"Vector2( 6080, 2480 )","rect_size":"Vector2( 355.001, 80 )","res_name":"StepComment"},"187971":{"headline_text":"scrape org = true","id":187971,"offset":"Vector2( 6080, 1680 )","rect_size":"Vector2( 355.001, 80 )","res_name":"StepComment"},"191106":{"headline_text":"scrape accounts ?","id":191106,"offset":"Vector2( 6880, 2480 )","rect_size":"Vector2( 355.001, 80 )","res_name":"StepComment"},"194828":{"headline_text":"assume role in account?","id":194828,"offset":"Vector2( 6900, 1660 )","rect_size":"Vector2( 355.001, 80 )","res_name":"StepComment"},"201971":{"headline_text":"Finish aws setup","id":201971,"offset":"Vector2( 8600, 2220 )","rect_size":"Vector2( 355, 80 )","res_name":"StepComment"}}}
+{
+	"info": {
+		"script_name": "setup_wizard",
+		"home_screen": "resoto_setup"
+	},
+	"nodes": {
+		"1444": {
+			"id": 1444,
+			"res_name": "StepSection",
+			"offset": "Vector2( -440, -100 )",
+			"rect_size": "Vector2( 225, 189 )",
+			"section_name": "start",
+			"section_display_title": "Welcome to Resoto!"
+		},
+		"2330": {
+			"id": 2330,
+			"res_name": "StepText",
+			"offset": "Vector2( 260, -100 )",
+			"rect_size": "Vector2( 380, 680 )",
+			"step_text": "Hello and welcome!\n\n[b]I am [color=#e98df7]C.K.[/color] and I am a Wizard![/b]\n\nI will help you to set up your Resoto  installation.\n\nYou can always [url=ui_help://You can open this Setup Wizard from the 'Settings' popup in the main menu]come back here later[/url] and use my help to setup different cloud providers.\n\n\nThis setup wizard is shown on start-up until a Collector is configured.",
+			"docs_link": "",
+			"previous_allowed": false,
+			"uid": ""
+		},
+		"3573": {
+			"id": 3573,
+			"res_name": "StepSection",
+			"offset": "Vector2( 0, -700 )",
+			"rect_size": "Vector2( 225.001, 189 )",
+			"section_name": "setup_complete",
+			"section_display_title": "Setup Complete!"
+		},
+		"3717": {
+			"id": 3717,
+			"res_name": "StepComment",
+			"offset": "Vector2( 680, -200 )",
+			"rect_size": "Vector2( 355, 80.001 )",
+			"headline_text": "Resoto Setup"
+		},
+		"4050": {
+			"id": 4050,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 940, -100 )",
+			"rect_size": "Vector2( 400, 680 )",
+			"step_text": "Resoto is able to talk to and collect data from different cloud providers.\n\nIn order to setup the system, you need to select at least one provider.\n\nAfter each setup, you will return here.",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": false,
+			"uid": "configured_collectors"
+		},
+		"5492": {
+			"id": 5492,
+			"res_name": "StepHandleObject",
+			"offset": "Vector2( 3060, 5120 )",
+			"rect_size": "Vector2( 350.2, 349.999 )",
+			"config_key": "resoto.worker",
+			"value_path": "k8s.config_files",
+			"variable_name": "k8s_config_file",
+			"action": "",
+			"wrap_as_array": true
+		},
+		"6270": {
+			"id": 6270,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 3220, 4220 )",
+			"rect_size": "Vector2( 366, 559.999 )",
+			"step_text": "Enter the path to the GCP service account file.\n\nPlease make sure that this file is accessible to ResotoWorker.",
+			"docs_link": "https://cloud.google.com/iam/docs/creating-managing-service-account-keys",
+			"config_key": "resoto.worker",
+			"value_path": "gcp.service_account",
+			"action": "merge",
+			"separator": ",",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"6750": {
+			"id": 6750,
+			"res_name": "StepText",
+			"offset": "Vector2( 300, -700 )",
+			"rect_size": "Vector2( 600, 320 )",
+			"step_text": "Have fun and enjoy Resoto!\n\nJoin our Discord if you have questions, need support, or want to chat about Infrastructure Intelligence!",
+			"docs_link": "",
+			"previous_allowed": false,
+			"uid": ""
+		},
+		"6770": {
+			"id": 6770,
+			"res_name": "StepText",
+			"offset": "Vector2( 4200, 0 )",
+			"rect_size": "Vector2( 420, 320 )",
+			"step_text": "There was a problem saving your configuration.\n\nPlease check if all data you entered is correct!",
+			"docs_link": "",
+			"previous_allowed": false,
+			"uid": ""
+		},
+		"6896": {
+			"id": 6896,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1800, -600 )",
+			"rect_size": "Vector2( 344, 196 )",
+			"step_text": "Amazon Web Services (AWS)",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": "aws_done==true"
+		},
+		"7078": {
+			"id": 7078,
+			"res_name": "StepSetVariable",
+			"offset": "Vector2( 9020, 2360 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"variable_name": "aws_done",
+			"variable_value": "true"
+		},
+		"7433": {
+			"id": 7433,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 5460, 2300 )",
+			"rect_size": "Vector2( 505.126, 386.346 )",
+			"step_text": "Do you want to scrape your accounts from the organizations?\nScraping the organization requires specific permissions.\n\nPlease find additional information in the help at the top right.",
+			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"7512": {
+			"id": 7512,
+			"res_name": "StepCustomScene",
+			"offset": "Vector2( -160, -100 )",
+			"rect_size": "Vector2( 366, 280 )",
+			"docs_link": "",
+			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_prefill_cloud_provider_vars.tscn",
+			"uid": ""
+		},
+		"7789": {
+			"id": 7789,
+			"res_name": "StepSection",
+			"offset": "Vector2( 3400, -260 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"section_name": "finish_setup",
+			"section_display_title": ""
+		},
+		"8115": {
+			"id": 8115,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 320, 6900 )",
+			"rect_size": "Vector2( 236, 313.001 )",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.collector",
+			"action": "merge",
+			"value": "[\"digitalocean\"]"
+		},
+		"8170": {
+			"id": 8170,
+			"res_name": "StepSection",
+			"offset": "Vector2( 4200, -440 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"section_name": "collect_run",
+			"section_display_title": "Collecting Resources"
+		},
+		"8229": {
+			"id": 8229,
+			"res_name": "StepCustomScene",
+			"offset": "Vector2( 5200, -440 )",
+			"rect_size": "Vector2( 366.001, 288 )",
+			"docs_link": "",
+			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_collect_run_result.tscn",
+			"uid": ""
+		},
+		"8770": {
+			"id": 8770,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1800, -380 )",
+			"rect_size": "Vector2( 345, 196 )",
+			"step_text": "Google Cloud Platform (GCP)",
+			"docs_link": "",
+			"custom_order": 8,
+			"variable_check": "gcp_done==true"
+		},
+		"10406": {
+			"id": 10406,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1800, -160 )",
+			"rect_size": "Vector2( 348, 196 )",
+			"step_text": "Kubernetes",
+			"docs_link": "",
+			"custom_order": 7,
+			"variable_check": "k8s_done==true"
+		},
+		"11223": {
+			"id": 11223,
+			"res_name": "StepComment",
+			"offset": "Vector2( 0, -800 )",
+			"rect_size": "Vector2( 355, 80 )",
+			"headline_text": "Setup Complete"
+		},
+		"11453": {
+			"id": 11453,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 5620, -440 )",
+			"rect_size": "Vector2( 359.998, 399.999 )",
+			"step_text": "Do you want to finish the setup wizard or go back and change settings?",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"12260": {
+			"id": 12260,
+			"res_name": "StepHandleObject",
+			"offset": "Vector2( 4560, 5840 )",
+			"rect_size": "Vector2( 380.001, 349.999 )",
+			"config_key": "resoto.worker",
+			"value_path": "k8s.configs",
+			"variable_name": "k8s_config",
+			"action": "merge",
+			"wrap_as_array": true
+		},
+		"13296": {
+			"id": 13296,
+			"res_name": "StepSetVariable",
+			"offset": "Vector2( 5040, 3860 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"variable_name": "gcp_done",
+			"variable_value": "true"
+		},
+		"13364": {
+			"id": 13364,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 4660, 0 )",
+			"rect_size": "Vector2( 225, 125 )",
+			"section_goto": "resoto_setup"
+		},
+		"13400": {
+			"id": 13400,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 2180, -160 )",
+			"rect_size": "Vector2( 225, 127 )",
+			"section_goto": "k8s_setup"
+		},
+		"13529": {
+			"id": 13529,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 6880, 2620 )",
+			"rect_size": "Vector2( 469.8, 467.563 )",
+			"step_text": "It is possible to scrape different accounts.\n\nSince the organization should not be scraped, do you want to define the list of accounts to scrape?",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"13714": {
+			"id": 13714,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 540, 3800 )",
+			"rect_size": "Vector2( 591, 389 )",
+			"step_text": "Google Cloud is using service account files in order to connect to an account.\nResoto Worker needs access to such a file to scrape the account.\nIf you have multiple accounts, you need to provide a service account file for each account.\n\nIf Resoto is running inside Google Cloud, it is possible to autodetect the accounts to scrape. In this case permissions need to be set for the instance Resoto is running on.\n\nSee help for more information.",
+			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/gcp",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"14015": {
+			"id": 14015,
+			"res_name": "StepSection",
+			"offset": "Vector2( 680, -100 )",
+			"rect_size": "Vector2( 225, 189 )",
+			"section_name": "resoto_setup",
+			"section_display_title": "Cloud Provider Setup"
+		},
+		"14271": {
+			"id": 14271,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 6080, -440 )",
+			"rect_size": "Vector2( 264.001, 196 )",
+			"step_text": "Finish setup!",
+			"docs_link": "",
+			"custom_order": 4,
+			"variable_check": ""
+		},
+		"14598": {
+			"id": 14598,
+			"res_name": "StepHandleObject",
+			"offset": "Vector2( 3060, 5500 )",
+			"rect_size": "Vector2( 352, 350 )",
+			"config_key": "resoto.worker",
+			"value_path": "k8s.config_files",
+			"variable_name": "k8s_config_file",
+			"action": "",
+			"wrap_as_array": true
+		},
+		"14821": {
+			"id": 14821,
+			"res_name": "StepSection",
+			"offset": "Vector2( 4900, -440 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"section_name": "result_screen",
+			"section_display_title": "Collect Results"
+		},
+		"15676": {
+			"id": 15676,
+			"res_name": "StepCustomScene",
+			"offset": "Vector2( 4480, -440 )",
+			"rect_size": "Vector2( 366, 288 )",
+			"docs_link": "",
+			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_collect_run_status.tscn",
+			"uid": ""
+		},
+		"15731": {
+			"id": 15731,
+			"res_name": "StepComment",
+			"offset": "Vector2( 0, 6800 )",
+			"rect_size": "Vector2( 355, 80.0015 )",
+			"headline_text": "DigitalOcean Setup"
+		},
+		"15919": {
+			"id": 15919,
+			"res_name": "StepComment",
+			"offset": "Vector2( -440, -200 )",
+			"rect_size": "Vector2( 355, 80.001 )",
+			"headline_text": "Setup Intro"
+		},
+		"15992": {
+			"id": 15992,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1800, 60 )",
+			"rect_size": "Vector2( 347.4, 196 )",
+			"step_text": "DigitalOcean",
+			"docs_link": "",
+			"custom_order": 4,
+			"variable_check": "do_done==true"
+		},
+		"16908": {
+			"id": 16908,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 7400, 2620 )",
+			"rect_size": "Vector2( 264.001, 196 )",
+			"step_text": "No",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"17418": {
+			"id": 17418,
+			"res_name": "StepConfigConditional",
+			"offset": "Vector2( 3480, 2060 )",
+			"rect_size": "Vector2( 260.001, 260 )",
+			"variable_name": "aws.profiles",
+			"variable_value": "1",
+			"operation": "<=",
+			"config": "resoto.worker",
+			"kind": "element_count"
+		},
+		"17446": {
+			"id": 17446,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 7400, 2900 )",
+			"rect_size": "Vector2( 264.001, 196 )",
+			"step_text": "Yes",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"19854": {
+			"id": 19854,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 2180, 60 )",
+			"rect_size": "Vector2( 225, 127 )",
+			"section_goto": "digitalocean_setup"
+		},
+		"20399": {
+			"id": 20399,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 6080, -200 )",
+			"rect_size": "Vector2( 264.001, 240 )",
+			"step_text": "Go back and change settings",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"21137": {
+			"id": 21137,
+			"res_name": "StepSetVariable",
+			"offset": "Vector2( 5640, 5500 )",
+			"rect_size": "Vector2( 224.999, 185 )",
+			"variable_name": "k8s_done",
+			"variable_value": "true"
+		},
+		"22432": {
+			"id": 22432,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1180, 3800 )",
+			"rect_size": "Vector2( 478, 196 )",
+			"step_text": "Discover GCP projects automatically",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"23560": {
+			"id": 23560,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 6080, 1820 )",
+			"rect_size": "Vector2( 361, 196 )",
+			"step_text": "Yes",
+			"docs_link": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_security_iam.html",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"24906": {
+			"id": 24906,
+			"res_name": "StepComment",
+			"offset": "Vector2( 4200, -600 )",
+			"rect_size": "Vector2( 355.001, 80 )",
+			"headline_text": "Show collect progress"
+		},
+		"26404": {
+			"id": 26404,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 1700, 3800 )",
+			"rect_size": "Vector2( 382.001, 313 )",
+			"config_key": "resoto.worker",
+			"value_path": "gcp.service_account",
+			"action": "merge",
+			"value": "[]"
+		},
+		"26588": {
+			"id": 26588,
+			"res_name": "StepSetVariable",
+			"offset": "Vector2( 2540, 6900 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"variable_name": "do_done",
+			"variable_value": "true"
+		},
+		"26844": {
+			"id": 26844,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 6080, 2620 )",
+			"rect_size": "Vector2( 363, 196 )",
+			"step_text": "No (default)",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"26904": {
+			"id": 26904,
+			"res_name": "StepCreateObject",
+			"offset": "Vector2( 1640, 6020 )",
+			"rect_size": "Vector2( 225, 126.999 )",
+			"variable_name": "k8s_config"
+		},
+		"27678": {
+			"id": 27678,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 6400, -200 )",
+			"rect_size": "Vector2( 225, 125 )",
+			"section_goto": "resoto_setup"
+		},
+		"29978": {
+			"id": 29978,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 6400, -440 )",
+			"rect_size": "Vector2( 225, 127 )",
+			"section_goto": "setup_complete"
+		},
+		"30694": {
+			"id": 30694,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 6480, 1820 )",
+			"rect_size": "Vector2( 342, 313 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.scrape_org",
+			"action": "set",
+			"value": "true"
+		},
+		"32172": {
+			"id": 32172,
+			"res_name": "StepText",
+			"offset": "Vector2( 8600, 2360 )",
+			"rect_size": "Vector2( 400, 480.001 )",
+			"step_text": "The AWS Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"32354": {
+			"id": 32354,
+			"res_name": "StepCreateObject",
+			"offset": "Vector2( 1660, 5300 )",
+			"rect_size": "Vector2( 225, 127 )",
+			"variable_name": "k8s_config_file"
+		},
+		"32588": {
+			"id": 32588,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 3660, 4220 )",
+			"rect_size": "Vector2( 223.922, 300 )",
+			"step_text": "Do you want to add more GCP service accounts?",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"32691": {
+			"id": 32691,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 680, 6900 )",
+			"rect_size": "Vector2( 519.999, 539.998 )",
+			"step_text": "Please enter the token to access your account.\n\n[url=https://cloud.digitalocean.com/account/api/tokens]Click here[/url] to get help retrieving the access token.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "digitalocean.api_tokens",
+			"action": "replace",
+			"separator": ",",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"33697": {
+			"id": 33697,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 3920, 4220 )",
+			"rect_size": "Vector2( 264.001, 196 )",
+			"step_text": "No",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"34704": {
+			"id": 34704,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 2180, -580 )",
+			"rect_size": "Vector2( 225, 127 )",
+			"section_goto": "aws_setup"
+		},
+		"35691": {
+			"id": 35691,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 3920, 4620 )",
+			"rect_size": "Vector2( 264.001, 196 )",
+			"step_text": "Yes",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"35925": {
+			"id": 35925,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 2340, 6020 )",
+			"rect_size": "Vector2( 419.999, 560.001 )",
+			"step_text": "Please enter the url of the Kubernetes API server.\n\nThis is usually something like:\n[code]https://<host>:<port>[/code]\nExample: [code]https://k8s-cluster-server.example.com[/code]",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "[k8s_config].server",
+			"action": "replace",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"36398": {
+			"id": 36398,
+			"res_name": "StepComment",
+			"offset": "Vector2( 3400, -400 )",
+			"rect_size": "Vector2( 500, 80 )",
+			"headline_text": "Finish Setup and Save Config to Core"
+		},
+		"36411": {
+			"id": 36411,
+			"res_name": "StepHandleObject",
+			"offset": "Vector2( 4560, 6260 )",
+			"rect_size": "Vector2( 376.646, 350 )",
+			"config_key": "resoto.worker",
+			"value_path": "k8s.configs",
+			"variable_name": "k8s_config",
+			"action": "merge",
+			"wrap_as_array": true
+		},
+		"37287": {
+			"id": 37287,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1800, 280 )",
+			"rect_size": "Vector2( 344.445, 211.668 )",
+			"step_text": "My cloud provider is not listed here",
+			"docs_link": "",
+			"custom_order": 2,
+			"variable_check": ""
+		},
+		"37535": {
+			"id": 37535,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 2120, 3800 )",
+			"rect_size": "Vector2( 360, 320 )",
+			"step_text": "Resoto will detect the accounts to scrape based on the instance profile Resoto Worker is running on.\n\nYou are all set!",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"40002": {
+			"id": 40002,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 6500, 2620 )",
+			"rect_size": "Vector2( 344, 313.001 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.scrape_org",
+			"action": "set",
+			"value": "false"
+		},
+		"42350": {
+			"id": 42350,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 1260, 6900 )",
+			"rect_size": "Vector2( 380, 300.001 )",
+			"step_text": "Do you have more cluster tokens to add?",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"43219": {
+			"id": 43219,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 2180, -380 )",
+			"rect_size": "Vector2( 225, 127 )",
+			"section_goto": "gcp_setup"
+		},
+		"44107": {
+			"id": 44107,
+			"res_name": "StepText",
+			"offset": "Vector2( 2220, 280 )",
+			"rect_size": "Vector2( 860, 360 )",
+			"step_text": "We are working hard on expanding our plugins every day.\n\nIt could also be that the provider or plugin you want to use is not available here but in other ways of setting up Resoto.\n\nPlease check out the docs (click the ? in the upper right corner) and join our Discord to get direct support!",
+			"docs_link": "https://resoto.com/docs/getting-started",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"44684": {
+			"id": 44684,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1740, 7200 )",
+			"rect_size": "Vector2( 264, 196.001 )",
+			"step_text": "Yes",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"44887": {
+			"id": 44887,
+			"res_name": "StepText",
+			"offset": "Vector2( 4580, 3860 )",
+			"rect_size": "Vector2( 420, 420 )",
+			"step_text": "The Google Cloud Platform Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"45237": {
+			"id": 45237,
+			"res_name": "StepText",
+			"offset": "Vector2( 5220, 5500 )",
+			"rect_size": "Vector2( 399.999, 380 )",
+			"step_text": "The Kubernetes Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"46009": {
+			"id": 46009,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1740, 6900 )",
+			"rect_size": "Vector2( 264, 196 )",
+			"step_text": "No",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"47535": {
+			"id": 47535,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 2540, 3800 )",
+			"rect_size": "Vector2( 348.845, 196 )",
+			"step_text": "Fantastic!",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"48328": {
+			"id": 48328,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 2820, 6020 )",
+			"rect_size": "Vector2( 460, 560.001 )",
+			"step_text": "Please enter the certificate authority data.\nThis is the base64 encoded certificate authority data of the cluster.\n\nYou can find this data in the kubeconfig file in the related cluster section.\n\nOnly required in case of a custom certificate.\nLeave the field empty, if this is not the case.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "[k8s_config].certificate_authority_data",
+			"action": "replace",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"49370": {
+			"id": 49370,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 2540, 4040 )",
+			"rect_size": "Vector2( 345.959, 209.799 )",
+			"step_text": "Add additional GCP service account files",
+			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/gcp",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"49866": {
+			"id": 49866,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 3880, 1680 )",
+			"rect_size": "Vector2( 589, 365 )",
+			"step_text": "Do you want Resoto to use a specific role that you have setup in AWS?\n\nThis is not required.",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"53647": {
+			"id": 53647,
+			"res_name": "StepText",
+			"offset": "Vector2( 2120, 6900 )",
+			"rect_size": "Vector2( 400, 419.998 )",
+			"step_text": "The DigitalOcean Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"56941": {
+			"id": 56941,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 2820, 6900 )",
+			"rect_size": "Vector2( 225.001, 126.999 )",
+			"section_goto": "resoto_setup"
+		},
+		"57110": {
+			"id": 57110,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 3320, 6020 )",
+			"rect_size": "Vector2( 456, 492 )",
+			"step_text": "Please enter the personal user access token.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "[k8s_config].token",
+			"action": "replace",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"58881": {
+			"id": 58881,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 4560, 1980 )",
+			"rect_size": "Vector2( 300.002, 196 )",
+			"step_text": "No",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"59950": {
+			"id": 59950,
+			"res_name": "StepSection",
+			"offset": "Vector2( -180, 2400 )",
+			"rect_size": "Vector2( 224.999, 189 )",
+			"section_name": "aws_setup",
+			"section_display_title": "Resoto AWS Collector"
+		},
+		"60651": {
+			"id": 60651,
+			"res_name": "StepSection",
+			"offset": "Vector2( 0, 3800 )",
+			"rect_size": "Vector2( 225, 189 )",
+			"section_name": "gcp_setup",
+			"section_display_title": "Resoto GCP Collector"
+		},
+		"61346": {
+			"id": 61346,
+			"res_name": "StepSection",
+			"offset": "Vector2( 0, 5300 )",
+			"rect_size": "Vector2( 225, 189 )",
+			"section_name": "k8s_setup",
+			"section_display_title": "Resoto Kubernetes Collector"
+		},
+		"61921": {
+			"id": 61921,
+			"res_name": "StepSection",
+			"offset": "Vector2( 0, 6900 )",
+			"rect_size": "Vector2( 225, 189 )",
+			"section_name": "digitalocean_setup",
+			"section_display_title": "Resoto DigitalOcean Collector"
+		},
+		"61929": {
+			"id": 61929,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 3820, 6020 )",
+			"rect_size": "Vector2( 401, 300 )",
+			"step_text": "Do you have more cluster configurations to add?",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"63220": {
+			"id": 63220,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 4560, 1680 )",
+			"rect_size": "Vector2( 294.002, 196.001 )",
+			"step_text": "Yes",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"64714": {
+			"id": 64714,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1180, 4220 )",
+			"rect_size": "Vector2( 479.88, 270.277 )",
+			"step_text": "Use service account file(s) to connect",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"64951": {
+			"id": 64951,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 4260, 6260 )",
+			"rect_size": "Vector2( 264, 196.001 )",
+			"step_text": "No",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"65559": {
+			"id": 65559,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 4260, 6020 )",
+			"rect_size": "Vector2( 264, 196 )",
+			"step_text": "Yes",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"69306": {
+			"id": 69306,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 100, 2400 )",
+			"rect_size": "Vector2( 296.041, 313 )",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.collector",
+			"action": "merge",
+			"value": "[\"aws\"]"
+		},
+		"69475": {
+			"id": 69475,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 4960, 1680 )",
+			"rect_size": "Vector2( 420.001, 492 )",
+			"step_text": "Please enter the role name you want to use.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "aws.role",
+			"action": "set",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"71307": {
+			"id": 71307,
+			"res_name": "StepSaveConfigsOnCore",
+			"offset": "Vector2( 3680, -260 )",
+			"rect_size": "Vector2( 219, 188 )"
+		},
+		"76525": {
+			"id": 76525,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 460, 2400 )",
+			"rect_size": "Vector2( 340, 340 )",
+			"step_text": "AWS allows several access methods to connect to your account(s).\n\nWhich one do you want to use?",
+			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws#authentication",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"77730": {
+			"id": 77730,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 5340, 3860 )",
+			"rect_size": "Vector2( 225.001, 127 )",
+			"section_goto": "resoto_setup"
+		},
+		"81056": {
+			"id": 81056,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1080, 1500 )",
+			"rect_size": "Vector2( 275.399, 238.605 )",
+			"step_text": "Resoto is running on a machine with a configured InstanceProfile",
+			"docs_link": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"83857": {
+			"id": 83857,
+			"res_name": "StepComment",
+			"offset": "Vector2( 0, 3680 )",
+			"rect_size": "Vector2( 355, 80.0005 )",
+			"headline_text": "GCP Setup"
+		},
+		"84670": {
+			"id": 84670,
+			"res_name": "StepText",
+			"offset": "Vector2( 1420, 1500 )",
+			"rect_size": "Vector2( 600, 240 )",
+			"step_text": "Using an instance profile does not require any additional configuration.\n\nPlease make sure the permissions are set correctly in IAM for the instance Resoto Worker is running on.",
+			"docs_link": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"91169": {
+			"id": 91169,
+			"res_name": "StepComment",
+			"offset": "Vector2( 0, 5200 )",
+			"rect_size": "Vector2( 355, 80 )",
+			"headline_text": "Kubernetes Setup"
+		},
+		"92219": {
+			"id": 92219,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1080, 1760 )",
+			"rect_size": "Vector2( 280, 260 )",
+			"step_text": "AWS access environment variables are provided to Resoto",
+			"docs_link": "https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#environment-variables",
+			"custom_order": 8,
+			"variable_check": ""
+		},
+		"93915": {
+			"id": 93915,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 280, 5300 )",
+			"rect_size": "Vector2( 236, 312.999 )",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.collector",
+			"action": "merge",
+			"value": "[\"k8s\"]"
+		},
+		"94485": {
+			"id": 94485,
+			"res_name": "StepText",
+			"offset": "Vector2( 1420, 1760 )",
+			"rect_size": "Vector2( 600, 260 )",
+			"step_text": "Using environment variables does not require any additional configuration.\n\nPlease make sure the variables are available to the Resoto Worker process.",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"97446": {
+			"id": 97446,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 7720, 2900 )",
+			"rect_size": "Vector2( 577.245, 518.682 )",
+			"step_text": "Enter all account ids to be scraped, separated by comma.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "aws.account",
+			"action": "set",
+			"separator": ",",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"97618": {
+			"id": 97618,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 540, 5300 )",
+			"rect_size": "Vector2( 514.438, 421.478 )",
+			"step_text": "The simplest way to connect to your cluster is using a kubeconfig file.\n\nFor this method to work, Resoto Worker needs to have access to the configured file.\n\nIn case this is not possible, or difficult to achieve, you can configure the access directly.",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"99489": {
+			"id": 99489,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1080, 2040 )",
+			"rect_size": "Vector2( 280, 240 )",
+			"step_text": "Use an AWS AccessKey and Secret Key",
+			"docs_link": "Configure Access and Secret Key",
+			"custom_order": 6,
+			"variable_check": ""
+		},
+		"100530": {
+			"id": 100530,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1080, 2660 )",
+			"rect_size": "Vector2( 282.601, 253 )",
+			"step_text": "Use AWS Profiles",
+			"docs_link": "Usually located at ~/.aws/config",
+			"custom_order": 4,
+			"variable_check": ""
+		},
+		"102181": {
+			"id": 102181,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 6880, 1820 )",
+			"rect_size": "Vector2( 240.001, 400 )",
+			"step_text": "Should Resoto assume that role inside the current account as well?",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"102377": {
+			"id": 102377,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1080, 3220 )",
+			"rect_size": "Vector2( 300, 240 )",
+			"step_text": "The Option I would like to use is not listed here",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"102826": {
+			"id": 102826,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1140, 5300 )",
+			"rect_size": "Vector2( 410.76, 196 )",
+			"step_text": "Resoto has access to a kubeconfig file",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"106362": {
+			"id": 106362,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 1140, 6020 )",
+			"rect_size": "Vector2( 410.76, 196 )",
+			"step_text": "Configure the access directly",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"107012": {
+			"id": 107012,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 1420, 2040 )",
+			"rect_size": "Vector2( 393.799, 492 )",
+			"step_text": "Enter the AWS Access Key ID",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "aws.access_key_id",
+			"action": "set",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"109673": {
+			"id": 109673,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 1920, 5300 )",
+			"rect_size": "Vector2( 480, 539.999 )",
+			"step_text": "Resoto can use a kubeconfig file to access your Kubernetes cluster(s).\n\nPlease enter the path to the kubeconfig file.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "[k8s_config_file].path",
+			"action": "replace",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"114327": {
+			"id": 114327,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 7200, 1820 )",
+			"rect_size": "Vector2( 264, 196 )",
+			"step_text": "Yes",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"114670": {
+			"id": 114670,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 1840, 2040 )",
+			"rect_size": "Vector2( 418.279, 492 )",
+			"step_text": "Enter the AWS Secret Access Key",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "aws.secret_access_key",
+			"action": "set",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"114995": {
+			"id": 114995,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 7200, 2060 )",
+			"rect_size": "Vector2( 264, 196 )",
+			"step_text": "No",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"119788": {
+			"id": 119788,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 280, 3800 )",
+			"rect_size": "Vector2( 236, 313 )",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.collector",
+			"action": "merge",
+			"value": "[\"gcp\"]"
+		},
+		"122981": {
+			"id": 122981,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 7500, 1720 )",
+			"rect_size": "Vector2( 236.001, 305 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.assume_current",
+			"action": "set",
+			"value": "true"
+		},
+		"124668": {
+			"id": 124668,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( 2440, 5300 )",
+			"rect_size": "Vector2( 260, 359.999 )",
+			"step_text": "Do you have more kubeconfig files to access other Kubernetes clusters?",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"128215": {
+			"id": 128215,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 2760, 5300 )",
+			"rect_size": "Vector2( 264.001, 196 )",
+			"step_text": "Yes",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": ""
+		},
+		"128981": {
+			"id": 128981,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 7760, 1720 )",
+			"rect_size": "Vector2( 236, 305 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.do_not_scrape_current",
+			"action": "set",
+			"value": "true"
+		},
+		"129548": {
+			"id": 129548,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( 2760, 5500 )",
+			"rect_size": "Vector2( 264.001, 196 )",
+			"step_text": "No",
+			"docs_link": "",
+			"custom_order": 10,
+			"variable_check": ""
+		},
+		"133408": {
+			"id": 133408,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 5920, 5500 )",
+			"rect_size": "Vector2( 224.999, 127 )",
+			"section_goto": "resoto_setup"
+		},
+		"134957": {
+			"id": 134957,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 7500, 2060 )",
+			"rect_size": "Vector2( 236.001, 305 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.assume_current",
+			"action": "set",
+			"value": "false"
+		},
+		"138039": {
+			"id": 138039,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 7760, 2060 )",
+			"rect_size": "Vector2( 236, 305 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.do_not_scrape_current",
+			"action": "set",
+			"value": "false"
+		},
+		"139063": {
+			"id": 139063,
+			"res_name": "StepComment",
+			"offset": "Vector2( -180, 2300 )",
+			"rect_size": "Vector2( 355, 80 )",
+			"headline_text": "AWS Setup"
+		},
+		"148056": {
+			"id": 148056,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 1420, 2640 )",
+			"rect_size": "Vector2( 600, 540 )",
+			"step_text": "Enter the name of your profile.\n\nYou can enter multiple profiles separated by a comma.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "aws.profiles",
+			"action": "set",
+			"separator": ",",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"148682": {
+			"id": 148682,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( 1920, 6020 )",
+			"rect_size": "Vector2( 366, 560.001 )",
+			"step_text": "Please enter the name of the cluster.\n\nThis name can be chosen freely, but should be unique.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "[k8s_config].name",
+			"action": "replace",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"155747": {
+			"id": 155747,
+			"res_name": "StepText",
+			"offset": "Vector2( 1420, 3220 )",
+			"rect_size": "Vector2( 600, 440 )",
+			"step_text": "I am able to handle the most common cases to connect to AWS.\n\nIt looks we do not cover your use case.\n\nSince most options to connect to AWS are implemented, you might be able to configure the access yourself by adjusting the configuration.\n\nPlease check out the docs (click the ? in the upper right corner) and join our Discord to get direct support!",
+			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"164195": {
+			"id": 164195,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 9320, 2360 )",
+			"rect_size": "Vector2( 225, 127 )",
+			"section_goto": "resoto_setup"
+		},
+		"180243": {
+			"id": 180243,
+			"res_name": "StepComment",
+			"offset": "Vector2( 3860, 1420 )",
+			"rect_size": "Vector2( 798, 80 )",
+			"headline_text": "Check for aws.profiles and show Role Prompt if profiles <= 1"
+		},
+		"186585": {
+			"id": 186585,
+			"res_name": "StepComment",
+			"offset": "Vector2( 6080, 2480 )",
+			"rect_size": "Vector2( 355.001, 80 )",
+			"headline_text": "scrape org = false"
+		},
+		"187971": {
+			"id": 187971,
+			"res_name": "StepComment",
+			"offset": "Vector2( 6080, 1680 )",
+			"rect_size": "Vector2( 355.001, 80 )",
+			"headline_text": "scrape org = true"
+		},
+		"191106": {
+			"id": 191106,
+			"res_name": "StepComment",
+			"offset": "Vector2( 6880, 2480 )",
+			"rect_size": "Vector2( 355.001, 80 )",
+			"headline_text": "scrape accounts ?"
+		},
+		"194828": {
+			"id": 194828,
+			"res_name": "StepComment",
+			"offset": "Vector2( 6900, 1660 )",
+			"rect_size": "Vector2( 355.001, 80 )",
+			"headline_text": "assume role in account?"
+		},
+		"201971": {
+			"id": 201971,
+			"res_name": "StepComment",
+			"offset": "Vector2( 8600, 2220 )",
+			"rect_size": "Vector2( 355, 80 )",
+			"headline_text": "Finish aws setup"
+		}
+	},
+	"connections": [
+		{
+			"from": "4050",
+			"from_port": 0,
+			"to": "6896",
+			"to_port": 0
+		},
+		{
+			"from": "4050",
+			"from_port": 0,
+			"to": "8770",
+			"to_port": 0
+		},
+		{
+			"from": "4050",
+			"from_port": 0,
+			"to": "10406",
+			"to_port": 0
+		},
+		{
+			"from": "3573",
+			"from_port": 0,
+			"to": "6750",
+			"to_port": 0
+		},
+		{
+			"from": "14015",
+			"from_port": 0,
+			"to": "4050",
+			"to_port": 0
+		},
+		{
+			"from": "2330",
+			"from_port": 0,
+			"to": "14015",
+			"to_port": 0
+		},
+		{
+			"from": "6896",
+			"from_port": 0,
+			"to": "34704",
+			"to_port": 0
+		},
+		{
+			"from": "8770",
+			"from_port": 0,
+			"to": "43219",
+			"to_port": 0
+		},
+		{
+			"from": "10406",
+			"from_port": 0,
+			"to": "13400",
+			"to_port": 0
+		},
+		{
+			"from": "4050",
+			"from_port": 0,
+			"to": "15992",
+			"to_port": 0
+		},
+		{
+			"from": "15992",
+			"from_port": 0,
+			"to": "19854",
+			"to_port": 0
+		},
+		{
+			"from": "4050",
+			"from_port": 0,
+			"to": "37287",
+			"to_port": 0
+		},
+		{
+			"from": "37287",
+			"from_port": 0,
+			"to": "44107",
+			"to_port": 0
+		},
+		{
+			"from": "69306",
+			"from_port": 0,
+			"to": "76525",
+			"to_port": 0
+		},
+		{
+			"from": "76525",
+			"from_port": 0,
+			"to": "81056",
+			"to_port": 0
+		},
+		{
+			"from": "81056",
+			"from_port": 0,
+			"to": "84670",
+			"to_port": 0
+		},
+		{
+			"from": "76525",
+			"from_port": 0,
+			"to": "92219",
+			"to_port": 0
+		},
+		{
+			"from": "92219",
+			"from_port": 0,
+			"to": "94485",
+			"to_port": 0
+		},
+		{
+			"from": "76525",
+			"from_port": 0,
+			"to": "99489",
+			"to_port": 0
+		},
+		{
+			"from": "76525",
+			"from_port": 0,
+			"to": "100530",
+			"to_port": 0
+		},
+		{
+			"from": "76525",
+			"from_port": 0,
+			"to": "102377",
+			"to_port": 0
+		},
+		{
+			"from": "99489",
+			"from_port": 0,
+			"to": "107012",
+			"to_port": 0
+		},
+		{
+			"from": "107012",
+			"from_port": 0,
+			"to": "114670",
+			"to_port": 0
+		},
+		{
+			"from": "100530",
+			"from_port": 0,
+			"to": "148056",
+			"to_port": 0
+		},
+		{
+			"from": "102377",
+			"from_port": 0,
+			"to": "155747",
+			"to_port": 0
+		},
+		{
+			"from": "7433",
+			"from_port": 0,
+			"to": "23560",
+			"to_port": 0
+		},
+		{
+			"from": "7433",
+			"from_port": 0,
+			"to": "26844",
+			"to_port": 0
+		},
+		{
+			"from": "23560",
+			"from_port": 0,
+			"to": "30694",
+			"to_port": 0
+		},
+		{
+			"from": "26844",
+			"from_port": 0,
+			"to": "40002",
+			"to_port": 0
+		},
+		{
+			"from": "49866",
+			"from_port": 0,
+			"to": "58881",
+			"to_port": 0
+		},
+		{
+			"from": "49866",
+			"from_port": 0,
+			"to": "63220",
+			"to_port": 0
+		},
+		{
+			"from": "63220",
+			"from_port": 0,
+			"to": "69475",
+			"to_port": 0
+		},
+		{
+			"from": "60651",
+			"from_port": 0,
+			"to": "119788",
+			"to_port": 0
+		},
+		{
+			"from": "119788",
+			"from_port": 0,
+			"to": "13714",
+			"to_port": 0
+		},
+		{
+			"from": "13714",
+			"from_port": 0,
+			"to": "22432",
+			"to_port": 0
+		},
+		{
+			"from": "22432",
+			"from_port": 0,
+			"to": "26404",
+			"to_port": 0
+		},
+		{
+			"from": "26404",
+			"from_port": 0,
+			"to": "37535",
+			"to_port": 0
+		},
+		{
+			"from": "37535",
+			"from_port": 0,
+			"to": "47535",
+			"to_port": 0
+		},
+		{
+			"from": "37535",
+			"from_port": 0,
+			"to": "49370",
+			"to_port": 0
+		},
+		{
+			"from": "13714",
+			"from_port": 0,
+			"to": "64714",
+			"to_port": 0
+		},
+		{
+			"from": "61346",
+			"from_port": 0,
+			"to": "93915",
+			"to_port": 0
+		},
+		{
+			"from": "93915",
+			"from_port": 0,
+			"to": "97618",
+			"to_port": 0
+		},
+		{
+			"from": "97618",
+			"from_port": 0,
+			"to": "102826",
+			"to_port": 0
+		},
+		{
+			"from": "97618",
+			"from_port": 0,
+			"to": "106362",
+			"to_port": 0
+		},
+		{
+			"from": "109673",
+			"from_port": 0,
+			"to": "124668",
+			"to_port": 0
+		},
+		{
+			"from": "124668",
+			"from_port": 0,
+			"to": "128215",
+			"to_port": 0
+		},
+		{
+			"from": "124668",
+			"from_port": 0,
+			"to": "129548",
+			"to_port": 0
+		},
+		{
+			"from": "102826",
+			"from_port": 0,
+			"to": "32354",
+			"to_port": 0
+		},
+		{
+			"from": "32354",
+			"from_port": 0,
+			"to": "109673",
+			"to_port": 0
+		},
+		{
+			"from": "128215",
+			"from_port": 0,
+			"to": "5492",
+			"to_port": 0
+		},
+		{
+			"from": "5492",
+			"from_port": 0,
+			"to": "32354",
+			"to_port": 0
+		},
+		{
+			"from": "129548",
+			"from_port": 0,
+			"to": "14598",
+			"to_port": 0
+		},
+		{
+			"from": "32691",
+			"from_port": 0,
+			"to": "42350",
+			"to_port": 0
+		},
+		{
+			"from": "42350",
+			"from_port": 0,
+			"to": "44684",
+			"to_port": 0
+		},
+		{
+			"from": "42350",
+			"from_port": 0,
+			"to": "46009",
+			"to_port": 0
+		},
+		{
+			"from": "26904",
+			"from_port": 0,
+			"to": "148682",
+			"to_port": 0
+		},
+		{
+			"from": "148682",
+			"from_port": 0,
+			"to": "35925",
+			"to_port": 0
+		},
+		{
+			"from": "35925",
+			"from_port": 0,
+			"to": "48328",
+			"to_port": 0
+		},
+		{
+			"from": "48328",
+			"from_port": 0,
+			"to": "57110",
+			"to_port": 0
+		},
+		{
+			"from": "61929",
+			"from_port": 0,
+			"to": "64951",
+			"to_port": 0
+		},
+		{
+			"from": "61929",
+			"from_port": 0,
+			"to": "65559",
+			"to_port": 0
+		},
+		{
+			"from": "57110",
+			"from_port": 0,
+			"to": "61929",
+			"to_port": 0
+		},
+		{
+			"from": "65559",
+			"from_port": 0,
+			"to": "12260",
+			"to_port": 0
+		},
+		{
+			"from": "106362",
+			"from_port": 0,
+			"to": "26904",
+			"to_port": 0
+		},
+		{
+			"from": "12260",
+			"from_port": 0,
+			"to": "26904",
+			"to_port": 0
+		},
+		{
+			"from": "64951",
+			"from_port": 0,
+			"to": "36411",
+			"to_port": 0
+		},
+		{
+			"from": "6270",
+			"from_port": 0,
+			"to": "32588",
+			"to_port": 0
+		},
+		{
+			"from": "32588",
+			"from_port": 0,
+			"to": "33697",
+			"to_port": 0
+		},
+		{
+			"from": "32588",
+			"from_port": 0,
+			"to": "35691",
+			"to_port": 0
+		},
+		{
+			"from": "47535",
+			"from_port": 0,
+			"to": "44887",
+			"to_port": 0
+		},
+		{
+			"from": "14598",
+			"from_port": 0,
+			"to": "45237",
+			"to_port": 0
+		},
+		{
+			"from": "36411",
+			"from_port": 0,
+			"to": "45237",
+			"to_port": 0
+		},
+		{
+			"from": "40002",
+			"from_port": 0,
+			"to": "13529",
+			"to_port": 0
+		},
+		{
+			"from": "17446",
+			"from_port": 0,
+			"to": "97446",
+			"to_port": 0
+		},
+		{
+			"from": "13529",
+			"from_port": 0,
+			"to": "17446",
+			"to_port": 0
+		},
+		{
+			"from": "13529",
+			"from_port": 0,
+			"to": "16908",
+			"to_port": 0
+		},
+		{
+			"from": "46009",
+			"from_port": 0,
+			"to": "53647",
+			"to_port": 0
+		},
+		{
+			"from": "44684",
+			"from_port": 0,
+			"to": "32691",
+			"to_port": 0
+		},
+		{
+			"from": "61921",
+			"from_port": 0,
+			"to": "8115",
+			"to_port": 0
+		},
+		{
+			"from": "8115",
+			"from_port": 0,
+			"to": "32691",
+			"to_port": 0
+		},
+		{
+			"from": "64714",
+			"from_port": 0,
+			"to": "6270",
+			"to_port": 0
+		},
+		{
+			"from": "49370",
+			"from_port": 0,
+			"to": "6270",
+			"to_port": 0
+		},
+		{
+			"from": "33697",
+			"from_port": 0,
+			"to": "44887",
+			"to_port": 0
+		},
+		{
+			"from": "35691",
+			"from_port": 0,
+			"to": "6270",
+			"to_port": 0
+		},
+		{
+			"from": "32172",
+			"from_port": 0,
+			"to": "7078",
+			"to_port": 0
+		},
+		{
+			"from": "7078",
+			"from_port": 0,
+			"to": "164195",
+			"to_port": 0
+		},
+		{
+			"from": "44887",
+			"from_port": 0,
+			"to": "13296",
+			"to_port": 0
+		},
+		{
+			"from": "13296",
+			"from_port": 0,
+			"to": "77730",
+			"to_port": 0
+		},
+		{
+			"from": "45237",
+			"from_port": 0,
+			"to": "21137",
+			"to_port": 0
+		},
+		{
+			"from": "21137",
+			"from_port": 0,
+			"to": "133408",
+			"to_port": 0
+		},
+		{
+			"from": "53647",
+			"from_port": 0,
+			"to": "26588",
+			"to_port": 0
+		},
+		{
+			"from": "26588",
+			"from_port": 0,
+			"to": "56941",
+			"to_port": 0
+		},
+		{
+			"from": "6770",
+			"from_port": 0,
+			"to": "13364",
+			"to_port": 0
+		},
+		{
+			"from": "71307",
+			"from_port": 1,
+			"to": "6770",
+			"to_port": 0
+		},
+		{
+			"from": "7789",
+			"from_port": 0,
+			"to": "71307",
+			"to_port": 0
+		},
+		{
+			"from": "1444",
+			"from_port": 0,
+			"to": "7512",
+			"to_port": 0
+		},
+		{
+			"from": "7512",
+			"from_port": 0,
+			"to": "2330",
+			"to_port": 0
+		},
+		{
+			"from": "8229",
+			"from_port": 0,
+			"to": "11453",
+			"to_port": 0
+		},
+		{
+			"from": "11453",
+			"from_port": 0,
+			"to": "14271",
+			"to_port": 0
+		},
+		{
+			"from": "11453",
+			"from_port": 0,
+			"to": "20399",
+			"to_port": 0
+		},
+		{
+			"from": "14271",
+			"from_port": 0,
+			"to": "29978",
+			"to_port": 0
+		},
+		{
+			"from": "20399",
+			"from_port": 0,
+			"to": "27678",
+			"to_port": 0
+		},
+		{
+			"from": "71307",
+			"from_port": 0,
+			"to": "8170",
+			"to_port": 0
+		},
+		{
+			"from": "8170",
+			"from_port": 0,
+			"to": "15676",
+			"to_port": 0
+		},
+		{
+			"from": "15676",
+			"from_port": 0,
+			"to": "14821",
+			"to_port": 0
+		},
+		{
+			"from": "14821",
+			"from_port": 0,
+			"to": "8229",
+			"to_port": 0
+		},
+		{
+			"from": "59950",
+			"from_port": 0,
+			"to": "69306",
+			"to_port": 0
+		},
+		{
+			"from": "17418",
+			"from_port": 0,
+			"to": "49866",
+			"to_port": 0
+		},
+		{
+			"from": "69475",
+			"from_port": 0,
+			"to": "7433",
+			"to_port": 0
+		},
+		{
+			"from": "58881",
+			"from_port": 0,
+			"to": "7433",
+			"to_port": 0
+		},
+		{
+			"from": "30694",
+			"from_port": 0,
+			"to": "102181",
+			"to_port": 0
+		},
+		{
+			"from": "102181",
+			"from_port": 0,
+			"to": "114327",
+			"to_port": 0
+		},
+		{
+			"from": "102181",
+			"from_port": 0,
+			"to": "114995",
+			"to_port": 0
+		},
+		{
+			"from": "114327",
+			"from_port": 0,
+			"to": "122981",
+			"to_port": 0
+		},
+		{
+			"from": "122981",
+			"from_port": 0,
+			"to": "128981",
+			"to_port": 0
+		},
+		{
+			"from": "128981",
+			"from_port": 0,
+			"to": "32172",
+			"to_port": 0
+		},
+		{
+			"from": "114995",
+			"from_port": 0,
+			"to": "134957",
+			"to_port": 0
+		},
+		{
+			"from": "16908",
+			"from_port": 0,
+			"to": "32172",
+			"to_port": 0
+		},
+		{
+			"from": "97446",
+			"from_port": 0,
+			"to": "32172",
+			"to_port": 0
+		},
+		{
+			"from": "134957",
+			"from_port": 0,
+			"to": "138039",
+			"to_port": 0
+		},
+		{
+			"from": "138039",
+			"from_port": 0,
+			"to": "32172",
+			"to_port": 0
+		},
+		{
+			"from": "17418",
+			"from_port": 1,
+			"to": "7433",
+			"to_port": 0
+		},
+		{
+			"from": "84670",
+			"from_port": 0,
+			"to": "17418",
+			"to_port": 0
+		},
+		{
+			"from": "94485",
+			"from_port": 0,
+			"to": "17418",
+			"to_port": 0
+		},
+		{
+			"from": "114670",
+			"from_port": 0,
+			"to": "17418",
+			"to_port": 0
+		},
+		{
+			"from": "148056",
+			"from_port": 0,
+			"to": "17418",
+			"to_port": 0
+		}
+	]
+}
