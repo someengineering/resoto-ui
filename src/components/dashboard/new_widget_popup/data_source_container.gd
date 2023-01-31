@@ -26,6 +26,12 @@ onready var text_line_edit := $VBox/Search/TextLineEdit
 onready var text_filters_line_edit := $VBox/Search/TextFiltersLineEdit
 onready var list_line_edit := $VBox/Search/ListLineEdit
 
+# Fixed Aggregate
+
+onready var fixed_search_line_edit := $VBox/FixedAggregate/SearchLineEdit
+onready var fixed_search_function_line_edit := $VBox/FixedAggregate/FunctionContainer/FunctionLineEdit
+onready var fixed_search_alias_line_edit := $VBox/FixedAggregate/FunctionContainer/FunctionAlias
+
 # Two Entries Aggregate
 onready var entry_1_line_edit := $VBox/TwoEntriesAggregate/EntryContainer1/Entry1LineEdit
 onready var entry_2_line_edit := $VBox/TwoEntriesAggregate/EntryContainer2/Entry2LineEdit
@@ -279,6 +285,11 @@ func set_data_source(new_data_source : DataSource) -> void:
 			group_variables.grouping_variables = data_source.grouping_variables
 			group_functions.grouping_variables = data_source.grouping_functions
 			search_query.text = data_source.search_query
+		DataSource.TYPES.FIXED_AGGREGATE:
+			fixed_search_alias_line_edit.text = new_data_source.function_alias
+			fixed_search_function_line_edit.text = new_data_source.function
+			fixed_search_line_edit.text = new_data_source.search
+
 			
 	$VBox/Title/ExpandButton.pressed = !new_data_source.custom_query
 	show_query_separator(!new_data_source.custom_query)

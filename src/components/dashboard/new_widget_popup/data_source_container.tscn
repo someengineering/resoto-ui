@@ -523,6 +523,7 @@ script = ExtResource( 6 )
 
 
 [node name="FixedAggregate" type="VBoxContainer" parent="VBox"]
+visible = false
 margin_top = 37.0
 margin_right = 511.0
 margin_bottom = 153.0

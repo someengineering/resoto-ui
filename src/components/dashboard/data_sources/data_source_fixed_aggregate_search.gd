@@ -12,7 +12,7 @@ func _init():
 
 
 func copy_data_source(other):
-	categories = other.categories.duplicate()
+	categories = other.categories
 	function = other.function
 	function_alias = other.function_alias
 	search = other.search

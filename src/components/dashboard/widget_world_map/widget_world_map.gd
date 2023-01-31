@@ -410,23 +410,28 @@ func _input(event):
 		mouse_pressed = false
 		return
 		
-	get_tree().set_input_as_handled()
+#	get_tree().set_input_as_handled()
 		
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
 			mouse_pressed = event.is_pressed()
 			if mouse_pressed:
 				mouse_from = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
-		if event.button_index == BUTTON_WHEEL_DOWN:
+		
+		var prev_fov = camera.fov
+		if event.button_index == BUTTON_WHEEL_DOWN and event.pressed:
 			camera_for_2d.fov = min(camera_for_2d.fov / 0.9, 90)
 			camera.fov = min(camera_for_2d.fov / 0.9, 90)
-		if event.button_index == BUTTON_WHEEL_UP:
+		if event.button_index == BUTTON_WHEEL_UP and event.pressed:
 			camera_for_2d.fov = max(camera_for_2d.fov * 0.9, 10)
 			camera.fov = max(camera_for_2d.fov * 0.9, 10)
 			
+		if camera.fov != prev_fov:
+			emit_signal("scrolling")
+			
 		camera_for_2d.translation = clamp_2d_camera(camera_for_2d.translation)
 		
-		emit_signal("scrolling")
+		
 		
 	if event is InputEventMouseMotion and mouse_pressed:
 		world.rotate(Vector3.UP, event.relative.x * 2 * PI / rect_size.x)
