@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=116 format=2]
+[gd_resource type="Theme" load_steps=118 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -285,17 +285,25 @@ use_mipmaps = true
 use_filter = true
 font_data = SubResource( 1 )
 
-[sub_resource type="DynamicFont" id=97]
-size = 19
-use_mipmaps = true
-use_filter = true
-font_data = SubResource( 1 )
+[sub_resource type="DynamicFontData" id=114]
+override_oversampling = 1.5
+font_path = "res://assets/theme/Barlow-Bold.ttf"
 
-[sub_resource type="DynamicFont" id=98]
+[sub_resource type="DynamicFont" id=115]
 size = 19
 use_mipmaps = true
 use_filter = true
-font_data = SubResource( 1 )
+font_data = SubResource( 114 )
+
+[sub_resource type="DynamicFontData" id=116]
+override_oversampling = 1.5
+font_path = "res://assets/theme/SourceCodePro-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=117]
+size = 19
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 116 )
 
 [sub_resource type="DynamicFont" id=99]
 size = 19
@@ -938,8 +946,8 @@ FontBig/fonts/font = SubResource( 71 )
 FontDefault/base_type = "TextEdit"
 FontDefault/fonts/font = SubResource( 66 )
 FontMedium/base_type = "RichTextLabel"
-FontMedium/fonts/bold_font = SubResource( 97 )
-FontMedium/fonts/mono_font = SubResource( 98 )
+FontMedium/fonts/bold_font = SubResource( 115 )
+FontMedium/fonts/mono_font = SubResource( 117 )
 FontMedium/fonts/normal_font = SubResource( 99 )
 FontZero/fonts/font = SubResource( 113 )
 GraphEdit/colors/grid_major = Color( 0.376471, 0.431373, 0.466667, 0.117647 )
