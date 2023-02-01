@@ -124,6 +124,7 @@ func connected(status_text:String) -> void:
 	SaveLoadSettings.save_settings()
 	_g.popup_manager.on_popup_close()
 	emit_signal("connected")
+	$PingTimer.start()
 
 
 func not_connected(status_text:String) -> void:
@@ -132,6 +133,7 @@ func not_connected(status_text:String) -> void:
 	$Content/Margin/Connect/PSK.show()
 	$Content/Margin/Connect/Adress.show()
 	connect_button.show()
+	$PingTimer.stop()
 
 
 func _on_ConnectDelay_timeout():
@@ -164,3 +166,15 @@ func _on_ResotoAdressEdit_text_entered(_new_text):
 
 func _on_PSKLineEdit_text_entered(_new_text):
 	start_connect()
+
+
+func _on_PingTimer_timeout():
+	API.ping(self)
+
+
+func _on_ping_done(_error: int, _r:ResotoAPI.Response):
+	if _error or _r.response_code != 200 or _r.body.get_string_from_utf8() != "pong":
+		_g.emit_signal("add_toast", "Lost connection to core...", "", 1)
+		$PingTimer.stop()
+		_g.popup_manager.open_popup("ConnectPopup")
+		connect_to_core()

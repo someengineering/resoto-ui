@@ -246,3 +246,8 @@ func tsdb_label_values(label:String):
 func analytics(body : String):
 	var request = req_post("/analytics", body, content_json_headers)
 	return request
+
+
+func ping():
+	var request = req_get("/system/ping", accept_text_headers)
+	return request

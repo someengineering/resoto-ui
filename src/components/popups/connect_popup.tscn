@@ -162,6 +162,9 @@ one_shot = true
 
 [node name="ConnectTimeoutTimer" type="Timer" parent="."]
 
+[node name="PingTimer" type="Timer" parent="."]
+wait_time = 5.0
+
 [connection signal="about_to_show" from="." to="." method="_on_ConnectPopup_about_to_show"]
 [connection signal="text_entered" from="Content/Margin/Connect/PSK/Edit/PSKLineEdit" to="." method="_on_PSKLineEdit_text_entered"]
 [connection signal="toggled" from="Content/Margin/Connect/PSK/Edit/ShowPSKIcon" to="." method="_on_ShowPSKIcon_toggled"]
@@ -169,3 +172,4 @@ one_shot = true
 [connection signal="pressed" from="Content/Margin/Connect/ButtonConnect" to="." method="_on_ButtonConnect_pressed"]
 [connection signal="timeout" from="ConnectDelay" to="." method="_on_ConnectDelay_timeout"]
 [connection signal="timeout" from="ConnectTimeoutTimer" to="." method="_on_ConnectTimeoutTimer_timeout"]
+[connection signal="timeout" from="PingTimer" to="." method="_on_PingTimer_timeout"]
