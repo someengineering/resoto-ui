@@ -3,9 +3,9 @@
 [ext_resource path="res://assets/theme/pt-root-ui_bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/theme/pt-root-ui_regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://components/dashboard/widget_world_map/viewport_container.gd" type="Script" id=3]
-[ext_resource path="res://assets/images/8081_earthmap2k.jpg" type="Texture" id=4]
 [ext_resource path="res://components/dashboard/widget_world_map/widget_world_map.gd" type="Script" id=5]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/images/world_map-01.svg" type="Texture" id=8]
 
 [sub_resource type="World" id=3]
 resource_local_to_scene = true
@@ -15,7 +15,7 @@ resource_local_to_scene = true
 
 [sub_resource type="SpatialMaterial" id=2]
 resource_local_to_scene = true
-albedo_texture = ExtResource( 4 )
+albedo_texture = ExtResource( 8 )
 
 [sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 2 )
@@ -78,8 +78,8 @@ physics_object_picking = true
 
 [node name="Sprite3D" type="Sprite3D" parent="ViewportContainer2/Viewport"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0 )
-pixel_size = 0.0075
-texture = ExtResource( 4 )
+pixel_size = 0.0038
+texture = ExtResource( 8 )
 
 [node name="Camera" type="Camera" parent="ViewportContainer2/Viewport"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, 0 )
