@@ -215,3 +215,9 @@ func ping(_connect_to: Node, _connect_function:String="_on_ping_done"):
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
 	
+
+func get_benchmark_report(benchmark, _connect_to:Node, _connect_function:String="_on_get_benchmark_report_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.get_benchmark_report(benchmark)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+

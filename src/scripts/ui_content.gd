@@ -12,6 +12,7 @@ onready var sections = {
 	"jobs": $Content/JobsComponent,
 	"aggregation_view": $Content/AggregationViewComponent,
 	"home": $Content/HomeComponent
+	"benchmark": $Content/BenchmarkComponent
 }
 
 var active_section:= "home"

@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/icons/icon_128_collapse.svg" type="Texture" id=2]
+[ext_resource path="res://components/shared/custom_tree_item.gd" type="Script" id=3]
+
+[node name="CustomTreeItem" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+theme_type_variation = "PanelContainerNoMarginRight"
+script = ExtResource( 3 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1920.0
+margin_bottom = 1070.0
+custom_constants/separation = 5
+
+[node name="MainContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 1910.0
+margin_bottom = 33.0
+alignment = 2
+
+[node name="CollapseButton" parent="VBoxContainer/MainContainer" instance=ExtResource( 1 )]
+margin_right = 16.0
+rect_min_size = Vector2( 16, 33 )
+toggle_mode = true
+flat = true
+icon_tex = ExtResource( 2 )
+icon_margin = 1
+
+[node name="MainElement" type="MarginContainer" parent="VBoxContainer/MainContainer"]
+margin_left = 20.0
+margin_right = 1910.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+
+[node name="SubContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 38.0
+margin_right = 1910.0
+margin_bottom = 38.0
+alignment = 2
+
+[node name="Spacer" type="Control" parent="VBoxContainer/SubContainer"]
+margin_right = 24.0
+rect_min_size = Vector2( 24, 0 )
+
+[node name="SubElements" type="VBoxContainer" parent="VBoxContainer/SubContainer"]
+margin_left = 28.0
+margin_right = 1910.0
+size_flags_horizontal = 3
+alignment = 2
+
+[connection signal="visibility_changed" from="." to="." method="_on_CustomTreeItem_visibility_changed"]
+[connection signal="pressed" from="VBoxContainer/MainContainer/CollapseButton" to="." method="_on_CollapseButton_pressed"]

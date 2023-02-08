@@ -55,6 +55,7 @@ number_as_bytes = false
 unit = "[unit]"
 
 [node name="IndicatorBackground" type="Panel" parent="."]
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 10 )

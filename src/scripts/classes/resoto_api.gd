@@ -257,4 +257,9 @@ func analytics(body : String):
 
 func ping():
 	var request = req_get("/system/ping", accept_text_headers)
+
+
+func get_benchmark_report(benchmark : String):
+	var request = req_get("/report/benchmark/%s/graph/%s" % [benchmark, default_graph], accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
 	return request
