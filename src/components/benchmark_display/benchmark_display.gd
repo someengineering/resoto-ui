@@ -3,9 +3,8 @@ extends MarginContainer
 onready var combo_box := $PanelContainer/Content/HBoxContainer/ComboBox
 onready var tree_container := $PanelContainer/Content/PanelContainer/TreeContainer
 
-onready var passed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/Indicator
-onready var failed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/Indicator2
-onready var resources_failed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/Indicator3
+onready var passed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/PassIndicator
+onready var failed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/FailIndicator
 
 var benchmark_tree_root : CustomTreeItem = null
 var tree_item_scene := preload("res://components/shared/custom_tree_item.tscn")
@@ -37,19 +36,21 @@ func _on_get_benchmark_report_done(_error: int, response):
 	sections = {}
 	if benchmark_tree_root:
 		benchmark_tree_root.queue_free()
-		
-	var failed_resources = 0
 	
 	for element in response.transformed.result:
 		if "kind" in element and element.kind == "report_check_result":
+			if element.reported.remediation.action != null:
+				pass
 			var display_element = preload("res://components/benchmark_display/benchmark_check_result_display.tscn").instance()
 			display_element.passed = element.reported.passed
 			display_element.failing_n = element.reported.number_of_resources_failing
 			display_element.title = element.reported.title
+			
+			display_element.set_custom_tooltip(element.reported.remediation.text, element.reported.remediation.url)
+			
 			var last_element_name = sections.keys()[-1]
 			var item = sections[last_element_name].add_sub_element(display_element)
 			sections[sections.keys()[-1] + "-" + element.reported.title] = item
-			failed_resources += element.reported.number_of_resources_failing
 			
 		elif "reported" in element and "kind" in element.reported:
 			var display_element := preload("res://components/benchmark_display/benchmark_check_collection_display.tscn").instance()
@@ -58,6 +59,7 @@ func _on_get_benchmark_report_done(_error: int, response):
 			display_element.passed = element.reported.passed
 			display_element.passing_n = element.reported.checks_passing
 			display_element.failing_n = element.reported.checks_failing
+			display_element.tooltip = element.reported.description
 			
 			match element.reported.kind:
 				"report_benchmark":
@@ -85,7 +87,6 @@ func _on_get_benchmark_report_done(_error: int, response):
 	
 	passed_indicator.value = benchmark_tree_root.main_element.passing_n
 	failed_indicator.value = benchmark_tree_root.main_element.failing_n
-	resources_failed_indicator.value = failed_resources
 	benchmark_tree_root.collapse(false)
 
 func _on_ComboBox_option_changed(option):

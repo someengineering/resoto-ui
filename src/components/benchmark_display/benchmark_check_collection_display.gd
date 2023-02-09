@@ -4,6 +4,7 @@ var title : String = "" setget set_title
 var passed : bool = false setget set_passed
 var passing_n : int = 1 setget set_passing_n
 var failing_n : int = 0 setget set_failing_n
+var tooltip : String = "" setget set_tooltip
 
 func set_title(_title : String):
 	title = _title
@@ -32,3 +33,8 @@ func update_bar():
 
 func set_label_variation(variation: String):
 	$Label.theme_type_variation = variation
+
+func set_tooltip(_tooltip: String):
+	tooltip = _tooltip
+	$IconTooltipHelper.tooltip_text = tooltip
+	$IconTooltipHelper.visible = tooltip != ""

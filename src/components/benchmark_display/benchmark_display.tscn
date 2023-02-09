@@ -58,21 +58,20 @@ text = "Expand All"
 [node name="PanelContainer2" type="PanelContainer" parent="PanelContainer/Content"]
 margin_top = 36.0
 margin_right = 1896.0
-margin_bottom = 136.0
-rect_min_size = Vector2( 0, 100 )
+margin_bottom = 106.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer2"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1886.0
-margin_bottom = 90.0
+margin_bottom = 60.0
 custom_constants/separation = 10
 alignment = 1
 
-[node name="Indicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
-margin_left = 628.0
-margin_right = 828.0
-margin_bottom = 80.0
+[node name="PassIndicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
+margin_left = 733.0
+margin_right = 933.0
+margin_bottom = 50.0
 rect_min_size = Vector2( 200, 50 )
 size_flags_vertical = 3
 unit = "Checks Passed"
@@ -80,10 +79,10 @@ background_color = Color( 0.0951492, 0.496094, 0.195385, 1 )
 decimal_digits = 0
 unit = "Checks Passed"
 
-[node name="Indicator2" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
-margin_left = 838.0
-margin_right = 1038.0
-margin_bottom = 80.0
+[node name="FailIndicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
+margin_left = 943.0
+margin_right = 1143.0
+margin_bottom = 50.0
 rect_min_size = Vector2( 200, 50 )
 size_flags_vertical = 3
 unit = "Checks Failed"
@@ -91,19 +90,8 @@ background_color = Color( 0.644531, 0.181526, 0.181526, 1 )
 decimal_digits = 0
 unit = "Checks Failed"
 
-[node name="Indicator3" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
-margin_left = 1048.0
-margin_right = 1248.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 200, 50 )
-size_flags_vertical = 3
-unit = "Resources Failed"
-background_color = Color( 0.760784, 0.423529, 0.12549, 1 )
-decimal_digits = 0
-unit = "Resources Failed"
-
 [node name="PanelContainer" type="PanelContainer" parent="PanelContainer/Content"]
-margin_top = 140.0
+margin_top = 110.0
 margin_right = 1896.0
 margin_bottom = 1064.0
 size_flags_vertical = 3
@@ -112,7 +100,7 @@ size_flags_vertical = 3
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1886.0
-margin_bottom = 914.0
+margin_bottom = 944.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
