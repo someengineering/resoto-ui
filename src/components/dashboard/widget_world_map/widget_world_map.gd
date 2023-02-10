@@ -2,8 +2,9 @@ extends BaseWidget
 
 signal scrolling
 
-var initial_world_speed := 0.5
-var world_speed := 0.0
+var initial_world_speed := 0.12
+var world_speed := initial_world_speed
+var stop_auto_rotate := false
 
 var mouse_pressed : bool = false
 var max_value : float = 0.0
@@ -382,13 +383,14 @@ export (bool) var auto_rotate := false setget set_auto_rotate
 export (bool) var _3d_view := true setget set__3d_view
 
 onready var world := $ViewportContainer/Viewport/WorldMesh
+onready var camera_target := $ViewportContainer/Viewport/CamTarget
 onready var camera_origin := $ViewportContainer/Viewport/CameraOrigin
 onready var camera := $ViewportContainer/Viewport/CameraOrigin/Camera
-onready var hint := $VBoxContainer/Hint
-onready var sepparator := $VBoxContainer/HSeparator
-onready var total_label := $VBoxContainer/Total
-onready var hint_container := $VBoxContainer
-onready var combo_box := $HBoxContainer/ComboBox
+onready var hint := $InterfaceMargin/VBoxContainer/PanelContainer/VBoxContainer/Hint
+onready var separator := $InterfaceMargin/VBoxContainer/PanelContainer/VBoxContainer/HSeparator
+onready var total_label := $InterfaceMargin/VBoxContainer/PanelContainer/VBoxContainer/Total
+onready var hint_container := $InterfaceMargin/VBoxContainer/PanelContainer
+onready var combo_box := $InterfaceMargin/VBoxContainer/ComboBox
 onready var camera_for_2d := $ViewportContainer2/Viewport/Camera
 onready var sprite := $ViewportContainer2/Viewport/Sprite3D
 onready var viewport := $ViewportContainer2/Viewport
@@ -396,43 +398,49 @@ onready var viewport := $ViewportContainer2/Viewport
 func _ready():
 	sprite_size = sprite.texture.get_size() * sprite.pixel_size
 	set__3d_view(_3d_view)
-#	add_cyllinder(Vector2(-38.4161, -63.6167))
+
 
 func _physics_process(delta):
-	world.rotation.y += world_speed*delta
-	
+	if auto_rotate:
+		if stop_auto_rotate or combo_box.text != "":
+			world_speed = lerp(world_speed, 0, delta*12)
+		else:
+			world_speed = lerp(world_speed, initial_world_speed, delta*2)
+		world.rotation.y += world_speed*delta
+
+
 func _process(_delta):
-	camera.look_at(world.transform.origin, Vector3.UP)
-	
-	
+	camera.look_at(camera_target.transform.origin, Vector3.UP)
+
+
 func _input(event):
 	if not get_global_rect().has_point(get_global_mouse_position()):
 		mouse_pressed = false
 		return
-		
-#	get_tree().set_input_as_handled()
-		
+	
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
 			mouse_pressed = event.is_pressed()
 			if mouse_pressed:
 				mouse_from = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
 		
-		var prev_fov = camera.fov
+		# var prev_fov = camera.fov
+		var prev_dist = camera.translation.x
 		if event.button_index == BUTTON_WHEEL_DOWN and event.pressed:
 			camera_for_2d.fov = min(camera_for_2d.fov / 0.9, 90)
-			camera.fov = min(camera_for_2d.fov / 0.9, 90)
+			camera.translation.x = min(camera.translation.x / 0.9, 9)
+			# camera.fov = min(camera_for_2d.fov / 0.9, 90)
 		if event.button_index == BUTTON_WHEEL_UP and event.pressed:
 			camera_for_2d.fov = max(camera_for_2d.fov * 0.9, 10)
-			camera.fov = max(camera_for_2d.fov * 0.9, 10)
+			camera.translation.x = max(camera.translation.x * 0.9, 4)
+			#camera.fov = max(camera_for_2d.fov * 0.9, 10)
 			
-		if camera.fov != prev_fov:
+		if camera.translation.x != prev_dist:
 			emit_signal("scrolling")
 			
 		camera_for_2d.translation = clamp_2d_camera(camera_for_2d.translation)
-		
-		
-		
+	
+	
 	if event is InputEventMouseMotion and mouse_pressed:
 		world.rotate(Vector3.UP, event.relative.x * 2 * PI / rect_size.x)
 		var camera_rotation = clamp(camera_origin.rotation.z + event.relative.y * PI / rect_size.y, -PI/2+0.2, PI/2-0.2)
@@ -462,7 +470,8 @@ func set_auto_rotate(rotate : bool):
 	auto_rotate = rotate
 	world_speed = initial_world_speed if rotate else 0.0
 
-func add_cyllinder(coordinates : Vector2, height := 1.0):
+
+func add_cylinder(coordinates : Vector2, height := 1.0):
 	var c := preload("res://components/dashboard/widget_world_map/widget_world_map_column.tscn").instance()
 	c.value = height
 	c.coordinates = coordinates
@@ -475,12 +484,15 @@ func add_cyllinder(coordinates : Vector2, height := 1.0):
 		
 		c.translation -= c.transform.basis.y
 		
-		for cyllinder in world.get_children():
-			if cyllinder == c:
+		for cylinder in world.get_children():
+			if cylinder.name == "Particles":
+				continue
+			
+			if cylinder == c:
 				continue
 				
-			if cyllinder.coordinates == coordinates:
-				c.translation -= c.transform.basis.y * cyllinder.value
+			if cylinder.coordinates == coordinates:
+				c.translation -= c.transform.basis.y * cylinder.value
 				
 	else:
 		sprite.add_child(c)
@@ -489,7 +501,7 @@ func add_cyllinder(coordinates : Vector2, height := 1.0):
 		c.translation.x = sprite_size.x * coordinates.y / 360 
 		c.translation.z = 0.02
 		
-	go_to_coordinate(coordinates)
+#	go_to_coordinate(coordinates)
 	
 	return c
 
@@ -502,6 +514,8 @@ func set_data(_data, _type : int):
 
 func clear_maps():
 	for column in world.get_children():
+		if column.name == "Particles":
+			continue
 		column.queue_free()
 		world.remove_child(column)
 	for column in sprite.get_children():
@@ -521,12 +535,12 @@ func create_columns_from_data(_data : Array):
 	for data in _data:
 		if data[variable_name] > max_value:
 			max_value = data[variable_name]
-			
+	
 	if max_value == 0.0:
 		max_value = 1.0
-		
+	
 	used_regions.clear()
-			
+	
 	for data in _data:
 		data = data as Dictionary
 		if "region" in data["group"] and "cloud" in data["group"]:
@@ -534,60 +548,60 @@ func create_columns_from_data(_data : Array):
 			var region = data["group"]["region"]
 			
 			if not cloud in regions:
-				return
+				continue
+			
 			var coordinates = Vector2(regions[cloud][region]["latitude"], regions[cloud][region]["longitude"])
 			
 			used_regions["%s (%s)" % [region, cloud]] = coordinates
-		
-			var cyllinder = add_cyllinder(coordinates, data[variable_name] / max_value)
-			cyllinder.cloud = cloud
-			cyllinder.region = region
 			
-			cyllinder.connect("start_hovering", self, "_on_cyllinder_hovering_started", [coordinates, variable_name, cyllinder])
-			cyllinder.connect("end_hovering", self, "_on_cyllinder_hovering_ended")
-			cyllinder.connect("clicked", self, "go_to_coordinate")
+			var cylinder = add_cylinder(coordinates, data[variable_name] / max_value)
+			cylinder.cloud = cloud
+			cylinder.region = region
 			
+			cylinder.connect("start_hovering", self, "_on_cylinder_hovering_started", [coordinates, variable_name, cylinder])
+			cylinder.connect("end_hovering", self, "_on_cylinder_hovering_ended")
+			cylinder.connect("clicked", self, "go_to_coordinate")
+	
 	combo_box.items = used_regions.keys()
 
 
-func _on_cyllinder_hovering_started(coordinates, variable_name, c):
+func _on_cylinder_hovering_started(coordinates, variable_name, c):
 	hint_container.show()
 	var lines : PoolStringArray = []
 	var total : float = 0.0
 	
 	var map = world if _3d_view else sprite
 	
-	for cyllinder in map.get_children():
-		prints(cyllinder.coordinates == coordinates, cyllinder.coordinates, coordinates)
-		if cyllinder.coordinates == coordinates:
-			var value : float = cyllinder.value * max_value
-			var line : String =  "%s %s in %s (%s)" % [str(value), variable_name, cyllinder.region, cyllinder.cloud]
-			if c == cyllinder:
+	for cylinder in map.get_children():
+		if cylinder.name == "Particles":
+			continue
+		if cylinder.coordinates == coordinates:
+			var value : float = cylinder.value * max_value
+			var line : String =  "%s %s in %s (%s)" % [str(value), variable_name, cylinder.region, cylinder.cloud]
+			if c == cylinder:
 				line = "→ " + line
 			lines.append(line)
 			total += value
-			
 	
-	hint.rect_min_size.y = 24 * lines.size()
+	#hint.rect_min_size.y = 24 * lines.size()
 	hint.text = lines.join("\n")
 	
 	if lines.size() > 1:
 		total_label.show()
-		sepparator.show()
+		separator.show()
 		total_label.text = "Total %s: %s" % [variable_name, str(total)]
 	else:
 		total_label.hide()
-		sepparator.hide()
+		separator.hide()
 		hint.text = hint.text.replace("→ ","")
-		
 	
-	world_speed = 0.0
+	stop_auto_rotate = true
 
 
-func _on_cyllinder_hovering_ended():
+func _on_cylinder_hovering_ended():
 	hint_container.hide()
 	if auto_rotate:
-		world_speed = initial_world_speed
+		stop_auto_rotate = false
 
 
 func go_to_coordinate(coordinates : Vector2, cloud := "", region := ""):
@@ -656,5 +670,5 @@ func set__3d_view(_3d : bool):
 	$ViewportContainer2.visible = !_3d
 	if not raw_data.empty():
 		create_columns_from_data(raw_data)
-		
+	
 	emit_signal("available_properties_changed")
