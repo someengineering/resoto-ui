@@ -122,6 +122,13 @@ func post_cli_execute(body:String, graph:String=default_graph) -> ResotoAPI.Requ
 	return request
 
 
+func post_cli_execute_json(body:String, graph:String=default_graph) -> ResotoAPI.Request:
+	var path: String = "/cli/execute?graph=" + graph
+	var request = req_post(path, body, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
 func post_cli_execute_streamed(body:String, graph:String=default_graph) -> ResotoAPI.Request:
 	var path: String = "/cli/execute?graph=" + graph
 	var request = req_post(path, body, accept_text_headers)

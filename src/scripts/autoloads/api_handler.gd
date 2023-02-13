@@ -158,10 +158,19 @@ func cli_execute_streamed(_command:String, _connect_to:Node,
 	return _req_res
 
 
+func cli_execute_nd_json(_command:String, _connect_to:Node,
+	_connect_data_function:String="_on_cli_execute_nd_json_data",
+	_connect_done_function:String="_on_cli_execute_nd_json_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.post_cli_execute_nd_chunks(_command, graph_id)
+	_req_res.connect("data", _connect_to, _connect_data_function)
+	_req_res.connect("done", _connect_to, _connect_done_function)
+	return _req_res
+
+
 func cli_execute_json(_command:String, _connect_to:Node,
 	_connect_data_function:String="_on_cli_execute_json_data",
 	_connect_done_function:String="_on_cli_execute_json_done") -> ResotoAPI.Request:
-	_req_res = _resoto_api.post_cli_execute_nd_chunks(_command, graph_id)
+	_req_res = _resoto_api.post_cli_execute_json(_command, graph_id)
 	_req_res.connect("data", _connect_to, _connect_data_function)
 	_req_res.connect("done", _connect_to, _connect_done_function)
 	return _req_res

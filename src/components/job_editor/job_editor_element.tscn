@@ -1,0 +1,144 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_128_play.svg" type="Texture" id=4]
+[ext_resource path="res://components/job_editor/job_editor_element.gd" type="Script" id=5]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=6]
+[ext_resource path="res://components/elements/styled/icon_check_button.tscn" type="PackedScene" id=7]
+
+[node name="JobElement" type="PanelContainer"]
+anchor_right = 1.0
+margin_bottom = 153.0
+size_flags_horizontal = 3
+theme_type_variation = "PanelContainerDark"
+script = ExtResource( 5 )
+
+[node name="JobData" type="VBoxContainer" parent="."]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1908.0
+margin_bottom = 229.0
+
+[node name="TitleBar" type="HBoxContainer" parent="JobData"]
+margin_right = 1896.0
+margin_bottom = 33.0
+
+[node name="JobName" type="Label" parent="JobData/TitleBar"]
+margin_top = 3.0
+margin_right = 1785.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_type_variation = "Label_24"
+text = "title"
+
+[node name="ActiveButton" parent="JobData/TitleBar" instance=ExtResource( 7 )]
+margin_left = 1789.0
+margin_right = 1822.0
+hint_tooltip = "Activate / Deactivate Job"
+
+[node name="RunButton" parent="JobData/TitleBar" instance=ExtResource( 6 )]
+margin_left = 1826.0
+margin_right = 1859.0
+hint_tooltip = "Run Job"
+icon_tex = ExtResource( 4 )
+
+[node name="DeleteButton" parent="JobData/TitleBar" instance=ExtResource( 6 )]
+margin_left = 1863.0
+margin_right = 1896.0
+hint_tooltip = "Delete Job"
+icon_tex = ExtResource( 2 )
+
+[node name="HSeparator2" type="HSeparator" parent="JobData"]
+margin_top = 37.0
+margin_right = 1896.0
+margin_bottom = 41.0
+
+[node name="TriggerSection" type="GridContainer" parent="JobData"]
+margin_top = 45.0
+margin_right = 1896.0
+margin_bottom = 149.0
+columns = 2
+
+[node name="TriggerLabel" type="Label" parent="JobData/TriggerSection"]
+margin_top = 6.0
+margin_right = 124.0
+margin_bottom = 26.0
+text = "Trigger:"
+
+[node name="TriggerSelect" type="OptionButton" parent="JobData/TriggerSection"]
+margin_left = 128.0
+margin_right = 1896.0
+margin_bottom = 32.0
+text = "Scheduled"
+items = [ "Scheduled", null, false, 0, null, "Event", null, false, 1, null, "Scheduled, then wait for Event", null, false, 2, null ]
+selected = 0
+
+[node name="CronLabel" type="Label" parent="JobData/TriggerSection"]
+margin_top = 42.0
+margin_right = 124.0
+margin_bottom = 62.0
+text = "Cron expression:"
+
+[node name="CronLineEdit" type="LineEdit" parent="JobData/TriggerSection"]
+margin_left = 128.0
+margin_top = 36.0
+margin_right = 1896.0
+margin_bottom = 68.0
+size_flags_horizontal = 3
+
+[node name="EventLabel" type="Label" parent="JobData/TriggerSection"]
+margin_top = 78.0
+margin_right = 124.0
+margin_bottom = 98.0
+text = "Event identifier: "
+
+[node name="EventSelector" type="MenuButton" parent="JobData/TriggerSection"]
+margin_left = 128.0
+margin_top = 72.0
+margin_right = 152.0
+margin_bottom = 104.0
+focus_mode = 2
+size_flags_horizontal = 0
+flat = false
+
+[node name="HSeparator" type="HSeparator" parent="JobData"]
+margin_top = 153.0
+margin_right = 1896.0
+margin_bottom = 157.0
+
+[node name="Command" type="Label" parent="JobData"]
+margin_top = 161.0
+margin_right = 1896.0
+margin_bottom = 181.0
+size_flags_vertical = 8
+text = "Executed command:"
+
+[node name="CommandEdit" type="TextEdit" parent="JobData"]
+margin_top = 185.0
+margin_right = 1896.0
+margin_bottom = 221.0
+rect_min_size = Vector2( 0, 36 )
+wrap_enabled = true
+
+[node name="SaveDiscardBar" type="HBoxContainer" parent="JobData"]
+visible = false
+margin_top = 225.0
+margin_right = 1896.0
+margin_bottom = 257.0
+
+[node name="SaveButton" type="Button" parent="JobData/SaveDiscardBar"]
+margin_right = 126.0
+margin_bottom = 32.0
+text = "Save Changes"
+
+[node name="DiscardButton" type="Button" parent="JobData/SaveDiscardBar"]
+margin_left = 130.0
+margin_right = 275.333
+margin_bottom = 32.0
+text = "Discard Changes"
+
+[connection signal="pressed" from="JobData/TitleBar/ActiveButton" to="." method="_on_ActiveButton_pressed"]
+[connection signal="pressed" from="JobData/TitleBar/RunButton" to="." method="_on_RunButton_pressed"]
+[connection signal="pressed" from="JobData/TitleBar/DeleteButton" to="." method="_on_DeleteButton_pressed"]
+[connection signal="text_changed" from="JobData/CommandEdit" to="." method="_on_CommandEdit_text_changed"]
