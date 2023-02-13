@@ -27,6 +27,7 @@ const message_types : Dictionary = {
 
 var full_run_events := []
 var run_errors := []
+var run_error_count := 0
 var error_string : String = ""
 var mouse_on_errors := false
 var display_messages := false
@@ -114,7 +115,7 @@ func refresh_error_tooltip():
 		
 	$PanelContainer/Content/HBoxContainer/ErrorBtn.show()
 	$PanelContainer/Content/HBoxContainer/ErrorNumber.show()
-	$PanelContainer/Content/HBoxContainer/ErrorNumber.text = str(run_errors.size())
+	$PanelContainer/Content/HBoxContainer/ErrorNumber.text = str(run_error_count)
 	$PanelContainer/Content/HBoxContainer/ErrorNumber.rect_size.x = 1
 	
 	error_string = ""
@@ -135,6 +136,7 @@ func parse_message(_m:Dictionary):
 		$CheckForWorkflows.stop()
 		emit_signal("started")
 		run_errors.clear()
+		run_error_count = 0
 		refresh_error_tooltip()
 		refresh_elements()
 		$PanelContainer/Content/HBoxContainer/Done.hide()
@@ -145,7 +147,9 @@ func parse_message(_m:Dictionary):
 	elif m_type == message_types[MessageTypes.ERROR]:
 		# handle error
 		if _m.data.has("message"):
-			run_errors.append(_m.data.message)
+			run_error_count += 1
+			if run_errors.size() < 100:
+				run_errors.append(_m.data.message)
 			var properties := {"error" : _m.data.message}
 			Analytics.event(Analytics.EventWizard.ERROR, properties)
 			refresh_error_tooltip()
