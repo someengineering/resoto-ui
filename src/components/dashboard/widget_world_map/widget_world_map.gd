@@ -429,15 +429,13 @@ func _input(event):
 		if event.button_index == BUTTON_WHEEL_DOWN and event.pressed:
 			camera_for_2d.fov = min(camera_for_2d.fov / 0.9, 90)
 			camera.translation.x = min(camera.translation.x / 0.9, 9)
-			# camera.fov = min(camera_for_2d.fov / 0.9, 90)
 		if event.button_index == BUTTON_WHEEL_UP and event.pressed:
 			camera_for_2d.fov = max(camera_for_2d.fov * 0.9, 10)
 			camera.translation.x = max(camera.translation.x * 0.9, 4)
-			#camera.fov = max(camera_for_2d.fov * 0.9, 10)
-			
+		
 		if camera.translation.x != prev_dist:
 			emit_signal("scrolling")
-			
+		
 		camera_for_2d.translation = clamp_2d_camera(camera_for_2d.translation)
 	
 	
