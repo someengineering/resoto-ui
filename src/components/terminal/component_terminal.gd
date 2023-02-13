@@ -216,7 +216,10 @@ func _input(event:InputEvent) -> void:
 
 func _on_cli_execute_streamed_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
-		console.append_bbcode("\nError: [color=red]" + Utils.err_enum_to_string(error) + "[/color]")
+		if _response.body and typeof(_response.body) == TYPE_RAW_ARRAY:
+			console.append_bbcode("[color=red]" + _response.body.get_string_from_utf8() + "[/color]")
+		else:
+			console.append_bbcode("\nError: [color=red]" + Utils.err_enum_to_string(error) + "[/color]")
 		loading.stop()
 	else:
 		data_chunks.resize(chunk_idx)
