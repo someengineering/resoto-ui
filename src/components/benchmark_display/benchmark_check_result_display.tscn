@@ -1,18 +1,21 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/icons/icon_128_close_thick.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=2]
 [ext_resource path="res://components/benchmark_display/benchmark_check_result_display.gd" type="Script" id=3]
-[ext_resource path="res://components/shared/icon_tooltip_helper.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=5]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=6]
 
-[node name="BenchmarkCheckResultDisplay" type="HBoxContainer"]
-margin_right = 40.0
+[node name="BenchmarkCheckResultDisplay" type="VBoxContainer"]
+margin_right = 128.0
 margin_bottom = 40.0
 script = ExtResource( 3 )
 
-[node name="Passed" type="TextureRect" parent="."]
+[node name="Main" type="HBoxContainer" parent="."]
+margin_right = 128.0
+margin_bottom = 20.0
+
+[node name="Passed" type="TextureRect" parent="Main"]
 visible = false
 modulate = Color( 0.265427, 0.957031, 0.438328, 1 )
 margin_left = 4.0
@@ -23,7 +26,7 @@ texture = ExtResource( 2 )
 expand = true
 stretch_mode = 6
 
-[node name="Failed" type="TextureRect" parent="."]
+[node name="Failed" type="TextureRect" parent="Main"]
 visible = false
 modulate = Color( 0.956863, 0.266667, 0.266667, 1 )
 margin_left = 24.0
@@ -34,41 +37,54 @@ texture = ExtResource( 1 )
 expand = true
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="."]
-margin_top = 10.0
-margin_bottom = 30.0
+[node name="Label" type="Label" parent="Main"]
+margin_bottom = 20.0
 
-[node name="Spacer" type="HSeparator" parent="."]
+[node name="SeverityLabel" type="Label" parent="Main"]
 margin_left = 4.0
-margin_right = 7.0
-margin_bottom = 40.0
+margin_top = 2.0
+margin_right = 4.0
+margin_bottom = 17.0
+theme_type_variation = "LabelSmall"
+
+[node name="Spacer" type="HSeparator" parent="Main"]
+margin_left = 8.0
+margin_right = 124.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="IconTooltipHelper" parent="." instance=ExtResource( 4 )]
-modulate = Color( 1, 1, 1, 0.219608 )
-margin_left = 11.0
-margin_top = 10.0
-margin_right = 31.0
-margin_bottom = 30.0
-texture = ExtResource( 5 )
+[node name="FailingResources" type="Label" parent="Main"]
+margin_left = 128.0
+margin_right = 128.0
+margin_bottom = 20.0
 
-[node name="FailingResources" type="Label" parent="."]
-margin_left = 35.0
-margin_top = 10.0
-margin_right = 35.0
-margin_bottom = 30.0
-
-[node name="RemediationButton" parent="." instance=ExtResource( 6 )]
+[node name="RemediationButton" parent="Main" instance=ExtResource( 6 )]
 visible = false
 modulate = Color( 0.265427, 0.957031, 0.438328, 1 )
-margin_left = 39.0
-margin_right = 72.0
-margin_bottom = 40.0
+margin_left = 81.0
+margin_right = 114.0
 icon_tex = ExtResource( 5 )
 
-[node name="Spacer2" type="Control" parent="."]
-margin_left = 39.0
-margin_right = 49.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 10, 0 )
+[node name="Secondary" type="HBoxContainer" parent="."]
+margin_top = 24.0
+margin_right = 128.0
+margin_bottom = 48.0
+
+[node name="Control" type="Control" parent="Secondary"]
+margin_right = 16.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 16, 0 )
+
+[node name="RemediationText" type="RichTextLabel" parent="Secondary"]
+margin_left = 20.0
+margin_right = 128.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 0, 24 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = "RichLabelSmall"
+bbcode_enabled = true
+fit_content_height = true
+
+[connection signal="meta_clicked" from="Secondary/RemediationText" to="." method="_on_RemediationText_meta_clicked"]

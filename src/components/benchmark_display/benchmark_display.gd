@@ -46,7 +46,10 @@ func _on_get_benchmark_report_done(_error: int, response):
 			display_element.failing_n = element.reported.number_of_resources_failing
 			display_element.title = element.reported.title
 			
-			display_element.set_custom_tooltip(element.reported.remediation.text, element.reported.remediation.url)
+			display_element.remediation_text = element.reported.remediation.text
+			display_element.remediation_url = element.reported.remediation.url
+			
+			display_element.severity = element.reported.severity
 			
 			var last_element_name = sections.keys()[-1]
 			var item = sections[last_element_name].add_sub_element(display_element)

@@ -1,37 +1,75 @@
-extends HBoxContainer
+extends VBoxContainer
 
 var passed : bool = false setget set_passed
 var title : String = "" setget set_title
 var failing_n : int = 0 setget set_failing_n
 var remediation_actions : Array = [] setget set_remediation_actions
+var remediation_text : String = "" setget set_remediation_text
+var remediation_url : String = "" setget set_remediation_url
+var severity : String = "" setget set_severity
 
 
 func set_passed(_passed : bool):
 	passed = _passed
-	$Passed.visible = passed
-	$Failed.visible = not passed
+	$Main/Passed.visible = passed
+	$Main/Failed.visible = not passed
+	$Secondary/RemediationText.visible = not passed
+	$Main/SeverityLabel.visible = not passed
+	$Main/Spacer.visible = not passed
 
 
 func set_title(_title : String):
 	title = _title
-	$Label.text = title
+	$Main/Label.text = title
 
 
 func set_failing_n(_failing : int):
 	failing_n = _failing
 	if _failing > 0:
-		$FailingResources.text = ("%d Resources have failed" if failing_n > 1 else "%d Resource has failed") % failing_n
+		$Main/FailingResources.text = ("%d Resources have failed" if failing_n > 1 else "%d Resource has failed") % failing_n
 	else:
-		$FailingResources.text = "All resources have passed!"
+		$Main/FailingResources.visible = false
 
-func set_custom_tooltip(tooltip: String, url: String):
-	$IconTooltipHelper.tooltip_text = tooltip
-	if url:
-		$IconTooltipHelper.link = url
-		$IconTooltipHelper.texture = preload("res://assets/icons/icon_128_help_external_link.svg")
+func set_remediation_text_and_url(text: String, url: String):
+	if url == null or url == "":
+		$Secondary/RemediationText.text = text
+	else:
+		$Secondary/RemediationText.bbcode_text = "[url=%s]%s[/url]" % [remediation_url, remediation_text]
 		
-	$IconTooltipHelper.visible = tooltip != ""
+		$Secondary/RemediationText.text = text
+	
+func set_remediation_text(text : String):
+	remediation_text = text
+	set_remediation_text_and_url(remediation_text, remediation_url)
+	
+func set_remediation_url(url : String):
+	remediation_url = url
+	set_remediation_text_and_url(remediation_text, remediation_url)
+
 
 func set_remediation_actions(actions : Array):
 	remediation_actions = actions
 	$RemediationButton.visible = not actions.empty()
+
+
+func _on_RemediationText_meta_clicked(meta):
+	OS.shell_open(meta)
+
+func set_severity(_severity : String):
+	severity = _severity
+	$Main/SeverityLabel.text = "%s severity" % severity
+	$Main/SeverityLabel.text = $Main/SeverityLabel.text.capitalize()
+	
+	var color = Color.white
+	match severity:
+		"low":
+			color = Color("#44f470")
+		"medium":
+			color = Color.orange
+		"high":
+			color = Color("#f44444")
+		"critical":
+			color = Color("#f44444")
+			$Main/SeverityLabel.text = $Main/SeverityLabel.text.to_upper()
+			
+	$Main/SeverityLabel.set("custom_colors/font_color", color)
