@@ -5,10 +5,10 @@ onready var graph = $GraphEdit
 var nodes:Dictionary = {}
 
 func _ready() -> void:
-	API.cli_execute_json("search --with-edges id=root -[0:2]->", self)
+	API.cli_execute_nd_json("search --with-edges id=root -[0:2]->", self)
 
 
-func _on_cli_execute_json_data(data) -> void:
+func _on_cli_execute_nd_json_data(data) -> void:
 	var new_resource = data
 	if data.type == "edge":
 		add_graph_edge(data)
@@ -50,7 +50,7 @@ func add_label(_text:String) ->Label:
 	return label
 
 
-func _on_cli_execute_json_done(error:int, response:UserAgent.Response) -> void:
+func _on_cli_execute_nd_json_done(error:int, response:UserAgent.Response) -> void:
 	if error:
 		print(error)
 	else:
