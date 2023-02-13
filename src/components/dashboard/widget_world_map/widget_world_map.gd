@@ -428,9 +428,15 @@ func _input(event):
 				mouse_from = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
 		
 		# var prev_fov = camera.fov
+		var aspect_ratio = rect_size.x / rect_size.y
+		var vertical_fov = 2 * atan2(sprite_size.y / 2, 3)
+		var horizontal_fov = 2 * atan2(sprite_size.x / aspect_ratio / 2, 3 )
+
+		var max_fov = rad2deg(max(vertical_fov, horizontal_fov))
+		 
 		var prev_dist = camera.translation.x
 		if event.button_index == BUTTON_WHEEL_DOWN and event.pressed:
-			camera_for_2d.fov = min(camera_for_2d.fov / 0.9, 90)
+			camera_for_2d.fov = min(camera_for_2d.fov / 0.9, max_fov)
 			camera.translation.x = min(camera.translation.x / 0.9, 9)
 		if event.button_index == BUTTON_WHEEL_UP and event.pressed:
 			camera_for_2d.fov = max(camera_for_2d.fov * 0.9, 10)
@@ -460,10 +466,14 @@ func clamp_2d_camera(translation : Vector3) -> Vector3:
 		
 		var delta : float = 3 * tan(deg2rad(camera_for_2d.fov / 2))
 		var delta_pos : Vector2 = Vector2(delta / r, delta)
-		var max_pos : Vector2 = sprite_size / 2 - delta_pos
+		var left_pos : Vector2 = sprite_size / 2 - delta_pos
+		var right_pos : Vector2 = -left_pos
 		
-		translation.z = clamp(translation.z, -max_pos.x, max_pos.x)
-		translation.y = clamp(translation.y, -max_pos.y, max_pos.y)
+		var max_pos := Vector2(max(left_pos.x, right_pos.x), max(left_pos.y, right_pos.y))
+		var min_pos := Vector2(min(left_pos.x, right_pos.x), min(left_pos.y, right_pos.y))
+		
+		translation.z = clamp(translation.z, min_pos.x, max_pos.x)
+		translation.y = clamp(translation.y, min_pos.y, max_pos.y)
 		
 		return translation
 
