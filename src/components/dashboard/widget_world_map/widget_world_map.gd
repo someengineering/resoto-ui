@@ -2,6 +2,9 @@ extends BaseWidget
 
 signal scrolling
 
+export (Color) var low_color := Color.midnightblue setget set_low_color
+export (Color) var high_color := Color.orangered setget set_high_color
+
 var initial_world_speed := 0.12
 var world_speed := initial_world_speed
 var stop_auto_rotate := false
@@ -471,6 +474,8 @@ func set_auto_rotate(rotate : bool):
 
 func add_cylinder(coordinates : Vector2, height := 1.0):
 	var c := preload("res://components/dashboard/widget_world_map/widget_world_map_column.tscn").instance()
+	c.min_color = low_color
+	c.max_color = high_color
 	c.value = height
 	c.coordinates = coordinates
 	
@@ -657,6 +662,16 @@ func _get_property_list() -> Array:
 			"name" : "auto_rotate",
 			"type" : TYPE_BOOL
 		})
+		
+	properties.append({
+		"name" : "low_color",
+		"type" : TYPE_COLOR
+	})
+	
+	properties.append({
+		"name" : "high_color",
+		"type" : TYPE_COLOR
+	})
 	
 	return properties
 	
@@ -670,3 +685,15 @@ func set__3d_view(_3d : bool):
 		create_columns_from_data(raw_data)
 	
 	emit_signal("available_properties_changed")
+
+
+func set_low_color(new_color : Color):
+	low_color = new_color
+	if not raw_data.empty():
+		create_columns_from_data(raw_data)
+
+
+func set_high_color(new_color : Color):
+	high_color = new_color
+	if not raw_data.empty():
+		create_columns_from_data(raw_data)

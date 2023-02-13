@@ -10,13 +10,17 @@ var cloud : String = ""
 var region : String = ""
 var hovering : bool = false
 
+var min_color : Color = Color.midnightblue
+var max_color : Color = Color.orangered
+
 func _input(event):
 	if hovering and event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		emit_signal("clicked", coordinates, cloud, region)
 
 func _ready():
 	$MeshInstance.mesh.height = value
-	$MeshInstance.mesh.material.albedo_color = Color.red.blend(Color(0,0,1,value))
+	max_color.a = value
+	$MeshInstance.mesh.material.albedo_color = min_color.blend(max_color)
 	$MeshInstance.translation -= $MeshInstance.transform.basis.y * (value / 2)
 	$CollisionShape.translation -= $MeshInstance.transform.basis.y * (value / 2)
 	$CollisionShape.shape.height = value
