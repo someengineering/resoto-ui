@@ -69,5 +69,25 @@
             "type": 3,
             "query": "aggregate(/ancestors.account.reported.name as account_name, instance_type as type: sum(1) as instances) : is(instance)"
         }
+    },
+    {
+        "Name": "Instance number per region and cloud",
+        "Widgets": ["WorldMap"],
+        "Description": "Gets the number of instances per per region and cloud",
+        "data": {
+            "categories": [
+                "/ancestors.cloud.reported.name as cloud",
+                "/ancestors.region.reported.name as region"
+            ],
+            "function": "sum(1)",
+            "function_alias": "instances",
+            "search": "is(instance)",
+            "grouping_variables": "",
+            "grouping_functions": "",
+            "search_query": "",
+            "type": 4,
+            "query": "aggregate(/ancestors.cloud.reported.name as cloud, /ancestors.region.reported.name as region: sum(1) as instances) : is(instance)",
+            "custom_query": false
+        }
     }
 ]
