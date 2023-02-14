@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://components/job_editor/job_editor_component.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=2]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=3]
 
 [node name="JobEditor" type="Control"]
 anchor_right = 1.0
@@ -11,9 +13,38 @@ script = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="JobList" type="VBoxContainer" parent="JobsPanel"]
+[node name="Main" type="VBoxContainer" parent="JobsPanel"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1910.0
 margin_bottom = 1070.0
 custom_constants/separation = 10
+
+[node name="Menu" type="HBoxContainer" parent="JobsPanel/Main"]
+margin_right = 1900.0
+margin_bottom = 33.0
+size_flags_vertical = 0
+
+[node name="AddJobButton" parent="JobsPanel/Main/Menu" instance=ExtResource( 3 )]
+margin_right = 108.0
+size_flags_vertical = 1
+text = "       Add Job"
+align = 0
+icon_tex = ExtResource( 2 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="JobsPanel/Main"]
+margin_top = 43.0
+margin_right = 1900.0
+margin_bottom = 1060.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="JobList" type="VBoxContainer" parent="JobsPanel/Main/ScrollContainer"]
+unique_name_in_owner = true
+margin_right = 1900.0
+margin_bottom = 1017.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
+
+[connection signal="pressed" from="JobsPanel/Main/Menu/AddJobButton" to="." method="_on_AddJobButton_pressed"]

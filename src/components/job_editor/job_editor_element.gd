@@ -70,6 +70,7 @@ const Trigger_Events = [
 ]
 
 signal delete_job
+signal duplicate_job
 
 var job_id : String			= "" setget set_job_id
 var job_active : bool		= true setget set_job_active
@@ -236,6 +237,16 @@ func _on_RunButton_pressed():
 	API.cli_execute("jobs run %s" % job_id, self, "_on_job_run_done")
 
 
+func _on_DuplicateButton_pressed():
+	var copy_job_trigger : int = $"%TriggerSelect".get_selected_id()
+	var copy_job_schedule : String = $"%CronLineEdit".text
+	var copy_job_event : String = $"%EventSelector".text
+	var copy_trigger_string : String = generate_schedule_string(copy_job_trigger, copy_job_schedule, copy_job_event)
+	
+	var copy_job_command : String = $"%CommandEdit".text
+	emit_signal("duplicate_job", job_id, copy_trigger_string, copy_job_command)
+
+
 func _on_DeleteButton_pressed():
 	var delete_confirm_popup = _g.popup_manager.show_confirm_popup(
 		"Delete Job?",
@@ -249,7 +260,7 @@ func _on_delete_confirm_response(_response:String, _double_confirm:=false):
 		API.cli_execute("jobs delete %s" % job_id, self, "_on_job_delete_done")
 
 
-func _on_job_delete_done():
+func _on_job_delete_done(_e, _r):
 	emit_signal("delete_job", self)
 
 
@@ -264,17 +275,10 @@ func _on_job_run_done(_e, _r):
 func _on_SaveButton_pressed():
 	job_trigger = $"%TriggerSelect".get_selected_id()
 	job_schedule = $"%CronLineEdit".text
-	job_command = $"%CommandEdit".text
 	job_event = $"%EventSelector".text
+	var trigger_string : String = generate_schedule_string(job_trigger, job_schedule, job_event)
 	
-	var trigger_string := ""
-	if job_trigger == Trigger.SCHEDULED or job_trigger == Trigger.SCHEDULED_AND_EVENT:
-		trigger_string = "--schedule \"%s\"" % job_schedule
-		if job_trigger == Trigger.SCHEDULED_AND_EVENT:
-			trigger_string += " --wait-for-event %s" % job_event
-	elif job_trigger == Trigger.EVENT:
-		trigger_string = "--wait-for-event %s" % job_event
-	
+	job_command = $"%CommandEdit".text
 	API.cli_execute("jobs update --id %s %s '%s'" % [job_id, trigger_string, job_command], self, "_on_job_update_done")
 	hide_save_options()
 
@@ -287,3 +291,14 @@ func _on_job_update_done(_error:int, _response:UserAgent.Response) -> void:
 
 func _on_DiscardButton_pressed():
 	restore_from_core()
+
+
+func generate_schedule_string(_trigger_type:int, trigger_schedule:String, trigger_event:String) -> String:
+	var _trigger_string := ""
+	if _trigger_type == Trigger.SCHEDULED or _trigger_type == Trigger.SCHEDULED_AND_EVENT:
+		_trigger_string = "--schedule \"%s\"" % trigger_schedule
+		if _trigger_type == Trigger.SCHEDULED_AND_EVENT:
+			_trigger_string += " --wait-for-event %s" % trigger_event
+	elif _trigger_type == Trigger.EVENT:
+		_trigger_string = "--wait-for-event %s" % trigger_event
+	return _trigger_string
