@@ -7,6 +7,7 @@ var remediation_actions : Array = [] setget set_remediation_actions
 var remediation_text : String = "" setget set_remediation_text
 var remediation_url : String = "" setget set_remediation_url
 var severity : String = "" setget set_severity
+var risk : String = ""
 
 
 func set_passed(_passed : bool):

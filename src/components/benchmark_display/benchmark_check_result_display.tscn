@@ -67,6 +67,7 @@ margin_right = 114.0
 icon_tex = ExtResource( 5 )
 
 [node name="Secondary" type="HBoxContainer" parent="."]
+visible = false
 margin_top = 24.0
 margin_right = 128.0
 margin_bottom = 48.0

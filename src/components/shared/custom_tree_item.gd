@@ -2,6 +2,8 @@ class_name CustomTreeItem
 extends PanelContainer
 
 signal collapsed_changed
+signal pressed(item)
+signal released
 
 export (bool) var collapsable: bool = true setget set_collapsable
 export (bool) var show_connection_lines: bool = true setget set_show_connection_lines
@@ -16,6 +18,7 @@ onready var sub_element_container := $VBoxContainer/SubContainer/SubElements
 onready var sub_container := $VBoxContainer/SubContainer
 onready var collapse_button := $VBoxContainer/MainContainer/CollapseButton
 onready var spacer := $VBoxContainer/SubContainer/Spacer
+
 
 func _ready():
 	set_collapsable(collapsable)
@@ -126,3 +129,21 @@ func to_local(position : Vector2) -> Vector2:
 
 func _on_CustomTreeItem_visibility_changed():
 	emit_signal("collapsed_changed")
+
+
+func _on_MainElement_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+		if event.pressed:
+			emit_signal("pressed", self)
+		else:
+			emit_signal("released")
+
+
+func _on_MainElement_mouse_entered():
+	var tween := get_tree().create_tween()
+	tween.tween_property(main_element, "modulate", Color(1.6,1.6,1.6), 0.1)
+
+
+func _on_MainElement_mouse_exited():
+	var tween := get_tree().create_tween()
+	tween.tween_property(main_element, "modulate", Color.white, 0.1)

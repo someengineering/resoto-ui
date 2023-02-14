@@ -17,19 +17,11 @@ func set_passed(_passed : bool):
 	
 func set_passing_n(n : int):
 	passing_n = n
-	$PassingNumber.text = str(n)
-	update_bar()
+	$FailingVsPassingWidget.passing_n = n
 	
 func set_failing_n(n : int):
 	failing_n = n
-	$FailingNumber.text = str(n)
-	update_bar()
-	
-func update_bar():
-	if passing_n + failing_n == 0:
-		return
-	var ratio : float = float(passing_n) / (passing_n + failing_n)
-	$ColorRect.material.set_shader_param("passed", ratio)
+	$FailingVsPassingWidget.failing_n = n
 
 func set_label_variation(variation: String):
 	$Label.theme_type_variation = variation

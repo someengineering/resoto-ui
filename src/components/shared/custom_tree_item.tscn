@@ -16,11 +16,13 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = 1920.0
 margin_bottom = 1070.0
+mouse_filter = 2
 custom_constants/separation = 5
 
 [node name="MainContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 1910.0
 margin_bottom = 33.0
+mouse_filter = 2
 alignment = 2
 
 [node name="CollapseButton" parent="VBoxContainer/MainContainer" instance=ExtResource( 1 )]
@@ -41,17 +43,23 @@ size_flags_horizontal = 3
 margin_top = 38.0
 margin_right = 1910.0
 margin_bottom = 38.0
+mouse_filter = 2
 alignment = 2
 
 [node name="Spacer" type="Control" parent="VBoxContainer/SubContainer"]
 margin_right = 24.0
 rect_min_size = Vector2( 24, 0 )
+mouse_filter = 2
 
 [node name="SubElements" type="VBoxContainer" parent="VBoxContainer/SubContainer"]
 margin_left = 28.0
 margin_right = 1910.0
+mouse_filter = 2
 size_flags_horizontal = 3
 alignment = 2
 
 [connection signal="visibility_changed" from="." to="." method="_on_CustomTreeItem_visibility_changed"]
 [connection signal="pressed" from="VBoxContainer/MainContainer/CollapseButton" to="." method="_on_CollapseButton_pressed"]
+[connection signal="gui_input" from="VBoxContainer/MainContainer/MainElement" to="." method="_on_MainElement_gui_input"]
+[connection signal="mouse_entered" from="VBoxContainer/MainContainer/MainElement" to="." method="_on_MainElement_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/MainContainer/MainElement" to="." method="_on_MainElement_mouse_exited"]
