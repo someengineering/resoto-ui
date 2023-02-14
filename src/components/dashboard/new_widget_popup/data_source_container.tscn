@@ -492,6 +492,7 @@ margin_bottom = 32.0
 size_flags_horizontal = 3
 script = ExtResource( 6 )
 
+
 [node name="AggregateSearch" type="VBoxContainer" parent="VBox"]
 visible = false
 margin_right = 511.0
@@ -519,6 +520,77 @@ margin_top = 128.0
 margin_right = 511.0
 margin_bottom = 160.0
 script = ExtResource( 6 )
+
+
+[node name="FixedAggregate" type="VBoxContainer" parent="VBox"]
+visible = false
+margin_top = 37.0
+margin_right = 511.0
+margin_bottom = 153.0
+
+[node name="Label" type="Label" parent="VBox/FixedAggregate"]
+margin_right = 511.0
+margin_bottom = 20.0
+text = "Search"
+
+[node name="SearchLineEdit" type="LineEdit" parent="VBox/FixedAggregate"]
+margin_top = 24.0
+margin_right = 511.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+script = ExtResource( 6 )
+
+[node name="FunctionText" type="HBoxContainer" parent="VBox/FixedAggregate"]
+margin_top = 60.0
+margin_right = 511.0
+margin_bottom = 80.0
+
+[node name="FunctionLabel" type="Label" parent="VBox/FixedAggregate/FunctionText"]
+margin_right = 159.0
+margin_bottom = 20.0
+text = "Aggregation Function"
+
+[node name="EntryHelp" parent="VBox/FixedAggregate/FunctionText" instance=ExtResource( 12 )]
+modulate = Color( 0, 0.329412, 0.639216, 1 )
+margin_left = 163.0
+margin_right = 179.0
+margin_bottom = 18.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 13 )
+darker_color = true
+tooltip_text = "Enter an Aggregation Function to use for the value of the heatmap cell and a name.
+[b]Examples[/b]
+- [code]sum(1)[/code] as [code]count[/code]
+- [code]sum(instance_cores)[/code] as [code]cores[/code]
+
+[b]Click[/b] to view our Resource Data Models (external link)"
+link = "https://resoto.com/docs/reference/search/aggregation#aggregation-functions"
+
+[node name="FunctionContainer" type="HBoxContainer" parent="VBox/FixedAggregate"]
+margin_top = 84.0
+margin_right = 511.0
+margin_bottom = 116.0
+
+[node name="FunctionLineEdit" type="LineEdit" parent="VBox/FixedAggregate/FunctionContainer"]
+margin_right = 243.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="VBox/FixedAggregate/FunctionContainer"]
+margin_left = 247.0
+margin_top = 6.0
+margin_right = 264.0
+margin_bottom = 26.0
+text = "as"
+
+[node name="FunctionAlias" type="LineEdit" parent="VBox/FixedAggregate/FunctionContainer"]
+margin_left = 268.0
+margin_right = 511.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+script = ExtResource( 6 )
+
 
 [node name="ResultingQueryBox" type="HBoxContainer" parent="VBox"]
 margin_top = 37.0
@@ -595,6 +667,9 @@ custom_styles/panel = SubResource( 2 )
 [connection signal="group_variables_changed" from="VBox/AggregateSearch/GroupVariables" to="." method="_on_GroupVariables_group_variables_changed"]
 [connection signal="group_variables_changed" from="VBox/AggregateSearch/GroupFunctions" to="." method="_on_GroupFunctions_group_variables_changed"]
 [connection signal="text_entered" from="VBox/AggregateSearch/AggregateSearchQuery" to="." method="_on_AggregateSearchQuery_text_entered"]
+[connection signal="text_entered" from="VBox/FixedAggregate/SearchLineEdit" to="." method="_on_SearchLineEdit_text_entered"]
+[connection signal="text_entered" from="VBox/FixedAggregate/FunctionContainer/FunctionLineEdit" to="." method="_on_FunctionLineEdit_text_entered"]
+[connection signal="text_entered" from="VBox/FixedAggregate/FunctionContainer/FunctionAlias" to="." method="_on_FunctionAlias_text_entered"]
 [connection signal="cursor_changed" from="VBox/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_cursor_changed"]
 [connection signal="gui_input" from="VBox/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_gui_input"]
 [connection signal="item_rect_changed" from="VBox/QueryEditVBox/QueryEdit" to="." method="_on_QueryEdit_item_rect_changed"]

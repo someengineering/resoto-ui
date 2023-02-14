@@ -393,7 +393,7 @@ func do_complete_update():
 
 func set_viewport_mode(_update:bool):
 	if _update:
-		viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
+		viewport.render_target_update_mode = Viewport.UPDATE_WHEN_VISIBLE
 		viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
 	else:
 		viewport.render_target_update_mode = Viewport.UPDATE_ONCE

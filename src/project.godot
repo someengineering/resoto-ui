@@ -109,6 +109,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/elements/utility/dynamic_label.gd"
 }, {
+"base": "AggregateSearchDataSource",
+"class": "FixedAggregateSearch",
+"language": "GDScript",
+"path": "res://components/dashboard/data_sources/data_source_fixed_aggregate_search.gd"
+}, {
 "base": "Node",
 "class": "GraphAStar",
 "language": "GDScript",
@@ -230,6 +235,7 @@ _global_script_class_icons={
 "DashboardManager": "",
 "DataSource": "",
 "DynamicLabel": "",
+"FixedAggregateSearch": "",
 "GraphAStar": "",
 "Indicator": "",
 "JWTGenerator": "",
@@ -282,7 +288,7 @@ gdscript/warnings/return_value_discarded=false
 window/size/width=1920
 window/size/height=1080
 window/size/test_width=1600
-window/size/test_height=1200
+window/size/test_height=900
 window/dpi/allow_hidpi=true
 window/stretch/aspect="expand"
 

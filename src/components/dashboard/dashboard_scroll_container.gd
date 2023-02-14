@@ -16,5 +16,6 @@ func _process(delta):
 
 func _on_Dashboard_widget_scrolling():
 	scrolling_disable_time = 0.5
-	previous_scroll = scroll_vertical
-	set_process(true)
+	if not is_processing():
+		previous_scroll = scroll_vertical
+		set_process(true)

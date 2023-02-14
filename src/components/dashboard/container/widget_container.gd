@@ -465,6 +465,8 @@ func set_data_sources_data(data : Array) -> void:
 				ds = TextSearchDataSource.new()
 			DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
 				ds = TwoEntryAggregateDataSource.new()
+			DataSource.TYPES.FIXED_AGGREGATE:
+				ds = FixedAggregateSearch.new()
 				
 		for key in settings:
 			ds.set(key, settings[key])
