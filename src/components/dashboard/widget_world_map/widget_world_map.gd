@@ -382,7 +382,7 @@ var raw_data : Array = []
 var mouse_from := Vector3.ZERO
 var sprite_size := Vector2.ZERO
 
-export (bool) var auto_rotate := false setget set_auto_rotate
+var auto_rotate := false setget set_auto_rotate
 export (bool) var _3d_view := true setget set__3d_view
 
 onready var world := $ViewportContainer/Viewport/WorldMesh
@@ -490,11 +490,11 @@ func add_cylinder(coordinates : Vector2, height := 1.0):
 	c.coordinates = coordinates
 	
 	if _3d_view:
+		c.radius = 0.02
 		world.add_child(c)
 		c.rotate(Vector3.FORWARD, PI/2)
 		c.rotate(Vector3.UP, deg2rad(coordinates.y-90))
 		c.rotate(Vector3.UP.cross(c.transform.basis.y), deg2rad(coordinates.x))
-		
 		c.translation -= c.transform.basis.y
 		
 		for cylinder in world.get_children():
@@ -505,9 +505,10 @@ func add_cylinder(coordinates : Vector2, height := 1.0):
 				continue
 				
 			if cylinder.coordinates == coordinates:
-				c.translation -= c.transform.basis.y * cylinder.value
+				c.translation -= c.transform.basis.y * cylinder.value * cylinder.height_scale
 				
 	else:
+		c.radius = 0.04
 		sprite.add_child(c)
 		c.rotate(Vector3.LEFT, 3*PI/4)
 		c.translation.y = sprite_size.y * coordinates.x / 180 

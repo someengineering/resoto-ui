@@ -75,7 +75,7 @@ func _on_AcceptButton_pressed() -> void:
 	
 	var properties = get_preview_widget_properties()
 	
-	for key in get_preview_widget_properties():
+	for key in properties:
 		widget[key] = properties[key]
 		
 	var new_data_sources : Array = []
@@ -144,8 +144,9 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		preview_widget = dashboard_container.WidgetScenes[widget_type].instance()
 	else:
 		preview_widget = load(widget_to_edit.widget.filename).instance()
-		for key in get_preview_widget_properties():
+		for key in get_preview_widget_properties(widget_to_edit.widget):
 			preview_widget[key] = widget_to_edit.widget[key]
+			prints(key, widget_to_edit.widget[key])
 			
 		for child in widget_to_edit.widget.get_children():
 			if child is ColorController:
@@ -248,14 +249,14 @@ func get_control_for_property(property : Dictionary) -> Control:
 	return control
 
 
-func get_preview_widget_properties() -> Dictionary:
+func get_preview_widget_properties(widget = preview_widget) -> Dictionary:
 	var found_settings := false
 	var properties := {}
-	for property in preview_widget.get_property_list():
+	for property in widget.get_property_list():
 		if found_settings:
 			if property.type == TYPE_NIL:
 				break
-			properties[property.name] = preview_widget[property.name]
+			properties[property.name] = widget[property.name]
 		elif property.name == "Widget Settings":
 			 found_settings = true
 	return properties

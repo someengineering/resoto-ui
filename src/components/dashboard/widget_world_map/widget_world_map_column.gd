@@ -10,6 +10,9 @@ var cloud : String = ""
 var region : String = ""
 var hovering : bool = false
 
+var height_scale := 0.7
+var radius := 0.02
+
 var min_color : Color = Color.midnightblue
 var max_color : Color = Color.orangered
 
@@ -18,11 +21,13 @@ func _input(event):
 		emit_signal("clicked", coordinates, cloud, region)
 
 func _ready():
-	$MeshInstance.mesh.height = value
+	$MeshInstance.mesh.height = value * height_scale
+	$MeshInstance.mesh.top_radius = radius
+	$MeshInstance.mesh.bottom_radius = radius
 	max_color.a = value
 	$MeshInstance.mesh.material.albedo_color = min_color.blend(max_color)
-	$MeshInstance.translation -= $MeshInstance.transform.basis.y * (value / 2)
-	$CollisionShape.translation -= $MeshInstance.transform.basis.y * (value / 2)
+	$MeshInstance.translation -= $MeshInstance.transform.basis.y * (value * height_scale / 2.0)
+	$CollisionShape.translation -= $MeshInstance.transform.basis.y * (value * height_scale / 2.0)
 	$CollisionShape.shape.height = value
 
 func _on_WorldMapColumn_mouse_entered():

@@ -46,8 +46,8 @@ vertex_color_use_as_albedo = true
 [sub_resource type="CylinderMesh" id=2]
 resource_local_to_scene = true
 material = SubResource( 1 )
-top_radius = 0.02
-bottom_radius = 0.02
+top_radius = 0.04
+bottom_radius = 0.04
 height = 0.5
 
 [sub_resource type="CylinderShape" id=5]
