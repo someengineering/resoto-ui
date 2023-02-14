@@ -1,5 +1,6 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=27 format=2]
 
+[ext_resource path="res://components/dashboard/widget_world_map/widget_world_map.tres" type="Material" id=1]
 [ext_resource path="res://components/dashboard/widget_world_map/viewport_container.gd" type="Script" id=3]
 [ext_resource path="res://components/dashboard/widget_world_map/widget_world_map.gd" type="Script" id=5]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=6]
@@ -59,87 +60,6 @@ albedo_color = Color( 0.203125, 0.754808, 1, 1 )
 flip_faces = true
 radial_segments = 128
 rings = 64
-
-[sub_resource type="Shader" id=32]
-code = "shader_type spatial;
-render_mode unshaded;
-
-uniform vec4 albedo_sea : hint_color;
-uniform vec4 albedo_land : hint_color;
-uniform vec4 albedo_border : hint_color;
-
-uniform float rim_power = 4.0;
-uniform float rim_range = 3.0;
-
-uniform float rim_power_land = 4.0;
-uniform float rim_range_land = 3.0;
-
-uniform vec3 rim_direction = vec3(1.,0.,0.);
-
-uniform sampler2D tex_map;
-uniform sampler2D poles_uv_map;
-uniform sampler2D poles_map;
-uniform sampler2D top_down_map;
-
-void fragment() {
-	float rim_f = clamp(pow( 1.0 - dot( NORMAL, rim_direction ), rim_range ) * pow( 1.0 - dot( NORMAL, VIEW ), rim_range ), 0.0, 1.0);
-	float rim_f_land = clamp(pow( 1.0 - dot( NORMAL, rim_direction ), rim_range_land ) * pow( 1.0 - dot( NORMAL, VIEW ), rim_range_land ), 0.0, 1.0);
-	vec3 tex = texture(tex_map, UV).rgb;
-	tex = mix(tex, texture(poles_map, UV).rgb, texture(poles_uv_map, UV).r);
-	vec3 albedo_final = mix(vec3(0.0), albedo_sea.rgb, tex.b);
-	albedo_final = mix(albedo_final, albedo_land.rgb * ((rim_f_land * rim_power_land*0.5) + 1.0), tex.g);
-	albedo_final = mix(albedo_final, albedo_border.rgb * ((rim_f_land * rim_power_land) + 1.0), tex.r);
-	ALBEDO = albedo_final * ((rim_f * rim_power) + 1.0);
-	ALBEDO *= texture(top_down_map, UV).r;
-}"
-
-[sub_resource type="Gradient" id=13]
-interpolation_mode = 1
-offsets = PoolRealArray( 0, 0.535385 )
-colors = PoolColorArray( 0, 0, 1, 1, 0, 1, 0, 1 )
-
-[sub_resource type="GradientTexture2D" id=33]
-gradient = SubResource( 13 )
-fill_from = Vector2( 0.5, 0 )
-fill_to = Vector2( 0.5, 1 )
-
-[sub_resource type="Gradient" id=15]
-interpolation_mode = 1
-offsets = PoolRealArray( 0, 0.0215385, 0.972308 )
-colors = PoolColorArray( 1, 1, 1, 1, 0, 0, 0, 1, 0.918239, 0.918239, 0.918239, 1 )
-
-[sub_resource type="GradientTexture2D" id=34]
-gradient = SubResource( 15 )
-width = 256
-height = 256
-fill_from = Vector2( 0.5, 1 )
-fill_to = Vector2( 0.5, 0 )
-
-[sub_resource type="Gradient" id=17]
-offsets = PoolRealArray( 0.107692, 0.476923 )
-colors = PoolColorArray( 0.239216, 0.0901961, 0.431373, 1, 1, 1, 1, 1 )
-
-[sub_resource type="GradientTexture2D" id=22]
-gradient = SubResource( 17 )
-width = 128
-height = 128
-fill_from = Vector2( 0.5, 1 )
-fill_to = Vector2( 0.5, 0 )
-
-[sub_resource type="ShaderMaterial" id=35]
-shader = SubResource( 32 )
-shader_param/albedo_sea = Color( 0.0392157, 0.145098, 0.247059, 1 )
-shader_param/albedo_land = Color( 0.123871, 0.346745, 0.480469, 1 )
-shader_param/albedo_border = Color( 0.194244, 0.57359, 0.742188, 1 )
-shader_param/rim_power = 5.555
-shader_param/rim_range = 2.198
-shader_param/rim_power_land = 0.256
-shader_param/rim_range_land = 0.857
-shader_param/rim_direction = Vector3( -0.372, -0.269, -0.188 )
-shader_param/tex_map = ExtResource( 8 )
-shader_param/poles_uv_map = SubResource( 34 )
-shader_param/poles_map = SubResource( 33 )
-shader_param/top_down_map = SubResource( 22 )
 
 [sub_resource type="SphereMesh" id=26]
 resource_local_to_scene = true
@@ -250,7 +170,7 @@ mesh = SubResource( 37 )
 skeleton = NodePath("../WorldMesh")
 
 [node name="WorldMesh" type="MeshInstance" parent="ViewportContainer/Viewport"]
-material_override = SubResource( 35 )
+material_override = ExtResource( 1 )
 cast_shadow = 0
 mesh = SubResource( 26 )
 skeleton = NodePath("")
@@ -291,7 +211,7 @@ physics_object_picking = true
 
 [node name="Sprite3D" type="Sprite3D" parent="ViewportContainer2/Viewport"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0 )
-material_override = SubResource( 35 )
+material_override = ExtResource( 1 )
 cast_shadow = 0
 pixel_size = 0.0038
 texture = ExtResource( 8 )

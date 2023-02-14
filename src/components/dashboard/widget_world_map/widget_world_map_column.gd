@@ -25,18 +25,18 @@ func _ready():
 	$MeshInstance.mesh.top_radius = radius
 	$MeshInstance.mesh.bottom_radius = radius
 	max_color.a = value
-	$MeshInstance.mesh.material.albedo_color = min_color.blend(max_color)
+	$MeshInstance.material_override.set_shader_param("albedo_color", min_color.blend(max_color))
 	$MeshInstance.translation -= $MeshInstance.transform.basis.y * (value * height_scale / 2.0)
 	$CollisionShape.translation -= $MeshInstance.transform.basis.y * (value * height_scale / 2.0)
 	$CollisionShape.shape.height = value
 
 func _on_WorldMapColumn_mouse_entered():
-	$MeshInstance.mesh.material.next_pass.set_shader_param("enabled", true)
+	$MeshInstance.material_override.next_pass.set_shader_param("enabled", true)
 	hovering = true
 	emit_signal("start_hovering")
 
 
 func _on_WorldMapColumn_mouse_exited():
-	$MeshInstance.mesh.material.next_pass.set_shader_param("enabled", false)
+	$MeshInstance.material_override.next_pass.set_shader_param("enabled", false)
 	hovering = false
 	emit_signal("end_hovering")
