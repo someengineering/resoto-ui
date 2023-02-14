@@ -10,22 +10,23 @@
 anchor_right = 1.0
 margin_bottom = 153.0
 size_flags_horizontal = 3
-theme_type_variation = "PanelContainerDark"
+theme_type_variation = "PanelContainerWindow"
 script = ExtResource( 5 )
 
 [node name="JobData" type="VBoxContainer" parent="."]
-margin_left = 12.0
-margin_top = 8.0
-margin_right = 1908.0
-margin_bottom = 229.0
+margin_left = 10.0
+margin_top = 4.0
+margin_right = 1916.0
+margin_bottom = 187.0
 
 [node name="TitleBar" type="HBoxContainer" parent="JobData"]
-margin_right = 1896.0
+margin_right = 1906.0
 margin_bottom = 33.0
 
 [node name="JobName" type="Label" parent="JobData/TitleBar"]
+unique_name_in_owner = true
 margin_top = 3.0
-margin_right = 1785.0
+margin_right = 1795.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 size_flags_vertical = 8
@@ -33,112 +34,183 @@ theme_type_variation = "Label_24"
 text = "title"
 
 [node name="ActiveButton" parent="JobData/TitleBar" instance=ExtResource( 7 )]
-margin_left = 1789.0
-margin_right = 1822.0
+unique_name_in_owner = true
+margin_left = 1799.0
+margin_right = 1832.0
 hint_tooltip = "Activate / Deactivate Job"
 
 [node name="RunButton" parent="JobData/TitleBar" instance=ExtResource( 6 )]
-margin_left = 1826.0
-margin_right = 1859.0
+margin_left = 1836.0
+margin_right = 1869.0
 hint_tooltip = "Run Job"
 icon_tex = ExtResource( 4 )
 
 [node name="DeleteButton" parent="JobData/TitleBar" instance=ExtResource( 6 )]
-margin_left = 1863.0
-margin_right = 1896.0
+margin_left = 1873.0
+margin_right = 1906.0
 hint_tooltip = "Delete Job"
 icon_tex = ExtResource( 2 )
 
-[node name="HSeparator2" type="HSeparator" parent="JobData"]
+[node name="Content" type="MarginContainer" parent="JobData"]
 margin_top = 37.0
-margin_right = 1896.0
-margin_bottom = 41.0
+margin_right = 1906.0
+margin_bottom = 183.0
+custom_constants/margin_right = 6
+custom_constants/margin_top = 12
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 6
 
-[node name="TriggerSection" type="GridContainer" parent="JobData"]
-margin_top = 45.0
-margin_right = 1896.0
-margin_bottom = 149.0
+[node name="VBox" type="VBoxContainer" parent="JobData/Content"]
+margin_top = 12.0
+margin_right = 1900.0
+margin_bottom = 140.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="JobData/Content/VBox"]
+margin_right = 1900.0
+margin_bottom = 128.0
+custom_constants/separation = 10
+
+[node name="TriggerSettings" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer"]
+margin_right = 459.0
+margin_bottom = 128.0
+
+[node name="Label" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings"]
+margin_right = 459.0
+margin_bottom = 20.0
+theme_type_variation = "LabelBold"
+text = "Trigger"
+
+[node name="TriggerSection" type="GridContainer" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings"]
+margin_top = 24.0
+margin_right = 459.0
+margin_bottom = 128.0
 columns = 2
 
-[node name="TriggerLabel" type="Label" parent="JobData/TriggerSection"]
-margin_top = 6.0
-margin_right = 124.0
-margin_bottom = 26.0
-text = "Trigger:"
+[node name="TriggerLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+margin_right = 155.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 155, 30 )
+size_flags_vertical = 0
+text = "Type"
+valign = 1
 
-[node name="TriggerSelect" type="OptionButton" parent="JobData/TriggerSection"]
-margin_left = 128.0
-margin_right = 1896.0
+[node name="TriggerSelect" type="OptionButton" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+unique_name_in_owner = true
+margin_left = 159.0
+margin_right = 459.0
 margin_bottom = 32.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 0
 text = "Scheduled"
 items = [ "Scheduled", null, false, 0, null, "Event", null, false, 1, null, "Scheduled, then wait for Event", null, false, 2, null ]
 selected = 0
 
-[node name="CronLabel" type="Label" parent="JobData/TriggerSection"]
-margin_top = 42.0
-margin_right = 124.0
-margin_bottom = 62.0
-text = "Cron expression:"
-
-[node name="CronLineEdit" type="LineEdit" parent="JobData/TriggerSection"]
-margin_left = 128.0
+[node name="CronLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+unique_name_in_owner = true
 margin_top = 36.0
-margin_right = 1896.0
+margin_right = 155.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_vertical = 0
+text = "Cron expression"
+valign = 1
+
+[node name="CronLineEdit" type="LineEdit" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+unique_name_in_owner = true
+margin_left = 159.0
+margin_top = 36.0
+margin_right = 459.0
 margin_bottom = 68.0
-size_flags_horizontal = 3
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 0
+text = "* * * * *"
 
-[node name="EventLabel" type="Label" parent="JobData/TriggerSection"]
-margin_top = 78.0
-margin_right = 124.0
-margin_bottom = 98.0
-text = "Event identifier: "
-
-[node name="EventSelector" type="MenuButton" parent="JobData/TriggerSection"]
-margin_left = 128.0
+[node name="EventLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+unique_name_in_owner = true
 margin_top = 72.0
-margin_right = 152.0
+margin_right = 155.0
+margin_bottom = 102.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_vertical = 0
+text = "Event identifier"
+valign = 1
+
+[node name="EventSelector" type="MenuButton" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+unique_name_in_owner = true
+margin_left = 159.0
+margin_top = 72.0
+margin_right = 459.0
 margin_bottom = 104.0
+rect_min_size = Vector2( 300, 0 )
 focus_mode = 2
 size_flags_horizontal = 0
 flat = false
+align = 0
 
-[node name="HSeparator" type="HSeparator" parent="JobData"]
-margin_top = 153.0
-margin_right = 1896.0
-margin_bottom = 157.0
+[node name="VSeparator" type="VSeparator" parent="JobData/Content/VBox/HBoxContainer"]
+margin_left = 469.0
+margin_right = 473.0
+margin_bottom = 128.0
 
-[node name="Command" type="Label" parent="JobData"]
-margin_top = 161.0
-margin_right = 1896.0
-margin_bottom = 181.0
-size_flags_vertical = 8
-text = "Executed command:"
+[node name="CommandSettings" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer"]
+margin_left = 483.0
+margin_right = 1900.0
+margin_bottom = 128.0
+size_flags_horizontal = 3
 
-[node name="CommandEdit" type="TextEdit" parent="JobData"]
-margin_top = 185.0
-margin_right = 1896.0
-margin_bottom = 221.0
-rect_min_size = Vector2( 0, 36 )
+[node name="Command" type="Label" parent="JobData/Content/VBox/HBoxContainer/CommandSettings"]
+margin_right = 1417.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_vertical = 0
+theme_type_variation = "LabelBold"
+text = "Executed command"
+valign = 1
+
+[node name="CommandEdit" type="TextEdit" parent="JobData/Content/VBox/HBoxContainer/CommandSettings"]
+unique_name_in_owner = true
+margin_top = 34.0
+margin_right = 1417.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 0, 58 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 wrap_enabled = true
 
-[node name="SaveDiscardBar" type="HBoxContainer" parent="JobData"]
+[node name="SaveDiscardSpacer" type="Control" parent="JobData/Content/VBox"]
+unique_name_in_owner = true
 visible = false
-margin_top = 225.0
-margin_right = 1896.0
-margin_bottom = 257.0
+margin_top = 132.0
+margin_right = 1900.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 0, 8 )
 
-[node name="SaveButton" type="Button" parent="JobData/SaveDiscardBar"]
-margin_right = 126.0
+[node name="SaveDiscardBar" type="HBoxContainer" parent="JobData/Content/VBox"]
+unique_name_in_owner = true
+visible = false
+margin_top = 144.0
+margin_right = 1900.0
+margin_bottom = 176.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="SaveButton" type="Button" parent="JobData/Content/VBox/SaveDiscardBar"]
+margin_left = 804.0
+margin_right = 930.0
 margin_bottom = 32.0
 text = "Save Changes"
 
-[node name="DiscardButton" type="Button" parent="JobData/SaveDiscardBar"]
-margin_left = 130.0
-margin_right = 275.333
+[node name="DiscardButton" type="Button" parent="JobData/Content/VBox/SaveDiscardBar"]
+margin_left = 950.0
+margin_right = 1095.33
 margin_bottom = 32.0
 text = "Discard Changes"
 
 [connection signal="pressed" from="JobData/TitleBar/ActiveButton" to="." method="_on_ActiveButton_pressed"]
 [connection signal="pressed" from="JobData/TitleBar/RunButton" to="." method="_on_RunButton_pressed"]
 [connection signal="pressed" from="JobData/TitleBar/DeleteButton" to="." method="_on_DeleteButton_pressed"]
-[connection signal="text_changed" from="JobData/CommandEdit" to="." method="_on_CommandEdit_text_changed"]
+[connection signal="item_selected" from="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/TriggerSelect" to="." method="_on_TriggerSelect_item_selected"]
+[connection signal="text_changed" from="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/CronLineEdit" to="." method="_on_CronLineEdit_text_changed"]
+[connection signal="text_changed" from="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandEdit" to="." method="_on_CommandEdit_text_changed"]
+[connection signal="pressed" from="JobData/Content/VBox/SaveDiscardBar/SaveButton" to="." method="_on_SaveButton_pressed"]
+[connection signal="pressed" from="JobData/Content/VBox/SaveDiscardBar/DiscardButton" to="." method="_on_DiscardButton_pressed"]

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=120 format=2]
+[gd_resource type="Theme" load_steps=121 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -627,6 +627,19 @@ shadow_color = Color( 0, 0, 0, 0.0784314 )
 shadow_size = 30
 shadow_offset = Vector2( 0, -3 )
 
+[sub_resource type="StyleBoxFlat" id=120]
+content_margin_left = 10.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+border_width_top = 42
+border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [sub_resource type="StyleBoxFlat" id=80]
 content_margin_left = 6.0
 content_margin_right = 6.0
@@ -1027,6 +1040,8 @@ PanelContainerDark/base_type = "PanelContainer"
 PanelContainerDark/styles/panel = SubResource( 82 )
 PanelContainerTagElement/base_type = "PanelContainer"
 PanelContainerTagElement/styles/panel = SubResource( 83 )
+PanelContainerWindow/base_type = "PanelContainer"
+PanelContainerWindow/styles/panel = SubResource( 120 )
 PanelPopup/base_type = "PanelContainer"
 PanelPopup/styles/panel = SubResource( 80 )
 PanelTooltip/base_type = "PanelContainer"

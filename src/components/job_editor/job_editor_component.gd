@@ -28,3 +28,8 @@ func create_job_element(job:Dictionary) -> void:
 	$JobsPanel/JobList.add_child(new_job)
 	new_job.setup(job)
 	displayed_jobs.append(new_job)
+
+
+func delete_job(job:Node) -> void:
+	displayed_jobs.erase(job)
+	job.queue_free()
