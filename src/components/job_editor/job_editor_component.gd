@@ -42,8 +42,13 @@ func create_job_element(job:Dictionary) -> void:
 	$"%JobList".move_child(new_job, 0)
 	new_job.connect("delete_job", self, "_on_delete_job")
 	new_job.connect("duplicate_job", self, "_on_duplicate_job")
+	new_job.connect("cron_editor", self, "_on_cron_editor_open")
 	new_job.setup(job)
 	displayed_jobs.append(new_job)
+
+
+func _on_cron_editor_open(_field_rect:Rect2, _expression:String, expr_field:Node) -> void:
+	$"%CronHelper".popup(_expression, _field_rect.position, expr_field)
 
 
 func _on_delete_job(job:Node) -> void:
@@ -106,3 +111,9 @@ func _on_job_add_done(_error:int, _response:UserAgent.Response) -> void:
 		_g.emit_signal("add_toast", "Error in adding Job.", _response.body.get_string_from_utf8(), 1, self)
 		return
 	update_view()
+
+
+func _on_CronHelper_finished(_expression:String, _target_node:Node):
+	_target_node.text = _expression
+	if _target_node.text != _target_node.owner.job_schedule:
+		_target_node.owner.show_save_options()

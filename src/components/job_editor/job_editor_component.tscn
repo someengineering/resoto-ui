@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://components/job_editor/job_editor_component.gd" type="Script" id=1]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=2]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/shared/cron_helper.tscn" type="PackedScene" id=4]
 
 [node name="JobEditor" type="Control"]
 anchor_right = 1.0
@@ -47,4 +48,15 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 10
 
+[node name="CronEditor" type="CanvasLayer" parent="."]
+
+[node name="CronHelper" parent="CronEditor" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+visible = false
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 656.0
+margin_bottom = 144.0
+
 [connection signal="pressed" from="JobsPanel/Main/Menu/AddJobButton" to="." method="_on_AddJobButton_pressed"]
+[connection signal="finished" from="CronEditor/CronHelper" to="." method="_on_CronHelper_finished"]

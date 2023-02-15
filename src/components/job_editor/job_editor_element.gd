@@ -71,6 +71,7 @@ const Trigger_Events = [
 
 signal delete_job
 signal duplicate_job
+signal cron_editor
 
 var job_id : String			= "" setget set_job_id
 var job_active : bool		= true setget set_job_active
@@ -80,9 +81,10 @@ var job_event : String		= "" setget set_job_event
 var job_schedule : String	= "* * * * *" setget set_job_schedule
 
 onready var event_popup : PopupMenu = $"%EventSelector".get_popup()
-
+onready var cron_regex : RegEx = RegEx.new()
 
 func _ready():
+	cron_regex.compile("(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\\d+(ns|us|µs|ms|s|m|h))+)|((((\\d+,)+\\d+|(\\d+(\\/|-)\\d+)|\\d+|\\*) ?){5,7})")
 	event_popup.connect("id_pressed", self, "_on_event_selected")
 	for trigger_event in Trigger_Events:
 		if trigger_event.separator:
@@ -175,7 +177,7 @@ func set_job_trigger(_job_trigger:int):
 	job_trigger = _job_trigger
 	$"%TriggerSelect".selected = job_trigger
 	$"%CronLabel".visible = (job_trigger == Trigger.SCHEDULED or job_trigger == Trigger.SCHEDULED_AND_EVENT)
-	$"%CronLineEdit".visible = (job_trigger == Trigger.SCHEDULED or job_trigger == Trigger.SCHEDULED_AND_EVENT)
+	$"%CronContainer".visible = (job_trigger == Trigger.SCHEDULED or job_trigger == Trigger.SCHEDULED_AND_EVENT)
 	$"%EventLabel".visible = (job_trigger == Trigger.EVENT or job_trigger == Trigger.SCHEDULED_AND_EVENT)
 	$"%EventSelector".visible = (job_trigger == Trigger.EVENT or job_trigger == Trigger.SCHEDULED_AND_EVENT)
 
@@ -188,6 +190,7 @@ func set_job_event(_job_event:String):
 func set_job_schedule(_job_schedule:String):
 	job_schedule = _job_schedule
 	$"%CronLineEdit".text = job_schedule
+	$"%CronError".visible = cron_regex.search_all(job_schedule).empty()
 
 
 func get_event_id_from_string(_job_event:String) -> int:
@@ -207,7 +210,7 @@ func _on_TriggerSelect_item_selected(index:int):
 		show_save_options()
 	
 	$"%CronLabel".visible = index != Trigger.EVENT
-	$"%CronLineEdit".visible = index != Trigger.EVENT
+	$"%CronContainer".visible = index != Trigger.EVENT
 	$"%EventLabel".visible = index != Trigger.SCHEDULED
 	$"%EventSelector".visible = index != Trigger.SCHEDULED
 	
@@ -223,6 +226,7 @@ func _on_TriggerSelect_item_selected(index:int):
 func _on_CronLineEdit_text_changed(new_text:String):
 	if new_text != job_schedule:
 		show_save_options()
+	$"%CronError".visible = cron_regex.search_all(new_text).empty()
 
 
 func _on_ActiveButton_pressed():
@@ -302,3 +306,7 @@ func generate_schedule_string(_trigger_type:int, trigger_schedule:String, trigge
 	elif _trigger_type == Trigger.EVENT:
 		_trigger_string = "--wait-for-event %s" % trigger_event
 	return _trigger_string
+
+
+func _on_CronEditor_pressed():
+	emit_signal("cron_editor", $"%CronContainer".get_global_rect(), $"%CronLineEdit".text, $"%CronLineEdit")

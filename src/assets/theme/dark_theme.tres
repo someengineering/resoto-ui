@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=121 format=2]
+[gd_resource type="Theme" load_steps=123 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -495,6 +495,16 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 15 )
 
+[sub_resource type="DynamicFontData" id=121]
+override_oversampling = 1.5
+font_path = "res://assets/theme/SourceCodePro-Bold.ttf"
+
+[sub_resource type="DynamicFont" id=122]
+size = 15
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 121 )
+
 [sub_resource type="DynamicFont" id=42]
 size = 12
 use_mipmaps = true
@@ -639,6 +649,9 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.0784314 )
+shadow_size = 20
+shadow_offset = Vector2( 0, 5 )
 
 [sub_resource type="StyleBoxFlat" id=80]
 content_margin_left = 6.0
@@ -1010,6 +1023,8 @@ LabelBold/base_type = "Label"
 LabelBold/fonts/font = SubResource( 63 )
 LabelCode/base_type = "Label"
 LabelCode/fonts/font = SubResource( 81 )
+LabelCodeBold/base_type = "Label"
+LabelCodeBold/fonts/font = SubResource( 122 )
 LabelSmall/base_type = "Label"
 LabelSmall/fonts/font = SubResource( 42 )
 Label_24/base_type = "Label"
