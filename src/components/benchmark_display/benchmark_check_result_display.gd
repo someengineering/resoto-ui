@@ -1,4 +1,5 @@
 extends VBoxContainer
+class_name BenchmarkResultDisplay
 
 var passed : bool = false setget set_passed
 var title : String = "" setget set_title
@@ -8,6 +9,7 @@ var remediation_text : String = "" setget set_remediation_text
 var remediation_url : String = "" setget set_remediation_url
 var severity : String = "" setget set_severity
 var risk : String = ""
+var detect : Dictionary = {}
 
 
 func set_passed(_passed : bool):
@@ -74,3 +76,13 @@ func set_severity(_severity : String):
 			$Main/SeverityLabel.text = $Main/SeverityLabel.text.to_upper()
 			
 	$Main/SeverityLabel.set("custom_colors/font_color", color)
+
+func set_reported_data(reported : Dictionary):
+	self.passed = reported.passed
+	self.failing_n = reported.number_of_resources_failing
+	self.title = reported.title
+	self.remediation_text = reported.remediation.text
+	self.remediation_url = reported.remediation.url
+	self.severity = reported.severity
+	self.risk = reported.risk
+	self.detect = reported.detect

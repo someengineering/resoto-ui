@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://components/benchmark_display/benchmark_display.gd" type="Script" id=1]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=2]
 [ext_resource path="res://components/shared/failing_vs_passed_widget.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/dashboard/widget_indicator/widget_indicator.tscn" type="PackedScene" id=4]
 [ext_resource path="res://components/elements/utility/clipped_label.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/dashboard/shared/loading_overlay.tscn" type="PackedScene" id=7]
 
 [node name="BenchmarkDisplay" type="MarginContainer"]
 anchor_right = 1.0
@@ -156,17 +157,49 @@ autowrap = true
 [node name="RemediationLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 visible = false
 margin_top = 90.0
-margin_right = 606.0
+margin_right = 354.0
 margin_bottom = 127.0
 theme_type_variation = "RichLabelNormal"
 bbcode_enabled = true
 fit_content_height = true
 
-[node name="Sepparator" type="Control" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 margin_top = 90.0
 margin_right = 354.0
+margin_bottom = 110.0
+text = "Failing Resources:"
+
+[node name="PanelContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+margin_top = 114.0
+margin_right = 354.0
 margin_bottom = 910.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_type_variation = "PanelContainerDark"
+
+[node name="ResourcesList" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer" groups=["FailingResourcesWidget"]]
+visible = false
+margin_right = 354.0
+margin_bottom = 796.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LoadingOverlay" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer" instance=ExtResource( 7 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 354.0
+margin_bottom = 796.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" groups=["FailingResourcesWidget"]]
+visible = false
+margin_left = 266.667
+margin_top = 878.0
+margin_right = 354.0
+margin_bottom = 910.0
+size_flags_horizontal = 8
+text = "Show All"
 
 [node name="FailingVsPassingWidget" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" instance=ExtResource( 3 )]
 margin_left = 276.0

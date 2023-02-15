@@ -13,6 +13,8 @@ onready var detail_view_pass_widget := $PanelContainer/Content/PanelContainer/De
 onready var detail_view_severity := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer/SeverityLabel
 onready var status_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer/StatusLabel
 onready var detail_remediation_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationLabel
+onready var resources_list := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer/ResourcesList
+onready var resources_loading_overlay := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer/LoadingOverlay
 
 var benchmark_tree_root : CustomTreeItem = null
 var tree_item_scene := preload("res://components/shared/custom_tree_item.tscn")
@@ -47,19 +49,13 @@ func _on_get_benchmark_report_done(_error: int, response):
 	
 	for element in response.transformed.result:
 		if "kind" in element and element.kind == "report_check_result":
-			if element.reported.remediation.action != null:
-				pass
 			var display_element = preload("res://components/benchmark_display/benchmark_check_result_display.tscn").instance()
-			display_element.passed = element.reported.passed
-			display_element.failing_n = element.reported.number_of_resources_failing
-			display_element.title = element.reported.title
+			display_element.set_reported_data(element.reported)
 			
-			display_element.remediation_text = element.reported.remediation.text
-			display_element.remediation_url = element.reported.remediation.url
-			
-			display_element.severity = element.reported.severity
-			
-			display_element.risk = element.reported.risk
+			if "resoto_cmd" in element.reported.detect:
+				print(element.reported.passed)
+				print(sections[sections.keys()[-1]].main_element.title)
+				print(element.reported.detect.resoto_cmd)
 			
 			var last_element_name = sections.keys()[-1]
 			var item : CustomTreeItem = sections[last_element_name].add_sub_element(display_element)
@@ -110,6 +106,7 @@ func _on_get_benchmark_report_done(_error: int, response):
 
 func _on_tree_item_pressed(item : CustomTreeItem):
 	var element = item.main_element
+	
 	detail_view_title.raw_text = element.title
 	
 	if element.passed:
@@ -155,8 +152,48 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 				
 		detail_view_severity.set("custom_colors/font_color", color)
 	
+	if element is BenchmarkResultDisplay:
+		if "resoto" in element.detect:
+			API.graph_search(element.detect["resoto"], self)
+			resources_loading_overlay.visible = true
+			get_tree().call_group("FailingResourcesWidget", "hide")
+		elif "resoto_cmd" in element.detect:
+			API.cli_execute(element.detect["resoto_cmd"], self)
+			resources_loading_overlay.visible = true
+			get_tree().call_group("FailingResourcesWidget", "hide")
+	else:
+		get_tree().call_group("FailingResourcesWidget", "hide")
+		
+func _on_cli_execute_done(error : int, response: ResotoAPI.Response):
+	pass
 
-
+func _on_graph_search_done(error : int, response: ResotoAPI.Response):
+	
+	resources_loading_overlay.visible = false
+	if error != OK:
+		# TODO: manage errors
+		return
+		
+	get_tree().call_group("FailingResourcesWidget", "show")
+	for resource in resources_list.get_children():
+		resources_list.remove_child(resource)
+		resource.queue_free()
+	
+	for resource in response.transformed.result:
+		var template = preload("res://components/fulltext_search_menu/full_text_search_result_template.tscn").instance()
+		template.get_node("VBox/Top/ResultKind").text = resource.reported.kind
+		var id : String = resource.reported.id
+		var resource_name : String = resource.reported.name
+		
+		template.get_node("VBox/Top/ResultName").text = resource_name if id == resource_name else "%s (%s)" % [resource_name, id]
+		
+		var cloud : String = resource.ancestors.cloud.reported.name if "cloud" in resource.ancestors else ""
+		var region : String = resource.ancestors.region.reported.name if "region" in resource.ancestors else ""
+		var account : String = resource.ancestors.account.reported.name if "account" in resource.ancestors else ""
+		
+		template.get_node("VBox/ResultDetails").text = "%s > %s > %s" % [cloud, account, region]
+		resources_list.add_child(template)
+		
 func _on_ComboBox_option_changed(option):
 	API.get_benchmark_report(option, self)
 

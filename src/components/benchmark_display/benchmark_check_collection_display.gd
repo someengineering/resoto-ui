@@ -1,4 +1,5 @@
 extends HBoxContainer
+class_name BenchmarkCollectionDisplay
 
 var title : String = "" setget set_title
 var passed : bool = false setget set_passed

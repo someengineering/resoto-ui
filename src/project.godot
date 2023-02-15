@@ -19,6 +19,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/shared/base_widget.gd"
 }, {
+"base": "HBoxContainer",
+"class": "BenchmarkCollectionDisplay",
+"language": "GDScript",
+"path": "res://components/benchmark_display/benchmark_check_collection_display.gd"
+}, {
+"base": "VBoxContainer",
+"class": "BenchmarkResultDisplay",
+"language": "GDScript",
+"path": "res://components/benchmark_display/benchmark_check_result_display.gd"
+}, {
 "base": "Label",
 "class": "ClippedLabel",
 "language": "GDScript",
@@ -222,6 +232,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AggregateSearchDataSource": "",
 "BaseWidget": "",
+"BenchmarkCollectionDisplay": "",
+"BenchmarkResultDisplay": "",
 "ClippedLabel": "",
 "ColorCondition": "",
 "ColorController": "",
