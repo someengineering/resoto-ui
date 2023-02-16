@@ -31,7 +31,7 @@ script = ExtResource( 5 )
 margin_left = 10.0
 margin_top = 4.0
 margin_right = 1916.0
-margin_bottom = 187.0
+margin_bottom = 188.0
 
 [node name="TitleBar" type="HBoxContainer" parent="JobData"]
 margin_right = 1906.0
@@ -79,7 +79,7 @@ icon_tex = ExtResource( 2 )
 [node name="Content" type="MarginContainer" parent="JobData"]
 margin_top = 37.0
 margin_right = 1906.0
-margin_bottom = 183.0
+margin_bottom = 184.0
 custom_constants/margin_right = 6
 custom_constants/margin_top = 12
 custom_constants/margin_left = 0
@@ -88,16 +88,16 @@ custom_constants/margin_bottom = 6
 [node name="VBox" type="VBoxContainer" parent="JobData/Content"]
 margin_top = 12.0
 margin_right = 1900.0
-margin_bottom = 140.0
+margin_bottom = 141.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="JobData/Content/VBox"]
 margin_right = 1900.0
-margin_bottom = 128.0
+margin_bottom = 129.0
 custom_constants/separation = 10
 
 [node name="TriggerSettings" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer"]
 margin_right = 459.0
-margin_bottom = 128.0
+margin_bottom = 129.0
 
 [node name="Label" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings"]
 margin_right = 459.0
@@ -108,7 +108,7 @@ text = "Trigger"
 [node name="TriggerSection" type="GridContainer" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings"]
 margin_top = 24.0
 margin_right = 459.0
-margin_bottom = 128.0
+margin_bottom = 129.0
 columns = 2
 
 [node name="TriggerLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
@@ -145,12 +145,12 @@ unique_name_in_owner = true
 margin_left = 159.0
 margin_top = 36.0
 margin_right = 459.0
-margin_bottom = 68.0
+margin_bottom = 69.0
 
 [node name="CronLineEdit" type="LineEdit" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/CronContainer"]
 unique_name_in_owner = true
 margin_right = 264.0
-margin_bottom = 32.6667
+margin_bottom = 33.0
 size_flags_horizontal = 3
 theme_type_variation = "LineEditCode"
 text = "* * * * *"
@@ -168,15 +168,14 @@ custom_styles/panel = SubResource( 1 )
 [node name="CronEditor" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/CronContainer" instance=ExtResource( 6 )]
 margin_left = 268.0
 margin_right = 300.0
-margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 icon_tex = ExtResource( 3 )
 
 [node name="EventLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
 unique_name_in_owner = true
-margin_top = 72.0
+margin_top = 73.0
 margin_right = 155.0
-margin_bottom = 102.0
+margin_bottom = 103.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_vertical = 0
 text = "Event identifier"
@@ -185,9 +184,9 @@ valign = 1
 [node name="EventSelector" type="MenuButton" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
 unique_name_in_owner = true
 margin_left = 159.0
-margin_top = 72.0
+margin_top = 73.0
 margin_right = 459.0
-margin_bottom = 104.0
+margin_bottom = 105.0
 rect_min_size = Vector2( 300, 0 )
 focus_mode = 2
 size_flags_horizontal = 0
@@ -197,12 +196,12 @@ align = 0
 [node name="VSeparator" type="VSeparator" parent="JobData/Content/VBox/HBoxContainer"]
 margin_left = 469.0
 margin_right = 473.0
-margin_bottom = 128.0
+margin_bottom = 129.0
 
 [node name="CommandSettings" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer"]
 margin_left = 483.0
 margin_right = 1900.0
-margin_bottom = 128.0
+margin_bottom = 129.0
 size_flags_horizontal = 3
 
 [node name="Command" type="Label" parent="JobData/Content/VBox/HBoxContainer/CommandSettings"]
@@ -218,7 +217,7 @@ valign = 1
 unique_name_in_owner = true
 margin_top = 34.0
 margin_right = 1417.0
-margin_bottom = 128.0
+margin_bottom = 129.0
 rect_min_size = Vector2( 0, 58 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
