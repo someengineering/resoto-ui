@@ -10,6 +10,8 @@ const NewJob : Dictionary = {
 
 var displayed_jobs = []
 
+onready var template_popup := $TemplatePopup
+
 
 func _ready():
 	update_view()
@@ -87,12 +89,13 @@ func _on_job_duplicate_done(_error:int, _response:UserAgent.Response) -> void:
 
 
 func _on_AddJobButton_pressed():
-	var add_confirm_popup = _g.popup_manager.show_input_popup(
-		"Add Job",
-		"Enter a new id (name) for the job",
-		"new-job-" + str(OS.get_unix_time()),
-		"Create Job", "Cancel")
-	add_confirm_popup.connect("response_with_input", self, "_on_add_confirm_response", [], CONNECT_ONESHOT)
+	template_popup.popup(Rect2($"%AddJobButton".rect_global_position + Vector2($"%AddJobButton".rect_size.x+10, 0), Vector2.ONE))
+#	var add_confirm_popup = _g.popup_manager.show_input_popup(
+#		"Add Job",
+#		"Enter a new id (name) for the job",
+#		"new-job-" + str(OS.get_unix_time()),
+#		"Create Job", "Cancel")
+#	add_confirm_popup.connect("response_with_input", self, "_on_add_confirm_response", [], CONNECT_ONESHOT)
 
 
 func _on_add_confirm_response(_button_clicked:String, _value:String):
@@ -117,3 +120,13 @@ func _on_CronHelper_finished(_expression:String, _target_node:Node):
 	_target_node.text = _expression
 	if _target_node.text != _target_node.owner.job_schedule:
 		_target_node.owner.show_save_options()
+
+
+func _on_AddEmptyButton_pressed():
+	template_popup.hide()
+	var add_confirm_popup = _g.popup_manager.show_input_popup(
+		"Add Job",
+		"Enter a new id (name) for the job",
+		"new-job-" + str(OS.get_unix_time()),
+		"Create Job", "Cancel")
+	add_confirm_popup.connect("response_with_input", self, "_on_add_confirm_response", [], CONNECT_ONESHOT)
