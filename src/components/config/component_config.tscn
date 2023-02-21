@@ -54,7 +54,7 @@ margin_right = 1916.0
 margin_bottom = 37.0
 
 [node name="ConfigLabel" type="Label" parent="VBox/Toolbar/Box"]
-margin_right = 59.0
+margin_right = 60.0
 margin_bottom = 33.0
 size_flags_vertical = 3
 custom_styles/normal = SubResource( 19 )
@@ -63,28 +63,29 @@ align = 2
 valign = 1
 
 [node name="ConfigCombo" parent="VBox/Toolbar/Box" instance=ExtResource( 16 )]
-margin_left = 63.0
-margin_right = 463.0
+margin_left = 64.0
+margin_right = 464.0
 rect_min_size = Vector2( 400, 24 )
 align_items_left = true
 
 [node name="ShowDashboardsButton" type="CheckBox" parent="VBox/Toolbar/Box"]
-margin_left = 467.0
-margin_right = 692.0
+margin_left = 468.0
+margin_right = 694.667
 margin_bottom = 33.0
 text = "Show Dashboard Configs"
 flat = true
 
 [node name="Spacer" type="Control" parent="VBox/Toolbar/Box"]
-margin_left = 696.0
+margin_left = 698.0
 margin_right = 1613.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 20, 0 )
 size_flags_horizontal = 3
 
 [node name="SaveConfigButton" type="Button" parent="VBox/Toolbar/Box"]
-margin_left = 1617.0
-margin_right = 1727.0
+margin_left = 1616.0
+margin_top = 1.0
+margin_right = 1726.67
 margin_bottom = 33.0
 hint_tooltip = "Save this configuration in Resoto Core"
 size_flags_horizontal = 4
@@ -140,7 +141,8 @@ scroll_horizontal_enabled = false
 script = ExtResource( 8 )
 
 [node name="Content" type="MarginContainer" parent="VBox/MainPanel/ScrollContainer"]
-margin_right = 1906.0
+margin_right = 1920.0
+margin_bottom = 1040.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 20

@@ -150,7 +150,7 @@ func get_value():
 func set_description(_value:String) -> void:
 	description = _value
 	if descriptions_as_hints:
-		$HeaderBG.hint_tooltip = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
+		$HeaderBG/Header/Top/HintIcon.hint = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
 		return
 	$HeaderBG/Header/Description.text =  description
 
