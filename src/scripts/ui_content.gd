@@ -46,6 +46,7 @@ func change_section(new_section:String, update_navigation_state := true):
 	for c in content_sections.get_children():
 		c.hide()
 	
+	_g.emit_signal("tooltip_hide")
 	sections[active_section].show()
 	
 	if update_navigation_state:

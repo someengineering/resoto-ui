@@ -94,6 +94,7 @@ func _on_HamburgerButton_hamburger_button_pressed(pressed:bool):
 		click_detection.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		hb_tween.interpolate_property(hb_menu, "rect_position:x", hb_menu.rect_position.x, -400, 0.2, Tween.TRANS_EXPO, Tween.EASE_IN)
 	else:
+		_g.emit_signal("tooltip_hide")
 		shadow_side.mouse_filter = Control.MOUSE_FILTER_PASS
 		click_detection.mouse_filter = Control.MOUSE_FILTER_PASS
 		hb_tween.interpolate_property(hb_menu, "rect_position:x", hb_menu.rect_position.x, 0, 0.2, Tween.TRANS_EXPO, Tween.EASE_OUT)
