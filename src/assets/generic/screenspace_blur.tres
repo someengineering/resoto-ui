@@ -3,9 +3,21 @@
 [resource]
 code = "shader_type canvas_item;
 
-uniform float lod: hint_range(0.0, 5) = 0.0;
+uniform vec2 dir;
+
+vec4 blur(sampler2D image, vec2 uv, vec2 blur_dir, vec2 res) {
+	vec2 os = vec2(1.4) * blur_dir;
+	vec2 ob = vec2(3.2) * blur_dir;
+	vec4 col = texture(image, uv) * 0.23;
+	col += texture(image, uv+(os/res)) * 0.32;
+	col += texture(image, uv-(os/res)) * 0.32;
+	col += texture(image, uv+(ob/res)) * 0.074;
+	col += texture(image, uv-(ob/res)) * 0.074;
+	return col;
+}
+
 
 void fragment(){
-	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV, lod);
-	COLOR = color;
+	vec2 iRes = 1.0 / SCREEN_PIXEL_SIZE;
+	COLOR = blur(SCREEN_TEXTURE, SCREEN_UV, dir, iRes);
 }"
