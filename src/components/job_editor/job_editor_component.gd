@@ -65,6 +65,7 @@ func _on_job_template_button_pressed(job:Dictionary):
 		trigger_string = "--wait-for-event %s" % job.trigger_event
 	print("jobs add --id %s %s '%s'" % [job.name, trigger_string, job.command])
 	API.cli_execute("jobs add --id %s %s '%s'" % [job.name, trigger_string, job.command], self, "_on_job_add_done")
+	Analytics.event(Analytics.EventsJobEditor.NEW_FROM_TEMPLATE)
 	template_popup.hide()
 
 

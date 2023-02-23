@@ -239,6 +239,7 @@ func _on_ActiveButton_pressed():
 
 func _on_RunButton_pressed():
 	API.cli_execute("jobs run %s" % job_id, self, "_on_job_run_done")
+	Analytics.event(Analytics.EventsJobEditor.RUN)
 
 
 func _on_DuplicateButton_pressed():
@@ -249,6 +250,8 @@ func _on_DuplicateButton_pressed():
 	
 	var copy_job_command : String = $"%CommandEdit".text
 	emit_signal("duplicate_job", job_id, copy_trigger_string, copy_job_command)
+	
+	Analytics.event(Analytics.EventsJobEditor.DUPLICATE)
 
 
 func _on_DeleteButton_pressed():
@@ -262,6 +265,7 @@ func _on_DeleteButton_pressed():
 func _on_delete_confirm_response(_response:String, _double_confirm:=false):
 	if _response == "left":
 		API.cli_execute("jobs delete %s" % job_id, self, "_on_job_delete_done")
+		Analytics.event(Analytics.EventsJobEditor.DELETE)
 
 
 func _on_job_delete_done(_e, _r):
@@ -284,6 +288,7 @@ func _on_SaveButton_pressed():
 	
 	job_command = $"%CommandEdit".text
 	API.cli_execute("jobs update --id %s %s '%s'" % [job_id, trigger_string, job_command], self, "_on_job_update_done")
+	Analytics.event(Analytics.EventsJobEditor.SAVE)
 	hide_save_options()
 
 
