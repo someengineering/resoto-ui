@@ -22,7 +22,7 @@ func set_value(_value:String):
 
 
 func _on_SearchTag_pressed():
-	emit_signal("search_tag", "tags.%s==\"%s\"" % [variable, value])
+	emit_signal("search_tag", "tags.`%s`==\"%s\"" % [variable, value])
 
 
 func _on_DeleteTag_pressed():
