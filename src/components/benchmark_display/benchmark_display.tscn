@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://components/benchmark_display/benchmark_display.gd" type="Script" id=1]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=2]
 [ext_resource path="res://components/shared/failing_vs_passed_widget.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/dashboard/widget_indicator/widget_indicator.tscn" type="PackedScene" id=4]
 [ext_resource path="res://components/elements/utility/clipped_label.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=6]
 [ext_resource path="res://components/dashboard/shared/loading_overlay.tscn" type="PackedScene" id=7]
+[ext_resource path="res://components/benchmark_display/benchmark_config_dialog.tscn" type="PackedScene" id=8]
 
 [node name="BenchmarkDisplay" type="MarginContainer"]
 anchor_right = 1.0
@@ -28,18 +30,21 @@ margin_right = 1896.0
 margin_bottom = 32.0
 
 [node name="Label" type="Label" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
 margin_top = 6.0
 margin_right = 84.0
 margin_bottom = 26.0
 text = "Benchmark"
 
 [node name="ComboBox" parent="PanelContainer/Content/HBoxContainer" instance=ExtResource( 2 )]
+visible = false
 margin_left = 88.0
 margin_right = 288.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 24 )
 
 [node name="Filter" parent="PanelContainer/Content/HBoxContainer" instance=ExtResource( 2 )]
+visible = false
 margin_left = 292.0
 margin_right = 392.0
 margin_bottom = 32.0
@@ -47,16 +52,52 @@ items = [ "All", "Passing", "Failing" ]
 text = "All"
 
 [node name="Collapse" type="Button" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
 margin_left = 396.0
 margin_right = 504.0
 margin_bottom = 32.0
 text = "Collapse All"
 
 [node name="Expand" type="Button" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
 margin_left = 508.0
 margin_right = 608.667
 margin_bottom = 32.0
 text = "Expand All"
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
+margin_left = 612.0
+margin_right = 616.0
+margin_bottom = 32.0
+
+[node name="Label2" type="Label" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
+margin_left = 620.0
+margin_top = 6.0
+margin_right = 662.0
+margin_bottom = 26.0
+text = "Cloud"
+
+[node name="CloudsComboBox" parent="PanelContainer/Content/HBoxContainer" instance=ExtResource( 2 )]
+visible = false
+margin_left = 666.0
+margin_right = 766.0
+margin_bottom = 32.0
+checkable = true
+
+[node name="Button" type="Button" parent="PanelContainer/Content/HBoxContainer"]
+visible = false
+margin_left = 769.333
+margin_right = 830.0
+margin_bottom = 32.0
+size_flags_horizontal = 8
+text = "Start"
+
+[node name="BenchmarkButton" type="Button" parent="PanelContainer/Content/HBoxContainer"]
+margin_right = 157.333
+margin_bottom = 32.0
+text = "Select Benchmark"
 
 [node name="PanelContainer2" type="PanelContainer" parent="PanelContainer/Content"]
 margin_top = 36.0
@@ -192,7 +233,7 @@ margin_bottom = 796.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" groups=["FailingResourcesWidget"]]
+[node name="ShowAllButton" type="Button" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" groups=["FailingResourcesWidget"]]
 visible = false
 margin_left = 266.667
 margin_top = 878.0
@@ -208,8 +249,23 @@ margin_right = 354.0
 margin_bottom = 934.0
 size_flags_horizontal = 8
 
+[node name="Control" type="Control" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+mouse_filter = 2
+
+[node name="BenchmarkConfigPopup" parent="Control" instance=ExtResource( 6 )]
+margin_left = 536.0
+margin_top = 288.0
+margin_right = 1416.0
+margin_bottom = 888.0
+window_content = ExtResource( 8 )
+
 [connection signal="visibility_changed" from="." to="." method="_on_BenchmarkDisplay_visibility_changed"]
 [connection signal="option_changed" from="PanelContainer/Content/HBoxContainer/ComboBox" to="." method="_on_ComboBox_option_changed"]
 [connection signal="option_changed" from="PanelContainer/Content/HBoxContainer/Filter" to="." method="_on_Filter_option_changed"]
 [connection signal="pressed" from="PanelContainer/Content/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/HBoxContainer/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
+[connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationLabel" to="." method="_on_RemediationLabel_meta_clicked"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ShowAllButton" to="." method="_on_ShowAllButton_pressed"]

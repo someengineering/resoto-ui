@@ -407,7 +407,7 @@ func _on_NewWidgetPopup_widget_edited():
 
 func _on_DashboardContainer_visibility_changed():
 	if not visible and is_editing:
-		add_widget_popup._close_popup()
+		._close_popup()
 		$"%DashboardEditButton".pressed = false
 
 

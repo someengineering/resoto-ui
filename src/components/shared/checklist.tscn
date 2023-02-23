@@ -1,0 +1,63 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://components/shared/checklist.gd" type="Script" id=2]
+
+[node name="CheckList" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1344.0
+margin_bottom = -980.0
+rect_min_size = Vector2( 0, 110 )
+script = ExtResource( 2 )
+title = "Check List"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 576.0
+margin_bottom = 110.0
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+margin_right = 576.0
+margin_bottom = 20.0
+text = "Check List"
+
+[node name="Controls" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 24.0
+margin_right = 576.0
+margin_bottom = 56.0
+
+[node name="FiltersLineEdit" type="LineEdit" parent="VBoxContainer/Controls"]
+margin_right = 343.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="AllButton" type="Button" parent="VBoxContainer/Controls"]
+margin_left = 347.0
+margin_right = 439.0
+margin_bottom = 32.0
+text = "Select All"
+
+[node name="NoneButton" type="Button" parent="VBoxContainer/Controls"]
+margin_left = 443.0
+margin_right = 576.333
+margin_bottom = 32.0
+text = "Clear Selection"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+margin_top = 60.0
+margin_right = 576.0
+margin_bottom = 110.0
+size_flags_vertical = 3
+theme_type_variation = "PanelContainerDark"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 564.0
+margin_bottom = 42.0
+
+[connection signal="text_changed" from="VBoxContainer/Controls/FiltersLineEdit" to="." method="_on_FiltersLineEdit_text_changed"]
+[connection signal="pressed" from="VBoxContainer/Controls/AllButton" to="." method="_on_AllButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/Controls/NoneButton" to="." method="_on_NoneButton_pressed"]
