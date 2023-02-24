@@ -55,10 +55,10 @@
 [ext_resource path="res://components/popups/popup_workflows.tscn" type="PackedScene" id=53]
 [ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=54]
 [ext_resource path="res://components/shared/blurred_panel_background.tscn" type="PackedScene" id=55]
-[ext_resource path="res://components/job_editor/job_editor_component.tscn" type="PackedScene" id=59]
 [ext_resource path="res://assets/generic/screenspace_blur.tres" type="Shader" id=56]
 [ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=57]
 [ext_resource path="res://assets/icons/icon_128_main_jobs.svg" type="Texture" id=58]
+[ext_resource path="res://components/job_editor/job_editor_component.tscn" type="PackedScene" id=59]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
