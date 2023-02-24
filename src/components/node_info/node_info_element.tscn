@@ -443,7 +443,7 @@ size_flags_horizontal = 3
 scroll_horizontal_enabled = false
 
 [node name="TagsContent" type="VBoxContainer" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup/VBox/ScrollContainer"]
-margin_right = 426.0
+margin_right = 412.0
 size_flags_horizontal = 3
 
 [node name="AddTagPopup" type="PopupPanel" parent="Margin/VBox/NodeContent/NodeDetails/TagsGroup"]
