@@ -1,0 +1,104 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://components/job_editor/job_editor_component.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=2]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/shared/cron_helper.tscn" type="PackedScene" id=4]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=5]
+
+[node name="JobEditor" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="JobsPanel" type="PanelContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Main" type="VBoxContainer" parent="JobsPanel"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+custom_constants/separation = 10
+
+[node name="Menu" type="HBoxContainer" parent="JobsPanel/Main"]
+margin_right = 1900.0
+margin_bottom = 33.0
+size_flags_vertical = 0
+custom_constants/separation = 10
+
+[node name="AddJobButton" parent="JobsPanel/Main/Menu" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+margin_right = 108.0
+size_flags_vertical = 1
+text = "       Add Job"
+align = 0
+icon_tex = ExtResource( 2 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="JobsPanel/Main"]
+margin_top = 43.0
+margin_right = 1900.0
+margin_bottom = 1060.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="JobList" type="VBoxContainer" parent="JobsPanel/Main/ScrollContainer"]
+unique_name_in_owner = true
+margin_right = 1900.0
+margin_bottom = 1017.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
+
+[node name="CronEditor" type="CanvasLayer" parent="."]
+
+[node name="CronHelper" parent="CronEditor" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+visible = false
+margin_left = 6.0
+margin_top = 7.0
+margin_right = 656.0
+margin_bottom = 144.0
+
+[node name="TemplatePopup" type="PopupPanel" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -800.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 300, 0 )
+theme_type_variation = "PopupPanelLight"
+script = ExtResource( 5 )
+
+[node name="VBox" type="VBoxContainer" parent="TemplatePopup"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 796.0
+margin_bottom = 596.0
+
+[node name="AddEmptyButton" type="Button" parent="TemplatePopup/VBox"]
+margin_right = 792.0
+margin_bottom = 32.0
+text = "New (empty)"
+align = 0
+
+[node name="TemplateHeadline" type="HBoxContainer" parent="TemplatePopup/VBox"]
+margin_top = 36.0
+margin_right = 792.0
+margin_bottom = 51.0
+
+[node name="TemplatesLabel" type="Label" parent="TemplatePopup/VBox/TemplateHeadline"]
+margin_right = 51.0
+margin_bottom = 15.0
+theme_type_variation = "LabelSmall"
+text = "Examples"
+
+[node name="TemplateContent" type="VBoxContainer" parent="TemplatePopup/VBox"]
+unique_name_in_owner = true
+margin_top = 55.0
+margin_right = 792.0
+margin_bottom = 87.0
+
+[connection signal="pressed" from="JobsPanel/Main/Menu/AddJobButton" to="." method="_on_AddJobButton_pressed"]
+[connection signal="finished" from="CronEditor/CronHelper" to="." method="_on_CronHelper_finished"]
+[connection signal="pressed" from="TemplatePopup/VBox/AddEmptyButton" to="." method="_on_AddEmptyButton_pressed"]

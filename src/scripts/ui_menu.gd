@@ -64,6 +64,11 @@ func _on_ButtonExplore_pressed():
 	close_menu()
 
 
+func _on_ButtonJobs_pressed():
+	_g.emit_signal("nav_change_section", "jobs")
+	close_menu()
+
+
 func _on_ButtonTerminals_pressed():
 	_g.emit_signal("nav_change_section", "resoto_shell_lite")
 	close_menu()
