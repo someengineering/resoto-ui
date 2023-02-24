@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=120 format=2]
+[gd_resource type="Theme" load_steps=118 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -441,13 +441,6 @@ corner_radius_bottom_left = 4
 draw_center = false
 border_width_top = 2
 border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
-
-[sub_resource type="Gradient" id=118]
-colors = PoolColorArray( 0.123871, 0.346745, 0.480469, 1, 0.123871, 0.346745, 0.480469, 1 )
-
-[sub_resource type="GradientTexture2D" id=119]
-gradient = SubResource( 118 )
-width = 4
 
 [sub_resource type="StyleBoxFlat" id=21]
 content_margin_left = 10.0
@@ -983,7 +976,6 @@ HScrollBar/styles/grabber_pressed = SubResource( 40 )
 HScrollBar/styles/scroll = SubResource( 15 )
 HScrollBar/styles/scroll_focus = SubResource( 60 )
 HSeparator/styles/separator = SubResource( 16 )
-HSplitContainer/icons/grabber = SubResource( 119 )
 ItemList/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 ItemList/colors/font_color_selected = Color( 0.816406, 0.94351, 1, 1 )
 ItemList/styles/bg = SubResource( 21 )
