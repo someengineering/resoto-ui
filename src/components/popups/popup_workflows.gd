@@ -15,18 +15,22 @@ func _ready():
 
 
 func update_running_workflows():
-	API.cli_execute("workflow running", self, "_on_get_running_workflows_done")
+	API.cli_execute_json("workflow running", self, "_on_get_running_workflows_data", "_on_get_running_workflows_done")
+
+
+func _on_get_running_workflows_data(_e, _r):
+	pass
 
 
 func _on_get_running_workflows_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
 		return
-	var workflow_running_name : String = _response.transformed.result.split("\n")[0]
-	if workflow_running_name != "":
-		workflow_display.update_title_text(workflow_running_name)
-		workflow_started(false)
-	else:
-		workflow_display.update_title_text("No active workflow")
+	for workflow in _response.transformed.result:
+		if workflow.progress != "done":
+			workflow_display.update_title_text(workflow.workflow)
+			workflow_started(false)
+			return
+	workflow_display.update_title_text("No active workflow")
 
 
 var is_running_workflow := false
