@@ -9,6 +9,7 @@ var active_request: ResotoAPI.Request
 var count_request: ResotoAPI.Request
 var search_command:= ""
 var buffered_command:= ""
+var limit_regex:= RegEx.new()
 
 onready var popup := $PopupLayer/ResultsPopUp
 onready var popup_results := $PopupLayer/ResultsPopUp/VBox
@@ -18,6 +19,10 @@ onready var list_btn := $PopupLayer/ResultsPopUp/VBox/Title/ListButton
 onready var single_node_info = _g.content_manager.find_node("NodeSingleInfo")
 onready var search_delay := $SearchDelay
 onready var error_msg := $"%ErrorMessage"
+
+
+func _ready():
+	limit_regex.compile("\\s+limit\\s+\\d+")
 
 
 func _input(event:InputEvent):
@@ -199,9 +204,14 @@ func _on_SearchDelay_timeout():
 	search_command = ""
 	var limited_search_command := ""
 	var count_command := ""
+	
 	if buffered_command.to_lower().begins_with("search "):
 		search_command = buffered_command.trim_prefix("search ")
-		limited_search_command = search_command + " limit "+ str(result_limit)
+		
+		if limit_regex.search_all(buffered_command).empty():
+			limited_search_command = search_command + " limit "+ str(result_limit)
+		else:
+			limited_search_command = search_command
 		count_command = buffered_command + " | count"
 	else:
 		search_command = "\"" + buffered_command + "\""
