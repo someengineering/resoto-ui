@@ -50,7 +50,7 @@ func _on_jobs_list_data(_e, _d):
 
 func add_templates():
 	for template_job in template_jobs:
-		var new_button = Button.new()
+		var new_button : Button = Button.new()
 		new_button.text = template_job.descr
 		new_button.align = Button.ALIGN_LEFT
 		$"%TemplateContent".add_child(new_button)

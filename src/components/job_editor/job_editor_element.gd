@@ -2,7 +2,7 @@ extends PanelContainer
 
 enum Trigger {SCHEDULED, EVENT, SCHEDULED_AND_EVENT}
 
-const Trigger_Events = [
+const Trigger_Events : Array = [
 	{
 		"id" : "Collect Steps",
 		"separator" : true
