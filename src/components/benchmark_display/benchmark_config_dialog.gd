@@ -2,6 +2,7 @@ extends MarginContainer
 
 var benchmarks_count := 0
 var benchmarks := {}
+var selected_benchmark : Dictionary = {}
 
 onready var clouds_checklist := $VBoxContainer/CloudsCheckList
 onready var accounts_checklist := $VBoxContainer/AccountsCheckList
@@ -20,7 +21,7 @@ func _on_get_configs_done(error: int, response):
 			benchmarks_count += 1
 			
 
-func _on_get_config_id_done(error: int, response : ResotoAPI.Response, config_id : String):
+func _on_get_config_id_done(error: int, response : ResotoAPI.Response, _config_id : String):
 	if error != OK:
 		# TODO handle errors
 		return
@@ -41,6 +42,7 @@ func _on_benchmark_config_dialog_visibility_changed():
 func _on_ComboBox_option_changed(option):
 	if "clouds" in benchmarks[option]:
 		clouds_checklist.items = benchmarks[option]["clouds"]
+	selected_benchmark = benchmarks[option]
 
 
 func _on_CloudsCheckList_selection_changed(selected_items : Array):

@@ -29,73 +29,27 @@ margin_bottom = 1072.0
 margin_right = 1896.0
 margin_bottom = 32.0
 
-[node name="Label" type="Label" parent="PanelContainer/Content/HBoxContainer"]
-visible = false
-margin_top = 6.0
-margin_right = 84.0
-margin_bottom = 26.0
-text = "Benchmark"
-
-[node name="ComboBox" parent="PanelContainer/Content/HBoxContainer" instance=ExtResource( 2 )]
-visible = false
-margin_left = 88.0
-margin_right = 288.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 200, 24 )
-
 [node name="Filter" parent="PanelContainer/Content/HBoxContainer" instance=ExtResource( 2 )]
-visible = false
-margin_left = 292.0
-margin_right = 392.0
+margin_right = 100.0
 margin_bottom = 32.0
 items = [ "All", "Passing", "Failing" ]
 text = "All"
 
 [node name="Collapse" type="Button" parent="PanelContainer/Content/HBoxContainer"]
-visible = false
-margin_left = 396.0
-margin_right = 504.0
+margin_left = 104.0
+margin_right = 212.0
 margin_bottom = 32.0
 text = "Collapse All"
 
 [node name="Expand" type="Button" parent="PanelContainer/Content/HBoxContainer"]
-visible = false
-margin_left = 508.0
-margin_right = 608.667
+margin_left = 216.0
+margin_right = 316.667
 margin_bottom = 32.0
 text = "Expand All"
 
-[node name="VSeparator" type="VSeparator" parent="PanelContainer/Content/HBoxContainer"]
-visible = false
-margin_left = 612.0
-margin_right = 616.0
-margin_bottom = 32.0
-
-[node name="Label2" type="Label" parent="PanelContainer/Content/HBoxContainer"]
-visible = false
-margin_left = 620.0
-margin_top = 6.0
-margin_right = 662.0
-margin_bottom = 26.0
-text = "Cloud"
-
-[node name="CloudsComboBox" parent="PanelContainer/Content/HBoxContainer" instance=ExtResource( 2 )]
-visible = false
-margin_left = 666.0
-margin_right = 766.0
-margin_bottom = 32.0
-checkable = true
-
-[node name="Button" type="Button" parent="PanelContainer/Content/HBoxContainer"]
-visible = false
-margin_left = 769.333
-margin_right = 830.0
-margin_bottom = 32.0
-size_flags_horizontal = 8
-text = "Start"
-
 [node name="BenchmarkButton" type="Button" parent="PanelContainer/Content/HBoxContainer"]
-margin_right = 157.333
+margin_left = 320.0
+margin_right = 477.333
 margin_bottom = 32.0
 text = "Select Benchmark"
 
@@ -259,13 +213,50 @@ margin_left = 536.0
 margin_top = 288.0
 margin_right = 1416.0
 margin_bottom = 888.0
-window_content = ExtResource( 8 )
 
-[connection signal="visibility_changed" from="." to="." method="_on_BenchmarkDisplay_visibility_changed"]
-[connection signal="option_changed" from="PanelContainer/Content/HBoxContainer/ComboBox" to="." method="_on_ComboBox_option_changed"]
+[node name="Content" parent="Control/BenchmarkConfigPopup" index="0"]
+margin_right = 880.0
+margin_bottom = 600.0
+
+[node name="Titlebar" parent="Control/BenchmarkConfigPopup/Content" index="0"]
+margin_right = 880.0
+
+[node name="Label" parent="Control/BenchmarkConfigPopup/Content/Titlebar" index="0"]
+margin_right = 880.0
+
+[node name="Content" parent="Control/BenchmarkConfigPopup/Content" index="1"]
+margin_right = 880.0
+margin_bottom = 550.0
+
+[node name="BenchmarkConfigDialog" parent="Control/BenchmarkConfigPopup/Content/Content" index="0" instance=ExtResource( 8 )]
+unique_name_in_owner = true
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 870.0
+margin_bottom = 508.0
+
+[node name="Footer" parent="Control/BenchmarkConfigPopup/Content" index="2"]
+margin_top = 554.0
+margin_right = 880.0
+margin_bottom = 600.0
+
+[node name="Footerbar" parent="Control/BenchmarkConfigPopup/Content/Footer" index="0"]
+margin_right = 870.0
+
+[node name="AcceptButton" parent="Control/BenchmarkConfigPopup/Content/Footer/Footerbar" index="0"]
+margin_left = 784.0
+margin_right = 860.0
+
+[node name="ResizeButtonContainer" parent="Control/BenchmarkConfigPopup" index="1"]
+margin_right = 880.0
+margin_bottom = 600.0
+
 [connection signal="option_changed" from="PanelContainer/Content/HBoxContainer/Filter" to="." method="_on_Filter_option_changed"]
 [connection signal="pressed" from="PanelContainer/Content/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/HBoxContainer/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
 [connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationLabel" to="." method="_on_RemediationLabel_meta_clicked"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ShowAllButton" to="." method="_on_ShowAllButton_pressed"]
+[connection signal="pressed" from="Control/BenchmarkConfigPopup/Content/Footer/Footerbar/AcceptButton" to="." method="_on_AcceptButton_pressed"]
+
+[editable path="Control/BenchmarkConfigPopup"]

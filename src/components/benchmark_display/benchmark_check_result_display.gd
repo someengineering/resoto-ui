@@ -30,8 +30,10 @@ func set_failing_n(_failing : int):
 	failing_n = _failing
 	if _failing > 0:
 		$Main/FailingResources.text = ("%d Resources have failed" if failing_n > 1 else "%d Resource has failed") % failing_n
+		self.passed = false
 	else:
 		$Main/FailingResources.visible = false
+		self.passed = true
 
 func set_remediation_text_and_url(text: String, url: String):
 	if url == null or url == "":

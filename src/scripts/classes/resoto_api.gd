@@ -259,7 +259,10 @@ func ping():
 	var request = req_get("/system/ping", accept_text_headers)
 
 
-func get_benchmark_report(benchmark : String):
-	var request = req_get("/report/benchmark/%s/graph/%s" % [benchmark, default_graph], accept_json_headers)
+func get_benchmark_report(benchmark : String, accounts : String):
+	var query = "/report/benchmark/%s/graph/%s" % [benchmark, default_graph]
+	if accounts != "":
+		query += "?accounts=%s" % accounts.percent_encode()
+	var request = req_get(query, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request

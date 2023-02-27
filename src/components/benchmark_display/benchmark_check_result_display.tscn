@@ -18,9 +18,8 @@ margin_bottom = 20.0
 [node name="Passed" type="TextureRect" parent="Main"]
 visible = false
 modulate = Color( 0.265427, 0.957031, 0.438328, 1 )
-margin_left = 4.0
-margin_right = 20.0
-margin_bottom = 40.0
+margin_right = 16.0
+margin_bottom = 20.0
 rect_min_size = Vector2( 16, 16 )
 texture = ExtResource( 2 )
 expand = true

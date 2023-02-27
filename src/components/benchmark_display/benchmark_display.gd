@@ -1,6 +1,23 @@
 extends MarginContainer
 
-onready var combo_box := $PanelContainer/Content/HBoxContainer/ComboBox
+var benchmark_tree_root : CustomTreeItem = null
+var tree_item_scene := preload("res://components/shared/custom_tree_item.tscn")
+var check_collection_scene := preload("res://components/benchmark_display/benchmark_check_collection_display.tscn")
+var check_result_scene := preload("res://components/benchmark_display/benchmark_check_result_display.tscn")
+
+var last_detect_type := "manual"
+var last_detect_command := ""
+
+var sections := {}
+
+var checks := {}
+var current_account : String = ""
+
+var benchmarks := {}
+var benchmarks_count := 0
+
+var benchmark_model : CustomTreeItem = null
+
 onready var tree_container := $PanelContainer/Content/PanelContainer/TreeContainer
 
 onready var passed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/PassIndicator
@@ -15,23 +32,7 @@ onready var status_label := $PanelContainer/Content/PanelContainer/DetailView/VB
 onready var detail_remediation_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationLabel
 onready var resources_list := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer/ResourcesList
 onready var resources_loading_overlay := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer/LoadingOverlay
-onready var clouds_combo_box := $PanelContainer/Content/HBoxContainer/CloudsComboBox
-
-var benchmark_tree_root : CustomTreeItem = null
-var tree_item_scene := preload("res://components/shared/custom_tree_item.tscn")
-
-var last_detect_type := "manual"
-var last_detect_command := ""
-
-var sections := {}
-
-var benchmarks := {}
-var benchmarks_count := 0
-
-
-func _on_BenchmarkDisplay_visibility_changed():
-	API.get_configs(self)
-	
+onready var benchmark_config_dialog := $"%BenchmarkConfigDialog"
 
 func _on_get_configs_done(error: int, response):
 	if error:
@@ -45,77 +46,22 @@ func _on_get_configs_done(error: int, response):
 			benchmarks_count += 1
 
 
-func _on_get_config_id_done(error: int, response : ResotoAPI.Response, config_id : String):
-	if error != OK:
-		# TODO handle errors
-		return
-		
-	var benchmark : Dictionary = response.transformed.result.report_benchmark
-	benchmarks[benchmark.id] = benchmark
-	
-	benchmarks_count -=  1
-	if benchmarks_count <= 0:
-		combo_box.items = benchmarks.keys()
-
-func _on_get_benchmark_report_done(_error: int, response):
+func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response, accounts : Array):
 	if _error:
 		print(response.body.get_string_from_utf8())
 		return
-		
-	sections = {}
-	if benchmark_tree_root:
-		benchmark_tree_root.queue_free()
 	
-	for element in response.transformed.result:
-		if "kind" in element and element.kind == "report_check_result":
-			var display_element = preload("res://components/benchmark_display/benchmark_check_result_display.tscn").instance()
-			display_element.set_reported_data(element.reported)
+	var data : Array = response.transformed.result
+	var account = "" if accounts.empty() else accounts[0]
+	for item in data:
+		if "kind" in item and item.kind == "report_check_result":
+			var tree_item : CustomTreeItem = checks[account][item.reported.id]
+			if item.reported.number_of_resources_failing > 0:
+				pass
+			tree_item.main_element.failing_n = item.reported.number_of_resources_failing
+			tree_item.main_element.title = item.reported.title
 			
-			var last_element_name = sections.keys()[-1]
-			var item : CustomTreeItem = sections[last_element_name].add_sub_element(display_element)
-			sections[sections.keys()[-1] + "-" + element.reported.title] = item
-			
-			item.connect("pressed", self, "_on_tree_item_pressed")
-			
-		elif "reported" in element and "kind" in element.reported:
-			var display_element := preload("res://components/benchmark_display/benchmark_check_collection_display.tscn").instance()
-			var title : String = element.reported.title
-			display_element.title = title
-#			display_element.passed = element.reported.passed
-#			display_element.passing_n = element.reported.checks_passing
-#			display_element.failing_n = element.reported.checks_failing
-			display_element.tooltip = element.reported.description
-			
-			match element.reported.kind:
-				"report_benchmark":
-					display_element.set_label_variation("Label_24")
-					benchmark_tree_root = tree_item_scene.instance()
-					benchmark_tree_root.main_element = display_element
-					tree_container.add_child(benchmark_tree_root)
-					benchmark_tree_root.connect("pressed", self, "_on_tree_item_pressed")
-				"report_check_collection":
-					var item : CustomTreeItem
-					if title.begins_with("Section"):
-						display_element.set_label_variation("LabelBold")
-						var section = title.split(":")[0].split(" ")[1]
-						item = benchmark_tree_root.add_sub_element(display_element)
-						sections[section] = item
-					else:
-						var section_numbers : String = title.split(" ")[0]
-						var section_index = section_numbers
-						var index = -1
-						while true:
-							index = section_numbers.rfind(".", index)
-							section_numbers = section_numbers.left(index)
-							if section_numbers in sections:
-								item = sections[section_numbers].add_sub_element(display_element)
-								sections[section_index] = item
-								break
-					item.connect("pressed", self, "_on_tree_item_pressed")
-	
-	passed_indicator.value = benchmark_tree_root.main_element.passing_n
-	failed_indicator.value = benchmark_tree_root.main_element.failing_n
-	benchmark_tree_root.collapse(false)
+			var collection = tree_item.parent
 
 
 func _on_tree_item_pressed(item : CustomTreeItem):
@@ -235,12 +181,6 @@ func _on_ShowAllButton_pressed():
 			# TODO, what to do here?
 			pass
 
-func _on_ComboBox_option_changed(option):
-	if "clouds" in benchmarks[option]:
-		clouds_combo_box.items = ["aws", "gcp", "digital ocean", "my cloud provider"]
-
-
-
 func _on_Filter_option_changed(option):
 	for section in sections.values():
 		match option:
@@ -273,12 +213,54 @@ func _on_Expand_pressed():
 		
 	benchmark_tree_root.collapse(false)
 
-
-
-
 func _on_RemediationLabel_meta_clicked(meta):
 	OS.shell_open(meta)
 
 
 func _on_BenchmarkButton_pressed():
 	$Control/BenchmarkConfigPopup.popup_centered()
+
+
+func _on_AcceptButton_pressed():
+	create_benchmark_model(benchmark_config_dialog.selected_benchmark)
+
+
+func create_benchmark_model(data : Dictionary):
+	benchmark_tree_root = tree_item_scene.instance()
+	benchmark_tree_root.main_element = new_check_collection_tree_item(data.title)
+	tree_container.add_child(benchmark_tree_root)
+	
+	var accounts : Array = benchmark_config_dialog.accounts_checklist.checked_options
+	
+	checks = {}
+	
+	for account in accounts:
+		current_account = account
+		var element = new_check_collection_tree_item(account)
+		var tree_item = benchmark_tree_root.add_sub_element(element)
+		populate_tree_branch(data, tree_item)
+	API.get_benchmark_report(data.id, PoolStringArray(accounts), self)
+
+
+func populate_tree_branch(data : Dictionary, root : CustomTreeItem):
+	if "children" in data:
+		for child in data.children:
+			var element = new_check_collection_tree_item(child.title)
+			var item = root.add_sub_element(element)
+			populate_tree_branch(child, item)
+	if "checks" in data:
+		for check in data.checks:
+			var element = new_check_result_tree_item(check)
+			if not current_account in checks:
+				checks[current_account] = {}
+			checks[current_account][check] = root.add_sub_element(element)
+
+func new_check_collection_tree_item(title : String = ""):
+	var element = check_collection_scene.instance()
+	element.title = title
+	return element
+
+func new_check_result_tree_item(title : String = ""):
+	var element = check_result_scene.instance()
+	element.title = title
+	return element

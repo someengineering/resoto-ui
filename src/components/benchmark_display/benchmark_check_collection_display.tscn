@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://components/benchmark_display/benchmark_check_collection_display.gd" type="Script" id=1]
 [ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=2]
 [ext_resource path="res://assets/icons/icon_128_close_thick.svg" type="Texture" id=3]
-[ext_resource path="res://components/shared/icon_tooltip_helper.tscn" type="PackedScene" id=4]
 [ext_resource path="res://components/shared/failing_vs_passed_widget.tscn" type="PackedScene" id=5]
 
 [node name="BenchmarkCheckCollectionDisplay" type="HBoxContainer"]
@@ -44,14 +43,6 @@ margin_right = 1824.0
 margin_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="IconTooltipHelper" parent="." instance=ExtResource( 4 )]
-visible = false
-modulate = Color( 1, 1, 1, 0.219608 )
-margin_left = 1804.0
-margin_top = 530.0
-margin_right = 1824.0
-margin_bottom = 550.0
 
 [node name="FailingVsPassingWidget" parent="." instance=ExtResource( 5 )]
 
