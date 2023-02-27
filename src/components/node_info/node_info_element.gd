@@ -15,10 +15,10 @@ var treemap_button_script_pressed : bool	= false
 var treemap_button_force_switched : bool	= false
 
 
-onready var n_icon_cleaned := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconCleaned
-onready var n_icon_phantom := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconPhantom
+onready var n_icon_cleaned := $"%NodeIconCleaned"
+onready var n_icon_phantom := $"%NodeIconPhantom"
 onready var property_container := $"%PropertyContainer"
-onready var leaf_panel := $Margin/VBox/NodeContent/LeafPanel
+onready var leaf_panel := $"%LeafPanel"
 onready var tag_group := $"%TagsGroup"
 onready var graph_a_star := GraphAStar.new()
 
@@ -92,7 +92,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		update_breadcrumbs()
 		
 		if not current_result.empty() and current_result[0].has("reported"):
-			$Margin/VBox/NodeContent/NodeDetails/AllDataGroup.node_text = Utils.readable_dict(current_result[0].reported)
+			$"%AllDataGroup".node_text = Utils.readable_dict(current_result[0].reported)
 		
 		for r in current_result:
 			if r.type == "node" and r.id == current_node_id:

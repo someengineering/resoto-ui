@@ -9,6 +9,7 @@ onready var sections = {
 	"node_single_info": $Content/NodeSingleInfoComponent,
 	"node_list_info": $Content/NodeListElementComponent,
 	"setup_wizard": $Content/SetupWizardComponent,
+	"jobs": $Content/JobsComponent,
 	"home": $Content/HomeComponent
 }
 

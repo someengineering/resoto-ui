@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/resoto/Resoto_logo_and_text_big.svg" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://components/hub/component_resoto_home.gd" type="Script" id=4]
 [ext_resource path="res://assets/icons/icon_128_main_dashboards.svg" type="Texture" id=5]
 [ext_resource path="res://components/hub/app_button.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/icons/icon_128_main_jobs.svg" type="Texture" id=7]
 [ext_resource path="res://assets/icons/icon_128_main_config.svg" type="Texture" id=8]
 [ext_resource path="res://assets/icons/icon_128_main_terminal.svg" type="Texture" id=9]
 [ext_resource path="res://assets/icons/icon_128_main_explore.svg" type="Texture" id=10]
@@ -69,14 +70,14 @@ margin_bottom = 272.0
 rect_min_size = Vector2( 0, 50 )
 
 [node name="Apps" type="GridContainer" parent="VBox"]
-margin_left = 605.0
+margin_left = 700.0
 margin_top = 276.0
-margin_right = 1315.0
-margin_bottom = 416.0
+margin_right = 1220.0
+margin_bottom = 572.0
 size_flags_horizontal = 4
-custom_constants/vseparation = 0
+custom_constants/vseparation = 16
 custom_constants/hseparation = 50
-columns = 4
+columns = 3
 
 [node name="ButtonDashboards" parent="VBox/Apps" instance=ExtResource( 6 )]
 margin_right = 140.0
@@ -91,17 +92,25 @@ margin_bottom = 140.0
 app_name = "Explore"
 app_icon = ExtResource( 10 )
 
-[node name="ButtonResotoShellLite" parent="VBox/Apps" instance=ExtResource( 6 )]
+[node name="ButtonJobs" parent="VBox/Apps" instance=ExtResource( 6 )]
 margin_left = 380.0
 margin_right = 520.0
 margin_bottom = 140.0
+app_name = "Jobs"
+app_icon = ExtResource( 7 )
+
+[node name="ButtonResotoShellLite" parent="VBox/Apps" instance=ExtResource( 6 )]
+margin_top = 156.0
+margin_right = 140.0
+margin_bottom = 296.0
 app_name = "Resoto Shell"
 app_icon = ExtResource( 9 )
 
 [node name="ButtonConfig" parent="VBox/Apps" instance=ExtResource( 6 )]
-margin_left = 570.0
-margin_right = 710.0
-margin_bottom = 140.0
+margin_left = 190.0
+margin_top = 156.0
+margin_right = 330.0
+margin_bottom = 296.0
 app_name = "Configuration"
 app_icon = ExtResource( 8 )
 
@@ -109,5 +118,6 @@ app_icon = ExtResource( 8 )
 [connection signal="text_changed" from="VBox/FullTextSearch" to="." method="_on_FullTextSearch_text_changed"]
 [connection signal="pressed" from="VBox/Apps/ButtonDashboards" to="." method="_on_ButtonDashboards_pressed"]
 [connection signal="pressed" from="VBox/Apps/ButtonExplore" to="." method="_on_ButtonExplore_pressed"]
+[connection signal="pressed" from="VBox/Apps/ButtonJobs" to="." method="_on_ButtonJobs_pressed"]
 [connection signal="pressed" from="VBox/Apps/ButtonResotoShellLite" to="." method="_on_ButtonResotoShellLite_pressed"]
 [connection signal="pressed" from="VBox/Apps/ButtonConfig" to="." method="_on_ButtonConfig_pressed"]
