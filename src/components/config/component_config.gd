@@ -1,8 +1,8 @@
 extends Control
 
 export var descriptions_as_hints:bool = true
-
-const BASE_KINDS:Array = [
+const DEFAULT_COLLAPSED_CATEGORIES : Array = ["ui", "dashboard", "report"]
+const BASE_KINDS : Array = [
 	"string",
 	"int32",
 	"int64",
@@ -15,8 +15,8 @@ const BASE_KINDS:Array = [
 	"duration",
 	"trafo.duration_to_datetime",
 	]
-const ProtectedConfigs:Array= ["resoto.core", "resoto.worker", "resoto.core.commands", "resoto.metrics"]
-const DashboardPrefix:= "resoto.ui.dashboard."
+const ProtectedConfigs : Array= ["resoto.core", "resoto.worker", "resoto.core.commands", "resoto.metrics"]
+const DashboardPrefix := "resoto.ui.dashboard."
 const DefaultConfig : String = "resoto.core"
 
 signal model_ready
@@ -32,7 +32,6 @@ var config_put_req: ResotoAPI.Request
 
 var config_model : Dictionary = {}
 var config_keys : Array
-var unfiltered_keys : Array
 
 var active_config_key : String = ""
 var active_config : Dictionary
@@ -45,8 +44,8 @@ var tabs_content_keys : Array = []
 var _active_tab_id : int = -1
 
 onready var tabs : Tabs = find_node("Tabs")
-onready var content = find_node("Content")
-onready var config_combo = $VBox/Toolbar/Box/ConfigCombo
+onready var content = $"%Content"
+onready var config_combo = $"%ConfigCombo"
 
 
 func _input(event:InputEvent):
@@ -90,23 +89,77 @@ func _on_get_configs_done(_error:int, _response:ResotoAPI.Response) -> void:
 		yield(self, "model_ready")
 	
 	show()
-	unfiltered_keys = _response.transformed.result
-	config_keys = []
-	for key in unfiltered_keys:
-		if not show_dashboards and key.begins_with(DashboardPrefix):
-			continue
-		config_keys.append(key)
+	config_keys = _response.transformed.result
 	
 	if config_keys.empty():
 		_g.emit_signal("add_toast", "Could not get Configs from Resoto Core!", "", 1, self)
 		return
 	
-	config_combo.set_items(config_keys)
-	if not unfiltered_keys.has(active_config_key):
+	create_config_tree(config_keys)
+	if not config_keys.has(active_config_key):
 		active_config_key = DefaultConfig
-		config_combo.set_text(active_config_key)
 	
 	emit_signal("config_list_refreshed")
+
+
+func create_config_tree(_config_keys:Array):
+	var tree : Tree = $"%ConfigSelectionTree"
+	tree.clear()
+	var root = tree.create_item()
+	tree.set_hide_root(true)
+	
+	for string in _config_keys:
+		var current_parent = root
+		var keys = string.split(".")
+		for i in keys.size():
+			if i == 0:
+				continue
+			else:
+				var already_exists = false
+				for pc in tree_get_item_children(current_parent):
+					if pc.get_text(0) == keys[i]:
+						current_parent = pc
+						already_exists = true
+						break
+				if not already_exists:
+					var new_cat = tree.create_item(current_parent)
+					if i == keys.size()-1:
+						new_cat.set_text(0, keys[i])
+						new_cat.set_icon(0, load("res://assets/icons/icon_128_settings.svg"))
+						new_cat.set_icon_max_width(0, 20)
+						new_cat.set_icon_modulate(0, Style.col_map[Style.c.LIGHT])
+					else:
+						new_cat.set_text(0, keys[i])
+						new_cat.set_custom_color(0, Style.col_map[Style.c.NORMAL])
+						new_cat.set_icon(0, load("res://assets/icons/icon_128_folder.svg"))
+						new_cat.set_selectable(0, false)
+						new_cat.set_icon_max_width(0, 20)
+						new_cat.set_icon_modulate(0, Style.col_map[Style.c.NORMAL])
+					if DEFAULT_COLLAPSED_CATEGORIES.has(keys[i]):
+						new_cat.collapsed = true
+					new_cat.set_metadata(0, string)
+					if string == active_config_key:
+						new_cat.select(0)
+					current_parent = new_cat
+				else:
+					continue
+	$"%ConfigLabel".text = "Config: %s" % active_config_key
+
+
+func _on_ConfigSelectionTree_item_selected():
+	var tree : Tree = $"%ConfigSelectionTree"
+	var selected_tree_item :TreeItem = tree.get_selected()
+	open_configuration(selected_tree_item.get_metadata(0))
+	$"%ConfigLabel".text = "Config: %s" % active_config_key
+
+
+func tree_get_item_children(item:TreeItem)->Array:
+	item = item.get_children()
+	var children = []
+	while item:
+		children.append(item)
+		item = item.get_next()
+	return children
 
 
 func open_configuration(_config_key:String) -> void:
@@ -595,7 +648,7 @@ func _on_add_confirm_response(_button_clicked:String, _value:String):
 		# To make sure no config was created while editing, check for new config keys:
 		API.get_configs(self)
 		yield(self, "config_list_refreshed")
-		if unfiltered_keys.has(_value):
+		if config_keys.has(_value):
 			_g.emit_signal("add_toast", "Config Creation failed", "A Configuration with that name already exists in Resoto Core", 1, self)
 			return
 		# Show loading animation
@@ -657,7 +710,7 @@ func _on_duplicate_confirm_response(_button_clicked:String, _value:String):
 		# To make sure no config was created while editing, check for new config keys:
 		API.get_configs(self)
 		yield(self, "config_list_refreshed")
-		if unfiltered_keys.has(_value):
+		if config_keys.has(_value):
 			_g.emit_signal("add_toast", "Duplicating Config failed", "A Configuration with that name already exists in Resoto Core", 1, self)
 			return
 		
@@ -695,7 +748,7 @@ func _on_rename_confirm_response(_button_clicked:String, _value:String):
 		# To make sure no config was created while editing, check for new config keys:
 		API.get_configs(self)
 		yield(self, "config_list_refreshed")
-		if unfiltered_keys.has(_value):
+		if config_keys.has(_value):
 			_g.emit_signal("add_toast", "Renaming failed", "A Configuration with that name already exists in Resoto Core", 1, self)
 			return
 		
