@@ -5,6 +5,7 @@ var title : String = "" setget set_title
 var passed : bool = false setget set_passed
 var passing_n : int = 1 setget set_passing_n
 var failing_n : int = 0 setget set_failing_n
+var description : String
 
 func set_title(_title : String):
 	title = _title
@@ -21,6 +22,7 @@ func set_passing_n(n : int):
 	
 func set_failing_n(n : int):
 	failing_n = n
+	self.passed = n == 0
 	$FailingVsPassingWidget.failing_n = n
 
 func set_label_variation(variation: String):

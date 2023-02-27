@@ -12,11 +12,9 @@ size_flags_horizontal = 3
 script = ExtResource( 1 )
 
 [node name="Passed" type="TextureRect" parent="."]
-visible = false
 modulate = Color( 0.265427, 0.957031, 0.438328, 1 )
-margin_left = 4.0
-margin_right = 20.0
-margin_bottom = 40.0
+margin_right = 16.0
+margin_bottom = 1080.0
 rect_min_size = Vector2( 16, 16 )
 texture = ExtResource( 2 )
 expand = true
@@ -34,11 +32,13 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="."]
+margin_left = 20.0
 margin_top = 530.0
+margin_right = 20.0
 margin_bottom = 550.0
 
 [node name="Spacer" type="HSeparator" parent="."]
-margin_left = 4.0
+margin_left = 24.0
 margin_right = 1824.0
 margin_bottom = 1080.0
 size_flags_horizontal = 3

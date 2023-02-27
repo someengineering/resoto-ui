@@ -4,6 +4,7 @@ var benchmark_tree_root : CustomTreeItem = null
 var tree_item_scene := preload("res://components/shared/custom_tree_item.tscn")
 var check_collection_scene := preload("res://components/benchmark_display/benchmark_check_collection_display.tscn")
 var check_result_scene := preload("res://components/benchmark_display/benchmark_check_result_display.tscn")
+var check_account_scene := preload("res://components/benchmark_display/benchmark_account_display.tscn")
 
 var last_detect_type := "manual"
 var last_detect_command := ""
@@ -46,23 +47,46 @@ func _on_get_configs_done(error: int, response):
 			benchmarks_count += 1
 
 
-func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response, accounts : Array):
+func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 	if _error:
 		print(response.body.get_string_from_utf8())
 		return
 	
 	var data : Array = response.transformed.result
-	var account = "" if accounts.empty() else accounts[0]
+	
 	for item in data:
 		if "kind" in item and item.kind == "report_check_result":
-			var tree_item : CustomTreeItem = checks[account][item.reported.id]
-			if item.reported.number_of_resources_failing > 0:
-				pass
-			tree_item.main_element.failing_n = item.reported.number_of_resources_failing
-			tree_item.main_element.title = item.reported.title
 			
-			var collection = tree_item.parent
-
+			for id in checks:
+				var d = checks[id]
+				var element = d[item.reported.id].main_element
+				element.title = item.reported.title
+				element.remediation_text = item.reported.remediation.text
+				element.remediation_url = item.reported.remediation.url
+				element.severity = item.reported.severity
+				element.detect = item.reported.detect
+				element.account_id = id
+			
+			if not "number_of_resources_failing_by_account" in item.reported:
+				for d in checks.values():
+					d[item.reported.id].main_element.failing_n = 0
+			else:
+				for a in checks:
+					var tree_item : CustomTreeItem = checks[a][item.reported.id]
+					if a in item.reported.number_of_resources_failing_by_account:
+						tree_item.main_element.failing_n = item.reported.number_of_resources_failing_by_account[a]
+					else:
+						tree_item.main_element.failing_n = 0
+						
+	for check in checks.values():
+		for item in check.values():
+			var parent = item.parent
+			while parent != null:
+				if item.main_element.passed:
+					parent.main_element.passing_n += 1
+				else:
+					parent.main_element.failing_n += 1
+				parent = parent.parent
 
 func _on_tree_item_pressed(item : CustomTreeItem):
 	var element = item.main_element
@@ -87,8 +111,8 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		else:
 			detail_remediation_label.text = "Fix: " + element.remediation_text
 	
-	if "tooltip" in element:
-		detail_view_description.text = element.tooltip
+	if "description" in element:
+		detail_view_description.text = element.description
 	elif "risk" in element:
 		detail_view_description.text = element.risk
 	
@@ -113,28 +137,14 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		detail_view_severity.set("custom_colors/font_color", color)
 	
 	if element is BenchmarkResultDisplay:
-		last_detect_type = element.detect.keys()[0]
-		last_detect_command = element.detect[last_detect_type]
-		if last_detect_type == "resoto":
-			API.graph_search(last_detect_command, self)
-		elif last_detect_type == "resoto_cmd":
-			API.cli_execute(last_detect_command, self)
-		
+		API.get_check_resources(element.id, element.account_id, self)
 		resources_loading_overlay.visible = true
 		get_tree().call_group("FailingResourcesWidget", "hide")
 	else:
 		get_tree().call_group("FailingResourcesWidget", "hide")
-		
-func _on_cli_execute_done(error : int, response: ResotoAPI.Response):
-	resources_loading_overlay.visible = false
-	if error != OK:
-		# TODO: manage errors
-		return
-		
-	populate_resources_list(response.transformed.result)
 
-func _on_graph_search_done(error : int, response: ResotoAPI.Response):
-	
+
+func _on_get_check_resources_done(error : int, response : ResotoAPI.Response):
 	resources_loading_overlay.visible = false
 	if error != OK:
 		# TODO: manage errors
@@ -227,40 +237,57 @@ func _on_AcceptButton_pressed():
 
 func create_benchmark_model(data : Dictionary):
 	benchmark_tree_root = tree_item_scene.instance()
-	benchmark_tree_root.main_element = new_check_collection_tree_item(data.title)
+	benchmark_tree_root.main_element = new_check_collection_tree_item(data)
+	
+	benchmark_tree_root.connect("pressed", self, "_on_tree_item_pressed")
 	tree_container.add_child(benchmark_tree_root)
 	
 	var accounts : Array = benchmark_config_dialog.accounts_checklist.checked_options
 	
 	checks = {}
 	
+	var accounts_id : Array = []
 	for account in accounts:
-		current_account = account
-		var element = new_check_collection_tree_item(account)
+		current_account = account.id
+		accounts_id.append(account.id)
+		var element = new_account_tree_item(account)
 		var tree_item = benchmark_tree_root.add_sub_element(element)
+		tree_item.connect("pressed", self, "_on_tree_item_pressed")
 		populate_tree_branch(data, tree_item)
-	API.get_benchmark_report(data.id, PoolStringArray(accounts), self)
+	
+	API.get_benchmark_report(data.id, PoolStringArray(accounts_id), self)
 
 
 func populate_tree_branch(data : Dictionary, root : CustomTreeItem):
 	if "children" in data:
 		for child in data.children:
-			var element = new_check_collection_tree_item(child.title)
-			var item = root.add_sub_element(element)
+			var element = new_check_collection_tree_item(child)
+			var item : CustomTreeItem = root.add_sub_element(element)
+			item.connect("pressed", self, "_on_tree_item_pressed")
 			populate_tree_branch(child, item)
 	if "checks" in data:
 		for check in data.checks:
 			var element = new_check_result_tree_item(check)
 			if not current_account in checks:
 				checks[current_account] = {}
-			checks[current_account][check] = root.add_sub_element(element)
+			var item : CustomTreeItem = root.add_sub_element(element)
+			checks[current_account][check] = item
+			item.connect("pressed", self, "_on_tree_item_pressed")
 
-func new_check_collection_tree_item(title : String = ""):
+func new_check_collection_tree_item(data):
 	var element = check_collection_scene.instance()
-	element.title = title
+	element.title = data.title
+	element.description = data.description
 	return element
 
-func new_check_result_tree_item(title : String = ""):
+func new_check_result_tree_item(id : String = ""):
 	var element = check_result_scene.instance()
-	element.title = title
+	element.id = id
+	return element
+
+func new_account_tree_item(account):
+	var element = check_account_scene.instance()
+	element.title = account.text
+	element.name = account.name
+	element.id = account.id
 	return element

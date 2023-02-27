@@ -266,3 +266,12 @@ func get_benchmark_report(benchmark : String, accounts : String):
 	var request = req_get(query, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
+
+
+func get_check_resources(check_id : String, account_id : String):
+	var query = "/report/check/%s/graph/%s" % [check_id, default_graph]
+	if account_id != "":
+		query += "?accounts=%s" % account_id
+	var request = req_get(query, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request

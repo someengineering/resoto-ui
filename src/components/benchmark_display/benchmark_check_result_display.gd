@@ -10,6 +10,8 @@ var remediation_url : String = "" setget set_remediation_url
 var severity : String = "" setget set_severity
 var risk : String = ""
 var detect : Dictionary = {}
+var account_id : String = ""
+var id : String = ""
 
 
 func set_passed(_passed : bool):
