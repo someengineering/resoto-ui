@@ -44,14 +44,13 @@ func populate_options(filter : String = filter_line_edit.text):
 	else:
 		matching_items.clear()
 		for item in items:
-			
 			var item_text = item.to_lower() if item is String else item.text.to_lower()
 			var edit_text = filter_line_edit.text.to_lower()
 			if item_text.begins_with(edit_text) and not item in matching_items:
 				matching_items.append(item)
 				
 		for item in items:
-			var item_text = item.to_lower()
+			var item_text = item.to_lower() if item is String else item.text.to_lower()
 			var edit_text = filter_line_edit.text.to_lower()
 			if edit_text in item_text and not item in matching_items:
 				matching_items.append(item)

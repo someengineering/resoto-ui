@@ -43,6 +43,7 @@ func _on_ComboBox_option_changed(option):
 	if "clouds" in benchmarks[option]:
 		clouds_checklist.items = benchmarks[option]["clouds"]
 	selected_benchmark = benchmarks[option]
+	clouds_checklist.select_all()
 
 
 func _on_CloudsCheckList_selection_changed(selected_items : Array):
@@ -67,3 +68,5 @@ func _on_graph_search_done(error : int, response : ResotoAPI.Response):
 			})
 		
 	accounts_checklist.items = accounts_id
+	
+	accounts_checklist.select_all()

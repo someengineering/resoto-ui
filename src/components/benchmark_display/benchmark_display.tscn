@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://components/benchmark_display/benchmark_display.gd" type="Script" id=1]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=6]
 [ext_resource path="res://components/dashboard/shared/loading_overlay.tscn" type="PackedScene" id=7]
 [ext_resource path="res://components/benchmark_display/benchmark_config_dialog.tscn" type="PackedScene" id=8]
+[ext_resource path="res://components/benchmark_display/SeverityTexture.gd" type="Script" id=9]
+[ext_resource path="res://components/benchmark_display/SeverityTexture.tscn" type="PackedScene" id=10]
 
 [node name="BenchmarkDisplay" type="MarginContainer"]
 anchor_right = 1.0
@@ -25,38 +27,9 @@ margin_top = 8.0
 margin_right = 1908.0
 margin_bottom = 1072.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content"]
-margin_right = 1896.0
-margin_bottom = 32.0
-
-[node name="Filter" parent="PanelContainer/Content/HBoxContainer" instance=ExtResource( 2 )]
-margin_right = 100.0
-margin_bottom = 32.0
-items = [ "All", "Passing", "Failing" ]
-text = "All"
-
-[node name="Collapse" type="Button" parent="PanelContainer/Content/HBoxContainer"]
-margin_left = 104.0
-margin_right = 212.0
-margin_bottom = 32.0
-text = "Collapse All"
-
-[node name="Expand" type="Button" parent="PanelContainer/Content/HBoxContainer"]
-margin_left = 216.0
-margin_right = 316.667
-margin_bottom = 32.0
-text = "Expand All"
-
-[node name="BenchmarkButton" type="Button" parent="PanelContainer/Content/HBoxContainer"]
-margin_left = 320.0
-margin_right = 477.333
-margin_bottom = 32.0
-text = "Select Benchmark"
-
 [node name="PanelContainer2" type="PanelContainer" parent="PanelContainer/Content"]
-margin_top = 36.0
 margin_right = 1896.0
-margin_bottom = 106.0
+margin_bottom = 70.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer2"]
 margin_left = 10.0
@@ -66,20 +39,9 @@ margin_bottom = 60.0
 custom_constants/separation = 10
 alignment = 1
 
-[node name="PassIndicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
+[node name="FailIndicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
 margin_left = 733.0
 margin_right = 933.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 200, 50 )
-size_flags_vertical = 3
-unit = "Checks Passed"
-background_color = Color( 0.0951492, 0.496094, 0.195385, 1 )
-decimal_digits = 0
-unit = "Checks Passed"
-
-[node name="FailIndicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
-margin_left = 943.0
-margin_right = 1143.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 200, 50 )
 size_flags_vertical = 3
@@ -88,102 +50,207 @@ background_color = Color( 0.644531, 0.181526, 0.181526, 1 )
 decimal_digits = 0
 unit = "Checks Failed"
 
+[node name="PassIndicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
+margin_left = 943.0
+margin_right = 1143.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 200, 50 )
+size_flags_vertical = 3
+unit = "Checks Passed"
+background_color = Color( 0.0951492, 0.496094, 0.195385, 1 )
+decimal_digits = 0
+unit = "Checks Passed"
+
 [node name="PanelContainer" type="HSplitContainer" parent="PanelContainer/Content"]
-margin_top = 110.0
+margin_top = 74.0
 margin_right = 1896.0
 margin_bottom = 1064.0
 size_flags_vertical = 3
 
-[node name="TreeContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer"]
-margin_right = 1510.0
-margin_bottom = 954.0
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer"]
+margin_right = 1348.0
+margin_bottom = 990.0
 size_flags_horizontal = 3
 
-[node name="DetailView" type="PanelContainer" parent="PanelContainer/Content/PanelContainer"]
-margin_left = 1522.0
-margin_right = 1896.0
-margin_bottom = 954.0
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/VBoxContainer"]
+margin_right = 1348.0
+margin_bottom = 32.0
+
+[node name="Filter" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 2 )]
+margin_right = 100.0
+margin_bottom = 32.0
+items = [ "All", "Passing", "Failing" ]
+text = "All"
+
+[node name="Collapse" type="Button" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 104.0
+margin_right = 212.0
+margin_bottom = 32.0
+text = "Collapse All"
+
+[node name="Expand" type="Button" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 216.0
+margin_right = 316.667
+margin_bottom = 32.0
+text = "Expand All"
+
+[node name="BenchmarkButton" type="Button" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 320.0
+margin_right = 477.333
+margin_bottom = 32.0
+text = "Select Benchmark"
+
+[node name="TreeContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 1348.0
+margin_bottom = 990.0
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.25
+size_flags_vertical = 3
+
+[node name="DetailView" type="PanelContainer" parent="PanelContainer/Content/PanelContainer"]
+margin_left = 1360.0
+margin_right = 1896.0
+margin_bottom = 990.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 364.0
-margin_bottom = 944.0
+margin_right = 526.0
+margin_bottom = 980.0
 
 [node name="TitleLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 354.0
+margin_right = 516.0
 margin_bottom = 30.0
 size_flags_horizontal = 3
 theme_type_variation = "Label_24"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 margin_top = 34.0
-margin_right = 354.0
+margin_right = 516.0
 margin_bottom = 54.0
 
 [node name="StatusLabel" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer"]
-margin_right = 350.0
+margin_right = 516.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 theme_type_variation = "LabelBold"
 
-[node name="SeverityLabel" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer"]
-margin_left = 354.0
-margin_top = 2.0
-margin_right = 354.0
-margin_bottom = 17.0
-theme_type_variation = "LabelSmall"
+[node name="SeverityTexture" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer" instance=ExtResource( 10 )]
+modulate = Color( 1, 0.533333, 0.196078, 1 )
+margin_left = 429.0
+margin_right = 445.0
+margin_bottom = 20.0
+script = ExtResource( 9 )
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 margin_top = 58.0
-margin_right = 354.0
+margin_right = 516.0
 margin_bottom = 62.0
 
 [node name="DescriptionLabel" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 margin_top = 66.0
-margin_right = 354.0
+margin_right = 516.0
 margin_bottom = 86.0
 autowrap = true
 
-[node name="RemediationLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
-visible = false
+[node name="Separator" type="Control" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 margin_top = 90.0
-margin_right = 354.0
-margin_bottom = 127.0
+margin_right = 516.0
+margin_bottom = 95.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="Risk" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+visible = false
+margin_top = 99.0
+margin_right = 445.0
+margin_bottom = 168.0
+
+[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk"]
+margin_right = 445.0
+margin_bottom = 20.0
+theme_type_variation = "LabelBold"
+text = "Risk"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk"]
+margin_top = 24.0
+margin_right = 445.0
+margin_bottom = 28.0
+
+[node name="RiskLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk"]
+margin_top = 32.0
+margin_right = 445.0
+margin_bottom = 69.0
 theme_type_variation = "RichLabelNormal"
 bbcode_enabled = true
 fit_content_height = true
 
-[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+[node name="Separator2" type="Control" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+margin_top = 99.0
+margin_right = 516.0
+margin_bottom = 104.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="Remediation" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+visible = false
+margin_top = 108.0
+margin_right = 445.0
+margin_bottom = 177.0
+
+[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation"]
+margin_right = 445.0
+margin_bottom = 20.0
+theme_type_variation = "LabelBold"
+text = "Remediation"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation"]
+margin_top = 24.0
+margin_right = 445.0
+margin_bottom = 28.0
+
+[node name="RemediationLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation"]
+margin_top = 32.0
+margin_right = 445.0
+margin_bottom = 69.0
+theme_type_variation = "RichLabelNormal"
+bbcode_enabled = true
+fit_content_height = true
+
+[node name="Separator3" type="Control" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+margin_top = 108.0
+margin_right = 516.0
+margin_bottom = 113.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" groups=["FailingResourcesWidget"]]
+visible = false
 margin_top = 90.0
-margin_right = 354.0
+margin_right = 445.0
 margin_bottom = 110.0
 text = "Failing Resources:"
 
-[node name="PanelContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
-margin_top = 114.0
-margin_right = 354.0
-margin_bottom = 910.0
+[node name="PanelContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" groups=["FailingResourcesWidget"]]
+margin_top = 117.0
+margin_right = 516.0
+margin_bottom = 946.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_type_variation = "PanelContainerDark"
 
-[node name="ResourcesList" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer" groups=["FailingResourcesWidget"]]
-visible = false
-margin_right = 354.0
-margin_bottom = 796.0
+[node name="ResourcesList" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer"]
+margin_right = 516.0
+margin_bottom = 829.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="LoadingOverlay" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer" instance=ExtResource( 7 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 354.0
-margin_bottom = 796.0
+margin_right = 516.0
+margin_bottom = 829.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -197,11 +264,13 @@ size_flags_horizontal = 8
 text = "Show All"
 
 [node name="FailingVsPassingWidget" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" instance=ExtResource( 3 )]
-margin_left = 276.0
-margin_top = 914.0
-margin_right = 354.0
-margin_bottom = 934.0
+margin_left = 402.0
+margin_top = 950.0
+margin_right = 516.0
+margin_bottom = 970.0
 size_flags_horizontal = 8
+size_flags_vertical = 10
+size_flags_stretch_ratio = 0.0
 
 [node name="Control" type="Control" parent="."]
 margin_right = 1920.0
@@ -213,6 +282,7 @@ margin_left = 536.0
 margin_top = 288.0
 margin_right = 1416.0
 margin_bottom = 888.0
+rect_min_size = Vector2( 0, 600 )
 
 [node name="Content" parent="Control/BenchmarkConfigPopup" index="0"]
 margin_right = 880.0
@@ -251,11 +321,12 @@ margin_right = 860.0
 margin_right = 880.0
 margin_bottom = 600.0
 
-[connection signal="option_changed" from="PanelContainer/Content/HBoxContainer/Filter" to="." method="_on_Filter_option_changed"]
-[connection signal="pressed" from="PanelContainer/Content/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
-[connection signal="pressed" from="PanelContainer/Content/HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
-[connection signal="pressed" from="PanelContainer/Content/HBoxContainer/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
-[connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationLabel" to="." method="_on_RemediationLabel_meta_clicked"]
+[connection signal="option_changed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Filter" to="." method="_on_Filter_option_changed"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
+[connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk/RiskLabel" to="." method="_on_RemediationLabel_meta_clicked"]
+[connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation/RemediationLabel" to="." method="_on_RemediationLabel_meta_clicked"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ShowAllButton" to="." method="_on_ShowAllButton_pressed"]
 [connection signal="pressed" from="Control/BenchmarkConfigPopup/Content/Footer/Footerbar/AcceptButton" to="." method="_on_AcceptButton_pressed"]
 

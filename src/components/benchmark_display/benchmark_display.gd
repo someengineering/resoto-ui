@@ -19,7 +19,7 @@ var benchmarks_count := 0
 
 var benchmark_model : CustomTreeItem = null
 
-onready var tree_container := $PanelContainer/Content/PanelContainer/TreeContainer
+onready var tree_container := $PanelContainer/Content/PanelContainer/VBoxContainer/TreeContainer
 
 onready var passed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/PassIndicator
 onready var failed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/FailIndicator
@@ -28,9 +28,10 @@ onready var detail_view := $PanelContainer/Content/PanelContainer/DetailView
 onready var detail_view_title := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleLabel
 onready var detail_view_description := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/DescriptionLabel
 onready var detail_view_pass_widget := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/FailingVsPassingWidget
-onready var detail_view_severity := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer/SeverityLabel
+onready var detail_view_severity := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer/SeverityTexture
 onready var status_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer/StatusLabel
-onready var detail_remediation_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationLabel
+onready var detail_remediation_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation/RemediationLabel
+onready var detail_risk_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk/RiskLabel
 onready var resources_list := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer/ResourcesList
 onready var resources_loading_overlay := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer/LoadingOverlay
 onready var benchmark_config_dialog := $"%BenchmarkConfigDialog"
@@ -63,6 +64,7 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 				element.title = item.reported.title
 				element.remediation_text = item.reported.remediation.text
 				element.remediation_url = item.reported.remediation.url
+				element.risk = item.reported.risk
 				element.severity = item.reported.severity
 				element.detect = item.reported.detect
 				element.account_id = id
@@ -87,6 +89,9 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 				else:
 					parent.main_element.failing_n += 1
 				parent = parent.parent
+				
+	passed_indicator.value = benchmark_tree_root.main_element.passing_n
+	failed_indicator.value = benchmark_tree_root.main_element.failing_n
 
 func _on_tree_item_pressed(item : CustomTreeItem):
 	var element = item.main_element
@@ -95,51 +100,46 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 	
 	if element.passed:
 		status_label.text = "Passed!"
+		status_label.set("custom_colors/font_color", Style.col_map[Style.c.CHECK_ON])
 	else:
+		status_label.set("custom_colors/font_color", Style.col_map[Style.c.CHECK_FAIL])
 		if "passing_n" in element:
 			status_label.text = ("%s Checks Failed" if element.failing_n > 1 else "%s Check Failed") % element.failing_n
 		else:
 			status_label.text = ("%s Resources Failed" if element.failing_n > 1 else "%s Resource Failed") % element.failing_n
 			
-	status_label.self_modulate = Color("#44f470") if element.passed else Color("#f44444")
 	detail_view_pass_widget.visible = "passing_n" in element
-	detail_remediation_label.visible = "remediation_text" in element
+	
+	$PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation.visible = "remediation_text" in element
+	$PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk.visible = "risk" in element
+	detail_view_description.visible = "description" in element
+	
 	detail_remediation_label.text = ""
 	if "remediation_text" in element:
 		if element.remediation_url != "":
-			detail_remediation_label.bbcode_text = "Fix: [url=%s]%s[/url]" % [element.remediation_url, element.remediation_text]
+			detail_remediation_label.bbcode_text = "[url=%s]%s[/url]" % [element.remediation_url, element.remediation_text]
 		else:
-			detail_remediation_label.text = "Fix: " + element.remediation_text
+			detail_remediation_label.text = element.remediation_text
+			
+	if "risk" in element:
+		detail_risk_label.text = element.risk
 	
 	if "description" in element:
 		detail_view_description.text = element.description
-	elif "risk" in element:
-		detail_view_description.text = element.risk
 	
 	if "passing_n" in element:
 		detail_view_pass_widget.passing_n = element.passing_n
 		detail_view_pass_widget.failing_n = element.failing_n
 	
 	if "severity" in element:
-		detail_view_severity.text = "(Severity: %s)" % element.severity
-		var color := Color.white
-		match element.severity:
-			"low":
-				color = Color("#44f470")
-			"medium":
-				color = Color.orange
-			"high":
-				color = Color("#f44444")
-			"critical":
-				color = Color("#f44444")
-				detail_view_severity.text = detail_view_severity.text.to_upper()
-				
-		detail_view_severity.set("custom_colors/font_color", color)
+		detail_view_severity.severity = element.severity
+		
+	detail_view_severity.visible = "severity" in element
 	
 	if element is BenchmarkResultDisplay:
 		API.get_check_resources(element.id, element.account_id, self)
 		resources_loading_overlay.visible = true
-		get_tree().call_group("FailingResourcesWidget", "hide")
+		get_tree().call_group("FailingResourcesWidget", "show")
 	else:
 		get_tree().call_group("FailingResourcesWidget", "hide")
 
@@ -232,12 +232,20 @@ func _on_BenchmarkButton_pressed():
 
 
 func _on_AcceptButton_pressed():
+	$Control/BenchmarkConfigPopup.hide()
 	create_benchmark_model(benchmark_config_dialog.selected_benchmark)
 
 
 func create_benchmark_model(data : Dictionary):
+	for child in tree_container.get_children():
+		if child is CustomTreeItem:
+			tree_container.remove_child(child)
+			child.queue_free()
+	
 	benchmark_tree_root = tree_item_scene.instance()
 	benchmark_tree_root.main_element = new_check_collection_tree_item(data)
+	benchmark_tree_root.main_element.set_label_variation("Label_24")
+	benchmark_tree_root.main_element.set_collection_icon(BenchmarkCollectionDisplay.TYPES.BENCHMARK)
 	
 	benchmark_tree_root.connect("pressed", self, "_on_tree_item_pressed")
 	tree_container.add_child(benchmark_tree_root)
@@ -251,17 +259,21 @@ func create_benchmark_model(data : Dictionary):
 		current_account = account.id
 		accounts_id.append(account.id)
 		var element = new_account_tree_item(account)
+		element.set_label_variation("LabelBold")
 		var tree_item = benchmark_tree_root.add_sub_element(element)
 		tree_item.connect("pressed", self, "_on_tree_item_pressed")
 		populate_tree_branch(data, tree_item)
 	
 	API.get_benchmark_report(data.id, PoolStringArray(accounts_id), self)
+	
+	benchmark_tree_root.collapse(false)
 
 
 func populate_tree_branch(data : Dictionary, root : CustomTreeItem):
 	if "children" in data:
 		for child in data.children:
 			var element = new_check_collection_tree_item(child)
+			element.set_collection_icon(BenchmarkCollectionDisplay.TYPES.COLLECTION)
 			var item : CustomTreeItem = root.add_sub_element(element)
 			item.connect("pressed", self, "_on_tree_item_pressed")
 			populate_tree_branch(child, item)

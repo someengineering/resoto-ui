@@ -24,7 +24,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/benchmark_display/benchmark_check_collection_display.gd"
 }, {
-"base": "VBoxContainer",
+"base": "HBoxContainer",
 "class": "BenchmarkResultDisplay",
 "language": "GDScript",
 "path": "res://components/benchmark_display/benchmark_check_result_display.gd"
