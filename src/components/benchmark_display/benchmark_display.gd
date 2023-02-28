@@ -9,7 +9,7 @@ var check_account_scene := preload("res://components/benchmark_display/benchmark
 var last_detect_type := "manual"
 var last_detect_command := ""
 
-var sections := {}
+var sections := []
 
 var checks := {}
 var current_account : String = ""
@@ -192,7 +192,7 @@ func _on_ShowAllButton_pressed():
 			pass
 
 func _on_Filter_option_changed(option):
-	for section in sections.values():
+	for section in sections:
 		match option:
 			"All":
 				section.visible = true
@@ -211,14 +211,14 @@ func _on_Filter_option_changed(option):
 
 
 func _on_Collapse_pressed():
-	for section in sections.values():
+	for section in sections:
 		section.collapse(true)
 		
 	benchmark_tree_root.collapse(true)
 
 
 func _on_Expand_pressed():
-	for section in sections.values():
+	for section in sections:
 		section.collapse(false)
 		
 	benchmark_tree_root.collapse(false)
@@ -241,6 +241,8 @@ func create_benchmark_model(data : Dictionary):
 		if child is CustomTreeItem:
 			tree_container.remove_child(child)
 			child.queue_free()
+	
+	sections = []
 	
 	benchmark_tree_root = tree_item_scene.instance()
 	benchmark_tree_root.main_element = new_check_collection_tree_item(data)
@@ -270,6 +272,7 @@ func create_benchmark_model(data : Dictionary):
 
 
 func populate_tree_branch(data : Dictionary, root : CustomTreeItem):
+	sections.append(root)
 	if "children" in data:
 		for child in data.children:
 			var element = new_check_collection_tree_item(child)
@@ -285,6 +288,7 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem):
 			var item : CustomTreeItem = root.add_sub_element(element)
 			checks[current_account][check] = item
 			item.connect("pressed", self, "_on_tree_item_pressed")
+			sections.append(item)
 
 func new_check_collection_tree_item(data):
 	var element = check_collection_scene.instance()

@@ -15,7 +15,7 @@ var id : String = ""
 
 func _draw():
 	var start : Vector2 = $Label.get_font("font").get_string_size($Label.text) + $Label.rect_position - Vector2(-5, $Label.rect_size.y / 2.0)
-	var end : Vector2 =  Vector2($SeverityTexture.rect_position.x, start.y)
+	var end : Vector2 =  Vector2($SeverityTexture.rect_position.x - 5, start.y)
 	if start.x < end.x and not passed:
 		draw_line(start, end, Color("#0f3356"))
 
@@ -35,7 +35,7 @@ func set_title(_title : String):
 func set_failing_n(_failing : int):
 	failing_n = _failing
 	if _failing > 0:
-		$FailingResources.text = ("%d Resources have failed" if failing_n > 1 else "%d Resource has failed") % failing_n
+		$FailingResources.text = ("%d Resources failed") % failing_n
 		self.passed = false
 	else:
 		$FailingResources.visible = false

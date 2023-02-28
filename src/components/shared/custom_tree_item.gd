@@ -147,3 +147,4 @@ func _on_MainElement_mouse_entered():
 func _on_MainElement_mouse_exited():
 	var tween := get_tree().create_tween()
 	tween.tween_property(main_element, "modulate", Color.white, 0.1)
+
