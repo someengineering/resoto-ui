@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=2]
+[gd_scene load_steps=79 format=2]
 
 [ext_resource path="res://components/popups/connect_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -55,7 +55,6 @@
 [ext_resource path="res://components/popups/popup_workflows.tscn" type="PackedScene" id=53]
 [ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=54]
 [ext_resource path="res://components/shared/blurred_panel_background.tscn" type="PackedScene" id=55]
-[ext_resource path="res://assets/generic/screenspace_blur.tres" type="Shader" id=56]
 [ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=57]
 [ext_resource path="res://assets/icons/icon_128_main_jobs.svg" type="Texture" id=58]
 [ext_resource path="res://components/job_editor/job_editor_component.tscn" type="PackedScene" id=59]
@@ -117,17 +116,6 @@ corner_radius_bottom_left = 4
 shadow_color = Color( 0, 0, 0, 0.117647 )
 shadow_size = 20
 shadow_offset = Vector2( 0, 5 )
-
-[sub_resource type="ShaderMaterial" id=36]
-shader = ExtResource( 56 )
-shader_param/dir = Vector2( 2, 0 )
-
-[sub_resource type="StyleBoxFlat" id=37]
-bg_color = Color( 0.243137, 0.141176, 0.372549, 1 )
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [sub_resource type="Gradient" id=38]
 interpolation_mode = 2
@@ -742,16 +730,7 @@ margin_bottom = 380.0
 custom_styles/panel = SubResource( 35 )
 status_icon_path = NodePath("../StatusIcons")
 
-[node name="BlurEffect" type="Panel" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup"]
-show_behind_parent = true
-material = SubResource( 36 )
-margin_right = 535.0
-margin_bottom = 335.0
-mouse_filter = 2
-input_pass_on_modal_close_click = false
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_styles/panel = SubResource( 37 )
+[node name="PanelBackgroundBlur" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup" instance=ExtResource( 55 )]
 
 [node name="StatusIcons" type="Control" parent="MenuBar/MenuContainer/TopMenu/Title/JobsBtn"]
 anchor_left = 0.5
