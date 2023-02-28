@@ -41,7 +41,6 @@ onready var template_popup := $TemplatePopup
 
 func _ready():
 	add_templates()
-	update_view()
 
 
 func _on_jobs_list_data(_e, _d):
@@ -174,3 +173,8 @@ func _on_AddEmptyButton_pressed():
 		"new-job-" + str(OS.get_unix_time()),
 		"Create Job", "Cancel")
 	add_confirm_popup.connect("response_with_input", self, "_on_add_confirm_response", [], CONNECT_ONESHOT)
+
+
+func _on_JobsComponent_show_section(is_visible:bool):
+	if is_visible:
+		update_view()

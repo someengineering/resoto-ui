@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=2]
+[gd_scene load_steps=80 format=2]
 
 [ext_resource path="res://components/popups/connect_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -55,6 +55,7 @@
 [ext_resource path="res://components/popups/popup_workflows.tscn" type="PackedScene" id=53]
 [ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=54]
 [ext_resource path="res://components/shared/blurred_panel_background.tscn" type="PackedScene" id=55]
+[ext_resource path="res://components/job_editor/jobs_component.gd" type="Script" id=56]
 [ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=57]
 [ext_resource path="res://assets/icons/icon_128_main_jobs.svg" type="Texture" id=58]
 [ext_resource path="res://components/job_editor/job_editor_component.tscn" type="PackedScene" id=59]
@@ -292,6 +293,7 @@ margin_bottom = 1080.0
 custom_constants/margin_right = 10
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
+script = ExtResource( 56 )
 
 [node name="JobEditor" parent="Content/Content/JobsComponent" instance=ExtResource( 59 )]
 anchor_right = 0.0
@@ -917,6 +919,7 @@ script = ExtResource( 22 )
 [connection signal="node_shown" from="Content/Content/NodeSingleInfoComponent/NodeSingleInfo" to="Content/Content/NodeSingleInfoComponent" method="_on_NodeSingleInfo_node_shown"]
 [connection signal="show" from="Content/Content/NodeListElementComponent/NodeListElement" to="Content/Content/NodeListElementComponent" method="_on_NodeListElement_show"]
 [connection signal="config_changed" from="Content/Content/ConfigComponent/ConfigManager" to="Content/Content/ConfigComponent" method="_on_ConfigManager_config_changed"]
+[connection signal="show_section" from="Content/Content/JobsComponent" to="Content/Content/JobsComponent/JobEditor" method="_on_JobsComponent_show_section"]
 [connection signal="unread_logs_changed" from="Content/Content/LogComponent/MessageLog" to="MenuBar/HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog/NotificationAnchor/NotificationLabel" method="set_notification_count"]
 [connection signal="dashboard_opened" from="Content/Content/DashBoardComponent/DashBoardManager" to="Content/Content/DashBoardComponent" method="_on_DashBoardManager_dashboard_opened"]
 [connection signal="setup_wizard_finished" from="Content/Content/SetupWizardComponent/WizardControl" to="Content/Content/SetupWizardComponent" method="_on_WizardControl_setup_wizard_finished"]
