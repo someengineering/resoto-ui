@@ -193,6 +193,11 @@ unique_name_in_owner = true
 wait_time = 0.3
 one_shot = true
 
+[node name="AnalyticsEventDelayTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 2.0
+one_shot = true
+
 [node name="TemplatePopup" type="PopupPanel" parent="."]
 unique_name_in_owner = true
 anchor_left = 1.0
@@ -232,3 +237,4 @@ margin_bottom = 19.0
 [connection signal="pressed" from="VBoxContainer/ResultHeadline/CopyCSVButton" to="." method="_on_CopyCSVButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/ResultHeadline/CopyJSONButton" to="." method="_on_CopyJSONButton_pressed"]
 [connection signal="timeout" from="ExecuteDelayTimer" to="." method="_on_ExecuteDelayTimer_timeout"]
+[connection signal="timeout" from="AnalyticsEventDelayTimer" to="." method="_on_AnalyticsEventDelayTimer_timeout"]
