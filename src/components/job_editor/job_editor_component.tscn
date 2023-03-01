@@ -71,10 +71,10 @@ theme_type_variation = "PopupPanelLight"
 script = ExtResource( 5 )
 
 [node name="VBox" type="VBoxContainer" parent="TemplatePopup"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 790.0
-margin_bottom = 590.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 796.0
+margin_bottom = 596.0
 
 [node name="AddEmptyButton" type="Button" parent="TemplatePopup/VBox"]
 margin_right = 792.0
