@@ -3,7 +3,7 @@ class_name TerminalComponent
 
 signal rename_terminal
 
-const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META, KEY_MASK_META, KEY_MASK_CMD]
+const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META, KEY_MASK_META, KEY_MASK_CMD, KEY_SUPER_L, KEY_SUPER_R]
 
 var terminal_active: bool = false setget set_terminal_active
 var last_command_id: int  = -1
