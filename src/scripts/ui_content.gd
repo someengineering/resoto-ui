@@ -10,6 +10,7 @@ onready var sections = {
 	"node_list_info": $Content/NodeListElementComponent,
 	"setup_wizard": $Content/SetupWizardComponent,
 	"jobs": $Content/JobsComponent,
+	"aggregation_view": $Content/AggregationViewComponent,
 	"home": $Content/HomeComponent
 }
 
@@ -77,7 +78,7 @@ func _on_navigate(navigation_args : Dictionary):
 		navigation_args["view"] = "home"
 	
 	var section = sections[navigation_args["view"]]
-		
+	
 	change_section(navigation_args["view"], false)
 	
 	if section is ComponentContainer:

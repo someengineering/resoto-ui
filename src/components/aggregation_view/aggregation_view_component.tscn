@@ -1,0 +1,234 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://components/dashboard/widget_table/widget_table.tscn" type="PackedScene" id=1]
+[ext_resource path="res://components/aggregation_view/aggregation_view_component.gd" type="Script" id=2]
+[ext_resource path="res://components/elements/styled/flat_copy_button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/icons/icon_128_copy.svg" type="Texture" id=5]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=6]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=7]
+[ext_resource path="res://components/dashboard/shared/loading_overlay.tscn" type="PackedScene" id=8]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0, 0.329412, 0.639216, 0.196078 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0, 0.329412, 0.639216, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="AggregateView" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 1920.0
+margin_bottom = 32.0
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_top = 1.0
+margin_right = 120.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 120, 0 )
+theme_type_variation = "Label_24"
+text = "Aggregation"
+
+[node name="CopyButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource( 3 )]
+margin_left = 124.0
+margin_top = 0.0
+margin_right = 149.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 25, 25 )
+size_flags_vertical = 5
+
+[node name="Spacer" type="Control" parent="VBoxContainer/HBoxContainer"]
+margin_left = 153.0
+margin_right = 1731.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="AddExample" parent="VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+margin_left = 1735.0
+margin_right = 1920.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 185, 20 )
+hint_tooltip = "Add an aggregation from our examples"
+size_flags_vertical = 0
+text = "Add from Examples"
+align = 2
+icon_tex = ExtResource( 6 )
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 36.0
+margin_right = 1920.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 0, 84 )
+text = "aggregate("
+wrap_enabled = true
+
+[node name="HintContainer" type="CenterContainer" parent="VBoxContainer/TextEdit"]
+unique_name_in_owner = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="VBoxContainer/TextEdit/HintContainer"]
+modulate = Color( 1, 1, 1, 0.627451 )
+margin_left = 810.0
+margin_top = 14.0
+margin_right = 1110.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 300, 0 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TextEdit/HintContainer/HBoxContainer"]
+margin_right = 300.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Type an aggregation query here to start."
+align = 1
+
+[node name="DocsButton" type="Button" parent="VBoxContainer/TextEdit/HintContainer/HBoxContainer"]
+margin_top = 24.0
+margin_right = 300.0
+margin_bottom = 56.0
+text = "Aggregation Docs"
+
+[node name="ErrorLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 120.0
+margin_right = 1920.0
+margin_bottom = 160.0
+theme_type_variation = "LabelCode"
+custom_styles/normal = SubResource( 1 )
+autowrap = true
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+margin_top = 124.0
+margin_right = 1920.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="LoadingOverlay" parent="VBoxContainer" instance=ExtResource( 8 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 148.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ResultHeadline" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 166.0
+margin_right = 1920.0
+margin_bottom = 198.0
+
+[node name="ResultLabel" type="Label" parent="VBoxContainer/ResultHeadline"]
+margin_top = 1.0
+margin_right = 70.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 70, 0 )
+theme_type_variation = "Label_24"
+text = "Result"
+
+[node name="CopyCSVButton" parent="VBoxContainer/ResultHeadline" instance=ExtResource( 4 )]
+margin_left = 74.0
+margin_right = 144.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 70, 20 )
+hint_tooltip = "Copy result in csv format to Clipboard"
+size_flags_vertical = 0
+text = "csv"
+align = 2
+icon_tex = ExtResource( 5 )
+
+[node name="CopyJSONButton" parent="VBoxContainer/ResultHeadline" instance=ExtResource( 4 )]
+margin_left = 148.0
+margin_right = 226.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 78, 20 )
+hint_tooltip = "Copy result in json format to Clipboard"
+size_flags_vertical = 0
+text = "json"
+align = 2
+icon_tex = ExtResource( 5 )
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/ResultHeadline"]
+margin_left = 230.0
+margin_right = 1920.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="ResultTableWidget" parent="VBoxContainer" instance=ExtResource( 1 )]
+unique_name_in_owner = true
+visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 202.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_vertical = 3
+
+[node name="ExecuteDelayTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.3
+one_shot = true
+
+[node name="TemplatePopup" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -800.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 300, 0 )
+theme_type_variation = "PopupPanelLight"
+script = ExtResource( 7 )
+
+[node name="VBox" type="VBoxContainer" parent="TemplatePopup"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 790.0
+margin_bottom = 590.0
+
+[node name="TemplateHeadline" type="HBoxContainer" parent="TemplatePopup/VBox"]
+margin_right = 780.0
+margin_bottom = 15.0
+
+[node name="TemplatesLabel" type="Label" parent="TemplatePopup/VBox/TemplateHeadline"]
+margin_right = 51.0
+margin_bottom = 15.0
+theme_type_variation = "LabelSmall"
+text = "Examples"
+
+[node name="TemplateContent" type="VBoxContainer" parent="TemplatePopup/VBox"]
+unique_name_in_owner = true
+margin_top = 19.0
+margin_right = 780.0
+margin_bottom = 19.0
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/CopyButton" to="." method="_on_CopyButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/AddExample" to="." method="_on_AddExample_pressed"]
+[connection signal="text_changed" from="VBoxContainer/TextEdit" to="." method="_on_TextEdit_text_changed"]
+[connection signal="pressed" from="VBoxContainer/TextEdit/HintContainer/HBoxContainer/DocsButton" to="." method="_on_DocsButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/ResultHeadline/CopyCSVButton" to="." method="_on_CopyCSVButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/ResultHeadline/CopyJSONButton" to="." method="_on_CopyJSONButton_pressed"]
+[connection signal="timeout" from="ExecuteDelayTimer" to="." method="_on_ExecuteDelayTimer_timeout"]

@@ -53,7 +53,7 @@ custom_colors/clear_button_color = Color( 0.913725, 0.552941, 0.968627, 1 )
 clear_button_enabled = true
 deselect_on_focus_loss_enabled = false
 right_icon = ExtResource( 2 )
-placeholder_text = "search"
+placeholder_text = "search or aggregate"
 placeholder_alpha = 0.3
 script = ExtResource( 1 )
 
@@ -109,7 +109,6 @@ margin_bottom = 235.0
 
 [node name="Title" type="HBoxContainer" parent="PopupLayer/ResultsPopUp/VBox"]
 margin_right = 565.0
-margin_bottom = 27.0
 
 [node name="ErrorMessage" type="RichTextLabel" parent="PopupLayer/ResultsPopUp/VBox/Title"]
 unique_name_in_owner = true
@@ -132,18 +131,29 @@ Expected one of "
 fit_content_height = true
 
 [node name="ResultAmountLabel" type="Label" parent="PopupLayer/ResultsPopUp/VBox/Title"]
+visible = false
 margin_right = 499.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 0, 27 )
 size_flags_horizontal = 3
 
 [node name="ListButton" type="Button" parent="PopupLayer/ResultsPopUp/VBox/Title"]
-margin_left = 503.0
-margin_right = 565.0
+visible = false
+margin_left = 437.0
+margin_right = 499.0
 margin_bottom = 27.0
 focus_neighbour_top = NodePath("../../../../..")
 theme_type_variation = "ButtonComboList"
 text = "more"
+
+[node name="AggregationButton" type="Button" parent="PopupLayer/ResultsPopUp/VBox/Title"]
+visible = false
+margin_right = 565.0
+margin_bottom = 26.0
+focus_neighbour_top = NodePath("../../../../..")
+size_flags_horizontal = 3
+theme_type_variation = "ButtonComboList"
+text = "View result in Aggregation View"
 
 [connection signal="focus_entered" from="." to="." method="_on_FullTextSearch_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_FullTextSearch_focus_exited"]
@@ -153,3 +163,4 @@ text = "more"
 [connection signal="pressed" from="ResultsPopUp/VBox/Title/ListButton" to="." method="_on_ListButton_pressed"]
 [connection signal="timeout" from="SearchDelay" to="." method="_on_SearchDelay_timeout"]
 [connection signal="pressed" from="PopupLayer/ResultsPopUp/VBox/Title/ListButton" to="." method="_on_ListButton_pressed"]
+[connection signal="pressed" from="PopupLayer/ResultsPopUp/VBox/Title/AggregationButton" to="." method="_on_AggregationButton_pressed"]
