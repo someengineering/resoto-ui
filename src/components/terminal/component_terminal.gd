@@ -5,6 +5,8 @@ signal rename_terminal
 
 const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META, KEY_MASK_META, KEY_MASK_CMD, KEY_SUPER_L, KEY_SUPER_R]
 
+export var is_popup := false
+
 var terminal_active: bool = false setget set_terminal_active
 var last_command_id: int  = -1
 var current_command:String = ""
@@ -74,6 +76,8 @@ func _input(event:InputEvent) -> void:
 		return
 	
 	if not command.has_focus() and event.pressed and not MODIFIER_KEYS.has(event.scancode) and event.scancode != KEY_ESCAPE:
+		if not is_popup and _g.popup_manager.resh_lite_popup.visible:
+			return
 		just_grabbed_focus = true
 		yield(get_tree(), "idle_frame")
 		console.selection_enabled = false

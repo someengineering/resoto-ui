@@ -5,6 +5,7 @@ signal popup_gone
 
 var current_popup: Popup = null
 var popup_connect: Node = null
+var resh_lite_popup : Node = null
 
 var tooltip_link_active:= false
 var tooltip_active:= false

@@ -25,6 +25,7 @@ var pos_before_max:= Vector2.ONE
 var is_resizing:= false
 var orig_size:= Vector2.ONE
 var resize_click_origin:= Vector2.ONE
+var content:Node = null
 
 onready var max_btn = $Content/Titlebar/Label/TitleButtons/MaximizeButton
 onready var close_btn = $Content/Titlebar/Label/TitleButtons/CloseButton
@@ -47,6 +48,7 @@ func _ready():
 	$Content/Footer.visible = show_footer
 	if window_content != null:
 		var new_content = window_content.instance()
+		content = new_content
 		$Content/Content.add_child(new_content)
 
 

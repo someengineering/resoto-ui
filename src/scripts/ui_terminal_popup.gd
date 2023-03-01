@@ -9,6 +9,8 @@ onready var terminal_popup := $TerminalPanel
 onready var tween = $VisibilityTween
 
 func _ready():
+	_g.popup_manager.resh_lite_popup = terminal_popup
+	terminal_popup.content.is_popup = true
 	terminal_popup.modulate.a = 0.0
 	_g.connect("resh_lite_popup", self, "change_terminal_popup_visibility")
 	_g.connect("resh_lite_popup_hide", self, "hide_terminal_popup")
