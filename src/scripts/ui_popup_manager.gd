@@ -32,6 +32,12 @@ func _ready() -> void:
 	_g.connect("tooltip_link", self, "tooltip_link")
 	_g.connect("tooltip_hide", self, "tooltip_hide")
 	_g.connect("text_to_clipboard", self, "on_text_to_clipboard")
+	_g.connect("connect_to_core", self, "on_connected_to_core")
+
+
+func on_connected_to_core():
+	if not ["", "Chrome", "Chromium"].has(_g.browser):
+		show_browser_popup(_g.browser)
 
 
 func _process(_delta:float):
@@ -135,6 +141,32 @@ func popup_fade_in():
 	current_popup.mouse_filter = Control.MOUSE_FILTER_STOP
 	tween.interpolate_property(current_popup, "modulate:a", current_popup.modulate.a, 1, 0.1)
 	tween.start()
+
+
+const browser_warning_string := "%s was detected as your browser.\n\nWe recommend Google Chrome for the best experience with the Resoto UI.\n\nYou could experience issues with the Resoto UI not using Google Chrome."
+var browser_warning_time := 5
+func show_browser_popup(_browser_name:String):
+	$"%BrowserWarningBG".show()
+	$"%BrowserWarningLabel".text = browser_warning_string % _browser_name
+	$"%BrowserWarningConfirmButton".disabled = true
+	$"%BrowserWarningConfirmButton".text = "Dismiss (5)"
+	$"%BrowserWarning".popup_centered()
+	$"%BrowserWarningTimer".start()
+
+
+func _on_BrowserWarningTimer_timeout():
+	browser_warning_time -= 1
+	if browser_warning_time <= 0:
+		$"%BrowserWarningConfirmButton".disabled = false
+		$"%BrowserWarningConfirmButton".text = "Dismiss"
+	else:
+		$"%BrowserWarningConfirmButton".text = "Dismiss (%s)" % str(browser_warning_time)
+		$"%BrowserWarningTimer".start()
+
+
+func _on_BrowserWarningConfirmButton_pressed():
+	$"%BrowserWarningBG".hide()
+	$"%BrowserWarning".hide()
 
 
 func show_confirm_popup(_title:String, _text:String, _left_button_text:String="Ok", _right_button_text:String="Cancel") -> Popup:

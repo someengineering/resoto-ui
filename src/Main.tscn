@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=2]
+[gd_scene load_steps=83 format=2]
 
 [ext_resource path="res://components/popups/connect_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -59,6 +59,7 @@
 [ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=57]
 [ext_resource path="res://assets/icons/icon_128_main_jobs.svg" type="Texture" id=58]
 [ext_resource path="res://components/job_editor/job_editor_component.tscn" type="PackedScene" id=59]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=60]
 
 [sub_resource type="Gradient" id=20]
 colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
@@ -135,6 +136,23 @@ shader_param/pos = Vector2( 0.5, 0.5 )
 shader_param/turn_speed = -6.0
 shader_param/grad_length = 1.0
 shader_param/gradient_texture = SubResource( 39 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.113725 )
+shadow_size = 10
+shadow_offset = Vector2( 0, 6 )
+
+[sub_resource type="StyleBoxFlat" id=8]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
 
 [sub_resource type="StyleBoxFlat" id=34]
 bg_color = Color( 1, 1, 1, 1 )
@@ -828,6 +846,103 @@ __meta__ = {
 
 [node name="ConfirmPopup" parent="Popups" instance=ExtResource( 18 )]
 
+[node name="BrowserWarningBG" type="ColorRect" parent="Popups"]
+unique_name_in_owner = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.784314 )
+
+[node name="BrowserWarning" type="PopupDialog" parent="Popups"]
+unique_name_in_owner = true
+visible = true
+self_modulate = Color( 0.0901961, 0.113725, 0.129412, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1920.0
+margin_bottom = -1080.0
+rect_min_size = Vector2( 600, 200 )
+theme = ExtResource( 2 )
+custom_styles/panel = SubResource( 7 )
+popup_exclusive = true
+
+[node name="Content" type="VBoxContainer" parent="Popups/BrowserWarning"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 0
+
+[node name="Label" type="Label" parent="Popups/BrowserWarning/Content"]
+margin_right = 600.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 100, 0 )
+theme_type_variation = "LabelBold"
+custom_styles/normal = SubResource( 8 )
+text = "Browser recommendation"
+align = 1
+script = ExtResource( 60 )
+
+[node name="MarginContainer" type="MarginContainer" parent="Popups/BrowserWarning/Content"]
+margin_top = 28.0
+margin_right = 600.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 20
+custom_constants/margin_top = 10
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Content" type="VBoxContainer" parent="Popups/BrowserWarning/Content/MarginContainer"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 580.0
+margin_bottom = 152.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
+
+[node name="BrowserWarningLabel" type="Label" parent="Popups/BrowserWarning/Content/MarginContainer/Content"]
+unique_name_in_owner = true
+margin_right = 560.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "%s was detected as the browser.
+$s
+We recommend Google Chrome for the best experience with the Resoto UI."
+align = 1
+autowrap = true
+
+[node name="Spacer" type="Control" parent="Popups/BrowserWarning/Content/MarginContainer/Content"]
+margin_top = 90.0
+margin_right = 560.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="Buttons" type="HBoxContainer" parent="Popups/BrowserWarning/Content/MarginContainer/Content"]
+margin_top = 110.0
+margin_right = 560.0
+margin_bottom = 142.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="BrowserWarningConfirmButton" type="Button" parent="Popups/BrowserWarning/Content/MarginContainer/Content/Buttons"]
+unique_name_in_owner = true
+margin_left = 220.0
+margin_right = 340.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 0 )
+theme_type_variation = "ButtonFlat"
+text = "Confirm"
+flat = true
+
+[node name="BrowserWarningTimer" type="Timer" parent="Popups/BrowserWarning"]
+unique_name_in_owner = true
+one_shot = true
+
 [node name="UISettingsPopup" parent="Popups" instance=ExtResource( 31 )]
 custom_styles/panel = SubResource( 34 )
 
@@ -942,6 +1057,9 @@ script = ExtResource( 22 )
 [connection signal="popup_hide" from="TerminalPopup/TerminalPanel" to="TerminalPopup" method="hide_terminal_popup"]
 [connection signal="tween_all_completed" from="TerminalPopup/VisibilityTween" to="TerminalPopup" method="_on_VisibilityTween_tween_all_completed"]
 [connection signal="about_to_show" from="Popups/ConfirmPopup" to="Popups/ConfirmPopup" method="_on_ConfirmPopup_about_to_show"]
+[connection signal="about_to_show" from="Popups/BrowserWarning" to="Popups/BrowserWarning" method="_on_ConfirmPopup_about_to_show"]
+[connection signal="pressed" from="Popups/BrowserWarning/Content/MarginContainer/Content/Buttons/BrowserWarningConfirmButton" to="Popups" method="_on_BrowserWarningConfirmButton_pressed"]
+[connection signal="timeout" from="Popups/BrowserWarning/BrowserWarningTimer" to="Popups" method="_on_BrowserWarningTimer_timeout"]
 [connection signal="pressed" from="Popups/WizardButton" to="Popups/WizardButton" method="_on_WizardButton_pressed"]
 
 [editable path="MenuBar/MenuContainer/TopMenu/Title/ReshLiteBtn"]

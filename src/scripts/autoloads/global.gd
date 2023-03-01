@@ -67,6 +67,7 @@ var ui_scale: float = 1.0 setget set_ui_scale
 var ui_version:String = "3.2.3"
 var resotocore_version:String = "n/a"
 var os = "Windows"
+var browser = ""
 var terminal_scrollback:Array = []
 var focus_in_search:bool = false
 
