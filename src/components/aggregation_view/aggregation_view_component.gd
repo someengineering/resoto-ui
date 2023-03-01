@@ -16,6 +16,7 @@ var active_result : Array = []
 
 onready var edit : TextEdit = $"%TextEdit"
 onready var delay_timer : Timer = $"%ExecuteDelayTimer"
+onready var analytics_delay_timer : Timer = $"%AnalyticsEventDelayTimer"
 onready var template_popup := $TemplatePopup
 
 
@@ -34,6 +35,7 @@ func add_templates():
 
 
 func show_aggregation(_new_text:String):
+	Analytics.event(Analytics.EventsAggregationView.SHOW)
 	template_popup.hide()
 	edit.text = _new_text
 	$"%HintContainer".visible = edit.text == ""
@@ -54,6 +56,7 @@ func _on_ExecuteDelayTimer_timeout():
 func _on_TextEdit_text_changed():
 	$"%HintContainer".visible = edit.text == ""
 	delay_timer.start()
+	analytics_delay_timer.stop()
 
 
 func _on_aggregate_search_done(error:int, _response:UserAgent.Response) -> void:
@@ -66,6 +69,7 @@ func _on_aggregate_search_done(error:int, _response:UserAgent.Response) -> void:
 		_g.emit_signal("add_toast", "Error in Search", "Query: "+ active_aggregate_request.body, 1, self)
 		return
 	if _response.transformed.has("result"):
+		analytics_delay_timer.start()
 		active_result = _response.transformed.result
 		$"%ResultTableWidget".set_data(_response.transformed.result, DataSource.TYPES.AGGREGATE_SEARCH)
 		show_result(true)
@@ -86,16 +90,24 @@ func _on_CopyButton_pressed():
 
 
 func _on_CopyCSVButton_pressed():
+	Analytics.event(Analytics.EventsAggregationView.COPY_TO_CSV)
 	_g.emit_signal("text_to_clipboard", $"%ResultTableWidget".get_csv())
 
 
 func _on_CopyJSONButton_pressed():
+	Analytics.event(Analytics.EventsAggregationView.COPY_TO_JSON)
 	_g.emit_signal("text_to_clipboard", active_result)
 
 
 func _on_AddExample_pressed():
+	Analytics.event(Analytics.EventsAggregationView.USE_EXAMPLE)
 	template_popup.popup(Rect2($"%AddExample".rect_global_position + Vector2($"%AddExample".rect_size.x+10, 0), Vector2.ONE))
 
 
 func _on_DocsButton_pressed():
+	Analytics.event(Analytics.EventsAggregationView.DOCS)
 	OS.shell_open("https://resoto.com/docs/reference/cli/search-commands/aggregate")
+
+
+func _on_AnalyticsEventDelayTimer_timeout():
+	Analytics.event(Analytics.EventsAggregationView.RUN)
