@@ -855,7 +855,6 @@ color = Color( 0, 0, 0, 0.784314 )
 
 [node name="BrowserWarning" type="PopupDialog" parent="Popups"]
 unique_name_in_owner = true
-visible = true
 self_modulate = Color( 0.0901961, 0.113725, 0.129412, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
