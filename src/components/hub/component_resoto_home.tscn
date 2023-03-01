@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/resoto/Resoto_logo_and_text_big.svg" type="Texture" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://assets/icons/icon_128_main_config.svg" type="Texture" id=8]
 [ext_resource path="res://assets/icons/icon_128_main_terminal.svg" type="Texture" id=9]
 [ext_resource path="res://assets/icons/icon_128_main_explore.svg" type="Texture" id=10]
+[ext_resource path="res://components/config/config_templates/config_custom_tooltip.gd" type="Script" id=11]
+[ext_resource path="res://assets/icons/icon_128_info_circle.svg" type="Texture" id=12]
 
 [sub_resource type="DynamicFont" id=1]
 size = 28
@@ -52,12 +54,40 @@ margin_right = 1920.0
 margin_bottom = 168.0
 rect_min_size = Vector2( 0, 30 )
 
-[node name="FullTextSearch" parent="VBox" instance=ExtResource( 3 )]
-margin_left = 660.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
 margin_top = 172.0
-margin_right = 1260.0
+margin_right = 1920.0
 margin_bottom = 218.0
-rect_min_size = Vector2( 600, 0 )
+alignment = 1
+
+[node name="HintIcon" type="TextureRect" parent="VBox/HBoxContainer"]
+modulate = Color( 0.462745, 0.176471, 0.843137, 1 )
+margin_left = 592.0
+margin_top = 7.0
+margin_right = 624.0
+margin_bottom = 39.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 12 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 11 )
+hint = "Searching without any keyword will use Resoto's full-text search mode.
+[b]Example:[/b] [code]\"development\"[/code]
+
+Starting with the [code]search[/code] keyword uses Resoto search command.
+[b]Example:[/b] [code]\"search is(instance) and tags.owner = null\"[/code]
+
+Starting with the [code]aggregate[/code] keyword runs your promts as an aggregation.
+[b]Example:[/b] [code]\"aggregate(/ancestors.cloud.reported.name as cloud : sum(1) as instances) : is(instance)\"[/code]"
+
+[node name="FullTextSearch" parent="VBox/HBoxContainer" instance=ExtResource( 3 )]
+margin_left = 628.0
+margin_top = 0.0
+margin_right = 1328.0
+margin_bottom = 46.0
+rect_min_size = Vector2( 700, 0 )
 size_flags_horizontal = 4
 custom_fonts/font = SubResource( 1 )
 caret_blink = true
@@ -115,7 +145,7 @@ app_name = "Configuration"
 app_icon = ExtResource( 8 )
 
 [connection signal="visibility_changed" from="." to="." method="_on_ResotoHome_visibility_changed"]
-[connection signal="text_changed" from="VBox/FullTextSearch" to="." method="_on_FullTextSearch_text_changed"]
+[connection signal="text_changed" from="VBox/HBoxContainer/FullTextSearch" to="." method="_on_FullTextSearch_text_changed"]
 [connection signal="pressed" from="VBox/Apps/ButtonDashboards" to="." method="_on_ButtonDashboards_pressed"]
 [connection signal="pressed" from="VBox/Apps/ButtonExplore" to="." method="_on_ButtonExplore_pressed"]
 [connection signal="pressed" from="VBox/Apps/ButtonJobs" to="." method="_on_ButtonJobs_pressed"]

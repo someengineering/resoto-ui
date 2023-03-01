@@ -1,6 +1,6 @@
 extends TextureRect
 
-var hint := ""
+export (String, MULTILINE) var hint := ""
 
 
 func _ready():

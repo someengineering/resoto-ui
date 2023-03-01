@@ -39,6 +39,9 @@ signal explore_node_list_from_node
 signal explore_node_list_kind
 signal explore_node_list_id
 
+# Aggregation View Signals
+signal aggregation_view_show
+
 # Setup Wizard Signals
 signal setup_wizard_start
 signal setup_wizard_done
