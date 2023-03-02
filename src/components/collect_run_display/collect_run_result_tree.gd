@@ -15,13 +15,46 @@ var tree_content := {
 
 onready var tree := $Tree
 
+# REMOVE BEFORE COMMIT!!!!
+# REMOVE BEFORE COMMIT!!!!
+# REMOVE BEFORE COMMIT!!!!
+# REMOVE BEFORE COMMIT!!!!
+# REMOVE BEFORE COMMIT!!!!
+func _ready():
+	refresh_results()
+# REMOVE BEFORE COMMIT!!!!
+# REMOVE BEFORE COMMIT!!!!
+# REMOVE BEFORE COMMIT!!!!
+# REMOVE BEFORE COMMIT!!!!
+# REMOVE BEFORE COMMIT!!!!
 
 func refresh_results():
 	tree.clear()
 	tree.set_column_title(0, "Name")
 	tree.set_column_title(1, "Descendants")
-	var query := "is(cloud) -[0:2]-> is(cloud, account, region)"
-	API.graph_search(query, self, "list")
+#	var query := "is(cloud) -[0:2]-> is(cloud, account, region)"
+#	API.graph_search(query, self, "list")
+	var descendants_query := "aggregate(/ancestors.cloud.reported.id as cloud, /ancestors.account.reported.id as account, /ancestors.region.reported.id as region: sum(1) as count): not is(cloud, account,region)"
+	API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
+
+
+func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> void:
+	if error:
+		if error == ERR_PRINTER_ON_FIRE:
+			return
+		_g.emit_signal("add_toast", "Error in Collect Result display", "", 1, self)
+		return
+	if _response.transformed.has("result"):
+		var response = _response.transformed.result
+		root = tree.create_item()
+		root.set_text(0, "Graph Root")
+		root.set_selectable(0, false)
+		for r in response:
+			if r.group.cloud != null and not get_item_children_texts(root).has(r.group.cloud):
+				var new_cloud : TreeItem = tree.create_item(root)
+				new_cloud.set_text(0, r.group.cloud)
+				
+
 
 
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
@@ -136,6 +169,15 @@ func get_item_children(item:TreeItem)->Array:
 		children.append(item)
 		item = item.get_next()
 	return children
+
+
+func get_item_children_texts(item:TreeItem)->Array:
+	item = item.get_children()
+	var children_texts = []
+	while item:
+		children_texts.append(item.get_text(0))
+		item = item.get_next()
+	return children_texts
 
 
 func get_item_children_and_text(item:TreeItem)->Array:
