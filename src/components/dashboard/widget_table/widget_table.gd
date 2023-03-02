@@ -155,6 +155,8 @@ func add_row(data : Dictionary, row_idx : int, row_node_id : String, header_arra
 		rows.add_child(table_cell)
 		var color:Color = column_header_color if is_header_column else row_color
 		var value = get_value(data, cell_idx)
+		if value == null:
+			value = ""
 		table_cell.set_cell(str(value), color, row_idx)
 
 
@@ -220,13 +222,23 @@ func sort_by_column(column : int, ascending : bool):
 func sort_ascending(a, b) -> bool:
 	var va = get_value(a, sorting_column)
 	var vb = get_value(b, sorting_column)
-	return va < vb
+	return make_sortable(va) < make_sortable(vb)
 
 
 func sort_descending(a, b) -> bool:
 	var va = get_value(a, sorting_column)
 	var vb = get_value(b, sorting_column)
-	return va > vb
+	return make_sortable(va) > make_sortable(vb)
+
+
+func make_sortable(value):
+	if not [TYPE_INT, TYPE_REAL, TYPE_STRING].has(typeof(value)):
+		if value == null:
+			return ""
+		return str(value).to_lower()
+	if typeof(value) == TYPE_STRING:
+		return value.to_lower()
+	return value
 
 
 func set_column_header_color(_new_color:Color):
