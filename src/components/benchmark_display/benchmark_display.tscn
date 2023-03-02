@@ -171,18 +171,20 @@ margin_right = 58.0
 margin_bottom = 30.0
 custom_constants/margin_right = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup"]
+[node name="ResultCountPanel" type="PanelContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup"]
+unique_name_in_owner = true
 self_modulate = Color( 0.956863, 0.266667, 0.266667, 1 )
 margin_right = 58.0
 margin_bottom = 30.0
 custom_styles/panel = SubResource( 4 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/ResultCountPanel"]
 margin_left = 8.0
 margin_right = 50.0
 margin_bottom = 30.0
 
-[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/PanelContainer/HBoxContainer"]
+[node name="ResultCountLabel" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/ResultCountPanel/HBoxContainer"]
+unique_name_in_owner = true
 margin_right = 24.0
 margin_bottom = 29.0
 theme_type_variation = "Label_24"
@@ -191,7 +193,8 @@ custom_constants/line_spacing = -31
 text = "
 24"
 
-[node name="FailOrPassIcon" type="TextureRect" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/PanelContainer/HBoxContainer"]
+[node name="FailOrPassIcon" type="TextureRect" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/ResultCountPanel/HBoxContainer"]
+unique_name_in_owner = true
 margin_left = 28.0
 margin_top = 8.0
 margin_right = 42.0
@@ -218,29 +221,22 @@ raw_text = "Benchmark Title Placeholder"
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 visible = false
-margin_top = 34.0
+margin_top = 40.0
 margin_right = 922.0
-margin_bottom = 38.0
+margin_bottom = 44.0
 
 [node name="DescriptionLabel" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 visible = false
-margin_top = 42.0
+margin_top = 40.0
 margin_right = 922.0
-margin_bottom = 62.0
+margin_bottom = 60.0
 autowrap = true
-
-[node name="StatusLabel" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
-unique_name_in_owner = true
-visible = false
-margin_top = 42.0
-margin_right = 922.0
-margin_bottom = 62.0
 
 [node name="Separator" type="Control" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 visible = false
-margin_top = 42.0
+margin_top = 40.0
 margin_right = 922.0
-margin_bottom = 47.0
+margin_bottom = 45.0
 rect_min_size = Vector2( 0, 5 )
 
 [node name="RiskContainer" type="PanelContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
@@ -268,6 +264,7 @@ theme_type_variation = "LabelBold"
 text = "Risk"
 
 [node name="RiskSeverity" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskTitleBar"]
+unique_name_in_owner = true
 margin_left = 40.0
 margin_right = 105.0
 margin_bottom = 20.0
@@ -283,21 +280,29 @@ size_flags_horizontal = 3
 
 [node name="SeverityIndicator" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskTitleBar" instance=ExtResource( 10 )]
 unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 840.0
 margin_right = 906.0
 margin_bottom = 21.0
 rect_min_size = Vector2( 66, 21 )
+size_flags_horizontal = 1
 size_flags_vertical = 4
 
 [node name="SeverityBG" type="Panel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskTitleBar/SeverityIndicator"]
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="RiskLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RiskContainer/RiskContent"]
+unique_name_in_owner = true
 margin_top = 35.0
 margin_right = 906.0
 margin_bottom = 76.0
@@ -333,7 +338,8 @@ margin_bottom = 20.0
 theme_type_variation = "LabelBold"
 text = "Remediation"
 
-[node name="RiskLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationContainer/RemidiationContent"]
+[node name="RemediationLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationContainer/RemidiationContent"]
+unique_name_in_owner = true
 margin_top = 34.0
 margin_right = 906.0
 margin_bottom = 75.0
@@ -345,7 +351,8 @@ bbcode_text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
 text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. "
 fit_content_height = true
 
-[node name="IconButtonText" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationContainer/RemidiationContent" instance=ExtResource( 12 )]
+[node name="RemediationButton" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationContainer/RemidiationContent" instance=ExtResource( 12 )]
+unique_name_in_owner = true
 margin_left = 731.0
 margin_top = 89.0
 margin_right = 906.0
@@ -358,16 +365,19 @@ icon_tex = ExtResource( 11 )
 icon_margin = 8
 
 [node name="ResourcesContainer" type="PanelContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+unique_name_in_owner = true
 margin_top = 282.0
 margin_right = 922.0
-margin_bottom = 328.0
+margin_bottom = 940.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
 
 [node name="ResourcesContent" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer"]
 margin_left = 8.0
 margin_top = 4.0
 margin_right = 914.0
-margin_bottom = 38.0
+margin_bottom = 650.0
 custom_constants/separation = 14
 
 [node name="ResourcesTitleBar" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent"]
@@ -375,6 +385,7 @@ margin_right = 906.0
 margin_bottom = 20.0
 
 [node name="ResourcesCountTitle" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/ResourcesTitleBar"]
+unique_name_in_owner = true
 margin_right = 20.0
 margin_bottom = 20.0
 theme_type_variation = "LabelBold"
@@ -388,104 +399,36 @@ margin_bottom = 20.0
 theme_type_variation = "LabelBold"
 text = "Failing Resources"
 
-[node name="PanelContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent" groups=["FailingResourcesWidget"]]
+[node name="PanelContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent"]
+unique_name_in_owner = true
 margin_top = 34.0
 margin_right = 906.0
-margin_bottom = 34.0
+margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_type_variation = "PanelContainerDark"
 
 [node name="ResourcesList" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/PanelContainer"]
-margin_right = 892.0
+unique_name_in_owner = true
+margin_right = 906.0
+margin_bottom = 566.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="LoadingOverlay" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/PanelContainer" instance=ExtResource( 7 )]
+unique_name_in_owner = true
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 892.0
-margin_bottom = 12.0
+margin_right = 906.0
+margin_bottom = 566.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Risk" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
-visible = false
-margin_top = 184.0
-margin_right = 922.0
-margin_bottom = 253.0
-
-[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk"]
-margin_right = 922.0
-margin_bottom = 20.0
-theme_type_variation = "LabelBold"
-text = "Risk"
-
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk"]
-margin_top = 24.0
-margin_right = 922.0
-margin_bottom = 28.0
-
-[node name="RiskLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk"]
-margin_top = 32.0
-margin_right = 922.0
-margin_bottom = 69.0
-theme_type_variation = "RichLabelNormal"
-bbcode_enabled = true
-fit_content_height = true
-
-[node name="Separator2" type="Control" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
-visible = false
-margin_top = 308.0
-margin_right = 922.0
-margin_bottom = 313.0
-rect_min_size = Vector2( 0, 5 )
-
-[node name="Remediation" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
-visible = false
-margin_top = 317.0
-margin_right = 922.0
-margin_bottom = 386.0
-
-[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation"]
-margin_right = 922.0
-margin_bottom = 20.0
-theme_type_variation = "LabelBold"
-text = "Remediation"
-
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation"]
-margin_top = 24.0
-margin_right = 922.0
-margin_bottom = 28.0
-
-[node name="RemediationLabel" type="RichTextLabel" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation"]
-margin_top = 32.0
-margin_right = 922.0
-margin_bottom = 69.0
-theme_type_variation = "RichLabelNormal"
-bbcode_enabled = true
-fit_content_height = true
-
-[node name="Separator3" type="Control" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
-visible = false
-margin_top = 282.0
-margin_right = 922.0
-margin_bottom = 287.0
-rect_min_size = Vector2( 0, 5 )
-
-[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" groups=["FailingResourcesWidget"]]
-visible = false
-margin_top = 338.0
-margin_right = 922.0
-margin_bottom = 358.0
-text = "Failing Resources:"
-
-[node name="ShowAllButton" type="Button" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" groups=["FailingResourcesWidget"]]
-visible = false
-margin_left = 266.667
-margin_top = 878.0
-margin_right = 354.0
-margin_bottom = 910.0
+[node name="ShowAllButton" type="Button" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent"]
+margin_left = 818.667
+margin_top = 614.0
+margin_right = 906.0
+margin_bottom = 646.0
 size_flags_horizontal = 8
 text = "Show All"
 
@@ -499,7 +442,6 @@ size_flags_vertical = 10
 size_flags_stretch_ratio = 0.0
 
 [node name="Control" type="Control" parent="."]
-visible = false
 margin_right = 1920.0
 margin_bottom = 1080.0
 mouse_filter = 2
@@ -553,10 +495,7 @@ margin_bottom = 600.0
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
 [connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskLabel" to="." method="_on_RemediationLabel_meta_clicked"]
-[connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationContainer/RemidiationContent/RiskLabel" to="." method="_on_RemediationLabel_meta_clicked"]
-[connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk/RiskLabel" to="." method="_on_RemediationLabel_meta_clicked"]
-[connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation/RemediationLabel" to="." method="_on_RemediationLabel_meta_clicked"]
-[connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ShowAllButton" to="." method="_on_ShowAllButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/ShowAllButton" to="." method="_on_ShowAllButton_pressed"]
 [connection signal="pressed" from="Control/BenchmarkConfigPopup/Content/Footer/Footerbar/AcceptButton" to="." method="_on_AcceptButton_pressed"]
 
 [editable path="Control/BenchmarkConfigPopup"]

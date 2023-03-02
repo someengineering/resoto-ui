@@ -9,8 +9,8 @@
 content_margin_right = 10.0
 
 [node name="BenchmarkCheckResultDisplay" type="HBoxContainer"]
-margin_right = 128.0
-margin_bottom = 20.0
+margin_right = 79.0
+margin_bottom = 24.0
 custom_constants/separation = 10
 script = ExtResource( 3 )
 
@@ -36,30 +36,28 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="."]
-margin_right = 82.0
-margin_bottom = 20.0
+margin_top = 2.0
+margin_right = 17.0
+margin_bottom = 22.0
 size_flags_horizontal = 3
 autowrap = true
 
 [node name="SeverityIndicator" parent="." instance=ExtResource( 5 )]
-margin_left = 92.0
-margin_right = 108.0
-margin_bottom = 20.0
-
-[node name="Label" parent="SeverityIndicator" index="0"]
-visible = false
-margin_top = 0.0
-margin_bottom = 20.0
-
-[node name="SeverityTexture" parent="SeverityIndicator" index="1"]
-margin_left = 0.0
-margin_right = 16.0
-margin_bottom = 20.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 27.0
+margin_top = 6.0
+margin_right = 59.0
+margin_bottom = 18.0
+rect_min_size = Vector2( 32, 12 )
+size_flags_horizontal = 0
+size_flags_vertical = 4
 
 [node name="FailingResources" type="Label" parent="."]
-margin_left = 118.0
-margin_right = 128.0
-margin_bottom = 20.0
+margin_left = 69.0
+margin_top = 2.0
+margin_right = 79.0
+margin_bottom = 22.0
 custom_styles/normal = SubResource( 1 )
 
 [connection signal="resized" from="." to="." method="_on_BenchmarkCheckResultDisplay_resized"]

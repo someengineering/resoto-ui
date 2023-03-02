@@ -209,11 +209,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 	if _response.transformed.has("result"):
 		# Delete old results, prepare new container (fastest way to delete a lot of nodes)
 		filter_variables = {}
-		var current_result = _response.transformed.result
-		for r in current_result:
-			add_result_element(r, vbox)
-		if filter_edit.text != "":
-			filter_results(filter_edit.text)
+		show_result(_response.transformed.result)
 		show()
 
 
@@ -509,3 +505,9 @@ func _on_TagsGroup_request_all_tag_keys():
 
 static func sort_tag_keys(a, b) -> bool:
 	return a[1] < b[1]
+
+func show_result(result : Array):
+	for r in result:
+		add_result_element(r, vbox)
+	if filter_edit.text != "":
+		filter_results(filter_edit.text)
