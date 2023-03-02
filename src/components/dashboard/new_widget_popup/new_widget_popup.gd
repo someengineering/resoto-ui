@@ -134,6 +134,7 @@ func _on_WidgetType_item_selected(_index : int) -> void:
 	
 	create_preview(widget_type_options.text)
 	update_legends()
+	check_for_data_sources()
 
 
 func create_preview(widget_type : String = "Indicator") -> void:
@@ -173,6 +174,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 	data_source_types.disabled = data_source_types.get_item_count() <= 1
 	data_source_types.emit_signal("item_selected", 0)
 	update_new_data_vis()
+	check_for_data_sources()
 
 
 func create_properties_options():
@@ -267,6 +269,11 @@ func _on_NameEdit_text_changed(new_text : String) -> void:
 		$"%WidgetPreviewTitleLabel".text = new_text
 
 
+func check_for_data_sources():
+	$"%DataSourceMissingHintHighlight".visible = data_source_container.get_child_count() == 0
+	$"%DataSourceMissingHint".visible = data_source_container.get_child_count() == 0
+
+
 func _on_get_config_id_done(_error, _response, _config_key) -> void:
 	metrics =  _response.transformed.result["resotometrics"]["metrics"]
 	for ds in data_source_container.get_children():
@@ -277,6 +284,7 @@ func clear_data_sources():
 	for data_source in data_source_container.get_children():
 		data_source_container.remove_child(data_source)
 		data_source.queue_free()
+	check_for_data_sources()
 
 
 func _on_NewWidgetPopup_about_to_show() -> void:
@@ -331,6 +339,7 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 		
 	update_new_data_vis()
 	update_legends()
+	check_for_data_sources()
 
 
 func _on_AddDataSource_pressed() -> void:
@@ -409,6 +418,7 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 	Analytics.event(event, context)
 	
 	update_legends()
+	check_for_data_sources()
 
 
 func delete_datasource(_data_source:Node) -> void:
@@ -417,6 +427,7 @@ func delete_datasource(_data_source:Node) -> void:
 	update_preview()
 	Analytics.event(Analytics.EventsDatasource.DELETE)
 	update_legends()
+	check_for_data_sources()
 
 
 func update_new_data_vis():
