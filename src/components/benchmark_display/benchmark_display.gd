@@ -25,16 +25,16 @@ onready var passed_indicator := $PanelContainer/Content/PanelContainer2/HBoxCont
 onready var failed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/FailIndicator
 
 onready var detail_view := $PanelContainer/Content/PanelContainer/DetailView
-onready var detail_view_title := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleLabel
+onready var detail_view_title := $"%TitleLabel"
 onready var detail_view_description := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/DescriptionLabel
 onready var detail_view_pass_widget := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/FailingVsPassingWidget
-onready var detail_view_severity := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer/SeverityTexture
-onready var status_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/HBoxContainer/StatusLabel
+onready var status_label := $"%StatusLabel"
 onready var detail_remediation_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Remediation/RemediationLabel
 onready var detail_risk_label := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/Risk/RiskLabel
 onready var resources_list := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer/ResourcesList
 onready var resources_loading_overlay := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/PanelContainer/LoadingOverlay
 onready var benchmark_config_dialog := $"%BenchmarkConfigDialog"
+onready var severity_indicator := $"%SeverityIndicator"
 
 func _on_get_configs_done(error: int, response):
 	if error:
@@ -132,9 +132,9 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		detail_view_pass_widget.failing_n = element.failing_n
 	
 	if "severity" in element:
-		detail_view_severity.severity = element.severity
+		severity_indicator.severity = element.severity
 		
-	detail_view_severity.visible = "severity" in element
+	severity_indicator.visible = "severity" in element
 	
 	if element is BenchmarkResultDisplay:
 		API.get_check_resources(element.id, element.account_id, self)

@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/icons/icon_128_close_thick.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=2]
 [ext_resource path="res://components/benchmark_display/benchmark_check_result_display.gd" type="Script" id=3]
-[ext_resource path="res://components/benchmark_display/SeverityTexture.gd" type="Script" id=4]
-[ext_resource path="res://components/benchmark_display/SeverityTexture.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/benchmark_display/severity_indicator.tscn" type="PackedScene" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 content_margin_right = 10.0
@@ -12,6 +11,7 @@ content_margin_right = 10.0
 [node name="BenchmarkCheckResultDisplay" type="HBoxContainer"]
 margin_right = 128.0
 margin_bottom = 20.0
+custom_constants/separation = 10
 script = ExtResource( 3 )
 
 [node name="Passed" type="TextureRect" parent="."]
@@ -36,14 +36,25 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="."]
-margin_right = 114.0
+margin_right = 82.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 autowrap = true
 
-[node name="SeverityTexture" parent="." instance=ExtResource( 5 )]
-modulate = Color( 1, 0.533333, 0.196078, 1 )
-script = ExtResource( 4 )
+[node name="SeverityIndicator" parent="." instance=ExtResource( 5 )]
+margin_left = 92.0
+margin_right = 108.0
+margin_bottom = 20.0
+
+[node name="Label" parent="SeverityIndicator" index="0"]
+visible = false
+margin_top = 0.0
+margin_bottom = 20.0
+
+[node name="SeverityTexture" parent="SeverityIndicator" index="1"]
+margin_left = 0.0
+margin_right = 16.0
+margin_bottom = 20.0
 
 [node name="FailingResources" type="Label" parent="."]
 margin_left = 118.0
@@ -53,3 +64,5 @@ custom_styles/normal = SubResource( 1 )
 
 [connection signal="resized" from="." to="." method="_on_BenchmarkCheckResultDisplay_resized"]
 [connection signal="visibility_changed" from="." to="." method="_on_BenchmarkCheckResultDisplay_visibility_changed"]
+
+[editable path="SeverityIndicator"]

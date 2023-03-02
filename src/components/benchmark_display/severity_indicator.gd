@@ -1,9 +1,10 @@
-extends TextureRect
+extends HBoxContainer
 
 var severity : String = "" setget set_severity
 
 func set_severity(new_severity : String):
 	severity = new_severity
+	$Label.text = ("%s severity" % severity ).capitalize()
 	var color = Color.white
 	match severity:
 		"low":
@@ -15,4 +16,5 @@ func set_severity(new_severity : String):
 		"critical":
 			color = Color("#f44444")
 			
-	modulate = color
+	$SeverityTexture.modulate = color
+	$Label.set("custom_colors/font_color", color)

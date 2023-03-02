@@ -15,7 +15,7 @@ var id : String = ""
 
 func _draw():
 	var start : Vector2 = $Label.get_font("font").get_string_size($Label.text) + $Label.rect_position - Vector2(-5, $Label.rect_size.y / 2.0)
-	var end : Vector2 =  Vector2($SeverityTexture.rect_position.x - 5, start.y)
+	var end : Vector2 =  Vector2($SeverityIndicator.rect_position.x - 5, start.y)
 	if start.x < end.x and not passed:
 		draw_line(start, end, Color("#0f3356"))
 
@@ -24,7 +24,7 @@ func set_passed(_passed : bool):
 	passed = _passed
 	$Passed.visible = passed
 	$Failed.visible = not passed
-	$SeverityTexture.visible = not passed
+	$SeverityIndicator.visible = not passed
 
 
 func set_title(_title : String):
@@ -35,7 +35,7 @@ func set_title(_title : String):
 func set_failing_n(_failing : int):
 	failing_n = _failing
 	if _failing > 0:
-		$FailingResources.text = ("%d Resources failed") % failing_n
+		$FailingResources.text = ("%d Resources failed the check") % failing_n
 		self.passed = false
 	else:
 		$FailingResources.visible = false
@@ -50,7 +50,7 @@ func set_remediation_url(url : String):
 
 func set_severity(_severity : String):
 	severity = _severity
-	$SeverityTexture.severity = severity
+	$SeverityIndicator.severity = severity
 
 func set_reported_data(reported : Dictionary):
 	self.passed = reported.passed
