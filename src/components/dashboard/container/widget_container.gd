@@ -341,6 +341,11 @@ func execute_query() -> void:
 		widget.clear_series()
 	
 	datetime_label.text = "Live"
+	
+	if data_sources.empty():
+		_on_data_source_query_status(FAILED, "No Data Source found.", "This widget has no Data Source.\nEdit the widget and add a Data Source to display data.")
+		return
+	
 	for datasource in data_sources:
 		var attr := {}
 		match datasource.type:
