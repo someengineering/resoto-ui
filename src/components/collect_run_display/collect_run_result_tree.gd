@@ -34,10 +34,10 @@ func refresh_results():
 	tree.set_column_title(1, "Descendants")
 #	var query := "is(cloud) -[0:2]-> is(cloud, account, region)"
 #	API.graph_search(query, self, "list")
-	var descendants_query := "aggregate(/ancestors.cloud.reported.id as cloud, /ancestors.account.reported.id as account, /ancestors.region.reported.id as region: sum(1) as count): not is(cloud, account,region)"
+	var descendants_query := "aggregate(/ancestors.cloud.reported.id as cloud, /ancestors.account.reported.name as account, /ancestors.region.reported.name as region: sum(1) as count): not is(cloud, account,region)"
 	API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
 
-
+var total_counter := {}
 func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
 		if error == ERR_PRINTER_ON_FIRE:
@@ -52,9 +52,51 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 		for r in response:
 			if r.group.cloud != null and not get_item_children_texts(root).has(r.group.cloud):
 				var new_cloud : TreeItem = tree.create_item(root)
+				new_cloud.set_selectable(0, false)
+				new_cloud.set_selectable(1, false)
 				new_cloud.set_text(0, r.group.cloud)
-				
+			if r.group.account != null:
+				for c in get_item_children_and_text(root):
+					if c[1] == r.group.cloud:
+						if not get_item_children_texts(c[0]).has(r.group.account):
+							var new_acc : TreeItem = tree.create_item(c[0])
+							new_acc.set_text(0, r.group.account)
+							new_acc.set_selectable(0, false)
+							new_acc.set_selectable(1, false)
+							new_acc.collapsed = true
+			if r.group.region != null:
+				for c in get_item_children_and_text(root):
+					if c[1] == r.group.cloud:
+						for a in get_item_children_and_text(c[0]):
+							if a[1] == r.group.account:
+								if not get_item_children_texts(a[0]).has(r.group.region):
+									var new_region : TreeItem = tree.create_item(a[0])
+									new_region.set_text(0, r.group.region)
+									new_region.set_text(1, str(r.count))
+									new_region.set_selectable(0, false)
+									new_region.set_selectable(1, false)
+									add_to_total(r)
+			if r.group.region == null and r.group.account != null:
+				add_to_total(r)
+	
+	for tree_cloud in get_item_children(root):
+		var tree_cloud_text : String = tree_cloud.get_text(0)
+		var cloud_total := 0
+		if total_counter.keys().has(tree_cloud_text):
+			for account_with_text in get_item_children_and_text(tree_cloud):
+				if total_counter[tree_cloud_text].keys().has(account_with_text[1]):
+					account_with_text[0].set_text(1, str(total_counter[tree_cloud_text][account_with_text[1]]))
+					cloud_total += total_counter[tree_cloud_text][account_with_text[1]]
+		tree_cloud.set_text(1, str(cloud_total))
 
+
+func add_to_total(r:Dictionary):
+	if not total_counter.has(r.group.cloud):
+		total_counter[r.group.cloud] = {}
+	if not total_counter[r.group.cloud].has(r.group.account):
+		total_counter[r.group.cloud][r.group.account] = int(r.count)
+	else:
+		total_counter[r.group.cloud][r.group.account] += int(r.count)
 
 
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
@@ -187,6 +229,7 @@ func get_item_children_and_text(item:TreeItem)->Array:
 		children.append([item, item.get_text(0).to_lower()])
 		item = item.get_next()
 	return children
+
 
 func get_item_children_and_int(item:TreeItem)->Array:
 	item = item.get_children()
