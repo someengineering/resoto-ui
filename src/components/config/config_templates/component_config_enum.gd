@@ -66,16 +66,10 @@ func get_value():
 	return value
 
 
-func _make_custom_tooltip(for_text):
-	var tooltip = preload("res://components/shared/custom_bb_hint_tooltip.tscn").instance()
-	tooltip.get_node("Text").set_bbcode(for_text)
-	return tooltip
-
-
 func set_description(_value:String) -> void:
 	description = _value
 	if descriptions_as_hints:
-		hint_tooltip = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
+		$VarContent/HintIcon.hint = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
 		return
 	if _value == "":
 		$Description.hide()
