@@ -26,7 +26,7 @@ func _on_get_running_workflows_done(error:int, _response:UserAgent.Response) -> 
 	if error:
 		return
 	for workflow in _response.transformed.result:
-		if workflow.progress != "done":
+		if not (workflow.has("progress") and workflow.progress == "done"):
 			workflow_display.update_title_text(workflow.workflow)
 			workflow_started(false)
 			return
