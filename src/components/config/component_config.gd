@@ -37,7 +37,7 @@ var active_config_key : String = ""
 var active_config : Dictionary
 var config_page : Control = null
 
-var show_dashboards : bool = false
+var use_raw_mode : bool = false
 
 var tabs_content : Dictionary = {}
 var tabs_content_keys : Array = []
@@ -77,7 +77,26 @@ func _on_get_config_model_done(_error:int, _response:ResotoAPI.Response) -> void
 	if _error:
 		return
 	config_model = _response.transformed.result.kinds
+	config_model = model_merge_base_classes(config_model)
 	emit_signal("model_ready")
+
+
+func model_merge_base_classes(_model:Dictionary):
+	var merged_model : Dictionary = _model.duplicate(true)
+	for c in merged_model.keys():
+		var merged_properties : Array = properties_from_base_classes(merged_model[c], [], _model)
+		if not merged_properties.empty() and merged_model[c].has("properties"):
+			merged_model[c].properties.append_array(merged_properties)
+	return merged_model
+
+
+func properties_from_base_classes(class_dict:Dictionary, merged_properties:Array, _unmodified_model:Dictionary):
+	if class_dict.has("properties") and class_dict.has("bases") and not class_dict.bases.empty():
+		for base_class in class_dict.bases:
+			if _unmodified_model.has(base_class) and _unmodified_model[base_class].has("properties"):
+				merged_properties.append_array(_unmodified_model[base_class].properties)
+			merged_properties = properties_from_base_classes(_unmodified_model[base_class], merged_properties, _unmodified_model)
+	return merged_properties
 
 
 func _on_get_configs_done(_error:int, _response:ResotoAPI.Response) -> void:
@@ -186,6 +205,10 @@ func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_ke
 
 
 func build_config_page():
+	if not use_raw_mode:
+		$"%RawViewModeButton".set_pressed(false, false)
+		$"%RawViewModeButton".disabled = false
+		$"%RawViewMapTitle".modulate.a = 1
 	var new_config_page = add_new_config_page(active_config_key)
 	new_config_page.set_meta("main_level", true)
 	new_config_page.key = active_config_key
@@ -196,6 +219,9 @@ func build_config_page():
 	
 	# If the config is completely empty, just add a raw json display
 	if active_config.keys().empty():
+		$"%RawViewModeButton".set_pressed(true, false)
+		$"%RawViewModeButton".disabled = true
+		$"%RawViewMapTitle".modulate.a = 0.3
 		var new_element = add_element("_", "", {}, new_config_page, false)
 		new_elements.append(new_element)
 	else:
@@ -312,14 +338,14 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 	var model_search = find_in_model(kind)
 	var model = model_search[1]
 	
-	if BASE_KINDS.has(kind):
+	if BASE_KINDS.has(kind) and not use_raw_mode:
 		# Create a new "Simple"
 		var simple_property = null
 		if _parent.model and _parent.model.has("properties"):
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_simple(_name, _property_value, kind, simple_property, _parent, default)
 	
-	elif kind.begins_with("dictionary") and not kind.ends_with("[]"):
+	elif kind.begins_with("dictionary") and not kind.ends_with("[]") and not use_raw_mode:
 		# Create a new Dictionary 
 #		print("=> Dict :", _name, ">", kind)
 		var simple_property = null
@@ -327,21 +353,21 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_dict(_name, kind, _property_value, simple_property, _parent, default)
 	
-	elif kind.ends_with("[]"):
+	elif kind.ends_with("[]") and not use_raw_mode:
 		# Create a new Array
 		var simple_property = null
 		if _parent.model and _parent.model.has("properties"):
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_array(_name, _property_value, kind, simple_property, _parent, default)
 	
-	elif model and model.has("enum"):
+	elif model and model.has("enum") and not use_raw_mode:
 		# Create a new Enum selection field
 		var simple_property = null
 		if _parent.model and _parent.model.has("properties"):
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_enum(_name, _property_value, kind, simple_property, model.enum, _parent, default)
 	
-	elif model and model.has("properties"):
+	elif model and model.has("properties") and not use_raw_mode:
 		# Create a new Complex, either by scratch or with values.
 		var new_elements:Array = []
 		if not default:
@@ -353,9 +379,19 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 				
 				if element_property.empty():
 					var element_model_search = find_in_model(key)
-					var element_model = element_model_search[1].properties
-					var element_kind:String = key if not (element_model and element_model.has("kind")) else element_model.kind
-					new_elements.append( create_complex(key, element_kind, element, element_model, _parent, default) )
+					if element_model_search[1] != null:
+						var element_model = element_model_search[1].properties
+						var element_kind:String = key if not (element_model and element_model.has("kind")) else element_model.kind
+						new_elements.append( create_complex(key, element_kind, element, element_model, _parent, default) )
+					else:
+						# If there is a problem with the model / data, use the raw view as fallback
+						_g.emit_signal("add_toast", "Config Model Error", "The current configuration has properties not described in the model, fallback raw view will be used.", 1, self)
+						use_raw_mode = true
+						$"%RawViewModeButton".set_pressed(true, false)
+						$"%RawViewModeButton".disabled = true
+						$"%RawViewMapTitle".modulate.a = 0.3
+						open_configuration(active_config_key)
+						return
 				else:
 					if is_fqn(element_property.kind):
 						new_elements.append( create_complex(key, element_property.kind, element, element_property, _parent, default) )
@@ -371,7 +407,13 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			pass
 		return new_elements
 	else:
-		var error_message = "Configuration was not found in model.\nDisplaying configurations in raw JSON:"
+		var error_message = ""
+		if not use_raw_mode:
+			error_message = "Configuration was not found in model.\nDisplaying configurations in raw JSON:"
+			$"%RawViewModeButton".set_pressed(true, false)
+			$"%RawViewModeButton".disabled = true
+			$"%RawViewMapTitle".modulate.a = 0.3
+		use_raw_mode = false
 		return create_custom(error_message, _property_value, _parent)
 
 
@@ -759,6 +801,6 @@ func _on_rename_confirm_response(_button_clicked:String, _value:String):
 		active_config_key = rename_new_name
 
 
-func _on_ShowDashboardsButton_toggled(button_pressed):
-	show_dashboards = button_pressed
-	load_configs()
+func _on_RawViewModeButton_toggled(_pressed):
+	use_raw_mode = _pressed
+	open_configuration(active_config_key)
