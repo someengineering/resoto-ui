@@ -6,10 +6,10 @@ const RESOURCE_WARN_LIMIT := 10
 const LOW_DESC_WARN = "Only %s resources were found. This could be caused by a configuration problem if it is not what you expect."
 const NO_DESC_WARN = "No resources were found. This could be caused by a configuration problem if it is not what you expect."
 
-var cloud_warn_icon : Texture = load("res://assets/icons/icon_128_cloud_warning.svg")
-var cloud_icon : Texture = load("res://assets/icons/icon_128_cloud.svg")
-var acc_icon : Texture = load("res://assets/icons/icon_128_account.svg")
-var region_icon : Texture = load("res://assets/icons/icon_128_region.svg")
+var cloud_warn_icon : Texture = preload("res://assets/icons/icon_128_cloud_warning.svg")
+var cloud_icon : Texture = preload("res://assets/icons/icon_128_cloud.svg")
+var acc_icon : Texture = preload("res://assets/icons/icon_128_account.svg")
+var region_icon : Texture = preload("res://assets/icons/icon_128_region.svg")
 var root : TreeItem
 var total_counter := {}
 var tree_dict := {}
