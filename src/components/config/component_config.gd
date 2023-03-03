@@ -77,7 +77,26 @@ func _on_get_config_model_done(_error:int, _response:ResotoAPI.Response) -> void
 	if _error:
 		return
 	config_model = _response.transformed.result.kinds
+	config_model = model_merge_base_classes(config_model)
 	emit_signal("model_ready")
+
+
+func model_merge_base_classes(_model:Dictionary):
+	var merged_model : Dictionary = _model.duplicate(true)
+	for c in merged_model.keys():
+		var merged_properties : Array = properties_from_base_classes(merged_model[c], [], _model)
+		if not merged_properties.empty() and merged_model[c].has("properties"):
+			merged_model[c].properties.append_array(merged_properties)
+	return merged_model
+
+
+func properties_from_base_classes(class_dict:Dictionary, merged_properties:Array, _unmodified_model:Dictionary):
+	if class_dict.has("properties") and class_dict.has("bases") and not class_dict.bases.empty():
+		for base_class in class_dict.bases:
+			if _unmodified_model.has(base_class) and _unmodified_model[base_class].has("properties"):
+				merged_properties.append_array(_unmodified_model[base_class].properties)
+			merged_properties = properties_from_base_classes(_unmodified_model[base_class], merged_properties, _unmodified_model)
+	return merged_properties
 
 
 func _on_get_configs_done(_error:int, _response:ResotoAPI.Response) -> void:
