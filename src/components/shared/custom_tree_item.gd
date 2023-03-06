@@ -100,11 +100,6 @@ func update_sub_container_visibility():
 	update()
 
 
-func _input(event):
-	if event.is_action_pressed("F1"):
-		add_sub_element("element %d" % sub_element_container.get_child_count())
-
-
 func _on_CollapseButton_pressed():
 	update_sub_container_visibility()
 

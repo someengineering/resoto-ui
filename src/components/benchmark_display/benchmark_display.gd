@@ -23,15 +23,15 @@ var benchmark_model : CustomTreeItem = null
 
 var current_failing_resources : Array = []
 
-onready var tree_container := $PanelContainer/Content/PanelContainer/VBoxContainer/TreeContainer
+onready var tree_container := $"%TreeContainer"
 
-onready var passed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/PassIndicator
-onready var failed_indicator := $PanelContainer/Content/PanelContainer2/HBoxContainer2/FailIndicator
+onready var passed_indicator := $"%PassingIndicator"
+onready var failed_indicator := $"%FailingIndicator"
 
-onready var detail_view := $PanelContainer/Content/PanelContainer/DetailView
+onready var detail_view := $"%DetailView"
 onready var detail_view_title := $"%TitleLabel"
-onready var detail_view_description := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/DescriptionLabel
-onready var detail_view_pass_widget := $PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/FailingVsPassingWidget
+onready var detail_view_description := $"%DescriptionLabel"
+onready var detail_view_pass_widget := $"%FailingVsPassingWidget"
 onready var detail_remediation_label := $"%RemediationLabel"
 onready var detail_risk_label := $"%RiskLabel"
 onready var resources_list := $"%ResourcesList"
@@ -48,9 +48,12 @@ onready var remediation_button := $"%RemediationButton"
 onready var detail_container := $"%VBoxContainer"
 onready var checks_table_container := $"%ChecksTableContainer"
 onready var checks_table_content := $"%ChecksTableContent"
+onready var benchmark_label := $"%BenchmarkLabel"
+onready var export_report_button := $"%ExportReportButton"
 
 func _ready():
 	detail_container.hide()
+	export_report_button.hide()
 
 func _on_get_configs_done(error: int, response):
 	if error:
@@ -66,7 +69,6 @@ func _on_get_configs_done(error: int, response):
 
 func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 	if _error:
-		print(response.body.get_string_from_utf8())
 		return
 	
 	var data : Array = response.transformed.result
@@ -101,8 +103,10 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 					parent.main_element.failing_n += 1
 				parent = parent.parent
 				
-	passed_indicator.value = benchmark_tree_root.main_element.passing_n
-	failed_indicator.value = benchmark_tree_root.main_element.failing_n
+	passed_indicator.text = str(benchmark_tree_root.main_element.passing_n) + " Checks Passed"
+	failed_indicator.text = str(benchmark_tree_root.main_element.failing_n) + " Checks Failed"
+	failed_indicator.visible = benchmark_tree_root.main_element.failing_n > 0
+	export_report_button.show()
 	
 	if selected_element != null and is_instance_valid(selected_element):
 		_on_tree_item_pressed(selected_element)
@@ -130,8 +134,8 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		result_count_panel.self_modulate =  Style.col_map[Style.c.CHECK_FAIL]
 	detail_view_pass_widget.visible = "passing_n" in element
 	
-	$PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RemediationContainer.visible = "remediation_text" in element
-	$PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RiskContainer.visible = "risk" in element
+	$"%RemediationContainer".visible = "remediation_text" in element
+	$"%RiskContainer".visible = "risk" in element
 	
 	resources_container.visible = element is BenchmarkResultDisplay
 	detail_view_description.visible = "description" in element
@@ -176,16 +180,21 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 			row.queue_free()
 			
 		var elements : Array = look_for_checks(selected_element)
-		var data_for_table : Array = []
+		var data_elements : Array = []
 		for check in elements:
 			if check.failing_n == 0:
 				continue
-			var table_element := preload("res://components/benchmark_display/checks_table_element.tscn").instance()
-			table_element.check_name = check.title
-			table_element.severity = check.severity
-			table_element.failing_n = check.failing_n
-			table_element.categories = check.categories
-			checks_table_content.add_child(table_element)
+			if not check.title in data_elements:
+				var table_element := preload("res://components/benchmark_display/checks_table_element.tscn").instance()
+				table_element.check_name = check.title
+				table_element.severity = check.severity
+				table_element.failing_n = check.failing_n
+				table_element.categories = check.categories
+				checks_table_content.add_child(table_element)
+				data_elements.append(check.title)
+			else:
+				var element_index := data_elements.find(check.title)
+				checks_table_content.get_child(element_index).failing_n += check.failing_n
 		
 		checks_table_container.visible = true if checks_table_content.get_child_count() > 0 else false
 		resources_container.visible = false
@@ -271,9 +280,11 @@ func _on_BenchmarkButton_pressed():
 
 func _on_AcceptButton_pressed():
 	$Control/BenchmarkConfigPopup.hide()
+	export_report_button.hide()
 	detail_container.hide()
 	selected_element = null
 	create_benchmark_model(benchmark_config_dialog.selected_benchmark)
+	benchmark_label.text = benchmark_config_dialog.selected_benchmark.title
 
 
 func create_benchmark_model(data : Dictionary):
@@ -375,3 +386,20 @@ func _on_ExportButton_pressed():
 	
 	JavaScript.download_buffer(data.join("\n").to_utf8(), "Checks Report - %s.csv" % Time.get_datetime_string_from_system())
 
+
+
+func _on_ExportReportButton_pressed():
+	var checks := look_for_checks(benchmark_tree_root)
+	var data : PoolStringArray = ["Severity", "Number of Resources Failing", "Check Name", "Categories", "Account ID"]
+	var severities := ["low", "medium", "high", "critical"]
+	for check in checks:
+		var row_data : PoolStringArray = []
+		var severity : String = check.severity
+		severity = "%d - %s" % [severities.find(severity), severity]
+		row_data.append(severity)
+		row_data.append(str(check.failing_n))
+		row_data.append(check.title)
+		row_data.append((check.categories as PoolStringArray).join(" "))
+		row_data.append(check.account_id)
+		data.append(row_data.join(","))
+	JavaScript.download_buffer(data.join("\n").to_utf8(), "Checks Report - %s.csv" % Time.get_datetime_string_from_system())

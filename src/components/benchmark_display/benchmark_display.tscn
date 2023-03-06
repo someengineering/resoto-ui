@@ -1,9 +1,9 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://components/benchmark_display/benchmark_display.gd" type="Script" id=1]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=2]
 [ext_resource path="res://components/shared/failing_vs_passed_widget.tscn" type="PackedScene" id=3]
-[ext_resource path="res://components/dashboard/widget_indicator/widget_indicator.tscn" type="PackedScene" id=4]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=4]
 [ext_resource path="res://components/elements/utility/clipped_label.tscn" type="PackedScene" id=5]
 [ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=6]
 [ext_resource path="res://components/dashboard/shared/loading_overlay.tscn" type="PackedScene" id=7]
@@ -15,6 +15,52 @@
 [ext_resource path="res://assets/icons/icon_128_close_thick.svg" type="Texture" id=13]
 [ext_resource path="res://components/elements/styled/styled_icon_button_hover.gd" type="Script" id=14]
 [ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=15]
+[ext_resource path="res://assets/icons/icon_128_expand_all.svg" type="Texture" id=16]
+[ext_resource path="res://assets/icons/icon_128_collapse_all.svg" type="Texture" id=17]
+
+[sub_resource type="Shader" id=9]
+code = "shader_type canvas_item;
+
+uniform vec2 rect_size =  vec2(150.0, 33.0);
+uniform float corner_radius = 5.0;
+
+void fragment(){
+	vec2 top_left = vec2(corner_radius);
+	vec2 top_right = vec2(rect_size.x - corner_radius, corner_radius);
+	vec2 bot_left = vec2(corner_radius, rect_size.y - corner_radius);
+	vec2 bot_right = rect_size - corner_radius;
+	vec2 pixel_uv = UV * rect_size;
+	float aa_value = TEXTURE_PIXEL_SIZE.x * 2.0;
+	
+	if (pixel_uv.x < top_left.x && pixel_uv.y < top_left.y){
+		COLOR.a = smoothstep(distance(top_left, pixel_uv) - aa_value, distance(top_left, pixel_uv) + aa_value, corner_radius);
+	}
+	if (pixel_uv.x > top_right.x && pixel_uv.y < top_right.y){
+		COLOR.a = smoothstep(distance(top_right, pixel_uv) - aa_value, distance(top_right, pixel_uv) + aa_value, corner_radius);
+	}
+	if (pixel_uv.x > bot_right.x && pixel_uv.y > bot_right.y){
+		COLOR.a = smoothstep(distance(bot_right, pixel_uv) - aa_value, distance(bot_right, pixel_uv) + aa_value, corner_radius);
+	}
+	if (pixel_uv.x < bot_left.x && pixel_uv.y > bot_left.y){
+		COLOR.a = smoothstep(distance(bot_left, pixel_uv) - aa_value, distance(bot_left, pixel_uv) + aa_value, corner_radius);
+	}
+	
+}"
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = SubResource( 9 )
+shader_param/rect_size = Vector2( 150, 33 )
+shader_param/corner_radius = 7.0
+
+[sub_resource type="Gradient" id=7]
+colors = PoolColorArray( 0.765625, 0.765625, 0.765625, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture2D" id=8]
+gradient = SubResource( 7 )
+width = 4
+height = 4
+fill_from = Vector2( 0.370833, 0.0916667 )
+fill_to = Vector2( 0.5625, 1 )
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 8.0
@@ -83,88 +129,125 @@ margin_bottom = 1072.0
 
 [node name="PanelContainer2" type="PanelContainer" parent="PanelContainer/Content"]
 margin_right = 1896.0
-margin_bottom = 70.0
+margin_bottom = 52.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer2"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1886.0
-margin_bottom = 60.0
+margin_bottom = 42.0
 custom_constants/separation = 10
-alignment = 1
 
-[node name="FailIndicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
-margin_left = 733.0
-margin_right = 933.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 200, 50 )
-size_flags_vertical = 3
-unit = "Checks Failed"
-background_color = Color( 0.644531, 0.181526, 0.181526, 1 )
-decimal_digits = 0
-unit = "Checks Failed"
+[node name="BenchmarkButton" type="Button" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2"]
+margin_right = 157.333
+margin_bottom = 32.0
+text = "Select Benchmark"
 
-[node name="PassIndicator" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2" instance=ExtResource( 4 )]
-margin_left = 943.0
-margin_right = 1143.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 200, 50 )
-size_flags_vertical = 3
-unit = "Checks Passed"
-background_color = Color( 0.0951492, 0.496094, 0.195385, 1 )
-decimal_digits = 0
-unit = "Checks Passed"
+[node name="BenchmarkLabel" type="Label" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2"]
+unique_name_in_owner = true
+margin_left = 934.0
+margin_top = 6.0
+margin_right = 934.0
+margin_bottom = 26.0
+size_flags_horizontal = 6
+
+[node name="ExportReportButton" type="Button" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2"]
+unique_name_in_owner = true
+margin_left = 1712.0
+margin_right = 1876.0
+margin_bottom = 32.0
+text = "Export result to csv"
 
 [node name="PanelContainer" type="HSplitContainer" parent="PanelContainer/Content"]
-margin_top = 74.0
+margin_top = 56.0
 margin_right = 1896.0
 margin_bottom = 1064.0
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer"]
 margin_right = 942.0
-margin_bottom = 990.0
+margin_bottom = 1008.0
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/VBoxContainer"]
 margin_right = 942.0
-margin_bottom = 32.0
+margin_bottom = 33.0
+
+[node name="FailingIndicator" type="Label" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+margin_right = 150.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_vertical = 5
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "0 Checks Failed"
+align = 1
+valign = 1
+
+[node name="Gradient" type="TextureRect" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/FailingIndicator"]
+self_modulate = Color( 0.956863, 0.266667, 0.266667, 1 )
+show_behind_parent = true
+material = SubResource( 10 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 8 )
+expand = true
+
+[node name="PassingIndicator" type="Label" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 154.0
+margin_right = 304.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_vertical = 5
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "0 Cheks Passed"
+align = 1
+valign = 1
+
+[node name="Gradient" type="TextureRect" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/PassingIndicator"]
+self_modulate = Color( 0, 0.8, 0.2, 1 )
+show_behind_parent = true
+material = SubResource( 10 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 8 )
+expand = true
 
 [node name="Filter" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 2 )]
-margin_right = 100.0
-margin_bottom = 32.0
+margin_left = 768.0
+margin_right = 868.0
+size_flags_horizontal = 10
 items = [ "All", "Passing", "Failing" ]
 text = "All"
 
-[node name="Collapse" type="Button" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 104.0
-margin_right = 212.0
-margin_bottom = 32.0
-text = "Collapse All"
+[node name="Expand" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
+margin_left = 872.0
+margin_right = 905.0
+icon_tex = ExtResource( 16 )
 
-[node name="Expand" type="Button" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 216.0
-margin_right = 316.667
-margin_bottom = 32.0
-text = "Expand All"
-
-[node name="BenchmarkButton" type="Button" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 320.0
-margin_right = 477.333
-margin_bottom = 32.0
-text = "Select Benchmark"
+[node name="Collapse" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
+margin_left = 909.0
+margin_right = 942.0
+icon_tex = ExtResource( 17 )
 
 [node name="TreeContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer/VBoxContainer"]
-margin_top = 36.0
+unique_name_in_owner = true
+margin_top = 37.0
 margin_right = 942.0
-margin_bottom = 990.0
+margin_bottom = 1008.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DetailView" type="PanelContainer" parent="PanelContainer/Content/PanelContainer"]
+unique_name_in_owner = true
 margin_left = 954.0
 margin_right = 1896.0
-margin_bottom = 990.0
+margin_bottom = 1008.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView"]
@@ -172,7 +255,7 @@ unique_name_in_owner = true
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 932.0
-margin_bottom = 980.0
+margin_bottom = 998.0
 custom_constants/separation = 10
 
 [node name="TitleBar" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
@@ -240,6 +323,7 @@ margin_right = 922.0
 margin_bottom = 44.0
 
 [node name="DescriptionLabel" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 margin_top = 40.0
 margin_right = 922.0
@@ -254,6 +338,7 @@ margin_bottom = 45.0
 rect_min_size = Vector2( 0, 5 )
 
 [node name="RiskContainer" type="PanelContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+unique_name_in_owner = true
 margin_top = 40.0
 margin_right = 922.0
 margin_bottom = 128.0
@@ -329,6 +414,7 @@ text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
 fit_content_height = true
 
 [node name="RemediationContainer" type="PanelContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
+unique_name_in_owner = true
 margin_top = 138.0
 margin_right = 922.0
 margin_bottom = 272.0
@@ -382,7 +468,7 @@ icon_margin = 8
 unique_name_in_owner = true
 margin_top = 282.0
 margin_right = 922.0
-margin_bottom = 606.0
+margin_bottom = 615.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
@@ -391,7 +477,7 @@ custom_styles/panel = SubResource( 2 )
 margin_left = 8.0
 margin_top = 4.0
 margin_right = 914.0
-margin_bottom = 316.0
+margin_bottom = 325.0
 custom_constants/separation = 14
 
 [node name="ResourcesTitleBar" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent"]
@@ -417,7 +503,7 @@ text = "Failing Resources"
 unique_name_in_owner = true
 margin_top = 34.0
 margin_right = 906.0
-margin_bottom = 266.0
+margin_bottom = 275.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_type_variation = "PanelContainerDark"
@@ -425,7 +511,7 @@ theme_type_variation = "PanelContainerDark"
 [node name="ResourcesList" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/PanelContainer"]
 unique_name_in_owner = true
 margin_right = 906.0
-margin_bottom = 232.0
+margin_bottom = 241.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -434,23 +520,23 @@ unique_name_in_owner = true
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 906.0
-margin_bottom = 232.0
+margin_bottom = 241.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ShowAllButton" type="Button" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent"]
 margin_left = 818.667
-margin_top = 280.0
+margin_top = 289.0
 margin_right = 906.0
-margin_bottom = 312.0
+margin_bottom = 321.0
 size_flags_horizontal = 8
 text = "Show All"
 
 [node name="ChecksTableContainer" type="PanelContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer"]
 unique_name_in_owner = true
-margin_top = 616.0
+margin_top = 625.0
 margin_right = 922.0
-margin_bottom = 940.0
+margin_bottom = 958.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
@@ -459,7 +545,7 @@ custom_styles/panel = SubResource( 2 )
 margin_left = 8.0
 margin_top = 4.0
 margin_right = 914.0
-margin_bottom = 316.0
+margin_bottom = 325.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer"]
@@ -533,29 +619,30 @@ rect_min_size = Vector2( 24, 0 )
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer"]
 margin_top = 52.0
 margin_right = 906.0
-margin_bottom = 312.0
+margin_bottom = 321.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 script = ExtResource( 9 )
 
 [node name="Content" type="MarginContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/ScrollContainer"]
 margin_right = 906.0
-margin_bottom = 260.0
+margin_bottom = 269.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ChecksTableContent" type="VBoxContainer" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/ScrollContainer/Content"]
 unique_name_in_owner = true
 margin_right = 906.0
-margin_bottom = 260.0
+margin_bottom = 269.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="FailingVsPassingWidget" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer" instance=ExtResource( 3 )]
+unique_name_in_owner = true
 margin_left = 808.0
-margin_top = 950.0
+margin_top = 968.0
 margin_right = 922.0
-margin_bottom = 970.0
+margin_bottom = 988.0
 size_flags_horizontal = 8
 size_flags_vertical = 10
 size_flags_stretch_ratio = 0.0
@@ -609,10 +696,11 @@ margin_right = 860.0
 margin_right = 880.0
 margin_bottom = 600.0
 
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer2/HBoxContainer2/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer2/HBoxContainer2/ExportReportButton" to="." method="_on_ExportReportButton_pressed"]
 [connection signal="option_changed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Filter" to="." method="_on_Filter_option_changed"]
-[connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
-[connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
 [connection signal="meta_clicked" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskLabel" to="." method="_on_RemediationLabel_meta_clicked"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/ShowAllButton" to="." method="_on_ShowAllButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/HBoxContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
