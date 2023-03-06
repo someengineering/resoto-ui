@@ -62,7 +62,7 @@ func _on_graph_search_done(error : int, response : ResotoAPI.Response):
 		var n = account.reported.name
 		var id = account.reported.id
 		accounts_id.append({
-			"text" : n if n == id else "%s(%s)" % [n, id],
+			"text" : n if n == id else "%s (%s)" % [n, id],
 			"name" : n,
 			"id" : id
 			})

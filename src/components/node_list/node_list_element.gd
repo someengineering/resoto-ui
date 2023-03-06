@@ -75,6 +75,13 @@ func new_search(_last_search_type:String):
 	arrow_icon_mid.hide()
 
 
+func show_resources_from_report_check(check_id : String, account_id : String):
+	new_search("show_resources_from_report_check")
+	limit_button.pressed = false
+	API.get_check_resources(check_id, account_id, self, "_on_graph_search_done")
+	emit_signal("show", last_search_type, [check_id, account_id])
+
+
 func show_kind_from_node_data(parent_node:Dictionary, kind:String):
 	new_search("show_kind_from_node_data")
 	
@@ -209,7 +216,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 	if _response.transformed.has("result"):
 		# Delete old results, prepare new container (fastest way to delete a lot of nodes)
 		filter_variables = {}
-		show_result(_response.transformed.result)
+		show_results(_response.transformed.result)
 		show()
 
 
@@ -506,8 +513,8 @@ func _on_TagsGroup_request_all_tag_keys():
 static func sort_tag_keys(a, b) -> bool:
 	return a[1] < b[1]
 
-func show_result(result : Array):
-	for r in result:
+func show_results(results : Array):
+	for r in results:
 		add_result_element(r, vbox)
 	if filter_edit.text != "":
 		filter_results(filter_edit.text)

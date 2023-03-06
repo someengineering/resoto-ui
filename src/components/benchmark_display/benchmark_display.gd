@@ -14,6 +14,8 @@ var sections := []
 var checks := {}
 var current_account : String = ""
 
+var selected_element : CustomTreeItem = null
+
 var benchmarks := {}
 var benchmarks_count := 0
 
@@ -43,6 +45,12 @@ onready var resource_count_label := $"%ResourcesCountTitle"
 onready var risk_severity_label := $"%RiskSeverity"
 onready var resources_container := $"%ResourcesContainer"
 onready var remediation_button := $"%RemediationButton"
+onready var detail_container := $"%VBoxContainer"
+onready var checks_table_container := $"%ChecksTableContainer"
+onready var checks_table_content := $"%ChecksTableContent"
+
+func _ready():
+	detail_container.hide()
 
 func _on_get_configs_done(error: int, response):
 	if error:
@@ -69,12 +77,7 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 			for id in checks:
 				var d = checks[id]
 				var element = d[item.reported.id].main_element
-				element.title = item.reported.title
-				element.remediation_text = item.reported.remediation.text
-				element.remediation_url = item.reported.remediation.url
-				element.risk = item.reported.risk
-				element.severity = item.reported.severity
-				element.detect = item.reported.detect
+				element.set_reported_data(item.reported)
 				element.account_id = id
 			
 			if not "number_of_resources_failing_by_account" in item.reported:
@@ -100,10 +103,14 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 				
 	passed_indicator.value = benchmark_tree_root.main_element.passing_n
 	failed_indicator.value = benchmark_tree_root.main_element.failing_n
+	
+	if selected_element != null and is_instance_valid(selected_element):
+		_on_tree_item_pressed(selected_element)
 
 func _on_tree_item_pressed(item : CustomTreeItem):
+	detail_container.show()
+	selected_element = item
 	var element = item.main_element
-	
 	detail_view_title.raw_text = element.title
 	
 	if element.passed:
@@ -162,7 +169,25 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		API.get_check_resources(element.id, element.account_id, self)
 		resources_container.visible = true
 		resources_loading_overlay.visible = true
+		checks_table_container.visible = false
 	else:
+		for row in checks_table_content.get_children():
+			checks_table_content.remove_child(row)
+			row.queue_free()
+			
+		var elements : Array = look_for_checks(selected_element)
+		var data_for_table : Array = []
+		for check in elements:
+			if check.failing_n == 0:
+				continue
+			var table_element := preload("res://components/benchmark_display/checks_table_element.tscn").instance()
+			table_element.check_name = check.title
+			table_element.severity = check.severity
+			table_element.failing_n = check.failing_n
+			table_element.categories = check.categories
+			checks_table_content.add_child(table_element)
+		
+		checks_table_container.visible = true if checks_table_content.get_child_count() > 0 else false
 		resources_container.visible = false
 
 
@@ -204,7 +229,7 @@ func _on_resource_button_pressed(id : String):
 func _on_ShowAllButton_pressed():
 	if not current_failing_resources.empty():
 		_g.content_manager.change_section_explore("node_list_info")
-		_g.content_manager.find_node("NodeListElement").show_result(current_failing_resources)
+		_g.content_manager.find_node("NodeListElement").show_resources_from_report_check(selected_element.main_element.id, selected_element.main_element.account_id)
 
 
 func _on_Filter_option_changed(option):
@@ -246,6 +271,8 @@ func _on_BenchmarkButton_pressed():
 
 func _on_AcceptButton_pressed():
 	$Control/BenchmarkConfigPopup.hide()
+	detail_container.hide()
+	selected_element = null
 	create_benchmark_model(benchmark_config_dialog.selected_benchmark)
 
 
@@ -320,3 +347,31 @@ func new_account_tree_item(account):
 	element.name = account.name
 	element.id = account.id
 	return element
+
+
+func look_for_checks(root : CustomTreeItem) -> Array:
+	var elements : Array = []
+	for element in root.sub_element_container.get_children():
+		if element.main_element is BenchmarkResultDisplay:
+			elements.append(element.main_element)
+		else:
+			elements.append_array(look_for_checks(element))
+			
+	return elements
+
+
+func _on_ExportButton_pressed():
+	var data : PoolStringArray = ["Severity", "Number of Resources Failing", "Check Name", "Categories"]
+	var severities := ["low", "medium", "high", "critical"]
+	for row in checks_table_content.get_children():
+		var row_data : PoolStringArray = []
+		var severity : String = row.severity
+		severity = "%d - %s" % [severities.find(severity), severity]
+		row_data.append(severity)
+		row_data.append(str(row.failing_n))
+		row_data.append(row.check_name)
+		row_data.append(row.categories.join(" "))
+		data.append(row_data.join(","))
+	
+	JavaScript.download_buffer(data.join("\n").to_utf8(), "Checks Report - %s.csv" % Time.get_datetime_string_from_system())
+

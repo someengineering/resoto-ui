@@ -11,6 +11,8 @@ var risk : String = ""
 var detect : Dictionary = {}
 var account_id : String = ""
 var id : String = ""
+var raw_data : Dictionary = {}
+var categories : Array = []
 
 
 func _draw():
@@ -53,7 +55,8 @@ func set_severity(_severity : String):
 	$SeverityIndicator.severity = severity
 
 func set_reported_data(reported : Dictionary):
-	self.passed = reported.passed
+	raw_data = reported.duplicate()
+	self.passed = reported.number_of_resources_failing == 0
 	self.failing_n = reported.number_of_resources_failing
 	self.title = reported.title
 	self.remediation_text = reported.remediation.text
@@ -61,6 +64,7 @@ func set_reported_data(reported : Dictionary):
 	self.severity = reported.severity
 	self.risk = reported.risk
 	self.detect = reported.detect
+	self.categories = reported.categories
 	update()
 
 
