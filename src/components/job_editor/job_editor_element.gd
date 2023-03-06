@@ -78,7 +78,7 @@ var job_active : bool		= true setget set_job_active
 var job_command : String	= "" setget set_job_command
 var job_trigger : int		= Trigger.SCHEDULED setget set_job_trigger
 var job_event : String		= "" setget set_job_event
-var job_schedule : String	= "* * * * *" setget set_job_schedule
+var job_schedule : String	= "0 * * * *" setget set_job_schedule
 
 onready var event_popup : PopupMenu = $"%EventSelector".get_popup()
 onready var cron_regex : RegEx = RegEx.new()
@@ -214,13 +214,13 @@ func _on_TriggerSelect_item_selected(index:int):
 	$"%EventLabel".visible = index != Trigger.SCHEDULED
 	$"%EventSelector".visible = index != Trigger.SCHEDULED
 	
-	# If there is no event defined yet, choose the post_collect event
+	# If there is no event defined yet, choose the cleanup_plan event
 	if index != Trigger.SCHEDULED and job_event == "":
 		for item_id in event_popup.get_item_count():
 			if event_popup.is_item_radio_checkable(item_id):
 				event_popup.set_item_checked(item_id, false)
 		event_popup.set_item_checked(4, true)
-		$"%EventSelector".text = "post_collect"
+		$"%EventSelector".text = "cleanup_plan"
 
 
 func _on_CronLineEdit_text_changed(new_text:String):

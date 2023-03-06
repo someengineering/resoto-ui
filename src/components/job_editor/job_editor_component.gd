@@ -5,19 +5,19 @@ const NewJob : Dictionary = {
 	"active" : true,
 	"command" : "",
 	"id" : "",
-	"trigger" : { "cron_expression" : "* * * * *" }
+	"trigger" : { "cron_expression" : "0 * * * *" }
 }
 const template_jobs : Array = [
 	{
 		"name" : "large-instance-in-test-account",
 		"descr" : "Report Instances with >4Gb Ram in 'test-account' every morning at 9am from Mon-Fri in a Discord message.",
-		"command" : "search is(instance) and instance_memory>4 and /ancestors.account.reported.name==test-account | discord title=\"Large instances found in test-account\"",
+		"command" : "search is(instance) and instance_memory>4 and /ancestors.account.reported.name==test-account | discord --title=\"Large instances found in test-account\" --webhook=\"https://your-webhook-url\"",
 		"trigger_schedule" : "0 9 * * 1-5"
 	},
 	{
 		"name" : "alert-on-pod-failure",
 		"descr" : "Find instances that have no owner tag and report them in a Discord message.",
-		"command" : "search is(kubernetes_pod) and pod_status.container_statuses[*].restart_count > 20 and last_update<1h | discord title=\"Pods are restarting too often!\"",
+		"command" : "search is(kubernetes_pod) and pod_status.container_statuses[*].restart_count > 20 and last_update<1h | discord --title=\"Pods are restarting too often!\" --webhook=\"https://your-webhook-url\"",
 		"trigger_event" : "post_collect"
 	},
 	{
@@ -30,11 +30,38 @@ const template_jobs : Array = [
 		"name" : "notify-missing-tags",
 		"descr" : "Find Volumes and Buckets without a 'costcenter' tag and report them in a Discord message.",
 		"trigger_event" : "post_collect",
-		"command" : "search is(aws_ec2_volume) or is(aws_s3_bucket) and tags.costcenter = null | discord title=\"Resources missing `costcenter` tag\""
+		"command" : "search is(aws_ec2_volume) or is(aws_s3_bucket) and tags.costcenter = null | discord --title=\"Resources missing `costcenter` tag\" --webhook=\"https://your-webhook-url\""
+	},
+	{
+		"name" : "cleanup-unused-aws-ebs-volumes",
+		"descr" : "Find unused AWS EBS Volumes that are older than a month and had no I/O in over a week.",
+		"trigger_event" : "cleanup_plan",
+		"command" : "search is(aws_ec2_volume) and volume_status = available and age > 30d and last_access > 7d | clean \"Volume has not been used in a week\""
+	},
+	{
+		"name" : "cleanup-expired-resources",
+		"descr" : "Mark expired Resources for cleanup.",
+		"trigger_event" : "cleanup_plan",
+		"command" : "search /metadata.expires < \"@utc@\" | clean \"Resource is expired\""
+	},
+	{
+		"name" : "shutdown-and-tag-on-friday",
+		"descr" : "Shutdown on Friday Evening and give the resources a shutdown-tag for restarting.",
+		"trigger_event" : "post_collect",
+		"trigger_schedule" : "0 5 * * mon",
+		"command" : "search is(aws_ec2_instance) and instance_status=running and /ancestors.account.reported.name = someengineering-development | tag update shutdown_by resoto; search is(aws_ec2_instance) and instance_status=running and /ancestors.account.reported.name = someengineering-development and tags.shutdown_by = resoto | aws ec2 stop-instances --instance-ids {id}"
+	},
+	{
+		"name" : "restart-tagged-resources-on-monday",
+		"descr" : "Startup Instances with a certain shutdown-tag on Monday Morning.",
+		"trigger_event" : "post_collect",
+		"trigger_schedule" : "0 5 * * sat",
+		"command" : "search is(aws_ec2_instance) and instance_status=stopped and /ancestors.account.reported.name = someengineering-development and tags.shutdown_by = resoto | aws ec2 start-instances --instance-ids {id}; search is(aws_ec2_instance) and instance_status=stopped and /ancestors.account.reported.name = someengineering-development and tags.shutdown_by = resoto | tag delete shutdown_by"
 	}
 ]
 
 var displayed_jobs = []
+var latest_added_job_id := ""
 
 onready var template_popup := $TemplatePopup
 
@@ -62,7 +89,7 @@ func _on_job_template_button_pressed(job:Dictionary):
 		trigger_string = "--schedule \"%s\"" % job.trigger_schedule
 	elif job.has("trigger_event"):
 		trigger_string = "--wait-for-event %s" % job.trigger_event
-	print("jobs add --id %s %s '%s'" % [job.name, trigger_string, job.command])
+	latest_added_job_id = job.name
 	API.cli_execute("jobs add --id %s %s '%s'" % [job.name, trigger_string, job.command], self, "_on_job_add_done")
 	Analytics.event(Analytics.EventsJobEditor.NEW_FROM_TEMPLATE)
 	template_popup.hide()
@@ -125,6 +152,7 @@ func _on_duplicate_confirm_response(_button_clicked:String, _value:String):
 			if job.job_id == _value:
 				_g.emit_signal("add_toast", "Duplication failed", "A Job with that name already exists.", 1, self)
 				return
+		latest_added_job_id = _value
 		API.cli_execute("jobs add --id %s %s '%s'" % [_value, duplicate_data.trigger_string, duplicate_data.job_command], self, "_on_job_duplicate_done")
 		duplicate_data.clear()
 
@@ -149,12 +177,21 @@ func _on_add_confirm_response(_button_clicked:String, _value:String):
 			if job.job_id == _value:
 				_g.emit_signal("add_toast", "Creation failed", "A Job with that name already exists.", 1, self)
 				return
+		latest_added_job_id = _value
 		API.cli_execute("jobs add --id %s --schedule \"* * * * *\" 'echo hello world'" % _value, self, "_on_job_add_done")
 
 
 func _on_job_add_done(_error:int, _response:UserAgent.Response) -> void:
 	if _error:
 		_g.emit_signal("add_toast", "Error in adding Job.", _response.body.get_string_from_utf8(), 1, self)
+		return
+	API.cli_execute("jobs deactivate %s" % latest_added_job_id, self, "_on_new_job_deactivate_done")
+	latest_added_job_id = ""
+
+
+func _on_new_job_deactivate_done(_error:int, _response:UserAgent.Response) -> void:
+	if _error:
+		_g.emit_signal("add_toast", "Error in duplicating Job.", _response.body.get_string_from_utf8(), 1, self)
 		return
 	update_view()
 
