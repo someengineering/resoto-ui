@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=125 format=2]
+[gd_resource type="Theme" load_steps=129 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -766,6 +766,26 @@ corner_radius_top_left = 3
 corner_radius_bottom_left = 3
 corner_detail = 1
 
+[sub_resource type="DynamicFontData" id=125]
+override_oversampling = 1.5
+font_path = "res://assets/theme/Barlow-Bold.ttf"
+
+[sub_resource type="DynamicFont" id=126]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 125 )
+
+[sub_resource type="DynamicFontData" id=127]
+override_oversampling = 1.5
+font_path = "res://assets/theme/SourceCodePro-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=128]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 127 )
+
 [sub_resource type="StyleBoxFlat" id=33]
 content_margin_left = 0.0
 content_margin_right = 0.0
@@ -1106,6 +1126,10 @@ PopupPanelLight/styles/panel = SubResource( 123 )
 ProgressBar/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 ProgressBar/styles/bg = SubResource( 8 )
 ProgressBar/styles/fg = SubResource( 9 )
+RichTextLabel/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+RichTextLabel/fonts/bold_font = SubResource( 126 )
+RichTextLabel/fonts/mono_font = SubResource( 128 )
+RichTextLabel/fonts/normal_font = SubResource( 66 )
 SpinBox/icons/updown = ExtResource( 13 )
 TabContainer/colors/font_color_bg = Color( 0.160784, 0.333333, 0.501961, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.0588235, 0.2, 0.337255, 1 )

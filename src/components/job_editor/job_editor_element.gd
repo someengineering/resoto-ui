@@ -2,6 +2,12 @@ extends PanelContainer
 
 enum Trigger {SCHEDULED, EVENT, SCHEDULED_AND_EVENT}
 
+const HELP_TEXT_TRIGGER_INTRO := "The job trigger defines when a job is executed.\n\n"
+const HELP_TEXT_TRIGGER_SCHEDULE := "[b]Schedule Trigger[/b]\nA schedule trigger executes a job at a specific time interval described by a cron expression."
+const HELP_TEXT_TRIGGER_EVENT := "[b]Event Trigger[/b]\nAn event trigger executes a job when a specific event is emitted by Resoto.\n\nResoto updates the state of resources in the four steps of the collect_and_cleanup workflow: [code]collect[/code], [code]cleanup_plan[/code], [code]cleanup[/code], and [code]generate_metrics[/code].\n\nEach of these steps emits events that can be used to trigger jobs."
+const HELP_TEXT_TRIGGER_COMBINED := "[b]Combined Trigger[/b]\nA combined trigger combines a schedule trigger with an event trigger, and executes a job when a specific event is emitted after a schedule trigger is fired.\n\nCombined triggers are useful if you want to perform an action on a specific schedule, but only after a specific event is fired."
+const HELP_TEXT_TRIGGER_MORE := "\n\n[url=trigger_docs]Read more about triggers in the Resoto docs.[/url]"
+
 const Trigger_Events : Array = [
 	{
 		"id" : "Collect Steps",
@@ -72,6 +78,35 @@ const Trigger_Events : Array = [
 signal delete_job
 signal duplicate_job
 signal cron_editor
+signal show_save_options
+
+var examples_triggers := [
+	"[b]Event Triggers[/b]",
+	{ "descr" : "After every Resoto Collect." , "job_trigger" : 1, "job_event" : "post_collect", "job_schedule" : ""},
+	{ "descr" : "When Resoto cleans up resources marked for clean-up." , "job_trigger" : 1, "job_event" : "cleanup_plan", "job_schedule" : ""},
+	"[b]Combined Triggers[/b]",
+	{ "descr" : "Every morning, Mon-Fri at 5:00 after a Resoto Collect." , "job_trigger" : 2, "job_event" : "post_collect", "job_schedule" : "0 5 * * MON-FRI"},
+	"[b]Scheduled Triggers[/b]",
+	{ "descr" : "Every morning at 9:00 from Mon-Fri." , "job_trigger" : 0, "job_event" : "", "job_schedule" : "0 9 * * 1-5"},
+	{ "descr" : "Every Friday evening at 22:00." , "job_trigger" : 0, "job_event" : "", "job_schedule" : "0 22 * * 5"},
+	{ "descr" : "Every Monday morning at 5:00." , "job_trigger" : 0, "job_event" : "", "job_schedule" : "0 5 * * mon"},
+	{ "descr" : "On the first Day of each Month." , "job_trigger" : 0, "job_event" : "", "job_schedule" : "0 0 1 * *"},
+	{ "descr" : "Every six hours." , "job_trigger" : 0, "job_event" : "", "job_schedule" : "0 */6 * * *"}
+]
+
+var example_commands := [
+	"[b]Alerting[/b]",
+	{ "descr" : "Report Instances with >4Gb Ram in 'test-account' in a Discord message.", "command" : "search is(instance) and instance_memory>4 and /ancestors.account.reported.name==test-account | discord --title=\"Large instances found in test-account\" --webhook=\"https://your-webhook-url\"" },
+	{ "descr" : "Find instances that have no owner tag and report them in a Discord message.", "command" : "search is(kubernetes_pod) and pod_status.container_statuses[*].restart_count > 20 and last_update<1h | discord --title=\"Pods are restarting too often!\" --webhook=\"https://your-webhook-url\""},
+	{ "descr" : "Find Volumes and Buckets without a 'costcenter' tag and report them in a Discord message.", "command" : "search is(aws_ec2_volume) or is(aws_s3_bucket) and tags.costcenter = null | discord --title=\"Resources missing `costcenter` tag\" --webhook=\"https://your-webhook-url\""},
+	"[b]Clean-up[/b]",
+	{ "descr" : "Find unused AWS EBS Volumes that are older than a month and had no I/O in over a week.", "command" : "search is(aws_ec2_volume) and volume_status = available and age > 30d and last_access > 7d | clean \"Volume has not been used in a week\""},
+	{ "descr" : "Mark expired Resources for cleanup.", "command" : "search /metadata.expires < \"@utc@\" | clean \"Resource is expired\""},
+	"[b]Cost-saving[/b]",
+	{ "descr" : "Shutdown running AWS EC2 instances and give them a shutdown-tag for restarting.", "command" : "search is(aws_ec2_instance) and instance_status=running and /ancestors.account.reported.name = someengineering-development | tag update shutdown_by resoto; search is(aws_ec2_instance) and instance_status=running and /ancestors.account.reported.name = someengineering-development and tags.shutdown_by = resoto | aws ec2 stop-instances --instance-ids {id}"},
+	{ "descr" : "Startup AWS EC2 Instances with a certain shutdown-tag.", "command" : "search is(aws_ec2_instance) and instance_status=stopped and /ancestors.account.reported.name = someengineering-development and tags.shutdown_by = resoto | aws ec2 start-instances --instance-ids {id}; search is(aws_ec2_instance) and instance_status=stopped and /ancestors.account.reported.name = someengineering-development and tags.shutdown_by = resoto | tag delete shutdown_by"},
+	{ "descr" : "Stop AWS Instances that have 'dev' in their name.", "command" : "search is(aws_ec2_instance) and instance_status=running and /ancestors.account.reported.name~dev | aws ec2 stop-instances --instance-ids {id}"},
+]
 
 var job_id : String			= "" setget set_job_id
 var job_active : bool		= true setget set_job_active
@@ -82,25 +117,39 @@ var job_schedule : String	= "0 * * * *" setget set_job_schedule
 
 onready var event_popup : PopupMenu = $"%EventSelector".get_popup()
 onready var cron_regex : RegEx = RegEx.new()
+onready var trigger_help_text := $"%TriggerHelpText"
+
 
 func _ready():
-	cron_regex.compile("(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\\d+(ns|us|µs|ms|s|m|h))+)|((((\\d+,)+\\d+|(\\d+(\\/|-)\\d+)|\\d+|\\*) ?){5,7})")
+	cron_regex.compile("(^((\\*\\/)?([0-5]?[0-9])((\\,|\\-|\\/)([0-5]?[0-9]))*|\\*)\\s+((\\*\\/)?((2[0-3]|1[0-9]|[0-9]|00))((\\,|\\-|\\/)(2[0-3]|1[0-9]|[0-9]|00))*|\\*)\\s+((\\*\\/)?([1-9]|[12][0-9]|3[01])((\\,|\\-|\\/)([1-9]|[12][0-9]|3[01]))*|\\*)\\s+((\\*\\/)?([1-9]|1[0-2])((\\,|\\-|\\/)([1-9]|1[0-2]))*|\\*|(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)((\\,|\\-|\\/)(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec))*)\\s+((\\*\\/)?[0-6]((\\,|\\-|\\/)[0-6])*|\\*|00|(mon|tue|wed|thu|fri|sat|sun)((\\,|\\-|\\/)(mon|tue|wed|thu|fri|sat|sun))*)$)")
 	event_popup.connect("id_pressed", self, "_on_event_selected")
 	for trigger_event in Trigger_Events:
 		if trigger_event.separator:
 			event_popup.add_separator(trigger_event.id)
 		else:
 			event_popup.add_radio_check_item(trigger_event.id)
+	# Create Examples Richtext for Triggers
+	var examples_string := ""
+	for i in examples_triggers.size():
+		if typeof(examples_triggers[i]) == TYPE_STRING:
+			examples_string += "\n" + examples_triggers[i] + "\n"
+		else:
+			examples_string += "• [url=%s]%s[/url]\n" % [i, examples_triggers[i].descr]
+	examples_string = examples_string.trim_suffix("\n").trim_prefix("\n")
+	$"%ExamplesHelpText".bbcode_text = examples_string
+	# Create Examples Richtext for Commands
+	var examples_string_cmd := ""
+	for i in example_commands.size():
+		if typeof(example_commands[i]) == TYPE_STRING:
+			examples_string_cmd += "\n" + example_commands[i] + "\n"
+		else:
+			examples_string_cmd += "• [url=%s]%s[/url]\n" % [i, example_commands[i].descr]
+	examples_string_cmd = examples_string_cmd.trim_suffix("\n").trim_prefix("\n")
+	$"%CommandExamplesText".bbcode_text = examples_string_cmd
 
 
 func show_save_options():
-	$"%SaveDiscardBar".show()
-	$"%SaveDiscardSpacer".show()
-
-
-func hide_save_options():
-	$"%SaveDiscardBar".hide()
-	$"%SaveDiscardSpacer".hide()
+	emit_signal("show_save_options")
 
 
 func _on_event_selected(_id:int):
@@ -153,7 +202,6 @@ func setup(job_data) -> void:
 		temp_job_trigger = 2
 		_on_event_selected(get_event_id_from_string(job_data.wait.message_type))
 	self.job_trigger = temp_job_trigger
-	hide_save_options()
 
 
 func set_job_id(_job_id:String):
@@ -180,6 +228,7 @@ func set_job_trigger(_job_trigger:int):
 	$"%CronContainer".visible = (job_trigger == Trigger.SCHEDULED or job_trigger == Trigger.SCHEDULED_AND_EVENT)
 	$"%EventLabel".visible = (job_trigger == Trigger.EVENT or job_trigger == Trigger.SCHEDULED_AND_EVENT)
 	$"%EventSelector".visible = (job_trigger == Trigger.EVENT or job_trigger == Trigger.SCHEDULED_AND_EVENT)
+	update_help_text_trigger(_job_trigger)
 
 
 func set_job_event(_job_event:String):
@@ -190,7 +239,7 @@ func set_job_event(_job_event:String):
 func set_job_schedule(_job_schedule:String):
 	job_schedule = _job_schedule
 	$"%CronLineEdit".text = job_schedule
-	$"%CronError".visible = cron_regex.search_all(job_schedule).empty()
+	$"%CronError".visible = cron_regex.search_all(job_schedule.to_lower()).empty()
 
 
 func get_event_id_from_string(_job_event:String) -> int:
@@ -221,12 +270,26 @@ func _on_TriggerSelect_item_selected(index:int):
 				event_popup.set_item_checked(item_id, false)
 		event_popup.set_item_checked(4, true)
 		$"%EventSelector".text = "cleanup_plan"
+	update_help_text_trigger(index)
+
+
+func update_help_text_trigger(trigger_id:int):
+	var trigger_help_string = HELP_TEXT_TRIGGER_INTRO
+	match trigger_id:
+		Trigger.SCHEDULED:
+			trigger_help_string += HELP_TEXT_TRIGGER_SCHEDULE
+		Trigger.EVENT:
+			trigger_help_string += HELP_TEXT_TRIGGER_EVENT
+		Trigger.SCHEDULED_AND_EVENT:
+			trigger_help_string += HELP_TEXT_TRIGGER_COMBINED
+	trigger_help_string += HELP_TEXT_TRIGGER_MORE
+	trigger_help_text.bbcode_text = trigger_help_string
 
 
 func _on_CronLineEdit_text_changed(new_text:String):
 	if new_text != job_schedule:
 		show_save_options()
-	$"%CronError".visible = cron_regex.search_all(new_text).empty()
+	$"%CronError".visible = cron_regex.search_all(new_text.to_lower()).empty()
 
 
 func _on_ActiveButton_pressed():
@@ -280,26 +343,20 @@ func _on_job_run_done(_e, _r):
 	pass
 
 
-func _on_SaveButton_pressed():
-	job_trigger = $"%TriggerSelect".get_selected_id()
-	job_schedule = $"%CronLineEdit".text
-	job_event = $"%EventSelector".text
-	var trigger_string : String = generate_schedule_string(job_trigger, job_schedule, job_event)
-	
-	job_command = $"%CommandEdit".text
-	API.cli_execute("jobs update --id %s %s '%s'" % [job_id, trigger_string, job_command], self, "_on_job_update_done")
-	Analytics.event(Analytics.EventsJobEditor.SAVE)
-	hide_save_options()
-
-
 func _on_job_update_done(_error:int, _response:UserAgent.Response) -> void:
 	if _error:
 		_g.emit_signal("add_toast", "Error in Job update", _response.body.get_string_from_utf8(), 1, self)
 		return
 
 
-func _on_DiscardButton_pressed():
-	restore_from_core()
+func save_field():
+	job_trigger = $"%TriggerSelect".get_selected_id()
+	job_schedule = $"%CronLineEdit".text
+	job_event = $"%EventSelector".text
+	var trigger_string : String = generate_schedule_string(job_trigger, job_schedule, job_event)
+	
+	job_command = $"%CommandEdit".text
+	return [job_id, trigger_string, job_command]
 
 
 func generate_schedule_string(_trigger_type:int, trigger_schedule:String, trigger_event:String) -> String:
@@ -315,3 +372,70 @@ func generate_schedule_string(_trigger_type:int, trigger_schedule:String, trigge
 
 func _on_CronEditor_pressed():
 	emit_signal("cron_editor", $"%CronContainer".get_global_rect(), $"%CronLineEdit".text, $"%CronLineEdit")
+
+
+func _on_HelpButton_pressed():
+	$"%HelpButton".pressed = true
+	$"%HelpButton".release_focus()
+	$"%ExamplesButton".pressed = false
+	$"%TriggerHelpText".show()
+	$"%ExamplesHelpText".hide()
+	
+
+func _on_ExamplesButton_pressed():
+	$"%HelpButton".pressed = false
+	$"%ExamplesButton".pressed = true
+	$"%ExamplesButton".release_focus()
+	$"%TriggerHelpText".hide()
+	$"%ExamplesHelpText".show()
+
+
+func _on_ExamplesHelpText_meta_clicked(meta):
+	if meta == "trigger_docs":
+		OS.shell_open("https://resoto.com/docs/concepts/automation#job-trigger")
+		return
+	var example : Dictionary = examples_triggers[int(meta)]
+	$"%TriggerSelect".select(example.job_trigger)
+	_on_TriggerSelect_item_selected(example.job_trigger)
+	update_help_text_trigger(example.job_trigger)
+	
+	if example.job_trigger != 0:
+		_on_event_selected(get_event_id_from_string(example.job_event))
+		job_event = example.job_event
+	if example.job_schedule != "":
+		$"%CronLineEdit".text = example.job_schedule
+	
+
+
+func _on_CommandHelpShowButton_pressed():
+	$"%ShowHelpBar".hide()
+	$"%CommandSimpleTabulators".show()
+
+
+func _on_CommandHelpHideButton_pressed():
+	$"%ShowHelpBar".show()
+	$"%CommandSimpleTabulators".hide()
+
+
+func _on_CommandsHelpButton_pressed():
+	$"%CommandsHelpButton".pressed = true
+	$"%CommandsHelpButton".release_focus()
+	$"%CommandsExamplesButton".pressed = false
+	$"%CommandHelpText".show()
+	$"%CommandExamplesText".hide()
+
+
+func _on_CommandsExamplesButton_pressed():
+	$"%CommandsHelpButton".pressed = false
+	$"%CommandsExamplesButton".pressed = true
+	$"%CommandsExamplesButton".release_focus()
+	$"%CommandHelpText".hide()
+	$"%CommandExamplesText".show()
+
+
+func _on_CommandExamplesText_meta_clicked(meta):
+	if meta == "trigger_docs":
+		OS.shell_open("https://resoto.com/docs/concepts/automation#job-filters--actions")
+		return
+	var example : Dictionary = example_commands[int(meta)]
+	$"%CommandEdit".text = example.command

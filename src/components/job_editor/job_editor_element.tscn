@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=2]
@@ -7,6 +7,9 @@
 [ext_resource path="res://components/job_editor/job_editor_element.gd" type="Script" id=5]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=6]
 [ext_resource path="res://components/elements/styled/icon_check_button.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/icons/icon_128_hide.svg" type="Texture" id=8]
+[ext_resource path="res://assets/icons/icon_128_questionmark.svg" type="Texture" id=9]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -20,6 +23,8 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxEmpty" id=2]
+
 [node name="JobElement" type="PanelContainer"]
 anchor_right = 1.0
 margin_bottom = 153.0
@@ -31,7 +36,7 @@ script = ExtResource( 5 )
 margin_left = 10.0
 margin_top = 4.0
 margin_right = 1916.0
-margin_bottom = 188.0
+margin_bottom = 472.0
 
 [node name="TitleBar" type="HBoxContainer" parent="JobData"]
 margin_right = 1906.0
@@ -79,7 +84,7 @@ icon_tex = ExtResource( 2 )
 [node name="Content" type="MarginContainer" parent="JobData"]
 margin_top = 37.0
 margin_right = 1906.0
-margin_bottom = 184.0
+margin_bottom = 468.0
 custom_constants/margin_right = 6
 custom_constants/margin_top = 12
 custom_constants/margin_left = 0
@@ -88,30 +93,37 @@ custom_constants/margin_bottom = 6
 [node name="VBox" type="VBoxContainer" parent="JobData/Content"]
 margin_top = 12.0
 margin_right = 1900.0
-margin_bottom = 141.0
+margin_bottom = 425.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="JobData/Content/VBox"]
+[node name="HBoxContainer" type="VBoxContainer" parent="JobData/Content/VBox"]
 margin_right = 1900.0
-margin_bottom = 129.0
+margin_bottom = 413.0
 custom_constants/separation = 10
 
-[node name="TriggerSettings" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer"]
-margin_right = 459.0
-margin_bottom = 129.0
+[node name="HBoxContainer" type="HBoxContainer" parent="JobData/Content/VBox/HBoxContainer"]
+margin_right = 1900.0
+margin_bottom = 133.0
+custom_constants/separation = 20
 
-[node name="Label" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings"]
+[node name="TriggerSettings" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer"]
 margin_right = 459.0
-margin_bottom = 20.0
+margin_bottom = 133.0
+rect_min_size = Vector2( 0, 130 )
+
+[node name="Label" type="Label" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings"]
+margin_right = 459.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 0, 24 )
 theme_type_variation = "LabelBold"
 text = "Trigger"
 
-[node name="TriggerSection" type="GridContainer" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings"]
-margin_top = 24.0
+[node name="TriggerSection" type="GridContainer" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings"]
+margin_top = 28.0
 margin_right = 459.0
-margin_bottom = 129.0
+margin_bottom = 133.0
 columns = 2
 
-[node name="TriggerLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+[node name="TriggerLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection"]
 margin_right = 155.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 155, 30 )
@@ -119,18 +131,18 @@ size_flags_vertical = 0
 text = "Type"
 valign = 1
 
-[node name="TriggerSelect" type="OptionButton" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+[node name="TriggerSelect" type="OptionButton" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection"]
 unique_name_in_owner = true
 margin_left = 159.0
 margin_right = 459.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 300, 0 )
 size_flags_horizontal = 0
-text = "Scheduled"
-items = [ "Scheduled", null, false, 0, null, "Event", null, false, 1, null, "Scheduled, then wait for Event", null, false, 2, null ]
+text = "Schedule"
+items = [ "Schedule", null, false, 0, null, "Event", null, false, 1, null, "Combined", null, false, 2, null ]
 selected = 0
 
-[node name="CronLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+[node name="CronLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection"]
 unique_name_in_owner = true
 margin_top = 36.0
 margin_right = 155.0
@@ -140,14 +152,14 @@ size_flags_vertical = 0
 text = "Cron expression"
 valign = 1
 
-[node name="CronContainer" type="HBoxContainer" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+[node name="CronContainer" type="HBoxContainer" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection"]
 unique_name_in_owner = true
 margin_left = 159.0
 margin_top = 36.0
 margin_right = 459.0
 margin_bottom = 69.0
 
-[node name="CronLineEdit" type="LineEdit" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/CronContainer"]
+[node name="CronLineEdit" type="LineEdit" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection/CronContainer"]
 unique_name_in_owner = true
 margin_right = 264.0
 margin_bottom = 33.0
@@ -155,10 +167,9 @@ size_flags_horizontal = 3
 theme_type_variation = "LineEditCode"
 text = "* * * * *"
 
-[node name="CronError" type="Panel" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/CronContainer/CronLineEdit"]
+[node name="CronError" type="Panel" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection/CronContainer/CronLineEdit"]
 unique_name_in_owner = true
 visible = false
-modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -166,13 +177,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 1 )
 
-[node name="CronEditor" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/CronContainer" instance=ExtResource( 6 )]
+[node name="CronEditor" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection/CronContainer" instance=ExtResource( 6 )]
 margin_left = 268.0
 margin_right = 300.0
 rect_min_size = Vector2( 32, 32 )
 icon_tex = ExtResource( 3 )
 
-[node name="EventLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+[node name="EventLabel" type="Label" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection"]
 unique_name_in_owner = true
 margin_top = 73.0
 margin_right = 155.0
@@ -182,7 +193,7 @@ size_flags_vertical = 0
 text = "Event identifier"
 valign = 1
 
-[node name="EventSelector" type="MenuButton" parent="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection"]
+[node name="EventSelector" type="MenuButton" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection"]
 unique_name_in_owner = true
 margin_left = 159.0
 margin_top = 73.0
@@ -194,19 +205,90 @@ size_flags_horizontal = 0
 flat = false
 align = 0
 
-[node name="VSeparator" type="VSeparator" parent="JobData/Content/VBox/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer"]
+visible = false
 margin_left = 469.0
 margin_right = 473.0
-margin_bottom = 129.0
+margin_bottom = 130.0
+
+[node name="SimpleTabulators" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer"]
+margin_left = 479.0
+margin_right = 1900.0
+margin_bottom = 133.0
+size_flags_horizontal = 3
+
+[node name="Navigation" type="HBoxContainer" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators"]
+margin_right = 1421.0
+margin_bottom = 26.0
+
+[node name="HelpButton" type="Button" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators/Navigation"]
+unique_name_in_owner = true
+margin_right = 140.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 140, 0 )
+theme_type_variation = "ButtonComboList"
+toggle_mode = true
+pressed = true
+text = "About Triggers"
+
+[node name="ExamplesButton" type="Button" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators/Navigation"]
+unique_name_in_owner = true
+margin_left = 144.0
+margin_right = 284.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 140, 0 )
+theme_type_variation = "ButtonComboList"
+toggle_mode = true
+text = "Examples"
+
+[node name="HSeparator" type="HSeparator" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators"]
+margin_top = 30.0
+margin_right = 1421.0
+margin_bottom = 34.0
+
+[node name="TabsContent" type="PanelContainer" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators"]
+margin_top = 38.0
+margin_right = 1421.0
+margin_bottom = 133.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+
+[node name="TriggerHelpText" type="RichTextLabel" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators/TabsContent"]
+unique_name_in_owner = true
+margin_right = 1421.0
+margin_bottom = 95.0
+size_flags_horizontal = 3
+bbcode_enabled = true
+bbcode_text = "The job trigger defines when a job is executed.
+[b]Schedule Trigger[/b]
+A schedule trigger executes a job at a specific time interval described by a cron expression.
+"
+text = "The job trigger defines when a job is executed.
+Schedule Trigger
+A schedule trigger executes a job at a specific time interval described by a cron expression.
+"
+fit_content_height = true
+
+[node name="ExamplesHelpText" type="RichTextLabel" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators/TabsContent"]
+unique_name_in_owner = true
+visible = false
+margin_right = 1421.0
+margin_bottom = 97.0
+size_flags_horizontal = 3
+bbcode_enabled = true
+bbcode_text = "EXAMPLES"
+text = "EXAMPLES"
+fit_content_height = true
 
 [node name="CommandSettings" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer"]
-margin_left = 483.0
+margin_top = 143.0
 margin_right = 1900.0
-margin_bottom = 129.0
+margin_bottom = 413.0
 size_flags_horizontal = 3
 
 [node name="Command" type="Label" parent="JobData/Content/VBox/HBoxContainer/CommandSettings"]
-margin_right = 1417.0
+margin_right = 1900.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_vertical = 0
@@ -217,49 +299,128 @@ valign = 1
 [node name="CommandEdit" type="TextEdit" parent="JobData/Content/VBox/HBoxContainer/CommandSettings"]
 unique_name_in_owner = true
 margin_top = 34.0
-margin_right = 1417.0
-margin_bottom = 129.0
-rect_min_size = Vector2( 0, 58 )
+margin_right = 1900.0
+margin_bottom = 234.0
+rect_min_size = Vector2( 0, 200 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 wrap_enabled = true
 
-[node name="SaveDiscardSpacer" type="Control" parent="JobData/Content/VBox"]
+[node name="ShowHelpBar" type="HBoxContainer" parent="JobData/Content/VBox/HBoxContainer/CommandSettings"]
+unique_name_in_owner = true
+margin_top = 238.0
+margin_right = 1900.0
+margin_bottom = 270.0
+
+[node name="CommandHelpShowButton" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/ShowHelpBar" instance=ExtResource( 10 )]
+margin_right = 120.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 0 )
+text = "Show Help"
+align = 2
+icon_tex = ExtResource( 9 )
+
+[node name="CommandSimpleTabulators" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer/CommandSettings"]
 unique_name_in_owner = true
 visible = false
-margin_top = 132.0
+margin_top = 274.0
 margin_right = 1900.0
-margin_bottom = 140.0
-rect_min_size = Vector2( 0, 8 )
+margin_bottom = 396.0
+size_flags_horizontal = 3
 
-[node name="SaveDiscardBar" type="HBoxContainer" parent="JobData/Content/VBox"]
+[node name="Navigation" type="HBoxContainer" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators"]
+margin_right = 1900.0
+margin_bottom = 26.0
+
+[node name="CommandHelpHideButton" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/Navigation" instance=ExtResource( 6 )]
+margin_right = 26.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 26, 26 )
+icon_tex = ExtResource( 8 )
+icon_margin = 2
+
+[node name="CommandsHelpButton" type="Button" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/Navigation"]
+unique_name_in_owner = true
+margin_left = 30.0
+margin_right = 184.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 140, 0 )
+theme_type_variation = "ButtonComboList"
+toggle_mode = true
+pressed = true
+text = "About Commands"
+
+[node name="CommandsExamplesButton" type="Button" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/Navigation"]
+unique_name_in_owner = true
+margin_left = 188.0
+margin_right = 328.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 140, 0 )
+theme_type_variation = "ButtonComboList"
+toggle_mode = true
+text = "Examples"
+
+[node name="HSeparator" type="HSeparator" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators"]
+margin_top = 30.0
+margin_right = 1900.0
+margin_bottom = 34.0
+
+[node name="TabsContent" type="PanelContainer" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators"]
+margin_top = 38.0
+margin_right = 1900.0
+margin_bottom = 122.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+
+[node name="CommandHelpText" type="RichTextLabel" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/TabsContent"]
+unique_name_in_owner = true
+margin_right = 1900.0
+margin_bottom = 84.0
+size_flags_horizontal = 3
+bbcode_enabled = true
+bbcode_text = "The command is executed by the job when triggered.
+A command usually consists of a [b]filter and action part[/b], separated by a [code]|[/code].
+
+To perform more complex automations, it is possible to define multiple sets of filters and actions delimited by a semicolon.
+Each set of filters and actions is executed sequentially when the job is triggered."
+text = "The command is executed by the job when triggered.
+A command usually consists of a filter and action part, separated by a |.
+
+To perform more complex automations, it is possible to define multiple sets of filters and actions delimited by a semicolon.
+Each set of filters and actions is executed sequentially when the job is triggered."
+fit_content_height = true
+
+[node name="CommandExamplesText" type="RichTextLabel" parent="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/TabsContent"]
 unique_name_in_owner = true
 visible = false
-margin_top = 144.0
 margin_right = 1900.0
-margin_bottom = 176.0
-custom_constants/separation = 20
-alignment = 1
-
-[node name="SaveButton" type="Button" parent="JobData/Content/VBox/SaveDiscardBar"]
-margin_left = 804.0
-margin_right = 930.0
-margin_bottom = 32.0
-text = "Save Changes"
-
-[node name="DiscardButton" type="Button" parent="JobData/Content/VBox/SaveDiscardBar"]
-margin_left = 950.0
-margin_right = 1095.33
-margin_bottom = 32.0
-text = "Discard Changes"
+margin_bottom = 84.0
+size_flags_horizontal = 3
+bbcode_enabled = true
+bbcode_text = "The job trigger defines when a job is executed.
+[b]Schedule Trigger[/b]
+A schedule trigger executes a job at a specific time interval described by a cron expression.
+"
+text = "The job trigger defines when a job is executed.
+Schedule Trigger
+A schedule trigger executes a job at a specific time interval described by a cron expression.
+"
+fit_content_height = true
 
 [connection signal="pressed" from="JobData/TitleBar/ActiveButton" to="." method="_on_ActiveButton_pressed"]
 [connection signal="pressed" from="JobData/TitleBar/RunButton" to="." method="_on_RunButton_pressed"]
 [connection signal="pressed" from="JobData/TitleBar/DuplicateButton" to="." method="_on_DuplicateButton_pressed"]
 [connection signal="pressed" from="JobData/TitleBar/DeleteButton" to="." method="_on_DeleteButton_pressed"]
-[connection signal="item_selected" from="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/TriggerSelect" to="." method="_on_TriggerSelect_item_selected"]
-[connection signal="text_changed" from="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/CronContainer/CronLineEdit" to="." method="_on_CronLineEdit_text_changed"]
-[connection signal="pressed" from="JobData/Content/VBox/HBoxContainer/TriggerSettings/TriggerSection/CronContainer/CronEditor" to="." method="_on_CronEditor_pressed"]
+[connection signal="item_selected" from="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection/TriggerSelect" to="." method="_on_TriggerSelect_item_selected"]
+[connection signal="text_changed" from="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection/CronContainer/CronLineEdit" to="." method="_on_CronLineEdit_text_changed"]
+[connection signal="pressed" from="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection/CronContainer/CronEditor" to="." method="_on_CronEditor_pressed"]
+[connection signal="pressed" from="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators/Navigation/HelpButton" to="." method="_on_HelpButton_pressed"]
+[connection signal="pressed" from="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators/Navigation/ExamplesButton" to="." method="_on_ExamplesButton_pressed"]
+[connection signal="meta_clicked" from="JobData/Content/VBox/HBoxContainer/HBoxContainer/SimpleTabulators/TabsContent/ExamplesHelpText" to="." method="_on_ExamplesHelpText_meta_clicked"]
 [connection signal="text_changed" from="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandEdit" to="." method="_on_CommandEdit_text_changed"]
-[connection signal="pressed" from="JobData/Content/VBox/SaveDiscardBar/SaveButton" to="." method="_on_SaveButton_pressed"]
-[connection signal="pressed" from="JobData/Content/VBox/SaveDiscardBar/DiscardButton" to="." method="_on_DiscardButton_pressed"]
+[connection signal="pressed" from="JobData/Content/VBox/HBoxContainer/CommandSettings/ShowHelpBar/CommandHelpShowButton" to="." method="_on_CommandHelpShowButton_pressed"]
+[connection signal="pressed" from="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/Navigation/CommandHelpHideButton" to="." method="_on_CommandHelpHideButton_pressed"]
+[connection signal="pressed" from="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/Navigation/CommandsHelpButton" to="." method="_on_CommandsHelpButton_pressed"]
+[connection signal="pressed" from="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/Navigation/CommandsExamplesButton" to="." method="_on_CommandsExamplesButton_pressed"]
+[connection signal="meta_clicked" from="JobData/Content/VBox/HBoxContainer/CommandSettings/CommandSimpleTabulators/TabsContent/CommandExamplesText" to="." method="_on_CommandExamplesText_meta_clicked"]
