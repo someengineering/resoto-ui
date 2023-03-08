@@ -8,7 +8,6 @@ signal all_dashboards_loaded
 signal dashboard_saved
 signal dashboard_opened(dashboard_name)
 signal dashboard_deleted
-signal old_dashboard_deleted
 
 const DefaultDashboardName:= "Resoto Example Dashboard"
 const number_keys : Array = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
@@ -116,7 +115,6 @@ func save_dashboard(dashboard : DashboardContainer):
 	if name_to_save in available_dashboards and available_dashboards[name_to_save].hash() == data.hash():
 		is_saving = false
 	else:
-		print(JSON.print({"ui_dashboard" : data}))
 		API.patch_config_id(self, get_db_config_name(current_name), JSON.print({"ui_dashboard" : data}))
 		available_dashboards[name_to_save] = data
 		
@@ -175,9 +173,8 @@ func _on_get_config_id_done(_error : int, _response, _config):
 		else:
 			var dashboard_name = dashboard.dashboard_name.replace(" ", "_")
 			available_dashboards[dashboard_name] = dashboard
-			API.delete_config_id(self, _g.dashboard_config_prefix + dashboard_name, "_on_old_dashboard_deleted")
-			yield(self, "old_dashboard_deleted")
-			API.patch_config_id(self, get_db_config_name(dashboard.dashboard_name), JSON.print({"ui_dashboard" : dashboard}))
+
+			API.put_config_id(self, get_db_config_name(dashboard.dashboard_name), JSON.print({"ui_dashboard" : dashboard}), "_on_update_dashboard_config_done")
 
 		dashboards_loaded += 1
 		if dashboards_loaded >= total_saved_dashboards:
@@ -188,11 +185,10 @@ func _on_get_config_id_done(_error : int, _response, _config):
 				_refresh_dashboard_list()
 
 
-func _on_old_dashboard_deleted(error : int, response : ResotoAPI.Response):
-	if error != OK:
+func _on_update_dashboard_config_done(_error : int, _response : ResotoAPI.Response):
+	if _error:
+		_g.emit_signal("add_toast", "Error updating dashboard to new configuration style.", "", 1, self)
 		return
-		
-	emit_signal("old_dashboard_deleted")
 
 
 func restore_default_dashboard() -> void:
