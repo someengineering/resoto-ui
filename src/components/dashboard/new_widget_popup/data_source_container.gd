@@ -282,9 +282,13 @@ func set_data_source(new_data_source : DataSource) -> void:
 			function_alias_line_edit.text = new_data_source.function_alias
 			kinds_combobox_two_entries_datasource.text = new_data_source.kind 
 		DataSource.TYPES.AGGREGATE_SEARCH:
-			group_variables.grouping_variables = data_source.grouping_variables
-			group_functions.grouping_variables = data_source.grouping_functions
-			search_query.text = data_source.search_query
+			if new_data_source.search_query != "":
+				group_variables.grouping_variables = new_data_source.grouping_variables
+				group_functions.grouping_variables = new_data_source.grouping_functions
+				search_query.text = new_data_source.search_query
+			else:
+				query_edit.text = new_data_source.query
+				new_data_source.custom_query = true
 		DataSource.TYPES.FIXED_AGGREGATE:
 			fixed_search_alias_line_edit.text = new_data_source.function_alias
 			fixed_search_function_line_edit.text = new_data_source.function
