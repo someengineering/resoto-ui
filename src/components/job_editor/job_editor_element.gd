@@ -79,6 +79,7 @@ signal delete_job
 signal duplicate_job
 signal cron_editor
 signal show_save_options
+signal changed_active_state
 
 var examples_triggers := [
 	"[b]Event Triggers[/b]",
@@ -114,6 +115,7 @@ var job_command : String	= "" setget set_job_command
 var job_trigger : int		= Trigger.SCHEDULED setget set_job_trigger
 var job_event : String		= "" setget set_job_event
 var job_schedule : String	= "0 * * * *" setget set_job_schedule
+var job_is_new : bool		= false
 
 onready var event_popup : PopupMenu = $"%EventSelector".get_popup()
 onready var cron_regex : RegEx = RegEx.new()
@@ -148,8 +150,18 @@ func _ready():
 	$"%CommandExamplesText".bbcode_text = examples_string_cmd
 
 
+func setup_new_job():
+	job_is_new = true
+	$"%JobID".show()
+	$"%JobNameEdit".show()
+	$"%JobNameEdit".grab_focus()
+	$"%JobName".hide()
+	yield(VisualServer, "frame_post_draw")
+	$"%JobNameEdit".set_cursor_position(job_id.length())
+
+
 func show_save_options():
-	emit_signal("show_save_options")
+	emit_signal("show_save_options", job_is_new)
 
 
 func _on_event_selected(_id:int):
@@ -183,6 +195,8 @@ func _on_job_show_done(_error:int, _response:UserAgent.Response) -> void:
 
 
 func setup(job_data) -> void:
+	if job_data.has("is_new_job"):
+		setup_new_job()
 	self.job_id = job_data.id
 	self.job_active = job_data.active
 	self.job_command = job_data.command
@@ -195,11 +209,13 @@ func setup(job_data) -> void:
 		elif job_data.trigger.has("message_type"):
 			# event trigger
 			temp_job_trigger = 1
+			job_event = job_data.trigger.message_type
 			_on_event_selected(get_event_id_from_string(job_data.trigger.message_type))
 			
 	if job_data.has("wait"):
 		# has schedule, then wait for event
 		temp_job_trigger = 2
+		job_event = job_data.trigger.message_type
 		_on_event_selected(get_event_id_from_string(job_data.wait.message_type))
 	self.job_trigger = temp_job_trigger
 
@@ -207,11 +223,12 @@ func setup(job_data) -> void:
 func set_job_id(_job_id:String):
 	job_id = _job_id
 	$"%JobName".text = job_id
+	$"%JobNameEdit".text = job_id
 
 
 func set_job_active(_job_active:bool):
 	job_active = _job_active
-	modulate.a = 1.0 if job_active else 0.6
+	modulate.a = 1.0 if job_active else 0.8
 	$"%ActiveButton".pressed = job_active
 	$"%ActiveButton"._on_toggle(job_active)
 
@@ -313,8 +330,6 @@ func _on_DuplicateButton_pressed():
 	
 	var copy_job_command : String = $"%CommandEdit".text
 	emit_signal("duplicate_job", job_id, copy_trigger_string, copy_job_command)
-	
-	Analytics.event(Analytics.EventsJobEditor.DUPLICATE)
 
 
 func _on_DeleteButton_pressed():
@@ -336,23 +351,23 @@ func _on_job_delete_done(_e, _r):
 
 
 func _on_job_active_toggle_done(_e, _r):
-	pass
+	if not _e:
+		emit_signal("changed_active_state", job_id, job_active)
 
 
 func _on_job_run_done(_e, _r):
 	pass
 
 
-func _on_job_update_done(_error:int, _response:UserAgent.Response) -> void:
-	if _error:
-		_g.emit_signal("add_toast", "Error in Job update", _response.body.get_string_from_utf8(), 1, self)
-		return
-
-
 func save_field():
 	job_trigger = $"%TriggerSelect".get_selected_id()
 	job_schedule = $"%CronLineEdit".text
 	job_event = $"%EventSelector".text
+	
+	if job_is_new:
+		$"%JobNameEdit".text = Utils.slugify($"%JobNameEdit".text)
+		job_id = $"%JobNameEdit".text
+	
 	var trigger_string : String = generate_schedule_string(job_trigger, job_schedule, job_event)
 	
 	job_command = $"%CommandEdit".text
@@ -404,7 +419,6 @@ func _on_ExamplesHelpText_meta_clicked(meta):
 		job_event = example.job_event
 	if example.job_schedule != "":
 		$"%CronLineEdit".text = example.job_schedule
-	
 
 
 func _on_CommandHelpShowButton_pressed():
@@ -439,3 +453,12 @@ func _on_CommandExamplesText_meta_clicked(meta):
 		return
 	var example : Dictionary = example_commands[int(meta)]
 	$"%CommandEdit".text = example.command
+
+
+func _on_JobNameEdit_focus_exited():
+	$"%JobNameEdit".text = Utils.slugify($"%JobNameEdit".text)
+
+
+func _on_JobNameEdit_text_entered(new_text):
+	$"%JobNameEdit".text = Utils.slugify($"%JobNameEdit".text)
+	$"%JobNameEdit".release_focus()

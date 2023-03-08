@@ -130,6 +130,17 @@ static func readable_dict(_dict:Dictionary, readable:String="", _depth:int=0) ->
 	return readable
 
 
+static func slugify(string: String) -> String:
+	var slug = string.to_lower().strip_edges().replace(" ", "-")
+	var allowed_chars = "a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 -"
+	var slugified_string := ""
+	for c in slug:
+		if allowed_chars.rsplit(" ").has(c):
+			slugified_string += c
+	slugified_string.trim_prefix("-").trim_suffix("-")
+	return slugified_string
+
+
 static func readable_array(_array:Array, readable:String="", _depth:int=0) -> String:
 	var _spacing : String = ""
 	for i in _depth:

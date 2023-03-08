@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=2]
@@ -10,6 +10,23 @@
 [ext_resource path="res://assets/icons/icon_128_hide.svg" type="Texture" id=8]
 [ext_resource path="res://assets/icons/icon_128_questionmark.svg" type="Texture" id=9]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=10]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=11]
+[ext_resource path="res://assets/icons/icon_128_toggle_off.svg" type="Texture" id=12]
+[ext_resource path="res://components/elements/styled/icon_toggle_button.gd" type="Script" id=13]
+
+[sub_resource type="DynamicFontData" id=3]
+override_oversampling = 1.5
+font_path = "res://assets/theme/SourceCodePro-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=4]
+size = 22
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 3 )
+
+[sub_resource type="StyleBoxEmpty" id=5]
+content_margin_left = 28.0
+content_margin_right = 5.0
 
 [sub_resource type="StyleBoxFlat" id=1]
 draw_center = false
@@ -42,6 +59,43 @@ margin_bottom = 472.0
 margin_right = 1906.0
 margin_bottom = 33.0
 
+[node name="JobID" type="Label" parent="JobData/TitleBar"]
+unique_name_in_owner = true
+visible = false
+margin_top = 3.0
+margin_right = 26.0
+margin_bottom = 33.0
+size_flags_vertical = 8
+theme_type_variation = "Label_24"
+text = "ID:"
+
+[node name="JobNameEdit" type="LineEdit" parent="JobData/TitleBar"]
+unique_name_in_owner = true
+visible = false
+margin_right = 857.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 4 )
+custom_styles/read_only = SubResource( 5 )
+custom_styles/focus = SubResource( 5 )
+custom_styles/normal = SubResource( 5 )
+text = "title"
+
+[node name="JobNameEditIcon" type="TextureRect" parent="JobData/TitleBar/JobNameEdit"]
+unique_name_in_owner = true
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -16.5
+margin_right = 24.0
+margin_bottom = 16.5
+rect_min_size = Vector2( 24, 24 )
+hint_tooltip = "Phantom Resource"
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 11 )
+
 [node name="JobName" type="Label" parent="JobData/TitleBar"]
 unique_name_in_owner = true
 margin_top = 3.0
@@ -62,6 +116,10 @@ unique_name_in_owner = true
 margin_left = 1762.0
 margin_right = 1795.0
 hint_tooltip = "Activate / Deactivate Job"
+flat = true
+script = ExtResource( 13 )
+icon_tex = ExtResource( 12 )
+icon_margin = 0
 
 [node name="RunButton" parent="JobData/TitleBar" instance=ExtResource( 6 )]
 margin_left = 1799.0
@@ -204,12 +262,6 @@ focus_mode = 2
 size_flags_horizontal = 0
 flat = false
 align = 0
-
-[node name="VSeparator" type="VSeparator" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer"]
-visible = false
-margin_left = 469.0
-margin_right = 473.0
-margin_bottom = 130.0
 
 [node name="SimpleTabulators" type="VBoxContainer" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer"]
 margin_left = 479.0
@@ -408,6 +460,8 @@ A schedule trigger executes a job at a specific time interval described by a cro
 "
 fit_content_height = true
 
+[connection signal="focus_exited" from="JobData/TitleBar/JobNameEdit" to="." method="_on_JobNameEdit_focus_exited"]
+[connection signal="text_entered" from="JobData/TitleBar/JobNameEdit" to="." method="_on_JobNameEdit_text_entered"]
 [connection signal="pressed" from="JobData/TitleBar/ActiveButton" to="." method="_on_ActiveButton_pressed"]
 [connection signal="pressed" from="JobData/TitleBar/RunButton" to="." method="_on_RunButton_pressed"]
 [connection signal="pressed" from="JobData/TitleBar/DuplicateButton" to="." method="_on_DuplicateButton_pressed"]
