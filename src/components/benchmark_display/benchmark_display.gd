@@ -12,12 +12,13 @@ var last_detect_command := ""
 var sections := []
 
 var checks := {}
-var current_account : String = ""
 
 var selected_element : CustomTreeItem = null
 
 var benchmarks := {}
 var benchmarks_count := 0
+var accounts : Array = []
+var current_account : String = ""
 
 var benchmark_model : CustomTreeItem = null
 
@@ -69,47 +70,53 @@ func _on_get_configs_done(error: int, response):
 
 func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 	if _error:
+		print(response.body.get_string_from_utf8())
 		return
 	
 	var data : Array = response.transformed.result
-	
+	checks = {}
+	var total_passing := 0
+	var total_failing := 0
 	for item in data:
 		if "kind" in item and item.kind == "report_check_result":
-			
-			for id in checks:
-				var d = checks[id]
-				var element = d[item.reported.id].main_element
-				element.set_reported_data(item.reported)
-				element.account_id = id
-			
-			if not "number_of_resources_failing_by_account" in item.reported:
-				for d in checks.values():
-					d[item.reported.id].main_element.failing_n = 0
-			else:
-				for a in checks:
-					var tree_item : CustomTreeItem = checks[a][item.reported.id]
-					if a in item.reported.number_of_resources_failing_by_account:
-						tree_item.main_element.failing_n = item.reported.number_of_resources_failing_by_account[a]
-					else:
-						tree_item.main_element.failing_n = 0
-						
-	for check in checks.values():
-		for item in check.values():
-			var parent = item.parent
-			while parent != null:
-				if item.main_element.passed:
-					parent.main_element.passing_n += 1
-				else:
-					parent.main_element.failing_n += 1
-				parent = parent.parent
+			checks[item.reported.id] = {"title" : item.reported.title}
+			if "number_of_resources_failing_by_account" in item.reported:
+				var resources_by_account : Dictionary = item.reported.number_of_resources_failing_by_account
+				checks[item.reported.id]["failing_resources"] = resources_by_account
 				
-	passed_indicator.text = str(benchmark_tree_root.main_element.passing_n) + " Checks Passed"
-	failed_indicator.text = str(benchmark_tree_root.main_element.failing_n) + " Checks Failed"
-	failed_indicator.visible = benchmark_tree_root.main_element.failing_n > 0
+				for account in benchmark_tree_root.sub_element_container.get_children():
+					if account.name in resources_by_account:
+						account.main_element.failing_n += 1
+						total_failing += 1
+					else:
+						account.main_element.passing_n += 1
+						total_passing += 1
+
+	benchmark_tree_root.main_element.passing_n = total_passing
+	benchmark_tree_root.main_element.failing_n = total_failing
+	passed_indicator.text = str(total_passing) + " Checks Passed"
+	failed_indicator.text = str(total_failing) + " Checks Failed"
+	failed_indicator.visible = total_failing > 0
 	export_report_button.show()
 	
 	if selected_element != null and is_instance_valid(selected_element):
 		_on_tree_item_pressed(selected_element)
+	
+
+func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictionary = {}):
+	if item == null:
+		return
+	if item.collapse_button.pressed and not data.empty():
+		item.disconnect("collapsed_changed", self, "_on_account_collapsed_changed")
+		current_account = item.name
+		populate_tree_branch(data, item)
+		
+
+
+func fill_totals(check : CustomTreeItem):
+	var parent : CustomTreeItem
+	
+
 
 func _on_tree_item_pressed(item : CustomTreeItem):
 	detail_container.show()
@@ -303,19 +310,19 @@ func create_benchmark_model(data : Dictionary):
 	benchmark_tree_root.connect("pressed", self, "_on_tree_item_pressed")
 	tree_container.add_child(benchmark_tree_root)
 	
-	var accounts : Array = benchmark_config_dialog.accounts_checklist.checked_options
+	accounts = benchmark_config_dialog.accounts_checklist.checked_options
 	
 	checks = {}
 	
 	var accounts_id : Array = []
 	for account in accounts:
-		current_account = account.id
 		accounts_id.append(account.id)
 		var element = new_account_tree_item(account)
 		element.set_label_variation("LabelBold")
 		var tree_item = benchmark_tree_root.add_sub_element(element)
+		tree_item.name = str(account.id)
 		tree_item.connect("pressed", self, "_on_tree_item_pressed")
-		populate_tree_branch(data, tree_item)
+		tree_item.connect("collapsed_changed", self, "_on_account_collapsed_changed", [tree_item, data])
 	
 	API.get_benchmark_report(data.id, PoolStringArray(accounts_id), self)
 	
@@ -334,10 +341,13 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem):
 	if "checks" in data:
 		for check in data.checks:
 			var element = new_check_result_tree_item(check)
-			if not current_account in checks:
-				checks[current_account] = {}
+			var current_check : Dictionary = checks[check]
+			if "failing_resources" in current_check and current_account in current_check["failing_resources"]:
+				element.failing_n = current_check["failing_resources"][current_account]
+			else:
+				element.failing_n = 0
+			element.title = current_check["title"]
 			var item : CustomTreeItem = root.add_sub_element(element)
-			checks[current_account][check] = item
 			item.connect("pressed", self, "_on_tree_item_pressed")
 			sections.append(item)
 

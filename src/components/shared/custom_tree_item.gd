@@ -96,7 +96,7 @@ func update_sub_container_visibility():
 	collapse_button.icon_tex = preload("res://assets/icons/icon_128_collapse.svg") if not collapse_button.pressed else preload("res://assets/icons/icon_128_expand.svg")
 	sub_container.visible = not collapsable or (sub_element_container.get_child_count() > 0 and collapse_button.pressed)
 	
-	collapse_button.visible = sub_element_container.get_child_count()
+#	collapse_button.visible = sub_element_container.get_child_count()
 	update()
 
 
@@ -142,4 +142,3 @@ func _on_MainElement_mouse_entered():
 func _on_MainElement_mouse_exited():
 	var tween := get_tree().create_tween()
 	tween.tween_property(main_element, "modulate", Color.white, 0.1)
-
