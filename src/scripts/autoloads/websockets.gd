@@ -38,6 +38,11 @@ func connect_websockets(_forced:=false):
 	if not _forced and (ws.get_connection_status() == ws.CONNECTION_CONNECTING or ws.get_connection_status() == ws.CONNECTION_CONNECTED):
 		return
 	
+	if _forced and ws.get_connection_status() == ws.CONNECTION_CONNECTING:
+		ws.disconnect_from_host()
+		connect_websockets(true)
+		return
+	
 	# Connect signals
 	if not ws.is_connected("connection_established", self, "_connection_established"):
 		ws.connect("connection_established", self, "_connection_established")
@@ -51,6 +56,7 @@ func connect_websockets(_forced:=false):
 	var ws_url = "ws://%s:%s/events" if not API.use_ssl else "wss://%s:%s/events"
 	ws_url = ws_url % [API.adress, API.port]
 	
+	set_process(true)
 	var err : int
 	if OS.has_feature("HTML5"):
 		refresh_auth_cookie()
@@ -94,5 +100,5 @@ func _on_data():
 
 func test_websocket():
 	if ws.get_peer(1).is_connected_to_host():
-		var test_string : String = JSON.print("")
+		var test_string : String = JSON.print({"kind": "event", "message_type": "task_started", "data": {}})
 		ws.get_peer(1).put_packet(test_string.to_utf8())

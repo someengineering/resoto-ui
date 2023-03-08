@@ -8,6 +8,8 @@ const TEXT_ERROR_CONNECTION = "Could not connect to Resoto Core!\nConnection tim
 var timeout_timer:= 0.0
 var timeout_limit:= 4.0
 var info_request : ResotoAPI.Request
+var infra_request : ResotoAPI.Request
+var is_connected := false
 
 onready var status = $"%ConnectStatusLabel"
 onready var psk_line_edit = $"%PSKLineEdit"
@@ -45,6 +47,10 @@ func connect_to_core() -> void:
 
 
 func start_connect() -> void:
+	if info_request:
+		info_request.cancel(ERR_PRINTER_ON_FIRE)
+	if infra_request:
+		infra_request.cancel(ERR_PRINTER_ON_FIRE)
 	$Content/Margin/Connect/PSK.hide()
 	$Content/Margin/Connect/Adress.hide()
 	connect_button.hide()
@@ -78,7 +84,7 @@ func start_connect() -> void:
 	$ConnectTimeoutTimer.start()
 	
 	info_request = API.system_ready(self)
-	API._get_infra_info(self)
+	infra_request = API._get_infra_info(self)
 
 
 func _on_get_infra_info_done(_error:int, response):
@@ -88,6 +94,8 @@ func _on_get_infra_info_done(_error:int, response):
 
 func _on_system_ready_done(error:int, response:UserAgent.Response) -> void:
 	if error:
+		if error == ERR_PRINTER_ON_FIRE:
+			return
 		if error == 25:
 			not_connected(Utils.http_status_to_string(info_request.http_.get_status()))
 		else:
@@ -102,11 +110,13 @@ func get_system_info():
 
 
 func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
+	if is_connected:
+		return
 	if error:
 		if _response.response_code == 401:
 			not_connected("401: Unauthorized")
 		return
-	
+	is_connected = true
 	var response_text:String = _response.transformed.result
 	var start_index:int = response_text.find("version: ") + 9
 	response_text = response_text.right(start_index)
@@ -134,6 +144,8 @@ func not_connected(status_text:String) -> void:
 	$Content/Margin/Connect/Adress.show()
 	connect_button.show()
 	$PingTimer.stop()
+	if not is_connected and not visible:
+		start_connect()
 
 
 func _on_ConnectDelay_timeout():
@@ -173,8 +185,11 @@ func _on_PingTimer_timeout():
 
 
 func _on_ping_done(_error: int, _r:ResotoAPI.Response):
+	if not is_connected:
+		return
 	if _error or _r.response_code != 200 or _r.body.get_string_from_utf8() != "pong":
-		_g.emit_signal("add_toast", "Lost connection to core...", "", 1)
+		is_connected = false
+		_g.emit_signal("add_toast", "Lost connection to Resoto Core.", "", 2)
 		$PingTimer.stop()
-		_g.popup_manager.open_popup("ConnectPopup")
-		connect_to_core()
+		_g.popup_manager.open_popup("ReconnectPopup")
+		start_connect()
