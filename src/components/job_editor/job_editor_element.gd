@@ -158,6 +158,9 @@ func setup_new_job():
 	$"%JobName".hide()
 	yield(VisualServer, "frame_post_draw")
 	$"%JobNameEdit".set_cursor_position(job_id.length())
+	$"%RunButton".hide()
+	$"%DuplicateButton".hide()
+	$"%DeleteButton".hide()
 
 
 func show_save_options():
@@ -215,7 +218,7 @@ func setup(job_data) -> void:
 	if job_data.has("wait"):
 		# has schedule, then wait for event
 		temp_job_trigger = 2
-		job_event = job_data.trigger.message_type
+		job_event = job_data.wait.message_type
 		_on_event_selected(get_event_id_from_string(job_data.wait.message_type))
 	self.job_trigger = temp_job_trigger
 
@@ -310,10 +313,11 @@ func _on_CronLineEdit_text_changed(new_text:String):
 
 
 func _on_ActiveButton_pressed():
-	if job_active:
-		API.cli_execute("jobs deactivate %s" % job_id, self, "_on_job_active_toggle_done")
-	else:
-		API.cli_execute("jobs activate %s" % job_id, self, "_on_job_active_toggle_done")
+	if not job_is_new:
+		if job_active:
+			API.cli_execute("jobs deactivate %s" % job_id, self, "_on_job_active_toggle_done")
+		else:
+			API.cli_execute("jobs activate %s" % job_id, self, "_on_job_active_toggle_done")
 	self.job_active = !job_active
 
 

@@ -149,7 +149,7 @@ func _on_duplicate_confirm_response(_button_clicked:String, _value:String):
 		# Check if a job with that name already exsits.
 		# To make sure no config was created while editing, check for new config keys:
 		for job in buffered_jobs:
-			if job.job_id == _value:
+			if job.id == _value:
 				_g.emit_signal("add_toast", "Duplication failed", "A Job with that name already exists.", 1, self)
 				return
 		latest_added_job_id = _value
@@ -175,7 +175,6 @@ func _on_job_add_done(_error:int, _response:UserAgent.Response) -> void:
 	if _error:
 		_g.emit_signal("add_toast", "Error in adding Job.", _response.body.get_string_from_utf8(), 1, self)
 		return
-	API.cli_execute("jobs deactivate %s" % latest_added_job_id, self, "_on_new_job_deactivate_done")
 	latest_added_job_id = ""
 	# Free the "new job" preview
 	var current_job : Node = null
@@ -183,6 +182,10 @@ func _on_job_add_done(_error:int, _response:UserAgent.Response) -> void:
 		current_job = c
 		break
 	if current_job.job_is_new:
+		if not current_job.job_active:
+			API.cli_execute("jobs deactivate %s" % current_job.job_id, self, "_on_new_job_deactivate_done")
+		else:
+			update_view()
 		current_job.queue_free()
 	$"%SaveDiscardBar".hide()
 

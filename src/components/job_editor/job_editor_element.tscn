@@ -122,18 +122,21 @@ icon_tex = ExtResource( 12 )
 icon_margin = 0
 
 [node name="RunButton" parent="JobData/TitleBar" instance=ExtResource( 6 )]
+unique_name_in_owner = true
 margin_left = 1799.0
 margin_right = 1832.0
 hint_tooltip = "Run Job"
 icon_tex = ExtResource( 4 )
 
 [node name="DuplicateButton" parent="JobData/TitleBar" instance=ExtResource( 6 )]
+unique_name_in_owner = true
 margin_left = 1836.0
 margin_right = 1869.0
 hint_tooltip = "Duplicate Job"
 icon_tex = ExtResource( 1 )
 
 [node name="DeleteButton" parent="JobData/TitleBar" instance=ExtResource( 6 )]
+unique_name_in_owner = true
 margin_left = 1873.0
 margin_right = 1906.0
 hint_tooltip = "Delete Job"
