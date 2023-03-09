@@ -115,7 +115,7 @@ func save_dashboard(dashboard : DashboardContainer):
 	if name_to_save in available_dashboards and available_dashboards[name_to_save].hash() == data.hash():
 		is_saving = false
 	else:
-		API.patch_config_id(self, get_db_config_name(current_name), JSON.print(data))
+		API.patch_config_id(self, get_db_config_name(current_name), JSON.print({"ui_dashboard" : data}))
 		available_dashboards[name_to_save] = data
 		
 	dashboard.last_saved_name = current_dashboard_name
@@ -163,9 +163,19 @@ func _on_get_configs_done(_error: int, response):
 func _on_get_config_id_done(_error : int, _response, _config):
 	var dashboard = _response.transformed.result
 	if dashboard is Dictionary:
-		if not default_dashboard_found and dashboard.dashboard_name == DefaultDashboardName:
-			default_dashboard_found = true
-		available_dashboards[dashboard.dashboard_name.replace(" ", "_")] = dashboard
+		if not default_dashboard_found:
+			if ("ui_dashboard" in dashboard and dashboard["ui_dashboard"].dashboard_name == DefaultDashboardName) or "dashboard_name" in dashboard and dashboard.dashboard_name == DefaultDashboardName:
+				default_dashboard_found = true
+			
+		# If ui_dashboard is not present (old dashboards) assing the whole result for retrocompatibility
+		if "ui_dashboard" in dashboard:
+			available_dashboards[dashboard["ui_dashboard"].dashboard_name.replace(" ", "_")] = dashboard["ui_dashboard"]
+		else:
+			var dashboard_name = dashboard.dashboard_name.replace(" ", "_")
+			available_dashboards[dashboard_name] = dashboard
+
+			API.put_config_id(self, get_db_config_name(dashboard.dashboard_name), JSON.print({"ui_dashboard" : dashboard}), "_on_update_dashboard_config_done")
+
 		dashboards_loaded += 1
 		if dashboards_loaded >= total_saved_dashboards:
 			if not default_dashboard_found:
@@ -175,11 +185,17 @@ func _on_get_config_id_done(_error : int, _response, _config):
 				_refresh_dashboard_list()
 
 
+func _on_update_dashboard_config_done(_error : int, _response : ResotoAPI.Response):
+	if _error:
+		_g.emit_signal("add_toast", "Error updating dashboard to new configuration style.", "", 1, self)
+		return
+
+
 func restore_default_dashboard() -> void:
 	var dashboard = Utils.load_json("res://data/resoto_example_dashboard.json")
 	if not dashboard.empty():
-		API.patch_config_id(self, get_db_config_name(dashboard.dashboard_name), JSON.print(dashboard))
-		available_dashboards[dashboard.dashboard_name.replace(" ", "_")] = dashboard
+		API.patch_config_id(self, get_db_config_name(dashboard["ui_dashboard"].dashboard_name), JSON.print(dashboard))
+		available_dashboards[dashboard["ui_dashboard"].dashboard_name.replace(" ", "_")] = dashboard["ui_dashboard"]
 	_refresh_dashboard_list()
 
 
@@ -253,7 +269,7 @@ func _on_import_rename_confirm_response(_button_clicked:String, _value:String, d
 		API.put_config_id(self, get_db_config_name(rename_new_name), JSON.print(data))
 
 
-func create_dashboard_with_data(data, save_dashboard:bool=true):
+func create_dashboard_with_data(data, _save_dashboard:bool=true):
 	if not data.has("dashboard_name"):
 		return
 
@@ -282,7 +298,7 @@ func create_dashboard_with_data(data, save_dashboard:bool=true):
 	dashboard.last_saved_name = dashboard.name
 	dashboard.manager = self
 	
-	if save_dashboard:
+	if _save_dashboard:
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
 		save_dashboard(dashboard)
