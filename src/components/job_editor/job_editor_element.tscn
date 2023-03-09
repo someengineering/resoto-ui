@@ -107,7 +107,7 @@ text = "ID:"
 [node name="JobNameEdit" type="LineEdit" parent="JobData/TitleBar"]
 unique_name_in_owner = true
 visible = false
-margin_right = 857.0
+margin_right = 779.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 custom_fonts/font = SubResource( 4 )
@@ -131,6 +131,27 @@ expand = true
 stretch_mode = 6
 script = ExtResource( 11 )
 
+[node name="IdError" type="Panel" parent="JobData/TitleBar/JobNameEdit"]
+unique_name_in_owner = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+
+[node name="IdErrorLabel" type="Label" parent="JobData/TitleBar/JobNameEdit/IdError"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -239.0
+margin_top = -25.0
+rect_min_size = Vector2( 0, 25 )
+custom_colors/font_color = Color( 0.788235, 0.258824, 0.141176, 1 )
+text = "A Job with this id already exists.  "
+
 [node name="JobName" type="Label" parent="JobData/TitleBar"]
 unique_name_in_owner = true
 margin_top = 3.0
@@ -140,7 +161,8 @@ size_flags_vertical = 8
 theme_type_variation = "Label_24"
 text = "title"
 
-[node name="Control" type="Control" parent="JobData/TitleBar"]
+[node name="JobNameSpacer" type="Control" parent="JobData/TitleBar"]
+unique_name_in_owner = true
 margin_left = 40.0
 margin_right = 1603.0
 margin_bottom = 33.0
@@ -502,6 +524,7 @@ A schedule trigger executes a job at a specific time interval described by a cro
 fit_content_height = true
 
 [connection signal="focus_exited" from="JobData/TitleBar/JobNameEdit" to="." method="_on_JobNameEdit_focus_exited"]
+[connection signal="text_changed" from="JobData/TitleBar/JobNameEdit" to="." method="_on_JobNameEdit_text_changed"]
 [connection signal="text_entered" from="JobData/TitleBar/JobNameEdit" to="." method="_on_JobNameEdit_text_entered"]
 [connection signal="pressed" from="JobData/TitleBar/ActiveButton" to="." method="_on_ActiveButton_pressed"]
 [connection signal="pressed" from="JobData/TitleBar/DuplicateButton" to="." method="_on_DuplicateButton_pressed"]

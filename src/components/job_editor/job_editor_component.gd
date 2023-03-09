@@ -7,7 +7,8 @@ const NewJob : Dictionary = {
 	"active" : true,
 	"command" : "",
 	"id" : "new-job-id",
-	"trigger" : { "cron_expression" : "0 * * * *" },
+#	"trigger" : { "cron_expression" : "0 * * * *" },
+	"trigger" : { "message_type" : "cleanup_plan"},
 	"is_new_job" : true
 }
 
@@ -134,39 +135,10 @@ func _on_delete_job(job:Node) -> void:
 	$"%SaveDiscardBar".hide()
 
 
-var duplicate_data := {}
-func _on_duplicate_job(job_id:String, copy_trigger_string:String, copy_job_command:String) -> void:
-	duplicate_data = {"job_id" : job_id, "trigger_string" : copy_trigger_string, "job_command" : copy_job_command}
-	var rename_confirm_popup = _g.popup_manager.show_input_popup(
-		"Duplicate Job id",
-		"Enter a new id for the duplicate of job. Do not use space:\n`%s`" % job_id,
-		job_id+"-duplicate",
-		"Accept", "Cancel")
-	rename_confirm_popup.connect("response_with_input", self, "_on_duplicate_confirm_response", [], CONNECT_ONESHOT)
-
-
-func _on_duplicate_confirm_response(_button_clicked:String, _value:String):
-	if _button_clicked == "left":
-		_value = _value.replace(" ", "-")
-		# Check if a job with that name already exsits.
-		# To make sure no config was created while editing, check for new config keys:
-		for job in buffered_jobs:
-			if job.id == _value:
-				_g.emit_signal("add_toast", "Duplication failed", "A Job with that name already exists.", 1, self)
-				return
-		latest_added_job_id = _value
-		Analytics.event(Analytics.EventsJobEditor.DUPLICATE)
-		API.cli_execute("jobs add --id %s %s '%s'" % [_value, duplicate_data.trigger_string, duplicate_data.job_command], self, "_on_job_duplicate_done")
-		duplicate_data.clear()
-
-
-func _on_job_duplicate_done(_error:int, _response:UserAgent.Response) -> void:
-	if _error:
-		_g.emit_signal("add_toast", "Error in duplicating Job.", _response.body.get_string_from_utf8(), 1, self)
-		return
-	API.cli_execute("jobs deactivate %s" % latest_added_job_id, self, "_on_new_job_deactivate_done")
-	latest_added_job_id = ""
-	update_view()
+func _on_duplicate_job(_job_dict:Dictionary):#(job_id:String, copy_trigger_string:String, copy_job_command:String) -> void:
+	show_job(_job_dict)
+	_on_show_save_options(true)
+	job_tree_root.select(0)
 
 
 func _on_AddJobButton_pressed():
@@ -239,6 +211,12 @@ func _on_SaveButton_pressed():
 	
 	var params : Array = current_job.save_field()
 	if current_job.job_is_new:
+		for job in buffered_jobs:
+			if job.id == params[0]:
+				_g.emit_signal("add_toast", "A Job with this id is already existing.", "", 2, self)
+				get_opened_job().id_warning()
+				return
+		
 		API.cli_execute("jobs add --id %s %s '%s'" % [params[0], params[1], params[2]], self, "_on_job_add_done")
 	else:
 		API.cli_execute("jobs update --id %s %s '%s'" % [params[0], params[1], params[2]], self, "_on_job_update_done")

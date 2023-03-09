@@ -113,7 +113,7 @@ var example_commands := [
 var job_id : String			= "" setget set_job_id
 var job_active : bool		= true setget set_job_active
 var job_command : String	= "" setget set_job_command
-var job_trigger : int		= Trigger.SCHEDULED setget set_job_trigger
+var job_trigger : int		= Trigger.EVENT setget set_job_trigger
 var job_event : String		= "" setget set_job_event
 var job_schedule : String	= "0 * * * *" setget set_job_schedule
 var job_is_new : bool		= false
@@ -158,6 +158,7 @@ func setup_new_job():
 	$"%JobNameEdit".show()
 	$"%JobNameEdit".grab_focus()
 	$"%JobName".hide()
+	$"%JobNameSpacer".hide()
 	show_command_error(true)
 	yield(VisualServer, "frame_post_draw")
 	$"%JobNameEdit".set_cursor_position(job_id.length())
@@ -339,13 +340,36 @@ func _on_RunButton_pressed():
 
 
 func _on_DuplicateButton_pressed():
+	emit_signal("duplicate_job", generate_dict())
+	return
 	var copy_job_trigger : int = $"%TriggerSelect".get_selected_id()
 	var copy_job_schedule : String = $"%CronLineEdit".text
 	var copy_job_event : String = $"%EventSelector".text
 	var copy_trigger_string : String = generate_schedule_string(copy_job_trigger, copy_job_schedule, copy_job_event)
-	
 	var copy_job_command : String = command_edit.text
 	emit_signal("duplicate_job", job_id, copy_trigger_string, copy_job_command)
+
+
+func generate_dict() -> Dictionary:
+	var job_dict : Dictionary = {
+		"active" : true,
+		"command" : command_edit.text,
+		"id" : job_id + "-duplicate",
+		"trigger" : {},
+		"is_new_job" : true
+	}
+	if job_trigger == Trigger.SCHEDULED:
+		job_dict.trigger = { "cron_expression" : job_schedule }
+	elif job_trigger == Trigger.EVENT:
+		job_dict.trigger = { "message_type" : job_event }
+	elif job_trigger == Trigger.SCHEDULED_AND_EVENT:
+		job_dict.trigger = { "cron_expression" : job_schedule }
+		job_dict["wait"] = { "message_type" : job_event }
+	return job_dict
+
+
+func id_warning():
+	$"%IdError".show()
 
 
 func _on_DeleteButton_pressed():
@@ -469,3 +493,7 @@ func _on_JobNameEdit_focus_exited():
 func _on_JobNameEdit_text_entered(new_text):
 	$"%JobNameEdit".text = Utils.slugify($"%JobNameEdit".text)
 	$"%JobNameEdit".release_focus()
+
+
+func _on_JobNameEdit_text_changed(new_text):
+	$"%IdError".hide()
