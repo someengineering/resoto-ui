@@ -79,6 +79,7 @@ signal delete_job
 signal duplicate_job
 signal cron_editor
 signal show_save_options
+signal toggle_save_button
 signal changed_active_state
 
 var examples_triggers := [
@@ -120,6 +121,7 @@ var job_is_new : bool		= false
 onready var event_popup : PopupMenu = $"%EventSelector".get_popup()
 onready var cron_regex : RegEx = RegEx.new()
 onready var trigger_help_text := $"%TriggerHelpText"
+onready var command_edit := $"%CommandEdit"
 
 
 func _ready():
@@ -156,11 +158,19 @@ func setup_new_job():
 	$"%JobNameEdit".show()
 	$"%JobNameEdit".grab_focus()
 	$"%JobName".hide()
+	show_command_error(true)
 	yield(VisualServer, "frame_post_draw")
 	$"%JobNameEdit".set_cursor_position(job_id.length())
 	$"%RunButton".hide()
 	$"%DuplicateButton".hide()
 	$"%DeleteButton".hide()
+
+
+func show_command_error(_show:bool):
+	if _show == $"%CommandError".visible:
+		return
+	$"%CommandError".visible = _show
+	emit_signal("toggle_save_button", _show)
 
 
 func show_save_options():
@@ -203,6 +213,7 @@ func setup(job_data) -> void:
 	self.job_id = job_data.id
 	self.job_active = job_data.active
 	self.job_command = job_data.command
+	show_command_error(command_edit.text == "")
 	var temp_job_trigger = -1
 	if job_data.has("trigger"):
 		if job_data.trigger.has("cron_expression"):
@@ -238,7 +249,7 @@ func set_job_active(_job_active:bool):
 
 func set_job_command(_job_command:String):
 	job_command = _job_command
-	$"%CommandEdit".text = job_command
+	command_edit.text = job_command
 
 
 func set_job_trigger(_job_trigger:int):
@@ -270,7 +281,8 @@ func get_event_id_from_string(_job_event:String) -> int:
 
 
 func _on_CommandEdit_text_changed():
-	if $"%CommandEdit".text != job_command:
+	show_command_error(command_edit.text == "")
+	if command_edit.text != job_command:
 		show_save_options()
 
 
@@ -322,8 +334,8 @@ func _on_ActiveButton_pressed():
 
 
 func _on_RunButton_pressed():
-	API.cli_execute("jobs run %s" % job_id, self, "_on_job_run_done")
 	Analytics.event(Analytics.EventsJobEditor.RUN)
+	_g.emit_signal("resh_lite_popup_with_cmd", "jobs run %s" % job_id)
 
 
 func _on_DuplicateButton_pressed():
@@ -332,7 +344,7 @@ func _on_DuplicateButton_pressed():
 	var copy_job_event : String = $"%EventSelector".text
 	var copy_trigger_string : String = generate_schedule_string(copy_job_trigger, copy_job_schedule, copy_job_event)
 	
-	var copy_job_command : String = $"%CommandEdit".text
+	var copy_job_command : String = command_edit.text
 	emit_signal("duplicate_job", job_id, copy_trigger_string, copy_job_command)
 
 
@@ -374,7 +386,7 @@ func save_field():
 	
 	var trigger_string : String = generate_schedule_string(job_trigger, job_schedule, job_event)
 	
-	job_command = $"%CommandEdit".text
+	job_command = command_edit.text
 	return [job_id, trigger_string, job_command]
 
 
@@ -425,16 +437,6 @@ func _on_ExamplesHelpText_meta_clicked(meta):
 		$"%CronLineEdit".text = example.job_schedule
 
 
-func _on_CommandHelpShowButton_pressed():
-	$"%ShowHelpBar".hide()
-	$"%CommandSimpleTabulators".show()
-
-
-func _on_CommandHelpHideButton_pressed():
-	$"%ShowHelpBar".show()
-	$"%CommandSimpleTabulators".hide()
-
-
 func _on_CommandsHelpButton_pressed():
 	$"%CommandsHelpButton".pressed = true
 	$"%CommandsHelpButton".release_focus()
@@ -456,7 +458,8 @@ func _on_CommandExamplesText_meta_clicked(meta):
 		OS.shell_open("https://resoto.com/docs/concepts/automation#job-filters--actions")
 		return
 	var example : Dictionary = example_commands[int(meta)]
-	$"%CommandEdit".text = example.command
+	command_edit.text = example.command
+	show_command_error(false)
 
 
 func _on_JobNameEdit_focus_exited():

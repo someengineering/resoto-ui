@@ -91,7 +91,7 @@ func popup(_expression:String, _position:=Vector2.ZERO, _target_node:Node=null):
 	target_node = _target_node
 	var split_expr : Array = _expression.split(" ")
 	if split_expr.size() < 5:
-		$"%MinLineEdit".text = "*"
+		$"%MinLineEdit".text = "0"
 		$"%HourLineEdit".text = "*"
 		$"%DayMLineEdit".text = "*"
 		$"%MonthLineEdit".text = "*"

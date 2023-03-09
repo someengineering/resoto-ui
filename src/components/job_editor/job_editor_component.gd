@@ -1,7 +1,7 @@
 extends Control
 
-const ToggleTexOn : Texture = preload("res://assets/icons/icon_128_toggle_on.svg")
-const ToggleTexOff : Texture = preload("res://assets/icons/icon_128_toggle_off.svg")
+const ToggleTexOn : Texture = preload("res://assets/icons/icon_128_check.svg")
+const ToggleTexOff : Texture = preload("res://assets/icons/icon_128_close_thick.svg")
 const JobElement : PackedScene = preload("res://components/job_editor/job_editor_element.tscn")
 const NewJob : Dictionary = {
 	"active" : true,
@@ -104,6 +104,7 @@ func _on_JobListTree_item_selected():
 
 func show_job(job:Dictionary):
 	$"%SaveDiscardBar".hide()
+	$"%CronHelper".hide()
 	for c in $"%JobView".get_children():
 		c.queue_free()
 	var new_job = JobElement.instance()
@@ -113,6 +114,7 @@ func show_job(job:Dictionary):
 	new_job.connect("duplicate_job", self, "_on_duplicate_job")
 	new_job.connect("show_save_options", self, "_on_show_save_options")
 	new_job.connect("cron_editor", self, "_on_cron_editor_open")
+	new_job.connect("toggle_save_button", self, "_on_toggle_save_button")
 	new_job.setup(job)
 
 
@@ -162,6 +164,8 @@ func _on_job_duplicate_done(_error:int, _response:UserAgent.Response) -> void:
 	if _error:
 		_g.emit_signal("add_toast", "Error in duplicating Job.", _response.body.get_string_from_utf8(), 1, self)
 		return
+	API.cli_execute("jobs deactivate %s" % latest_added_job_id, self, "_on_new_job_deactivate_done")
+	latest_added_job_id = ""
 	update_view()
 
 
@@ -212,7 +216,12 @@ func _on_JobsListFilterLineEdit_text_changed(_new_text):
 	update_navigation(_new_text)
 
 
+func _on_toggle_save_button(_disabled:bool):
+	$"%SaveButton".disabled = _disabled
+
+
 func _on_show_save_options(is_new_job:=false):
+	$"%SaveButton".disabled = get_opened_job().command_edit.text == ""
 	if is_new_job:
 		$"%SaveButton".text = "Add new Job"
 		$"%DiscardButton".text = "Discard new Job"

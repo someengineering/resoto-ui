@@ -14,6 +14,7 @@ func _ready():
 	terminal_popup.modulate.a = 0.0
 	_g.connect("resh_lite_popup", self, "change_terminal_popup_visibility")
 	_g.connect("resh_lite_popup_hide", self, "hide_terminal_popup")
+	_g.connect("resh_lite_popup_with_cmd", self, "resh_lite_popup_with_cmd")
 	terminal_popup.set_window_title("Resoto Shell Lite")
 
 
@@ -22,6 +23,11 @@ func change_terminal_popup_visibility():
 		hide_terminal_popup()
 	else:
 		show_terminal_popup()
+
+
+func resh_lite_popup_with_cmd(_command:String):
+	show_terminal_popup()
+	terminal_popup.content.set_command_line_text_on_active_tab(_command)
 
 
 func show_terminal_popup():
