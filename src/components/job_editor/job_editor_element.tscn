@@ -263,7 +263,7 @@ margin_right = 264.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 theme_type_variation = "LineEditCode"
-text = "* * * * *"
+text = "0 * * * *"
 
 [node name="CronError" type="Panel" parent="JobData/Content/VBox/HBoxContainer/HBoxContainer/TriggerSettings/TriggerSection/CronContainer/CronLineEdit"]
 unique_name_in_owner = true
