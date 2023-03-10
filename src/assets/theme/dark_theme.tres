@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=125 format=2]
+[gd_resource type="Theme" load_steps=132 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -766,6 +766,26 @@ corner_radius_top_left = 3
 corner_radius_bottom_left = 3
 corner_detail = 1
 
+[sub_resource type="DynamicFontData" id=125]
+override_oversampling = 1.5
+font_path = "res://assets/theme/Barlow-Bold.ttf"
+
+[sub_resource type="DynamicFont" id=126]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 125 )
+
+[sub_resource type="DynamicFontData" id=127]
+override_oversampling = 1.5
+font_path = "res://assets/theme/SourceCodePro-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=128]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 127 )
+
 [sub_resource type="StyleBoxFlat" id=33]
 content_margin_left = 0.0
 content_margin_right = 0.0
@@ -846,6 +866,10 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 expand_margin_bottom = 3.0
 
+[sub_resource type="DynamicFontData" id=131]
+override_oversampling = 1.0
+font_path = "res://assets/theme/NotoEmoji-Regular.ttf"
+
 [sub_resource type="DynamicFontData" id=19]
 override_oversampling = 2.0
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
@@ -854,6 +878,7 @@ font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 19 )
+fallback/0 = SubResource( 131 )
 
 [sub_resource type="StyleBoxEmpty" id=86]
 
@@ -882,6 +907,15 @@ use_filter = true
 font_data = SubResource( 1 )
 
 [sub_resource type="StyleBoxEmpty" id=95]
+
+[sub_resource type="StyleBoxEmpty" id=130]
+
+[sub_resource type="StyleBoxFlat" id=129]
+bg_color = Color( 0, 0.329412, 0.639216, 0.392157 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id=96]
 content_margin_left = 12.0
@@ -1106,6 +1140,10 @@ PopupPanelLight/styles/panel = SubResource( 123 )
 ProgressBar/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 ProgressBar/styles/bg = SubResource( 8 )
 ProgressBar/styles/fg = SubResource( 9 )
+RichTextLabel/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+RichTextLabel/fonts/bold_font = SubResource( 126 )
+RichTextLabel/fonts/mono_font = SubResource( 128 )
+RichTextLabel/fonts/normal_font = SubResource( 66 )
 SpinBox/icons/updown = ExtResource( 13 )
 TabContainer/colors/font_color_bg = Color( 0.160784, 0.333333, 0.501961, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.0588235, 0.2, 0.337255, 1 )
@@ -1153,6 +1191,7 @@ TextEditTag/styles/normal = SubResource( 87 )
 TextEditTag/styles/read_only = SubResource( 88 )
 TooltipPanel/styles/panel = SubResource( 45 )
 Tree/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+Tree/colors/font_color_selected = Color( 1, 1, 1, 1 )
 Tree/colors/relationship_line_color = Color( 0, 0.329412, 0.639216, 0.301961 )
 Tree/colors/title_button_color = Color( 0.816406, 0.94351, 1, 1 )
 Tree/constants/draw_guides = 0
@@ -1167,6 +1206,9 @@ Tree/icons/unchecked = ExtResource( 4 )
 Tree/icons/updown = ExtResource( 13 )
 Tree/styles/bg = SubResource( 7 )
 Tree/styles/bg_focus = SubResource( 95 )
+Tree/styles/button_pressed = SubResource( 130 )
+Tree/styles/selected = SubResource( 129 )
+Tree/styles/selected_focus = SubResource( 129 )
 Tree/styles/title_button_hover = SubResource( 4 )
 Tree/styles/title_button_normal = SubResource( 96 )
 Tree/styles/title_button_pressed = SubResource( 4 )

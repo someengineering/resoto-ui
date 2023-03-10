@@ -56,6 +56,7 @@ signal text_to_clipboard
 
 # Resh Lite Popup
 signal resh_lite_popup
+signal resh_lite_popup_with_cmd
 signal resh_lite_popup_hide
 
 

@@ -26,6 +26,10 @@ func update_size() -> void:
 	tabs.rect_min_size.x = clamp(40 + total_size_x, 0, rect_size.x-30)
 
 
+func set_command_line_text_on_active_tab(_text:String):
+	terminals[_active_tab_id].execute_command(_text)
+
+
 func deactivate_all_terminals() -> void:
 	for terminal in terminals:
 		if terminal is TerminalComponent:

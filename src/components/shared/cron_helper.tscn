@@ -74,7 +74,7 @@ unique_name_in_owner = true
 margin_right = 132.0
 margin_bottom = 33.0
 theme_type_variation = "LineEditCode"
-text = "*"
+text = "0"
 align = 1
 
 [node name="HourLineEdit" type="LineEdit" parent="Content/Control"]

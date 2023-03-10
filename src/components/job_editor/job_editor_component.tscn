@@ -1,10 +1,21 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://components/job_editor/job_editor_component.gd" type="Script" id=1]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=2]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=3]
 [ext_resource path="res://components/shared/cron_helper.tscn" type="PackedScene" id=4]
 [ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=5]
+[ext_resource path="res://assets/icons/icon_128_search.svg" type="Texture" id=6]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 0.0588235, 0.2, 0.337255, 1, 0.0588235, 0.2, 0.337255, 1 )
+
+[sub_resource type="GradientTexture2D" id=2]
+gradient = SubResource( 1 )
+width = 8
+height = 128
+
+[sub_resource type="StyleBoxEmpty" id=3]
 
 [node name="JobEditor" type="Control"]
 anchor_right = 1.0
@@ -22,34 +33,125 @@ margin_right = 1910.0
 margin_bottom = 1070.0
 custom_constants/separation = 10
 
-[node name="Menu" type="HBoxContainer" parent="JobsPanel/Main"]
+[node name="HSplitContainer" type="HSplitContainer" parent="JobsPanel/Main"]
 margin_right = 1900.0
-margin_bottom = 33.0
-size_flags_vertical = 0
-custom_constants/separation = 10
+margin_bottom = 1060.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_icons/grabber = SubResource( 2 )
 
-[node name="AddJobButton" parent="JobsPanel/Main/Menu" instance=ExtResource( 3 )]
+[node name="JobsListPanel" type="PanelContainer" parent="JobsPanel/Main/HSplitContainer"]
+margin_right = 536.0
+margin_bottom = 1060.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.4
+theme_type_variation = "PanelContainerDark"
+
+[node name="JobsList" type="VBoxContainer" parent="JobsPanel/Main/HSplitContainer/JobsListPanel"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 524.0
+margin_bottom = 1052.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 8
+
+[node name="Title" type="HBoxContainer" parent="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList"]
+margin_right = 512.0
+margin_bottom = 33.0
+custom_constants/separation = 5
+
+[node name="AddJobButton" parent="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList/Title" instance=ExtResource( 3 )]
 unique_name_in_owner = true
-margin_right = 108.0
+margin_left = -1.0
+margin_right = 110.333
 size_flags_vertical = 1
-text = "       Add Job"
+text = "       New Job"
 align = 0
 icon_tex = ExtResource( 2 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="JobsPanel/Main"]
-margin_top = 43.0
+[node name="Control" type="Control" parent="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList/Title"]
+margin_left = 116.0
+margin_right = 126.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="AllDataSearchIcon" type="TextureRect" parent="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 131.0
+margin_top = 6.0
+margin_right = 151.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 20, 20 )
+size_flags_vertical = 6
+texture = ExtResource( 6 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 5 )
+
+[node name="JobsListFilterLineEdit" type="LineEdit" parent="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList/Title"]
+unique_name_in_owner = true
+margin_left = 156.0
+margin_right = 512.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+clear_button_enabled = true
+
+[node name="JobListTree" type="Tree" parent="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList"]
+unique_name_in_owner = true
+margin_top = 41.0
+margin_right = 512.0
+margin_bottom = 1044.0
+rect_min_size = Vector2( 0, 160 )
+size_flags_vertical = 3
+columns = 2
+hide_root = true
+select_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="JobsPanel/Main/HSplitContainer"]
+margin_left = 548.0
 margin_right = 1900.0
 margin_bottom = 1060.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="JobList" type="VBoxContainer" parent="JobsPanel/Main/ScrollContainer"]
-unique_name_in_owner = true
-margin_right = 1900.0
-margin_bottom = 1017.0
+[node name="JobViewScrollContainer" type="ScrollContainer" parent="JobsPanel/Main/HSplitContainer/VBoxContainer"]
+margin_right = 1352.0
+margin_bottom = 1060.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 10
+
+[node name="JobView" type="PanelContainer" parent="JobsPanel/Main/HSplitContainer/VBoxContainer/JobViewScrollContainer"]
+unique_name_in_owner = true
+margin_right = 1352.0
+margin_bottom = 1060.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 3 )
+
+[node name="SaveDiscardBar" type="HBoxContainer" parent="JobsPanel/Main/HSplitContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 1028.0
+margin_right = 1352.0
+margin_bottom = 1060.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="SaveButton" type="Button" parent="JobsPanel/Main/HSplitContainer/VBoxContainer/SaveDiscardBar"]
+unique_name_in_owner = true
+margin_left = 530.0
+margin_right = 656.0
+margin_bottom = 32.0
+text = "Save Changes"
+
+[node name="DiscardButton" type="Button" parent="JobsPanel/Main/HSplitContainer/VBoxContainer/SaveDiscardBar"]
+unique_name_in_owner = true
+margin_left = 676.0
+margin_right = 821.333
+margin_bottom = 32.0
+text = "Discard Changes"
 
 [node name="CronEditor" type="CanvasLayer" parent="."]
 
@@ -61,44 +163,9 @@ margin_top = 7.0
 margin_right = 656.0
 margin_bottom = 144.0
 
-[node name="TemplatePopup" type="PopupPanel" parent="."]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -800.0
-margin_bottom = 600.0
-rect_min_size = Vector2( 300, 0 )
-theme_type_variation = "PopupPanelLight"
-script = ExtResource( 5 )
-
-[node name="VBox" type="VBoxContainer" parent="TemplatePopup"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 790.0
-margin_bottom = 590.0
-
-[node name="AddEmptyButton" type="Button" parent="TemplatePopup/VBox"]
-margin_right = 792.0
-margin_bottom = 32.0
-text = "New (empty)"
-align = 0
-
-[node name="TemplateHeadline" type="HBoxContainer" parent="TemplatePopup/VBox"]
-margin_top = 36.0
-margin_right = 792.0
-margin_bottom = 51.0
-
-[node name="TemplatesLabel" type="Label" parent="TemplatePopup/VBox/TemplateHeadline"]
-margin_right = 51.0
-margin_bottom = 15.0
-theme_type_variation = "LabelSmall"
-text = "Examples"
-
-[node name="TemplateContent" type="VBoxContainer" parent="TemplatePopup/VBox"]
-unique_name_in_owner = true
-margin_top = 55.0
-margin_right = 792.0
-margin_bottom = 87.0
-
-[connection signal="pressed" from="JobsPanel/Main/Menu/AddJobButton" to="." method="_on_AddJobButton_pressed"]
+[connection signal="pressed" from="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList/Title/AddJobButton" to="." method="_on_AddJobButton_pressed"]
+[connection signal="text_changed" from="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList/Title/JobsListFilterLineEdit" to="." method="_on_JobsListFilterLineEdit_text_changed"]
+[connection signal="item_selected" from="JobsPanel/Main/HSplitContainer/JobsListPanel/JobsList/JobListTree" to="." method="_on_JobListTree_item_selected"]
+[connection signal="pressed" from="JobsPanel/Main/HSplitContainer/VBoxContainer/SaveDiscardBar/SaveButton" to="." method="_on_SaveButton_pressed"]
+[connection signal="pressed" from="JobsPanel/Main/HSplitContainer/VBoxContainer/SaveDiscardBar/DiscardButton" to="." method="_on_DiscardButton_pressed"]
 [connection signal="finished" from="CronEditor/CronHelper" to="." method="_on_CronHelper_finished"]
-[connection signal="pressed" from="TemplatePopup/VBox/AddEmptyButton" to="." method="_on_AddEmptyButton_pressed"]
