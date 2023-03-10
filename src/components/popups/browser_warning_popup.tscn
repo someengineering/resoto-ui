@@ -120,7 +120,6 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 80, 0 )
 theme_type_variation = "ButtonFlat"
 text = "Dismiss"
-flat = true
 
 [node name="BrowserWarningTimer" type="Timer" parent="."]
 unique_name_in_owner = true
