@@ -22,6 +22,8 @@ var focus := false
 var showing:= false
 var just_hidden:= false
 
+var disabled := false setget set_disabled
+
 export (String) var text : String setget set_text, get_text
 
 onready var options_container := $PopupPanel/ScrollContainer/VBoxContainer
@@ -234,3 +236,9 @@ func set_button_min_size(_button_min_size:Vector2) -> void:
 	button_min_size = _button_min_size
 	if button:
 		button.rect_min_size = button_min_size
+
+
+func set_disabled(_disabled : bool):
+	disabled = _disabled
+	line_edit.editable = !disabled
+	button.disabled = disabled

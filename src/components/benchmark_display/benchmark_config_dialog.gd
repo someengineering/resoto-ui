@@ -58,15 +58,14 @@ func _on_graph_search_done(error : int, response : ResotoAPI.Response):
 	var accounts : Array = response.transformed.result
 	var accounts_id : Array = []
 	
-	for i in 10:
-		for account in accounts:
-			var n = account.reported.name
-			var id = account.reported.id
-			accounts_id.append({
-				"text" : n if n == id else "%s (%s)" % [n, id],
-				"name" : n,
-				"id" : id
-				})
+	for account in accounts:
+		var n = account.reported.name
+		var id = account.reported.id
+		accounts_id.append({
+			"text" : n if n == id else "%s (%s)" % [n, id],
+			"name" : n,
+			"id" : id
+			})
 		
 	accounts_checklist.items = accounts_id
 	

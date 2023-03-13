@@ -139,6 +139,7 @@ margin_bottom = 42.0
 custom_constants/separation = 10
 
 [node name="BenchmarkButton" type="Button" parent="PanelContainer/Content/PanelContainer2/HBoxContainer2"]
+unique_name_in_owner = true
 margin_right = 157.333
 margin_bottom = 32.0
 text = "Select Benchmark"
@@ -219,6 +220,7 @@ texture = SubResource( 8 )
 expand = true
 
 [node name="Filter" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 2 )]
+unique_name_in_owner = true
 margin_left = 768.0
 margin_right = 868.0
 size_flags_horizontal = 10
@@ -226,11 +228,13 @@ items = [ "All", "Passing", "Failing" ]
 text = "All"
 
 [node name="Expand" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
 margin_left = 872.0
 margin_right = 905.0
 icon_tex = ExtResource( 16 )
 
 [node name="Collapse" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
 margin_left = 909.0
 margin_right = 942.0
 icon_tex = ExtResource( 17 )

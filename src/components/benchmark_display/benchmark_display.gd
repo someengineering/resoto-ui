@@ -1,5 +1,7 @@
 extends MarginContainer
 
+signal expand_account_finished
+
 var benchmark_tree_root : CustomTreeItem = null
 var tree_item_scene := preload("res://components/shared/custom_tree_item.tscn")
 var check_collection_scene := preload("res://components/benchmark_display/benchmark_check_collection_display.tscn")
@@ -8,8 +10,6 @@ var check_account_scene := preload("res://components/benchmark_display/benchmark
 
 var last_detect_type := "manual"
 var last_detect_command := ""
-
-var sections := []
 
 var checks := {}
 
@@ -51,6 +51,11 @@ onready var checks_table_container := $"%ChecksTableContainer"
 onready var checks_table_content := $"%ChecksTableContent"
 onready var benchmark_label := $"%BenchmarkLabel"
 onready var export_report_button := $"%ExportReportButton"
+onready var benchmark_button := $"%BenchmarkButton"
+onready var expand_button := $"%Expand"
+onready var collapse_button := $"%Collapse"
+onready var filter_combo := $"%Filter"
+
 
 func _ready():
 	detail_container.hide()
@@ -69,6 +74,8 @@ func _on_get_configs_done(error: int, response):
 
 
 func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
+	set_top_buttons_disabled(false)
+	
 	if _error:
 		print(response.body.get_string_from_utf8())
 		return
@@ -91,6 +98,7 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 					else:
 						account.main_element.passing_n += 1
 						total_passing += 1
+					account.collapsable = true
 
 	benchmark_tree_root.main_element.passing_n = total_passing
 	benchmark_tree_root.main_element.failing_n = total_failing
@@ -109,13 +117,18 @@ func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictiona
 	if item.collapse_button.pressed and not data.empty():
 		item.disconnect("collapsed_changed", self, "_on_account_collapsed_changed")
 		current_account = item.name
-		populate_tree_branch(data, item)
+		var branch_checks := populate_tree_branch(data, item)
 		
-
-
-func fill_totals(check : CustomTreeItem):
-	var parent : CustomTreeItem
-	
+		for check in branch_checks:
+			var current_item = check
+			while current_item != item:
+				if current_item.main_element.passed:
+					current_item.parent.main_element.passing_n += 1
+				else:
+					current_item.parent.main_element.failing_n += 1
+				current_item = current_item.parent
+				
+	emit_signal("expand_account_finished")
 
 
 func _on_tree_item_pressed(item : CustomTreeItem):
@@ -249,37 +262,53 @@ func _on_ShowAllButton_pressed():
 
 
 func _on_Filter_option_changed(option):
-	for section in sections:
-		match option:
-			"All":
-				section.visible = true
-			"Passing":
-				section.visible = section.main_element.passed
-				if section.visible:
-					section.collapse(false)
-					while section.parent != benchmark_tree_root:
-						section.parent.visible = true
-						section = section.parent
-						section.collapse(false)
-			"Failing":
-				section.visible = not section.main_element.passed
-				if section.visible:
-					section.collapse(false)
+	_on_Expand_pressed()
+	filter_all(benchmark_tree_root, option)
+	
 
 
 func _on_Collapse_pressed():
-	for section in sections:
-		section.collapse(true)
-		
-	benchmark_tree_root.collapse(true)
+	set_top_buttons_disabled(true)
+	yield(change_collapse_all(benchmark_tree_root, true), 'completed')
+	
+	set_top_buttons_disabled(false)
 
 
 func _on_Expand_pressed():
-	for section in sections:
-		section.collapse(false)
-		
-	benchmark_tree_root.collapse(false)
+	set_top_buttons_disabled(true)
+	for account_item in benchmark_tree_root.sub_element_container.get_children():
+		if account_item.is_connected("collapsed_changed", self, "_on_account_collapsed_changed"):
+			account_item.collapse(false)
+			yield(self, "expand_account_finished")
+			
+	yield(change_collapse_all(benchmark_tree_root, false), "completed")
+	set_top_buttons_disabled(false)
+	
+	
+func change_collapse_all(item : CustomTreeItem, collapse : bool):
+	item.collapse(collapse)
+	
+	for sub_element in item.sub_element_container.get_children():
+		change_collapse_all(sub_element, collapse)
+		yield(get_tree(), "idle_frame")
 
+func filter_all(item : CustomTreeItem, condition : String):
+	var v : bool
+	match condition:
+		"Failing":
+			v = item.main_element.passed == false
+		"Passing":
+			if item.main_element is BenchmarkResultDisplay:
+				v = item.main_element.passed
+			else:
+				v = item.main_element.passing_n > 0
+		"All":
+			v = true
+			
+	item.visible = v
+	if v:
+		for sub_element in item.sub_element_container.get_children():
+			filter_all(sub_element, condition)
 
 func _on_BenchmarkButton_pressed():
 	$Control/BenchmarkConfigPopup.popup_centered()
@@ -299,8 +328,6 @@ func create_benchmark_model(data : Dictionary):
 		if child is CustomTreeItem:
 			tree_container.remove_child(child)
 			child.queue_free()
-	
-	sections = []
 	
 	benchmark_tree_root = tree_item_scene.instance()
 	benchmark_tree_root.main_element = new_check_collection_tree_item(data)
@@ -324,20 +351,21 @@ func create_benchmark_model(data : Dictionary):
 		tree_item.connect("pressed", self, "_on_tree_item_pressed")
 		tree_item.connect("collapsed_changed", self, "_on_account_collapsed_changed", [tree_item, data])
 	
+	set_top_buttons_disabled(true)
 	API.get_benchmark_report(data.id, PoolStringArray(accounts_id), self)
 	
 	benchmark_tree_root.collapse(false)
 
 
-func populate_tree_branch(data : Dictionary, root : CustomTreeItem):
-	sections.append(root)
+func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
+	var branch_checks : Array = []
 	if "children" in data:
 		for child in data.children:
 			var element = new_check_collection_tree_item(child)
 			element.set_collection_icon(BenchmarkCollectionDisplay.TYPES.COLLECTION)
 			var item : CustomTreeItem = root.add_sub_element(element)
 			item.connect("pressed", self, "_on_tree_item_pressed")
-			populate_tree_branch(child, item)
+			branch_checks.append_array(populate_tree_branch(child, item))
 	if "checks" in data:
 		for check in data.checks:
 			var element = new_check_result_tree_item(check)
@@ -349,7 +377,8 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem):
 			element.title = current_check["title"]
 			var item : CustomTreeItem = root.add_sub_element(element)
 			item.connect("pressed", self, "_on_tree_item_pressed")
-			sections.append(item)
+			branch_checks.append(item)
+	return branch_checks
 
 func new_check_collection_tree_item(data):
 	var element = check_collection_scene.instance()
@@ -399,10 +428,10 @@ func _on_ExportButton_pressed():
 
 
 func _on_ExportReportButton_pressed():
-	var checks := look_for_checks(benchmark_tree_root)
+	var _checks := look_for_checks(benchmark_tree_root)
 	var data : PoolStringArray = ["Severity", "Number of Resources Failing", "Check Name", "Categories", "Account ID"]
 	var severities := ["low", "medium", "high", "critical"]
-	for check in checks:
+	for check in _checks:
 		var row_data : PoolStringArray = []
 		var severity : String = check.severity
 		severity = "%d - %s" % [severities.find(severity), severity]
@@ -413,3 +442,11 @@ func _on_ExportReportButton_pressed():
 		row_data.append(check.account_id)
 		data.append(row_data.join(","))
 	JavaScript.download_buffer(data.join("\n").to_utf8(), "Checks Report - %s.csv" % Time.get_datetime_string_from_system())
+
+
+func set_top_buttons_disabled(disabled : bool):
+	export_report_button.disabled = disabled
+	benchmark_button.disabled = disabled
+	collapse_button.disabled = disabled
+	expand_button.disabled = disabled
+	filter_combo.disabled = disabled

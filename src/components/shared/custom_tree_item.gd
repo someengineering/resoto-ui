@@ -21,7 +21,7 @@ onready var spacer := $VBoxContainer/SubContainer/Spacer
 
 
 func _ready():
-	set_collapsable(collapsable)
+	set_collapsable(sub_element_container.get_child_count() > 0)
 	set_show_connection_lines(show_connection_lines)
 	if main_element:
 		set_main_element(main_element)
@@ -42,7 +42,7 @@ func _draw():
 
 
 func set_collapsable(_collapsable: bool):
-	collapsable = _collapsable and sub_container.get_child_count() > 0
+	collapsable = _collapsable
 	collapse_button.visible = collapsable
 	update_sub_container_visibility()
 
@@ -86,6 +86,8 @@ func add_sub_element(element):
 	if new_element != null:
 		new_element.connect("collapsed_changed", self, "child_collapsed_changed")
 		new_element.parent = self
+	
+	self.collapsable = true
 	update_sub_container_visibility()
 	return new_element
 
@@ -96,7 +98,7 @@ func update_sub_container_visibility():
 	collapse_button.icon_tex = preload("res://assets/icons/icon_128_collapse.svg") if not collapse_button.pressed else preload("res://assets/icons/icon_128_expand.svg")
 	sub_container.visible = not collapsable or (sub_element_container.get_child_count() > 0 and collapse_button.pressed)
 	
-#	collapse_button.visible = sub_element_container.get_child_count()
+	collapse_button.visible = collapsable
 	update()
 
 
@@ -114,6 +116,8 @@ func child_collapsed_changed():
 
 
 func collapse(collapse: bool):
+	if collapse_button.pressed != collapse:
+		return
 	collapse_button.pressed = not collapse
 	collapse_button.emit_signal("pressed")
 
@@ -142,3 +146,11 @@ func _on_MainElement_mouse_entered():
 func _on_MainElement_mouse_exited():
 	var tween := get_tree().create_tween()
 	tween.tween_property(main_element, "modulate", Color.white, 0.1)
+
+
+func expand_upwards():
+	if collapse_button.pressed:
+		return
+	collapse(false)
+	if parent != null:
+		parent.expand_upwards()
