@@ -1,3 +1,4 @@
+class_name BenchmarkAccountDisplay
 extends BenchmarkCollectionDisplay
 
-var id : String = ""
+var account_id : String = ""

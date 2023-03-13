@@ -600,19 +600,11 @@ text = "Failing Resources"
 
 [node name="CheckNameHeader" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/Header"]
 margin_left = 238.0
-margin_right = 762.0
+margin_right = 882.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 custom_styles/normal = SubResource( 5 )
 text = "Check Name"
-
-[node name="CategoriesHeader" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/Header"]
-margin_left = 762.0
-margin_right = 882.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 120, 0 )
-custom_styles/normal = SubResource( 6 )
-text = "Categories"
 
 [node name="Spacer" type="Control" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/Header"]
 margin_left = 882.0

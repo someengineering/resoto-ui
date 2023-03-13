@@ -13,6 +13,7 @@ var passed : bool = false setget set_passed
 var passing_n : int = 0 setget set_passing_n
 var failing_n : int = 0 setget set_failing_n
 var description : String
+var id : String
 
 func _ready():
 	connect("resized", self, "_on_BenchmarkCheckCollectionDisplay_resized")

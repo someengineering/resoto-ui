@@ -86,7 +86,9 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 	var total_failing := 0
 	for item in data:
 		if "kind" in item and item.kind == "report_check_result":
-			checks[item.reported.id] = {"title" : item.reported.title}
+			checks[item.reported.id] = item.reported
+			checks[item.reported.id]["failing_resources"] = {}
+			
 			if "number_of_resources_failing_by_account" in item.reported:
 				var resources_by_account : Dictionary = item.reported.number_of_resources_failing_by_account
 				checks[item.reported.id]["failing_resources"] = resources_by_account
@@ -121,7 +123,7 @@ func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictiona
 		
 		for check in branch_checks:
 			var current_item = check
-			while current_item != item:
+			while current_item.parent != item:
 				if current_item.main_element.passed:
 					current_item.parent.main_element.passing_n += 1
 				else:
@@ -138,7 +140,7 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 	detail_view_title.raw_text = element.title
 	
 	if element.passed:
-		result_count_label.text = "Passed!"		
+		result_count_label.text = "Passed!"
 		result_count_label.modulate = Color(0x004d4dff)
 		result_count_panel.self_modulate =  Style.col_map[Style.c.CHECK_ON]
 		result_count_icon.texture = preload("res://assets/icons/icon_128_check.svg")
@@ -154,25 +156,9 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		result_count_panel.self_modulate =  Style.col_map[Style.c.CHECK_FAIL]
 	detail_view_pass_widget.visible = "passing_n" in element
 	
-	$"%RemediationContainer".visible = "remediation_text" in element
-	$"%RiskContainer".visible = "risk" in element
-	
 	resources_container.visible = element is BenchmarkResultDisplay
 	detail_view_description.visible = "description" in element
-	
-	detail_remediation_label.text = ""
-	if "remediation_text" in element:
-		detail_remediation_label.text = element.remediation_text
-		if remediation_button.is_connected("pressed", OS, "shell_open"):
-			remediation_button.disconnect("pressed", OS, "shell_open")
-		if element.remediation_url != "":
-			remediation_button.connect("pressed", OS, "shell_open", [element.remediation_url])
-		remediation_button.visible = element.remediation_url != ""
-		
-			
-	if "risk" in element:
-		detail_risk_label.text = element.risk
-	
+
 	if "description" in element:
 		detail_view_description.text = element.description
 	
@@ -180,36 +166,64 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		detail_view_pass_widget.passing_n = element.passing_n
 		detail_view_pass_widget.failing_n = element.failing_n
 	
-	if "severity" in element:
-		severity_indicator.severity = element.severity
-		risk_severity_label.text = "(%s)" % element.severity.capitalize()
-		risk_severity_label.set("custom_colors/font_color", severity_indicator.severity_colors[element.severity])
-		
-	severity_indicator.visible = "severity" in element
-	
-	
 	current_failing_resources = []
-	if element is BenchmarkResultDisplay and not element.passed:
-		API.get_check_resources(element.id, element.account_id, self)
-		resources_container.visible = true
-		resources_loading_overlay.visible = true
+	if element is BenchmarkResultDisplay:
 		checks_table_container.visible = false
+		if not element.passed:
+			API.get_check_resources(element.id, element.account_id, self)
+			resources_container.visible = true
+			resources_loading_overlay.visible = true
+			checks_table_container.visible = false
+		else:
+			resources_container.visible = false
+			
+		$"%RemediationContainer".visible = true
+		$"%RiskContainer".visible = true
+		severity_indicator.visible = true
+		
+		var check = checks[element.id]
+		
+		detail_remediation_label.text = check.remediation.text
+		if remediation_button.is_connected("pressed", OS, "shell_open"):
+			remediation_button.disconnect("pressed", OS, "shell_open")
+		if check.remediation.url != "":
+			remediation_button.connect("pressed", OS, "shell_open", [check.remediation.url])
+			remediation_button.show()
+		else:
+			remediation_button.hide()
+		remediation_button.visible = check.remediation.url != ""
+		
+		detail_risk_label.text = check.risk
+		severity_indicator.severity = check.severity
+		risk_severity_label.text = "(%s)" % check.severity.capitalize()
+		risk_severity_label.set("custom_colors/font_color", severity_indicator.severity_colors[check.severity])
+		
 	else:
+		$"%RemediationContainer".visible = false
+		$"%RiskContainer".visible = false
+		severity_indicator.visible = false
+		
 		for row in checks_table_content.get_children():
 			checks_table_content.remove_child(row)
 			row.queue_free()
-			
-		var elements : Array = look_for_checks(selected_element)
+		
+		var title = selected_element.main_element.title if not selected_element.main_element is BenchmarkAccountDisplay else benchmark_tree_root.main_element.title
+		var elements : Array = look_for_checks(title)
 		var data_elements : Array = []
+		var filter_account := get_element_account(selected_element)
+		
 		for check in elements:
-			if check.failing_n == 0:
+			if filter_account != "" and not filter_account in check.failing_resources:
 				continue
 			if not check.title in data_elements:
 				var table_element := preload("res://components/benchmark_display/checks_table_element.tscn").instance()
 				table_element.check_name = check.title
 				table_element.severity = check.severity
-				table_element.failing_n = check.failing_n
-				table_element.categories = check.categories
+				for account_id in check.failing_resources:
+					if filter_account == "" or account_id == filter_account:
+						table_element.failing_n += check.failing_resources[account_id]
+				if table_element.failing_n == 0:
+					continue
 				checks_table_content.add_child(table_element)
 				data_elements.append(check.title)
 			else:
@@ -291,6 +305,7 @@ func change_collapse_all(item : CustomTreeItem, collapse : bool):
 	for sub_element in item.sub_element_container.get_children():
 		change_collapse_all(sub_element, collapse)
 		yield(get_tree(), "idle_frame")
+
 
 func filter_all(item : CustomTreeItem, condition : String):
 	var v : bool
@@ -374,11 +389,13 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
 				element.failing_n = current_check["failing_resources"][current_account]
 			else:
 				element.failing_n = 0
+			element.severity = current_check["severity"]
 			element.title = current_check["title"]
 			var item : CustomTreeItem = root.add_sub_element(element)
 			item.connect("pressed", self, "_on_tree_item_pressed")
 			branch_checks.append(item)
 	return branch_checks
+
 
 func new_check_collection_tree_item(data):
 	var element = check_collection_scene.instance()
@@ -386,32 +403,55 @@ func new_check_collection_tree_item(data):
 	element.description = data.description
 	return element
 
+
 func new_check_result_tree_item(id : String = ""):
 	var element = check_result_scene.instance()
 	element.id = id
 	return element
 
+
 func new_account_tree_item(account):
 	var element = check_account_scene.instance()
 	element.title = account.text
 	element.name = account.name
-	element.id = account.id
+	element.account_id = account.id
 	return element
 
 
-func look_for_checks(root : CustomTreeItem) -> Array:
-	var elements : Array = []
-	for element in root.sub_element_container.get_children():
-		if element.main_element is BenchmarkResultDisplay:
-			elements.append(element.main_element)
+func look_for_checks(title : String) -> Array:
+	if checks.empty():
+		return []
+	# Look element in the model
+	var element = find_model_element_by_title(title, benchmark_config_dialog.selected_benchmark)
+	var check_ids := look_for_checks_in_element(element)
+	var check_elements := []
+	
+	for id in check_ids:
+		check_elements.append(checks[id])
+		
+	return check_elements
+
+
+func look_for_checks_in_element(element : Dictionary) -> Array:
+	var all_checks: Array = []
+	
+	if element.empty():
+		return []
+	
+	if "checks" in element:
+		return element["checks"]
+	
+	for child in element["children"]:
+		if "checks" in child:
+			all_checks.append_array(child["checks"])
 		else:
-			elements.append_array(look_for_checks(element))
-			
-	return elements
+			all_checks.append_array(look_for_checks_in_element(child))
+	
+	return all_checks
 
 
 func _on_ExportButton_pressed():
-	var data : PoolStringArray = ["Severity", "Number of Resources Failing", "Check Name", "Categories"]
+	var data : PoolStringArray = ["Severity,Number of Resources Failing,Check Name"]
 	var severities := ["low", "medium", "high", "critical"]
 	for row in checks_table_content.get_children():
 		var row_data : PoolStringArray = []
@@ -420,28 +460,28 @@ func _on_ExportButton_pressed():
 		row_data.append(severity)
 		row_data.append(str(row.failing_n))
 		row_data.append(row.check_name)
-		row_data.append(row.categories.join(" "))
 		data.append(row_data.join(","))
 	
-	JavaScript.download_buffer(data.join("\n").to_utf8(), "Checks Report - %s.csv" % Time.get_datetime_string_from_system())
-
+	if OS.has_feature("HTML5"):
+		JavaScript.download_buffer(data.join("\n").to_utf8(), "Checks Report - %s.csv" % Time.get_datetime_string_from_system())
 
 
 func _on_ExportReportButton_pressed():
-	var _checks := look_for_checks(benchmark_tree_root)
-	var data : PoolStringArray = ["Severity", "Number of Resources Failing", "Check Name", "Categories", "Account ID"]
+	var _checks := look_for_checks(benchmark_tree_root.main_element.title)
+	var data : PoolStringArray = ["Severity,Number of Resources Failing,Check Name,Account ID"]
 	var severities := ["low", "medium", "high", "critical"]
 	for check in _checks:
-		var row_data : PoolStringArray = []
-		var severity : String = check.severity
-		severity = "%d - %s" % [severities.find(severity), severity]
-		row_data.append(severity)
-		row_data.append(str(check.failing_n))
-		row_data.append(check.title)
-		row_data.append((check.categories as PoolStringArray).join(" "))
-		row_data.append(check.account_id)
-		data.append(row_data.join(","))
-	JavaScript.download_buffer(data.join("\n").to_utf8(), "Checks Report - %s.csv" % Time.get_datetime_string_from_system())
+		for account_id in check.failing_resources:
+			var row_data : PoolStringArray = []
+			var severity : String = "%d - %s" % [severities.find(check.severity), check.severity]
+			row_data.append(severity)
+			row_data.append(str(check.failing_resources[account_id]))
+			row_data.append(check.title)
+			row_data.append(account_id)
+			data.append(row_data.join(","))
+		
+	if OS.has_feature("HTML5"):
+		JavaScript.download_buffer(data.join("\n").to_utf8(), "Checks Report - %s.csv" % Time.get_datetime_string_from_system())
 
 
 func set_top_buttons_disabled(disabled : bool):
@@ -450,3 +490,26 @@ func set_top_buttons_disabled(disabled : bool):
 	collapse_button.disabled = disabled
 	expand_button.disabled = disabled
 	filter_combo.disabled = disabled
+
+func find_model_element_by_title(title : String, model : Dictionary):
+	var result : Dictionary = {}
+	if model["title"] == title:
+		return model
+
+	if "children" in model:
+		for element in model["children"]:
+			if element["title"] == title:
+				result = element
+			else:
+				result = find_model_element_by_title(title, element)
+			if not result.empty():
+				break
+	return result
+	
+func get_element_account(element : CustomTreeItem) -> String:
+	var parent := element
+	while parent != null:
+		if parent.main_element is BenchmarkAccountDisplay:
+			return parent.main_element.account_id
+		parent = parent.parent
+	return ""
