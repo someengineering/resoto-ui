@@ -24,6 +24,7 @@ texture = ExtResource( 3 )
 [node name="Content" type="Node2D" parent="GraphNavigator"]
 
 [node name="BG" type="TextureRect" parent="GraphNavigator/Content"]
+visible = false
 modulate = Color( 0.239216, 0.0901961, 0.431373, 0.278431 )
 margin_left = -5120.0
 margin_top = -5120.0

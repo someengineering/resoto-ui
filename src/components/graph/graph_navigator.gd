@@ -49,6 +49,10 @@ func _input(event):
 			zoom(-zoom_amount)
 
 
+func reset_position():
+	content.position = Vector2.ZERO
+
+
 func zoom(_change:float):
 	var new_zoom_level = clamp(zoom_level+_change, 0.02, 1.5)
 	if new_zoom_level == zoom_level:

@@ -6,7 +6,7 @@ class_name GraphLayoutAlgorithmCose
 # Modified for GDScript
 
 # Based on the following article:
-# http:#dl.acm.org/citation.cfm?id=1498047
+# http://dl.acm.org/citation.cfm?id=1498047
 
 const GraphLayoutNodeScene = preload("res://components/graph/Elements/GraphNode.tscn")
 const GraphLayoutEdgeScene = preload("res://components/graph/Elements/GraphEdge.tscn")
@@ -24,6 +24,8 @@ var node_overlap:float			= 800.0
 var max_iterations:int			= 1000
 var total_offset:float			= 10000.0
 var stopped:bool				= false
+
+var main_node_id:String			= ""
 
 var edges:Array
 var nodes:Dictionary
@@ -112,6 +114,9 @@ func create_layout_info(_nodes:Dictionary, _edges:Array):
 	for node_id in nodes.keys():
 		var temp_node = GraphLayoutNodeScene.instance()
 		temp_node.id = node_id
+		temp_node.node_id = nodes[node_id].id
+		if temp_node.node_id == main_node_id:
+			temp_node.node_display_mode = temp_node.Mode.ROOT
 		temp_node.parent_id = ""
 		if node_id=="root":
 			temp_node.is_locked = true
@@ -186,8 +191,10 @@ func create_layout_info(_nodes:Dictionary, _edges:Array):
 	for i in new_layout_info.edge_size:
 		var e = edges[ i ];
 		var tempEdge = GraphLayoutEdgeScene.instance()
-		tempEdge.id = e.from+"---"+e.to
+		tempEdge.id = e.from+"##to##"+e.to
 		tempEdge.source_id = e.from
+		if tempEdge.source_id == main_node_id:
+			tempEdge.edge_display_mode = tempEdge.Mode.OUTBOUND
 		tempEdge.target_id = e.to
 		graph_base.add_child(tempEdge)
 
