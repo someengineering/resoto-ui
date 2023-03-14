@@ -12,6 +12,7 @@ export (Color) var connection_lines_color: Color = Color("#0f3356")
 var custom_tree_item_scene := load("res://components/shared/custom_tree_item.tscn")
 var main_element = null
 var parent = null
+var n_of_childs_visible := 0
 
 onready var main_element_container := $VBoxContainer/MainContainer/MainElement
 onready var sub_element_container := $VBoxContainer/SubContainer/SubElements
@@ -28,7 +29,7 @@ func _ready():
 	else:
 		set_main_element("null")
 
-func _draw():
+func _draw():	
 	if sub_container.visible and show_connection_lines:
 		for element in sub_element_container.get_children():
 			if not element.visible:
@@ -105,8 +106,8 @@ func update_sub_container_visibility():
 func _on_CollapseButton_pressed():
 	update_sub_container_visibility()
 
-	yield(VisualServer, "frame_post_draw")
 	emit_signal("collapsed_changed")
+	yield(VisualServer, "frame_post_draw")
 	update()
 
 

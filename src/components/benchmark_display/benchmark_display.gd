@@ -1,6 +1,8 @@
 extends MarginContainer
 
 signal expand_account_finished
+signal all_accounts_expanded
+signal all_collapsed
 
 var benchmark_tree_root : CustomTreeItem = null
 var tree_item_scene := preload("res://components/shared/custom_tree_item.tscn")
@@ -19,6 +21,7 @@ var benchmarks := {}
 var benchmarks_count := 0
 var accounts : Array = []
 var current_account : String = ""
+var collapsed_accounts : Array = []
 
 var severities := ["low", "medium", "high", "critical"]
 
@@ -119,7 +122,8 @@ func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictiona
 	if item == null:
 		return
 	if item.collapse_button.pressed and not data.empty():
-		item.disconnect("collapsed_changed", self, "_on_account_collapsed_changed")
+		if item.is_connected("collapsed_changed", self, "_on_account_collapsed_changed"):
+			item.disconnect("collapsed_changed", self, "_on_account_collapsed_changed")
 		current_account = item.name
 		var branch_checks := populate_tree_branch(data, item)
 		
@@ -149,10 +153,14 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		resource_count_label.visible = false
 	else:
 		result_count_icon.visible = false
-		result_count_label.text = str(element.failing_n) + (" resources failing" if selected_element.main_element is BenchmarkResultDisplay else " checks failing")
+		var result_text : String = str(element.failing_n) + (" resources failing" if selected_element.main_element is BenchmarkResultDisplay else " checks failing")
+		if element.failing_n == 1:
+			result_text = result_text.replace("resources", "resource").replace("checks",  "check")
+		result_count_label.text = result_text
 		result_count_label.modulate = Color.white
 		resource_count_label.visible = true
 		resource_count_label.text = str(element.failing_n)
+		$"%ResourcesTitle".text = "Failing Resource" if element.failing_n == 1 else "Failing Resources"
 		result_count_panel.self_modulate =  Style.col_map[Style.c.CHECK_FAIL]
 	detail_view_pass_widget.visible = "passing_n" in element
 	
@@ -278,35 +286,48 @@ func _on_ShowAllButton_pressed():
 func _on_Filter_option_changed(option):
 	if benchmark_tree_root == null:
 		return
-	yield(_on_Expand_pressed(), "completed")
+		
+	set_top_buttons_disabled(true)
+	
+	$ExpandAccountsTimer.start()
+	yield(self, "all_accounts_expanded")
+	
+	change_collapse_all(benchmark_tree_root, false)
+	yield(self, "all_collapsed")
+	
 	filter_all(benchmark_tree_root, option)
+	
+	set_top_buttons_disabled(false)
 	
 
 
 func _on_Collapse_pressed():
 	set_top_buttons_disabled(true)
-	yield(change_collapse_all(benchmark_tree_root, true), 'completed')
-	
+	change_collapse_all(benchmark_tree_root, true)
+	yield(self, "all_collapsed")
 	set_top_buttons_disabled(false)
 
 
 func _on_Expand_pressed():
 	set_top_buttons_disabled(true)
-	for account_item in benchmark_tree_root.sub_element_container.get_children():
-		if account_item.is_connected("collapsed_changed", self, "_on_account_collapsed_changed"):
-			account_item.collapse(false)
-			yield(self, "expand_account_finished")
-			
-	yield(change_collapse_all(benchmark_tree_root, false), "completed")
+	
+	$ExpandAccountsTimer.start()
+	yield(self, "all_accounts_expanded")
+	
+	change_collapse_all(benchmark_tree_root, false)
+	yield(self, "all_collapsed")
+	
 	set_top_buttons_disabled(false)
 	
 	
 func change_collapse_all(item : CustomTreeItem, collapse : bool):
 	item.collapse(collapse)
-	
 	for sub_element in item.sub_element_container.get_children():
 		change_collapse_all(sub_element, collapse)
 		yield(get_tree(), "idle_frame")
+		
+	if item == benchmark_tree_root:
+		emit_signal("all_collapsed")
 
 
 func filter_all(item : CustomTreeItem, condition : String):
@@ -360,6 +381,7 @@ func create_benchmark_model(data : Dictionary):
 	checks = {}
 	
 	var accounts_id : Array = []
+	collapsed_accounts = []
 	for account in accounts:
 		accounts_id.append(account.id)
 		var element = new_account_tree_item(account)
@@ -368,6 +390,7 @@ func create_benchmark_model(data : Dictionary):
 		tree_item.name = str(account.id)
 		tree_item.connect("pressed", self, "_on_tree_item_pressed")
 		tree_item.connect("collapsed_changed", self, "_on_account_collapsed_changed", [tree_item, data])
+		collapsed_accounts.append(tree_item)
 	
 	set_top_buttons_disabled(true)
 	API.get_benchmark_report(data.id, PoolStringArray(accounts_id), self)
@@ -496,6 +519,9 @@ func set_top_buttons_disabled(disabled : bool):
 	collapse_button.disabled = disabled
 	expand_button.disabled = disabled
 	filter_combo.disabled = disabled
+	failed_indicator.get_node("FailButtonFilter").disabled = disabled
+	passed_indicator.get_node("PassButtonFilter").disabled = disabled
+	$"%LoadingIndicator".modulate = Color.white if disabled else Color.transparent
 
 func find_model_element_by_title(title : String, model : Dictionary):
 	var result : Dictionary = {}
@@ -532,3 +558,15 @@ func _on_FailButtonFilter_pressed():
 
 func _on_PassButtonFilter_pressed():
 	filter_combo.text = "Passing"
+
+
+func _on_Timer_timeout():
+	if not collapsed_accounts.empty():
+		for i in 5:
+			if collapsed_accounts.empty():
+				break
+			collapsed_accounts.pop_front().collapse(false)
+			
+		$ExpandAccountsTimer.start()
+	else:
+		emit_signal("all_accounts_expanded")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://components/benchmark_display/benchmark_display.gd" type="Script" id=1]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=2]
@@ -17,6 +17,8 @@
 [ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=15]
 [ext_resource path="res://assets/icons/icon_128_expand_all.svg" type="Texture" id=16]
 [ext_resource path="res://assets/icons/icon_128_collapse_all.svg" type="Texture" id=17]
+[ext_resource path="res://assets/icons/icon_128_circle_thick.svg" type="Texture" id=18]
+[ext_resource path="res://assets/generic/spin_shader.tres" type="Shader" id=19]
 
 [sub_resource type="Shader" id=9]
 code = "shader_type canvas_item;
@@ -89,6 +91,23 @@ corner_radius_top_left = 7
 corner_radius_top_right = 7
 corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
+
+[sub_resource type="Gradient" id=25]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.0310421, 1 )
+colors = PoolColorArray( 0.164063, 0.164063, 0.164063, 1, 1, 1, 1, 1, 0.164706, 0.164706, 0.164706, 1 )
+
+[sub_resource type="GradientTexture" id=24]
+gradient = SubResource( 25 )
+
+[sub_resource type="ShaderMaterial" id=26]
+shader = ExtResource( 19 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 24 )
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 8.0
@@ -263,11 +282,39 @@ custom_styles/pressed = SubResource( 12 )
 custom_styles/focus = SubResource( 12 )
 custom_styles/normal = SubResource( 12 )
 
+[node name="LoadingIndicator" type="HBoxContainer" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 308.0
+margin_right = 764.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Progressing" type="TextureRect" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/LoadingIndicator"]
+modulate = Color( 1, 1, 1, 0.501961 )
+material = SubResource( 26 )
+margin_left = 174.0
+margin_top = 4.0
+margin_right = 204.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 30, 24 )
+size_flags_vertical = 4
+texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/LoadingIndicator"]
+margin_left = 208.0
+margin_top = 6.0
+margin_right = 282.0
+margin_bottom = 26.0
+text = "Loading..."
+
 [node name="Filter" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 2 )]
 unique_name_in_owner = true
 margin_left = 768.0
 margin_right = 868.0
-size_flags_horizontal = 10
 items = [ "All", "Passing", "Failing" ]
 text = "All"
 
@@ -542,6 +589,7 @@ custom_colors/font_color = Color( 0.956863, 0.266667, 0.266667, 1 )
 text = "24"
 
 [node name="ResourcesTitle" type="Label" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/ResourcesTitleBar"]
+unique_name_in_owner = true
 margin_left = 24.0
 margin_right = 156.0
 margin_bottom = 20.0
@@ -737,6 +785,9 @@ margin_right = 860.0
 margin_right = 880.0
 margin_bottom = 600.0
 
+[node name="ExpandAccountsTimer" type="Timer" parent="."]
+wait_time = 0.1
+
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer2/HBoxContainer2/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer2/HBoxContainer2/ExportReportButton" to="." method="_on_ExportReportButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/FailingIndicator/FailButtonFilter" to="." method="_on_FailButtonFilter_pressed"]
@@ -748,5 +799,6 @@ margin_bottom = 600.0
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/ShowAllButton" to="." method="_on_ShowAllButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/HBoxContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="pressed" from="Control/BenchmarkConfigPopup/Content/Footer/Footerbar/AcceptButton" to="." method="_on_AcceptButton_pressed"]
+[connection signal="timeout" from="ExpandAccountsTimer" to="." method="_on_Timer_timeout"]
 
 [editable path="Control/BenchmarkConfigPopup"]
