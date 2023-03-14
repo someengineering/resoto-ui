@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://components/benchmark_display/benchmark_display.gd" type="Script" id=1]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=2]
@@ -12,7 +12,7 @@
 [ext_resource path="res://components/benchmark_display/severity_indicator.tscn" type="PackedScene" id=10]
 [ext_resource path="res://assets/icons/icon_128_external_link.svg" type="Texture" id=11]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=12]
-[ext_resource path="res://assets/icons/icon_128_close_thick.svg" type="Texture" id=13]
+[ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=13]
 [ext_resource path="res://components/elements/styled/styled_icon_button_hover.gd" type="Script" id=14]
 [ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=15]
 [ext_resource path="res://assets/icons/icon_128_expand_all.svg" type="Texture" id=16]
@@ -45,6 +45,8 @@ void fragment(){
 		COLOR.a = smoothstep(distance(bot_left, pixel_uv) - aa_value, distance(bot_left, pixel_uv) + aa_value, corner_radius);
 	}
 	
+	COLOR.rgb += 0.5*(1.0-UV.y) - 0.5;
+	
 }"
 
 [sub_resource type="ShaderMaterial" id=10]
@@ -61,6 +63,32 @@ width = 4
 height = 4
 fill_from = Vector2( 0.370833, 0.0916667 )
 fill_to = Vector2( 0.5625, 1 )
+
+[sub_resource type="StyleBoxFlat" id=11]
+bg_color = Color( 1, 0.654902, 0.654902, 0.0784314 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 0.487109, 0.487109, 1 )
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxEmpty" id=12]
+
+[sub_resource type="StyleBoxFlat" id=13]
+bg_color = Color( 0.776471, 1, 0.831373, 0.027451 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.627734, 1, 0.720801, 1 )
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 8.0
@@ -196,6 +224,14 @@ size_flags_vertical = 3
 texture = SubResource( 8 )
 expand = true
 
+[node name="FailButtonFilter" type="Button" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/FailingIndicator"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 11 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/focus = SubResource( 12 )
+custom_styles/normal = SubResource( 12 )
+
 [node name="PassingIndicator" type="Label" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 margin_left = 154.0
@@ -218,6 +254,14 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = SubResource( 8 )
 expand = true
+
+[node name="PassButtonFilter" type="Button" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/PassingIndicator"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 13 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/focus = SubResource( 12 )
+custom_styles/normal = SubResource( 12 )
 
 [node name="Filter" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 2 )]
 unique_name_in_owner = true
@@ -296,6 +340,7 @@ text = "
 
 [node name="FailOrPassIcon" type="TextureRect" parent="PanelContainer/Content/PanelContainer/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/ResultCountPanel/HBoxContainer"]
 unique_name_in_owner = true
+self_modulate = Color( 0, 0.301961, 0.301961, 1 )
 margin_left = 28.0
 margin_top = 8.0
 margin_right = 42.0
@@ -694,6 +739,8 @@ margin_bottom = 600.0
 
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer2/HBoxContainer2/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer2/HBoxContainer2/ExportReportButton" to="." method="_on_ExportReportButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/FailingIndicator/FailButtonFilter" to="." method="_on_FailButtonFilter_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/PassingIndicator/PassButtonFilter" to="." method="_on_PassButtonFilter_pressed"]
 [connection signal="option_changed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Filter" to="." method="_on_Filter_option_changed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]

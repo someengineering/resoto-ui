@@ -27,7 +27,7 @@ func _on_get_config_id_done(error: int, response : ResotoAPI.Response, _config_i
 		return
 		
 	var benchmark : Dictionary = response.transformed.result.report_benchmark
-	benchmarks[benchmark.id] = benchmark
+	benchmarks[benchmark.title] = benchmark
 	
 	benchmarks_count -=  1
 	if benchmarks_count <= 0:

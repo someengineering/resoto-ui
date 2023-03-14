@@ -20,6 +20,8 @@ var benchmarks_count := 0
 var accounts : Array = []
 var current_account : String = ""
 
+var severities := ["low", "medium", "high", "critical"]
+
 var benchmark_model : CustomTreeItem = null
 
 var current_failing_resources : Array = []
@@ -143,13 +145,11 @@ func _on_tree_item_pressed(item : CustomTreeItem):
 		result_count_label.text = "Passed!"
 		result_count_label.modulate = Color(0x004d4dff)
 		result_count_panel.self_modulate =  Style.col_map[Style.c.CHECK_ON]
-		result_count_icon.texture = preload("res://assets/icons/icon_128_check.svg")
-		result_count_icon.modulate = Color(0x004d4dff)
+		result_count_icon.visible = true
 		resource_count_label.visible = false
 	else:
-		result_count_icon.texture = preload("res://assets/icons/icon_128_close_thin.svg")
-		result_count_icon.modulate = Color.white
-		result_count_label.text = str(element.failing_n)
+		result_count_icon.visible = false
+		result_count_label.text = str(element.failing_n) + (" resources failing" if selected_element.main_element is BenchmarkResultDisplay else " checks failing")
 		result_count_label.modulate = Color.white
 		resource_count_label.visible = true
 		resource_count_label.text = str(element.failing_n)
@@ -276,7 +276,9 @@ func _on_ShowAllButton_pressed():
 
 
 func _on_Filter_option_changed(option):
-	_on_Expand_pressed()
+	if benchmark_tree_root == null:
+		return
+	yield(_on_Expand_pressed(), "completed")
 	filter_all(benchmark_tree_root, option)
 	
 
@@ -339,6 +341,7 @@ func _on_AcceptButton_pressed():
 
 
 func create_benchmark_model(data : Dictionary):
+	filter_combo.text = "All"
 	for child in tree_container.get_children():
 		if child is CustomTreeItem:
 			tree_container.remove_child(child)
@@ -385,13 +388,16 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
 		for check in data.checks:
 			var element = new_check_result_tree_item(check)
 			var current_check : Dictionary = checks[check]
+			element.severity = current_check["severity"]
+			element.title = current_check["title"]
+			element.account_id = current_account
+			var item : CustomTreeItem = root.add_sub_element(element)
+			
 			if "failing_resources" in current_check and current_account in current_check["failing_resources"]:
 				element.failing_n = current_check["failing_resources"][current_account]
 			else:
 				element.failing_n = 0
-			element.severity = current_check["severity"]
-			element.title = current_check["title"]
-			var item : CustomTreeItem = root.add_sub_element(element)
+			
 			item.connect("pressed", self, "_on_tree_item_pressed")
 			branch_checks.append(item)
 	return branch_checks
@@ -429,10 +435,11 @@ func look_for_checks(title : String) -> Array:
 	for id in check_ids:
 		check_elements.append(checks[id])
 		
+	check_elements.sort_custom(self, "sort_severity")
 	return check_elements
 
 
-func look_for_checks_in_element(element : Dictionary) -> Array:
+func look_for_checks_in_element(element : Dictionary, sort := true) -> Array:
 	var all_checks: Array = []
 	
 	if element.empty():
@@ -452,7 +459,7 @@ func look_for_checks_in_element(element : Dictionary) -> Array:
 
 func _on_ExportButton_pressed():
 	var data : PoolStringArray = ["Severity,Number of Resources Failing,Check Name"]
-	var severities := ["low", "medium", "high", "critical"]
+	
 	for row in checks_table_content.get_children():
 		var row_data : PoolStringArray = []
 		var severity : String = row.severity
@@ -469,7 +476,6 @@ func _on_ExportButton_pressed():
 func _on_ExportReportButton_pressed():
 	var _checks := look_for_checks(benchmark_tree_root.main_element.title)
 	var data : PoolStringArray = ["Severity,Number of Resources Failing,Check Name,Account ID"]
-	var severities := ["low", "medium", "high", "critical"]
 	for check in _checks:
 		for account_id in check.failing_resources:
 			var row_data : PoolStringArray = []
@@ -513,3 +519,16 @@ func get_element_account(element : CustomTreeItem) -> String:
 			return parent.main_element.account_id
 		parent = parent.parent
 	return ""
+
+func sort_severity(a : Dictionary, b : Dictionary):
+	if severities.find(a.severity) > severities.find(b.severity):
+		return true
+	return false
+
+
+func _on_FailButtonFilter_pressed():
+	filter_combo.text = "Failing"
+
+
+func _on_PassButtonFilter_pressed():
+	filter_combo.text = "Passing"
