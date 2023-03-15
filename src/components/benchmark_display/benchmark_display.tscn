@@ -286,7 +286,7 @@ custom_styles/normal = SubResource( 12 )
 unique_name_in_owner = true
 modulate = Color( 1, 1, 1, 0 )
 margin_left = 308.0
-margin_right = 764.0
+margin_right = 801.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
 alignment = 1
@@ -294,9 +294,9 @@ alignment = 1
 [node name="Progressing" type="TextureRect" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/LoadingIndicator"]
 modulate = Color( 1, 1, 1, 0.501961 )
 material = SubResource( 26 )
-margin_left = 174.0
+margin_left = 192.0
 margin_top = 4.0
-margin_right = 204.0
+margin_right = 222.0
 margin_bottom = 28.0
 rect_min_size = Vector2( 30, 24 )
 size_flags_vertical = 4
@@ -305,21 +305,22 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer/LoadingIndicator"]
-margin_left = 208.0
+margin_left = 226.0
 margin_top = 6.0
-margin_right = 282.0
+margin_right = 300.0
 margin_bottom = 26.0
 text = "Loading..."
 
 [node name="Filter" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 2 )]
 unique_name_in_owner = true
-margin_left = 768.0
-margin_right = 868.0
+margin_left = 805.0
+margin_right = 905.0
 items = [ "All", "Passing", "Failing" ]
 text = "All"
 
 [node name="Expand" parent="PanelContainer/Content/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
 unique_name_in_owner = true
+visible = false
 margin_left = 872.0
 margin_right = 905.0
 icon_tex = ExtResource( 16 )
@@ -787,6 +788,7 @@ margin_bottom = 600.0
 
 [node name="ExpandAccountsTimer" type="Timer" parent="."]
 wait_time = 0.1
+one_shot = true
 
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer2/HBoxContainer2/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
 [connection signal="pressed" from="PanelContainer/Content/PanelContainer2/HBoxContainer2/ExportReportButton" to="." method="_on_ExportReportButton_pressed"]

@@ -44,7 +44,7 @@ func _draw():
 
 func set_collapsable(_collapsable: bool):
 	collapsable = _collapsable
-	collapse_button.visible = collapsable
+	$VBoxContainer/MainContainer/CollapseButton.visible = collapsable
 	update_sub_container_visibility()
 
 
@@ -112,7 +112,9 @@ func _on_CollapseButton_pressed():
 
 
 func child_collapsed_changed():
-	emit_signal("collapsed_changed")
+#	emit_signal("collapsed_changed")
+
+	yield(VisualServer, "frame_post_draw")
 	update()
 
 

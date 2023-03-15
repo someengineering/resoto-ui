@@ -57,7 +57,7 @@ func _on_graph_search_done(error : int, response : ResotoAPI.Response):
 		
 	var accounts : Array = response.transformed.result
 	var accounts_id : Array = []
-	
+
 	for account in accounts:
 		var n = account.reported.name
 		var id = account.reported.id

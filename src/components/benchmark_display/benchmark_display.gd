@@ -22,6 +22,7 @@ var benchmarks_count := 0
 var accounts : Array = []
 var current_account : String = ""
 var collapsed_accounts : Array = []
+var account_trees : Dictionary = {}
 
 var severities := ["low", "medium", "high", "critical"]
 
@@ -33,6 +34,8 @@ onready var tree_container := $"%TreeContainer"
 
 onready var passed_indicator := $"%PassingIndicator"
 onready var failed_indicator := $"%FailingIndicator"
+
+var number_of_nodes := 0
 
 onready var detail_view := $"%DetailView"
 onready var detail_view_title := $"%TitleLabel"
@@ -121,22 +124,38 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictionary = {}):
 	if item == null:
 		return
-	if item.collapse_button.pressed and not data.empty():
-		if item.is_connected("collapsed_changed", self, "_on_account_collapsed_changed"):
-			item.disconnect("collapsed_changed", self, "_on_account_collapsed_changed")
-		current_account = item.name
-		var branch_checks := populate_tree_branch(data, item)
-		
-		for check in branch_checks:
-			var current_item = check
-			while current_item.parent != item:
-				if current_item.main_element.passed:
-					current_item.parent.main_element.passing_n += 1
-				else:
-					current_item.parent.main_element.failing_n += 1
-				current_item = current_item.parent
-				
+	if item.collapse_button.pressed:
+		for account in benchmark_tree_root.sub_element_container.get_children():
+			if account == item:
+				continue
+			if not account.main_element.account_id in account_trees and not account in collapsed_accounts:
+				account_trees[account.main_element.account_id] = account.sub_element_container
+				account.sub_container.remove_child(account.sub_element_container)
+			account.collapse(true)
+		if item in collapsed_accounts:
+			collapsed_accounts.erase(item)
+			current_account = item.name
+			var branch_checks := populate_tree_branch(data, item)
+			
+			for check in branch_checks:
+				var current_item = check
+				while current_item.parent != item:
+					if current_item.main_element.passed:
+						current_item.parent.main_element.passing_n += 1
+					else:
+						current_item.parent.main_element.failing_n += 1
+					current_item = current_item.parent
+		elif item.sub_container.get_node_or_null("SubElements") == null:
+			item.sub_container.add_child(account_trees[item.main_element.account_id])
 	emit_signal("expand_account_finished")
+
+
+func expand_account(account_item : CustomTreeItem):
+	var function_state = account_item.collapse(false)
+	if function_state is GDScriptFunctionState:
+		yield(function_state, "completed")
+	change_collapse_all(account_item, false)
+	
 
 
 func _on_tree_item_pressed(item : CustomTreeItem):
@@ -317,6 +336,7 @@ func _on_Expand_pressed():
 	change_collapse_all(benchmark_tree_root, false)
 	yield(self, "all_collapsed")
 	
+	print(number_of_nodes)
 	set_top_buttons_disabled(false)
 	
 	
@@ -372,6 +392,7 @@ func create_benchmark_model(data : Dictionary):
 	benchmark_tree_root.main_element = new_check_collection_tree_item(data)
 	benchmark_tree_root.main_element.set_label_variation("Label_24")
 	benchmark_tree_root.main_element.set_collection_icon(BenchmarkCollectionDisplay.TYPES.BENCHMARK)
+	benchmark_tree_root.collapsable = false
 	
 	benchmark_tree_root.connect("pressed", self, "_on_tree_item_pressed")
 	tree_container.add_child(benchmark_tree_root)
@@ -379,9 +400,9 @@ func create_benchmark_model(data : Dictionary):
 	accounts = benchmark_config_dialog.accounts_checklist.checked_options
 	
 	checks = {}
-	
 	var accounts_id : Array = []
 	collapsed_accounts = []
+	
 	for account in accounts:
 		accounts_id.append(account.id)
 		var element = new_account_tree_item(account)
@@ -390,6 +411,7 @@ func create_benchmark_model(data : Dictionary):
 		tree_item.name = str(account.id)
 		tree_item.connect("pressed", self, "_on_tree_item_pressed")
 		tree_item.connect("collapsed_changed", self, "_on_account_collapsed_changed", [tree_item, data])
+		tree_item.main_element.connect("expand_all", self, "expand_account", [tree_item])
 		collapsed_accounts.append(tree_item)
 	
 	set_top_buttons_disabled(true)
@@ -400,6 +422,7 @@ func create_benchmark_model(data : Dictionary):
 
 func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
 	var branch_checks : Array = []
+	number_of_nodes += 10
 	if "children" in data:
 		for child in data.children:
 			var element = new_check_collection_tree_item(child)
@@ -407,8 +430,10 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
 			var item : CustomTreeItem = root.add_sub_element(element)
 			item.connect("pressed", self, "_on_tree_item_pressed")
 			branch_checks.append_array(populate_tree_branch(child, item))
+			number_of_nodes += 9
 	if "checks" in data:
 		for check in data.checks:
+			number_of_nodes += 5
 			var element = new_check_result_tree_item(check)
 			var current_check : Dictionary = checks[check]
 			element.severity = current_check["severity"]
@@ -565,8 +590,9 @@ func _on_Timer_timeout():
 		for i in 5:
 			if collapsed_accounts.empty():
 				break
-			collapsed_accounts.pop_front().collapse(false)
+			collapsed_accounts[0].collapse(false)
 			
 		$ExpandAccountsTimer.start()
 	else:
 		emit_signal("all_accounts_expanded")
+		
