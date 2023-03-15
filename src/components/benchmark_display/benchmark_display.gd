@@ -23,6 +23,7 @@ var accounts : Array = []
 var current_account : String = ""
 var collapsed_accounts : Array = []
 var account_trees : Dictionary = {}
+var current_expanded_account : CustomTreeItem = null
 
 var severities := ["low", "medium", "high", "critical"]
 
@@ -125,6 +126,7 @@ func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictiona
 	if item == null:
 		return
 	if item.collapse_button.pressed:
+		current_expanded_account = item
 		for account in benchmark_tree_root.sub_element_container.get_children():
 			if account == item:
 				continue
@@ -147,6 +149,10 @@ func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictiona
 					current_item = current_item.parent
 		elif item.sub_container.get_node_or_null("SubElements") == null:
 			item.sub_container.add_child(account_trees[item.main_element.account_id])
+		filter_all(item, filter_combo.text)
+	elif current_expanded_account == item:
+		current_expanded_account = null
+		
 	emit_signal("expand_account_finished")
 
 
@@ -303,18 +309,15 @@ func _on_ShowAllButton_pressed():
 
 
 func _on_Filter_option_changed(option):
-	if benchmark_tree_root == null:
+	if benchmark_tree_root == null or current_expanded_account == null:
 		return
 		
 	set_top_buttons_disabled(true)
-	
-	$ExpandAccountsTimer.start()
-	yield(self, "all_accounts_expanded")
-	
-	change_collapse_all(benchmark_tree_root, false)
+
+	change_collapse_all(current_expanded_account, false, current_expanded_account)
 	yield(self, "all_collapsed")
 	
-	filter_all(benchmark_tree_root, option)
+	filter_all(current_expanded_account, option)
 	
 	set_top_buttons_disabled(false)
 	
@@ -340,13 +343,13 @@ func _on_Expand_pressed():
 	set_top_buttons_disabled(false)
 	
 	
-func change_collapse_all(item : CustomTreeItem, collapse : bool):
+func change_collapse_all(item : CustomTreeItem, collapse : bool, root : CustomTreeItem = benchmark_tree_root):
 	item.collapse(collapse)
 	for sub_element in item.sub_element_container.get_children():
 		change_collapse_all(sub_element, collapse)
 		yield(get_tree(), "idle_frame")
 		
-	if item == benchmark_tree_root:
+	if item == root:
 		emit_signal("all_collapsed")
 
 
