@@ -46,21 +46,21 @@ size_flags_horizontal = 3
 
 [node name="Top" type="HBoxContainer" parent="VBox"]
 margin_right = 390.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
 [node name="ResultKind" type="Label" parent="VBox/Top"]
-margin_right = 93.0
-margin_bottom = 20.0
+margin_right = 92.0
+margin_bottom = 21.0
 theme_type_variation = "LabelBold"
 custom_styles/normal = SubResource( 3 )
 text = "Result Kind"
 
 [node name="ResultName" type="Label" parent="VBox/Top"]
-margin_left = 101.0
+margin_left = 100.0
 margin_right = 382.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 text = "Result Name"
 clip_text = true
@@ -69,7 +69,7 @@ clip_text = true
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
 margin_left = 390.0
 margin_right = 390.0
-margin_bottom = 20.0
+margin_bottom = 21.0
 mouse_filter = 2
 script = ExtResource( 2 )
 
@@ -114,9 +114,9 @@ expand = true
 stretch_mode = 6
 
 [node name="ResultDetails" type="Label" parent="VBox"]
-margin_top = 24.0
+margin_top = 25.0
 margin_right = 390.0
-margin_bottom = 41.0
+margin_bottom = 42.0
 size_flags_horizontal = 3
 custom_colors/font_color = Color( 0.236435, 0.58671, 0.796875, 1 )
 custom_fonts/font = SubResource( 2 )
