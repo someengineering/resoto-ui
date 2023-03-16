@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/resoto/Resoto_logo_and_text_big.svg" type="Texture" id=2]
@@ -123,7 +123,6 @@ margin_bottom = 140.0
 app_name = "Explore"
 app_icon = ExtResource( 10 )
 
-
 [node name="ButtonJobs" parent="VBox/Apps" instance=ExtResource( 6 )]
 margin_left = 380.0
 margin_right = 520.0
@@ -131,29 +130,25 @@ margin_bottom = 140.0
 app_name = "Jobs"
 app_icon = ExtResource( 7 )
 
-[node name="ButtonResotoShellLite" parent="VBox/Apps" instance=ExtResource( 6 )]
+[node name="Benchmark" parent="VBox/Apps" instance=ExtResource( 6 )]
 margin_top = 156.0
 margin_right = 140.0
 margin_bottom = 296.0
-
-[node name="Benchmark" parent="VBox/Apps" instance=ExtResource( 6 )]
-margin_left = 380.0
-margin_right = 520.0
-margin_bottom = 140.0
 app_name = "Benchmark"
 app_icon = ExtResource( 13 )
 
 [node name="ButtonResotoShellLite" parent="VBox/Apps" instance=ExtResource( 6 )]
-margin_left = 570.0
-margin_right = 710.0
-margin_bottom = 140.0
+margin_left = 190.0
+margin_top = 156.0
+margin_right = 330.0
+margin_bottom = 296.0
 app_name = "Resoto Shell"
 app_icon = ExtResource( 9 )
 
 [node name="ButtonConfig" parent="VBox/Apps" instance=ExtResource( 6 )]
-margin_left = 190.0
+margin_left = 380.0
 margin_top = 156.0
-margin_right = 330.0
+margin_right = 520.0
 margin_bottom = 296.0
 app_name = "Configuration"
 app_icon = ExtResource( 8 )
