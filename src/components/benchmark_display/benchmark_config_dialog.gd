@@ -66,7 +66,14 @@ func _on_graph_search_done(error : int, response : ResotoAPI.Response):
 			"name" : n,
 			"id" : id
 			})
-		
+	
+	accounts_id.sort_custom(self, "sort_by_name")
 	accounts_checklist.items = accounts_id
 	
 	accounts_checklist.select_all()
+
+
+func sort_by_name(a: Dictionary, b: Dictionary):
+	if a.name < b.name:
+		return true
+	return false
