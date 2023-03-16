@@ -490,7 +490,7 @@ func look_for_checks(title : String) -> Array:
 	return check_elements
 
 
-func look_for_checks_in_element(element : Dictionary, sort := true) -> Array:
+func look_for_checks_in_element(element : Dictionary) -> Array:
 	var all_checks: Array = []
 	
 	if element.empty():
