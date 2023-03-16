@@ -490,10 +490,10 @@ func _on_JobNameEdit_focus_exited():
 	$"%JobNameEdit".text = Utils.slugify($"%JobNameEdit".text)
 
 
-func _on_JobNameEdit_text_entered(new_text):
+func _on_JobNameEdit_text_entered(_new_text):
 	$"%JobNameEdit".text = Utils.slugify($"%JobNameEdit".text)
 	$"%JobNameEdit".release_focus()
 
 
-func _on_JobNameEdit_text_changed(new_text):
+func _on_JobNameEdit_text_changed(_new_text):
 	$"%IdError".hide()

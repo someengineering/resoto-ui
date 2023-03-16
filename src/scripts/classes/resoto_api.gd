@@ -257,7 +257,7 @@ func analytics(body : String):
 
 func ping():
 	var request = req_get("/system/ping", accept_text_headers)
-
+	return request
 
 func get_benchmark_report(benchmark : String, accounts : String):
 	var query = "/report/benchmark/%s/graph/%s" % [benchmark, default_graph]

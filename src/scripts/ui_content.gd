@@ -11,7 +11,7 @@ onready var sections = {
 	"setup_wizard": $Content/SetupWizardComponent,
 	"jobs": $Content/JobsComponent,
 	"aggregation_view": $Content/AggregationViewComponent,
-	"home": $Content/HomeComponent
+	"home": $Content/HomeComponent,
 	"benchmark": $Content/BenchmarkComponent
 }
 

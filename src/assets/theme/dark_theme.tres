@@ -728,14 +728,6 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxLine" id=118]
-color = Color( 0.123871, 0.346745, 0.480469, 1 )
-grow_begin = 0.0
-grow_end = -10.0
-
-[sub_resource type="StyleBoxLine" id=119]
-color = Color( 0.123871, 0.346745, 0.480469, 1 )
-
 [sub_resource type="StyleBoxLine" id=37]
 color = Color( 0.123871, 0.346745, 0.480469, 1 )
 
@@ -1160,16 +1152,16 @@ PopupPanelLight/styles/panel = SubResource( 123 )
 ProgressBar/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 ProgressBar/styles/bg = SubResource( 8 )
 ProgressBar/styles/fg = SubResource( 9 )
-RichTextLabel/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
-RichTextLabel/fonts/bold_font = SubResource( 126 )
-RichTextLabel/fonts/mono_font = SubResource( 128 )
-RichTextLabel/fonts/normal_font = SubResource( 66 )
 RichLabelNormal/base_type = "RichTextLabel"
 RichLabelNormal/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 RichLabelNormal/styles/normal = SubResource( 82 )
 RichLabelSmall/base_type = "RichTextLabel"
 RichLabelSmall/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 RichLabelSmall/fonts/normal_font = SubResource( 42 )
+RichTextLabel/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+RichTextLabel/fonts/bold_font = SubResource( 126 )
+RichTextLabel/fonts/mono_font = SubResource( 128 )
+RichTextLabel/fonts/normal_font = SubResource( 66 )
 SpinBox/icons/updown = ExtResource( 13 )
 TabContainer/colors/font_color_bg = Color( 0.160784, 0.333333, 0.501961, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.0588235, 0.2, 0.337255, 1 )
