@@ -3,6 +3,8 @@ extends MarginContainer
 
 signal selection_changed(selected_items)
 
+export var main_icon : Texture
+
 enum ContainerType {VERTICAL_FLOW, HORIZONTAL_FLOW, VERTICAL_LIST, HORIZONTAL_LIST}
 
 const Containers := {
@@ -26,6 +28,7 @@ onready var filter_line_edit := $VBoxContainer/Controls/FiltersLineEdit
 onready var scroll_container := $VBoxContainer/PanelContainer/ScrollContainer
 
 func _ready():
+	$VBoxContainer/HBoxContainer/MainIcon.texture = main_icon
 	set_title(title)
 	options_container = Containers[container_type].new() as Control
 	options_container.size_flags_horizontal = SIZE_EXPAND_FILL
@@ -114,7 +117,7 @@ func set_title(new_title : String):
 	title = new_title
 	if not is_inside_tree():
 		return
-	$VBoxContainer/Title.text = new_title
+	$VBoxContainer/HBoxContainer/Title.text = new_title
 
 func select_all():
 	_on_AllButton_pressed()

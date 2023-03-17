@@ -4,9 +4,16 @@ var benchmarks_count := 0
 var benchmarks := {}
 var selected_benchmark : Dictionary = {}
 
-onready var clouds_checklist := $VBoxContainer/CloudsCheckList
-onready var accounts_checklist := $VBoxContainer/AccountsCheckList
-onready var combo_box := $VBoxContainer/HBoxContainer/ComboBox
+onready var clouds_checklist := $"%CloudsCheckList"
+onready var accounts_checklist := $"%AccountsCheckList"
+onready var combo_box := $"%BenchmarkComboBox"
+
+
+func _ready():
+	update_view()
+
+func update_view():
+	show_benchmark_help(combo_box.text == "")
 
 
 func _on_get_configs_done(error: int, response):
@@ -40,10 +47,19 @@ func _on_benchmark_config_dialog_visibility_changed():
 
 
 func _on_ComboBox_option_changed(option):
+	show_benchmark_help(option == "")
+		
 	if "clouds" in benchmarks[option]:
 		clouds_checklist.items = benchmarks[option]["clouds"]
 	selected_benchmark = benchmarks[option]
 	clouds_checklist.select_all()
+
+
+func show_benchmark_help(_show:bool):
+	$"%BenchmarkMissingHintHighlight".visible = _show
+	$"%BenchmarkMissingHint".visible = _show
+	accounts_checklist.visible = not _show
+	clouds_checklist.visible = not _show
 
 
 func _on_CloudsCheckList_selection_changed(selected_items : Array):
