@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=1]
 [ext_resource path="res://components/shared/checklist.gd" type="Script" id=2]
+[ext_resource path="res://assets/icons/icon_128_search.svg" type="Texture" id=3]
 
 [node name="CheckList" type="MarginContainer"]
 anchor_right = 1.0
@@ -13,42 +15,74 @@ title = "Check List"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 576.0
-margin_bottom = 110.0
+margin_bottom = 120.0
 size_flags_horizontal = 3
 
-[node name="Title" type="Label" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 576.0
-margin_bottom = 20.0
+margin_bottom = 32.0
+custom_constants/separation = 10
+
+[node name="MainIcon" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_right = 32.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_vertical = 6
+expand = true
+stretch_mode = 6
+script = ExtResource( 1 )
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 42.0
+margin_top = 6.0
+margin_right = 118.0
+margin_bottom = 26.0
 text = "Check List"
 
 [node name="Controls" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 24.0
+margin_top = 36.0
 margin_right = 576.0
-margin_bottom = 56.0
+margin_bottom = 68.0
+custom_constants/separation = 10
+
+[node name="FilterSearchIcon" type="TextureRect" parent="VBoxContainer/Controls"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_top = 6.0
+margin_right = 20.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 20, 20 )
+size_flags_vertical = 6
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 1 )
 
 [node name="FiltersLineEdit" type="LineEdit" parent="VBoxContainer/Controls"]
-margin_right = 343.0
+margin_left = 30.0
+margin_right = 452.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
+clear_button_enabled = true
 caret_blink = true
 caret_blink_speed = 0.5
 
 [node name="AllButton" type="Button" parent="VBoxContainer/Controls"]
-margin_left = 347.0
-margin_right = 439.0
+margin_left = 462.0
+margin_right = 504.667
 margin_bottom = 32.0
-text = "Select All"
+text = "All"
 
 [node name="NoneButton" type="Button" parent="VBoxContainer/Controls"]
-margin_left = 443.0
-margin_right = 576.333
+margin_left = 514.0
+margin_right = 576.667
 margin_bottom = 32.0
-text = "Clear Selection"
+text = "None"
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-margin_top = 60.0
+margin_top = 72.0
 margin_right = 576.0
-margin_bottom = 110.0
+margin_bottom = 120.0
 size_flags_vertical = 3
 theme_type_variation = "PanelContainerDark"
 
@@ -56,7 +90,8 @@ theme_type_variation = "PanelContainerDark"
 margin_left = 12.0
 margin_top = 8.0
 margin_right = 564.0
-margin_bottom = 42.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 32 )
 
 [connection signal="text_changed" from="VBoxContainer/Controls/FiltersLineEdit" to="." method="_on_FiltersLineEdit_text_changed"]
 [connection signal="pressed" from="VBoxContainer/Controls/AllButton" to="." method="_on_AllButton_pressed"]

@@ -69,6 +69,8 @@ onready var filter_combo := $"%Filter"
 func _ready():
 	detail_container.hide()
 	export_report_button.hide()
+	check_help_view()
+
 
 func _on_get_configs_done(error: int, response):
 	if error:
@@ -161,7 +163,6 @@ func expand_account(account_item : CustomTreeItem):
 	if function_state is GDScriptFunctionState:
 		yield(function_state, "completed")
 	change_collapse_all(account_item, false)
-	
 
 
 func _on_tree_item_pressed(item : CustomTreeItem):
@@ -274,7 +275,8 @@ func _on_get_check_resources_done(error : int, response : ResotoAPI.Response):
 		return
 	current_failing_resources = response.transformed.result
 	populate_resources_list(response.transformed.result)
-		
+
+
 func populate_resources_list(request_result : Array):
 	for resource in resources_list.get_children():
 		resources_list.remove_child(resource)
@@ -301,6 +303,7 @@ func populate_resources_list(request_result : Array):
 func _on_resource_button_pressed(id : String):
 	_g.content_manager.change_section_explore("node_single_info")
 	_g.content_manager.find_node("NodeSingleInfo").show_node(id)
+
 
 func _on_ShowAllButton_pressed():
 	if not current_failing_resources.empty():
@@ -371,17 +374,36 @@ func filter_all(item : CustomTreeItem, condition : String):
 		for sub_element in item.sub_element_container.get_children():
 			filter_all(sub_element, condition)
 
+
 func _on_BenchmarkButton_pressed():
-	$Control/BenchmarkConfigPopup.popup_centered()
+	$"%BenchmarkConfigPopup".popup_centered()
+	$"%BenchmarkConfigDialog".update_view()
 
 
 func _on_AcceptButton_pressed():
-	$Control/BenchmarkConfigPopup.hide()
+	$"%BenchmarkConfigPopup".hide()
 	export_report_button.hide()
 	detail_container.hide()
 	selected_element = null
 	create_benchmark_model(benchmark_config_dialog.selected_benchmark)
 	benchmark_label.text = benchmark_config_dialog.selected_benchmark.title
+	check_help_view()
+
+
+func check_help_view():
+	var show_help : bool = benchmark_config_dialog.selected_benchmark.empty()
+	$"%BenchmarkMissingHintHighlight".visible = show_help
+	$"%BenchmarkResultView".visible = not show_help
+	$"%ExportReportButton".visible = not show_help
+
+
+func _on_BenchmarkDisplay_visibility_changed():
+	if visible:
+		check_help_view()
+		if benchmark_config_dialog.selected_benchmark.empty():
+			_on_BenchmarkButton_pressed()
+	else:
+		$"%BenchmarkPopupBG".hide()
 
 
 func create_benchmark_model(data : Dictionary):
@@ -438,6 +460,8 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
 		for check in data.checks:
 			number_of_nodes += 5
 			var element = new_check_result_tree_item(check)
+			if not checks.has(check):
+				continue
 			var current_check : Dictionary = checks[check]
 			element.severity = current_check["severity"]
 			element.title = current_check["title"]
@@ -598,4 +622,7 @@ func _on_Timer_timeout():
 		$ExpandAccountsTimer.start()
 	else:
 		emit_signal("all_accounts_expanded")
-		
+
+
+func _on_BenchmarkConfigPopup_visibility_changed():
+	$"%BenchmarkPopupBG".visible = $"%BenchmarkConfigPopup".visible
