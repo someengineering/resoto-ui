@@ -84,6 +84,11 @@ func _on_ButtonMessageLog_pressed():
 	close_menu()
 
 
+func _on_ButtonBenchmark_pressed():
+	_g.emit_signal("nav_change_section", "benchmark")
+	close_menu()
+
+
 func close_menu():
 	if hb_button.pressed:
 		hb_button.pressed = false
@@ -153,3 +158,5 @@ func _on_ReshLiteBtn_pressed():
 
 func _on_JobsBtn_pressed():
 	$MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup.visible = !$MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup.visible
+
+

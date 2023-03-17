@@ -258,3 +258,20 @@ func analytics(body : String):
 func ping():
 	var request = req_get("/system/ping", accept_text_headers)
 	return request
+
+func get_benchmark_report(benchmark : String, accounts : String):
+	var query = "/report/benchmark/%s/graph/%s" % [benchmark, default_graph]
+	if accounts != "":
+		query += "?accounts=%s" % accounts.percent_encode()
+	var request = req_get(query, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
+func get_check_resources(check_id : String, account_id : String):
+	var query = "/report/check/%s/graph/%s" % [check_id, default_graph]
+	if account_id != "":
+		query += "?accounts=%s" % account_id
+	var request = req_get(query, accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request

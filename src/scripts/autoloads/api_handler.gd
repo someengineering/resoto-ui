@@ -199,9 +199,10 @@ func get_node_by_id(_node_id:String, _connect_to:Node, _connect_function:String=
 
 
 func _get_infra_info(_connect_to:Node = self,
-	_connect_function:String="_on_get_infra_info_done") -> void:
+	_connect_function:String="_on_get_infra_info_done") -> ResotoAPI.Request:
 	_req_res = _resoto_api.get_infra_info()
 	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
 
 
 func analytics(_query : String, _connect_to : Node, _connect_function:String="_on_analytics_done") -> ResotoAPI.Request:
@@ -214,4 +215,18 @@ func ping(_connect_to: Node, _connect_function:String="_on_ping_done"):
 	_req_res = _resoto_api.ping()
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
-	
+
+
+func get_benchmark_report(benchmark : String, accounts : PoolStringArray, _connect_to:Node, _connect_function:String="_on_get_benchmark_report_done") -> ResotoAPI.Request:
+	var accounts_filter = accounts.join(",")
+	_req_res = _resoto_api.get_benchmark_report(benchmark, accounts_filter)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+
+
+func get_check_resources(check_id: String, account : String, _connect_to: Node, _connect_function : String = "_on_get_check_resources_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.get_check_resources(check_id, account)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+
+

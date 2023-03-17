@@ -19,6 +19,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/dashboard/shared/base_widget.gd"
 }, {
+"base": "BenchmarkCollectionDisplay",
+"class": "BenchmarkAccountDisplay",
+"language": "GDScript",
+"path": "res://components/benchmark_display/benchmark_account_display.gd"
+}, {
+"base": "HBoxContainer",
+"class": "BenchmarkCollectionDisplay",
+"language": "GDScript",
+"path": "res://components/benchmark_display/benchmark_check_collection_display.gd"
+}, {
+"base": "HBoxContainer",
+"class": "BenchmarkResultDisplay",
+"language": "GDScript",
+"path": "res://components/benchmark_display/benchmark_check_result_display.gd"
+}, {
 "base": "Label",
 "class": "ClippedLabel",
 "language": "GDScript",
@@ -83,6 +98,11 @@ _global_script_classes=[ {
 "class": "CustomPopupWindowContainer",
 "language": "GDScript",
 "path": "res://components/elements/styled/custom_dragable_window_panel.gd"
+}, {
+"base": "PanelContainer",
+"class": "CustomTreeItem",
+"language": "GDScript",
+"path": "res://components/shared/custom_tree_item.gd"
 }, {
 "base": "Control",
 "class": "DashboardContainer",
@@ -217,6 +237,9 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AggregateSearchDataSource": "",
 "BaseWidget": "",
+"BenchmarkAccountDisplay": "",
+"BenchmarkCollectionDisplay": "",
+"BenchmarkResultDisplay": "",
 "ClippedLabel": "",
 "ColorCondition": "",
 "ColorController": "",
@@ -230,6 +253,7 @@ _global_script_class_icons={
 "ContentManager": "",
 "CustomPopupWindow": "",
 "CustomPopupWindowContainer": "",
+"CustomTreeItem": "",
 "DashboardContainer": "",
 "DashboardContainerPlaceholder": "",
 "DashboardManager": "",

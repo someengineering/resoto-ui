@@ -342,12 +342,6 @@ func _on_RunButton_pressed():
 func _on_DuplicateButton_pressed():
 	emit_signal("duplicate_job", generate_dict())
 	return
-	var copy_job_trigger : int = $"%TriggerSelect".get_selected_id()
-	var copy_job_schedule : String = $"%CronLineEdit".text
-	var copy_job_event : String = $"%EventSelector".text
-	var copy_trigger_string : String = generate_schedule_string(copy_job_trigger, copy_job_schedule, copy_job_event)
-	var copy_job_command : String = command_edit.text
-	emit_signal("duplicate_job", job_id, copy_trigger_string, copy_job_command)
 
 
 func generate_dict() -> Dictionary:
@@ -490,10 +484,10 @@ func _on_JobNameEdit_focus_exited():
 	$"%JobNameEdit".text = Utils.slugify($"%JobNameEdit".text)
 
 
-func _on_JobNameEdit_text_entered(new_text):
+func _on_JobNameEdit_text_entered(_new_text):
 	$"%JobNameEdit".text = Utils.slugify($"%JobNameEdit".text)
 	$"%JobNameEdit".release_focus()
 
 
-func _on_JobNameEdit_text_changed(new_text):
+func _on_JobNameEdit_text_changed(_new_text):
 	$"%IdError".hide()

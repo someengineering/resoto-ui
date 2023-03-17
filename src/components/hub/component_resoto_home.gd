@@ -33,3 +33,8 @@ func _on_ButtonResotoShellLite_pressed():
 
 func _on_ButtonJobs_pressed():
 	_g.emit_signal("nav_change_section", "jobs")
+
+
+func _on_Benchmark_pressed():
+	_g.emit_signal("nav_change_section", "benchmark")
+

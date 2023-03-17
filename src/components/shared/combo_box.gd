@@ -12,12 +12,17 @@ export (bool) var clear_button_enabled:= false
 export (bool) var scroll_with_keyboard:= true
 export (bool) var small_results:= false
 
+export (bool) var checkable:= false
+
+var checked_items : PoolStringArray = []
 var matching_items : Array
 var previous_option : String = ""
 
 var focus := false
 var showing:= false
 var just_hidden:= false
+
+var disabled := false setget set_disabled
 
 export (String) var text : String setget set_text, get_text
 
@@ -123,7 +128,11 @@ func populate_options(filter : String = "") -> void:
 
 
 func add_option(option_name : String) -> void:
-	var new_button := Button.new()
+	var new_button
+	
+	new_button = Button.new() if not checkable else CheckBox.new()
+	new_button.pressed = option_name in checked_items
+	
 	new_button.size_flags_horizontal = SIZE_EXPAND_FILL
 	new_button.text = option_name
 	if small_results:
@@ -141,11 +150,19 @@ func _on_LineEdit_text_changed(new_text : String) -> void:
 
 
 func _on_option_pressed(option_name : String) -> void:
-	line_edit.text = option_name
-	options_popup.hide()
-	previous_option = option_name
-	emit_signal("option_changed", option_name)
-	line_edit.caret_position = 0
+	if not checkable:
+		line_edit.text = option_name
+		options_popup.hide()
+		previous_option = option_name
+		emit_signal("option_changed", option_name)
+		line_edit.caret_position = 0
+	else:
+		if option_name in checked_items:
+			checked_items.remove(checked_items.find(option_name))
+		else:
+			checked_items.append(option_name)
+			
+		line_edit.text = checked_items.join(", ")
 
 
 func show_options() -> void:
@@ -207,6 +224,8 @@ func _on_PopupPanel_popup_hide():
 		button.flip_v = false
 		just_hidden = true
 		$JustHiddenTimer.start()
+		if checkable:
+			emit_signal("option_changed", checked_items)
 
 
 func _on_JustHiddenTimer_timeout():
@@ -217,3 +236,9 @@ func set_button_min_size(_button_min_size:Vector2) -> void:
 	button_min_size = _button_min_size
 	if button:
 		button.rect_min_size = button_min_size
+
+
+func set_disabled(_disabled : bool):
+	disabled = _disabled
+	line_edit.editable = !disabled
+	button.disabled = disabled

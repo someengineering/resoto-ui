@@ -1,6 +1,7 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
+[ext_resource path="res://components/benchmark_display/benchmark_display.tscn" type="PackedScene" id=2]
 [ext_resource path="res://components/hub/component_resoto_home.tscn" type="PackedScene" id=5]
 [ext_resource path="res://components/node_list/node_list_element.tscn" type="PackedScene" id=6]
 [ext_resource path="res://components/config/component_config.tscn" type="PackedScene" id=7]
@@ -218,6 +219,18 @@ margin_left = 10.0
 margin_right = 1910.0
 margin_bottom = 1020.0
 is_collector_config_wizard = true
+
+[node name="BenchmarkComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+
+[node name="BenchmarkDisplay" parent="Content/BenchmarkComponent" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1920.0
+margin_bottom = 1030.0
 
 [connection signal="node_shown" from="Content/NodeSingleInfoComponent/NodeSingleInfo" to="Content/NodeSingleInfoComponent" method="_on_NodeSingleInfo_node_shown"]
 [connection signal="show" from="Content/NodeListElementComponent/NodeListElement" to="Content/NodeListElementComponent" method="_on_NodeListElement_show"]

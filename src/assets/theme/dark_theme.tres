@@ -620,6 +620,17 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxEmpty" id=36]
 
+[sub_resource type="StyleBoxFlat" id=119]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [sub_resource type="StyleBoxFlat" id=82]
 content_margin_left = 12.0
 content_margin_right = 12.0
@@ -630,6 +641,13 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=118]
+content_margin_left = 10.0
+content_margin_right = 0.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0, 0, 0, 0 )
 
 [sub_resource type="StyleBoxFlat" id=83]
 content_margin_top = 4.0
@@ -709,14 +727,6 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxLine" id=118]
-color = Color( 0.123871, 0.346745, 0.480469, 1 )
-grow_begin = 0.0
-grow_end = -10.0
-
-[sub_resource type="StyleBoxLine" id=119]
-color = Color( 0.123871, 0.346745, 0.480469, 1 )
 
 [sub_resource type="StyleBoxLine" id=37]
 color = Color( 0.123871, 0.346745, 0.480469, 1 )
@@ -1105,9 +1115,11 @@ LineEditSmall/styles/normal = SubResource( 73 )
 LineEditSmall/styles/read_only = SubResource( 74 )
 OptionButton/icons/arrow = ExtResource( 13 )
 Panel/styles/panel = SubResource( 36 )
-PanelContainer/styles/panel = SubResource( 21 )
+PanelContainer/styles/panel = SubResource( 119 )
 PanelContainerDark/base_type = "PanelContainer"
 PanelContainerDark/styles/panel = SubResource( 82 )
+PanelContainerNoMarginRight/base_type = "PanelContainer"
+PanelContainerNoMarginRight/styles/panel = SubResource( 118 )
 PanelContainerTagElement/base_type = "PanelContainer"
 PanelContainerTagElement/styles/panel = SubResource( 83 )
 PanelContainerWindow/base_type = "PanelContainer"
@@ -1140,6 +1152,12 @@ PopupPanelLight/styles/panel = SubResource( 123 )
 ProgressBar/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 ProgressBar/styles/bg = SubResource( 8 )
 ProgressBar/styles/fg = SubResource( 9 )
+RichLabelNormal/base_type = "RichTextLabel"
+RichLabelNormal/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+RichLabelNormal/styles/normal = SubResource( 82 )
+RichLabelSmall/base_type = "RichTextLabel"
+RichLabelSmall/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+RichLabelSmall/fonts/normal_font = SubResource( 42 )
 RichTextLabel/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 RichTextLabel/fonts/bold_font = SubResource( 126 )
 RichTextLabel/fonts/mono_font = SubResource( 128 )
