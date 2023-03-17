@@ -48,6 +48,9 @@ func _on_benchmark_config_dialog_visibility_changed():
 
 func _on_ComboBox_option_changed(option):
 	show_benchmark_help(option == "")
+	if not option in benchmarks:
+		combo_box.text = ""
+		return
 		
 	if "clouds" in benchmarks[option]:
 		clouds_checklist.items = benchmarks[option]["clouds"]
