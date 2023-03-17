@@ -28,7 +28,7 @@ func create_tags(tags:Dictionary):
 		sorted_keys.sort_custom(self, "sort_tag_keys")
 		
 		for tag_pair in sorted_keys:
-			create_tag(tag_pair[0], tags[tag_pair[0]])
+			create_tag(str(tag_pair[0]), str(tags[tag_pair[0]]))
 
 
 static func sort_tag_keys(a, b) -> bool:
