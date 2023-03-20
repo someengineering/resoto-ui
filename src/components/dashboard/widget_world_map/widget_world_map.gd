@@ -409,7 +409,7 @@ func _physics_process(delta):
 			world_speed = lerp(world_speed, 0, delta*12)
 		else:
 			world_speed = lerp(world_speed, initial_world_speed, delta*2)
-		world.rotation.y += world_speed*delta
+		world.rotation.y = wrapf(world.rotation.y + world_speed*delta, -PI, PI)
 
 
 func _process(_delta):
