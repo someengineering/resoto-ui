@@ -9,7 +9,7 @@ func _ready():
 	_g.connect("setup_wizard_start", self, "_start_wizard")
 	$WizardControl.connect("setup_wizard_collecting", self, "_on_is_collecting")
 	$WizardControl.connect("setup_wizard_changed_config", self, "set_can_leave_section", [false])
-	_g.connect("connected_to_resotocore", self, "_check_for_setup_wizard_autostart")
+	_g.connect("connected_to_resotocore", self, "_check_for_setup_wizard_autostart", [], CONNECT_ONESHOT)
 	connect("visibility_changed", self, "_on_SetupWizardComponent_visibility_changed")
 
 
