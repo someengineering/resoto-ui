@@ -248,6 +248,7 @@ margin_bottom = 43.0
 rect_min_size = Vector2( 150, 24 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
+clear_button_enabled = true
 
 [node name="Spacer" type="Control" parent="InterfaceMargin/VBoxContainer"]
 margin_top = 47.0
