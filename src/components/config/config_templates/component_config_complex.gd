@@ -52,6 +52,9 @@ func set_required(_value:bool) -> void:
 
 func set_value(_value) -> void:
 	value = _value
+	for property in model.properties:
+		if not property.name in value:
+			value[property.name] = null
 	if value == null:
 		_on_ButtonSetToNull_pressed()
 	var new_content_elements = config_component.add_element(key, kind, value, self, false)
