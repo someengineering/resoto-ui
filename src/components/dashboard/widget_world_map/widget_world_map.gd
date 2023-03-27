@@ -2,7 +2,7 @@ extends BaseWidget
 
 signal scrolling
 
-export (Color) var low_color := Color.midnightblue setget set_low_color
+export (Color) var low_color := Color("#2626b9") setget set_low_color
 export (Color) var high_color := Color.orangered setget set_high_color
 
 var initial_world_speed := 0.12
@@ -425,7 +425,8 @@ func _input(event):
 		if event.button_index == BUTTON_LEFT:
 			mouse_pressed = event.is_pressed()
 			if mouse_pressed:
-				mouse_from = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
+				var mouse_pos = viewport.get_mouse_position()
+				mouse_from = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(mouse_pos), camera_for_2d.project_ray_normal(mouse_pos))
 		
 		# var prev_fov = camera.fov
 		var aspect_ratio = rect_size.x / rect_size.y
@@ -435,12 +436,18 @@ func _input(event):
 		var max_fov = rad2deg(max(vertical_fov, horizontal_fov))
 		 
 		var prev_dist = camera.translation.x
+		var mouse_pos = viewport.get_mouse_position()
+		var mouse_before = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(mouse_pos), camera_for_2d.project_ray_normal(mouse_pos))
+		
 		if event.button_index == BUTTON_WHEEL_DOWN and event.pressed:
 			camera_for_2d.fov = min(camera_for_2d.fov / 0.9, max_fov)
 			camera.translation.x = min(camera.translation.x / 0.9, 9)
 		if event.button_index == BUTTON_WHEEL_UP and event.pressed:
 			camera_for_2d.fov = max(camera_for_2d.fov * 0.9, 10)
 			camera.translation.x = max(camera.translation.x * 0.9, 4)
+			
+		var mouse_after =  Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(mouse_pos), camera_for_2d.project_ray_normal(mouse_pos))
+		camera_for_2d.translation -= (mouse_after - mouse_before) 
 		
 		if camera.translation.x != prev_dist:
 			emit_signal("scrolling")
@@ -453,8 +460,9 @@ func _input(event):
 		var camera_rotation = clamp(camera_origin.rotation.z + event.relative.y * PI / rect_size.y, -PI/2+0.2, PI/2-0.2)
 		camera_origin.rotation.z = camera_rotation
 		combo_box.text = ""
-		var new_mouse_pos : Vector3 = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(event.position), camera_for_2d.project_ray_normal(event.position))
-		
+		var mouse_pos = viewport.get_mouse_position()
+		var new_mouse_pos : Vector3 = Plane.PLANE_YZ.intersects_ray(camera_for_2d.project_ray_origin(mouse_pos), camera_for_2d.project_ray_normal(mouse_pos))
+
 		camera_for_2d.translation.z += mouse_from.z - new_mouse_pos.z
 		camera_for_2d.translation.y += mouse_from.y - new_mouse_pos.y
 		
