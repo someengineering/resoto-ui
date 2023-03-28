@@ -160,3 +160,6 @@ func _on_JobsBtn_pressed():
 	$MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup.visible = !$MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup.visible
 
 
+func _on_SetupWizardButton_pressed():
+	_g.emit_signal("setup_wizard_start")
+	close_menu()

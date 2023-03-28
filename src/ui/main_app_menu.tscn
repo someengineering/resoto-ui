@@ -242,6 +242,12 @@ margin_right = 310.0
 margin_bottom = 963.0
 size_flags_vertical = 3
 
+[node name="SetupWizardButton" type="Button" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+margin_top = 931.0
+margin_right = 310.0
+margin_bottom = 963.0
+text = "Setup Wizard"
+
 [node name="UISettings" type="HBoxContainer" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 967.0
 margin_right = 310.0
@@ -587,6 +593,7 @@ mouse_filter = 2
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonJobs" to="." method="_on_ButtonJobs_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonTerminals" to="." method="_on_ButtonTerminals_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonConfig" to="." method="_on_ButtonConfig_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/SetupWizardButton" to="." method="_on_SetupWizardButton_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonUISettings" to="." method="_on_ButtonUISettings_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonDocs" to="." method="_on_ButtonDocs_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog" to="." method="_on_ButtonMessageLog_pressed"]

@@ -194,6 +194,7 @@ theme_type_variation = "LabelSmall"
 text = "Do not actually clean up resources. Just create log files."
 
 [node name="ToolsLabel" type="Label" parent="Content/Content/SettingsTabs/General Settings/VBox" index="4"]
+visible = false
 margin_top = 235.0
 margin_right = 590.0
 margin_bottom = 295.0
@@ -203,6 +204,7 @@ text = "Tools"
 valign = 2
 
 [node name="SetupWizardStartButton" type="Button" parent="Content/Content/SettingsTabs/General Settings/VBox" index="5"]
+visible = false
 margin_top = 299.0
 margin_right = 160.0
 margin_bottom = 331.0
