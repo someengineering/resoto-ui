@@ -13,7 +13,7 @@ var hovering : bool = false
 var height_scale := 0.7
 var radius := 0.02
 
-var min_color : Color = Color.midnightblue
+var min_color : Color = Color.purple
 var max_color : Color = Color.orangered
 
 func _input(event):
