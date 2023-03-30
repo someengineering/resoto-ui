@@ -35,12 +35,15 @@ func _on_aggregate_search_done(_error : int, response):
 			error_detail = "\n\n" + response.body.get_string_from_utf8()
 		emit_signal("query_status", FAILED, "Invalid Aggregate Search", "There is a problem with the aggregate search query.%s" % error_detail)
 		return
-	if not response.transformed.result is Array or response.transformed.result.size() == 0:
+	if not response.transformed.result is Array:
 		var error_detail := ""
 		if response:
 			error_detail = "\n\n" + response.body.get_string_from_utf8()
 		_g.emit_signal("add_toast", "Invalid Aggregate Search", "There is a problem with the aggregate search query.", 1, self)
 		emit_signal("query_status", FAILED, "Invalid Aggregate Search", "There is a problem with the aggregate search query.%s" % error_detail)
+		return
+	if  response.transformed.result.size() == 0:
+		emit_signal("query_status", FAILED, "Empty Aggregate Search Result", "This search returned an empty result.")
 		return
 	if widget is TableWidget:
 		widget.header_columns_count = response.transformed.result[0]["group"].size()-1

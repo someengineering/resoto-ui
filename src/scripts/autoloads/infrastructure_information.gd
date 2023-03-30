@@ -22,7 +22,7 @@ func set_infra_info(new_info : Array) -> void:
 					else:
 						regions[cloud] = [info.reported.name]
 				elif "account" in info.reported.kind:
-					if cloud in regions:
+					if cloud in accounts:
 						accounts[cloud].append(info.reported.name)
 					else:
 						accounts[cloud] = [info.reported.name]
