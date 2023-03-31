@@ -112,6 +112,10 @@ func _on_get_benchmark_report_done(_error: int, response : ResotoAPI.Response):
 						account.main_element.passing_n += 1
 						total_passing += 1
 					account.collapsable = true
+			else:
+				for account in benchmark_tree_root.sub_element_container.get_children():
+					account.main_element.passing_n += 1
+					total_passing += 1
 
 	benchmark_tree_root.main_element.passing_n = total_passing
 	benchmark_tree_root.main_element.failing_n = total_failing
@@ -136,6 +140,7 @@ func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictiona
 				account_trees[account.main_element.account_id] = account.sub_element_container
 				account.sub_container.remove_child(account.sub_element_container)
 			account.collapse(true)
+			
 		if item in collapsed_accounts:
 			collapsed_accounts.erase(item)
 			current_account = item.name
@@ -144,7 +149,7 @@ func _on_account_collapsed_changed(item : CustomTreeItem = null, data : Dictiona
 			for check in branch_checks:
 				var current_item = check
 				while current_item.parent != item:
-					if current_item.main_element.passed:
+					if check.main_element.passed:
 						current_item.parent.main_element.passing_n += 1
 					else:
 						current_item.parent.main_element.failing_n += 1
@@ -456,7 +461,7 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
 			item.connect("pressed", self, "_on_tree_item_pressed")
 			branch_checks.append_array(populate_tree_branch(child, item))
 			number_of_nodes += 9
-	if "checks" in data:
+	elif "checks" in data:
 		for check in data.checks:
 			number_of_nodes += 5
 			var element = new_check_result_tree_item(check)
