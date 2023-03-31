@@ -10,6 +10,7 @@ var description:String = "" setget set_description
 var key:String = "" setget set_key
 var required:bool = false setget set_required
 var descriptions_as_hints:bool = true
+var overriden := false setget set_overriden
 
 onready var null_value = $VarContent/VarValueIsNull
 
@@ -17,6 +18,11 @@ onready var null_value = $VarContent/VarValueIsNull
 func _ready():
 	if descriptions_as_hints:
 		$Description.hide()
+
+
+func set_overriden(o: bool):
+	overriden = o
+	$VarContent/OverridenLabel.visible = o
 
 
 func set_default(_value:bool) -> void:

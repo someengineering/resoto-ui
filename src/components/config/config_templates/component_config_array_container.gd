@@ -20,6 +20,7 @@ var description:String = "" setget set_description
 var value = null setget set_value, get_value
 var content_elements:Array = []
 var descriptions_as_hints:bool = true
+var overriden:bool = false setget set_overriden
 
 onready var content = $Margin/Content/Elements
 onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
@@ -33,6 +34,9 @@ func _ready() -> void:
 	_on_Expand_toggled(start_expanded)
 	orig_size = $Margin.rect_size.y
 
+func set_overriden(o : bool):
+	overriden = o
+	$HeaderBG/Header/Top/OverridenLabel.visible = o
 
 func set_required(_value:bool) -> void:
 	required = _value

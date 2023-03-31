@@ -187,8 +187,8 @@ func get_configs() -> ResotoAPI.Request:
 	return request
 
 
-func get_config_id(_config_id:String="resoto.core") -> ResotoAPI.Request:
-	var config_id = "/config/" + _config_id
+func get_config_id(_config_id:String="resoto.core", separate_overrides:bool=false) -> ResotoAPI.Request:
+	var config_id = "/config/" + _config_id + "?separate_overrides=%s&apply_overrides=true" % str(separate_overrides)
 	var request = req_get(config_id, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request

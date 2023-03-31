@@ -58,6 +58,16 @@ rect_min_size = Vector2( 300, 0 )
 size_flags_vertical = 0
 text = "Description"
 
+[node name="OverridenLabel" type="Label" parent="VarContent"]
+visible = false
+margin_left = 330.0
+margin_top = 2.0
+margin_right = 477.0
+margin_bottom = 17.0
+theme_type_variation = "LabelSmall"
+custom_colors/font_color = Color( 0.803922, 0.631373, 0.109804, 1 )
+text = "(overriden by external config)"
+
 [node name="VarValueIsNull" type="Label" parent="VarContent"]
 visible = false
 modulate = Color( 1, 1, 1, 0.439216 )

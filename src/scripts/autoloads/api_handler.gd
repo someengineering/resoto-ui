@@ -78,8 +78,8 @@ func get_configs(_connect_to:Node, _connect_function:String="_on_get_configs_don
 
 
 func get_config_id(_connect_to:Node, _config_id:String="resoto.core",
-	_connect_function:String="_on_get_config_id_done"):
-	_req_res = _resoto_api.get_config_id(_config_id)
+	_connect_function:String="_on_get_config_id_done", separate_overrides:bool = false):
+	_req_res = _resoto_api.get_config_id(_config_id, separate_overrides)
 	_req_res.connect("done", _connect_to, _connect_function, [_config_id])
 
 
