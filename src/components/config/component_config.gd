@@ -35,6 +35,8 @@ var config_keys : Array
 
 var active_config_key : String = ""
 var active_config : Dictionary
+var active_config_overrides : Dictionary
+var elements_in_overrides : Array = []
 var config_page : Control = null
 
 var use_raw_mode : bool = false
@@ -188,9 +190,10 @@ func open_configuration(_config_key:String) -> void:
 	active_config_key = _config_key
 	config_page = null
 	active_config = {}
+	active_config_overrides = {}
 	for c in content.get_children():
 		c.queue_free()
-	config_req = API.get_config_id(self, _config_key)
+	config_req = API.get_config_id(self, _config_key, "_on_get_config_id_done", true)
 
 
 func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_key:String) -> void:
@@ -200,7 +203,10 @@ func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_ke
 		# Handle eventual error... if we arrive here, any other error should be
 		# extremely unlikely
 		return
-	active_config = _response.transformed.result
+	active_config = _response.transformed.result["config"]
+	var overrides = _response.transformed.result["overrides"]
+	active_config_overrides = overrides if overrides != null else {} 
+	
 	build_config_page()
 
 
@@ -216,6 +222,7 @@ func build_config_page():
 	new_config_page.kind = active_config_key
 	new_config_page.value = active_config
 	var new_elements = []
+	elements_in_overrides = []
 	
 	# If the config is completely empty, just add a raw json display
 	if active_config.keys().empty():
@@ -233,6 +240,8 @@ func build_config_page():
 			new_elements.append(new_element)
 	
 	new_config_page.content_elements = new_elements
+	for element in elements_in_overrides:
+		mark_overrides(element)
 	
 	# If there is only one main key in the dictionary / config, expand it when showing the tab.
 	var count_complex:= 0
@@ -250,6 +259,22 @@ func build_config_page():
 	config_page = new_config_page
 	emit_signal("pages_built")
 
+func mark_overrides(element, override_dict := active_config_overrides):
+	var type = get_kind_type(element.kind) if "kind" in element else ""
+	if type in ["complex", "dict"] or (type == "" and "content_elements" in element):
+			var element_name : String = element.key
+			var override = override_dict[element_name]
+			if "enum_values" in element:
+				element.overriden = true
+			elif "content_elements" in element:
+				for sub_element in element.content_elements:
+					if typeof(override) == TYPE_DICTIONARY:
+						if sub_element.key in override:
+							mark_overrides(sub_element, override)
+					else:
+						mark_overrides(sub_element, override_dict)
+	else:
+		element.overriden = true
 
 func add_new_config_page(_title:String) -> Node:
 	var new_config_page = preload("res://components/config/config_templates/component_config_template_config_page.tscn").instance()
@@ -277,6 +302,8 @@ func convert_active_config_to_string() -> Dictionary:
 	var new_config:Dictionary = {}
 	for config_element in config_page.content_elements:
 		if "key" in config_element:
+			if config_element.key == "slack":
+				pass
 			new_config[config_element.key] = config_element.value
 		else:
 			new_config = config_element.value
@@ -337,6 +364,9 @@ func find_in_properties(_properties:Array, _id:String) -> Dictionary:
 func add_element(_name:String, kind:String, _property_value, _parent:Control, default:bool):
 	var model_search = find_in_model(kind)
 	var model = model_search[1]
+	
+	if _name == "slack":
+		pass
 	
 	if BASE_KINDS.has(kind) and not use_raw_mode:
 		# Create a new "Simple"
@@ -483,6 +513,8 @@ func create_complex(_name:String, kind:String, _property_value, properties, _par
 	else:
 		new_complex.description = ""
 	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_complex)
 	return new_complex
 
 
@@ -514,6 +546,8 @@ func create_simple(_name:String, _value, _kind, _properties, _parent:Control, de
 		new_value.description = ""
 		new_value.required = false
 	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_value)
 	return new_value
 
 
@@ -543,6 +577,8 @@ func create_enum(_name:String, _value, _kind, _properties, _enum_values, _parent
 		new_value.description = ""
 		new_value.required = false
 	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_value)
 	return new_value
 
 
@@ -585,6 +621,8 @@ func create_array(_name:String, _value, _kind, _properties, _parent:Control, def
 		new_array_container.is_null = true
 	new_array_container.value = _value
 	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_array_container)
 	return new_array_container
 
 
@@ -624,7 +662,8 @@ func create_dict(_name:String, _kind, _value, _properties, _parent:Control, defa
 	if _value == null:
 		new_dict_container.is_null = true
 	new_dict_container.value = _value
-	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_dict_container)
 	return new_dict_container
 
 

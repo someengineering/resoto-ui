@@ -12,6 +12,7 @@ var enum_values:Array = [] setget set_enum_values
 var required:bool = false setget set_required
 var is_null:bool = false
 var descriptions_as_hints:bool = true
+var overriden: bool = false setget set_overriden
 
 onready var enum_button:OptionButton = $VarContent/VarValueEnum
 onready var null_value = $VarContent/VarValueIsNull
@@ -20,6 +21,11 @@ onready var null_value = $VarContent/VarValueIsNull
 func _ready():
 	if descriptions_as_hints:
 		$Description.hide()
+
+
+func set_overriden(o: bool):
+	overriden = o
+	$VarContent/OverridenLabel.visible = o
 
 
 func set_required(_value:bool) -> void:

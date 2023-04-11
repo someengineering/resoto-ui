@@ -39,17 +39,27 @@ margin_bottom = 33.0
 [node name="Description" type="Label" parent="Box/Header"]
 margin_top = 6.0
 margin_right = 300.0
-margin_bottom = 27.0
+margin_bottom = 26.0
 rect_min_size = Vector2( 300, 0 )
 text = "Description"
+
+[node name="OverridenLabel" type="Label" parent="Box/Header"]
+visible = false
+margin_left = 304.0
+margin_top = 9.0
+margin_right = 451.0
+margin_bottom = 24.0
+theme_type_variation = "LabelSmall"
+custom_colors/font_color = Color( 0.803922, 0.631373, 0.109804, 1 )
+text = "(overriden by external config)"
 
 [node name="VarValueIsNull" type="Label" parent="Box/Header"]
 visible = false
 modulate = Color( 1, 1, 1, 0.439216 )
-margin_left = 304.0
-margin_top = 3.0
-margin_right = 1024.0
-margin_bottom = 17.0
+margin_left = 455.0
+margin_top = 6.0
+margin_right = 1116.0
+margin_bottom = 26.0
 rect_min_size = Vector2( 300, 0 )
 size_flags_horizontal = 3
 theme_type_variation = "LabelCode"

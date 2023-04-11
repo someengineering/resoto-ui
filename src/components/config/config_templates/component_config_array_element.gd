@@ -9,10 +9,15 @@ var value setget set_value, get_value
 var content_elements:Array = []
 var default:bool = false
 var is_null:bool = false
+var overriden: bool = false setget set_overriden
 
 onready var null_value = $Box/Header/VarValueIsNull
 onready var content = $Box/Content
 
+
+func set_overriden(o : bool):
+	overriden = 0
+	$Box/Header/OverridenLabel.visible = o
 
 func _on_DuplicateButton_pressed() -> void:
 	emit_signal("duplicate")

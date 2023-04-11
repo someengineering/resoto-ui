@@ -109,33 +109,45 @@ text = "Test"
 [node name="VarValueIsNull" type="Label" parent="HeaderBG/Header/Top"]
 visible = false
 modulate = Color( 1, 1, 1, 0.439216 )
-margin_left = 318.0
-margin_right = 1900.0
+margin_left = 344.0
+margin_top = 2.0
+margin_right = 1749.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 300, 0 )
 size_flags_horizontal = 3
 theme_type_variation = "LabelCode"
 text = "= null"
 
+[node name="OverridenLabel" type="Label" parent="HeaderBG/Header/Top"]
+visible = false
+margin_left = 1753.0
+margin_top = 5.0
+margin_right = 1900.0
+margin_bottom = 20.0
+size_flags_horizontal = 10
+theme_type_variation = "LabelSmall"
+custom_colors/font_color = Color( 0.803922, 0.631373, 0.109804, 1 )
+text = "(overriden by external config)"
+
 [node name="ButtonSetToNull" parent="HeaderBG/Header/Top" instance=ExtResource( 6 )]
 visible = false
 modulate = Color( 1, 1, 1, 0.235294 )
-margin_left = 318.0
-margin_right = 343.0
+margin_left = 1875.0
+margin_right = 1900.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 25, 25 )
 hint_tooltip = "To null"
 size_flags_horizontal = 10
 size_flags_vertical = 5
+size_flags_stretch_ratio = 0.0
 flat = true
 icon_tex = ExtResource( 7 )
 icon_margin = 3
 
 [node name="ButtonAddValue" parent="HeaderBG/Header/Top" instance=ExtResource( 6 )]
 visible = false
-margin_left = 1852.0
-margin_right = 1885.0
-margin_bottom = 34.0
+margin_left = 1867.0
+margin_right = 1900.0
 hint_tooltip = "Add Value"
 size_flags_horizontal = 0
 icon_tex = ExtResource( 5 )
