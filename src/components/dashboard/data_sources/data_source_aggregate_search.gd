@@ -45,8 +45,7 @@ func _on_aggregate_search_done(_error : int, response):
 	if  response.transformed.result.size() == 0:
 		emit_signal("query_status", FAILED, "Empty Aggregate Search Result", "This search returned an empty result.")
 		return
-	if widget is TableWidget:
-		widget.header_columns_count = response.transformed.result[0]["group"].size()-1
+	
 	widget.set_data(response.transformed.result, type)
 	emit_signal("query_status", OK, "")
 

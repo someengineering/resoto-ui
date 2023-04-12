@@ -92,6 +92,7 @@ func set_data(data, type):
 	
 	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
 		if "group" in raw_data[0]:
+			header_columns_count = raw_data[0]["group"].size()-1
 			var headers = raw_data[0]["group"].keys()
 			headers.append_array(raw_data[0].keys())
 			headers.erase("group")
@@ -298,18 +299,18 @@ func get_value(data : Dictionary, index : int):
 	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
 		var keys : Array = []
 		
-		if "groups" in data:
+		if "group" in data:
 			keys = data["group"].keys()
 		else:
 			keys = data.keys()
 		var group_keys : Array = keys.duplicate()
 		var all_keys : Array = data.keys()
 		
-		if "groups" in all_keys:
+		if "group" in all_keys:
 			all_keys.erase("group")
 		keys.append_array(all_keys)
 		if index < group_keys.size():
-			if "groups" in data:
+			if "group" in data:
 				return data["group"][group_keys[index]]
 			else:
 				return data[group_keys[index]]
