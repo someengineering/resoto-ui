@@ -91,10 +91,15 @@ func set_data(data, type):
 	raw_data = data
 	
 	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
-		var headers = raw_data[0]["group"].keys()
-		headers.append_array(raw_data[0].keys())
-		headers.erase("group")
-		set_headers(headers)
+		if "group" in raw_data[0]:
+			header_columns_count = raw_data[0]["group"].size()-1
+			var headers = raw_data[0]["group"].keys()
+			headers.append_array(raw_data[0].keys())
+			headers.erase("group")
+			set_headers(headers)
+		else:
+			var headers = raw_data[0].keys()
+			set_headers(headers)
 	elif data_source_type == DataSource.TYPES.SEARCH:
 		set_headers(DefaultSearchAttributes.keys())
 		
@@ -292,13 +297,23 @@ func get_node_id(data : Dictionary) -> String:
 
 func get_value(data : Dictionary, index : int):
 	if data_source_type == DataSource.TYPES.AGGREGATE_SEARCH:
-		var keys : Array = data["group"].keys()
+		var keys : Array = []
+		
+		if "group" in data:
+			keys = data["group"].keys()
+		else:
+			keys = data.keys()
 		var group_keys : Array = keys.duplicate()
 		var all_keys : Array = data.keys()
-		all_keys.erase("group")
+		
+		if "group" in all_keys:
+			all_keys.erase("group")
 		keys.append_array(all_keys)
 		if index < group_keys.size():
-			return data["group"][group_keys[index]]
+			if "group" in data:
+				return data["group"][group_keys[index]]
+			else:
+				return data[group_keys[index]]
 		return data[keys[index]]
 	elif data_source_type == DataSource.TYPES.SEARCH:
 		var key : String = DefaultSearchAttributes.keys()[index]
