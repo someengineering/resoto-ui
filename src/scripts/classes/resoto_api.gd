@@ -175,6 +175,12 @@ func get_model() -> ResotoAPI.Request:
 	return request
 
 
+func get_model_flat() -> ResotoAPI.Request:
+	var request = req_get("/model?flat=true", accept_json_headers)
+	request.connect("pre_done", self, "_transform_json")
+	return request
+
+
 func get_config_model() -> ResotoAPI.Request:
 	var request = req_get("/configs/model", accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/resoto/Resoto_logo_and_text_big.svg" type="Texture" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://components/config/config_templates/config_custom_tooltip.gd" type="Script" id=11]
 [ext_resource path="res://assets/icons/icon_128_info_circle.svg" type="Texture" id=12]
 [ext_resource path="res://assets/icons/icon_128_main_benchmark.svg" type="Texture" id=13]
+[ext_resource path="res://components/popups/popup_model_loading.tscn" type="PackedScene" id=14]
 
 [sub_resource type="DynamicFont" id=1]
 size = 28
@@ -152,6 +153,25 @@ margin_right = 520.0
 margin_bottom = 296.0
 app_name = "Configuration"
 app_icon = ExtResource( 8 )
+
+[node name="Spacer4" type="Control" parent="VBox"]
+margin_top = 576.0
+margin_right = 1920.0
+margin_bottom = 596.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="Status" type="VBoxContainer" parent="VBox"]
+margin_top = 600.0
+margin_right = 1920.0
+margin_bottom = 636.0
+alignment = 1
+
+[node name="ModelReceivePopup" parent="VBox/Status" instance=ExtResource( 14 )]
+margin_left = 760.0
+margin_top = 0.0
+margin_right = 1160.0
+margin_bottom = 36.0
+size_flags_horizontal = 4
 
 [connection signal="visibility_changed" from="." to="." method="_on_ResotoHome_visibility_changed"]
 [connection signal="text_changed" from="VBox/HBoxContainer/FullTextSearch" to="." method="_on_FullTextSearch_text_changed"]

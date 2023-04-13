@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/generic/spin_shader.tres" type="Shader" id=1]
+[ext_resource path="res://assets/icons/icon_128_circle_thick.svg" type="Texture" id=2]
+[ext_resource path="res://components/popups/popup_model_loading.gd" type="Script" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="Gradient" id=2]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.0310421, 1 )
+colors = PoolColorArray( 0.164063, 0.164063, 0.164063, 1, 1, 1, 1, 1, 0.164706, 0.164706, 0.164706, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 1 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 3 )
+
+[node name="ModelReceivePopup" type="Control"]
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 406.0
+margin_bottom = 42.0
+rect_min_size = Vector2( 400, 36 )
+script = ExtResource( 3 )
+
+[node name="ProgressToast" type="PanelContainer" parent="."]
+margin_right = 400.0
+margin_bottom = 27.0
+custom_styles/panel = SubResource( 5 )
+
+[node name="Main" type="HBoxContainer" parent="ProgressToast"]
+margin_right = 400.0
+margin_bottom = 27.0
+alignment = 1
+
+[node name="Progressing" type="TextureRect" parent="ProgressToast/Main"]
+modulate = Color( 0.462745, 0.176471, 0.843137, 1 )
+material = SubResource( 4 )
+margin_left = 124.0
+margin_top = 1.0
+margin_right = 154.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 30, 24 )
+size_flags_vertical = 4
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Title" type="Label" parent="ProgressToast/Main"]
+margin_left = 158.0
+margin_top = 3.0
+margin_right = 276.0
+margin_bottom = 23.0
+custom_colors/font_color = Color( 0.85098, 0.721569, 1, 1 )
+text = "Receiving Model"
+
+[node name="StartModelRequestDelay" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="StartModelRequestDelay" to="." method="_on_StartModelRequestDelay_timeout"]
