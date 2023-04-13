@@ -67,6 +67,11 @@ func get_model(_connect_to:Node, _connect_function:String="_on_get_model_done") 
 	_req_res.connect("done", _connect_to, _connect_function)
 
 
+func get_model_flat(_connect_to:Node, _connect_function:String="_on_get_model_flat_done") -> void:
+	_req_res = _resoto_api.get_model_flat()
+	_req_res.connect("done", _connect_to, _connect_function)
+
+
 func patch_model(_body:String, _connect_to:Node, _connect_function:String="_on_patch_model_done") -> void:
 	_req_res = _resoto_api.patch_model(_body)
 	_req_res.connect("done", _connect_to, _connect_function)

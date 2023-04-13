@@ -74,6 +74,7 @@ var os = "Windows"
 var browser = ""
 var terminal_scrollback:Array = []
 var focus_in_search:bool = false
+var resoto_model : Dictionary = {}
 
 var is_connected_to_resotocore:bool	= false
 
