@@ -569,7 +569,7 @@ func create_columns_from_data(_data : Array):
 			var cloud = data["group"]["cloud"]
 			var region = data["group"]["region"]
 			
-			if not cloud in regions:
+			if not cloud in regions or not region in regions[cloud]:
 				continue
 			
 			var coordinates = Vector2(regions[cloud][region]["latitude"], regions[cloud][region]["longitude"])
