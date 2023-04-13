@@ -10,16 +10,17 @@ var orig_data : Dictionary = {}
 
 func get_shortest_path(result:Array, start_node_id:String, end_node_id:String) -> Array:
 	orig_data.clear()
+	astar.clear()
 	start_id = -1
 	end_id = -1
 	for r in result:
 		if r.type == "edge":
-			var from_id : int = _to32(r.from.hash())
-			var to_id : int = _to32(r.to.hash())
+			var from_id : int = _to32(str(r.from).hash())
+			var to_id : int = _to32(str(r.to).hash())
 			astar.connect_points(from_id, to_id, true)
 		
 		if r.type == "node":
-			var id:int = _to32(r.id.hash())
+			var id:int = _to32(str(r.id).hash())
 			orig_data[id] = r
 			astar.add_point(id, Vector2.ZERO)
 			if r.id == start_node_id:
