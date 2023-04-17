@@ -99,7 +99,8 @@ func _on_ButtonAddValue_pressed() -> void:
 
 func _on_VarKey_text_changed(new_text:String) -> void:
 	key = new_text
-	emit_signal("key_update", key)
+	if typeof(value) != TYPE_DICTIONARY:
+		emit_signal("key_update", key)
 
 
 func _on_key_update(_new_key:String) -> void:
