@@ -555,3 +555,7 @@ func _on_TitleBar_mouse_exited():
 func _on_WidgetContainer_tree_exiting():
 	for data_source in data_sources:
 		data_source.queue_free()
+
+func minimize():
+	if is_maximized:
+		maximize_button.pressed = false

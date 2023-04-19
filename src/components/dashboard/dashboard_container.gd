@@ -14,6 +14,7 @@ signal deleted
 signal dashboard_changed(dashboard)
 signal dashboard_closed(dashboard)
 signal dashboard_maximized(is_maximized)
+signal dashboard_edit_enabled
 
 var manager: Node = null
 var dashboard_name : String = "" setget set_dashboard_name
@@ -135,6 +136,8 @@ func _on_DashboardEditButton_toggled(button_pressed : bool) -> void:
 	dashboard.lock(!is_editing)
 	if !is_editing:
 		emit_signal("dashboard_changed", self)
+	else:
+		emit_signal("dashboard_edit_enabled")
 
 
 func _on_OptionButton_item_selected(_index : int) -> void:
