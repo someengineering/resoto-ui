@@ -33,6 +33,27 @@ The UI ships as part of the [Resoto Docker](https://resoto.com/docs/getting-star
 - Run the Project by clicking on the `Play` button in the upper right corner or by pressing `F5`.
 
 
+## Creating a Release
+**1) Change the version in the repo and open a version bump PR.**
+
+The version number must be changed in two files:
+
+`resotoui\__init__.py` -> `__version__ = "X.Y.Z"`
+
+`src\scripts\autoloads\global.gd` -> `var ui_version:String= X.Y.Z`
+
+**2) Create a new Release on GitHub**
+
+Just create a new release, the title of the release is always `vX.Y.Z` while the tag is just `X.Y.Z.` (e.g. Title: `v3.3.3`, Tag: `3.3.3`)
+
+**3) Create a PR in the Resoto repo to bump the UI version**
+
+You need to change the UI version accordingly here:
+
+`https://github.com/someengineering/resoto/blob/main/resotocore/requirements.txt` -> `resotoui==X.Y.Z`
+
+Then open a pull request with the change.
+
 ## Contact
 [Join our Discord](https://discord.gg/someengineering) if you have any questions or want to chat about Resoto or Resoto UI - or [open a GitHub issue](https://github.com/someengineering/resoto-ui/issues/new) if you encounter problems and/or bugs.
 
