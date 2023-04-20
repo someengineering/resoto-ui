@@ -85,6 +85,8 @@ func add_widget(widget_data : Dictionary, _show_after_creation:=false) -> Widget
 	container.set_deferred("title", widget_data.title)
 	container.call_deferred("lock", locked)
 	
+	dashboard_container.connect("dashboard_edit_enabled", container, "minimize")
+	
 	if widget_data.has("settings"):
 		for key in widget_data.settings:
 			if "color" in key and not widget_data.settings[key] is Color:
