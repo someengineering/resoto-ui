@@ -54,9 +54,9 @@ func set_description(_value:String) -> void:
 
 func set_overridden(o: bool):
 	overridden = o
-	$VarContent/OverriddenLabel.visible = o
+	$HeaderBG/Header/Top/OverriddenLabel.visible = o
 	if overridden:
-		$"%VarName".add_color_override("font_color", Style.col_map[Style.c.WARN_MSG])
+		$"%Name".add_color_override("font_color", Style.col_map[Style.c.WARN_MSG])
 
 
 func set_required(_value:bool) -> void:

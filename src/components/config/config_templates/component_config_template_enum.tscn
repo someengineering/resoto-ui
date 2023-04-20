@@ -16,6 +16,7 @@ margin_right = 1900.0
 margin_bottom = 25.0
 
 [node name="VarName" type="Label" parent="VarContent"]
+unique_name_in_owner = true
 margin_top = 2.0
 margin_right = 87.0
 margin_bottom = 22.0
