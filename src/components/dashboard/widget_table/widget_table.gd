@@ -21,6 +21,18 @@ const DefaultSearchAttributes : Dictionary = {
 	"zone" : ["ancestors", "zone", "reported", "name"],
 }
 
+const time_units := [
+	{ "units": ["years", "year", "yr", "y"], "multiplier": 365 * 24 * 3600 },
+	{ "units": ["months", "month", "mo", "M"], "multiplier": 31 * 24 * 3600 },
+	{ "units": ["days", "day", "d"], "multiplier": 24 * 3600 },
+	{ "units": ["weeks", "week", "w"], "multiplier": 7 * 24 * 3600 },
+	{ "units": ["hours", "hour", "h"], "multiplier": 3600 },
+	{ "units": ["minutes", "minute", "min", "m"], "multiplier": 60 },
+	{ "units": ["seconds", "second", "s"], "multiplier": 1 }
+]
+
+var column_types := {}
+
 var raw_data : Array 
 var sorting_column : int = -1
 var sorting_type : String = ""
@@ -102,10 +114,32 @@ func set_data(data, type):
 			set_headers(headers)
 	elif data_source_type == DataSource.TYPES.SEARCH:
 		set_headers(DefaultSearchAttributes.keys())
+		update_column_types()
 		
 	update_page_count(raw_data.size())
 	yield(VisualServer, "frame_post_draw")
 	sort_by_column(sorting_column, sorting_type == "asc")
+
+
+func update_column_types():
+	for key in DefaultSearchAttributes.keys():
+		var prop : String = DefaultSearchAttributes[key][-1]
+		if not prop in _g.resoto_model:
+			var found := false
+			for kind_key in _g.resoto_model:
+				if found:
+					break
+					
+				var kind = _g.resoto_model[kind_key]
+				
+				if "properties" in kind:
+					for property in kind.properties:
+						if property.name == prop:
+							prop = property.kind
+							found = true
+							break
+		
+		column_types[key] = _g.resoto_model[prop].runtime_kind
 
 
 func set_headers(headers : Array):
@@ -138,6 +172,7 @@ func update_page_count(row_count : int):
 
 
 func clear_all():
+	column_types = {}
 	for child in header_row.get_children():
 		header_row.remove_child(child)
 		child.queue_free()
@@ -237,7 +272,13 @@ func sort_descending(a, b) -> bool:
 
 
 func make_sortable(value):
-	if not [TYPE_INT, TYPE_REAL, TYPE_STRING].has(typeof(value)):
+	if data_source_type  == DataSource.TYPES.SEARCH:
+		var key : String = DefaultSearchAttributes.keys()[sorting_column]
+		if key in column_types:
+			if column_types[key] == "duration":
+				value = duration_to_seconds(value)
+			
+	if not typeof(value) in [TYPE_INT, TYPE_REAL, TYPE_STRING]:
 		if value == null:
 			return ""
 		return str(value).to_lower()
@@ -327,3 +368,15 @@ func get_value(data : Dictionary, index : int):
 				break
 		return result
 
+func duration_to_seconds(duration : String) -> int:
+	for row in time_units:
+		for unit in row.units:
+			if unit in duration:
+				duration = duration.replace(unit, " * %d + " % row.multiplier)
+				break
+				
+	duration = duration.trim_suffix(" + ")
+	var expression := Expression.new()
+	if expression.parse(duration):
+		return 0
+	return expression.execute()
