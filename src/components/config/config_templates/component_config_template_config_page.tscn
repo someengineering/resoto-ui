@@ -2,7 +2,7 @@
 
 [ext_resource path="res://components/config/config_templates/component_config_page.gd" type="Script" id=1]
 
-[node name="TemplateConfigPage" type="VBoxContainer"]
+[node name="TemplateConfigPage" type="VBoxContainer" groups=["config_key_owner", "config_template_element"]]
 margin_right = 1900.0
 margin_bottom = 4.0
 custom_constants/separation = 5

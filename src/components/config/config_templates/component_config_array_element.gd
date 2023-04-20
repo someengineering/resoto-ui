@@ -7,17 +7,18 @@ var config_component:Node = null
 var model:Dictionary = {}
 var value setget set_value, get_value
 var content_elements:Array = []
+var index := 0
 var default:bool = false
 var is_null:bool = false
-var overriden: bool = false setget set_overriden
+var overridden: bool = false setget set_overridden
 
 onready var null_value = $Box/Header/VarValueIsNull
 onready var content = $Box/Content
 
 
-func set_overriden(o : bool):
-	overriden = 0
-	$Box/Header/OverridenLabel.visible = o
+func set_overridden(o : bool):
+	overridden = 0
+	$Box/Header/overriddenLabel.visible = o
 
 func _on_DuplicateButton_pressed() -> void:
 	emit_signal("duplicate")
@@ -27,8 +28,12 @@ func _on_DeleteButton_pressed() -> void:
 	emit_signal("delete")
 
 
-func set_title(_index:int) -> void:
-	$Box/Header/Description.text = "Index " + str(_index)
+func set_title(_array_name:String, _index:int) -> void:
+	index = _index
+	if _array_name == "":
+		$Box/Header/Description.text = "Index %s" % str(index)
+	else:
+		$Box/Header/Description.text = _array_name
 
 
 func set_value(_value) -> void:
@@ -54,6 +59,17 @@ func set_value(_value) -> void:
 		content_elements = new_element
 	else:
 		content_elements = [new_element]
+	for elem in content_elements:
+		if "key" in elem and elem.key == "name":
+			elem.connect("value_changed", self, "update_title_from_name")
+			set_title(elem.value, index)
+		if not model.empty() and config_component.BASE_KINDS.has(model.fqn):
+			elem.connect("value_changed", self, "update_title_from_name")
+			set_title(elem.value, index)
+
+
+func update_title_from_name(_new_title:String):
+	set_title(_new_title, index)
 
 
 func get_value():

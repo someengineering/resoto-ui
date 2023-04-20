@@ -1,15 +1,16 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://components/config/component_config.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
 [ext_resource path="res://assets/icons/icon_128_save_disc.svg" type="Texture" id=3]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=4]
-[ext_resource path="res://components/elements/styled/check_button_styled.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/elements/styled/icon_check_button.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/icons/icon_128_info_circle.svg" type="Texture" id=7]
 [ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=8]
+[ext_resource path="res://assets/icons/icon_128_json_view.svg" type="Texture" id=9]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=13]
 [ext_resource path="res://assets/icons/icon_128_reload_thick.svg" type="Texture" id=15]
-[ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=17]
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=18]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=19]
@@ -66,14 +67,6 @@ text = "Configurations"
 align = 2
 valign = 1
 
-[node name="ConfigCombo" parent="VBox/Toolbar/Box" instance=ExtResource( 16 )]
-unique_name_in_owner = true
-visible = false
-margin_left = 64.0
-margin_right = 464.0
-rect_min_size = Vector2( 400, 24 )
-align_items_left = true
-
 [node name="ShowDashboardsButton" type="CheckBox" parent="VBox/Toolbar/Box"]
 visible = false
 margin_right = 226.667
@@ -83,28 +76,42 @@ flat = true
 
 [node name="Spacer" type="Control" parent="VBox/Toolbar/Box"]
 margin_left = 124.0
-margin_right = 1445.0
+margin_right = 1310.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 20, 0 )
 size_flags_horizontal = 3
 
-[node name="RawViewModeButton" parent="VBox/Toolbar/Box" instance=ExtResource( 5 )]
+[node name="SearchLineEdit" type="LineEdit" parent="VBox/Toolbar/Box"]
 unique_name_in_owner = true
-margin_left = 1449.0
-margin_top = 6.0
-margin_right = 1484.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 35, 20 )
-size_flags_vertical = 4
+margin_left = 1314.0
+margin_right = 1514.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 200, 0 )
+clear_button_enabled = true
+placeholder_text = "Search"
 
-[node name="RawViewMapTitle" type="Label" parent="VBox/Toolbar/Box"]
+[node name="ShowDescriptionsButton" parent="VBox/Toolbar/Box" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_left = 1488.0
-margin_top = 6.0
+margin_left = 1518.0
+margin_right = 1551.0
+hint_tooltip = "Show/Hide Property Descriptions"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+pressed = true
+icon_tex = ExtResource( 7 )
+icon_true = ExtResource( 7 )
+icon_false = ExtResource( 7 )
+
+[node name="RawViewButton" parent="VBox/Toolbar/Box" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 1555.0
 margin_right = 1588.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 100, 0 )
-text = "Raw View"
+hint_tooltip = "Show/Hide Property Descriptions"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon_tex = ExtResource( 9 )
+icon_true = ExtResource( 9 )
+icon_false = ExtResource( 9 )
 
 [node name="SaveConfigButton" parent="VBox/Toolbar/Box" instance=ExtResource( 4 )]
 margin_left = 1592.0
@@ -208,9 +215,10 @@ custom_constants/margin_right = 20
 custom_constants/margin_top = 0
 custom_constants/margin_left = 8
 
-[connection signal="option_changed" from="VBox/Toolbar/Box/ConfigCombo" to="." method="_on_ConfigCombo_option_changed"]
 [connection signal="toggled" from="VBox/Toolbar/Box/ShowDashboardsButton" to="." method="_on_ShowDashboardsButton_toggled"]
-[connection signal="toggled" from="VBox/Toolbar/Box/RawViewModeButton" to="." method="_on_RawViewModeButton_toggled"]
+[connection signal="text_changed" from="VBox/Toolbar/Box/SearchLineEdit" to="." method="_on_SearchLineEdit_text_changed"]
+[connection signal="pressed" from="VBox/Toolbar/Box/ShowDescriptionsButton" to="." method="_on_ShowDescriptionsButton_pressed"]
+[connection signal="pressed" from="VBox/Toolbar/Box/RawViewButton" to="." method="_on_RawViewButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/SaveConfigButton" to="." method="_on_SaveConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/RenameConfigButton" to="." method="_on_RenameConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/DuplicateConfigButton" to="." method="_on_DuplicateConfigButton_pressed"]

@@ -25,7 +25,18 @@ func _ready():
 func set_number(new_number:String):
 	if is_inside_tree():
 		on_text_changed(new_number)
-	text = "%s %s %s" % [prefix, old_text, suffix]
+		add_suffix_prefix(new_number)
+
+
+func add_suffix_prefix(_text:String):
+	if prefix == "" and suffix == "":
+		text = str(_text)
+	elif prefix == "":
+		text = "%s %s" % [_text, suffix]
+	elif suffix == "":
+		text = "%s %s" % [prefix, _text]
+	else:
+		text = "%s %s %s" % [prefix, _text, suffix]
 
 
 func set_max_value(_max_value:int):
@@ -41,9 +52,11 @@ func set_min_value(_min_value:int):
 
 
 func on_text_changed(new_text:String):
+	var old_cursor_pos = get_cursor_position()
 	if not update_on_writing:
 		return
 	check_text(new_text)
+	set_cursor_position(old_cursor_pos)
 
 func check_text(new_text:String):
 	if new_text == "":
@@ -54,10 +67,10 @@ func check_text(new_text:String):
 		if use_min_value and int(new_text) < min_value:
 			new_text = str(min_value)
 		old_text = str(new_text)
-		text = "%s %s %s" % [prefix, old_text, suffix]
+		add_suffix_prefix(old_text)
 	else:
 		var cursor_pos = clamp(caret_position-1, 0, old_text.length())
-		text = "%s %s %s" % [prefix, old_text, suffix]
+		add_suffix_prefix(old_text)
 		set_cursor_position(cursor_pos)
 	emit_signal("value_change_done", int(old_text))
 

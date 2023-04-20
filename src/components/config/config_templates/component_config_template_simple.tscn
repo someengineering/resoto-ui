@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://components/config/config_templates/component_config_simple.gd" type="Script" id=1]
 [ext_resource path="res://components/config/config_templates/component_config_line_edit_int.gd" type="Script" id=2]
@@ -7,66 +7,51 @@
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=5]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/icons/icon_128_to_null.svg" type="Texture" id=7]
-[ext_resource path="res://assets/icons/icon_128_info_circle.svg" type="Texture" id=8]
-[ext_resource path="res://components/config/config_templates/config_custom_tooltip.gd" type="Script" id=9]
+[ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=8]
+[ext_resource path="res://assets/icons/icon_128_checkbox_false.svg" type="Texture" id=9]
 
-[sub_resource type="DynamicFontData" id=2]
-font_path = "res://assets/theme/Barlow-Regular.ttf"
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 14.0
+content_margin_right = 6.0
+content_margin_top = 13.0
+content_margin_bottom = 0.0
+bg_color = Color( 0, 0.0509804, 0.0980392, 1 )
+border_width_top = 5
+border_color = Color( 0, 0.040625, 0.078125, 1 )
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
-[sub_resource type="DynamicFont" id=3]
-size = 13
-use_mipmaps = true
-use_filter = true
-font_data = SubResource( 2 )
-
-[sub_resource type="StyleBoxEmpty" id=7]
-content_margin_left = 10.0
-
-[node name="TemplateSimple" type="VBoxContainer"]
-margin_top = 339.0
-margin_right = 1900.0
-margin_bottom = 377.0
-custom_constants/separation = 1
+[node name="TemplateSimple" type="VBoxContainer" groups=["config_description_toggle", "config_key_owner", "config_template_element"]]
+margin_right = 1100.0
+margin_bottom = 45.0
+custom_constants/separation = 4
 script = ExtResource( 1 )
 
 [node name="VarContent" type="HBoxContainer" parent="."]
-margin_right = 1900.0
-margin_bottom = 20.0
-
-[node name="HintIcon" type="TextureRect" parent="VarContent"]
-modulate = Color( 0.123871, 0.346745, 0.480469, 1 )
-margin_right = 18.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 18, 20 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 8 )
-expand = true
-stretch_mode = 6
-script = ExtResource( 9 )
-
-[node name="Control" type="Control" parent="VarContent"]
-margin_left = 22.0
-margin_right = 22.0
+unique_name_in_owner = true
+margin_right = 1100.0
 margin_bottom = 20.0
 
 [node name="VarName" type="Label" parent="VarContent"]
-margin_left = 26.0
-margin_right = 326.0
+unique_name_in_owner = true
+margin_right = 87.0
 margin_bottom = 20.0
-rect_min_size = Vector2( 300, 0 )
-size_flags_vertical = 0
+theme_type_variation = "LabelBold"
 text = "Description"
 
-[node name="OverridenLabel" type="Label" parent="VarContent"]
+[node name="OverriddenLabel" type="Label" parent="VarContent"]
 visible = false
-margin_left = 330.0
+margin_left = 91.0
 margin_top = 2.0
-margin_right = 477.0
+margin_right = 256.0
 margin_bottom = 17.0
 theme_type_variation = "LabelSmall"
 custom_colors/font_color = Color( 0.803922, 0.631373, 0.109804, 1 )
-text = "(overriden by external config)"
+text = "(overriden by external config file)"
+valign = 2
 
 [node name="VarValueIsNull" type="Label" parent="VarContent"]
 visible = false
@@ -79,43 +64,12 @@ size_flags_vertical = 6
 theme_type_variation = "LabelCode"
 text = "= null"
 
-[node name="VarValueBool" parent="VarContent" instance=ExtResource( 4 )]
-visible = false
-margin_left = 304.0
-margin_right = 337.0
-rect_min_size = Vector2( 23, 23 )
-hint_tooltip = "Enable/Disable"
-size_flags_horizontal = 2
-size_flags_vertical = 6
-icon_margin = 1
-
-[node name="VarValueTextbox" type="LineEdit" parent="VarContent"]
-visible = false
-margin_left = 304.0
-margin_right = 1900.0
-margin_bottom = 24.0
+[node name="Spacer" type="Control" parent="VarContent"]
+margin_left = 91.0
+margin_right = 1100.0
+margin_bottom = 20.0
+mouse_filter = 2
 size_flags_horizontal = 3
-theme_type_variation = "LineEditConfig"
-caret_blink = true
-caret_blink_speed = 0.5
-
-[node name="VarValueInt" type="LineEdit" parent="VarContent"]
-visible = false
-margin_left = 324.0
-margin_right = 1900.0
-margin_bottom = 24.0
-size_flags_horizontal = 3
-theme_type_variation = "LineEditConfig"
-script = ExtResource( 2 )
-
-[node name="VarValueFloat" type="LineEdit" parent="VarContent"]
-visible = false
-margin_left = 304.0
-margin_right = 1900.0
-margin_bottom = 34.0
-size_flags_horizontal = 3
-theme_type_variation = "LineEditConfig"
-script = ExtResource( 3 )
 
 [node name="ButtonSetToNull" parent="VarContent" instance=ExtResource( 6 )]
 visible = false
@@ -139,15 +93,108 @@ hint_tooltip = "Add Value"
 icon_tex = ExtResource( 5 )
 icon_margin = 3
 
-[node name="Description" type="Label" parent="."]
-visible = false
-modulate = Color( 1, 1, 1, 0.54902 )
-margin_top = 21.0
-margin_right = 1900.0
-margin_bottom = 37.0
-custom_fonts/font = SubResource( 3 )
-custom_styles/normal = SubResource( 7 )
-text = "Description"
+[node name="DescriptionContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+margin_top = 24.0
+margin_right = 1100.0
+margin_bottom = 41.0
+custom_constants/separation = 0
 
+[node name="Spacer" type="Control" parent="DescriptionContainer"]
+margin_right = 12.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 12, 0 )
+
+[node name="Description" type="Label" parent="DescriptionContainer"]
+unique_name_in_owner = true
+self_modulate = Color( 1, 1, 1, 0.490196 )
+margin_left = 12.0
+margin_top = -1.0
+margin_right = 1100.0
+margin_bottom = 16.3333
+size_flags_horizontal = 3
+theme_type_variation = "LabelSmallMedium"
+text = "Help Text"
+autowrap = true
+
+[node name="ValueContent" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+margin_top = 45.0
+margin_right = 1100.0
+margin_bottom = 45.0
+custom_constants/separation = 0
+
+[node name="Spacer" type="Control" parent="ValueContent"]
+margin_right = 12.0
+rect_min_size = Vector2( 12, 0 )
+
+[node name="BoolGroup" type="HBoxContainer" parent="ValueContent"]
+unique_name_in_owner = true
+visible = false
+margin_left = 12.0
+margin_right = 99.0
+margin_bottom = 23.0
+
+[node name="VarValueBool" parent="ValueContent/BoolGroup" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+margin_right = 23.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 23, 23 )
+size_flags_horizontal = 2
+size_flags_vertical = 6
+icon_margin = 1
+icon_true = ExtResource( 8 )
+icon_false = ExtResource( 9 )
+
+[node name="VarValueBoolLabel" type="Label" parent="ValueContent/BoolGroup"]
+unique_name_in_owner = true
+margin_left = 27.0
+margin_top = 1.0
+margin_right = 87.0
+margin_bottom = 21.0
+text = "Enabled"
+
+[node name="VarValueInt" type="LineEdit" parent="ValueContent"]
+unique_name_in_owner = true
+visible = false
+margin_left = 324.0
+margin_top = -35.0
+margin_right = 1900.0
+margin_bottom = -1.0
+size_flags_horizontal = 3
+theme_type_variation = "LineEditConfig"
+script = ExtResource( 2 )
+
+[node name="VarValueFloat" type="LineEdit" parent="ValueContent"]
+unique_name_in_owner = true
+visible = false
+margin_left = 304.0
+margin_top = -35.0
+margin_right = 1900.0
+margin_bottom = -1.0
+size_flags_horizontal = 3
+theme_type_variation = "LineEditConfig"
+script = ExtResource( 3 )
+
+[node name="VarValueTextbox" type="TextEdit" parent="ValueContent"]
+unique_name_in_owner = true
+visible = false
+margin_left = 330.0
+margin_top = -35.0
+margin_right = 1900.0
+margin_bottom = -1.0
+size_flags_horizontal = 3
+theme_type_variation = "LineEditConfig"
+custom_constants/line_spacing = 0
+custom_styles/normal = SubResource( 1 )
+show_line_numbers = true
+virtual_keyboard_enabled = false
+wrap_enabled = true
+caret_blink = true
+caret_blink_speed = 0.5
+
+[connection signal="item_rect_changed" from="." to="." method="_on_TemplateSimple_item_rect_changed"]
 [connection signal="pressed" from="VarContent/ButtonSetToNull" to="." method="_on_ButtonSetToNull_pressed"]
 [connection signal="pressed" from="VarContent/ButtonAddValue" to="." method="_on_ButtonAddValue_pressed"]
+[connection signal="pressed" from="ValueContent/BoolGroup/VarValueBool" to="." method="_on_VarValueBool_pressed"]
+[connection signal="text_changed" from="ValueContent/VarValueTextbox" to="." method="_on_VarValueTextbox_text_changed"]

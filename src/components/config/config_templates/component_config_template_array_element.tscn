@@ -13,15 +13,16 @@ content_margin_right = 5.0
 content_margin_top = 5.0
 content_margin_bottom = 5.0
 bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+border_width_top = 44
+border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [node name="TemplateArrayElement" type="PanelContainer"]
-margin_top = 190.0
 margin_right = 1900.0
-margin_bottom = 236.0
+margin_bottom = 69.0
 custom_styles/panel = SubResource( 8 )
 script = ExtResource( 1 )
 
@@ -29,7 +30,7 @@ script = ExtResource( 1 )
 margin_left = 10.0
 margin_top = 5.0
 margin_right = 1895.0
-margin_bottom = 50.0
+margin_bottom = 64.0
 size_flags_horizontal = 3
 
 [node name="Header" type="HBoxContainer" parent="Box"]
@@ -37,10 +38,10 @@ margin_right = 1885.0
 margin_bottom = 33.0
 
 [node name="Description" type="Label" parent="Box/Header"]
-margin_top = 6.0
-margin_right = 300.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 300, 0 )
+margin_top = 1.0
+margin_right = 103.0
+margin_bottom = 31.0
+theme_type_variation = "Label_24"
 text = "Description"
 
 [node name="OverridenLabel" type="Label" parent="Box/Header"]
@@ -66,7 +67,7 @@ theme_type_variation = "LabelCode"
 text = "= null"
 
 [node name="Control" type="Control" parent="Box/Header"]
-margin_left = 304.0
+margin_left = 107.0
 margin_right = 1782.0
 margin_bottom = 33.0
 size_flags_horizontal = 3
@@ -116,6 +117,13 @@ margin_top = 45.0
 margin_right = 1885.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
+custom_constants/separation = 15
+
+[node name="Control" type="Control" parent="Box"]
+margin_top = 49.0
+margin_right = 1885.0
+margin_bottom = 59.0
+rect_min_size = Vector2( 0, 10 )
 
 [connection signal="pressed" from="Box/Header/DuplicateButton" to="." method="_on_DuplicateButton_pressed"]
 [connection signal="pressed" from="Box/Header/DeleteButton" to="." method="_on_DeleteButton_pressed"]

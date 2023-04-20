@@ -1,8 +1,8 @@
 extends "res://components/elements/styled/icon_button.gd"
 tool
 
-const icon_true = preload("res://assets/icons/icon_128_check.svg")
-const icon_false = preload("res://assets/icons/icon_128_checkbox_false.svg")
+export (Texture) var icon_true = preload("res://assets/icons/icon_128_check.svg")
+export (Texture) var icon_false = preload("res://assets/icons/icon_128_checkbox_false.svg")
 
 
 func _ready():

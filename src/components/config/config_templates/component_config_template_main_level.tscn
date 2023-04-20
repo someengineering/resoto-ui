@@ -1,6 +1,6 @@
 [gd_scene format=2]
 
-[node name="TemplateMainLevel" type="VBoxContainer"]
+[node name="TemplateMainLevel" type="VBoxContainer" groups=["config_key_owner", "config_template_element"]]
 margin_top = 8.0
 margin_right = 1900.0
 margin_bottom = 8.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/icons/icon_128_collapse.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icons/icon_128_expand.svg" type="Texture" id=2]
@@ -6,8 +6,6 @@
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=5]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/icons/icon_128_to_null.svg" type="Texture" id=7]
-[ext_resource path="res://components/config/config_templates/config_custom_tooltip.gd" type="Script" id=8]
-[ext_resource path="res://assets/icons/icon_128_info_circle.svg" type="Texture" id=9]
 
 [sub_resource type="StyleBoxFlat" id=8]
 content_margin_top = 2.0
@@ -19,18 +17,6 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 expand_margin_left = 8.0
-
-[sub_resource type="DynamicFontData" id=2]
-font_path = "res://assets/theme/Barlow-Regular.ttf"
-
-[sub_resource type="DynamicFont" id=3]
-size = 13
-use_mipmaps = true
-use_filter = true
-font_data = SubResource( 2 )
-
-[sub_resource type="StyleBoxEmpty" id=7]
-content_margin_left = 10.0
 
 [sub_resource type="StyleBoxFlat" id=5]
 content_margin_left = 20.0
@@ -47,7 +33,7 @@ corner_radius_bottom_left = 4
 expand_margin_left = 8.0
 expand_margin_top = 8.0
 
-[node name="TemplateElementsContainer" type="VBoxContainer"]
+[node name="TemplateElementsContainer" type="VBoxContainer" groups=["config_description_toggle", "config_key_owner", "config_template_element"]]
 margin_top = 88.0
 margin_right = 1900.0
 margin_bottom = 207.0
@@ -55,79 +41,76 @@ script = ExtResource( 3 )
 
 [node name="HeaderBG" type="PanelContainer" parent="."]
 margin_right = 1900.0
-margin_bottom = 47.0
+margin_bottom = 53.0
 custom_styles/panel = SubResource( 8 )
 
 [node name="Header" type="VBoxContainer" parent="HeaderBG"]
 margin_top = 2.0
 margin_right = 1900.0
-margin_bottom = 43.0
+margin_bottom = 49.0
 custom_constants/separation = 0
 
 [node name="Top" type="HBoxContainer" parent="HeaderBG/Header"]
 margin_right = 1900.0
-margin_bottom = 25.0
+margin_bottom = 30.0
 
 [node name="Expand" type="TextureButton" parent="HeaderBG/Header/Top"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_right = 10.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 10, 21 )
+margin_right = 16.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 16, 21 )
 toggle_mode = true
 texture_normal = ExtResource( 1 )
 texture_pressed = ExtResource( 2 )
 expand = true
 stretch_mode = 5
 
-[node name="HintIcon" type="TextureRect" parent="HeaderBG/Header/Top"]
-modulate = Color( 0.123871, 0.346745, 0.480469, 1 )
-margin_left = 14.0
-margin_right = 32.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 18, 25 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 9 )
-expand = true
-stretch_mode = 6
-script = ExtResource( 8 )
-
-[node name="Control" type="Control" parent="HeaderBG/Header/Top"]
-margin_left = 36.0
-margin_right = 36.0
-margin_bottom = 25.0
-
 [node name="Name" type="Label" parent="HeaderBG/Header/Top"]
-margin_left = 40.0
-margin_top = 2.0
-margin_right = 340.0
-margin_bottom = 22.0
-rect_min_size = Vector2( 300, 0 )
+margin_left = 20.0
+margin_right = 60.0
+margin_bottom = 30.0
 mouse_filter = 1
+theme_type_variation = "Label_24"
 text = "Test"
+
+[node name="ElementCount" type="Label" parent="HeaderBG/Header/Top"]
+self_modulate = Color( 1, 1, 1, 0.490196 )
+margin_left = 64.0
+margin_top = 5.0
+margin_right = 64.0
+margin_bottom = 25.0
+mouse_filter = 1
+theme_type_variation = "LabelBold"
+
+[node name="OverriddenLabel" type="Label" parent="HeaderBG/Header/Top"]
+visible = false
+margin_left = 68.0
+margin_top = 7.0
+margin_right = 233.0
+margin_bottom = 22.0
+size_flags_horizontal = 9
+theme_type_variation = "LabelSmall"
+custom_colors/font_color = Color( 0.803922, 0.631373, 0.109804, 1 )
+text = "(overriden by external config file)"
 
 [node name="VarValueIsNull" type="Label" parent="HeaderBG/Header/Top"]
 visible = false
 modulate = Color( 1, 1, 1, 0.439216 )
-margin_left = 344.0
-margin_top = 2.0
-margin_right = 1749.0
-margin_bottom = 22.0
+margin_left = 66.0
+margin_top = 5.0
+margin_right = 981.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 300, 0 )
 size_flags_horizontal = 3
 theme_type_variation = "LabelCode"
 text = "= null"
 
-[node name="OverridenLabel" type="Label" parent="HeaderBG/Header/Top"]
-visible = false
-margin_left = 1753.0
-margin_top = 5.0
+[node name="Spacer" type="Control" parent="HeaderBG/Header/Top"]
+margin_left = 68.0
 margin_right = 1900.0
-margin_bottom = 20.0
-size_flags_horizontal = 10
-theme_type_variation = "LabelSmall"
-custom_colors/font_color = Color( 0.803922, 0.631373, 0.109804, 1 )
-text = "(overriden by external config)"
+margin_bottom = 30.0
+mouse_filter = 2
+size_flags_horizontal = 3
 
 [node name="ButtonSetToNull" parent="HeaderBG/Header/Top" instance=ExtResource( 6 )]
 visible = false
@@ -153,15 +136,29 @@ size_flags_horizontal = 0
 icon_tex = ExtResource( 5 )
 icon_margin = 3
 
-[node name="Description" type="Label" parent="HeaderBG/Header"]
-modulate = Color( 1, 1, 1, 0.54902 )
-margin_top = 25.0
+[node name="DescriptionContainer" type="HBoxContainer" parent="HeaderBG/Header"]
+unique_name_in_owner = true
+margin_top = 30.0
 margin_right = 1900.0
-margin_bottom = 41.0
-mouse_filter = 1
-custom_fonts/font = SubResource( 3 )
-custom_styles/normal = SubResource( 7 )
-text = "Description"
+margin_bottom = 47.0
+custom_constants/separation = 0
+
+[node name="Spacer" type="Control" parent="HeaderBG/Header/DescriptionContainer"]
+margin_right = 18.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 18, 0 )
+
+[node name="Description" type="Label" parent="HeaderBG/Header/DescriptionContainer"]
+unique_name_in_owner = true
+self_modulate = Color( 1, 1, 1, 0.490196 )
+margin_left = 18.0
+margin_right = 1900.0
+margin_bottom = 17.3333
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_type_variation = "LabelSmallMedium"
+text = "Help Text"
+autowrap = true
 
 [node name="HSeparator" type="HSeparator" parent="HeaderBG/Header"]
 visible = false
@@ -174,9 +171,9 @@ custom_constants/separation = 0
 
 [node name="Margin" type="PanelContainer" parent="."]
 show_behind_parent = true
-margin_top = 51.0
+margin_top = 57.0
 margin_right = 1900.0
-margin_bottom = 133.0
+margin_bottom = 139.0
 custom_styles/panel = SubResource( 5 )
 
 [node name="Content" type="VBoxContainer" parent="Margin"]
@@ -188,7 +185,7 @@ custom_constants/separation = 20
 
 [node name="Elements" type="VBoxContainer" parent="Margin/Content"]
 margin_right = 1880.0
-custom_constants/separation = 10
+custom_constants/separation = 20
 
 [node name="HSeparator" type="HSeparator" parent="Margin/Content"]
 visible = false
