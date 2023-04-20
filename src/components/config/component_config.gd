@@ -221,10 +221,8 @@ func build_config_page():
 	var new_elements = []
 	elements_in_overrides = []
 	
-	var used_raw_mode := false
 	# If the config is completely empty, just add a raw json display
 	if active_config.keys().empty():
-		used_raw_mode = true
 		$"%RawViewButton".pressed = true
 		var new_element = add_element("_", "", {}, new_config_page, false)
 		new_elements.append(new_element)
