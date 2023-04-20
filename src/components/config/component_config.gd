@@ -38,6 +38,7 @@ var active_config : Dictionary
 var active_config_overrides : Dictionary
 var elements_in_overrides : Array = []
 var config_page : Control = null
+var show_descriptions := true
 
 var use_raw_mode : bool = false
 
@@ -47,7 +48,6 @@ var _active_tab_id : int = -1
 
 onready var tabs : Tabs = find_node("Tabs")
 onready var content = $"%Content"
-onready var config_combo = $"%ConfigCombo"
 
 
 func _input(event:InputEvent):
@@ -59,7 +59,7 @@ func history_navigate_to_config(_config_key:String):
 	if active_config_key == "":
 		active_config_key = _config_key
 	else:
-		config_combo.text = _config_key
+		open_configuration(_config_key)
 
 
 func start() -> void:
@@ -71,7 +71,7 @@ func start() -> void:
 func load_configs() -> void:
 	API.get_configs(self)
 	yield(self, "config_list_refreshed")
-	config_combo.set_text(active_config_key)
+	open_configuration(active_config_key)
 	_g.emit_signal("add_toast", "Configs received from Resoto Core", "", 0, self)
 
 
@@ -171,7 +171,6 @@ func _on_ConfigSelectionTree_item_selected():
 	var tree : Tree = $"%ConfigSelectionTree"
 	var selected_tree_item :TreeItem = tree.get_selected()
 	open_configuration(selected_tree_item.get_metadata(0))
-	$"%ConfigLabel".text = "Config: %s" % active_config_key
 
 
 func tree_get_item_children(item:TreeItem)->Array:
@@ -184,6 +183,7 @@ func tree_get_item_children(item:TreeItem)->Array:
 
 
 func open_configuration(_config_key:String) -> void:
+	$"%ConfigLabel".text = "Config: %s" % active_config_key
 	# Cancel the old request if configs are changed in quick succession
 	if config_req:
 		config_req.cancel()
@@ -206,15 +206,12 @@ func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_ke
 	active_config = _response.transformed.result["config"]
 	var overrides = _response.transformed.result["overrides"]
 	active_config_overrides = overrides if overrides != null else {} 
-	
 	build_config_page()
 
 
 func build_config_page():
 	if not use_raw_mode:
-		$"%RawViewModeButton".set_pressed(false, false)
-		$"%RawViewModeButton".disabled = false
-		$"%RawViewMapTitle".modulate.a = 1
+		$"%RawViewButton".pressed = false
 	var new_config_page = add_new_config_page(active_config_key)
 	new_config_page.set_meta("main_level", true)
 	new_config_page.key = active_config_key
@@ -226,9 +223,7 @@ func build_config_page():
 	
 	# If the config is completely empty, just add a raw json display
 	if active_config.keys().empty():
-		$"%RawViewModeButton".set_pressed(true, false)
-		$"%RawViewModeButton".disabled = true
-		$"%RawViewMapTitle".modulate.a = 0.3
+		$"%RawViewButton".pressed = true
 		var new_element = add_element("_", "", {}, new_config_page, false)
 		new_elements.append(new_element)
 	else:
@@ -257,7 +252,13 @@ func build_config_page():
 	if count_complex == 1:
 		first_complex.set_expand_fixed()
 	config_page = new_config_page
+	
+	$"%ShowDescriptionsButton".visible = not $"%RawViewButton".pressed
+	$"%SearchLineEdit".visible = not $"%RawViewButton".pressed
+	_on_ShowDescriptionsButton_pressed()
+	
 	emit_signal("pages_built")
+
 
 func mark_overrides(element, override_dict := active_config_overrides):
 	var type = get_kind_type(element.kind) if "kind" in element else ""
@@ -265,7 +266,7 @@ func mark_overrides(element, override_dict := active_config_overrides):
 			var element_name : String = element.key
 			var override = override_dict[element_name]
 			if "enum_values" in element:
-				element.overriden = true
+				element.overridden = true
 			elif "content_elements" in element:
 				for sub_element in element.content_elements:
 					if typeof(override) == TYPE_DICTIONARY:
@@ -274,7 +275,7 @@ func mark_overrides(element, override_dict := active_config_overrides):
 					else:
 						mark_overrides(sub_element, override_dict)
 	else:
-		element.overriden = true
+		element.overridden = true
 
 func add_new_config_page(_title:String) -> Node:
 	var new_config_page = preload("res://components/config/config_templates/component_config_template_config_page.tscn").instance()
@@ -400,13 +401,21 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 	elif model and model.has("properties") and not use_raw_mode:
 		# Create a new Complex, either by scratch or with values.
 		var new_elements:Array = []
+		
 		if not default:
-			# the new element has values, it's not a blank new value.
-			for key in _property_value.keys():
-
+			var property_keys : Array = []
+			if config_model.has(kind) and config_model[kind].has("properties"):
+				for properties in config_model[kind].properties:
+					property_keys.append(properties.name)
+			
+			# This is a fallback for the highest level of the config
+			# (Because the first dictionary is not rendered)
+			if not property_keys.has(_property_value.keys()[0]):
+				property_keys = _property_value.keys()
+			
+			for key in property_keys:
 				var element = _property_value[key]
 				var element_property = find_in_properties(model.properties, key)
-				
 				if element_property.empty():
 					var element_model_search = find_in_model(key)
 					if element_model_search[1] != null:
@@ -417,9 +426,7 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 						# If there is a problem with the model / data, use the raw view as fallback
 						_g.emit_signal("add_toast", "Config Model Error", "The current configuration has properties not described in the model, fallback raw view will be used.", 1, self)
 						use_raw_mode = true
-						$"%RawViewModeButton".set_pressed(true, false)
-						$"%RawViewModeButton".disabled = true
-						$"%RawViewMapTitle".modulate.a = 0.3
+						$"%RawViewButton".pressed = true
 						open_configuration(active_config_key)
 						return
 				else:
@@ -440,9 +447,7 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 		var error_message = ""
 		if not use_raw_mode:
 			error_message = "Configuration was not found in model.\nDisplaying configurations in raw JSON:"
-			$"%RawViewModeButton".set_pressed(true, false)
-			$"%RawViewModeButton".disabled = true
-			$"%RawViewMapTitle".modulate.a = 0.3
+			$"%RawViewButton".pressed = true
 		use_raw_mode = false
 		return create_custom(error_message, _property_value, _parent)
 
@@ -840,6 +845,45 @@ func _on_rename_confirm_response(_button_clicked:String, _value:String):
 		active_config_key = rename_new_name
 
 
-func _on_RawViewModeButton_toggled(_pressed):
-	use_raw_mode = _pressed
+func _on_ShowDescriptionsButton_pressed():
+	show_descriptions = $"%ShowDescriptionsButton".pressed
+	get_tree().call_group("config_description_toggle", "show_description", show_descriptions)
+
+
+func _on_RawViewButton_pressed():
+	use_raw_mode = $"%RawViewButton".pressed
 	open_configuration(active_config_key)
+
+
+func _on_SearchLineEdit_text_changed(new_text):
+	var callables := get_tree().get_nodes_in_group("config_template_element")
+	get_tree().call_group("config_template_element", "expand", false)
+	if new_text == "":
+		get_tree().call_group("config_template_element", "show")
+		return
+	else:
+		get_tree().call_group("config_template_element", "hide")
+	
+	yield(VisualServer, "frame_post_draw")
+	var searchables := get_tree().get_nodes_in_group("config_key_owner")
+	for s in searchables:
+		if (new_text in s.key.to_lower()
+		or ("description" in s and new_text in s.description.to_lower())):
+			unhide_recursive_up(s)
+			unhide_recursive_down(s, callables)
+
+
+func unhide_recursive_down(_element:Node, _callables:Array):
+	for c in _callables:
+		if c.get_parent().owner == _element:
+			c.show()
+			unhide_recursive_down(c, _callables)
+
+
+func unhide_recursive_up(_element:Node):
+	if _element == self:
+		return
+	_element.show()
+	if _element.has_method("expand"):
+		_element.expand(true)
+	unhide_recursive_up(_element.get_parent())

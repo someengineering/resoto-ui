@@ -4,6 +4,7 @@ class_name ConfigComponentComplex
 var config_component:Node = null
 var start_expanded:bool = false
 var expanded:bool = true
+var expand_locked:bool = false
 var orig_size:int = 0
 var required:bool = false setget set_required
 var is_null:bool = false
@@ -24,17 +25,36 @@ onready var content = $Margin/Content
 func _ready() -> void:
 	Style.add($HeaderBG/Header/Top/Expand, Style.c.LIGHT)
 	
-	_on_Expand_toggled(start_expanded)
+	expand(start_expanded)
 	orig_size = $Margin.rect_size.y
-	if descriptions_as_hints:
-		$HeaderBG/Header/Description.hide()
+
+
+func expand(_expand:bool):
+	if expand_locked:
+		$Margin.visible = true
+		return
+	expanded = _expand
+	$HeaderBG.self_modulate.a = 0.3 if not expanded else 1.0
+	$HeaderBG/Header/Top/Expand.pressed = expanded
+	$Margin.visible = expanded
 
 
 func make_top_level_headline():
 	$HeaderBG/Header/Top/Name.theme_type_variation = "Label_24"
 
 
+func show_description(_show:bool) -> void:
+	$"%DescriptionContainer".visible = _show if description != "" else false
+
+
+func set_description(_value:String) -> void:
+	description = _value
+	$"%DescriptionContainer".visible = description != ""
+	$"%Description".text = description
+
+
 func set_expand_fixed():
+	expand_locked = true
 	$HeaderBG.self_modulate.a = 1.0
 	$Margin.visible = true
 	$HeaderBG/Header/Top/Expand.hide()
@@ -83,14 +103,6 @@ func get_value():
 			return new_value
 
 
-func set_description(_value:String) -> void:
-	description = _value
-	if descriptions_as_hints:
-		$HeaderBG/Header/Top/HintIcon.hint = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
-		return
-	$HeaderBG/Header/Description.text =  description
-
-
 func set_to_null(to_null:bool) -> void:
 	if to_null:
 		_on_Expand_toggled(false)
@@ -126,12 +138,7 @@ func _on_key_update(_new_key:String) -> void:
 
 
 func _on_Expand_toggled(button_pressed) -> void:
-	if button_pressed == expanded:
-		return
-	expanded = button_pressed
-	$HeaderBG.self_modulate.a = 0.3 if not expanded else 1.0
-	$HeaderBG/Header/Top/Expand.pressed = expanded
-	$Margin.visible = expanded
+	expand(button_pressed)
 
 
 func _on_Header_gui_input(event:InputEvent) -> void:

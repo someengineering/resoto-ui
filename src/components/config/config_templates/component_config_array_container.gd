@@ -20,7 +20,7 @@ var description:String = "" setget set_description
 var value = null setget set_value, get_value
 var content_elements:Array = []
 var descriptions_as_hints:bool = true
-var overriden:bool = false setget set_overriden
+var overridden:bool = false setget set_overridden
 
 onready var content = $Margin/Content/Elements
 onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
@@ -29,14 +29,35 @@ onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
 func _ready() -> void:
 	Style.add($HeaderBG/Header/Top/Expand, Style.c.LIGHT)
 	
-	if descriptions_as_hints:
-		$HeaderBG/Header/Description.hide()
-	_on_Expand_toggled(start_expanded)
+	expand(start_expanded)
 	orig_size = $Margin.rect_size.y
 
-func set_overriden(o : bool):
-	overriden = o
-	$HeaderBG/Header/Top/OverridenLabel.visible = o
+
+func expand(_expand:bool):
+	if is_null:
+		return
+	expanded = _expand
+	$HeaderBG.self_modulate.a = 0.3 if not expanded else 1.0
+	$HeaderBG/Header/Top/Expand.pressed = expanded
+	$Margin.visible = expanded
+
+
+func show_description(_show:bool) -> void:
+	$"%DescriptionContainer".visible = _show if description != "" else false
+
+
+func set_description(_value:String) -> void:
+	description = _value
+	$"%DescriptionContainer".visible = description != ""
+	$"%Description".text = description
+
+
+func set_overridden(o: bool):
+	overridden = o
+	$HeaderBG/Header/Top/OverriddenLabel.visible = o
+	if overridden:
+		$"%Name".add_color_override("font_color", Style.col_map[Style.c.WARN_MSG])
+
 
 func set_required(_value:bool) -> void:
 	required = _value
@@ -110,7 +131,7 @@ func refresh_elements() -> void:
 			new_array_element.name = "Array_Element_" + str(new_elem_index)
 			new_array_element.config_component = config_component
 			new_array_element.set_meta("attach", new_array_element.get_node("Box/Content"))
-			new_array_element.set_title(new_elem_index)
+			new_array_element.set_title("", new_elem_index)
 			new_array_element.connect("delete", self, "_on_array_element_delete", [new_elem_index])
 			new_array_element.connect("duplicate", self, "_on_array_element_duplicate", [new_elem_index])
 			new_array_element.value = element
@@ -121,13 +142,19 @@ func refresh_elements() -> void:
 
 
 func update_title() -> void:
+	var count_text := ""
 	if value != null:
 		if kind == "dict":
-			set_title(key + ": {" + str(value.size()) + "}")
+			set_title(key)
+			count_text = "{" + str(value.size()) + "}"
 		else:
-			set_title(key.capitalize() + " [" + str(value.size()) + "]")
+			set_title(key.capitalize())
+			count_text = "[" + str(value.size()) + "]"
 	else:
 		set_title(key.capitalize())
+		count_text = ""
+	
+	$HeaderBG/Header/Top/ElementCount.text = count_text
 
 
 func get_value():
@@ -151,21 +178,8 @@ func get_value():
 			return new_value
 
 
-func set_description(_value:String) -> void:
-	description = _value
-	if descriptions_as_hints:
-		$HeaderBG/Header/Top/HintIcon.hint = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
-		return
-	$HeaderBG/Header/Description.text =  description
-
-
 func _on_Expand_toggled(button_pressed) -> void:
-	if is_null:
-		return
-	expanded = button_pressed
-	$HeaderBG.self_modulate.a = 0.3 if not expanded else 1.0
-	$HeaderBG/Header/Top/Expand.pressed = expanded
-	$Margin.visible = expanded
+	expand(button_pressed)
 
 
 func _on_ButtonSetToNull_pressed() -> void:
@@ -174,7 +188,7 @@ func _on_ButtonSetToNull_pressed() -> void:
 
 func set_to_null(to_null:bool) -> void:
 	if to_null:
-		_on_Expand_toggled(false)
+		expand(false)
 		value = null
 		set_title(key.capitalize())
 		content_elements.clear()
@@ -182,6 +196,7 @@ func set_to_null(to_null:bool) -> void:
 			for c in content.get_children():
 				c.queue_free()
 	is_null = to_null
+	$HeaderBG/Header/Top/ElementCount.text = ""
 	$HeaderBG/Header/Top/Expand.visible = !is_null
 	null_value.hide()
 #	null_value.visible = is_null
@@ -201,12 +216,12 @@ func _on_ButtonAddValue_pressed() -> void:
 
 func _on_Header_gui_input(event:InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		_on_Expand_toggled(!$HeaderBG/Header/Top/Expand.pressed)
+		expand(!$HeaderBG/Header/Top/Expand.pressed)
 
 
 func _on_AddButton_pressed() -> void:
 	value = get_value()
-	_on_Expand_toggled(true)
+	expand(true)
 	
 	var size:int = 0
 	if value == null:
@@ -237,7 +252,7 @@ func _on_AddButton_pressed() -> void:
 		
 		new_array_element.config_component = config_component
 		new_array_element.set_meta("attach", new_array_element.get_node("Box/Content"))
-		new_array_element.set_title(size)
+		new_array_element.set_title("", size)
 		new_array_element.default = true
 		new_array_element.value = null
 		content_elements.append(new_array_element)

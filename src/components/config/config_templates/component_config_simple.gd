@@ -2,6 +2,7 @@ extends Control
 class_name ConfigComponentSimple
 
 signal value_field_selected
+signal value_changed
 
 var value_field = null
 var kind:String = "" setget set_kind
@@ -10,19 +11,35 @@ var description:String = "" setget set_description
 var key:String = "" setget set_key
 var required:bool = false setget set_required
 var descriptions_as_hints:bool = true
-var overriden := false setget set_overriden
+var overridden := false setget set_overridden
+var text_rows := 0
+var font_height := 1.0
 
 onready var null_value = $VarContent/VarValueIsNull
 
 
-func _ready():
-	if descriptions_as_hints:
-		$Description.hide()
+func show_description(_show:bool) -> void:
+	$"%DescriptionContainer".visible = _show if description != "" else false
 
 
-func set_overriden(o: bool):
-	overriden = o
-	$VarContent/OverridenLabel.visible = o
+func set_description(_value:String) -> void:
+	description = _value
+	$"%DescriptionContainer".visible = description != ""
+	$"%Description".text = description
+
+
+func set_key(_value:String) -> void:
+	key = _value
+	if _value == "":
+		$VarContent/VarName.hide()
+	$VarContent/VarName.text = key.capitalize()
+
+
+func set_overridden(o: bool):
+	overridden = o
+	$VarContent/OverriddenLabel.visible = o
+	if overridden:
+		$"%VarName".add_color_override("font_color", Style.col_map[Style.c.WARN_MSG])
 
 
 func set_default(_value:bool) -> void:
@@ -53,13 +70,15 @@ func set_kind(_kind:String) -> void:
 	kind = _kind
 	match kind:
 		"string", "any", "date", "datetime", "duration", "trafo.duration_to_datetime":
-			value_field = $VarContent/VarValueTextbox
+			value_field = $"%VarValueTextbox"
+			font_height = value_field.get_font("font").get_height()
 		"int64", "int32":
-			value_field = $VarContent/VarValueInt
+			value_field = $"%VarValueInt"
 		"float", "double":
-			value_field = $VarContent/VarValueFloat
+			value_field = $"%VarValueFloat"
 		"boolean":
-			value_field = $VarContent/VarValueBool
+			$"%BoolGroup".show()
+			value_field = $"%VarValueBool"
 	value_field.show()
 	emit_signal("value_field_selected")
 
@@ -83,6 +102,7 @@ func set_value(_value) -> void:
 			value_field.set_number(new_value)
 		"boolean":
 			value_field.pressed = bool(value)
+			$"%VarValueBoolLabel".text = "True" if bool(value) else "False"
 		"any":
 			value_field.text = JSON.print(value)
 
@@ -105,23 +125,6 @@ func get_value():
 				return json_parse_result.result
 			else:
 				return str(value_field.text)
-
-
-func set_description(_value:String) -> void:
-	description = _value
-	if descriptions_as_hints:
-		$VarContent/HintIcon.hint = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
-		return
-	if _value == "":
-		$Description.hide()
-	$Description.text = _value
-
-
-func set_key(_value:String) -> void:
-	key = _value
-	if _value == "":
-		$VarContent/VarName.hide()
-	$VarContent/VarName.text = key.capitalize()
 
 
 func _on_ButtonSetToNull_pressed() -> void:
@@ -165,3 +168,28 @@ func _on_ButtonAddValue_pressed() -> void:
 		"boolean":
 			new_value = false
 	set_value(new_value)
+
+
+func _on_TemplateSimple_item_rect_changed():
+	if value_field == $"%VarValueTextbox" and not VisualServer.is_connected("frame_post_draw", self, "update_text_box_height"):
+		VisualServer.connect("frame_post_draw", self, "update_text_box_height", [], CONNECT_ONESHOT)
+
+
+func update_text_box_height():
+	if text_rows != value_field.get_total_visible_rows():
+		text_rows = value_field.get_total_visible_rows()
+		if text_rows == 1:
+			value_field.show_line_numbers = false
+			value_field.rect_min_size.y = 36
+		else:
+			value_field.show_line_numbers = true
+			value_field.rect_min_size.y = max((text_rows+1) * (font_height), 36)
+
+
+func _on_VarValueTextbox_text_changed():
+	update_text_box_height()
+	emit_signal("value_changed", $"%VarValueTextbox".text)
+
+
+func _on_VarValueBool_pressed():
+	$"%VarValueBoolLabel".text = "True" if value_field.pressed else "False"
