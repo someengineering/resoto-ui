@@ -44,7 +44,7 @@ margin_bottom = 31.0
 theme_type_variation = "Label_24"
 text = "Description"
 
-[node name="OverridenLabel" type="Label" parent="Box/Header"]
+[node name="OverriddenLabel" type="Label" parent="Box/Header"]
 visible = false
 margin_left = 304.0
 margin_top = 9.0
