@@ -4,6 +4,9 @@ extends Node
 # Theme Manager - This handles colors of icons and changing certain elements.
 #------------------------------------------------------------------------------#
 
+const icon_path := "res://assets/resource_icons/icon_%s.svg"
+const icon_fallback := "res://assets/resource_icons/icon_resource.svg"
+
 const themed_group_name:= "themed"
 const themed_self_group_name:= "themed_self"
 const themed_col_name:= "theme_color"
@@ -49,6 +52,22 @@ var default_colors:= {
 	# Style Error color - this is used when styling fails
 	c.STYLE_ERROR:	Color("#ff00ff"),
 }
+
+var group_colors := {
+	"graph_root" : [Color("#e98df7"), Color("#3e245f")],
+	"misc" : [Color("#0054a3"), Color("#89d1f1")],
+	"control" : [Color("#0a826c"), Color("#ddfff9")],
+	"networking" : [Color("#8e44ad"), Color("#bdc3c7")],
+	"access_control" : [Color("#2980b9"), Color("#ecf0f1")],
+	"storage" : [Color("#f1c40f"), Color("#34495e")],
+	"database" : [Color("#16a085"), Color("#ecf0f1")],
+	"compute" : [Color("#d35400"), Color("#ecf0f1")],
+}
+
+var icon_files := {
+	
+}
+
 
 func update_theme():
 	var nodes_to_style : Array = get_tree().get_nodes_in_group(themed_group_name)

@@ -10,10 +10,12 @@ var resh_lite_popup : Node = null
 var tooltip_link_active:= false
 var tooltip_active:= false
 var tooltip_error_active:= false
+var tooltip_node_active:= false
 
 onready var n_tooltip_link:= $TooltipLayer/TooltipLink
 onready var n_tooltip_error:= $TooltipLayer/ToolTipError
 onready var n_tooltip:= $TooltipLayer/Tooltip
+onready var n_tooltip_node:= $TooltipLayer/TooltipNode
 onready var confirm_popup: Popup = $ConfirmPopup
 onready var popup_bg := $BG
 onready var tween := Tween.new()
@@ -32,11 +34,12 @@ func _ready() -> void:
 	_g.connect("tooltip_error", self, "tooltip_error")
 	_g.connect("tooltip_link", self, "tooltip_link")
 	_g.connect("tooltip_hide", self, "tooltip_hide")
+	_g.connect("tooltip_node", self, "tooltip_node")
 	_g.connect("text_to_clipboard", self, "on_text_to_clipboard")
 
 
 func _process(_delta:float):
-	if tooltip_active or tooltip_link_active or tooltip_error_active:
+	if tooltip_active or tooltip_link_active or tooltip_error_active or tooltip_node_active:
 		var tt : Control = null
 		if tooltip_active:
 			tt = n_tooltip
@@ -44,6 +47,9 @@ func _process(_delta:float):
 			tt = n_tooltip_link
 		elif tooltip_error_active:
 			tt = n_tooltip_error
+		elif tooltip_node_active:
+			tt = n_tooltip_node
+		
 		
 		tt.rect_position = main.get_global_mouse_position() + Vector2(20,20)
 		var w_rect := OS.get_window_safe_area()
@@ -72,6 +78,11 @@ func tooltip_error(_text:String) -> void:
 	tooltip_error_active = true
 
 
+func tooltip_node(_metadata:Dictionary) -> void:
+	n_tooltip_node.display(_metadata)
+	tooltip_node_active = true
+
+
 func tooltip_link(_title:String, _link:String) -> void:
 	n_tooltip_link.get_node("VBox/HBox/DescrLabel").text = _title
 	# LINK NOT WORKING!
@@ -87,6 +98,8 @@ func tooltip_hide() -> void:
 	n_tooltip.visible = false
 	tooltip_error_active = false
 	n_tooltip_error.visible = false
+	tooltip_node_active = false
+	n_tooltip_node.visible = false
 
 
 func on_text_to_clipboard(_text:String):

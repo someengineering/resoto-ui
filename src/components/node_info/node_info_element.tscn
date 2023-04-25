@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -13,9 +13,9 @@
 [ext_resource path="res://assets/resoto/Resoto-Logo_med.svg" type="Texture" id=11]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/icons/icon_128_arrow.svg" type="Texture" id=13]
-[ext_resource path="res://assets/icons/icon_128_leaf.svg" type="Texture" id=14]
+[ext_resource path="res://assets/icons/icon_128_circle_big.svg" type="Texture" id=14]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=15]
-[ext_resource path="res://components/node_info/node_info_element_all_data_popup.gd" type="Script" id=16]
+[ext_resource path="res://components/shared/icon_from_kind.gd" type="Script" id=16]
 [ext_resource path="res://components/elements/styled/icon_button_text_aligned.tscn" type="PackedScene" id=17]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=18]
 [ext_resource path="res://assets/icons/icon_128_search.svg" type="Texture" id=19]
@@ -74,8 +74,6 @@ shadow_size = 10
 shadow_offset = Vector2( 0, 4 )
 
 [sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="StyleBoxEmpty" id=8]
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 12.0
@@ -144,20 +142,58 @@ rect_min_size = Vector2( 0, 40 )
 mouse_filter = 2
 custom_constants/separation = 10
 
-[node name="NodeIcon" type="TextureRect" parent="Margin/VBox/TitleBar"]
-visible = false
-modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_right = 34.0
-margin_bottom = 39.0
-rect_min_size = Vector2( 34, 39 )
+[node name="IconContainer" type="Control" parent="Margin/VBox/TitleBar"]
+unique_name_in_owner = true
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+mouse_filter = 2
+script = ExtResource( 16 )
+
+[node name="IconBG" type="Sprite" parent="Margin/VBox/TitleBar/IconContainer"]
+unique_name_in_owner = true
+self_modulate = Color( 0.0392157, 0.509804, 0.423529, 1 )
+position = Vector2( 20, 20 )
+scale = Vector2( 0.32, 0.32 )
+texture = ExtResource( 14 )
+
+[node name="IconShadow" type="TextureRect" parent="Margin/VBox/TitleBar/IconContainer/IconBG"]
+unique_name_in_owner = true
+modulate = Color( 0, 0, 0, 0.313726 )
+margin_left = -48.0
+margin_top = -42.3333
+margin_right = 48.0
+margin_bottom = 53.6667
+rect_min_size = Vector2( 96, 96 )
+mouse_filter = 2
 texture = ExtResource( 5 )
 expand = true
 stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="IconTex" type="TextureRect" parent="Margin/VBox/TitleBar/IconContainer/IconBG"]
+unique_name_in_owner = true
+modulate = Color( 0.866667, 1, 0.976471, 1 )
+margin_left = -48.0
+margin_top = -48.0
+margin_right = 48.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 96, 96 )
+mouse_filter = 2
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="KindLabelButton" type="Button" parent="Margin/VBox/TitleBar"]
 unique_name_in_owner = true
+margin_left = 50.0
 margin_top = 4.0
-margin_right = 121.0
+margin_right = 171.0
 margin_bottom = 36.0
 size_flags_vertical = 4
 theme_type_variation = "ButtonKindLabel"
@@ -165,7 +201,7 @@ text = "Node Kind"
 
 [node name="NodeNameLabel" type="Label" parent="Margin/VBox/TitleBar"]
 unique_name_in_owner = true
-margin_left = 131.0
+margin_left = 181.0
 margin_right = 1900.0
 margin_bottom = 39.0
 mouse_filter = 1
@@ -516,9 +552,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_type_variation = "PanelContainerDark"
 script = ExtResource( 20 )
-original_path = NodePath("..")
-popup_size_ref_path = NodePath("../../../..")
-popup_path = NodePath("../../../../../../AllDataPopup")
 
 [node name="VBox" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup"]
 margin_left = 12.0
@@ -597,39 +630,96 @@ text = "..."
 readonly = true
 highlight_all_occurrences = true
 
-[node name="TreeMapContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent"]
-unique_name_in_owner = true
+[node name="NodeNavigation" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent"]
 margin_left = 500.0
 margin_right = 1900.0
 margin_bottom = 953.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="NodeNavButtons" type="HBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation"]
+margin_right = 1400.0
+margin_bottom = 32.0
+alignment = 1
+
+[node name="TreeMapButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
+unique_name_in_owner = true
+margin_left = 544.0
+margin_right = 632.667
+margin_bottom = 32.0
+toggle_mode = true
+pressed = true
+text = "Treemap"
+
+[node name="NeighbourhoodButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
+unique_name_in_owner = true
+margin_left = 636.0
+margin_right = 773.333
+margin_bottom = 32.0
+toggle_mode = true
+text = "Neighbourhood"
+
+[node name="AllDetailsButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
+unique_name_in_owner = true
+margin_left = 777.0
+margin_right = 856.333
+margin_bottom = 32.0
+toggle_mode = true
+text = "All Data"
+
+[node name="PanelContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation"]
+margin_top = 36.0
+margin_right = 1400.0
+margin_bottom = 953.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="NeigbourhoodViewContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer"]
+unique_name_in_owner = true
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1390.0
+margin_bottom = 907.0
+rect_min_size = Vector2( 400, 225 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TreeMapContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer"]
+unique_name_in_owner = true
+visible = false
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1390.0
+margin_bottom = 907.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_type_variation = "PanelContainerDark"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer"]
 margin_left = 12.0
 margin_top = 8.0
-margin_right = 1388.0
-margin_bottom = 945.0
+margin_right = 1368.0
+margin_bottom = 889.0
 
-[node name="TreeMapTitleBar" type="HBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer"]
-margin_right = 1376.0
+[node name="TreeMapTitleBar" type="HBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer"]
+margin_right = 1356.0
 margin_bottom = 22.0
 
-[node name="TreeMapModeButton_old" type="CheckButton" parent="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar"]
+[node name="TreeMapModeButton_old" type="CheckButton" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar"]
 visible = false
 margin_right = 32.0
 margin_bottom = 25.0
 theme_type_variation = "ButtonBigText"
 flat = true
 
-[node name="TreeMapModeButton" parent="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar" instance=ExtResource( 28 )]
+[node name="TreeMapModeButton" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar" instance=ExtResource( 28 )]
 unique_name_in_owner = true
 margin_right = 35.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 35, 20 )
 
-[node name="TreeMapTitle" type="Label" parent="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar"]
+[node name="TreeMapTitle" type="Label" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar"]
 unique_name_in_owner = true
 margin_left = 39.0
 margin_top = 1.0
@@ -637,10 +727,10 @@ margin_right = 360.0
 margin_bottom = 21.0
 text = "Node Successors by their Descendant Count"
 
-[node name="TreeMapCopyButton" parent="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar" instance=ExtResource( 21 )]
+[node name="TreeMapCopyButton" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar" instance=ExtResource( 21 )]
 margin_left = 364.0
 margin_top = 0.0
-margin_right = 1376.0
+margin_right = 1356.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 80, 22 )
 hint_tooltip = "Copy Node ID to Clipboard"
@@ -650,40 +740,41 @@ custom_fonts/font = SubResource( 7 )
 text = "Aggregation Query"
 align = 0
 
-[node name="TreeMap" parent="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer" instance=ExtResource( 4 )]
+[node name="TreeMap" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer" instance=ExtResource( 4 )]
 unique_name_in_owner = true
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 26.0
-margin_right = 1376.0
-margin_bottom = 937.0
+margin_right = 1356.0
+margin_bottom = 881.0
 size_flags_horizontal = 11
 size_flags_vertical = 3
 treemap_size = Vector2( 50, 50 )
 
-[node name="LeafPanel" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent"]
+[node name="AllDataFullView" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer"]
 unique_name_in_owner = true
 visible = false
-margin_left = 500.0
-margin_right = 1900.0
-margin_bottom = 986.0
+self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1390.0
+margin_bottom = 907.0
 size_flags_horizontal = 3
-custom_styles/panel = SubResource( 8 )
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 4 )
 
-[node name="LeafIcon" type="TextureRect" parent="Margin/VBox/ScrollContainer/NodeContent/LeafPanel"]
-modulate = Color( 0, 0.329412, 0.639216, 1 )
-margin_left = 600.0
-margin_top = 393.0
-margin_right = 800.0
-margin_bottom = 593.0
-rect_min_size = Vector2( 200, 200 )
-mouse_filter = 2
-size_flags_horizontal = 6
-size_flags_vertical = 6
-texture = ExtResource( 14 )
-expand = true
-stretch_mode = 6
-script = ExtResource( 7 )
+[node name="FullAllDataTextEdit" type="TextEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView"]
+unique_name_in_owner = true
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1368.0
+margin_bottom = 889.0
+rect_min_size = Vector2( 0, 160 )
+size_flags_vertical = 3
+custom_styles/focus = SubResource( 6 )
+text = "..."
+readonly = true
+highlight_all_occurrences = true
 
 [node name="Templates" type="Control" parent="."]
 visible = false
@@ -709,15 +800,6 @@ texture = ExtResource( 13 )
 expand = true
 script = ExtResource( 7 )
 
-[node name="AllDataPopup" type="PopupPanel" parent="."]
-self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
-margin_right = 1920.0
-margin_bottom = 1080.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_styles/panel = SubResource( 4 )
-script = ExtResource( 16 )
-
 [connection signal="pressed" from="Margin/VBox/BreadcrumbContainer/ResourceListButton" to="." method="_on_ResourceListButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/TitleBar/KindLabelButton" to="." method="_on_KindLabelButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/Actions/PredecessorsButton" to="." method="_on_PredecessorsButton_pressed"]
@@ -730,15 +812,17 @@ script = ExtResource( 16 )
 [connection signal="tags_request_refresh" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup" to="." method="_on_TagsGroup_tags_request_refresh"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/VBox/TagTitleBar/AddTagButton" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup" method="_on_AddTagButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData/AddNewTagButton" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup" method="_on_AddNewTagButton_pressed"]
+[connection signal="show_full_all_data" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" to="." method="_on_AllDataGroup_show_full_all_data"]
 [connection signal="option_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataFilter_option_changed"]
 [connection signal="text_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataFilter_text_changed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataMaximizeButton" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataMaximizeButton_pressed"]
-[connection signal="toggled" from="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton_old" to="." method="_on_TreeMapModeButton_toggled"]
-[connection signal="toggled" from="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton" to="." method="_on_TreeMapModeButton_toggled"]
-[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapCopyButton" to="." method="_on_TreeMapCopyButton_pressed"]
-[connection signal="pressed_lmb" from="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed_lmb"]
-[connection signal="pressed_rmb" from="Margin/VBox/ScrollContainer/NodeContent/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed_rmb"]
-[connection signal="gui_input" from="Margin/VBox/ScrollContainer/NodeContent/LeafPanel" to="." method="_on_LeafPanel_gui_input"]
-[connection signal="popup_hide" from="AllDataPopup" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataPopup_popup_hide"]
+[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/TreeMapButton" to="." method="_on_TreeMapButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/NeighbourhoodButton" to="." method="_on_NeighbourhoodButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/AllDetailsButton" to="." method="_on_AllDetailsButton_pressed"]
+[connection signal="toggled" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton_old" to="." method="_on_TreeMapModeButton_toggled"]
+[connection signal="toggled" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton" to="." method="_on_TreeMapModeButton_toggled"]
+[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapCopyButton" to="." method="_on_TreeMapCopyButton_pressed"]
+[connection signal="pressed_lmb" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed_lmb"]
+[connection signal="pressed_rmb" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed_rmb"]
 
 [editable path="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/RemoveFromCleanupButton"]

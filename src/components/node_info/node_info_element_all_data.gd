@@ -1,8 +1,6 @@
 extends PanelContainer
 
-export (NodePath) var original_path : NodePath
-export (NodePath) var popup_size_ref_path : NodePath
-export (NodePath) var popup_path : NodePath
+signal show_full_all_data
 
 var persistent_key := "NodeInfoElement_AllDataFilterComboBox"
 var filter_history := []
@@ -10,9 +8,6 @@ var filter := ""
 var node_text := "" setget set_node_text
 var node_text_lines : Array = []
 
-onready var popup : PopupPanel = get_node(popup_path)
-onready var popup_size_ref : VBoxContainer = get_node(popup_size_ref_path)
-onready var original_node : VBoxContainer = get_node(original_path)
 onready var combo := $VBox/Title/AllDataFilter
 onready var edit := $VBox/AllDataTextEdit
 onready var max_btn := $VBox/Title/AllDataMaximizeButton
@@ -75,24 +70,8 @@ func apply_filter(_filter:String):
 
 
 func _on_AllDataMaximizeButton_pressed():
-	if get_parent() == popup:
-		popup.remove_child(self)
-		original_node.add_child(self)
-		set_owner(original_node)
-		popup.hide()
-	elif get_parent() == original_node:
-		original_node.remove_child(self)
-		popup.add_child(self)
-		set_owner(popup)
-		popup.popup(Rect2(popup_size_ref.rect_global_position-Vector2(1, 1), popup_size_ref.rect_size + Vector2(2,2)))
-		rect_size = popup_size_ref.rect_size
-		rect_position = Vector2.ZERO
+	emit_signal("show_full_all_data")
 	
 
 func _on_AllDataCopyButton_pressed():
 	OS.set_clipboard(node_text)
-
-
-func _on_AllDataPopup_popup_hide():
-	if get_parent() == popup:
-		_on_AllDataMaximizeButton_pressed()

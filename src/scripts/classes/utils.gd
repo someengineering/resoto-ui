@@ -187,6 +187,13 @@ static func comma_sep(number):
 	return res
 
 
+static func name_id(_name:String, _id:String):
+	if _name == _id:
+		return _name
+	else:
+		return "%s (%s)" % [_name, _id]
+
+
 static func set_path(dict, keypath, value):
 	var current = keypath[0]
 	if dict.has(current):
