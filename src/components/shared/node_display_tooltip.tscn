@@ -26,6 +26,7 @@ content_margin_top = 4.0
 content_margin_bottom = 4.0
 
 [node name="NodeHint" type="PanelContainer"]
+visible = false
 margin_right = 112.0
 margin_bottom = 23.0
 mouse_filter = 2

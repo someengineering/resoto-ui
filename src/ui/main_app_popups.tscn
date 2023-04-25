@@ -130,7 +130,6 @@ layer = 32
 visible = false
 
 [node name="TooltipNode" parent="TooltipLayer" instance=ExtResource( 3 )]
-visible = false
 margin_right = 132.0
 margin_bottom = 80.0
 

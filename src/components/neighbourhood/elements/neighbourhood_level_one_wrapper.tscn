@@ -15,6 +15,7 @@ corner_radius_bottom_left = 8
 [node name="LevelOneWrapper" type="PanelContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
 margin_bottom = 210.0
+mouse_filter = 2
 size_flags_horizontal = 8
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )
@@ -23,11 +24,13 @@ script = ExtResource( 1 )
 margin_top = 30.0
 margin_bottom = 180.0
 rect_min_size = Vector2( 0, 150 )
+mouse_filter = 2
 size_flags_horizontal = 8
 custom_constants/separation = 0
 alignment = 2
 
 [node name="Children" type="VBoxContainer" parent="Main"]
 margin_bottom = 150.0
+mouse_filter = 2
 custom_constants/separation = 100
 alignment = 1

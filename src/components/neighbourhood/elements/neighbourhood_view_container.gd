@@ -260,6 +260,7 @@ func create_node(_node_id:String, _graph_parent:Node, _graph_navigator:Node) -> 
 	temp_node.id = _node_id
 	temp_node.node_id = nodes[_node_id].id
 	temp_node.parent_id = ""
+	temp_node.graph_navigator = _graph_navigator
 	temp_node.metadata = nodes[_node_id]
 	temp_node.connect("node_clicked", _graph_parent, "on_node_clicked")
 	_graph_navigator.connect("change_zoom", temp_node, "on_change_zoom")
