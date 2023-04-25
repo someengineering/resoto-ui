@@ -1,0 +1,164 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=1]
+[ext_resource path="res://components/shared/checklist.tscn" type="PackedScene" id=2]
+[ext_resource path="res://components/benchmark_display/benchmark_config_dialog.gd" type="Script" id=3]
+[ext_resource path="res://components/shared/checklist_account_item.tscn" type="PackedScene" id=4]
+[ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=5]
+[ext_resource path="res://assets/generic/spin_shader_mix_control_node.tres" type="Shader" id=6]
+[ext_resource path="res://assets/icons/icon_128_arrow_curved.svg" type="Texture" id=7]
+[ext_resource path="res://assets/icons/icon_128_benchmark.svg" type="Texture" id=8]
+[ext_resource path="res://assets/icons/icon_128_account.svg" type="Texture" id=9]
+[ext_resource path="res://assets/icons/icon_128_cloud.svg" type="Texture" id=10]
+
+[sub_resource type="Gradient" id=8]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.460905, 1 )
+colors = PoolColorArray( 0.462745, 0.176471, 0.843137, 1, 0.913725, 0.552941, 0.968627, 1, 0.462745, 0.176471, 0.843137, 1 )
+
+[sub_resource type="GradientTexture" id=11]
+gradient = SubResource( 8 )
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = ExtResource( 6 )
+shader_param/shader_effect_mix = 1.0
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 11 )
+
+[sub_resource type="StyleBoxFlat" id=10]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 3.0
+expand_margin_bottom = 3.0
+
+[node name="benchmark_config_dialog" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 512, 0 )
+script = ExtResource( 3 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+custom_constants/separation = 30
+
+[node name="BenchmarkContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_right = 1920.0
+margin_bottom = 66.0
+
+[node name="HBoxContainer" type="VBoxContainer" parent="VBoxContainer/BenchmarkContainer"]
+margin_right = 1920.0
+margin_bottom = 66.0
+size_flags_vertical = 4
+custom_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/BenchmarkContainer/HBoxContainer"]
+margin_right = 1920.0
+margin_bottom = 32.0
+custom_constants/separation = 10
+
+[node name="MainIcon" type="TextureRect" parent="VBoxContainer/BenchmarkContainer/HBoxContainer/HBoxContainer"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_right = 32.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_vertical = 6
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="VBoxContainer/BenchmarkContainer/HBoxContainer/HBoxContainer"]
+margin_left = 42.0
+margin_top = 6.0
+margin_right = 126.0
+margin_bottom = 26.0
+text = "Benchmark"
+
+[node name="BenchmarkComboBox" parent="VBoxContainer/BenchmarkContainer/HBoxContainer" instance=ExtResource( 1 )]
+unique_name_in_owner = true
+margin_top = 42.0
+margin_right = 1920.0
+margin_bottom = 66.0
+size_flags_horizontal = 3
+
+[node name="BenchmarkMissingHintHighlight" type="Panel" parent="VBoxContainer/BenchmarkContainer"]
+unique_name_in_owner = true
+visible = false
+material = SubResource( 9 )
+margin_right = 1920.0
+margin_bottom = 66.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 10 )
+
+[node name="BenchmarkMissingHint" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 44.0
+margin_right = 1920.0
+margin_bottom = 124.0
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="HintLabel" type="Label" parent="VBoxContainer/BenchmarkMissingHint"]
+margin_left = 1460.0
+margin_top = 42.6667
+margin_right = 1846.0
+margin_bottom = 80.0
+size_flags_vertical = 8
+theme_type_variation = "Label_36"
+custom_colors/font_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+text = "Select Benchmark to get started!"
+
+[node name="HintArrow" type="TextureRect" parent="VBoxContainer/BenchmarkMissingHint"]
+modulate = Color( 0.913725, 0.552941, 0.968627, 1 )
+margin_left = 1850.0
+margin_right = 1920.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 70, 80 )
+texture = ExtResource( 7 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 5 )
+
+[node name="CloudsCheckList" parent="VBoxContainer" instance=ExtResource( 2 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 96.0
+margin_right = 1920.0
+margin_bottom = 216.0
+main_icon = ExtResource( 10 )
+title = "Clouds"
+container_type = 1
+
+[node name="AccountsCheckList" parent="VBoxContainer" instance=ExtResource( 2 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 246.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_vertical = 3
+main_icon = ExtResource( 9 )
+title = "Accounts"
+container_type = 0
+item_delegate = ExtResource( 4 )
+
+[connection signal="visibility_changed" from="." to="." method="_on_benchmark_config_dialog_visibility_changed"]
+[connection signal="option_changed" from="VBoxContainer/BenchmarkContainer/HBoxContainer/BenchmarkComboBox" to="." method="_on_ComboBox_option_changed"]
+[connection signal="selection_changed" from="VBoxContainer/CloudsCheckList" to="." method="_on_CloudsCheckList_selection_changed"]

@@ -1,0 +1,241 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
+[ext_resource path="res://components/benchmark_display/benchmark_display.tscn" type="PackedScene" id=2]
+[ext_resource path="res://components/hub/component_resoto_home.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/node_list/node_list_element.tscn" type="PackedScene" id=6]
+[ext_resource path="res://components/config/component_config.tscn" type="PackedScene" id=7]
+[ext_resource path="res://components/dashboard/dashboard_manager.tscn" type="PackedScene" id=8]
+[ext_resource path="res://components/message_log/component_message_log.tscn" type="PackedScene" id=9]
+[ext_resource path="res://components/wizard/wizard_component.tscn" type="PackedScene" id=10]
+[ext_resource path="res://components/node_info/node_info_element.tscn" type="PackedScene" id=11]
+[ext_resource path="res://components/aggregation_view/aggregation_view_component.tscn" type="PackedScene" id=12]
+[ext_resource path="res://components/job_editor/job_editor_component.tscn" type="PackedScene" id=13]
+[ext_resource path="res://components/node_list/node_list_element_component.gd" type="Script" id=16]
+[ext_resource path="res://components/config/config_component.gd" type="Script" id=17]
+[ext_resource path="res://components/node_info/node_single_info_component.gd" type="Script" id=18]
+[ext_resource path="res://components/wizard/setup_wizard_component.gd" type="Script" id=19]
+[ext_resource path="res://components/dashboard/dashboard_component.gd" type="Script" id=23]
+[ext_resource path="res://scripts/ui_content.gd" type="Script" id=24]
+[ext_resource path="res://components/terminal/component_terminal_manager.tscn" type="PackedScene" id=25]
+[ext_resource path="res://components/job_editor/jobs_component.gd" type="Script" id=27]
+[ext_resource path="res://components/aggregation_view/aggregation_view_component_nav.gd" type="Script" id=28]
+
+[node name="Content" type="CanvasLayer"]
+script = ExtResource( 24 )
+
+[node name="Content" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+custom_constants/margin_right = 0
+custom_constants/margin_top = 50
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+
+[node name="HomeComponent" type="MarginContainer" parent="Content"]
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="ResotoHome" parent="Content/HomeComponent" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+
+[node name="NodeSingleInfoComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 18 )
+view = "node_single_info"
+
+[node name="NodeSingleInfo" parent="Content/NodeSingleInfoComponent" instance=ExtResource( 11 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+
+[node name="NodeListElementComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 16 )
+view = "node_list_info"
+
+[node name="NodeListElement" parent="Content/NodeListElementComponent" instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AggregationViewComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 28 )
+
+[node name="AggregateView" parent="Content/AggregationViewComponent" instance=ExtResource( 12 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+
+[node name="ConfigComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 17 )
+view = "config"
+wait_signal = "pages_build"
+
+[node name="ConfigManager" parent="Content/ConfigComponent" instance=ExtResource( 7 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+
+[node name="TerminalComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="TerminalManager" parent="Content/TerminalComponent" instance=ExtResource( 25 )]
+margin_top = 0.0
+margin_bottom = 1020.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="JobsComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 27 )
+
+[node name="JobEditor" parent="Content/JobsComponent" instance=ExtResource( 13 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+
+[node name="LogComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="MessageLog" parent="Content/LogComponent" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+
+[node name="DashBoardComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 23 )
+view = "dashboards"
+
+[node name="DashBoardManager" parent="Content/DashBoardComponent" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+
+[node name="SetupWizardComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 19 )
+
+[node name="WizardControl" parent="Content/SetupWizardComponent" instance=ExtResource( 10 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_right = 1910.0
+margin_bottom = 1020.0
+is_collector_config_wizard = true
+
+[node name="BenchmarkComponent" type="MarginContainer" parent="Content"]
+visible = false
+margin_top = 50.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+
+[node name="BenchmarkDisplay" parent="Content/BenchmarkComponent" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1920.0
+margin_bottom = 1030.0
+
+[connection signal="node_shown" from="Content/NodeSingleInfoComponent/NodeSingleInfo" to="Content/NodeSingleInfoComponent" method="_on_NodeSingleInfo_node_shown"]
+[connection signal="show" from="Content/NodeListElementComponent/NodeListElement" to="Content/NodeListElementComponent" method="_on_NodeListElement_show"]
+[connection signal="visibility_changed" from="Content/AggregationViewComponent" to="Content/AggregationViewComponent" method="_on_AggregationViewComponent_visibility_changed"]
+[connection signal="config_changed" from="Content/ConfigComponent/ConfigManager" to="Content/ConfigComponent" method="_on_ConfigManager_config_changed"]
+[connection signal="show_section" from="Content/JobsComponent" to="Content/JobsComponent/JobEditor" method="_on_JobsComponent_show_section"]
+[connection signal="dashboard_opened" from="Content/DashBoardComponent/DashBoardManager" to="Content/DashBoardComponent" method="_on_DashBoardManager_dashboard_opened"]
+[connection signal="setup_wizard_finished" from="Content/SetupWizardComponent/WizardControl" to="Content/SetupWizardComponent" method="_on_WizardControl_setup_wizard_finished"]

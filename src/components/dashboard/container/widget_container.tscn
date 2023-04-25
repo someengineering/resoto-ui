@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=1]
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=10]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=11]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=12]
+[ext_resource path="res://components/dashboard/shared/loading_overlay.tscn" type="PackedScene" id=13]
 
 [sub_resource type="StyleBoxFlat" id=21]
 bg_color = Color( 0, 0, 0, 1 )
@@ -315,7 +316,7 @@ self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
 margin_left = 77.0
 margin_top = 67.0
 margin_right = 168.0
-margin_bottom = 144.0
+margin_bottom = 143.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_styles/panel = SubResource( 20 )
@@ -324,7 +325,7 @@ custom_styles/panel = SubResource( 20 )
 margin_left = 6.0
 margin_top = 6.0
 margin_right = 85.0
-margin_bottom = 71.0
+margin_bottom = 70.0
 custom_constants/separation = 8
 
 [node name="ConfigButton" parent="QueryWarning/VBox/PanelContainer/VBox" instance=ExtResource( 11 )]
@@ -341,9 +342,13 @@ icon_margin = 2
 modulate = Color( 1, 1, 1, 0.588235 )
 margin_top = 44.0
 margin_right = 79.0
-margin_bottom = 65.0
+margin_bottom = 64.0
 text = "Error: Title"
 align = 1
+
+[node name="LoadingOverlay" parent="." instance=ExtResource( 13 )]
+visible = true
+margin_top = 40.0
 
 [node name="TitleBar" type="PanelContainer" parent="."]
 self_modulate = Color( 0.0392157, 0.145098, 0.247059, 1 )
@@ -375,7 +380,7 @@ mouse_filter = 2
 [node name="DataTimeLabel" type="Label" parent="TitleBar/Title"]
 modulate = Color( 1, 1, 1, 0.498039 )
 margin_top = 4.0
-margin_bottom = 20.0
+margin_bottom = 19.0
 theme_type_variation = "LabelSmall"
 
 [node name="Spacer" type="Control" parent="TitleBar/Title"]

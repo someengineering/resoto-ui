@@ -2,6 +2,8 @@ extends VBoxContainer
 
 var TerminalScene: PackedScene = preload("res://components/terminal/component_terminal.tscn")
 
+var is_popup := false
+
 var terminals: Array = []
 var _active_tab_id: int = -1
 
@@ -24,6 +26,10 @@ func update_size() -> void:
 	tabs.rect_min_size.x = clamp(40 + total_size_x, 0, rect_size.x-30)
 
 
+func set_command_line_text_on_active_tab(_text:String):
+	terminals[_active_tab_id].execute_command(_text)
+
+
 func deactivate_all_terminals() -> void:
 	for terminal in terminals:
 		if terminal is TerminalComponent:
@@ -38,6 +44,7 @@ func change_name(_new_name:String) -> void:
 func add_new_terminal_tab() -> void:
 	tabs.add_tab("Terminal " + str(tabs.get_tab_count()+1))
 	var new_terminal = TerminalScene.instance()
+	new_terminal.is_popup = is_popup
 	new_terminal.connect("rename_terminal", self, "on_rename_terminal", [new_terminal])
 	terminals.append(new_terminal)
 	container.add_child(new_terminal)

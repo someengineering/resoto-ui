@@ -1,559 +1,633 @@
 {
-	"dashboard_name": "Resoto Example Dashboard",
-	"ui_version": "3.0.0",
-	"refresh_time_option": 0,
-	"time_range": "Last 7 days",
-	"cloud": "",
-	"account": "",
-	"region": "",
-	"widgets": [
-		{
-			"position:x": 0,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+	"ui_dashboard": {
+		"dashboard_name": "Resoto Example Dashboard",
+		"ui_version": "3.0.0",
+		"refresh_time_option": 0,
+		"time_range": "Last 2 days",
+		"cloud": "",
+		"account": "",
+		"region": "",
+		"widgets": [
+			{
+				"position:x": 0,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 0,
+						"show_comma": false,
+						"number_as_bytes": false,
+						"unit": ""
+					},
+					"title": "Accounts",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Accounts",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(1) as accounts_total): is(account)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(1) as accounts_total): is(account)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 1,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+			{
+				"position:x": 1,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 0,
+						"show_comma": false,
+						"number_as_bytes": false,
+						"unit": ""
+					},
+					"title": "Instances",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Instances",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(1) as instances_total): is(instance)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(1) as instances_total): is(instance)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 2,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+			{
+				"position:x": 2,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 0,
+						"show_comma": false,
+						"number_as_bytes": false,
+						"unit": ""
+					},
+					"title": "Volumes",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Volumes",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(1) as volumes_total): is(volume)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(1) as volumes_total): is(volume)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 3,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+			{
+				"position:x": 3,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 0,
+						"show_comma": false,
+						"number_as_bytes": false,
+						"unit": ""
+					},
+					"title": "Unused Volumes",
+					"color_controllers_data": [
+						"[ [ 50.0, Color( 0.752941, 0.0941176, 0.0941176, 1 ) ], [ 0, Color( 0.113725, 0.611765, 0.27451, 1 ) ] ]"
+					]
 				},
-				"title": "Unused Volumes",
-				"color_controllers_data": [
-					"[ [ 50.0, Color( 0.752941, 0.0941176, 0.0941176, 1 ) ], [ 0, Color( 0.113725, 0.611765, 0.27451, 1 ) ] ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(1) as volumes_total): is(volume) and volume_status = available and age > 2h",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(1) as volumes_total): is(volume) and volume_status = available and age > 2h",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 6,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 2,
-					"unit": "TB",
-					"show_comma": false
+			{
+				"position:x": 6,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 2,
+						"show_comma": false,
+						"number_as_bytes": true
+					},
+					"title": "Instance Memory",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Instance Memory",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(instance_memory  * 1024 * 1024 * 1024) as instances_memory): is(instance)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(instance_memory / 1024) as instances_memory): is(instance)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 7,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 2,
-					"unit": "TB",
-					"show_comma": false
+			{
+				"position:x": 7,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 2,
+						"show_comma": false,
+						"number_as_bytes": true
+					},
+					"title": "Volume Size",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Volume Size",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(volume_size  * 1024 * 1024 * 1024) as instances_memory): is(volume)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(volume_size / 1024) as instances_memory): is(volume)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 9,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 2,
-					"unit": "USD",
-					"show_comma": false
+			{
+				"position:x": 9,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 2,
+						"show_comma": false,
+						"number_as_bytes": false,
+						"unit": "USD"
+					},
+					"title": "Monthly Volume Cost",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Monthly Volume Cost",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(/ancestors.volume_type.reported.ondemand_cost) as volumes_monthly_cost_estimate): is(volume)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(/ancestors.volume_type.reported.ondemand_cost) as volumes_monthly_cost_estimate): is(volume)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 8,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 2,
-					"unit": "USD",
-					"show_comma": false
+			{
+				"position:x": 8,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 2,
+						"show_comma": false,
+						"number_as_bytes": false,
+						"unit": "USD"
+					},
+					"title": "Hourly Instance Cost est.",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Hourly Instance Cost est.",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(/ancestors.instance_type.reported.ondemand_cost) as instances_hourly_cost_estimate): is(instance) and instance_status == running",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(/ancestors.instance_type.reported.ondemand_cost) as instances_hourly_cost_estimate): is(instance) and instance_status == running",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 0,
-			"position:y": 1,
-			"size:x": 4,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
-				"widget_type": "Chart",
-				"settings": {
+			{
+				"position:x": 0,
+				"position:y": 1,
+				"size:x": 4,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+					"widget_type": "Chart",
+					"settings": {
+						"number_as_bytes": false
+					},
+					"title": "Instances Total",
+					"color_controllers_data": [
 
+					]
 				},
-				"title": "Instances Total",
-				"color_controllers_data": [
+				"data_sources_data": [
+					{
+						"metric": "instances_total",
+						"aggregator": "",
+						"filters": "",
+						"filter_dicts": [
 
+						],
+						"stacked": true,
+						"offset": "",
+						"sum_by": "(account)",
+						"legend": "{account}",
+						"custom_query": false,
+						"type": 0,
+						"query": "sum(resoto_instances_total{$dashboard_filters}) by (account)"
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"metric": "instances_total",
-					"aggregator": "",
-					"filters": "",
-					"filter_dicts": [
+			{
+				"position:x": 0,
+				"position:y": 5,
+				"size:x": 5,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_heatmap/widget_heatmap.tscn",
+					"widget_type": "Heatmap",
+					"settings": {
+						"low_color": "Color( 0.0980392, 0.0980392, 0.439216, 1 )",
+						"high_color": "Color( 1, 0.270588, 0, 1 )"
+					},
+					"title": "Instance Types by Account",
+					"color_controllers_data": [
 
-					],
-					"stacked": true,
-					"offset": "",
-					"sum_by": "(account)",
-					"legend": "{account}",
-					"custom_query": false,
-					"type": 0,
-					"query": "sum(resoto_instances_total{$dashboard_filters}) by (account)"
-				}
-			]
-		},
-		{
-			"position:x": 0,
-			"position:y": 5,
-			"size:x": 5,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_heatmap/widget_heatmap.tscn",
-				"widget_type": "Heatmap",
-				"settings": {
-					"low_color": "Color( 0.0980392, 0.0980392, 0.439216, 1 )",
-					"high_color": "Color( 1, 0.270588, 0, 1 )"
+					]
 				},
-				"title": "Instance Types by Account",
-				"color_controllers_data": [
-
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(/ancestors.account.reported.name as account, instance_type: sum(1) as instances): is(instance) and instance_status == running",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(/ancestors.account.reported.name as account, instance_type: sum(1) as instances): is(instance) and instance_status == running",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 4,
-			"position:y": 1,
-			"size:x": 3,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
-				"widget_type": "Chart",
-				"settings": {
+			{
+				"position:x": 4,
+				"position:y": 1,
+				"size:x": 3,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+					"widget_type": "Chart",
+					"settings": {
+						"number_as_bytes": false
+					},
+					"title": "Instance Cores",
+					"color_controllers_data": [
 
+					]
 				},
-				"title": "Instance Cores",
-				"color_controllers_data": [
+				"data_sources_data": [
+					{
+						"metric": "cores_total",
+						"aggregator": "",
+						"filters": "",
+						"filter_dicts": [
 
+						],
+						"stacked": true,
+						"offset": "",
+						"sum_by": "(account)",
+						"legend": "{account}",
+						"custom_query": false,
+						"type": 0,
+						"query": "sum(resoto_cores_total{$dashboard_filters}) by (account)"
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"metric": "cores_total",
-					"aggregator": "",
-					"filters": "",
-					"filter_dicts": [
+			{
+				"position:x": 7,
+				"position:y": 1,
+				"size:x": 3,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+					"widget_type": "Chart",
+					"settings": {
+						"number_as_bytes": true
+					},
+					"title": "Instance Memory",
+					"color_controllers_data": [
 
-					],
-					"stacked": true,
-					"offset": "",
-					"sum_by": "(account)",
-					"legend": "{account}",
-					"custom_query": false,
-					"type": 0,
-					"query": "sum(resoto_cores_total{$dashboard_filters}) by (account)"
-				}
-			]
-		},
-		{
-			"position:x": 7,
-			"position:y": 1,
-			"size:x": 3,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
-				"widget_type": "Chart",
-				"settings": {
-
+					]
 				},
-				"title": "Instance Memory",
-				"color_controllers_data": [
+				"data_sources_data": [
+					{
+						"metric": "memory_bytes",
+						"aggregator": "",
+						"filters": "",
+						"filter_dicts": [
 
+						],
+						"stacked": true,
+						"offset": "",
+						"sum_by": "(account)",
+						"legend": "{account}",
+						"custom_query": false,
+						"type": 0,
+						"query": "sum(resoto_memory_bytes{$dashboard_filters}) by (account)"
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"metric": "memory_bytes",
-					"aggregator": "",
-					"filters": "",
-					"filter_dicts": [
+			{
+				"position:x": 5,
+				"position:y": 9,
+				"size:x": 5,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+					"widget_type": "Table",
+					"settings": {
+						"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
+						"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
+						"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
+						"sorting_column": -1,
+						"sorting_type": ""
+					},
+					"title": "Unused  Volumes older than 1 week",
+					"color_controllers_data": [
 
-					],
-					"stacked": true,
-					"offset": "",
-					"sum_by": "(account)",
-					"legend": "{account}",
-					"custom_query": false,
-					"type": 0,
-					"query": "sum(resoto_memory_bytes{$dashboard_filters}) by (account)"
-				}
-			]
-		},
-		{
-			"position:x": 5,
-			"position:y": 9,
-			"size:x": 5,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
-				"widget_type": "Table",
-				"settings": {
-					"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
-					"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
-					"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
-					"sorting_column": -1,
-					"sorting_type": ""
+					]
 				},
-				"title": "Unused  Volumes older than 1 week",
-				"color_controllers_data": [
-
+				"data_sources_data": [
+					{
+						"text_to_search": "",
+						"kinds": "aws_ec2_volume",
+						"filters": "volume_status = available and age > 30d and last_access > 7d",
+						"list": "",
+						"type": 2,
+						"query": "is(volume){global_filters} and volume_status = available and age > \"1 week\"",
+						"custom_query": true
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"text_to_search": "",
-					"kinds": "aws_ec2_volume",
-					"filters": "volume_status = available and age > 30d and last_access > 7d",
-					"list": "",
-					"type": 2,
-					"query": "is(volume){global_filters} and volume_status = available and age > \"1 week\"",
-					"custom_query": true
-				}
-			]
-		},
-		{
-			"position:x": 5,
-			"position:y": 13,
-			"size:x": 5,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
-				"widget_type": "Table",
-				"settings": {
-					"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
-					"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
-					"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
-					"sorting_column": -1,
-					"sorting_type": ""
-				},
-				"title": "Load balancers with no backends",
-				"color_controllers_data": [
+			{
+				"position:x": 5,
+				"position:y": 13,
+				"size:x": 5,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+					"widget_type": "Table",
+					"settings": {
+						"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
+						"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
+						"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
+						"sorting_column": -1,
+						"sorting_type": ""
+					},
+					"title": "Load balancers with no backends",
+					"color_controllers_data": [
 
+					]
+				},
+				"data_sources_data": [
+					{
+						"text_to_search": "",
+						"kinds": "",
+						"filters": "",
+						"list": "",
+						"type": 2,
+						"query": "is(load_balancer) and backends = []",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"text_to_search": "",
-					"kinds": "",
-					"filters": "",
-					"list": "",
-					"type": 2,
-					"query": "is(load_balancer) and backends = []",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 0,
-			"position:y": 9,
-			"size:x": 5,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
-				"widget_type": "Chart",
-				"settings": {
+			{
+				"position:x": 0,
+				"position:y": 9,
+				"size:x": 5,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+					"widget_type": "Chart",
+					"settings": {
+						"number_as_bytes": true
+					},
+					"title": "Volumes Size",
+					"color_controllers_data": [
 
+					]
 				},
-				"title": "Volumes Size",
-				"color_controllers_data": [
+				"data_sources_data": [
+					{
+						"metric": "volume_bytes",
+						"aggregator": "",
+						"filters": "",
+						"filter_dicts": [
 
+						],
+						"stacked": true,
+						"offset": "",
+						"sum_by": "(account)",
+						"legend": "{account}",
+						"custom_query": false,
+						"type": 0,
+						"query": "sum(resoto_volume_bytes{$dashboard_filters}) by (account)"
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"metric": "volume_bytes",
-					"aggregator": "",
-					"filters": "",
-					"filter_dicts": [
+			{
+				"position:x": 5,
+				"position:y": 5,
+				"size:x": 5,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+					"widget_type": "Table",
+					"settings": {
+						"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
+						"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
+						"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
+						"sorting_column": 3,
+						"sorting_type": "desc"
+					},
+					"title": "Instances by Region",
+					"color_controllers_data": [
 
-					],
-					"stacked": true,
-					"offset": "",
-					"sum_by": "(account)",
-					"legend": "{account}",
-					"custom_query": false,
-					"type": 0,
-					"query": "sum(resoto_volume_bytes{$dashboard_filters}) by (account)"
-				}
-			]
-		},
-		{
-			"position:x": 5,
-			"position:y": 5,
-			"size:x": 5,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_table/widget_table.tscn",
-				"widget_type": "Table",
-				"settings": {
-					"header_color": "Color( 0, 0.301961, 0.584314, 1 )",
-					"row_color": "Color( 0.0489686, 0.160932, 0.265625, 1 )",
-					"column_header_color": "Color( 0.0588235, 0.2, 0.337255, 1 )",
-					"sorting_column": 3,
-					"sorting_type": "desc"
+					]
 				},
-				"title": "Instances by Region",
-				"color_controllers_data": [
-
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(/ancestors.cloud.reported.name as cloud, /ancestors.account.reported.name as account, /ancestors.region.reported.name as region: sum(1) as instances): is(instance)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(/ancestors.cloud.reported.name as cloud, /ancestors.account.reported.name as account, /ancestors.region.reported.name as region: sum(1) as instances): is(instance)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 5,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+			{
+				"position:x": 5,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 0,
+						"show_comma": false,
+						"number_as_bytes": false,
+						"unit": ""
+					},
+					"title": "Databases",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Databases",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(1) as databases_total): is(database)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(1) as databases_total): is(database)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 4,
-			"position:y": 0,
-			"size:x": 1,
-			"size:y": 1,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
-				"widget_type": "Indicator",
-				"settings": {
-					"decimal_digits": 0,
-					"unit": "",
-					"show_comma": false
+			{
+				"position:x": 4,
+				"position:y": 0,
+				"size:x": 1,
+				"size:y": 1,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_indicator/widget_indicator.tscn",
+					"widget_type": "Indicator",
+					"settings": {
+						"decimal_digits": 0,
+						"show_comma": false,
+						"number_as_bytes": false,
+						"unit": ""
+					},
+					"title": "Storage Buckets",
+					"color_controllers_data": [
+						"[  ]"
+					]
 				},
-				"title": "Storage Buckets",
-				"color_controllers_data": [
-					"[  ]"
+				"data_sources_data": [
+					{
+						"type": 1,
+						"query": "aggregate(sum(1) as instances_memory): is(bucket)",
+						"custom_query": false
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"type": 1,
-					"query": "aggregate(sum(1) as instances_memory): is(bucket)",
-					"custom_query": false
-				}
-			]
-		},
-		{
-			"position:x": 0,
-			"position:y": 13,
-			"size:x": 5,
-			"size:y": 4,
-			"widget_data": {
-				"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
-				"widget_type": "Chart",
-				"settings": {
+			{
+				"position:x": 0,
+				"position:y": 13,
+				"size:x": 5,
+				"size:y": 4,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_chart/widget_chart.tscn",
+					"widget_type": "Chart",
+					"settings": {
+						"number_as_bytes": false
+					},
+					"title": "Load balancers total",
+					"color_controllers_data": [
 
+					]
 				},
-				"title": "Load balancers total",
-				"color_controllers_data": [
+				"data_sources_data": [
+					{
+						"metric": "load_balancers_total",
+						"aggregator": "",
+						"filters": "",
+						"filter_dicts": [
 
+						],
+						"stacked": true,
+						"offset": "",
+						"sum_by": "(account)",
+						"legend": "{account}",
+						"custom_query": false,
+						"type": 0,
+						"query": "sum(resoto_load_balancers_total{$dashboard_filters}) by (account)"
+					}
 				]
 			},
-			"data_sources_data": [
-				{
-					"metric": "load_balancers_total",
-					"aggregator": "",
-					"filters": "",
-					"filter_dicts": [
+			{
+				"position:x": 5,
+				"position:y": 17,
+				"size:x": 5,
+				"size:y": 3,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+					"widget_type": "Table",
+					"settings": {
+						"header_color": "Color( 0, 0.3, 0.58, 1 )",
+						"row_color": "Color( 0.05, 0.16, 0.27, 1 )",
+						"column_header_color": "Color( 0.06, 0.2, 0.34, 1 )",
+						"sorting_column": -1,
+						"sorting_type": ""
+					},
+					"title": "Certificates about to expire",
+					"color_controllers_data": [
 
-					],
-					"stacked": true,
-					"offset": "",
-					"sum_by": "(account)",
-					"legend": "{account}",
-					"custom_query": false,
-					"type": 0,
-					"query": "sum(resoto_load_balancers_total{$dashboard_filters}) by (account)"
-				}
-			]
-		}
-	],
-	"uuid": ""
+					]
+				},
+				"data_sources_data": [
+					{
+						"text_to_search": "is(certificate) and expires > \"@now@\" and expires < 1mo",
+						"kinds": "",
+						"filters": "",
+						"list": "",
+						"type": 2,
+						"query": "is(certificate) and expires > \"@now@\" and expires < 1mo{global_filters}",
+						"custom_query": false
+					}
+				]
+			},
+			{
+				"position:x": 0,
+				"position:y": 17,
+				"size:x": 5,
+				"size:y": 3,
+				"widget_data": {
+					"scene": "res://components/dashboard/widget_table/widget_table.tscn",
+					"widget_type": "Table",
+					"settings": {
+						"header_color": "Color( 0, 0.3, 0.58, 1 )",
+						"row_color": "Color( 0.05, 0.16, 0.27, 1 )",
+						"column_header_color": "Color( 0.06, 0.2, 0.34, 1 )",
+						"sorting_column": -1,
+						"sorting_type": ""
+					},
+					"title": "Expired Certificates",
+					"color_controllers_data": [
+
+					]
+				},
+				"data_sources_data": [
+					{
+						"text_to_search": "is(certificate) and expires < \"@now@\"",
+						"kinds": "",
+						"filters": "",
+						"list": "",
+						"type": 2,
+						"query": "is(certificate) and expires < \"@now@\"{global_filters}",
+						"custom_query": false
+					}
+				]
+			}
+		],
+		"uuid": ""
+	}
 }

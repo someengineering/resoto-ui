@@ -18,9 +18,6 @@ onready var filters_widget := $VBox/TimeSeries/FilterWidget
 onready var date_offset_edit := $VBox/TimeSeries/DateOffset/DateOffsetLineEdit
 onready var by_line_edit := $VBox/TimeSeries/SumBy/SumByLineEdit
 onready var sum_by_help := $VBox/TimeSeries/SumBy/SumByTitle/SumByHelp
-onready var legend_edit := $VBox/TimeSeries/Legend/LegendEdit
-onready var legend_help := $VBox/TimeSeries/Legend/LegendTitle/LegendHelp
-onready var stacked_check_box := $VBox/TimeSeries/StackedCheckBox
 
 # Search Data Source
 onready var kinds_combo_box := $VBox/Search/HBoxContainer/KindsComboBox
@@ -28,6 +25,12 @@ onready var kinds_line_edit := $VBox/Search/LineEditKinds
 onready var text_line_edit := $VBox/Search/TextLineEdit
 onready var text_filters_line_edit := $VBox/Search/TextFiltersLineEdit
 onready var list_line_edit := $VBox/Search/ListLineEdit
+
+# Fixed Aggregate
+
+onready var fixed_search_line_edit := $VBox/FixedAggregate/SearchLineEdit
+onready var fixed_search_function_line_edit := $VBox/FixedAggregate/FunctionContainer/FunctionLineEdit
+onready var fixed_search_alias_line_edit := $VBox/FixedAggregate/FunctionContainer/FunctionAlias
 
 # Two Entries Aggregate
 onready var entry_1_line_edit := $VBox/TwoEntriesAggregate/EntryContainer1/Entry1LineEdit
@@ -38,11 +41,16 @@ onready var function_line_edit := $VBox/TwoEntriesAggregate/FunctionContainer/Fu
 onready var function_alias_line_edit := $VBox/TwoEntriesAggregate/FunctionContainer/FunctionAlias
 onready var kinds_combobox_two_entries_datasource := $VBox/TwoEntriesAggregate/KindComboBox
 
-# Aggregation would make sense!
-
+# Aggregate Search
+onready var group_variables := $VBox/AggregateSearch/GroupVariables
+onready var group_functions := $VBox/AggregateSearch/GroupFunctions
+onready var search_query := $VBox/AggregateSearch/AggregateSearchQuery
 
 # Resulting Query Box
 onready var resulting_query_sep := $VBox/ResultingQueryBox
+onready var resulting_query_label := $VBox/ResultingQueryBox/QueryLabel
+
+onready var query_editbox_label := $VBox/QueryEditVBox/QueryLabel
 
 # Query Edit
 onready var query_edit := $VBox/QueryEditVBox/QueryEdit
@@ -56,24 +64,25 @@ func _ready() -> void:
 	$VBox/TimeSeries.visible = datasource_type == DataSource.TYPES.TIME_SERIES
 	$VBox/Search.visible = datasource_type == DataSource.TYPES.SEARCH
 	$VBox/TwoEntriesAggregate.visible = datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
+	$VBox/AggregateSearch.visible = datasource_type == DataSource.TYPES.AGGREGATE_SEARCH
+	$VBox/FixedAggregate.visible = datasource_type == DataSource.TYPES.FIXED_AGGREGATE
 	show_query_separator(false)
-	update_time_series_legend()
+	update_time_series_sum_by()
 	
 	match datasource_type:
 		DataSource.TYPES.TIME_SERIES:
 			data_source = TimeSeriesDataSource.new()
-			show_query_separator(true)
 		DataSource.TYPES.AGGREGATE_SEARCH:
 			data_source = AggregateSearchDataSource.new()
-			expand_button.hide()
 		DataSource.TYPES.SEARCH:
 			data_source = TextSearchDataSource.new()
-			show_query_separator(true)
 			API.cli_execute("kinds", self)
 		DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
-			show_query_separator(true)
 			data_source = TwoEntryAggregateDataSource.new()
 			API.cli_execute("kinds", self)
+		DataSource.TYPES.FIXED_AGGREGATE:
+			data_source = FixedAggregateSearch.new()
+			show_query_separator(true)
 	
 	$"%TitleLabel".text = "Data Source %s - %s" % [str(get_parent().get_children().find(self)+1), DataSource.TYPES.keys()[data_source.type].capitalize()]
 	
@@ -81,6 +90,7 @@ func _ready() -> void:
 	data_source.connect("query_status", self, "_on_data_source_query_status")
 	query_edit.connect("focus_exited", self, "_on_QueryEdit_focus_exited")
 	
+	update_query_label_text()
 	add_child(data_source)
 
 
@@ -141,17 +151,16 @@ func update_query(force_query := false) -> void:
 func set_widget(new_widget : BaseWidget) -> void:
 	widget = new_widget
 	data_source.widget = new_widget
-	var ranged : bool = widget.data_type == BaseWidget.DATA_TYPE.RANGE
-	stacked_check_box.visible = ranged
-	legend_edit.get_parent().visible = ranged
 
 
-func _on_StackedCheckBox_toggled(button_pressed : bool) -> void:
+func _on_stack_changed(button_pressed : bool) -> void:
+	if data_source.stacked == button_pressed:
+		return
 	data_source.stacked = button_pressed
 	update_query(true)
 
 
-func _on_LegendEdit_text_entered(new_text : String) -> void:
+func _on_legend_changed(new_text : String) -> void:
 	data_source.legend = new_text
 	update_query(true)
 
@@ -216,7 +225,7 @@ func _on_QueryEdit_cursor_changed():
 
 
 func _on_data_source_query_status(_status:int, _title:String, _message:=""):
-	update_time_series_legend()
+	update_time_series_sum_by()
 	var error_icon = $"%ErrorIcon"
 	var tooltip = "[b][color=#%s]%s[/color][/b]" % [Style.col_map[Style.c.ERR_MSG].to_html(), _title]
 	if _message != "":
@@ -225,7 +234,7 @@ func _on_data_source_query_status(_status:int, _title:String, _message:=""):
 		OK:
 			# Update the Help for time series legends
 			if "last_metric_keys" in data_source:
-				update_time_series_legend(data_source.last_metric_keys)
+				update_time_series_sum_by(data_source.last_metric_keys)
 			error_icon.hide()
 			hint_tooltip = ""
 			$Warning.hide()
@@ -257,8 +266,6 @@ func set_data_source(new_data_source : DataSource) -> void:
 			function_options.text = new_data_source.aggregator
 			data_source.query = new_data_source.query
 			data_source.custom_query = new_data_source.custom_query
-			legend_edit.text = new_data_source.legend
-			stacked_check_box.pressed = new_data_source.stacked
 		DataSource.TYPES.SEARCH:
 			data_source.custom_query = new_data_source.custom_query
 			kinds_line_edit.text = new_data_source.kinds
@@ -274,6 +281,19 @@ func set_data_source(new_data_source : DataSource) -> void:
 			function_line_edit.text = new_data_source.function
 			function_alias_line_edit.text = new_data_source.function_alias
 			kinds_combobox_two_entries_datasource.text = new_data_source.kind 
+		DataSource.TYPES.AGGREGATE_SEARCH:
+			if new_data_source.search_query != "":
+				group_variables.grouping_variables = new_data_source.grouping_variables
+				group_functions.grouping_variables = new_data_source.grouping_functions
+				search_query.text = new_data_source.search_query
+			else:
+				query_edit.text = new_data_source.query
+				new_data_source.custom_query = true
+		DataSource.TYPES.FIXED_AGGREGATE:
+			fixed_search_alias_line_edit.text = new_data_source.function_alias
+			fixed_search_function_line_edit.text = new_data_source.function
+			fixed_search_line_edit.text = new_data_source.search
+
 			
 	$VBox/Title/ExpandButton.pressed = !new_data_source.custom_query
 	show_query_separator(!new_data_source.custom_query)
@@ -313,8 +333,8 @@ func _on_ExpandButton_toggled(button_pressed:bool):
 	$VBox/TimeSeries.visible = button_pressed and datasource_type == DataSource.TYPES.TIME_SERIES
 	$VBox/Search.visible = button_pressed and datasource_type == DataSource.TYPES.SEARCH
 	$VBox/TwoEntriesAggregate.visible = button_pressed and datasource_type == DataSource.TYPES.TWO_ENTRIES_AGGREGATE
-	if [DataSource.TYPES.TWO_ENTRIES_AGGREGATE, DataSource.TYPES.SEARCH, DataSource.TYPES.TIME_SERIES].has(datasource_type):
-		show_query_separator(button_pressed)
+	$VBox/AggregateSearch.visible = button_pressed and datasource_type == DataSource.TYPES.AGGREGATE_SEARCH
+	show_query_separator(button_pressed)
 
 
 func _on_KindComboBox_option_changed(option):
@@ -356,7 +376,7 @@ func _on_FunctionAlias_text_entered(new_text):
 	update_query()
 
 
-func update_time_series_legend(last_metric_keys:Array=[]):
+func update_time_series_sum_by(last_metric_keys:Array=[]):
 	var help_text_legend := "[b]Set the legend on the widget.[/b]\nIf the result contains labels, you can display them by wrapping it in curly braces.\n"
 	help_text_legend += "[b]Examples[/b]\n- [code]{label_name}[/code]\n- [code]Cloud: {cloud}[/code]%s"
 	var help_text_sum_by := "[b]Sum by a label in the metric.[/b]%s"
@@ -368,11 +388,45 @@ func update_time_series_legend(last_metric_keys:Array=[]):
 		help_text_sum_by = help_text_sum_by % str("\n\nThe last query returned the following labels:\n[code]%s[/code]" % last_metric_string.join(", "))
 	else:
 		help_text_legend = help_text_legend % ""
-		help_text_sum_by = help_text_sum_by % ""
-	legend_help.tooltip_text = help_text_legend
+#		help_text_sum_by = help_text_sum_by % ""
+#	legend_help.tooltip_text = help_text_legend
 	sum_by_help.tooltip_text = help_text_sum_by
 
 
 func show_query_separator(_show:bool=false):
 	resulting_query_sep.visible = _show
-	$VBox/QueryEditVBox/QueryLabel.visible = !_show
+	query_editbox_label.visible = !_show
+
+
+func _on_GroupVariables_group_variables_changed(grouping_variables):
+	data_source.grouping_variables = grouping_variables
+	update_query()
+
+
+func _on_GroupFunctions_group_variables_changed(grouping_variables):
+	data_source.grouping_functions = grouping_variables
+	update_query()
+
+
+func _on_AggregateSearchQuery_text_entered(new_text):
+	data_source.search_query = new_text
+	update_query()
+
+
+func update_query_label_text():
+	var label_text : String = ""
+	match datasource_type:
+		DataSource.TYPES.TIME_SERIES:
+			label_text = "Query"
+		DataSource.TYPES.SEARCH:
+			label_text = "Resoto Search"
+		_:
+			label_text = "Aggregate Search"
+			
+	query_editbox_label.text = label_text
+	resulting_query_label.text = label_text
+
+
+func _on_SearchLineEdit_text_entered(new_text):
+	data_source.search = new_text
+	update_query()

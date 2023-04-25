@@ -3,14 +3,14 @@
 [ext_resource path="res://components/elements/styled/style_color_auto_remap.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=3]
-[ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=4]
+[ext_resource path="res://components/shared/label_left_click_copy.tscn" type="PackedScene" id=4]
 [ext_resource path="res://components/node_list/node_list_element.gd" type="Script" id=5]
 [ext_resource path="res://assets/icons/icon_128_arrow.svg" type="Texture" id=6]
 [ext_resource path="res://assets/icons/icon_128_node_element.svg" type="Texture" id=7]
 [ext_resource path="res://assets/icons/search-blue-01.svg" type="Texture" id=8]
 [ext_resource path="res://assets/theme/Barlow-Bold.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=10]
-[ext_resource path="res://components/elements/utility/left_click_copy.gd" type="Script" id=11]
+[ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=11]
 [ext_resource path="res://components/elements/styled/check_button_styled.tscn" type="PackedScene" id=12]
 [ext_resource path="res://components/elements/styled/flat_copy_button.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=14]
@@ -161,7 +161,8 @@ margin_bottom = 34.0
 size_flags_horizontal = 0
 custom_fonts/font = SubResource( 8 )
 text = "All Successors"
-script = ExtResource( 11 )
+
+[node name="LabelLeftClickCopy" parent="VBox/TitleBar/SearchTypeLabel" instance=ExtResource( 4 )]
 
 [node name="Spacer" type="Control" parent="VBox/TitleBar"]
 margin_left = 43.0
@@ -283,7 +284,8 @@ texture = null
 tooltip_text = "Mark the displayed resources for clean-up
 
 [b]Warning![/b]
-If [code]cleanup[/code] is enabled, this will [b]delete these resources from your infrastructure[/b] on the next cleanup run!"
+This will [b]delete the displayed resources from your infrastructure[/b] on the next cleanup run!
+Marking resources for cleanup will [b]not have any effect[/b] until [code]cleanup[/code] is enabled in the [code]resoto.worker[/code] configuration"
 tooltip = "tooltip_error"
 
 [node name="RemoveFromCleanupButton" parent="VBox/Filter/ResotoActionGroup/TagTitleBar" instance=ExtResource( 3 )]
@@ -514,7 +516,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 follow_focus = true
 scroll_horizontal_enabled = false
-script = ExtResource( 4 )
+script = ExtResource( 11 )
 
 [node name="Content" type="MarginContainer" parent="VBox/MainPanel/ScrollContainer"]
 margin_right = 1920.0

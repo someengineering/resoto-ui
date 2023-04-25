@@ -57,6 +57,7 @@ onready var duplicate_button := $TitleBar/Title/DuplicateButton
 onready var maximize_button := $TitleBar/Title/MaximizeButton
 onready var query_warning := $QueryWarning
 onready var widget_content := $MarginContainer
+onready var loading_overlay := $LoadingOverlay
 
 
 func _ready() -> void:
@@ -71,6 +72,8 @@ func _ready() -> void:
 		button.connect("button_up", self, "_on_resize_button_released")
 		button.connect("button_down", self, "_on_resize_button_pressed", [i])
 	set_process(false)
+	
+	refresh_pos_and_size_on_grid()
 
 
 func set_grid_size(new_grid_size : Vector2) -> void:
@@ -333,10 +336,16 @@ func set_title(new_title : String) -> void:
 func execute_query() -> void:
 	widget_content.show()
 	query_warning.hide()
+	loading_overlay.show()
 	if widget.has_method("clear_series"):
 		widget.clear_series()
 	
 	datetime_label.text = "Live"
+	
+	if data_sources.empty():
+		_on_data_source_query_status(FAILED, "No Data Source found.", "This widget has no Data Source.\nEdit the widget and add a Data Source to display data.")
+		return
+	
 	for datasource in data_sources:
 		var attr := {}
 		match datasource.type:
@@ -461,6 +470,8 @@ func set_data_sources_data(data : Array) -> void:
 				ds = TextSearchDataSource.new()
 			DataSource.TYPES.TWO_ENTRIES_AGGREGATE:
 				ds = TwoEntryAggregateDataSource.new()
+			DataSource.TYPES.FIXED_AGGREGATE:
+				ds = FixedAggregateSearch.new()
 				
 		for key in settings:
 			ds.set(key, settings[key])
@@ -479,13 +490,27 @@ func get_data_sources_data() -> Array:
 
 onready var query_warning_title = $QueryWarning/VBox/PanelContainer/VBox/QueryStatusTitle
 func _on_data_source_query_status(_type:int=0, _title:="Widget Error", _message:=""):
+	if not is_executing_queries():
+		loading_overlay.hide()
+	
 	if _type == OK:
 		return
+	
 	query_warning_title.visible = _title != ""
 	query_warning_title.text = _title
 	$QueryWarning/VBox/PanelContainer.hint_tooltip = _title + "\n" + _message
 	query_warning.get_node("VBox/PanelContainer").visible = size_on_grid.y >= 2
 	query_warning.show()
+
+
+func is_executing_queries() -> bool:
+	var querying := false
+	for datasource in data_sources:
+			if datasource.is_executing_query():
+				querying = true
+				break
+				
+	return querying
 
 
 func _on_MaximizeButton_toggled(button_pressed):
@@ -501,8 +526,8 @@ func _on_MaximizeButton_toggled(button_pressed):
 func _on_WidgetContainer_moved_or_resized():  
 	if is_maximized:
 		maximize_button.modulate.a = 0.1
-		rect_global_position = get_parent().get_parent().get_parent().rect_global_position
-		rect_size = get_parent().get_parent().get_parent().rect_size
+		rect_global_position = dashboard.get_node(dashboard.scrollcontainer_path).rect_global_position
+		rect_size = dashboard.scroll_container.rect_size
 	else:
 		rect_position = position_on_grid * grid_size
 		rect_size = size_on_grid * grid_size
@@ -530,3 +555,7 @@ func _on_TitleBar_mouse_exited():
 func _on_WidgetContainer_tree_exiting():
 	for data_source in data_sources:
 		data_source.queue_free()
+
+func minimize():
+	if is_maximized:
+		maximize_button.pressed = false

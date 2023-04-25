@@ -12,14 +12,34 @@ var enum_values:Array = [] setget set_enum_values
 var required:bool = false setget set_required
 var is_null:bool = false
 var descriptions_as_hints:bool = true
+var overridden: bool = false setget set_overridden
 
-onready var enum_button:OptionButton = $VarContent/VarValueEnum
+onready var enum_button:OptionButton = $"%VarValueEnum"
 onready var null_value = $VarContent/VarValueIsNull
 
 
-func _ready():
-	if descriptions_as_hints:
-		$Description.hide()
+func show_description(_show:bool) -> void:
+	$"%DescriptionContainer".visible = _show if description != "" else false
+
+
+func set_description(_value:String) -> void:
+	description = _value
+	$"%DescriptionContainer".visible = description != ""
+	$"%Description".text = description
+
+
+func set_key(_value:String) -> void:
+	key = _value
+	if _value == "":
+		$VarContent/VarName.hide()
+	$VarContent/VarName.text = key.capitalize()
+
+
+func set_overridden(o: bool):
+	overridden = o
+	$VarContent/OverriddenLabel.visible = o
+	if overridden:
+		$"%VarName".add_color_override("font_color", Style.col_map[Style.c.WARN_MSG])
 
 
 func set_required(_value:bool) -> void:
@@ -64,29 +84,6 @@ func get_value():
 	if is_null:
 		return null
 	return value
-
-
-func _make_custom_tooltip(for_text):
-	var tooltip = preload("res://components/shared/custom_bb_hint_tooltip.tscn").instance()
-	tooltip.get_node("Text").set_bbcode(for_text)
-	return tooltip
-
-
-func set_description(_value:String) -> void:
-	description = _value
-	if descriptions_as_hints:
-		hint_tooltip = "[b]Property:[/b]\n[code]%s[/code]\n\n%s" % [key, description]
-		return
-	if _value == "":
-		$Description.hide()
-	$Description.text = _value
-
-
-func set_key(_value:String) -> void:
-	key = _value
-	if _value == "":
-		$VarContent/VarName.hide()
-	$VarContent/VarName.text = key.capitalize()
 
 
 func _on_ButtonSetToNull_pressed() -> void:

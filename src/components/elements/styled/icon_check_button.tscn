@@ -17,6 +17,7 @@ custom_constants/margin_left = 3
 custom_constants/margin_bottom = 3
 
 [node name="Icon" parent="Margin" index="0"]
+self_modulate = Color( 0.219608, 0.52549, 0.807843, 1 )
 margin_left = 3.0
 margin_top = 3.0
 margin_right = 30.0

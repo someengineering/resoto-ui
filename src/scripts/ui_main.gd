@@ -18,7 +18,7 @@ func _ready() -> void:
 				"errors" : errors
 			}
 			var counters := {
-				"errors" : errors.size()
+				"errors-number" : errors.size()
 			}
 			
 			Analytics.event(Analytics.EventsUI.ERROR, properties, counters)
@@ -32,6 +32,7 @@ func _ready() -> void:
 	if OS.has_feature("HTML5"):
 		properties["OS"] = JavaScript.eval("getOS()")
 		properties["browser"] = JavaScript.eval("getBrowser()")
+		_g.browser = properties["browser"]
 	else:
 		properties["OS"] = OS.get_name()
 		

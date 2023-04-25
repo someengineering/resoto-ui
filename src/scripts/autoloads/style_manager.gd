@@ -8,7 +8,7 @@ const themed_group_name:= "themed"
 const themed_self_group_name:= "themed_self"
 const themed_col_name:= "theme_color"
 
-enum c {NORMAL, LIGHT, LIGHTER, DARK, DARKER, BG, BG2, BG_BACK, CON_1, CON_2, CON_3, ERR_MSG, WARN_MSG, STYLE_ERROR}
+enum c {NORMAL, LIGHT, LIGHTER, DARK, DARKER, BG, BG2, BG_BACK, CON_1, CON_2, CON_3, ERR_MSG, WARN_MSG, STYLE_ERROR, CHECK_FAIL, CHECK_ON}
 
 var col_map:= {
 	c.NORMAL:		Color("#0054a3"),
@@ -27,6 +27,8 @@ var col_map:= {
 	c.WARN_MSG:		Color("#cda11c"),
 	# Style Error color - this is used when styling fails
 	c.STYLE_ERROR:	Color("#ff00ff"),
+	c.CHECK_FAIL:	Color("#f44444"),
+	c.CHECK_ON:		Color("#44f470")
 }
 
 var default_colors:= {

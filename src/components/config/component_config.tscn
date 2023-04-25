@@ -1,12 +1,16 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://components/config/component_config.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
+[ext_resource path="res://assets/icons/icon_128_save_disc.svg" type="Texture" id=3]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=4]
+[ext_resource path="res://components/elements/styled/icon_check_button.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/icons/icon_128_info_circle.svg" type="Texture" id=7]
 [ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=8]
+[ext_resource path="res://assets/icons/icon_128_json_view.svg" type="Texture" id=9]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=13]
 [ext_resource path="res://assets/icons/icon_128_reload_thick.svg" type="Texture" id=15]
-[ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=17]
 [ext_resource path="res://assets/icons/icon_128_duplicate.svg" type="Texture" id=18]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=19]
@@ -54,42 +58,69 @@ margin_right = 1916.0
 margin_bottom = 37.0
 
 [node name="ConfigLabel" type="Label" parent="VBox/Toolbar/Box"]
-margin_right = 59.0
+unique_name_in_owner = true
+margin_right = 120.0
 margin_bottom = 33.0
 size_flags_vertical = 3
 custom_styles/normal = SubResource( 19 )
-text = "Config"
+text = "Configurations"
 align = 2
 valign = 1
 
-[node name="ConfigCombo" parent="VBox/Toolbar/Box" instance=ExtResource( 16 )]
-margin_left = 63.0
-margin_right = 463.0
-rect_min_size = Vector2( 400, 24 )
-align_items_left = true
-
 [node name="ShowDashboardsButton" type="CheckBox" parent="VBox/Toolbar/Box"]
-margin_left = 467.0
-margin_right = 692.0
+visible = false
+margin_right = 226.667
 margin_bottom = 33.0
 text = "Show Dashboard Configs"
 flat = true
 
 [node name="Spacer" type="Control" parent="VBox/Toolbar/Box"]
-margin_left = 696.0
-margin_right = 1613.0
+margin_left = 124.0
+margin_right = 1310.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 20, 0 )
 size_flags_horizontal = 3
 
-[node name="SaveConfigButton" type="Button" parent="VBox/Toolbar/Box"]
-margin_left = 1617.0
-margin_right = 1727.0
+[node name="SearchLineEdit" type="LineEdit" parent="VBox/Toolbar/Box"]
+unique_name_in_owner = true
+margin_left = 1314.0
+margin_right = 1514.0
 margin_bottom = 33.0
-hint_tooltip = "Save this configuration in Resoto Core"
-size_flags_horizontal = 4
-size_flags_vertical = 8
+rect_min_size = Vector2( 200, 0 )
+clear_button_enabled = true
+placeholder_text = "Search"
+
+[node name="ShowDescriptionsButton" parent="VBox/Toolbar/Box" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 1518.0
+margin_right = 1551.0
+hint_tooltip = "Show/Hide Property Descriptions"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+pressed = true
+icon_tex = ExtResource( 7 )
+icon_true = ExtResource( 7 )
+icon_false = ExtResource( 7 )
+
+[node name="RawViewButton" parent="VBox/Toolbar/Box" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 1555.0
+margin_right = 1588.0
+hint_tooltip = "Show/Hide Property Descriptions"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon_tex = ExtResource( 9 )
+icon_true = ExtResource( 9 )
+icon_false = ExtResource( 9 )
+
+[node name="SaveConfigButton" parent="VBox/Toolbar/Box" instance=ExtResource( 4 )]
+margin_left = 1592.0
+margin_right = 1727.0
+rect_min_size = Vector2( 135, 33 )
 text = "Save Config"
+align = 2
+icon_tex = ExtResource( 3 )
+icon_margin = 4
 
 [node name="RenameConfigButton" parent="VBox/Toolbar/Box" instance=ExtResource( 12 )]
 margin_left = 1731.0
@@ -121,17 +152,52 @@ margin_right = 1912.0
 hint_tooltip = "Delete this configuration from Resoto Core (no undo!)"
 icon_tex = ExtResource( 13 )
 
-[node name="MainPanel" type="PanelContainer" parent="VBox"]
-show_behind_parent = true
+[node name="HBoxContainer" type="HSplitContainer" parent="VBox"]
 margin_top = 40.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBox/HBoxContainer"]
+margin_right = 437.0
+margin_bottom = 1040.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBox/HBoxContainer/MarginContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 437.0
+margin_bottom = 1036.0
+
+[node name="Label" type="Label" parent="VBox/HBoxContainer/MarginContainer/VBoxContainer"]
+visible = false
+margin_right = 433.0
+margin_bottom = 20.0
+text = "Configurations"
+
+[node name="ConfigSelectionTree" type="Tree" parent="VBox/HBoxContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+margin_right = 433.0
+margin_bottom = 1032.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MainPanel" type="PanelContainer" parent="VBox/HBoxContainer"]
+show_behind_parent = true
+margin_left = 449.0
+margin_right = 1920.0
+margin_bottom = 1040.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_styles/panel = SubResource( 20 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBox/MainPanel"]
-margin_right = 1920.0
+[node name="ScrollContainer" type="ScrollContainer" parent="VBox/HBoxContainer/MainPanel"]
+margin_right = 1471.0
 margin_bottom = 1040.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -139,8 +205,9 @@ follow_focus = true
 scroll_horizontal_enabled = false
 script = ExtResource( 8 )
 
-[node name="Content" type="MarginContainer" parent="VBox/MainPanel/ScrollContainer"]
-margin_right = 1920.0
+[node name="Content" type="MarginContainer" parent="VBox/HBoxContainer/MainPanel/ScrollContainer"]
+unique_name_in_owner = true
+margin_right = 1471.0
 margin_bottom = 1040.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -148,11 +215,14 @@ custom_constants/margin_right = 20
 custom_constants/margin_top = 0
 custom_constants/margin_left = 8
 
-[connection signal="option_changed" from="VBox/Toolbar/Box/ConfigCombo" to="." method="_on_ConfigCombo_option_changed"]
 [connection signal="toggled" from="VBox/Toolbar/Box/ShowDashboardsButton" to="." method="_on_ShowDashboardsButton_toggled"]
+[connection signal="text_changed" from="VBox/Toolbar/Box/SearchLineEdit" to="." method="_on_SearchLineEdit_text_changed"]
+[connection signal="pressed" from="VBox/Toolbar/Box/ShowDescriptionsButton" to="." method="_on_ShowDescriptionsButton_pressed"]
+[connection signal="pressed" from="VBox/Toolbar/Box/RawViewButton" to="." method="_on_RawViewButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/SaveConfigButton" to="." method="_on_SaveConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/RenameConfigButton" to="." method="_on_RenameConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/DuplicateConfigButton" to="." method="_on_DuplicateConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/ReloadConfigButton" to="." method="_on_LoadConfigFromCoreButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/AddConfigButton" to="." method="_on_AddConfigButton_pressed"]
 [connection signal="pressed" from="VBox/Toolbar/Box/DeleteConfigButton" to="." method="_on_DeleteConfigButton_pressed"]
+[connection signal="item_selected" from="VBox/HBoxContainer/MarginContainer/VBoxContainer/ConfigSelectionTree" to="." method="_on_ConfigSelectionTree_item_selected"]

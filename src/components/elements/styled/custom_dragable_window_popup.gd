@@ -1,6 +1,8 @@
 extends PopupPanel
 class_name CustomPopupWindow
 
+signal close_popup
+
 const TopMenuHeight:= 40
 
 export var default_size:= Vector2.ONE
@@ -26,18 +28,25 @@ func _ready():
 	$Content/Titlebar.target = self
 	connect("about_to_show", self, "reset_settings")
 	rect_size = default_size
+	get_tree().root.connect("size_changed", self, "on_ui_scale_changed")
 	_g.connect("ui_scale_changed", self, "on_ui_scale_changed")
 
 
 func on_ui_scale_changed() -> void:
 	if visible:
 		var w_size = (OS.window_size / _g.ui_scale)
-		var popup_size = rect_size
-		rect_position = (w_size/2 - popup_size/2) - Vector2(0, -TopMenuHeight)
-		rect_size = Vector2(
-			clamp(rect_size.x, 1, w_size.x - rect_position.x),
-			clamp(rect_size.y, 1, w_size.y - rect_position.y)
-		)
+		
+		if get_global_rect().end.x > w_size.x:
+			rect_position.x = w_size.x - get_global_rect().size.x
+		if get_global_rect().end.y > w_size.y:
+			rect_position.y = w_size.y - get_global_rect().size.y
+		
+		if get_global_rect().position.y < TopMenuHeight:
+			rect_size.y = w_size.y - TopMenuHeight
+			rect_position.y = TopMenuHeight
+		if get_global_rect().position.x < 0:
+			rect_size.x = w_size.x
+			rect_position.x = 0
 
 
 func set_window_title(_new_title:String):
@@ -49,6 +58,7 @@ func reset_settings():
 	close_btn.visible = show_close_icon
 	max_btn.visible = show_max_icon
 	rect_size = size_before_max
+	on_ui_scale_changed()
 
 
 func _process(_delta:float):
@@ -94,7 +104,7 @@ func _on_IconButton_pressed():
 
 
 func _close_popup():
-	pass
+	emit_signal("close_popup")
 
 
 func _on_ResizeButton_button_down():

@@ -13,7 +13,10 @@ func get_value():
 	if not self.is_inside_tree():
 		yield(self, "ready")
 	
-	var found_kind_type = config_component.get_kind_type(model.fqn)
+	var found_kind_type = "complex"
+	if not model.empty():
+		found_kind_type = config_component.get_kind_type(model.fqn)
+	
 	match found_kind_type:
 		"simple":
 			return config_component.build_simple(content_elements)

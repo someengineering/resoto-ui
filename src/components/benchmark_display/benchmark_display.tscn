@@ -1,0 +1,865 @@
+[gd_scene load_steps=41 format=2]
+
+[ext_resource path="res://components/benchmark_display/benchmark_display.gd" type="Script" id=1]
+[ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=2]
+[ext_resource path="res://components/shared/failing_vs_passed_widget.tscn" type="PackedScene" id=3]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=4]
+[ext_resource path="res://components/elements/utility/clipped_label.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/elements/styled/custom_dragable_window_panel.tscn" type="PackedScene" id=6]
+[ext_resource path="res://components/dashboard/shared/loading_overlay.tscn" type="PackedScene" id=7]
+[ext_resource path="res://components/benchmark_display/benchmark_config_dialog.tscn" type="PackedScene" id=8]
+[ext_resource path="res://components/elements/utility/scroll_container_scrollbar_claim_space_vertical.gd" type="Script" id=9]
+[ext_resource path="res://components/benchmark_display/severity_indicator.tscn" type="PackedScene" id=10]
+[ext_resource path="res://assets/icons/icon_128_external_link.svg" type="Texture" id=11]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=12]
+[ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=13]
+[ext_resource path="res://components/elements/styled/styled_icon_button_hover.gd" type="Script" id=14]
+[ext_resource path="res://assets/icons/icon_128_download_plain.svg" type="Texture" id=15]
+[ext_resource path="res://assets/icons/icon_128_expand_all.svg" type="Texture" id=16]
+[ext_resource path="res://assets/icons/icon_128_collapse_all.svg" type="Texture" id=17]
+[ext_resource path="res://assets/icons/icon_128_circle_thick.svg" type="Texture" id=18]
+[ext_resource path="res://assets/generic/spin_shader.tres" type="Shader" id=19]
+[ext_resource path="res://assets/generic/spin_shader_mix_control_node.tres" type="Shader" id=20]
+
+[sub_resource type="Gradient" id=27]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.460905, 1 )
+colors = PoolColorArray( 0.462745, 0.176471, 0.843137, 1, 0.913725, 0.552941, 0.968627, 1, 0.462745, 0.176471, 0.843137, 1 )
+
+[sub_resource type="GradientTexture" id=28]
+gradient = SubResource( 27 )
+
+[sub_resource type="ShaderMaterial" id=29]
+shader = ExtResource( 20 )
+shader_param/shader_effect_mix = 1.0
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 28 )
+
+[sub_resource type="StyleBoxFlat" id=30]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 3.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="Shader" id=9]
+code = "shader_type canvas_item;
+
+uniform vec2 rect_size =  vec2(150.0, 33.0);
+uniform float corner_radius = 5.0;
+
+void fragment(){
+	vec2 top_left = vec2(corner_radius);
+	vec2 top_right = vec2(rect_size.x - corner_radius, corner_radius);
+	vec2 bot_left = vec2(corner_radius, rect_size.y - corner_radius);
+	vec2 bot_right = rect_size - corner_radius;
+	vec2 pixel_uv = UV * rect_size;
+	float aa_value = TEXTURE_PIXEL_SIZE.x * 2.0;
+	
+	if (pixel_uv.x < top_left.x && pixel_uv.y < top_left.y){
+		COLOR.a = smoothstep(distance(top_left, pixel_uv) - aa_value, distance(top_left, pixel_uv) + aa_value, corner_radius);
+	}
+	if (pixel_uv.x > top_right.x && pixel_uv.y < top_right.y){
+		COLOR.a = smoothstep(distance(top_right, pixel_uv) - aa_value, distance(top_right, pixel_uv) + aa_value, corner_radius);
+	}
+	if (pixel_uv.x > bot_right.x && pixel_uv.y > bot_right.y){
+		COLOR.a = smoothstep(distance(bot_right, pixel_uv) - aa_value, distance(bot_right, pixel_uv) + aa_value, corner_radius);
+	}
+	if (pixel_uv.x < bot_left.x && pixel_uv.y > bot_left.y){
+		COLOR.a = smoothstep(distance(bot_left, pixel_uv) - aa_value, distance(bot_left, pixel_uv) + aa_value, corner_radius);
+	}
+	
+	COLOR.rgb += 0.5*(1.0-UV.y) - 0.5;
+	
+}"
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = SubResource( 9 )
+shader_param/rect_size = Vector2( 150, 33 )
+shader_param/corner_radius = 7.0
+
+[sub_resource type="Gradient" id=7]
+colors = PoolColorArray( 0.765625, 0.765625, 0.765625, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture2D" id=8]
+gradient = SubResource( 7 )
+width = 4
+height = 4
+fill_from = Vector2( 0.370833, 0.0916667 )
+fill_to = Vector2( 0.5625, 1 )
+
+[sub_resource type="StyleBoxFlat" id=11]
+bg_color = Color( 1, 0.654902, 0.654902, 0.0784314 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 0.487109, 0.487109, 1 )
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxEmpty" id=12]
+
+[sub_resource type="StyleBoxFlat" id=13]
+bg_color = Color( 0.776471, 1, 0.831373, 0.027451 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.627734, 1, 0.720801, 1 )
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="Gradient" id=25]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.0310421, 1 )
+colors = PoolColorArray( 0.164063, 0.164063, 0.164063, 1, 1, 1, 1, 1, 0.164706, 0.164706, 0.164706, 1 )
+
+[sub_resource type="GradientTexture" id=24]
+gradient = SubResource( 25 )
+
+[sub_resource type="ShaderMaterial" id=26]
+shader = ExtResource( 19 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 24 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 3
+shadow_offset = Vector2( -1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 4.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+border_width_top = 30
+border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 1, 1, 0 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color( 0.0243879, 0.126305, 0.22539, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+
+[node name="BenchmarkDisplay" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+theme_type_variation = "PanelContainerDark"
+
+[node name="Content" type="VBoxContainer" parent="PanelContainer"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1908.0
+margin_bottom = 1072.0
+
+[node name="BenchmarkToolBar" type="PanelContainer" parent="PanelContainer/Content"]
+margin_right = 1896.0
+margin_bottom = 52.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkToolBar"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1886.0
+margin_bottom = 42.0
+custom_constants/separation = 10
+
+[node name="BenchmarkButton" type="Button" parent="PanelContainer/Content/BenchmarkToolBar/HBoxContainer2"]
+unique_name_in_owner = true
+margin_right = 157.333
+margin_bottom = 32.0
+text = "Select Benchmark"
+
+[node name="BenchmarkMissingHintHighlight" type="Panel" parent="PanelContainer/Content/BenchmarkToolBar/HBoxContainer2/BenchmarkButton"]
+unique_name_in_owner = true
+material = SubResource( 29 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 30 )
+
+[node name="BenchmarkLabel" type="Label" parent="PanelContainer/Content/BenchmarkToolBar/HBoxContainer2"]
+unique_name_in_owner = true
+margin_left = 894.0
+margin_top = 6.0
+margin_right = 894.0
+margin_bottom = 26.0
+size_flags_horizontal = 6
+
+[node name="ExportReportButton" type="Button" parent="PanelContainer/Content/BenchmarkToolBar/HBoxContainer2"]
+unique_name_in_owner = true
+margin_left = 1631.0
+margin_right = 1876.33
+margin_bottom = 32.0
+text = "Export Complete Report to csv"
+
+[node name="BenchmarkResultView" type="HSplitContainer" parent="PanelContainer/Content"]
+unique_name_in_owner = true
+visible = false
+margin_top = 36.0
+margin_right = 1896.0
+margin_bottom = 1064.0
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Content/BenchmarkResultView"]
+margin_right = 942.0
+margin_bottom = 1028.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer"]
+margin_right = 942.0
+margin_bottom = 33.0
+
+[node name="FailingIndicator" type="Label" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+margin_right = 150.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_vertical = 5
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "0 Checks Failed"
+align = 1
+valign = 1
+
+[node name="Gradient" type="TextureRect" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/FailingIndicator"]
+self_modulate = Color( 0.956863, 0.266667, 0.266667, 1 )
+show_behind_parent = true
+material = SubResource( 10 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 8 )
+expand = true
+
+[node name="FailButtonFilter" type="Button" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/FailingIndicator"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 11 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/focus = SubResource( 12 )
+custom_styles/normal = SubResource( 12 )
+
+[node name="PassingIndicator" type="Label" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 154.0
+margin_right = 304.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_vertical = 5
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "0 Cheks Passed"
+align = 1
+valign = 1
+
+[node name="Gradient" type="TextureRect" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/PassingIndicator"]
+self_modulate = Color( 0, 0.8, 0.2, 1 )
+show_behind_parent = true
+material = SubResource( 10 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 8 )
+expand = true
+
+[node name="PassButtonFilter" type="Button" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/PassingIndicator"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/hover = SubResource( 13 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/focus = SubResource( 12 )
+custom_styles/normal = SubResource( 12 )
+
+[node name="LoadingIndicator" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 308.0
+margin_right = 801.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Progressing" type="TextureRect" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/LoadingIndicator"]
+modulate = Color( 1, 1, 1, 0.501961 )
+material = SubResource( 26 )
+margin_left = 192.0
+margin_top = 4.0
+margin_right = 222.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 30, 24 )
+size_flags_vertical = 4
+texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/LoadingIndicator"]
+margin_left = 226.0
+margin_top = 6.0
+margin_right = 300.0
+margin_bottom = 26.0
+text = "Loading..."
+
+[node name="Filter" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer" instance=ExtResource( 2 )]
+unique_name_in_owner = true
+margin_left = 805.0
+margin_right = 905.0
+items = [ "All", "Passing", "Failing" ]
+text = "All"
+
+[node name="Expand" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+visible = false
+margin_left = 872.0
+margin_right = 905.0
+icon_tex = ExtResource( 16 )
+
+[node name="Collapse" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+margin_left = 909.0
+margin_right = 942.0
+icon_tex = ExtResource( 17 )
+
+[node name="TreeContainer" type="ScrollContainer" parent="PanelContainer/Content/BenchmarkResultView/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 37.0
+margin_right = 942.0
+margin_bottom = 1028.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DetailView" type="PanelContainer" parent="PanelContainer/Content/BenchmarkResultView"]
+unique_name_in_owner = true
+margin_left = 954.0
+margin_right = 1896.0
+margin_bottom = 1028.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView"]
+unique_name_in_owner = true
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 932.0
+margin_bottom = 1018.0
+custom_constants/separation = 10
+
+[node name="TitleBar" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer"]
+margin_right = 922.0
+margin_bottom = 30.0
+custom_constants/separation = 10
+
+[node name="ResultCountLabelGroup" type="MarginContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/TitleBar"]
+margin_right = 58.0
+margin_bottom = 30.0
+custom_constants/margin_right = 0
+
+[node name="ResultCountPanel" type="PanelContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup"]
+unique_name_in_owner = true
+self_modulate = Color( 0.956863, 0.266667, 0.266667, 1 )
+margin_right = 58.0
+margin_bottom = 30.0
+custom_styles/panel = SubResource( 4 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/ResultCountPanel"]
+margin_left = 8.0
+margin_right = 50.0
+margin_bottom = 30.0
+
+[node name="ResultCountLabel" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/ResultCountPanel/HBoxContainer"]
+unique_name_in_owner = true
+margin_right = 24.0
+margin_bottom = 29.0
+theme_type_variation = "Label_24"
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_constants/line_spacing = -31
+text = "
+24"
+
+[node name="FailOrPassIcon" type="TextureRect" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/TitleBar/ResultCountLabelGroup/ResultCountPanel/HBoxContainer"]
+unique_name_in_owner = true
+self_modulate = Color( 0, 0.301961, 0.301961, 1 )
+margin_left = 28.0
+margin_top = 8.0
+margin_right = 42.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 14, 14 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 13 )
+expand = true
+stretch_mode = 6
+
+[node name="TitleLabel" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/TitleBar" instance=ExtResource( 5 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 68.0
+margin_right = 922.0
+margin_bottom = 30.0
+hint_tooltip = "Benchmark Title Placeholder"
+size_flags_horizontal = 3
+theme_type_variation = "Label_24"
+text = "Benchmark Title Placeholder"
+raw_text = "Benchmark Title Placeholder"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer"]
+visible = false
+margin_top = 40.0
+margin_right = 922.0
+margin_bottom = 44.0
+
+[node name="DescriptionLabel" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 40.0
+margin_right = 922.0
+margin_bottom = 60.0
+autowrap = true
+
+[node name="Separator" type="Control" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer"]
+visible = false
+margin_top = 40.0
+margin_right = 922.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="RiskContainer" type="PanelContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 40.0
+margin_right = 922.0
+margin_bottom = 128.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="RiskContent" type="VBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 914.0
+margin_bottom = 80.0
+custom_constants/separation = 14
+
+[node name="RiskTitleBar" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer/RiskContent"]
+margin_right = 906.0
+margin_bottom = 21.0
+custom_constants/separation = 8
+
+[node name="RiskTitle" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskTitleBar"]
+margin_right = 32.0
+margin_bottom = 20.0
+theme_type_variation = "LabelBold"
+text = "Risk"
+
+[node name="RiskSeverity" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskTitleBar"]
+unique_name_in_owner = true
+margin_left = 40.0
+margin_right = 105.0
+margin_bottom = 20.0
+theme_type_variation = "LabelBold"
+custom_colors/font_color = Color( 0.956863, 0.266667, 0.266667, 1 )
+text = "(Critical)"
+
+[node name="Spacer" type="Control" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskTitleBar"]
+margin_left = 113.0
+margin_right = 832.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+
+[node name="SeverityIndicator" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskTitleBar" instance=ExtResource( 10 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 840.0
+margin_right = 906.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 66, 21 )
+size_flags_horizontal = 1
+size_flags_vertical = 4
+
+[node name="SeverityBG" type="Panel" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskTitleBar/SeverityIndicator"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="RiskLabel" type="RichTextLabel" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer/RiskContent"]
+unique_name_in_owner = true
+margin_top = 35.0
+margin_right = 906.0
+margin_bottom = 76.0
+theme_type_variation = "RichLabelNormal"
+custom_styles/focus = SubResource( 1 )
+custom_styles/normal = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. "
+text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. "
+fit_content_height = true
+
+[node name="RemediationContainer" type="PanelContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 138.0
+margin_right = 922.0
+margin_bottom = 272.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="RemidiationContent" type="VBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RemediationContainer"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 914.0
+margin_bottom = 126.0
+custom_constants/separation = 14
+
+[node name="RemediationTitleBar" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RemediationContainer/RemidiationContent"]
+margin_right = 906.0
+margin_bottom = 20.0
+custom_constants/separation = 8
+
+[node name="RemediationTitle" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RemediationContainer/RemidiationContent/RemediationTitleBar"]
+margin_right = 94.0
+margin_bottom = 20.0
+theme_type_variation = "LabelBold"
+text = "Remediation"
+
+[node name="RemediationLabel" type="RichTextLabel" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RemediationContainer/RemidiationContent"]
+unique_name_in_owner = true
+margin_top = 34.0
+margin_right = 906.0
+margin_bottom = 75.0
+theme_type_variation = "RichLabelNormal"
+custom_styles/focus = SubResource( 1 )
+custom_styles/normal = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. "
+text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. "
+fit_content_height = true
+
+[node name="RemediationButton" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RemediationContainer/RemidiationContent" instance=ExtResource( 12 )]
+unique_name_in_owner = true
+margin_left = 731.0
+margin_top = 89.0
+margin_right = 906.0
+margin_bottom = 122.0
+rect_min_size = Vector2( 175, 33 )
+size_flags_horizontal = 8
+text = "More information"
+align = 2
+icon_tex = ExtResource( 11 )
+icon_margin = 8
+
+[node name="ResourcesContainer" type="PanelContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 282.0
+margin_right = 922.0
+margin_bottom = 625.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+
+[node name="ResourcesContent" type="VBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 914.0
+margin_bottom = 335.0
+custom_constants/separation = 14
+
+[node name="ResourcesTitleBar" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent"]
+margin_right = 906.0
+margin_bottom = 20.0
+
+[node name="ResourcesCountTitle" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/ResourcesTitleBar"]
+unique_name_in_owner = true
+margin_right = 20.0
+margin_bottom = 20.0
+theme_type_variation = "LabelBold"
+custom_colors/font_color = Color( 0.956863, 0.266667, 0.266667, 1 )
+text = "24"
+
+[node name="ResourcesTitle" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/ResourcesTitleBar"]
+unique_name_in_owner = true
+margin_left = 24.0
+margin_right = 156.0
+margin_bottom = 20.0
+theme_type_variation = "LabelBold"
+text = "Failing Resources"
+
+[node name="PanelContainer" type="ScrollContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent"]
+unique_name_in_owner = true
+margin_top = 34.0
+margin_right = 906.0
+margin_bottom = 285.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = "PanelContainerDark"
+
+[node name="ResourcesList" type="VBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/PanelContainer"]
+unique_name_in_owner = true
+margin_right = 906.0
+margin_bottom = 251.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LoadingOverlay" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/PanelContainer" instance=ExtResource( 7 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 906.0
+margin_bottom = 251.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ShowAllButton" type="Button" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent"]
+margin_left = 818.667
+margin_top = 299.0
+margin_right = 906.0
+margin_bottom = 331.0
+size_flags_horizontal = 8
+text = "Show All"
+
+[node name="ChecksTableContainer" type="PanelContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 635.0
+margin_right = 922.0
+margin_bottom = 978.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 914.0
+margin_bottom = 335.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer"]
+margin_right = 906.0
+margin_bottom = 24.0
+
+[node name="Label" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/HBoxContainer"]
+margin_top = 2.0
+margin_right = 106.0
+margin_bottom = 22.0
+theme_type_variation = "LabelBold"
+text = "Failing checks"
+
+[node name="ExportButton" type="Button" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/HBoxContainer"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 882.0
+margin_right = 906.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+hint_tooltip = "Export data to csv"
+mouse_filter = 1
+size_flags_horizontal = 10
+theme_type_variation = "ButtonBorderless"
+icon = ExtResource( 15 )
+flat = true
+expand_icon = true
+script = ExtResource( 14 )
+
+[node name="Header" type="HBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 906.0
+margin_bottom = 48.0
+custom_constants/separation = 0
+
+[node name="SeverityHeader" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/Header"]
+margin_right = 100.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
+custom_styles/normal = SubResource( 5 )
+text = "Severity"
+
+[node name="FailingNumberHeader" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/Header"]
+margin_left = 100.0
+margin_right = 238.0
+margin_bottom = 20.0
+custom_styles/normal = SubResource( 6 )
+text = "Failing Resources"
+
+[node name="CheckNameHeader" type="Label" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/Header"]
+margin_left = 238.0
+margin_right = 882.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+custom_styles/normal = SubResource( 5 )
+text = "Check Name"
+
+[node name="Spacer" type="Control" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/Header"]
+margin_left = 882.0
+margin_right = 906.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 24, 0 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer"]
+margin_top = 52.0
+margin_right = 906.0
+margin_bottom = 331.0
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+script = ExtResource( 9 )
+
+[node name="Content" type="MarginContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/ScrollContainer"]
+margin_right = 906.0
+margin_bottom = 279.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ChecksTableContent" type="VBoxContainer" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/ScrollContainer/Content"]
+unique_name_in_owner = true
+margin_right = 906.0
+margin_bottom = 279.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FailingVsPassingWidget" parent="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+margin_left = 808.0
+margin_top = 988.0
+margin_right = 922.0
+margin_bottom = 1008.0
+size_flags_horizontal = 8
+size_flags_vertical = 10
+size_flags_stretch_ratio = 0.0
+
+[node name="Control" type="Control" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+mouse_filter = 2
+
+[node name="BenchmarkPopupBG" type="ColorRect" parent="Control"]
+unique_name_in_owner = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.0470588, 0.0941176, 0.133333, 0.784314 )
+
+[node name="BenchmarkConfigPopup" parent="Control" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+visible = false
+margin_left = 536.0
+margin_top = 288.0
+margin_right = 1416.0
+margin_bottom = 888.0
+rect_min_size = Vector2( 0, 600 )
+window_title = "Benchmark Selection"
+
+[node name="Content" parent="Control/BenchmarkConfigPopup" index="0"]
+margin_right = 880.0
+margin_bottom = 600.0
+
+[node name="Titlebar" parent="Control/BenchmarkConfigPopup/Content" index="0"]
+margin_right = 880.0
+
+[node name="Label" parent="Control/BenchmarkConfigPopup/Content/Titlebar" index="0"]
+margin_right = 880.0
+text = "Benchmark Selection"
+
+[node name="Content" parent="Control/BenchmarkConfigPopup/Content" index="1"]
+margin_right = 880.0
+margin_bottom = 550.0
+
+[node name="BenchmarkConfigDialog" parent="Control/BenchmarkConfigPopup/Content/Content" index="0" instance=ExtResource( 8 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 870.0
+margin_bottom = 508.0
+
+[node name="Footer" parent="Control/BenchmarkConfigPopup/Content" index="2"]
+margin_top = 554.0
+margin_right = 880.0
+margin_bottom = 600.0
+
+[node name="Footerbar" parent="Control/BenchmarkConfigPopup/Content/Footer" index="0"]
+margin_right = 870.0
+
+[node name="AcceptButton" parent="Control/BenchmarkConfigPopup/Content/Footer/Footerbar" index="0"]
+margin_left = 784.0
+margin_right = 860.0
+
+[node name="ResizeButtonContainer" parent="Control/BenchmarkConfigPopup" index="1"]
+margin_right = 880.0
+margin_bottom = 600.0
+
+[node name="ExpandAccountsTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="visibility_changed" from="." to="." method="_on_BenchmarkDisplay_visibility_changed"]
+[connection signal="pressed" from="PanelContainer/Content/BenchmarkToolBar/HBoxContainer2/BenchmarkButton" to="." method="_on_BenchmarkButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/BenchmarkToolBar/HBoxContainer2/ExportReportButton" to="." method="_on_ExportReportButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/FailingIndicator/FailButtonFilter" to="." method="_on_FailButtonFilter_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/PassingIndicator/PassButtonFilter" to="." method="_on_PassButtonFilter_pressed"]
+[connection signal="option_changed" from="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/Filter" to="." method="_on_Filter_option_changed"]
+[connection signal="pressed" from="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/BenchmarkResultView/VBoxContainer/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
+[connection signal="meta_clicked" from="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/RiskContainer/RiskContent/RiskLabel" to="." method="_on_RemediationLabel_meta_clicked"]
+[connection signal="pressed" from="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ResourcesContainer/ResourcesContent/ShowAllButton" to="." method="_on_ShowAllButton_pressed"]
+[connection signal="pressed" from="PanelContainer/Content/BenchmarkResultView/DetailView/VBoxContainer/ChecksTableContainer/VBoxContainer/HBoxContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
+[connection signal="visibility_changed" from="Control/BenchmarkConfigPopup" to="." method="_on_BenchmarkConfigPopup_visibility_changed"]
+[connection signal="pressed" from="Control/BenchmarkConfigPopup/Content/Footer/Footerbar/AcceptButton" to="." method="_on_AcceptButton_pressed"]
+[connection signal="timeout" from="ExpandAccountsTimer" to="." method="_on_Timer_timeout"]
+
+[editable path="Control/BenchmarkConfigPopup"]

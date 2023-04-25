@@ -1,0 +1,63 @@
+name: Build and upload PyPI package
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Python Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: export project
+        id: export
+        uses: firebelley/godot-export@v4.1.0
+        with:
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.5.1/Godot_v3.5.1-stable_linux_headless.64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.5.1/Godot_v3.5.1-stable_export_templates.tpz
+          export_debug: true
+          relative_project_path: ./src
+          relative_export_path: ./builds
+          archive_output: false
+
+      - name: Install packages
+        run: |
+          pip install -U pip setuptools wheel build twine
+
+      - name: Copy the compiled UI to the Python package
+        run: |
+          rm -f ./resotoui/resotoui/ui/readme.txt
+          cp -a ./builds/HTML5/* ./resotoui/resotoui/ui/
+
+      - name: Build a binary wheel and a source tarball
+        working-directory: ./resotoui
+        run: >-
+          python -m
+          build
+          --sdist
+          --wheel
+          --outdir dist/
+
+      - name: Upload UI Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ui-artifact
+          path: ./resotoui/dist/
+
+      - name: Publish distribution to PyPI
+        if: github.ref_type == 'tag'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_RESOTOUI }}
+          packages_dir: ./resotoui/dist/

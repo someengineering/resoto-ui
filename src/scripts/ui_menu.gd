@@ -64,6 +64,11 @@ func _on_ButtonExplore_pressed():
 	close_menu()
 
 
+func _on_ButtonJobs_pressed():
+	_g.emit_signal("nav_change_section", "jobs")
+	close_menu()
+
+
 func _on_ButtonTerminals_pressed():
 	_g.emit_signal("nav_change_section", "resoto_shell_lite")
 	close_menu()
@@ -79,6 +84,11 @@ func _on_ButtonMessageLog_pressed():
 	close_menu()
 
 
+func _on_ButtonBenchmark_pressed():
+	_g.emit_signal("nav_change_section", "benchmark")
+	close_menu()
+
+
 func close_menu():
 	if hb_button.pressed:
 		hb_button.pressed = false
@@ -86,7 +96,6 @@ func close_menu():
 
 func on_ui_scale_changed():
 	hb_menu.rect_size.y = OS.window_size.y / _g.ui_scale
-	$"%ZoomScaleLabel".text = str(_g.ui_scale*100) + "%"
 
 
 func _on_HamburgerButton_hamburger_button_pressed(pressed:bool):
@@ -95,6 +104,7 @@ func _on_HamburgerButton_hamburger_button_pressed(pressed:bool):
 		click_detection.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		hb_tween.interpolate_property(hb_menu, "rect_position:x", hb_menu.rect_position.x, -400, 0.2, Tween.TRANS_EXPO, Tween.EASE_IN)
 	else:
+		_g.emit_signal("tooltip_hide")
 		shadow_side.mouse_filter = Control.MOUSE_FILTER_PASS
 		click_detection.mouse_filter = Control.MOUSE_FILTER_PASS
 		hb_tween.interpolate_property(hb_menu, "rect_position:x", hb_menu.rect_position.x, 0, 0.2, Tween.TRANS_EXPO, Tween.EASE_OUT)
@@ -142,38 +152,14 @@ func _on_ButtonUISettings_pressed():
 	close_menu()
 
 
-func _on_ButtonUIScaleMinus_pressed():
-	_g.emit_signal("ui_scale_decrease")
+func _on_ReshLiteBtn_pressed():
+	_g.emit_signal("resh_lite_popup")
 
 
-func _on_ButtonUIScalePlus_pressed():
-	_g.emit_signal("ui_scale_increase")
+func _on_JobsBtn_pressed():
+	$MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup.visible = !$MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup.visible
 
 
-# This still needs to be build back into the UI, but for now the PR is on ice.
-#func _on_config_menu_id_pressed(id : int) -> void:
-#	match id:
-#		0:
-#			pass
-#		1:
-#			# Download the model
-#			API.get_model(self)
-#		2:
-#			# Patch model by upload
-#			HtmlFiles.upload_file(self)
-#		3:
-#			# Upload Graph popup
-#			_g.popup_manager.open_popup("GraphPopup")
-#
-#
-## Download the model
-#func _on_get_model_done(_error:int, response) -> void:
-#	JavaScript.download_buffer(response.body,"model.json")
-#
-## Patch model by upload
-#func _on_upload_file_done(_filename:String, data) -> void:
-#	API.patch_model(data, self)
-#
-#
-#func _on_patch_model_done(_error:int, _response) -> void:
-#	print("Done patching model")
+func _on_SetupWizardButton_pressed():
+	_g.emit_signal("setup_wizard_start")
+	close_menu()

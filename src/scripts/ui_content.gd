@@ -9,7 +9,10 @@ onready var sections = {
 	"node_single_info": $Content/NodeSingleInfoComponent,
 	"node_list_info": $Content/NodeListElementComponent,
 	"setup_wizard": $Content/SetupWizardComponent,
-	"home": $Content/HomeComponent
+	"jobs": $Content/JobsComponent,
+	"aggregation_view": $Content/AggregationViewComponent,
+	"home": $Content/HomeComponent,
+	"benchmark": $Content/BenchmarkComponent
 }
 
 var active_section:= "home"
@@ -46,6 +49,7 @@ func change_section(new_section:String, update_navigation_state := true):
 	for c in content_sections.get_children():
 		c.hide()
 	
+	_g.emit_signal("tooltip_hide")
 	sections[active_section].show()
 	
 	if update_navigation_state:
@@ -75,7 +79,7 @@ func _on_navigate(navigation_args : Dictionary):
 		navigation_args["view"] = "home"
 	
 	var section = sections[navigation_args["view"]]
-		
+	
 	change_section(navigation_args["view"], false)
 	
 	if section is ComponentContainer:

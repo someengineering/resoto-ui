@@ -1,6 +1,8 @@
 extends Control
 
 signal started
+signal message_new
+signal progress_message
 signal all_done
 
 const ProgressElement = preload("res://components/collect_run_display/collect_run_display_progress_element.tscn")
@@ -9,6 +11,8 @@ enum Kinds {EVENT, ACTION}
 enum MessageTypes {TASK_STARTED, PROGRESS, ERROR, MERGE_OUTER_EDGES, POST_COLLECT, PRE_GENERATE_METRICS, GENERATE_METRICS, TASK_END}
 
 export (bool) var test_mode := false
+export (bool) var test_mode_manual := false
+export (bool) var wait_for_task_started := true
 
 const message_types : Dictionary = {
 	MessageTypes.TASK_STARTED : "task_started",
@@ -23,6 +27,7 @@ const message_types : Dictionary = {
 
 var full_run_events := []
 var run_errors := []
+var run_error_count := 0
 var error_string : String = ""
 var mouse_on_errors := false
 var display_messages := false
@@ -42,10 +47,17 @@ onready var elements := $PanelContainer/Content/ScrollContainer/Content/Elements
 
 
 func _ready():
+	if not wait_for_task_started:
+		display_messages = true
+	
 	if test_mode:
 		start_test()
 	else:
 		_g.connect("websocket_message", self, "receive_websocket_message")
+
+
+func update_title_text(_new:String):
+	$PanelContainer/Content/HBoxContainer/Label.text = _new
 
 
 func receive_websocket_message(_m:String):
@@ -54,6 +66,14 @@ func receive_websocket_message(_m:String):
 	var json_res : JSONParseResult = JSON.parse(_m)
 	if json_res.result:
 		parse_message(json_res.result)
+
+
+func wait_for_config_update():
+	refresh_elements()
+	$PanelContainer/Content/HBoxContainer/Done.hide()
+	var new_progress_element = ProgressElement.instance().init("Waiting for configuration update.", 1, 0)
+	elements.add_child(new_progress_element)
+	display_messages = false
 
 
 func wait_for_core():
@@ -82,15 +102,20 @@ func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
 func refresh_elements():
 	elements.queue_free()
 	var new_elements : VBoxContainer = VBoxContainer.new()
-	new_elements.rect_min_size = Vector2(800, 0)
+	new_elements.rect_min_size = Vector2(1, 1)
 	$PanelContainer/Content/ScrollContainer/Content.add_child(new_elements)
 	elements = new_elements
 
 
 func refresh_error_tooltip():
+	if run_errors.empty():
+		$PanelContainer/Content/HBoxContainer/ErrorBtn.hide()
+		$PanelContainer/Content/HBoxContainer/ErrorNumber.hide()
+		return
+		
 	$PanelContainer/Content/HBoxContainer/ErrorBtn.show()
 	$PanelContainer/Content/HBoxContainer/ErrorNumber.show()
-	$PanelContainer/Content/HBoxContainer/ErrorNumber.text = str(run_errors.size())
+	$PanelContainer/Content/HBoxContainer/ErrorNumber.text = str(run_error_count)
 	$PanelContainer/Content/HBoxContainer/ErrorNumber.rect_size.x = 1
 	
 	error_string = ""
@@ -101,6 +126,8 @@ func refresh_error_tooltip():
 
 
 func parse_message(_m:Dictionary):
+	if test_mode:
+		print(Utils.readable_dict(_m))
 	var m_type : String = _m.message_type
 	if not display_messages and m_type != message_types[MessageTypes.TASK_STARTED]:
 		return
@@ -108,6 +135,9 @@ func parse_message(_m:Dictionary):
 	if m_type == message_types[MessageTypes.TASK_STARTED]:
 		$CheckForWorkflows.stop()
 		emit_signal("started")
+		run_errors.clear()
+		run_error_count = 0
+		refresh_error_tooltip()
 		refresh_elements()
 		$PanelContainer/Content/HBoxContainer/Done.hide()
 		var new_progress_element = ProgressElement.instance().init("Starting Task", 1, 0)
@@ -117,11 +147,11 @@ func parse_message(_m:Dictionary):
 	elif m_type == message_types[MessageTypes.ERROR]:
 		# handle error
 		if _m.data.has("message"):
-			run_errors.append(_m.data.message)
-			
+			run_error_count += 1
+			if run_errors.size() < 100:
+				run_errors.append(_m.data.message)
 			var properties := {"error" : _m.data.message}
 			Analytics.event(Analytics.EventWizard.ERROR, properties)
-			
 			refresh_error_tooltip()
 	
 	elif m_type == message_types[MessageTypes.PROGRESS]:
@@ -131,7 +161,7 @@ func parse_message(_m:Dictionary):
 			msg = _m.data.message
 		else:
 			return
-		
+		emit_signal("progress_message")
 		refresh_elements()
 		for p in msg.parts:
 			var part_parent : Node = elements
@@ -150,10 +180,11 @@ func parse_message(_m:Dictionary):
 		var new_progress_element = ProgressElement.instance().init("Finished!", 1, 1)
 		_g.emit_signal("collect_run_finished")
 		elements.add_child(new_progress_element)
-		emit_signal("all_done")
+		emit_signal("all_done", run_errors.empty())
 		display_messages = false
 	else:
 		if _m.data.has("step"):
+			emit_signal("message_new")
 			refresh_elements()
 			var new_progress_element = ProgressElement.instance().init(_m.data.step, 1, 0)
 			elements.add_child(new_progress_element)
@@ -176,7 +207,7 @@ func find_or_create_parent(_path:Array, par:Node) -> Node:
 				par.add_sub_element(new_progress_element)
 			else:
 				par.add_child(new_progress_element)
-			return new_progress_element
+			par = new_progress_element
 		else:
 			par = new_par
 	return par
@@ -206,7 +237,22 @@ func start_test():
 		var jr : JSONParseResult = JSON.parse(tfe)
 		if !jr.error:
 			full_run_events.append(jr.result)
-	$Flip.start()
+	if not test_mode_manual:
+		$Flip.start()
+	else:
+		parse_message(full_run_events[0])
+
+# commented out so it doesn't trigger all the time.
+# Can be uncommented to manually test.
+#func _input(event):
+#	if not test_mode_manual:
+#		return
+#	if event.is_action_pressed("ui_right"):
+#		full_run_events_id = int(clamp(full_run_events_id+1, 0, full_run_events.size()))
+#		parse_message(full_run_events[full_run_events_id])
+#	if event.is_action_pressed("ui_left"):
+#		full_run_events_id = int(clamp(full_run_events_id-1, 0, full_run_events.size()))
+#		parse_message(full_run_events[full_run_events_id])
 
 
 var full_run_events_id := 0

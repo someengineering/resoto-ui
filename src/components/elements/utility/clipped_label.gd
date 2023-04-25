@@ -2,12 +2,13 @@ tool
 class_name ClippedLabel
 extends Label
 
-export var raw_text : String setget set_raw_text
+export (String) var raw_text : String setget set_raw_text
 
 func set_raw_text(new_raw_text : String) -> void:
 	raw_text = new_raw_text
 	update_text()
-	
+
+
 func update_text():
 	text = ""
 	var width := rect_size.x

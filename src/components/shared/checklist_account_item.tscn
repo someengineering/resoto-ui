@@ -1,0 +1,5 @@
+[gd_scene format=2]
+
+[node name="ChecklistAccountItem" type="CheckBox"]
+margin_right = 40.0
+margin_bottom = 32.0

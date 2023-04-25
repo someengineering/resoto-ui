@@ -1,4 +1,4 @@
-extends CustomPopupWindow
+extends CustomPopupWindowContainer
 
 signal widget_added(widget_data)
 signal widget_edited
@@ -12,12 +12,12 @@ const CheckBoxStyled := preload("res://components/elements/styled/icon_check_but
 const IntSpinBoxBig := preload("res://components/shared/int_spinbox_big.tscn")
 const DataSourceWidget := preload("res://components/dashboard/new_widget_popup/data_source_container.tscn")
 const ColorControllerUIScene := preload("res://components/dashboard/new_widget_popup/color_controller_ui.tscn")
+const LegendUIScene := preload("res://components/dashboard/new_widget_popup/legend_ui.tscn")
 
 var dashboard_container:DashboardContainer = null setget set_dashboard_container
 var current_widget_preview_name : String = "Indicator"
 var current_wdiget_properties : Dictionary = {}
 var preview_widget : BaseWidget = null
-var data_sources : Array = []
 var metrics : Dictionary = {}
 
 var widget_to_edit:Node	= null
@@ -36,12 +36,15 @@ var query : String = ""
 
 var data_sources_templates : Array = []
 
+var loading_overlay_scene := preload("res://components/dashboard/shared/loading_overlay.tscn")
+
 onready var data_source_container := find_node("DataSources")
 onready var widget_type_options := find_node("WidgetType")
 onready var preview_container := find_node("PreviewContainer")
 onready var widget_name_label := find_node("WidgetNameEdit")
 onready var options_container := find_node("Options")
 onready var controller_container := $"%ColorControllersContainer"
+onready var legends_container := $"%LegendsContainer"
 onready var data_source_types := $"%DataSourceTypeOptionButton"
 onready var new_data_source_container := $"%NewDataSourceHBox"
 onready var template_popup:= $TemplatePopup
@@ -61,7 +64,7 @@ func set_dashboard_container(_dc:DashboardContainer) -> void:
 		widget_type_options.add_item(key)
 
 
-func _on_AddWidgetButton_pressed() -> void:
+func _on_AcceptButton_pressed() -> void:
 	var widget
 	
 	if widget_to_edit == null or duplicating:
@@ -69,10 +72,10 @@ func _on_AddWidgetButton_pressed() -> void:
 		widget = dashboard_container.WidgetScenes[widget_scene_type].instance()
 	else:
 		widget = widget_to_edit.widget
-		
+	
 	var properties = get_preview_widget_properties()
 	
-	for key in get_preview_widget_properties():
+	for key in properties:
 		widget[key] = properties[key]
 		
 	var new_data_sources : Array = []
@@ -104,7 +107,7 @@ func _on_AddWidgetButton_pressed() -> void:
 		widget_to_edit = null
 		emit_signal("widget_edited")
 	
-	hide()
+	_hide_popup()
 	
 	var event : int 
 	if duplicating:
@@ -130,6 +133,8 @@ func _on_WidgetType_item_selected(_index : int) -> void:
 		return
 	
 	create_preview(widget_type_options.text)
+	update_legends()
+	check_for_data_sources()
 
 
 func create_preview(widget_type : String = "Indicator") -> void:
@@ -140,15 +145,17 @@ func create_preview(widget_type : String = "Indicator") -> void:
 		preview_widget = dashboard_container.WidgetScenes[widget_type].instance()
 	else:
 		preview_widget = load(widget_to_edit.widget.filename).instance()
-		for key in get_preview_widget_properties():
+		for key in get_preview_widget_properties(widget_to_edit.widget):
 			preview_widget[key] = widget_to_edit.widget[key]
+			prints(key, widget_to_edit.widget[key])
 			
 		for child in widget_to_edit.widget.get_children():
 			if child is ColorController:
 				preview_widget.get_node(child.name).conditions = child.conditions.duplicate()
-	
 	create_properties_options()
 	
+	preview_widget.is_preview_widget = true
+	preview_widget.add_child(loading_overlay_scene.instance())
 	preview_container.add_child(preview_widget)
 	preview_widget.connect("available_properties_changed", self, "create_properties_options")
 	preview_widget.connect("available_properties_changed", self, "update_preview")
@@ -167,6 +174,7 @@ func create_preview(widget_type : String = "Indicator") -> void:
 	data_source_types.disabled = data_source_types.get_item_count() <= 1
 	data_source_types.emit_signal("item_selected", 0)
 	update_new_data_vis()
+	check_for_data_sources()
 
 
 func create_properties_options():
@@ -225,7 +233,6 @@ func get_control_for_property(property : Dictionary) -> Control:
 			control_signal = "value_changed"
 		TYPE_BOOL:
 			control = CheckBoxStyled.instance()
-			#control.size_flags_horizontal = 0
 			control.pressed = preview_widget[property.name]
 			control_signal = "toggled"
 		TYPE_STRING:
@@ -240,18 +247,18 @@ func get_control_for_property(property : Dictionary) -> Control:
 	
 	control.connect(control_signal, preview_widget, "set_"+property.name)
 	control.size_flags_horizontal |= SIZE_EXPAND
-			
+	
 	return control
 
 
-func get_preview_widget_properties() -> Dictionary:
+func get_preview_widget_properties(widget = preview_widget) -> Dictionary:
 	var found_settings := false
 	var properties := {}
-	for property in preview_widget.get_property_list():
+	for property in widget.get_property_list():
 		if found_settings:
 			if property.type == TYPE_NIL:
 				break
-			properties[property.name] = preview_widget[property.name]
+			properties[property.name] = widget[property.name]
 		elif property.name == "Widget Settings":
 			 found_settings = true
 	return properties
@@ -260,6 +267,11 @@ func get_preview_widget_properties() -> Dictionary:
 func _on_NameEdit_text_changed(new_text : String) -> void:
 	if preview_container.get_child_count() > 0:
 		$"%WidgetPreviewTitleLabel".text = new_text
+
+
+func check_for_data_sources():
+	$"%DataSourceMissingHintHighlight".visible = data_source_container.get_child_count() == 0
+	$"%DataSourceMissingHint".visible = data_source_container.get_child_count() == 0
 
 
 func _on_get_config_id_done(_error, _response, _config_key) -> void:
@@ -272,6 +284,7 @@ func clear_data_sources():
 	for data_source in data_source_container.get_children():
 		data_source_container.remove_child(data_source)
 		data_source.queue_free()
+	check_for_data_sources()
 
 
 func _on_NewWidgetPopup_about_to_show() -> void:
@@ -304,6 +317,8 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 		current_widget_preview_name = widget_to_edit.widget.widget_type_id
 		widget_name_label.text = widget_to_edit.title
 		$"%WidgetPreviewTitleLabel".text = widget_to_edit.title
+		var current_widget_index : int = dashboard_container.WidgetScenes.keys().find(widget_to_edit.widget.widget_type_id)
+		widget_type_options.select(current_widget_index)
 		for data_source in widget_to_edit.data_sources:
 			var ds = DataSourceWidget.instance()
 			ds.datasource_type = data_source.type
@@ -323,6 +338,8 @@ func _on_NewWidgetPopup_about_to_show() -> void:
 		update_preview()
 		
 	update_new_data_vis()
+	update_legends()
+	check_for_data_sources()
 
 
 func _on_AddDataSource_pressed() -> void:
@@ -337,6 +354,25 @@ func _on_AddDataSource_pressed() -> void:
 	
 	template_popup.popup(Rect2(add_data_source_button.rect_global_position, Vector2.ONE))
 
+
+func update_legends():
+	for legend in legends_container.get_children():
+		legends_container.remove_child(legend)
+		legend.queue_free()
+		
+	var idx := 0
+	for datasource in data_source_container.get_children():
+		var ds = datasource.data_source
+		if "legend" in ds and preview_widget.widget_type_id == "Chart":
+			var legend_ui = LegendUIScene.instance()
+			legend_ui.index = idx
+			legend_ui.text = ds.legend
+			legend_ui.stack = ds.stacked
+			legends_container.add_child(legend_ui)
+			ds.connect("last_metric_keys_changed", legend_ui, "update_legend_help")
+			legend_ui.connect("legend_changed", datasource, "_on_legend_changed")
+			legend_ui.connect("stack_changed", datasource, "_on_stack_changed")
+		idx += 1
 
 func _on_TemplateButton_pressed(_template_id:int) -> void:
 	_on_AddDataSource(_template_id)
@@ -380,6 +416,9 @@ func _on_AddDataSource(template_id:int= -1) -> void:
 		context["template"] = data_sources_templates[template_id]["Name"]
 
 	Analytics.event(event, context)
+	
+	update_legends()
+	check_for_data_sources()
 
 
 func delete_datasource(_data_source:Node) -> void:
@@ -387,6 +426,8 @@ func delete_datasource(_data_source:Node) -> void:
 	yield(_data_source, "tree_exited")
 	update_preview()
 	Analytics.event(Analytics.EventsDatasource.DELETE)
+	update_legends()
+	check_for_data_sources()
 
 
 func update_new_data_vis():
@@ -417,8 +458,23 @@ func update_preview() -> void:
 				attr["to"] = to_date
 			
 		datasource.data_source.make_query(dashboard_filters, attr)
+		
+		if not datasource.data_source.is_connected("query_status", self, "_on_data_source_query_status"):
+			datasource.data_source.connect("query_status", self, "_on_data_source_query_status", [], CONNECT_ONESHOT)
+		preview_widget.get_node("LoadingOverlay").show()
 
 
+func _on_data_source_query_status(_status:int, _title:String, _message:=""):
+	var querying := false
+	for datasource in data_source_container.get_children():
+		var ds = datasource.data_source
+		if ds.is_executing_query():
+			querying = true
+			break
+			
+	if not querying:
+		preview_widget.get_node("LoadingOverlay").hide()
+	
 func duplicate_widget(widget) -> void:
 	duplicating = true
 	widget_to_edit = widget
@@ -439,7 +495,6 @@ func _close_popup():
 func _on_NewWidgetPopup_popup_hide():
 	duplicating = false
 	widget_to_edit = null
-	hide()
 	if preview_widget != null and is_instance_valid(preview_widget):
 		preview_widget.queue_free()
 	clear_data_sources()

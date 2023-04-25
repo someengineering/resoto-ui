@@ -2,12 +2,13 @@ extends Node
 
 var ws : WebSocketClient = null
 var ws_header : PoolStringArray = []
+var auto_reconnect := true
 
 
 func _ready():
 	ws = WebSocketClient.new()
 	ws.verify_ssl = false
-	_g.connect("connected_to_resotocore", self, "connect_websockets")
+	_g.connect("connected_to_resotocore", self, "connect_websockets", [true])
 
 
 func refresh_jwt_header() -> void:
@@ -33,8 +34,13 @@ func _exit_tree():
 	ws.disconnect_from_host()
 
 
-func connect_websockets():
-	if ws.get_connection_status() == ws.CONNECTION_CONNECTING || ws.get_connection_status() == ws.CONNECTION_CONNECTED:
+func connect_websockets(_forced:=false):
+	if not _forced and (ws.get_connection_status() == ws.CONNECTION_CONNECTING or ws.get_connection_status() == ws.CONNECTION_CONNECTED):
+		return
+	
+	if _forced and ws.get_connection_status() == ws.CONNECTION_CONNECTING:
+		ws.disconnect_from_host()
+		connect_websockets(true)
 		return
 	
 	# Connect signals
@@ -50,6 +56,7 @@ func connect_websockets():
 	var ws_url = "ws://%s:%s/events" if not API.use_ssl else "wss://%s:%s/events"
 	ws_url = ws_url % [API.adress, API.port]
 	
+	set_process(true)
 	var err : int
 	if OS.has_feature("HTML5"):
 		refresh_auth_cookie()
@@ -69,6 +76,8 @@ func _connection_closed(_error):
 	print("Websocket: Connection closed")
 	print(_error)
 	set_process(false)
+	if auto_reconnect:
+		connect_websockets()
 
 
 func _connection_error():
@@ -91,5 +100,5 @@ func _on_data():
 
 func test_websocket():
 	if ws.get_peer(1).is_connected_to_host():
-		var test_string : String = JSON.print("")
+		var test_string : String = JSON.print({"kind": "event", "message_type": "task_started", "data": {}})
 		ws.get_peer(1).put_packet(test_string.to_utf8())

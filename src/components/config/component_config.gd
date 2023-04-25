@@ -1,8 +1,8 @@
 extends Control
 
 export var descriptions_as_hints:bool = true
-
-const BASE_KINDS:Array = [
+const DEFAULT_COLLAPSED_CATEGORIES : Array = ["ui", "dashboard", "report"]
+const BASE_KINDS : Array = [
 	"string",
 	"int32",
 	"int64",
@@ -15,8 +15,8 @@ const BASE_KINDS:Array = [
 	"duration",
 	"trafo.duration_to_datetime",
 	]
-const ProtectedConfigs:Array= ["resoto.core", "resoto.worker", "resoto.core.commands", "resoto.metrics"]
-const DashboardPrefix:= "resoto.ui.dashboard."
+const ProtectedConfigs : Array= ["resoto.core", "resoto.worker", "resoto.core.commands", "resoto.metrics"]
+const DashboardPrefix := "resoto.ui.dashboard."
 const DefaultConfig : String = "resoto.core"
 
 signal model_ready
@@ -32,21 +32,22 @@ var config_put_req: ResotoAPI.Request
 
 var config_model : Dictionary = {}
 var config_keys : Array
-var unfiltered_keys : Array
 
 var active_config_key : String = ""
 var active_config : Dictionary
+var active_config_overrides : Dictionary
+var elements_in_overrides : Array = []
 var config_page : Control = null
+var show_descriptions := true
 
-var show_dashboards : bool = false
+var use_raw_mode : bool = false
 
 var tabs_content : Dictionary = {}
 var tabs_content_keys : Array = []
 var _active_tab_id : int = -1
 
 onready var tabs : Tabs = find_node("Tabs")
-onready var content = find_node("Content")
-onready var config_combo = $VBox/Toolbar/Box/ConfigCombo
+onready var content = $"%Content"
 
 
 func _input(event:InputEvent):
@@ -58,7 +59,7 @@ func history_navigate_to_config(_config_key:String):
 	if active_config_key == "":
 		active_config_key = _config_key
 	else:
-		config_combo.text = _config_key
+		open_configuration(_config_key)
 
 
 func start() -> void:
@@ -70,7 +71,7 @@ func start() -> void:
 func load_configs() -> void:
 	API.get_configs(self)
 	yield(self, "config_list_refreshed")
-	config_combo.set_text(active_config_key)
+	open_configuration(active_config_key)
 	_g.emit_signal("add_toast", "Configs received from Resoto Core", "", 0, self)
 
 
@@ -78,7 +79,26 @@ func _on_get_config_model_done(_error:int, _response:ResotoAPI.Response) -> void
 	if _error:
 		return
 	config_model = _response.transformed.result.kinds
+	config_model = model_merge_base_classes(config_model)
 	emit_signal("model_ready")
+
+
+func model_merge_base_classes(_model:Dictionary):
+	var merged_model : Dictionary = _model.duplicate(true)
+	for c in merged_model.keys():
+		var merged_properties : Array = properties_from_base_classes(merged_model[c], [], _model)
+		if not merged_properties.empty() and merged_model[c].has("properties"):
+			merged_model[c].properties.append_array(merged_properties)
+	return merged_model
+
+
+func properties_from_base_classes(class_dict:Dictionary, merged_properties:Array, _unmodified_model:Dictionary):
+	if class_dict.has("properties") and class_dict.has("bases") and not class_dict.bases.empty():
+		for base_class in class_dict.bases:
+			if _unmodified_model.has(base_class) and _unmodified_model[base_class].has("properties"):
+				merged_properties.append_array(_unmodified_model[base_class].properties)
+			merged_properties = properties_from_base_classes(_unmodified_model[base_class], merged_properties, _unmodified_model)
+	return merged_properties
 
 
 func _on_get_configs_done(_error:int, _response:ResotoAPI.Response) -> void:
@@ -90,35 +110,90 @@ func _on_get_configs_done(_error:int, _response:ResotoAPI.Response) -> void:
 		yield(self, "model_ready")
 	
 	show()
-	unfiltered_keys = _response.transformed.result
-	config_keys = []
-	for key in unfiltered_keys:
-		if not show_dashboards and key.begins_with(DashboardPrefix):
-			continue
-		config_keys.append(key)
+	config_keys = _response.transformed.result
 	
 	if config_keys.empty():
 		_g.emit_signal("add_toast", "Could not get Configs from Resoto Core!", "", 1, self)
 		return
 	
-	config_combo.set_items(config_keys)
-	if not unfiltered_keys.has(active_config_key):
+	create_config_tree(config_keys)
+	if not config_keys.has(active_config_key):
 		active_config_key = DefaultConfig
-		config_combo.set_text(active_config_key)
 	
 	emit_signal("config_list_refreshed")
 
 
+func create_config_tree(_config_keys:Array):
+	var tree : Tree = $"%ConfigSelectionTree"
+	tree.clear()
+	var root = tree.create_item()
+	tree.set_hide_root(true)
+	
+	for string in _config_keys:
+		var current_parent = root
+		var keys = string.split(".")
+		for i in keys.size():
+			if i == 0:
+				continue
+			else:
+				var already_exists = false
+				for pc in tree_get_item_children(current_parent):
+					if pc.get_text(0) == keys[i]:
+						current_parent = pc
+						already_exists = true
+						break
+				if not already_exists:
+					var new_cat = tree.create_item(current_parent)
+					if i == keys.size()-1:
+						new_cat.set_text(0, keys[i])
+						new_cat.set_icon(0, load("res://assets/icons/icon_128_settings.svg"))
+						new_cat.set_icon_max_width(0, 20)
+						new_cat.set_icon_modulate(0, Style.col_map[Style.c.LIGHT])
+					else:
+						new_cat.set_text(0, keys[i])
+						new_cat.set_custom_color(0, Style.col_map[Style.c.NORMAL])
+						new_cat.set_icon(0, load("res://assets/icons/icon_128_folder.svg"))
+						new_cat.set_selectable(0, false)
+						new_cat.set_icon_max_width(0, 20)
+						new_cat.set_icon_modulate(0, Style.col_map[Style.c.NORMAL])
+					if DEFAULT_COLLAPSED_CATEGORIES.has(keys[i]):
+						new_cat.collapsed = true
+					new_cat.set_metadata(0, string)
+					if string == active_config_key:
+						new_cat.select(0)
+					current_parent = new_cat
+				else:
+					continue
+	$"%ConfigLabel".text = "Config: %s" % active_config_key
+
+
+func _on_ConfigSelectionTree_item_selected():
+	var tree : Tree = $"%ConfigSelectionTree"
+	var selected_tree_item :TreeItem = tree.get_selected()
+	open_configuration(selected_tree_item.get_metadata(0))
+
+
+func tree_get_item_children(item:TreeItem)->Array:
+	item = item.get_children()
+	var children = []
+	while item:
+		children.append(item)
+		item = item.get_next()
+	return children
+
+
 func open_configuration(_config_key:String) -> void:
+	$"%ConfigLabel".text = "Config: %s" % active_config_key
 	# Cancel the old request if configs are changed in quick succession
 	if config_req:
-		config_req.cancel(ERR_PRINTER_ON_FIRE)
+		config_req.cancel()
 	active_config_key = _config_key
 	config_page = null
 	active_config = {}
+	active_config_overrides = {}
 	for c in content.get_children():
 		c.queue_free()
-	config_req = API.get_config_id(self, _config_key)
+	config_req = API.get_config_id(self, _config_key, "_on_get_config_id_done", true)
 
 
 func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_key:String) -> void:
@@ -128,11 +203,15 @@ func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_ke
 		# Handle eventual error... if we arrive here, any other error should be
 		# extremely unlikely
 		return
-	active_config = _response.transformed.result
+	active_config = _response.transformed.result["config"]
+	var overrides = _response.transformed.result["overrides"]
+	active_config_overrides = overrides if overrides != null else {} 
 	build_config_page()
 
 
 func build_config_page():
+	if not use_raw_mode:
+		$"%RawViewButton".pressed = false
 	var new_config_page = add_new_config_page(active_config_key)
 	new_config_page.set_meta("main_level", true)
 	new_config_page.key = active_config_key
@@ -140,9 +219,11 @@ func build_config_page():
 	new_config_page.kind = active_config_key
 	new_config_page.value = active_config
 	var new_elements = []
+	elements_in_overrides = []
 	
 	# If the config is completely empty, just add a raw json display
 	if active_config.keys().empty():
+		$"%RawViewButton".pressed = true
 		var new_element = add_element("_", "", {}, new_config_page, false)
 		new_elements.append(new_element)
 	else:
@@ -154,6 +235,8 @@ func build_config_page():
 			new_elements.append(new_element)
 	
 	new_config_page.content_elements = new_elements
+	for element in elements_in_overrides:
+		mark_overrides(element)
 	
 	# If there is only one main key in the dictionary / config, expand it when showing the tab.
 	var count_complex:= 0
@@ -169,8 +252,30 @@ func build_config_page():
 	if count_complex == 1:
 		first_complex.set_expand_fixed()
 	config_page = new_config_page
+	
+	$"%ShowDescriptionsButton".visible = not $"%RawViewButton".pressed
+	$"%SearchLineEdit".visible = not $"%RawViewButton".pressed
+	_on_ShowDescriptionsButton_pressed()
+	
 	emit_signal("pages_built")
 
+
+func mark_overrides(element, override_dict := active_config_overrides):
+	var type = get_kind_type(element.kind) if "kind" in element else ""
+	if type in ["complex", "dict"] or (type == "" and "content_elements" in element):
+			var element_name : String = element.key
+			var override = override_dict[element_name]
+			if "enum_values" in element:
+				element.overridden = true
+			elif "content_elements" in element:
+				for sub_element in element.content_elements:
+					if typeof(override) == TYPE_DICTIONARY:
+						if sub_element.key in override:
+							mark_overrides(sub_element, override)
+					else:
+						mark_overrides(sub_element, override_dict)
+	else:
+		element.overridden = true
 
 func add_new_config_page(_title:String) -> Node:
 	var new_config_page = preload("res://components/config/config_templates/component_config_template_config_page.tscn").instance()
@@ -183,9 +288,6 @@ func save_config() -> void:
 	var json_config_result = convert_active_config_to_string()
 	if json_config_result.error != OK:
 		_g.emit_signal("add_toast", "Error saving configuration.", "", 1, self)
-		return
-	if JSON.print(json_config_result.dict).hash() == JSON.print(active_config).hash():
-		_g.emit_signal("add_toast", "No semantic changes.", "", 0, self)
 		return
 	
 	config_put_req = API.put_config_id(self, active_config_key, json_config_result.string)
@@ -201,6 +303,8 @@ func convert_active_config_to_string() -> Dictionary:
 	var new_config:Dictionary = {}
 	for config_element in config_page.content_elements:
 		if "key" in config_element:
+			if config_element.key == "slack":
+				pass
 			new_config[config_element.key] = config_element.value
 		else:
 			new_config = config_element.value
@@ -209,7 +313,6 @@ func convert_active_config_to_string() -> Dictionary:
 				result.error = FAILED
 				return result
 	result.dict = new_config
-	
 	var json_string = JSON.print(new_config)
 	if json_string.begins_with("{\"\":"):
 		json_string = json_string.trim_prefix("{\"\":").trim_suffix("}")
@@ -263,14 +366,17 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 	var model_search = find_in_model(kind)
 	var model = model_search[1]
 	
-	if BASE_KINDS.has(kind):
+	if _name == "slack":
+		pass
+	
+	if BASE_KINDS.has(kind) and not use_raw_mode:
 		# Create a new "Simple"
 		var simple_property = null
 		if _parent.model and _parent.model.has("properties"):
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_simple(_name, _property_value, kind, simple_property, _parent, default)
 	
-	elif kind.begins_with("dictionary"):
+	elif kind.begins_with("dictionary") and not kind.ends_with("[]") and not use_raw_mode:
 		# Create a new Dictionary 
 #		print("=> Dict :", _name, ">", kind)
 		var simple_property = null
@@ -278,35 +384,51 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_dict(_name, kind, _property_value, simple_property, _parent, default)
 	
-	elif "[]" in kind:
+	elif kind.ends_with("[]") and not use_raw_mode:
 		# Create a new Array
 		var simple_property = null
 		if _parent.model and _parent.model.has("properties"):
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_array(_name, _property_value, kind, simple_property, _parent, default)
 	
-	elif model and model.has("enum"):
+	elif model and model.has("enum") and not use_raw_mode:
 		# Create a new Enum selection field
 		var simple_property = null
 		if _parent.model and _parent.model.has("properties"):
 			simple_property = find_in_properties(_parent.model.properties, _name)
 		return create_enum(_name, _property_value, kind, simple_property, model.enum, _parent, default)
 	
-	elif model and model.has("properties"):
+	elif model and model.has("properties") and not use_raw_mode:
 		# Create a new Complex, either by scratch or with values.
 		var new_elements:Array = []
+		
 		if not default:
-			# the new element has values, it's not a blank new value.
-			for key in _property_value.keys():
-
+			var property_keys : Array = []
+			if config_model.has(kind) and config_model[kind].has("properties"):
+				for properties in config_model[kind].properties:
+					property_keys.append(properties.name)
+			
+			# This is a fallback for the highest level of the config
+			# (Because the first dictionary is not rendered)
+			if not property_keys.has(_property_value.keys()[0]):
+				property_keys = _property_value.keys()
+			
+			for key in property_keys:
 				var element = _property_value[key]
 				var element_property = find_in_properties(model.properties, key)
-				
 				if element_property.empty():
 					var element_model_search = find_in_model(key)
-					var element_model = element_model_search[1].properties
-					var element_kind:String = key if not (element_model and element_model.has("kind")) else element_model.kind
-					new_elements.append( create_complex(key, element_kind, element, element_model, _parent, default) )
+					if element_model_search[1] != null:
+						var element_model = element_model_search[1].properties
+						var element_kind:String = key if not (element_model and element_model.has("kind")) else element_model.kind
+						new_elements.append( create_complex(key, element_kind, element, element_model, _parent, default) )
+					else:
+						# If there is a problem with the model / data, use the raw view as fallback
+						_g.emit_signal("add_toast", "Config Model Error", "The current configuration has properties not described in the model, fallback raw view will be used.", 1, self)
+						use_raw_mode = true
+						$"%RawViewButton".pressed = true
+						open_configuration(active_config_key)
+						return
 				else:
 					if is_fqn(element_property.kind):
 						new_elements.append( create_complex(key, element_property.kind, element, element_property, _parent, default) )
@@ -322,7 +444,11 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			pass
 		return new_elements
 	else:
-		var error_message = "Configuration was not found in model.\nDisplaying configurations in raw JSON:"
+		var error_message = ""
+		if not use_raw_mode:
+			error_message = "Configuration was not found in model.\nDisplaying configurations in raw JSON:"
+			$"%RawViewButton".pressed = true
+		use_raw_mode = false
 		return create_custom(error_message, _property_value, _parent)
 
 
@@ -346,7 +472,10 @@ func create_custom(_text:String, _property_value, _parent:Control):
 		_parent.add_child(new_custom)
 	
 	new_custom.value = _property_value
-	new_custom.get_node("MessageLabel").text = _text
+	if _text != "":
+		new_custom.get_node("MessageLabel").text = _text
+	else:
+		new_custom.get_node("MessageLabel").hide()
 	
 	return new_custom
 	
@@ -389,6 +518,8 @@ func create_complex(_name:String, kind:String, _property_value, properties, _par
 	else:
 		new_complex.description = ""
 	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_complex)
 	return new_complex
 
 
@@ -420,6 +551,8 @@ func create_simple(_name:String, _value, _kind, _properties, _parent:Control, de
 		new_value.description = ""
 		new_value.required = false
 	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_value)
 	return new_value
 
 
@@ -449,6 +582,8 @@ func create_enum(_name:String, _value, _kind, _properties, _enum_values, _parent
 		new_value.description = ""
 		new_value.required = false
 	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_value)
 	return new_value
 
 
@@ -491,6 +626,8 @@ func create_array(_name:String, _value, _kind, _properties, _parent:Control, def
 		new_array_container.is_null = true
 	new_array_container.value = _value
 	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_array_container)
 	return new_array_container
 
 
@@ -530,7 +667,8 @@ func create_dict(_name:String, _kind, _value, _properties, _parent:Control, defa
 	if _value == null:
 		new_dict_container.is_null = true
 	new_dict_container.value = _value
-	
+	if _name in active_config_overrides:
+		elements_in_overrides.append(new_dict_container)
 	return new_dict_container
 
 
@@ -596,7 +734,7 @@ func _on_add_confirm_response(_button_clicked:String, _value:String):
 		# To make sure no config was created while editing, check for new config keys:
 		API.get_configs(self)
 		yield(self, "config_list_refreshed")
-		if unfiltered_keys.has(_value):
+		if config_keys.has(_value):
 			_g.emit_signal("add_toast", "Config Creation failed", "A Configuration with that name already exists in Resoto Core", 1, self)
 			return
 		# Show loading animation
@@ -658,7 +796,7 @@ func _on_duplicate_confirm_response(_button_clicked:String, _value:String):
 		# To make sure no config was created while editing, check for new config keys:
 		API.get_configs(self)
 		yield(self, "config_list_refreshed")
-		if unfiltered_keys.has(_value):
+		if config_keys.has(_value):
 			_g.emit_signal("add_toast", "Duplicating Config failed", "A Configuration with that name already exists in Resoto Core", 1, self)
 			return
 		
@@ -696,7 +834,7 @@ func _on_rename_confirm_response(_button_clicked:String, _value:String):
 		# To make sure no config was created while editing, check for new config keys:
 		API.get_configs(self)
 		yield(self, "config_list_refreshed")
-		if unfiltered_keys.has(_value):
+		if config_keys.has(_value):
 			_g.emit_signal("add_toast", "Renaming failed", "A Configuration with that name already exists in Resoto Core", 1, self)
 			return
 		
@@ -707,6 +845,45 @@ func _on_rename_confirm_response(_button_clicked:String, _value:String):
 		active_config_key = rename_new_name
 
 
-func _on_ShowDashboardsButton_toggled(button_pressed):
-	show_dashboards = button_pressed
-	load_configs()
+func _on_ShowDescriptionsButton_pressed():
+	show_descriptions = $"%ShowDescriptionsButton".pressed
+	get_tree().call_group("config_description_toggle", "show_description", show_descriptions)
+
+
+func _on_RawViewButton_pressed():
+	use_raw_mode = $"%RawViewButton".pressed
+	open_configuration(active_config_key)
+
+
+func _on_SearchLineEdit_text_changed(new_text):
+	var callables := get_tree().get_nodes_in_group("config_template_element")
+	get_tree().call_group("config_template_element", "expand", false)
+	if new_text == "":
+		get_tree().call_group("config_template_element", "show")
+		return
+	else:
+		get_tree().call_group("config_template_element", "hide")
+	
+	yield(VisualServer, "frame_post_draw")
+	var searchables := get_tree().get_nodes_in_group("config_key_owner")
+	for s in searchables:
+		if (new_text in s.key.to_lower()
+		or ("description" in s and new_text in s.description.to_lower())):
+			unhide_recursive_up(s)
+			unhide_recursive_down(s, callables)
+
+
+func unhide_recursive_down(_element:Node, _callables:Array):
+	for c in _callables:
+		if c.get_parent().owner == _element:
+			c.show()
+			unhide_recursive_down(c, _callables)
+
+
+func unhide_recursive_up(_element:Node):
+	if _element == self:
+		return
+	_element.show()
+	if _element.has_method("expand"):
+		_element.expand(true)
+	unhide_recursive_up(_element.get_parent())

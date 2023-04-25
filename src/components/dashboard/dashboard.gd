@@ -1,6 +1,9 @@
 extends Control
 
 signal need_to_resize(y)
+signal widget_scrolling
+
+export (NodePath) var scrollcontainer_path : NodePath = ""
 
 export var x_grid_ratio := 10.0 
 export var y_grid_size := 100.0 
@@ -15,6 +18,7 @@ var ts_end : int
 var step : int
 var widget_reveal_timer:= Timer.new()
 var appear_tween:= Tween.new()
+var scroll_container:ScrollContainer
 
 var filters : Dictionary = {
 	"cloud" : "",
@@ -36,6 +40,7 @@ onready var widget_container_scene := preload("res://components/dashboard/contai
 
 
 func _ready():
+	scroll_container = get_node(scrollcontainer_path)
 	add_child(widget_reveal_timer)
 	widget_reveal_timer.wait_time = 0.1
 	widget_reveal_timer.one_shot = true
@@ -72,10 +77,15 @@ func add_widget(widget_data : Dictionary, _show_after_creation:=false) -> Widget
 			widget_data["widget_type"] = remap_old_data[widget_data.scene]
 		widget = dashboard_container.WidgetScenes[widget_data.widget_type].instance()
 	
+	if widget.has_signal("scrolling"):
+		widget.connect("scrolling", self, "_on_widget_scrolling")
+	
 	container.call_deferred("set_widget", widget)
 	container.call_deferred("set_data_sources", widget_data.data_sources)
 	container.set_deferred("title", widget_data.title)
 	container.call_deferred("lock", locked)
+	
+	dashboard_container.connect("dashboard_edit_enabled", container, "minimize")
 	
 	if widget_data.has("settings"):
 		for key in widget_data.settings:
@@ -206,3 +216,7 @@ func _on_widget_moved_or_resized():
 			max_y = widget.rect_size.y + widget.rect_position.y
 	
 	emit_signal("need_to_resize", max_y)
+	
+	
+func _on_widget_scrolling():
+	emit_signal("widget_scrolling")

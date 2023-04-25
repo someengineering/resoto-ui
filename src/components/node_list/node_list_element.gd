@@ -55,7 +55,7 @@ func show_self():
 
 func count_search(_search_command) -> void:
 	if count_request:
-		count_request.cancel(ERR_PRINTER_ON_FIRE)
+		count_request.cancel()
 	result_amount_label.text = ""
 	var count_command : String = "search " + _search_command + " | count"
 	count_request = API.cli_execute(count_command, self)
@@ -64,7 +64,7 @@ func count_search(_search_command) -> void:
 func new_search(_last_search_type:String):
 	last_search_type = _last_search_type
 	if active_request:
-		active_request.cancel(ERR_PRINTER_ON_FIRE)
+		active_request.cancel()
 	change_section_to_self()
 	
 	node_kind_button.hide()
@@ -73,6 +73,13 @@ func new_search(_last_search_type:String):
 	list_kind_button.hide()
 	search_type_label.hide()
 	arrow_icon_mid.hide()
+
+
+func show_resources_from_report_check(check_id : String, account_id : String):
+	new_search("show_resources_from_report_check")
+	limit_button.pressed = false
+	API.get_check_resources(check_id, account_id, self, "_on_graph_search_done")
+	emit_signal("show", last_search_type, [check_id, account_id])
 
 
 func show_kind_from_node_data(parent_node:Dictionary, kind:String):
@@ -165,7 +172,6 @@ func show_list_from_search(search_command:String):
 		search_command +=  " limit " + str(NODE_LIMIT)
 		
 	search_type_label.text = "search " + search_command
-	search_type_label.enabled = true
 	
 	active_request = API.graph_search(search_command, self, "list")
 	emit_signal("show", last_search_type, [search_command])
@@ -185,7 +191,6 @@ func explore_node_list_from_node(parent_node:Dictionary, search_command:String, 
 
 	parent_button.text = parent_node_name
 	parent_button.set_meta("id", parent_node_id)
-	search_type_label.enabled = false
 	parent_button.show()
 	search_type_label.show()
 	arrow_icon_mid.show()
@@ -211,11 +216,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 	if _response.transformed.has("result"):
 		# Delete old results, prepare new container (fastest way to delete a lot of nodes)
 		filter_variables = {}
-		var current_result = _response.transformed.result
-		for r in current_result:
-			add_result_element(r, vbox)
-		if filter_edit.text != "":
-			filter_results(filter_edit.text)
+		show_results(_response.transformed.result)
 		show()
 
 
@@ -345,7 +346,7 @@ func _on_LimitButton_toggled(_pressed:bool):
 	use_limit = _pressed
 	if last_query == "":
 		return
-	active_request.cancel(ERR_PRINTER_ON_FIRE)
+	active_request.cancel()
 	var search_command : String = last_query
 	if use_limit:
 		search_command +=  " limit " + str(NODE_LIMIT)
@@ -411,14 +412,14 @@ func _on_ProtectButton_pressed():
 	if filter_edit.text == "":
 		for c in vbox.get_children():
 			c.is_protected = do_protect
-		protect_query = "search " + last_query + " | set_metadata protected=%s" % str(do_protect)
+		protect_query = "search " + last_query + " | set_metadata protected=%s" % JSON.print(do_protect)
 	else:
 		var node_ids_to_clean : PoolStringArray = []
 		for c in vbox.get_children():
 			if c.visible:
 				c.is_protected = do_protect
 				node_ids_to_clean.append(c.node_id)
-		protect_query = "json %s | set_metadata protected=%s" % [JSON.print(node_ids_to_clean), str(do_protect)]
+		protect_query = "json %s | set_metadata protected=%s" % [JSON.print(node_ids_to_clean), JSON.print(do_protect)]
 	if not _g.ui_test_mode:
 		API.cli_execute(protect_query, self, "_on_protect_query_done")
 	else:
@@ -511,3 +512,9 @@ func _on_TagsGroup_request_all_tag_keys():
 
 static func sort_tag_keys(a, b) -> bool:
 	return a[1] < b[1]
+
+func show_results(results : Array):
+	for r in results:
+		add_result_element(r, vbox)
+	if filter_edit.text != "":
+		filter_results(filter_edit.text)

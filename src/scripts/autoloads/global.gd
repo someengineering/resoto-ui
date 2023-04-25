@@ -9,6 +9,7 @@ signal add_toast
 signal toast_created
 signal toast_click
 signal toast_show_saved
+signal toast_close_all
 
 # UI and fullscreen
 signal ui_scale_changed
@@ -38,13 +39,25 @@ signal explore_node_list_from_node
 signal explore_node_list_kind
 signal explore_node_list_id
 
+# Aggregation View Signals
+signal aggregation_view_show
+
 # Setup Wizard Signals
 signal setup_wizard_start
+signal setup_wizard_done
 signal setup_wizard_minimized
 signal collect_run_finished
 
 # Websocket
 signal websocket_message
+
+# Messaging
+signal text_to_clipboard
+
+# Resh Lite Popup
+signal resh_lite_popup
+signal resh_lite_popup_with_cmd
+signal resh_lite_popup_hide
 
 
 const TOP_MARGIN:int = 50
@@ -55,11 +68,13 @@ const discord_link:String			 = "https://discord.gg/someengineering"
 
 var ui_test_mode: bool = false
 var ui_scale: float = 1.0 setget set_ui_scale
-var ui_version:String = "3.0.0rc1"
+var ui_version:String = "3.3.3"
 var resotocore_version:String = "n/a"
 var os = "Windows"
+var browser = ""
 var terminal_scrollback:Array = []
 var focus_in_search:bool = false
+var resoto_model : Dictionary = {}
 
 var is_connected_to_resotocore:bool	= false
 

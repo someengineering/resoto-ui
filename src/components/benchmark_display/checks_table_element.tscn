@@ -1,0 +1,89 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/icons/icon_warning_icon_special_contrast.svg" type="Texture" id=1]
+[ext_resource path="res://components/benchmark_display/checks_table_element.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.0243879, 0.126305, 0.22539, 1 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color( 0.0243879, 0.126305, 0.22539, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color( 0.0243879, 0.126305, 0.22539, 1 )
+
+[node name="ChecksTableElement" type="HBoxContainer"]
+margin_right = 632.0
+margin_bottom = 21.0
+custom_constants/separation = 0
+script = ExtResource( 2 )
+
+[node name="Background" type="PanelContainer" parent="."]
+show_behind_parent = true
+margin_right = 100.0
+margin_bottom = 21.0
+custom_styles/panel = SubResource( 8 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background"]
+margin_right = 100.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="Control" type="Control" parent="Background/HBoxContainer"]
+margin_right = 5.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 5, 0 )
+
+[node name="SeverityIcon" type="TextureRect" parent="Background/HBoxContainer"]
+margin_left = 5.0
+margin_right = 29.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 24, 0 )
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6
+
+[node name="SeverityLabel" type="Label" parent="Background/HBoxContainer"]
+show_behind_parent = true
+margin_left = 29.0
+margin_right = 100.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/normal = SubResource( 7 )
+text = "Critical"
+align = 1
+valign = 1
+
+[node name="FailingNumberLabel" type="Label" parent="."]
+margin_left = 100.0
+margin_right = 238.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 138, 0 )
+size_flags_vertical = 1
+custom_styles/normal = SubResource( 6 )
+text = "0"
+align = 1
+valign = 1
+
+[node name="CheckNameLabel" type="Label" parent="."]
+margin_left = 238.0
+margin_right = 632.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_styles/normal = SubResource( 5 )
+text = "Check Name"
+valign = 1
+autowrap = true

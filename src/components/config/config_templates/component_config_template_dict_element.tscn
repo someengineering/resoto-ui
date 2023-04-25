@@ -18,7 +18,7 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="TemplateDictElement" type="PanelContainer"]
+[node name="TemplateDictElement" type="PanelContainer" groups=["config_key_owner"]]
 margin_top = 254.0
 margin_right = 1900.0
 margin_bottom = 300.0
@@ -29,23 +29,24 @@ script = ExtResource( 1 )
 margin_left = 10.0
 margin_top = 5.0
 margin_right = 1895.0
-margin_bottom = 51.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
 
 [node name="Header" type="HBoxContainer" parent="Box"]
 margin_right = 1885.0
-margin_bottom = 34.0
+margin_bottom = 33.0
 
 [node name="Description" type="Label" parent="Box/Header"]
 margin_top = 6.0
-margin_right = 33.0
-margin_bottom = 27.0
+margin_right = 35.0
+margin_bottom = 26.0
+theme_type_variation = "LabelBold"
 text = "Key:"
 
 [node name="VarKey" type="LineEdit" parent="Box/Header"]
-margin_left = 37.0
-margin_right = 306.0
-margin_bottom = 34.0
+margin_left = 39.0
+margin_right = 308.0
+margin_bottom = 33.0
 rect_min_size = Vector2( 269, 0 )
 theme_type_variation = "LineEditCode"
 caret_blink = true
@@ -63,15 +64,14 @@ size_flags_horizontal = 3
 text = "= null"
 
 [node name="Control" type="Control" parent="Box/Header"]
-margin_left = 310.0
+margin_left = 312.0
 margin_right = 1782.0
-margin_bottom = 34.0
+margin_bottom = 33.0
 size_flags_horizontal = 3
 
 [node name="DuplicateButton" parent="Box/Header" instance=ExtResource( 5 )]
 margin_left = 1786.0
 margin_right = 1819.0
-margin_bottom = 34.0
 hint_tooltip = "Duplicate Element"
 icon_tex = ExtResource( 2 )
 icon_margin = 3
@@ -79,7 +79,6 @@ icon_margin = 3
 [node name="DeleteButton" parent="Box/Header" instance=ExtResource( 5 )]
 margin_left = 1823.0
 margin_right = 1856.0
-margin_bottom = 34.0
 hint_tooltip = "Delete Element"
 icon_tex = ExtResource( 3 )
 icon_margin = 3
@@ -88,7 +87,6 @@ icon_margin = 3
 modulate = Color( 1, 1, 1, 0.235294 )
 margin_left = 1860.0
 margin_right = 1885.0
-margin_bottom = 34.0
 rect_min_size = Vector2( 25, 25 )
 hint_tooltip = "To null"
 size_flags_vertical = 5
@@ -107,15 +105,16 @@ icon_margin = 3
 
 [node name="HSeparator" type="HSeparator" parent="Box"]
 modulate = Color( 1, 1, 1, 0.25098 )
-margin_top = 38.0
+margin_top = 37.0
 margin_right = 1885.0
-margin_bottom = 42.0
+margin_bottom = 41.0
 
 [node name="Content" type="VBoxContainer" parent="Box"]
-margin_top = 46.0
+margin_top = 45.0
 margin_right = 1885.0
-margin_bottom = 46.0
+margin_bottom = 45.0
 size_flags_horizontal = 3
+custom_constants/separation = 15
 
 [connection signal="text_changed" from="Box/Header/VarKey" to="." method="_on_VarKey_text_changed"]
 [connection signal="pressed" from="Box/Header/DuplicateButton" to="." method="_on_DuplicateButton_pressed"]

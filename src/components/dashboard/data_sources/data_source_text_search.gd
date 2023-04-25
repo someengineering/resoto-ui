@@ -20,11 +20,17 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 		global_filters += " and /ancestors.region.reported.name=\"%s\"" % dashboard_filters["region"]
 	if dashboard_filters["account"] != "" and dashboard_filters["account"] != "All":
 		global_filters += " and /ancestors.account.reported.name=\"%s\"" % dashboard_filters["account"]
-	q = q.replace("{global_filters}", global_filters)
+	if "{global_filters}" in q:
+		q = q.replace("{global_filters}", global_filters)
+	else:
+		q += global_filters
 	set_request(API.graph_search(q, self, "list"))
 
 
 func _on_graph_search_done(_error : int, response):
+	if _error == ERR_PRINTER_ON_FIRE:
+		emit_signal("query_status", _error, "Query canceled")
+		return
 	if _error:
 		var error_detail := ""
 		if response:

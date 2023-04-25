@@ -12,8 +12,10 @@ func _ready():
 
 
 func set_number(new_number:String):
+	var old_cursor_pos = get_cursor_position()
 	on_text_changed(new_number)
 	text = old_text
+	set_cursor_position(old_cursor_pos)
 
 
 func on_text_changed(new_text:String):

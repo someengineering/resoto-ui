@@ -128,7 +128,6 @@ script = ExtResource( 12 )
 margin_top = 38.0
 margin_right = 1896.0
 margin_bottom = 1064.0
-rect_min_size = Vector2( 800, 0 )
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 script = ExtResource( 13 )
@@ -143,10 +142,10 @@ size_flags_vertical = 3
 [node name="Elements" type="VBoxContainer" parent="PanelContainer/Content/ScrollContainer/Content"]
 margin_right = 1896.0
 margin_bottom = 1026.0
-rect_min_size = Vector2( 800, 0 )
 size_flags_vertical = 3
 
 [node name="ErrorPopup" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="ErrorPopup"]
 anchor_right = 1.0

@@ -11,6 +11,8 @@ export (Vector2) var divisions := Vector2(3.0, 3.0)
 
 export (Array, PoolVector2Array) var series : Array
 
+var max_min : Dictionary = {"max" : 100, "min" : 0}
+
 var dynamic_label_scene := preload("res://components/elements/utility/dynamic_label.tscn")
 var series_scene := preload("res://components/dashboard/widget_chart/widget_chart_serie.tscn")
 var mouse_on_graph := false
@@ -83,7 +85,12 @@ func _input(event) -> void:
 	if event is InputEventMouseMotion and mouse_on_graph and series.size() > 0:
 		mouse_marker.position.x = legend_pos.get_local_mouse_position().x + 0.5
 		var x = x_range * legend_pos.get_local_mouse_position().x / legend_pos.rect_size.x 
-		legend.rect_global_position = get_global_mouse_position() + Vector2(24,0)
+		
+		var new_position : Vector2 = get_global_mouse_position() + Vector2(24,0)
+		if new_position.x + legend.rect_size.x > OS.get_window_size().x:
+			new_position.x -= legend.rect_size.x + 48
+			
+		legend.rect_global_position = new_position
 		legend.rect_size.y = 0
 		
 		for label in legend_grid.get_children():
@@ -155,6 +162,12 @@ func update_series() -> void:
 	stacked.resize(range(0, x_range, step).size())
 	stacked.fill(0)
 
+	var maxy := -INF
+	var miny := INF
+	
+	var all_values : Array = []
+	all_values.resize(n)
+
 	for i in n:
 		var index = n - i - 1
 		var line : Line2D = graph_area.get_child(index)
@@ -165,11 +178,35 @@ func update_series() -> void:
 			if str(point.y) == "nan":
 				continue
 				
+			if miny > point.y:
+				miny = point.y
 			if line.get_meta("stack"):
 				point.y += stacked[j]
 				stacked[j] = point.y
-			values.append(transform_point(point))
-		line.points = values
+			if maxy < point.y:
+				maxy = point.y
+				
+			values.append(point)
+			
+		
+		
+		all_values[index] = values
+	max_min["max"] = maxy
+	max_min["min"] = maxy
+	
+	if auto_scale:
+		set_scale_from_series()
+	
+	for i in n:
+		var line : Line2D = graph_area.get_child(i)
+		var values = all_values[i]
+		var transformed_values : PoolVector2Array = []
+		transformed_values.resize(values.size())
+		
+		for j in values.size():
+			transformed_values[j] = transform_point(values[j])
+	
+		line.points = optimize_data(transformed_values)
 		line.zero_position = transform_point(Vector2.ZERO).y
 		line.global_position = origin
 
@@ -212,7 +249,7 @@ func update_graph_area(force := false) -> void:
 	var scaled = get_scaled_value(max_y_value)
 	var max_scaled_value = scaled.value
 	var unit = scaled.unit
-	var ratio = max_scaled_value / max_y_value
+	var ratio = 1.0 if max_y_value == 0.0 else max_scaled_value / max_y_value
 	
 	if divisions.y != new_divisions.y or force:
 		divisions.y = new_divisions.y
@@ -231,7 +268,7 @@ func update_graph_area(force := false) -> void:
 				value += int(round(min_y_value))
 				
 			if number_as_bytes:
-				l.text = "%.2f%s" % [value * ratio, unit]
+				l.text = "%.2f %s" % [value * ratio, unit]
 			else:
 				l.text = str(value)
 				
@@ -248,7 +285,6 @@ func add_serie(data : PoolVector2Array, color = null, serie_name := "", stack :=
 	serie.set_meta("stack", stack)
 	serie.get_node("Polygon2D").visible = stack
 	graph_area.add_child(serie)
-	serie.points = data
 	series.append(data)
 	
 	if color != null:
@@ -270,33 +306,50 @@ func clear_series() -> void:
 			serie.queue_free()
 	current_color = 0
 	series.clear()
-
-func set_scale_from_series() -> void:
-	if series.size() == 0:
-		return
 	
-	var maxy = -INF
-	var miny = INF
+
+func get_series_max_min():
+	var maximum := -INF
+	var minimum := INF
+	var maximum_stacked := -INF
+	var minimum_stacked := INF
 
 	var stacked : PoolRealArray = []
 	stacked.resize(range(0, x_range, step).size())
 	stacked.fill(0)
 	
-	for j in stacked.size():
-		for i in series.size():
-			var serie : Array = series[i]
-			var line : Line2D = graph_area.get_child(i)
-			var value = find_value_at_x(j*step, serie)
-			if str(value.y) == "nan":
-				continue
-			if miny > value.y:
-				miny = value.y
-			if line.get_meta("stack"):
+
+	for i in series.size():
+		var serie : Array = series[i]
+		var line : Line2D = graph_area.get_child(i)
+		
+		if line.get_meta("stack"):
+			for j in stacked.size():
+				var value = find_value_at_x(j*step, serie)
+				if minimum_stacked > value.y:
+					minimum_stacked = value.y
 				value.y += stacked[j]
 				stacked[j] = value.y
-			if maxy < value.y:
-				maxy = value.y
+				if maximum_stacked < value.y:
+					maximum_stacked = value.y
+					
+		else:
+			for point in serie:
+				if maximum < point.y:
+					maximum = point.y
+				if minimum > point.y:
+					minimum = point.y
+
+					
+	max_min = {"max" : max(maximum, maximum_stacked), "min": min(minimum_stacked, minimum)}
 	
+
+func set_scale_from_series() -> void:
+	if series.size() == 0:
+		return
+	
+	var maxy : float = max_min["max"]
+	var miny : float = max_min["min"]
 	
 	max_y_value = ceil(maxy + (maxy - miny) * 0.1 if maxy != miny else maxy * 1.1)
 	min_y_value = floor(miny - (maxy - miny) * 0.1 if maxy != miny else miny * 0.9)
@@ -313,8 +366,6 @@ func set_scale_from_series() -> void:
 
 
 func do_complete_update():
-	if auto_scale:
-		set_scale_from_series()
 	update_series()
 	update_graph_area(force_update_graph_area)
 	
@@ -342,7 +393,7 @@ func do_complete_update():
 
 func set_viewport_mode(_update:bool):
 	if _update:
-		viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
+		viewport.render_target_update_mode = Viewport.UPDATE_WHEN_VISIBLE
 		viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
 	else:
 		viewport.render_target_update_mode = Viewport.UPDATE_ONCE
@@ -463,3 +514,15 @@ func _get_property_list() -> Array:
 	})
 	
 	return properties
+	
+	
+func optimize_data(data_points:PoolVector2Array):
+	var cleaned_points : PoolVector2Array = [data_points[0]]
+	var data_points_size: int = data_points.size()-1
+	for i in data_points.size():
+		if i == 0 or i == data_points_size:
+			continue
+		if not data_points[i].direction_to(data_points[i-1]) == -data_points[i].direction_to(data_points[i+1]):
+			cleaned_points.append(data_points[i])
+	cleaned_points.append(data_points[data_points_size])
+	return cleaned_points

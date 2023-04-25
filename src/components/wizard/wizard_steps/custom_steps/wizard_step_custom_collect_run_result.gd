@@ -5,7 +5,9 @@ onready var results := $VBoxContainer/CollectRunDisplay/PanelContainer/Content/C
 func _ready():
 	results.connect("done_with_display", self, "_on_CollectRunResults_done")
 
+
 func start(_data:Dictionary):
+	results.refresh_results()
 	emit_signal("can_previous", false)
 
 

@@ -57,7 +57,7 @@ class Request:
 		body = _body
 	
 	
-	func cancel(err_code:int=1) -> void:
+	func cancel(err_code:int=ERR_PRINTER_ON_FIRE) -> void:
 		if state_ != states.DONE:
 			emit_signal("done", err_code, null)
 			state_ = states.DONE
@@ -74,6 +74,13 @@ class Request:
 			state_ = states.DONE
 			return false
 		return true
+	
+	
+	func add_authorization_header(_headers:Array):
+		if JWT.token == "" or JWT.token_expired():
+			JWT.create_jwt("")
+		_headers.append("Authorization: Bearer %s" % JWT.token)
+	
 	
 	func request_(_method:int = method, _path:String = path, _headers:Array = headers, _body:String = body) -> void:
 		var http_status:int= http_.get_status()
@@ -105,7 +112,8 @@ class Request:
 					state_ = states.CONNECTED
 			
 			states.CONNECTED:
-				var err : int = http_.request(method, path, headers, body)
+				add_authorization_header(_headers)
+				var err : int = http_.request(_method, _path, _headers, _body)
 				if err != OK:
 					emit_signal("done", err, null)
 					state_ = states.DONE
@@ -161,7 +169,7 @@ class Request:
 			states.RESPONSE_READY:
 				response_chunks.resize(chunk_idx)
 				response_.body = response_chunks
-				if [401, 400].has(response_.response_code):
+				if response_.response_code >= 400:
 					emit_signal("pre_done", FAILED, response_)
 					emit_signal("done", FAILED, response_)
 				else:
@@ -228,7 +236,6 @@ func req_delete(path:String, body:String, req_headers:RequestHeaders) -> Request
 func poll() -> void:
 	var requests: Array = requests_
 	requests_           = []
-	
 	for request in requests:
 		if request.state_ != request.states.DONE:
 			request.request_()

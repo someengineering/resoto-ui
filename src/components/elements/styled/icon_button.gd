@@ -52,6 +52,8 @@ func set_flip_v(_flip_v:bool) -> void:
 
 
 func _on_IconButton_mouse_entered() -> void:
+	if disabled:
+		return
 	if add_to_style:
 		icon_node.modulate = Style.col_map[Style.c.LIGHTER]
 	else:

@@ -3,7 +3,9 @@ class_name TerminalComponent
 
 signal rename_terminal
 
-const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META, KEY_MASK_META, KEY_MASK_CMD]
+const MODIFIER_KEYS:Array = [KEY_CONTROL, KEY_SHIFT, KEY_ALT, KEY_CAPSLOCK, KEY_META, KEY_MASK_META, KEY_MASK_CMD, KEY_SUPER_L, KEY_SUPER_R]
+
+export var is_popup := false
 
 var terminal_active: bool = false setget set_terminal_active
 var last_command_id: int  = -1
@@ -69,10 +71,13 @@ func _input(event:InputEvent) -> void:
 	or !terminal_active
 	or _g.popup_manager.popup_active()
 	or not event is InputEventKey
-	or _g.focus_in_search):
+	or _g.focus_in_search
+	or not get_global_rect().has_point(get_global_mouse_position())):
 		return
 	
 	if not command.has_focus() and event.pressed and not MODIFIER_KEYS.has(event.scancode) and event.scancode != KEY_ESCAPE:
+		if not is_popup and _g.popup_manager.resh_lite_popup.visible:
+			return
 		just_grabbed_focus = true
 		yield(get_tree(), "idle_frame")
 		console.selection_enabled = false
@@ -215,7 +220,10 @@ func _input(event:InputEvent) -> void:
 
 func _on_cli_execute_streamed_done(error:int, _response:UserAgent.Response) -> void:
 	if error:
-		console.append_bbcode("\nError: [color=red]" + Utils.err_enum_to_string(error) + "[/color]")
+		if _response.body and typeof(_response.body) == TYPE_RAW_ARRAY:
+			console.append_bbcode("[color=red]" + _response.body.get_string_from_utf8() + "[/color]")
+		else:
+			console.append_bbcode("\nError: [color=red]" + Utils.err_enum_to_string(error) + "[/color]")
 		loading.stop()
 	else:
 		data_chunks.resize(chunk_idx)

@@ -12,7 +12,7 @@ export var is_collector_config_wizard := false
 export var wizard_script_name := ""
 export var text_scroll_speed := 0.005
 
-var visible_step_scene_names := ["StepText", "StepQuestion", "StepPrompt"]
+var visible_step_scene_names := ["StepText", "StepQuestion", "StepPrompt", "StepCustomScene"]
 
 var wizard_step_scenes:Dictionary = {
 	"StepSection" : preload("res://components/wizard/wizard_steps/wizard_step_section.tscn"),
@@ -24,7 +24,8 @@ var wizard_step_scenes:Dictionary = {
 	"StepCreateObject" : preload("res://components/wizard/wizard_steps/wizard_step_create_object.tscn"),
 	"StepHandleObject" : preload("res://components/wizard/wizard_steps/wizard_step_handle_object.tscn"),
 	"StepSaveConfigsOnCore" : preload("res://components/wizard/wizard_steps/wizard_step_save_configs_on_core.tscn"),
-	"StepSetVariable" : preload("res://components/wizard/wizard_steps/wizard_step_set_variable.tscn")
+	"StepSetVariable" : preload("res://components/wizard/wizard_steps/wizard_step_set_variable.tscn"),
+	"StepConfigConditional" : preload("res://components/wizard/wizard_steps/wizard_step_config_conditional.tscn")
 }
 
 var current_step:Node = null
@@ -175,10 +176,11 @@ func show_step(_step_id:String):
 
 
 func check_if_can_finish_wizard(step_data:Dictionary):
-	if not is_collector_config_wizard or step_data.res_name == "StepSection":
+	if not is_collector_config_wizard or not visible_step_scene_names.has(step_data.res_name):
 		return
 	# Show the Finish Setup button
 	# This is very specific to the "Setup Wizard"
+	
 	if (step_data.has("uid")
 	and step_data.uid == "configured_collectors"
 	and config_changed):
@@ -220,6 +222,7 @@ func can_previous(_can:bool):
 	prev_button.disabled = !_can
 	next_button.focus_mode = Control.FOCUS_ALL if _can else Control.FOCUS_NONE
 	$BG/StepDisplay/Titlebar/HomeButton.disabled = !_can
+	$BG/StepDisplay/Titlebar/HomeButton.modulate.a = 0.1 if !_can else 1.0
 
 
 func next_step(_next_on_slot:int=0):

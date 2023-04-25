@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=116 format=2]
+[gd_resource type="Theme" load_steps=134 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -285,17 +285,25 @@ use_mipmaps = true
 use_filter = true
 font_data = SubResource( 1 )
 
-[sub_resource type="DynamicFont" id=97]
-size = 19
-use_mipmaps = true
-use_filter = true
-font_data = SubResource( 1 )
+[sub_resource type="DynamicFontData" id=114]
+override_oversampling = 1.5
+font_path = "res://assets/theme/Barlow-Bold.ttf"
 
-[sub_resource type="DynamicFont" id=98]
+[sub_resource type="DynamicFont" id=115]
 size = 19
 use_mipmaps = true
 use_filter = true
-font_data = SubResource( 1 )
+font_data = SubResource( 114 )
+
+[sub_resource type="DynamicFontData" id=116]
+override_oversampling = 1.5
+font_path = "res://assets/theme/SourceCodePro-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=117]
+size = 19
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 116 )
 
 [sub_resource type="DynamicFont" id=99]
 size = 19
@@ -487,11 +495,31 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 15 )
 
+[sub_resource type="DynamicFontData" id=121]
+override_oversampling = 1.5
+font_path = "res://assets/theme/SourceCodePro-Bold.ttf"
+
+[sub_resource type="DynamicFont" id=122]
+size = 15
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 121 )
+
 [sub_resource type="DynamicFont" id=42]
-size = 13
+size = 12
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 12 )
+
+[sub_resource type="DynamicFontData" id=133]
+override_oversampling = 1.5
+font_path = "res://assets/theme/Barlow-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=132]
+size = 14
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 133 )
 
 [sub_resource type="DynamicFontData" id=90]
 override_oversampling = 1.5
@@ -499,6 +527,14 @@ font_path = "res://assets/theme/Barlow-Bold.ttf"
 
 [sub_resource type="DynamicFont" id=91]
 size = 20
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = 3
+extra_spacing_bottom = 3
+font_data = SubResource( 90 )
+
+[sub_resource type="DynamicFont" id=124]
+size = 26
 use_mipmaps = true
 use_filter = true
 extra_spacing_top = 3
@@ -594,6 +630,17 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxEmpty" id=36]
 
+[sub_resource type="StyleBoxFlat" id=119]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [sub_resource type="StyleBoxFlat" id=82]
 content_margin_left = 12.0
 content_margin_right = 12.0
@@ -604,6 +651,13 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=118]
+content_margin_left = 10.0
+content_margin_right = 0.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0, 0, 0, 0 )
 
 [sub_resource type="StyleBoxFlat" id=83]
 content_margin_top = 4.0
@@ -618,6 +672,22 @@ expand_margin_right = 4.0
 shadow_color = Color( 0, 0, 0, 0.0784314 )
 shadow_size = 30
 shadow_offset = Vector2( 0, -3 )
+
+[sub_resource type="StyleBoxFlat" id=120]
+content_margin_left = 10.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+border_width_top = 42
+border_color = Color( 0.0588235, 0.2, 0.337255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.0784314 )
+shadow_size = 20
+shadow_offset = Vector2( 0, 5 )
 
 [sub_resource type="StyleBoxFlat" id=80]
 content_margin_left = 6.0
@@ -669,7 +739,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxLine" id=37]
-color = Color( 0.313726, 0.223529, 0.435294, 1 )
+color = Color( 0.123871, 0.346745, 0.480469, 1 )
 
 [sub_resource type="StyleBoxFlat" id=112]
 content_margin_left = 6.0
@@ -677,6 +747,17 @@ content_margin_right = 6.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
 bg_color = Color( 0.0313726, 0.121569, 0.207843, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id=123]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -704,6 +785,26 @@ border_color = Color( 0, 0.329412, 0.639216, 1 )
 corner_radius_top_left = 3
 corner_radius_bottom_left = 3
 corner_detail = 1
+
+[sub_resource type="DynamicFontData" id=125]
+override_oversampling = 1.5
+font_path = "res://assets/theme/Barlow-Bold.ttf"
+
+[sub_resource type="DynamicFont" id=126]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 125 )
+
+[sub_resource type="DynamicFontData" id=127]
+override_oversampling = 1.5
+font_path = "res://assets/theme/SourceCodePro-Medium.ttf"
+
+[sub_resource type="DynamicFont" id=128]
+size = 17
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 127 )
 
 [sub_resource type="StyleBoxFlat" id=33]
 content_margin_left = 0.0
@@ -785,6 +886,10 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 expand_margin_bottom = 3.0
 
+[sub_resource type="DynamicFontData" id=131]
+override_oversampling = 1.0
+font_path = "res://assets/theme/NotoEmoji-Regular.ttf"
+
 [sub_resource type="DynamicFontData" id=19]
 override_oversampling = 2.0
 font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
@@ -793,6 +898,7 @@ font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 19 )
+fallback/0 = SubResource( 131 )
 
 [sub_resource type="StyleBoxEmpty" id=86]
 
@@ -821,6 +927,15 @@ use_filter = true
 font_data = SubResource( 1 )
 
 [sub_resource type="StyleBoxEmpty" id=95]
+
+[sub_resource type="StyleBoxEmpty" id=130]
+
+[sub_resource type="StyleBoxFlat" id=129]
+bg_color = Color( 0, 0.329412, 0.639216, 0.392157 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id=96]
 content_margin_left = 12.0
@@ -938,8 +1053,8 @@ FontBig/fonts/font = SubResource( 71 )
 FontDefault/base_type = "TextEdit"
 FontDefault/fonts/font = SubResource( 66 )
 FontMedium/base_type = "RichTextLabel"
-FontMedium/fonts/bold_font = SubResource( 97 )
-FontMedium/fonts/mono_font = SubResource( 98 )
+FontMedium/fonts/bold_font = SubResource( 115 )
+FontMedium/fonts/mono_font = SubResource( 117 )
 FontMedium/fonts/normal_font = SubResource( 99 )
 FontZero/fonts/font = SubResource( 113 )
 GraphEdit/colors/grid_major = Color( 0.376471, 0.431373, 0.466667, 0.117647 )
@@ -981,10 +1096,16 @@ LabelBold/base_type = "Label"
 LabelBold/fonts/font = SubResource( 63 )
 LabelCode/base_type = "Label"
 LabelCode/fonts/font = SubResource( 81 )
+LabelCodeBold/base_type = "Label"
+LabelCodeBold/fonts/font = SubResource( 122 )
 LabelSmall/base_type = "Label"
 LabelSmall/fonts/font = SubResource( 42 )
+LabelSmallMedium/base_type = "Label"
+LabelSmallMedium/fonts/font = SubResource( 132 )
 Label_24/base_type = "Label"
 Label_24/fonts/font = SubResource( 91 )
+Label_36/base_type = "Label"
+Label_36/fonts/font = SubResource( 124 )
 LineEdit/colors/clear_button_color = Color( 0, 0.329412, 0.639216, 1 )
 LineEdit/colors/clear_button_color_pressed = Color( 0.537255, 0.819608, 0.945098, 1 )
 LineEdit/colors/cursor_color = Color( 0.816406, 0.94351, 1, 1 )
@@ -1006,30 +1127,53 @@ LineEditSmall/styles/normal = SubResource( 73 )
 LineEditSmall/styles/read_only = SubResource( 74 )
 OptionButton/icons/arrow = ExtResource( 13 )
 Panel/styles/panel = SubResource( 36 )
-PanelContainer/styles/panel = SubResource( 21 )
+PanelContainer/styles/panel = SubResource( 119 )
 PanelContainerDark/base_type = "PanelContainer"
 PanelContainerDark/styles/panel = SubResource( 82 )
+PanelContainerNoMarginRight/base_type = "PanelContainer"
+PanelContainerNoMarginRight/styles/panel = SubResource( 118 )
 PanelContainerTagElement/base_type = "PanelContainer"
 PanelContainerTagElement/styles/panel = SubResource( 83 )
+PanelContainerWindow/base_type = "PanelContainer"
+PanelContainerWindow/styles/panel = SubResource( 120 )
 PanelPopup/base_type = "PanelContainer"
 PanelPopup/styles/panel = SubResource( 80 )
 PanelTooltip/base_type = "PanelContainer"
 PanelTooltip/styles/panel = SubResource( 111 )
 PanelWidgetBackground/base_type = "Panel"
 PanelWidgetBackground/styles/panel = SubResource( 93 )
+PopupMenu/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+PopupMenu/colors/font_color_accel = Color( 0.537255, 0.819608, 0.945098, 1 )
+PopupMenu/colors/font_color_disabled = Color( 0.123871, 0.346745, 0.480469, 1 )
+PopupMenu/colors/font_color_hover = Color( 0.816406, 0.94351, 1, 1 )
+PopupMenu/colors/font_color_separator = Color( 0.537255, 0.819608, 0.945098, 1 )
 PopupMenu/icons/checked = ExtResource( 2 )
 PopupMenu/icons/radio_checked = ExtResource( 11 )
 PopupMenu/icons/radio_unchecked = ExtResource( 10 )
 PopupMenu/icons/unchecked = ExtResource( 4 )
 PopupMenu/styles/hover = SubResource( 38 )
+PopupMenu/styles/labeled_separator_left = SubResource( 118 )
+PopupMenu/styles/labeled_separator_right = SubResource( 119 )
 PopupMenu/styles/panel = SubResource( 21 )
 PopupMenu/styles/separator = SubResource( 37 )
 PopupPanel/styles/panel = SubResource( 21 )
 PopupPanelComboBox/base_type = "PopupPanel"
 PopupPanelComboBox/styles/panel = SubResource( 112 )
+PopupPanelLight/base_type = "PopupPanel"
+PopupPanelLight/styles/panel = SubResource( 123 )
 ProgressBar/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 ProgressBar/styles/bg = SubResource( 8 )
 ProgressBar/styles/fg = SubResource( 9 )
+RichLabelNormal/base_type = "RichTextLabel"
+RichLabelNormal/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+RichLabelNormal/styles/normal = SubResource( 82 )
+RichLabelSmall/base_type = "RichTextLabel"
+RichLabelSmall/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+RichLabelSmall/fonts/normal_font = SubResource( 42 )
+RichTextLabel/colors/default_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+RichTextLabel/fonts/bold_font = SubResource( 126 )
+RichTextLabel/fonts/mono_font = SubResource( 128 )
+RichTextLabel/fonts/normal_font = SubResource( 66 )
 SpinBox/icons/updown = ExtResource( 13 )
 TabContainer/colors/font_color_bg = Color( 0.160784, 0.333333, 0.501961, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.0588235, 0.2, 0.337255, 1 )
@@ -1077,6 +1221,7 @@ TextEditTag/styles/normal = SubResource( 87 )
 TextEditTag/styles/read_only = SubResource( 88 )
 TooltipPanel/styles/panel = SubResource( 45 )
 Tree/colors/font_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+Tree/colors/font_color_selected = Color( 1, 1, 1, 1 )
 Tree/colors/relationship_line_color = Color( 0, 0.329412, 0.639216, 0.301961 )
 Tree/colors/title_button_color = Color( 0.816406, 0.94351, 1, 1 )
 Tree/constants/draw_guides = 0
@@ -1091,6 +1236,9 @@ Tree/icons/unchecked = ExtResource( 4 )
 Tree/icons/updown = ExtResource( 13 )
 Tree/styles/bg = SubResource( 7 )
 Tree/styles/bg_focus = SubResource( 95 )
+Tree/styles/button_pressed = SubResource( 130 )
+Tree/styles/selected = SubResource( 129 )
+Tree/styles/selected_focus = SubResource( 129 )
 Tree/styles/title_button_hover = SubResource( 4 )
 Tree/styles/title_button_normal = SubResource( 96 )
 Tree/styles/title_button_pressed = SubResource( 4 )

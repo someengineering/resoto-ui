@@ -55,8 +55,8 @@ theme_type_variation = "LabelBold"
 text = "External Link"
 
 [node name="UrlLabel" type="Label" parent="VBox"]
-margin_top = 23.0
+margin_top = 24.0
 margin_right = 119.0
-margin_bottom = 38.3333
+margin_bottom = 39.0
 theme_type_variation = "LabelSmall"
 text = "External Link"

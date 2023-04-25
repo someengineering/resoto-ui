@@ -4,12 +4,12 @@ extends BaseWidget
 
 export (float) var value : float setget set_value
 export (String) var unit := "" setget set_unit
+export (Color) var background_color := Color("#0a253f") setget set_background_color
 
 var decimal_digits := 2 setget set_decimal_digits
 var show_comma		:= false setget set_show_comma
 var number_as_bytes := false setget set_number_as_bytes
 var color := Color.white setget set_color
-var background_color := Color("#0a253f") setget set_background_color
 
 onready var value_label := $IndicatorBackground/ValueLabel
 onready var unit_label := $IndicatorBackground/UnitLabel

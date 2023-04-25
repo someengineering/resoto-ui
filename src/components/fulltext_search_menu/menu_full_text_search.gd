@@ -2,22 +2,31 @@ extends LineEdit
 
 const NO_RESULT_MESSAGE = "0 results"
 const ResultTemplate = preload("res://components/fulltext_search_menu/full_text_search_result_template.tscn")
+const TableWidgetScene = preload("res://components/dashboard/widget_table/widget_table.tscn")
 
 var popup_x_size:int = 500
 var result_limit:int = 10
 var active_request: ResotoAPI.Request
+var active_aggregate_request: ResotoAPI.Request
 var count_request: ResotoAPI.Request
 var search_command:= ""
+var aggregate_command:= ""
 var buffered_command:= ""
+var limit_regex:= RegEx.new()
 
 onready var popup := $PopupLayer/ResultsPopUp
 onready var popup_results := $PopupLayer/ResultsPopUp/VBox
 onready var result_amount_label := $PopupLayer/ResultsPopUp/VBox/Title/ResultAmountLabel
 onready var list_btn := $PopupLayer/ResultsPopUp/VBox/Title/ListButton
+onready var aggr_btn := $PopupLayer/ResultsPopUp/VBox/Title/AggregationButton
 
 onready var single_node_info = _g.content_manager.find_node("NodeSingleInfo")
 onready var search_delay := $SearchDelay
 onready var error_msg := $"%ErrorMessage"
+
+
+func _ready():
+	limit_regex.compile("\\s+limit\\s+\\d+")
 
 
 func _input(event:InputEvent):
@@ -48,6 +57,7 @@ func _on_FullTextSearch_text_changed(_command:String) -> void:
 		popup.hide()
 		search_delay.stop()
 	list_btn.hide()
+	aggr_btn.hide()
 	result_amount_label.show()
 	result_amount_label.text = ""
 	result_amount_label.modulate.a = 0.0
@@ -82,15 +92,33 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		if _response.response_code == 400:
 			show_search_results([], _response.body.get_string_from_utf8())
 		else:
-			_g.emit_signal("add_toast", "Error in Seasrch", "Query: "+ active_request.body, 1, self)
+			_g.emit_signal("add_toast", "Error in Search", "Query: "+ active_request.body, 1, self)
 		return
 	if _response.transformed.has("result"):
 		show_search_results(_response.transformed.result)
 
 
+func parse_error_message(error:String) -> String:
+	var error_a : Array = error.replace("Error: ParseError\nMessage: ", "[b]Parse Error: [/b]").split("\n")
+	error_a[0] = error_a[0].trim_suffix(" limit 10")
+	if error_a.size() == 1:
+		if error_a.find("Navigation traversal"):
+			error_a = error_a[0].split(" Navigation traversal")
+			error_a[1] = "Navigation traversal" + error_a[1]
+			error = "[color=#f16d4f]%s[/color]\n[code]%s[/code]" % error_a
+		else:
+			error = "[color=#f16d4f]%s[/color]" % error_a
+	elif error_a.size() > 1:
+		error = "[color=#f16d4f]%s[/color]\n[code]%s[/code]" % error_a
+	else:
+		error = "[color=#f16d4f]Undefined error[/color]"
+	return error
+
+
 func show_search_results(results:Array, error:="") -> void:
 	grab_focus()
 	error_msg.hide()
+	aggr_btn.hide()
 	result_amount_label.show()
 	# clear old results
 	for c in popup_results.get_children():
@@ -102,10 +130,7 @@ func show_search_results(results:Array, error:="") -> void:
 		if error != "":
 			error_msg.show()
 			result_amount_label.hide()
-			var error_a : Array = error.replace("Error: ParseError\nMessage: ", "[b]Parse Error: [/b]").split("\n")
-			error_a[0] = error_a[0].trim_suffix(" limit 10")
-			error = "[color=#f16d4f]%s[/color]\n[code]%s[/code]" % error_a
-			error_msg.bbcode_text = error
+			error_msg.bbcode_text = parse_error_message(error)
 			popup.show()
 			yield(VisualServer, "frame_post_draw")
 			popup.rect_size = Vector2(rect_size.x, 50)
@@ -184,12 +209,94 @@ func text_to_search(_text:String):
 
 
 func _on_SearchDelay_timeout():
+	cancel_active_requests()
+	if (buffered_command.to_lower().begins_with("aggregate(")
+	or buffered_command.to_lower().begins_with("search aggregate(")):
+		execute_aggregation()
+	else:
+		execute_search()
+
+
+func execute_aggregation():
+	if buffered_command.to_lower().begins_with("search aggregate("):
+		aggregate_command = buffered_command.trim_prefix("search ")
+	else:
+		aggregate_command = buffered_command
+	active_aggregate_request = API.aggregate_search(aggregate_command, self)
+
+
+func _on_aggregate_search_done(error:int, _response:UserAgent.Response) -> void:
+	if error:
+		if error == ERR_PRINTER_ON_FIRE:
+			return
+		if _response.response_code == 400:
+			show_search_results([], _response.body.get_string_from_utf8())
+		else:
+			_g.emit_signal("add_toast", "Error in Search", "Query: "+ active_aggregate_request.body, 1, self)
+		return
+	if _response.transformed.has("result"):
+		show_aggregation_results(_response.transformed.result)
+
+
+func show_aggregation_results(results:Array, error:="") -> void:
+	grab_focus()
+	error_msg.hide()
+	result_amount_label.hide()
+	# clear old results
+	for c in popup_results.get_children():
+		if c.get_class() == "HBoxContainer":
+			continue
+		c.queue_free()
+	
+	if text == "" or results.empty():
+		if error != "":
+			error_msg.show()
+			error_msg.bbcode_text = parse_error_message(error)
+			popup.show()
+			yield(VisualServer, "frame_post_draw")
+			popup.rect_size = Vector2(rect_size.x, 50)
+		else:
+			popup.hide()
+		return
+	
+	aggr_btn.show()
+	
+	var new_result_table = TableWidgetScene.instance()
+	popup_results.add_child(new_result_table)
+	new_result_table.size_flags_vertical = SIZE_EXPAND_FILL
+	new_result_table.rect_min_size.y = 200
+	new_result_table.set_data(results, DataSource.TYPES.AGGREGATE_SEARCH)
+	
+	yield(VisualServer, "frame_post_draw")
+	var _popup_x_size = max(popup_x_size, rect_size.x)
+	var popup_pos  = rect_global_position + Vector2(-abs(_popup_x_size-rect_size.x), self.rect_size.y)
+	popup.rect_global_position = popup_pos
+	popup.rect_size = Vector2(_popup_x_size, 1)
+	popup.show()
+	grab_focus()
+
+
+func cancel_active_requests():
+	if count_request:
+		count_request.cancel()
+	if active_request:
+		active_request.cancel()
+	if active_aggregate_request:
+		active_aggregate_request.cancel()
+
+
+func execute_search():
 	search_command = ""
 	var limited_search_command := ""
 	var count_command := ""
+	
 	if buffered_command.to_lower().begins_with("search "):
 		search_command = buffered_command.trim_prefix("search ")
-		limited_search_command = search_command + " limit "+ str(result_limit)
+		
+		if limit_regex.search_all(buffered_command).empty():
+			limited_search_command = search_command + " limit "+ str(result_limit)
+		else:
+			limited_search_command = search_command
 		count_command = buffered_command + " | count"
 	else:
 		search_command = "\"" + buffered_command + "\""
@@ -203,9 +310,17 @@ func _on_SearchDelay_timeout():
 func _on_FullTextSearch_text_entered(_new_text):
 	popup.hide()
 	search_delay.stop()
-	if count_request:
-		count_request.cancel(ERR_PRINTER_ON_FIRE)
-	if active_request:
-		active_request.cancel(ERR_PRINTER_ON_FIRE)
-	_g.emit_signal("explore_node_list_search", text_to_search(text))
-	Analytics.event(Analytics.EventsSearch.SEARCH, {"search" : text})
+	cancel_active_requests()
+	
+	if text.to_lower().begins_with("aggregate("):
+		_g.content_manager.change_section("aggregation_view")
+		_g.emit_signal("aggregation_view_show", aggregate_command)
+	else:
+		_g.emit_signal("explore_node_list_search", text_to_search(text))
+		Analytics.event(Analytics.EventsSearch.SEARCH, {"search" : text})
+
+
+func _on_AggregationButton_pressed():
+	popup.hide()
+	_g.content_manager.change_section("aggregation_view")
+	_g.emit_signal("aggregation_view_show", aggregate_command)

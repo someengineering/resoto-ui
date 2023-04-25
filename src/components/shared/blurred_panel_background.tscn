@@ -1,0 +1,91 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/generic/screenspace_blur.tres" type="Shader" id=1]
+[ext_resource path="res://components/shared/blurred_panel_background.gd" type="Script" id=2]
+
+[sub_resource type="ShaderMaterial" id=36]
+shader = ExtResource( 1 )
+shader_param/dir = Vector2( 2, 0 )
+
+[sub_resource type="StyleBoxFlat" id=37]
+bg_color = Color( 0.243137, 0.141176, 0.372549, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="ShaderMaterial" id=41]
+shader = ExtResource( 1 )
+shader_param/dir = Vector2( 0, 2 )
+
+[sub_resource type="ShaderMaterial" id=42]
+shader = ExtResource( 1 )
+shader_param/dir = Vector2( 6, 0 )
+
+[sub_resource type="ShaderMaterial" id=43]
+shader = ExtResource( 1 )
+shader_param/dir = Vector2( 0, 6 )
+
+[node name="PanelBackgroundBlur" type="Node2D"]
+z_index = -1
+script = ExtResource( 2 )
+
+[node name="BackBufferCopy_X1" type="BackBufferCopy" parent="."]
+copy_mode = 2
+rect = Rect2( 0, 0, 200, 200 )
+
+[node name="BlurEffect" type="Panel" parent="BackBufferCopy_X1"]
+show_behind_parent = true
+material = SubResource( 36 )
+margin_right = 900.0
+margin_bottom = 620.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 37 )
+
+[node name="BackBufferCopy_Y1" type="BackBufferCopy" parent="."]
+copy_mode = 2
+rect = Rect2( 0, 0, 200, 200 )
+
+[node name="BlurEffect" type="Panel" parent="BackBufferCopy_Y1"]
+show_behind_parent = true
+material = SubResource( 41 )
+margin_right = 900.0
+margin_bottom = 620.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 37 )
+
+[node name="BackBufferCopy_X2" type="BackBufferCopy" parent="."]
+copy_mode = 2
+rect = Rect2( 0, 0, 200, 200 )
+
+[node name="BlurEffect" type="Panel" parent="BackBufferCopy_X2"]
+show_behind_parent = true
+material = SubResource( 42 )
+margin_right = 900.0
+margin_bottom = 620.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 37 )
+
+[node name="BackBufferCopy_Y2" type="BackBufferCopy" parent="."]
+copy_mode = 2
+rect = Rect2( 0, 0, 200, 200 )
+
+[node name="BlurEffect" type="Panel" parent="BackBufferCopy_Y2"]
+show_behind_parent = true
+material = SubResource( 43 )
+margin_right = 900.0
+margin_bottom = 620.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 37 )

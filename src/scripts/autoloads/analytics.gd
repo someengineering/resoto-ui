@@ -9,6 +9,8 @@ enum EventsUI {STARTED = 300, EXITED, ERROR, RUNNING}
 enum EventsExplore {BACK = 400, COPY_QUERY, COPY_NODE, CHANGE_MODE, REMOVE_FROM_CLEANUP, ADD_TO_CLEANUP, PROTECT, EXPLORE_SUCCESSORS, EXPLORE_PREDECESSORS, EXPLORE_NODE_LIST, EXPLORE_NODE}
 enum EventsSearch {SEARCH = 500}
 enum EventWizard {START = 600, FINISH, COLLECT_DONE, ERROR}
+enum EventsJobEditor {SAVE = 700, DELETE, DUPLICATE, RUN, NEW_FROM_TEMPLATE}
+enum EventsAggregationView {RUN = 800, USE_EXAMPLE, COPY_TO_CSV, COPY_TO_JSON, DOCS, SHOW}
 
 var events:= {
 	EventsDashboard.NEW : "ui.dashboard.new",
@@ -42,7 +44,18 @@ var events:= {
 	EventWizard.START: "ui.wizard.start",
 	EventWizard.FINISH: "ui.wizard.finish",
 	EventWizard.ERROR: "ui.wizard.error",
-	EventWizard.COLLECT_DONE: "ui.wizard.collect-done"
+	EventWizard.COLLECT_DONE: "ui.wizard.collect-done",
+	EventsJobEditor.DELETE: "ui.job-editor.delete",
+	EventsJobEditor.DUPLICATE: "ui.job-editor.duplicate",
+	EventsJobEditor.NEW_FROM_TEMPLATE: "ui.job-editor.new_from_template",
+	EventsJobEditor.RUN: "ui.job-editor.run",
+	EventsJobEditor.SAVE: "ui.job-editor.save",
+	EventsAggregationView.RUN: "ui.aggregation-view.run",
+	EventsAggregationView.USE_EXAMPLE: "ui.aggregation-view.used_example",
+	EventsAggregationView.COPY_TO_CSV: "ui.aggregation-view.copy_to_csv",
+	EventsAggregationView.COPY_TO_JSON: "ui.aggregation-view.copy_to_json",
+	EventsAggregationView.DOCS: "ui.aggregation-view.docs",
+	EventsAggregationView.SHOW: "ui.aggregation-view.show"
 }
 
 var api_key : String = ""

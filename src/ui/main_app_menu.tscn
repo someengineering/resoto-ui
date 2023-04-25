@@ -1,0 +1,610 @@
+[gd_scene load_steps=47 format=2]
+
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
+[ext_resource path="res://scripts/ui_menu.gd" type="Script" id=2]
+[ext_resource path="res://assets/resoto/Resoto_logo_and_text.svg" type="Texture" id=3]
+[ext_resource path="res://assets/icons/icon_128_help_external_link.svg" type="Texture" id=4]
+[ext_resource path="res://components/popups/popup_workflows.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/elements/history_button.tscn" type="PackedScene" id=6]
+[ext_resource path="res://components/elements/hamburger_button.tscn" type="PackedScene" id=7]
+[ext_resource path="res://components/shared/blurred_panel_background.tscn" type="PackedScene" id=8]
+[ext_resource path="res://components/shared/notification-label.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/icons/icon_128_circle_thick.svg" type="Texture" id=10]
+[ext_resource path="res://assets/icons/icon_128_attention_round.svg" type="Texture" id=11]
+[ext_resource path="res://components/fulltext_search_menu/full_text_search.tscn" type="PackedScene" id=12]
+[ext_resource path="res://components/shared/zoom_group.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/theme/Barlow-Medium.ttf" type="DynamicFontData" id=14]
+[ext_resource path="res://assets/icons/icon_128_terminal.svg" type="Texture" id=15]
+[ext_resource path="res://assets/icons/icon_128_cleanup_job.svg" type="Texture" id=16]
+[ext_resource path="res://assets/generic/spin_shader_mix.tres" type="Shader" id=17]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=22]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=23]
+[ext_resource path="res://assets/icons/icon_128_main_jobs.svg" type="Texture" id=24]
+[ext_resource path="res://assets/icons/icon_128_main_dashboards.svg" type="Texture" id=25]
+[ext_resource path="res://assets/icons/icon_128_main_config.svg" type="Texture" id=26]
+[ext_resource path="res://assets/icons/icon_128_settings.svg" type="Texture" id=27]
+[ext_resource path="res://assets/icons/icon_128_main_terminal.svg" type="Texture" id=28]
+[ext_resource path="res://assets/icons/icon_128_main_explore.svg" type="Texture" id=29]
+[ext_resource path="res://assets/icons/icon_128_notification.svg" type="Texture" id=33]
+
+[sub_resource type="StyleBoxFlat" id=24]
+bg_color = Color( 0.0470588, 0.0941176, 0.133333, 1 )
+
+[sub_resource type="Gradient" id=22]
+offsets = PoolRealArray( 0.154734, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.12549, 0.0862745, 0.247059, 0 )
+
+[sub_resource type="GradientTexture2D" id=23]
+gradient = SubResource( 22 )
+height = 20
+fill_to = Vector2( 0, 1 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 15
+use_mipmaps = true
+use_filter = true
+extra_spacing_top = -4
+extra_spacing_bottom = -3
+font_data = ExtResource( 14 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 1.0
+bg_color = Color( 0, 0.329412, 0.639216, 1 )
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 3.0
+expand_margin_bottom = 3.0
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 3
+shadow_offset = Vector2( -1, 1 )
+
+[sub_resource type="DynamicFontData" id=29]
+font_path = "res://assets/theme/SourceCodePro-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=30]
+size = 12
+font_data = SubResource( 29 )
+
+[sub_resource type="Gradient" id=25]
+colors = PoolColorArray( 0, 0, 0, 1, 0.12549, 0.0862745, 0.247059, 0 )
+
+[sub_resource type="GradientTexture2D" id=26]
+gradient = SubResource( 25 )
+width = 50
+height = 20
+
+[sub_resource type="Gradient" id=27]
+offsets = PoolRealArray( 0.665169, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.12549, 0.0862745, 0.247059, 0 )
+
+[sub_resource type="GradientTexture2D" id=28]
+gradient = SubResource( 27 )
+height = 20
+fill_to = Vector2( 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.0392157, 0.145098, 0.247059, 1 )
+
+[sub_resource type="Gradient" id=20]
+colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.106957, 0.112697, 0.253906, 1 )
+
+[sub_resource type="GradientTexture2D" id=21]
+gradient = SubResource( 20 )
+height = 20
+use_hdr = true
+fill_from = Vector2( 0, 0.0777042 )
+
+[sub_resource type="StyleBoxEmpty" id=41]
+
+[sub_resource type="StyleBoxEmpty" id=42]
+
+[sub_resource type="StyleBoxFlat" id=35]
+bg_color = Color( 1, 1, 1, 0.498039 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 20
+shadow_offset = Vector2( 0, 5 )
+
+[sub_resource type="Gradient" id=38]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.0310421, 1 )
+colors = PoolColorArray( 0.243137, 0.141176, 0.372549, 1, 0.674586, 0.429688, 1, 1, 0.243137, 0.141176, 0.372549, 1 )
+
+[sub_resource type="GradientTexture" id=39]
+gradient = SubResource( 38 )
+
+[sub_resource type="ShaderMaterial" id=40]
+shader = ExtResource( 17 )
+shader_param/shader_effect_mix = 1.0
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/power = 1.0
+shader_param/pos = Vector2( 0.5, 0.5 )
+shader_param/turn_speed = -6.0
+shader_param/grad_length = 1.0
+shader_param/gradient_texture = SubResource( 39 )
+
+[node name="MenuBar" type="CanvasLayer"]
+layer = 20
+follow_viewport_enable = true
+script = ExtResource( 2 )
+
+[node name="HamburgerMenu" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 350, 0 )
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+custom_constants/separation = 0
+
+[node name="Panel" type="PanelContainer" parent="HamburgerMenu"]
+margin_right = 350.0
+margin_bottom = 1080.0
+rect_min_size = Vector2( 350, 0 )
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 24 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ShadowTop" type="TextureRect" parent="HamburgerMenu/Panel"]
+margin_right = 350.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 60 )
+mouse_filter = 2
+size_flags_vertical = 0
+texture = SubResource( 23 )
+stretch_mode = 1
+
+[node name="MenuContent" type="MarginContainer" parent="HamburgerMenu/Panel"]
+margin_right = 350.0
+margin_bottom = 1080.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 60
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="HamburgerMenuItems" type="VBoxContainer" parent="HamburgerMenu/Panel/MenuContent"]
+unique_name_in_owner = true
+margin_left = 20.0
+margin_top = 60.0
+margin_right = 330.0
+margin_bottom = 1060.0
+custom_constants/separation = 4
+
+[node name="Buttons" type="VBoxContainer" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+margin_right = 310.0
+margin_bottom = 248.0
+custom_constants/separation = 17
+
+[node name="ButtonDashboards" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 23 )]
+margin_right = 310.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+theme_type_variation = "ButtonFlatDefault"
+text = "Dashboards"
+icon_tex = ExtResource( 25 )
+icon_margin = -5
+
+[node name="ButtonExplore" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 23 )]
+margin_top = 53.0
+margin_right = 310.0
+margin_bottom = 89.0
+size_flags_horizontal = 3
+theme_type_variation = "ButtonFlatDefault"
+text = "Explore"
+icon_tex = ExtResource( 29 )
+icon_margin = -5
+
+[node name="ButtonJobs" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 23 )]
+margin_top = 106.0
+margin_right = 310.0
+margin_bottom = 142.0
+size_flags_horizontal = 3
+theme_type_variation = "ButtonFlatDefault"
+text = "Jobs"
+icon_tex = ExtResource( 24 )
+icon_margin = -5
+
+[node name="ButtonTerminals" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 23 )]
+margin_top = 159.0
+margin_right = 310.0
+margin_bottom = 195.0
+size_flags_horizontal = 3
+theme_type_variation = "ButtonFlatDefault"
+text = "Resoto Shell Lite"
+icon_tex = ExtResource( 28 )
+icon_margin = -5
+
+[node name="ButtonConfig" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons" instance=ExtResource( 23 )]
+margin_top = 212.0
+margin_right = 310.0
+margin_bottom = 248.0
+size_flags_horizontal = 3
+theme_type_variation = "ButtonFlatDefault"
+text = "Configuration"
+icon_tex = ExtResource( 26 )
+icon_margin = -5
+
+[node name="Spacer" type="Control" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+margin_top = 252.0
+margin_right = 310.0
+margin_bottom = 963.0
+size_flags_vertical = 3
+
+[node name="SetupWizardButton" type="Button" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+margin_top = 931.0
+margin_right = 310.0
+margin_bottom = 963.0
+text = "Setup Wizard"
+
+[node name="UISettings" type="HBoxContainer" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+margin_top = 967.0
+margin_right = 310.0
+margin_bottom = 1000.0
+alignment = 1
+
+[node name="UIZoomGroup" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 13 )]
+margin_right = 93.0
+
+[node name="Spacer" type="Control" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings"]
+margin_left = 97.0
+margin_right = 199.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+
+[node name="ButtonUISettings" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 22 )]
+margin_left = 203.0
+margin_right = 236.0
+hint_tooltip = "Settings"
+size_flags_horizontal = 0
+icon_tex = ExtResource( 27 )
+
+[node name="ButtonDocs" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 22 )]
+margin_left = 240.0
+margin_right = 273.0
+hint_tooltip = "Documentation (external link)"
+icon_tex = ExtResource( 4 )
+
+[node name="ButtonMessageLog" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings" instance=ExtResource( 22 )]
+margin_left = 277.0
+margin_right = 310.0
+hint_tooltip = "Notifications"
+size_flags_horizontal = 0
+icon_tex = ExtResource( 33 )
+
+[node name="NotificationAnchor" type="Control" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog"]
+margin_left = 26.0
+margin_top = -3.0
+margin_right = 36.0
+margin_bottom = 7.0
+mouse_filter = 2
+
+[node name="NotificationLabel" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog/NotificationAnchor" instance=ExtResource( 9 )]
+visible = false
+margin_right = 10.0
+custom_fonts/font = SubResource( 1 )
+custom_styles/normal = SubResource( 2 )
+
+[node name="ResotoUIVersion" type="Label" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
+visible = false
+modulate = Color( 1, 1, 1, 0.196078 )
+margin_top = 984.0
+margin_right = 310.0
+margin_bottom = 1000.0
+custom_fonts/font = SubResource( 30 )
+text = "resoto-ui v"
+align = 1
+
+[node name="ShadowSide" type="TextureRect" parent="HamburgerMenu"]
+modulate = Color( 1, 1, 1, 0.227451 )
+margin_left = 350.0
+margin_right = 400.0
+margin_bottom = 1080.0
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+texture = SubResource( 26 )
+stretch_mode = 1
+
+[node name="ClickDetection" type="Control" parent="HamburgerMenu"]
+margin_left = 400.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="HamburgerTween" type="Tween" parent="HamburgerMenu"]
+
+[node name="ShadowTop" type="TextureRect" parent="."]
+modulate = Color( 1, 1, 1, 0.12549 )
+show_behind_parent = true
+margin_right = 1920.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 52.738 )
+mouse_filter = 2
+size_flags_vertical = 0
+texture = SubResource( 28 )
+stretch_mode = 1
+
+[node name="MenuContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 1 )
+custom_constants/separation = 0
+
+[node name="TopMenu" type="PanelContainer" parent="MenuContainer"]
+margin_right = 1920.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackgroundGradient" type="TextureRect" parent="MenuContainer/TopMenu"]
+margin_right = 1920.0
+margin_bottom = 40.0
+mouse_filter = 2
+texture = SubResource( 21 )
+stretch_mode = 1
+
+[node name="Title" type="HBoxContainer" parent="MenuContainer/TopMenu"]
+margin_right = 1920.0
+margin_bottom = 40.0
+mouse_filter = 2
+custom_constants/separation = 0
+
+[node name="HamburgerButton" parent="MenuContainer/TopMenu/Title" instance=ExtResource( 7 )]
+modulate = Color( 0.913725, 0.552941, 0.968627, 1 )
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_vertical = 4
+custom_styles/hover = SubResource( 41 )
+custom_styles/pressed = SubResource( 41 )
+custom_styles/focus = SubResource( 41 )
+custom_styles/disabled = SubResource( 41 )
+custom_styles/normal = SubResource( 41 )
+
+[node name="HistoryButtons" type="HBoxContainer" parent="MenuContainer/TopMenu/Title"]
+unique_name_in_owner = true
+margin_left = 40.0
+margin_right = 105.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 65, 0 )
+custom_constants/separation = 6
+alignment = 2
+
+[node name="HistoryBackButton" parent="MenuContainer/TopMenu/Title/HistoryButtons" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+modulate = Color( 0.913725, 0.552941, 0.968627, 1 )
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 9.0
+margin_right = 34.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 25, 40 )
+custom_styles/hover = SubResource( 42 )
+custom_styles/pressed = SubResource( 42 )
+custom_styles/focus = SubResource( 42 )
+custom_styles/disabled = SubResource( 42 )
+custom_styles/normal = SubResource( 42 )
+disabled = true
+can_press = false
+
+[node name="HistoryFwdButton" parent="MenuContainer/TopMenu/Title/HistoryButtons" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+modulate = Color( 0.913725, 0.552941, 0.968627, 1 )
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 40.0
+margin_right = 65.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 25, 40 )
+custom_styles/hover = SubResource( 42 )
+custom_styles/pressed = SubResource( 42 )
+custom_styles/focus = SubResource( 42 )
+custom_styles/disabled = SubResource( 42 )
+custom_styles/normal = SubResource( 42 )
+disabled = true
+forward = true
+can_press = false
+
+[node name="ReshLiteBtn" parent="MenuContainer/TopMenu/Title" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+modulate = Color( 0.913725, 0.552941, 0.968627, 1 )
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 105.0
+margin_right = 145.0
+margin_bottom = 40.0
+custom_styles/hover = SubResource( 42 )
+custom_styles/pressed = SubResource( 42 )
+custom_styles/focus = SubResource( 42 )
+custom_styles/disabled = SubResource( 42 )
+custom_styles/normal = SubResource( 42 )
+px_offset = 0.0
+
+[node name="ArrowIcon" parent="MenuContainer/TopMenu/Title/ReshLiteBtn/Button" index="0"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 35.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 30, 30 )
+texture = ExtResource( 15 )
+
+[node name="FixedSpacer" type="MarginContainer" parent="MenuContainer/TopMenu/Title"]
+margin_left = 145.0
+margin_right = 450.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 305, 0 )
+mouse_filter = 2
+
+[node name="SpacerMidL" type="MarginContainer" parent="MenuContainer/TopMenu/Title"]
+margin_left = 450.0
+margin_right = 918.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 20, 0 )
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="MainResotoLogo" type="TextureRect" parent="MenuContainer/TopMenu/Title"]
+unique_name_in_owner = true
+margin_left = 918.0
+margin_top = 4.0
+margin_right = 1003.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 85, 32 )
+size_flags_vertical = 4
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="SpacerMidR" type="MarginContainer" parent="MenuContainer/TopMenu/Title"]
+margin_left = 1003.0
+margin_right = 1472.0
+margin_bottom = 40.0
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="TopMenuFullTextSearch" parent="MenuContainer/TopMenu/Title" instance=ExtResource( 12 )]
+unique_name_in_owner = true
+margin_left = 1472.0
+margin_right = 1872.0
+rect_min_size = Vector2( 400, 0 )
+mouse_filter = 1
+
+[node name="SpacerR2" type="MarginContainer" parent="MenuContainer/TopMenu/Title"]
+margin_left = 1872.0
+margin_right = 1880.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 8, 0 )
+mouse_filter = 2
+
+[node name="JobsBtn" parent="MenuContainer/TopMenu/Title" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 1880.0
+margin_right = 1910.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 30, 40 )
+custom_styles/hover = SubResource( 42 )
+custom_styles/pressed = SubResource( 42 )
+custom_styles/focus = SubResource( 42 )
+custom_styles/disabled = SubResource( 42 )
+custom_styles/normal = SubResource( 42 )
+px_offset = 0.0
+
+[node name="Button" parent="MenuContainer/TopMenu/Title/JobsBtn" index="0"]
+modulate = Color( 0.462745, 0.176471, 0.843137, 1 )
+
+[node name="ArrowIcon" parent="MenuContainer/TopMenu/Title/JobsBtn/Button" index="0"]
+margin_left = 1.0
+margin_top = 6.0
+margin_right = 29.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 28, 28 )
+texture = ExtResource( 16 )
+
+[node name="WorkflowsPopup" parent="MenuContainer/TopMenu/Title/JobsBtn" instance=ExtResource( 5 )]
+visible = false
+self_modulate = Color( 0.0901961, 0.113725, 0.129412, 1 )
+margin_left = -500.0
+margin_top = 45.0
+margin_right = 35.0
+margin_bottom = 380.0
+custom_styles/panel = SubResource( 35 )
+status_icon_path = NodePath("../StatusIcons")
+
+[node name="PanelBackgroundBlur" parent="MenuContainer/TopMenu/Title/JobsBtn/WorkflowsPopup" instance=ExtResource( 8 )]
+
+[node name="StatusIcons" type="Control" parent="MenuContainer/TopMenu/Title/JobsBtn"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -15.0
+margin_top = -15.0
+margin_right = 15.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 30 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Error" type="TextureRect" parent="MenuContainer/TopMenu/Title/JobsBtn/StatusIcons"]
+visible = false
+modulate = Color( 0.788235, 0.258824, 0.141176, 1 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -14.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 14, 14 )
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 11 )
+expand = true
+stretch_mode = 6
+
+[node name="Progressing" type="TextureRect" parent="MenuContainer/TopMenu/Title/JobsBtn/StatusIcons"]
+visible = false
+material = SubResource( 40 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -12.0
+margin_top = -12.0
+margin_right = 12.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 24, 24 )
+mouse_filter = 2
+size_flags_vertical = 4
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 6
+
+[node name="SpacerR" type="MarginContainer" parent="MenuContainer/TopMenu/Title"]
+margin_left = 1910.0
+margin_right = 1920.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 10, 0 )
+mouse_filter = 2
+
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonDashboards" to="." method="_on_ButtonDashboards_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonExplore" to="." method="_on_ButtonExplore_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonJobs" to="." method="_on_ButtonJobs_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonTerminals" to="." method="_on_ButtonTerminals_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonConfig" to="." method="_on_ButtonConfig_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/SetupWizardButton" to="." method="_on_SetupWizardButton_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonUISettings" to="." method="_on_ButtonUISettings_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonDocs" to="." method="_on_ButtonDocs_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog" to="." method="_on_ButtonMessageLog_pressed"]
+[connection signal="gui_input" from="HamburgerMenu/ShadowSide" to="." method="_on_click_detection_gui_input"]
+[connection signal="gui_input" from="HamburgerMenu/ClickDetection" to="." method="_on_click_detection_gui_input"]
+[connection signal="hamburger_button_pressed" from="MenuContainer/TopMenu/Title/HamburgerButton" to="." method="_on_HamburgerButton_hamburger_button_pressed"]
+[connection signal="pressed" from="MenuContainer/TopMenu/Title/HistoryButtons/HistoryBackButton" to="." method="_on_HistoryBackButton_pressed"]
+[connection signal="pressed" from="MenuContainer/TopMenu/Title/HistoryButtons/HistoryFwdButton" to="." method="_on_HistoryFwdButton_pressed"]
+[connection signal="pressed" from="MenuContainer/TopMenu/Title/ReshLiteBtn" to="." method="_on_ReshLiteBtn_pressed"]
+[connection signal="gui_input" from="MenuContainer/TopMenu/Title/MainResotoLogo" to="." method="_on_ResotoLogo_gui_input"]
+[connection signal="pressed" from="MenuContainer/TopMenu/Title/JobsBtn" to="." method="_on_JobsBtn_pressed"]
+
+[editable path="MenuContainer/TopMenu/Title/ReshLiteBtn"]
+[editable path="MenuContainer/TopMenu/Title/JobsBtn"]

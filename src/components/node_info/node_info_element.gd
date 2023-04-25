@@ -14,14 +14,19 @@ var default_treemap_mode : int				= 1
 var treemap_button_script_pressed : bool	= false
 var treemap_button_force_switched : bool	= false
 
-onready var n_icon_protected := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconProtected
-onready var n_icon_cleaned := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconCleaned
-onready var n_icon_dclean := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconDesiredClean
-onready var n_icon_phantom := $Margin/VBox/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIconPhantom
+
+onready var n_icon_cleaned := $"%NodeIconCleaned"
+onready var n_icon_phantom := $"%NodeIconPhantom"
 onready var property_container := $"%PropertyContainer"
-onready var leaf_panel := $Margin/VBox/NodeContent/LeafPanel
+onready var leaf_panel := $"%LeafPanel"
 onready var tag_group := $"%TagsGroup"
 onready var graph_a_star := GraphAStar.new()
+
+# Resoto Action Buttons
+onready var btn_protect_add : Button = $"%ProtectButton"
+onready var btn_protect_remove : Button = $"%UnProtectButton"
+onready var btn_cleanup_add : Button = $"%AddToCleanupButton"
+onready var btn_cleanup_remove : Button = $"%RemoveFromCleanupButton"
 
 
 func _ready():
@@ -35,9 +40,9 @@ func show_node(node_id:String, _add_to_history:=true):
 		clear_view()
 	# cancel the active request... this created problems with the signal returning old requests
 	if active_request:
-		active_request.cancel(ERR_PRINTER_ON_FIRE)
+		active_request.cancel()
 	if aggregation_request:
-		aggregation_request.cancel(ERR_PRINTER_ON_FIRE)
+		aggregation_request.cancel()
 	
 	_g.content_manager.change_section_explore("node_single_info")
 	var search_command = "id(\"" + node_id + "\") <-[0:]-"
@@ -62,9 +67,7 @@ func clear_view():
 	$"%KindLabelButton".set("custom_colors/font_color", Color.transparent)
 	set_successor_button(false)
 	set_predecessor_button(false)
-	n_icon_protected.hide()
 	n_icon_cleaned.hide()
-	n_icon_dclean.hide()
 	leaf_panel.hide()
 	$"%TreeMapContainer".show()
 
@@ -89,7 +92,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		update_breadcrumbs()
 		
 		if not current_result.empty() and current_result[0].has("reported"):
-			$Margin/VBox/NodeContent/NodeDetails/AllDataGroup.node_text = Utils.readable_dict(current_result[0].reported)
+			$"%AllDataGroup".node_text = Utils.readable_dict(current_result[0].reported)
 		
 		for r in current_result:
 			if r.type == "node" and r.id == current_node_id:
@@ -252,13 +255,13 @@ func main_node_display(node_data):
 	if has_meta and node_data.metadata.has("cleaned"):
 		n_icon_cleaned.visible = node_data.metadata.cleaned
 	if has_meta and node_data.metadata.has("protected"):
-		n_icon_protected.visible = node_data.metadata.protected
+		btn_protect_add.visible = !node_data.metadata.protected
+		btn_protect_remove.visible = node_data.metadata.protected
 	if has_meta and node_data.metadata.has("phantom"):
 		n_icon_phantom.visible = node_data.metadata.phantom
 	if has_desired and node_data.desired.has("clean"):
-		n_icon_dclean.visible = node_data.desired.clean
-		$"%AddToCleanupButton".visible = !node_data.desired.clean
-		$"%RemoveFromCleanupButton".visible = !node_data.desired.clean
+		btn_cleanup_add.visible = !node_data.desired.clean
+		btn_cleanup_remove.visible = node_data.desired.clean
 	
 	var visible_properties:= {
 		"kind" : ["Kind", "kind"],
@@ -275,7 +278,7 @@ func main_node_display(node_data):
 				var descr_node:= Label.new()
 				descr_node.text = visible_properties[vp_key][0]
 				var value_node = load("res://components/elements/utility/clipped_label.tscn").instance()
-				value_node.script = load("res://components/elements/utility/clipped_label_copy_lmb.gd")
+				value_node.add_child(preload("res://components/shared/label_left_click_copy.tscn").instance())
 				var value_text = str(node_data.reported[vp_key])
 				
 				if vp_key == "name":
@@ -403,9 +406,8 @@ func _on_ResourceListButton_pressed():
 
 
 func _on_RemoveFromCleanupButton_pressed():
-	n_icon_dclean.visible = false
-	$"%RemoveFromCleanupButton".hide()
-	$"%AddToCleanupButton".show()
+	btn_cleanup_remove.hide()
+	btn_cleanup_add.show()
 	var remove_from_cleanup_query : String = "search id(\"%s\") | set_desired clean=false" % [current_node_id]
 	if not _g.ui_test_mode:
 		API.cli_execute(remove_from_cleanup_query, self, "_on_remove_cleanup_query_done")
@@ -416,9 +418,8 @@ func _on_RemoveFromCleanupButton_pressed():
 
 
 func _on_AddToCleanupButton_pressed():
-	n_icon_dclean.visible = true
-	$"%AddToCleanupButton".hide()
-	$"%RemoveFromCleanupButton".show()
+	btn_cleanup_remove.show()
+	btn_cleanup_add.hide()
 	var cleanup_query : String = "search id(\"%s\") | clean" % [current_node_id]
 	if not _g.ui_test_mode:
 		API.cli_execute(cleanup_query, self, "_on_cleanup_query_done")
@@ -429,13 +430,25 @@ func _on_AddToCleanupButton_pressed():
 
 
 func _on_ProtectButton_pressed():
-	n_icon_protected.visible = !n_icon_protected.visible
-	var protect_query : String = "search id(\"%s\") | set_metadata protected=%s" % [current_node_id, str(n_icon_protected.visible)]
+	btn_protect_remove.show()
+	btn_protect_add.hide()
+	var protect_query : String = "search id(\"%s\") | set_metadata protected=true" % current_node_id
 	if not _g.ui_test_mode:
 		API.cli_execute(protect_query, self, "_on_protect_query_done")
 	else:
 		print(protect_query)
 		
+	Analytics.event(Analytics.EventsExplore.PROTECT, {"query": protect_query})
+
+
+func _on_UnProtectButton_pressed():
+	btn_protect_remove.hide()
+	btn_protect_add.show()
+	var protect_query : String = "search id(\"%s\") | set_metadata protected=false" % current_node_id
+	if not _g.ui_test_mode:
+		API.cli_execute(protect_query, self, "_on_protect_query_done")
+	else:
+		print(protect_query)
 	Analytics.event(Analytics.EventsExplore.PROTECT, {"query": protect_query})
 
 

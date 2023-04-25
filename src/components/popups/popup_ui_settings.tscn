@@ -11,7 +11,6 @@
 [ext_resource path="res://components/shared/icon_tooltip_helper.tscn" type="PackedScene" id=9]
 
 [node name="UISettings" instance=ExtResource( 1 )]
-visible = true
 margin_right = 640.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 640, 450 )
@@ -95,6 +94,7 @@ margin_right = 590.0
 margin_bottom = 68.0
 size_flags_horizontal = 3
 script = ExtResource( 6 )
+update_on_writing = false
 
 [node name="PSKLabel" type="Label" parent="Content/Content/SettingsTabs/General Settings/VBox/ConnectionSettings" index="4"]
 margin_top = 78.0
@@ -159,8 +159,8 @@ size_flags_vertical = 6
 [node name="CleanupHint" type="Label" parent="Content/Content/SettingsTabs/General Settings/VBox/CleanupSettings" index="2"]
 margin_left = 172.0
 margin_top = 4.0
-margin_right = 334.0
-margin_bottom = 20.0
+margin_right = 315.0
+margin_bottom = 19.0
 theme_type_variation = "LabelSmall"
 text = "Enable cleanup of resources"
 
@@ -194,6 +194,7 @@ theme_type_variation = "LabelSmall"
 text = "Do not actually clean up resources. Just create log files."
 
 [node name="ToolsLabel" type="Label" parent="Content/Content/SettingsTabs/General Settings/VBox" index="4"]
+visible = false
 margin_top = 235.0
 margin_right = 590.0
 margin_bottom = 295.0
@@ -203,6 +204,7 @@ text = "Tools"
 valign = 2
 
 [node name="SetupWizardStartButton" type="Button" parent="Content/Content/SettingsTabs/General Settings/VBox" index="5"]
+visible = false
 margin_top = 299.0
 margin_right = 160.0
 margin_bottom = 331.0
@@ -378,29 +380,43 @@ text = "Copyright 2022 Some Engineering Inc."
 [node name="ResotoLinkButton" type="LinkButton" parent="Content/Content/SettingsTabs/About/VBox" index="4"]
 margin_top = 126.0
 margin_right = 590.0
-margin_bottom = 146.0
+margin_bottom = 166.0
+rect_min_size = Vector2( 0, 40 )
 focus_mode = 2
 text = "View the Resoto UI Apache 2.0 license"
 
-[node name="ThirdPartyLabel" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="5"]
-margin_top = 150.0
+[node name="ResotoUIRepoLabel" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="5"]
+margin_top = 170.0
 margin_right = 590.0
-margin_bottom = 210.0
+margin_bottom = 190.0
+text = "Contribute"
+
+[node name="ResotoLinkButton3" type="LinkButton" parent="Content/Content/SettingsTabs/About/VBox" index="6"]
+margin_top = 194.0
+margin_right = 590.0
+margin_bottom = 214.0
+focus_mode = 2
+text = "GitHub repository"
+
+[node name="ThirdPartyLabel" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="7"]
+margin_top = 218.0
+margin_right = 590.0
+margin_bottom = 278.0
 rect_min_size = Vector2( 0, 60 )
 theme_type_variation = "Label_24"
 text = "Third Party Licenses"
 valign = 2
 
-[node name="Godot" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="6"]
-margin_top = 214.0
+[node name="Godot" type="Label" parent="Content/Content/SettingsTabs/About/VBox" index="8"]
+margin_top = 282.0
 margin_right = 590.0
-margin_bottom = 234.0
+margin_bottom = 302.0
 text = "Resoto UI was built using the Godot Engine"
 
-[node name="LinkButton" type="LinkButton" parent="Content/Content/SettingsTabs/About/VBox" index="7"]
-margin_top = 238.0
+[node name="LinkButton" type="LinkButton" parent="Content/Content/SettingsTabs/About/VBox" index="9"]
+margin_top = 306.0
 margin_right = 590.0
-margin_bottom = 258.0
+margin_bottom = 326.0
 focus_mode = 2
 text = "View the Godot Engine MIT license and third party license information"
 
@@ -436,5 +452,6 @@ margin_bottom = 32.0
 [connection signal="pressed" from="Content/Content/SettingsTabs/UI Settings/VBox/GeneralUISettings/WizardEditorGroup/WizardEditorStartButton" to="." method="_on_WizardEditorStartButton_pressed"]
 [connection signal="pressed" from="Content/Content/SettingsTabs/About/VBox/ResotoLinkButton2" to="." method="_on_ResotoLinkButton2_pressed"]
 [connection signal="pressed" from="Content/Content/SettingsTabs/About/VBox/ResotoLinkButton" to="." method="_on_ResotoLinkButton_pressed"]
+[connection signal="pressed" from="Content/Content/SettingsTabs/About/VBox/ResotoLinkButton3" to="." method="_on_ResotoLinkButton3_pressed"]
 [connection signal="pressed" from="Content/Content/SettingsTabs/About/VBox/LinkButton" to="." method="_on_LinkButton_pressed"]
 [connection signal="pressed" from="Content/Footer/Footerbar/CancelButton" to="." method="_on_CancelButton_pressed"]

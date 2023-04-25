@@ -16,7 +16,7 @@ func _ready() -> void:
 	req_res.connect("done", self, "_on_post_cli_execute_done")
 
 
-func _process(delta:float) -> void:
+func _process(_delta:float) -> void:
 	resoto_api_.poll()
 
 

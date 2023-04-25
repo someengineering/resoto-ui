@@ -1,4 +1,5 @@
 extends ScrollContainer
+class_name ScrollContainerScrollbarClaimSpaceVertical
 
 export (int) var extra_space : int = 10
 

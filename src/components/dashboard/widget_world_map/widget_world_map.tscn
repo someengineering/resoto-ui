@@ -1,0 +1,300 @@
+[gd_scene load_steps=27 format=2]
+
+[ext_resource path="res://components/dashboard/widget_world_map/widget_world_map.tres" type="Material" id=1]
+[ext_resource path="res://components/dashboard/widget_world_map/viewport_container.gd" type="Script" id=3]
+[ext_resource path="res://components/dashboard/widget_world_map/widget_world_map.gd" type="Script" id=5]
+[ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/images/world_map-01.svg" type="Texture" id=8]
+
+[sub_resource type="World" id=3]
+resource_local_to_scene = true
+
+[sub_resource type="Gradient" id=19]
+offsets = PoolRealArray( 0, 0.390769, 0.4, 0.421538, 0.433846, 0.886154, 0.898462, 0.966154, 0.978462 )
+colors = PoolColorArray( 0.355469, 0.355469, 0.355469, 1, 0.198717, 0.198717, 0.198717, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.165392, 0.165392, 0.165392, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture2D" id=11]
+gradient = SubResource( 19 )
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2( 0.5, 0.5 )
+fill_to = Vector2( 0.5, 0 )
+
+[sub_resource type="SpatialMaterial" id=20]
+flags_unshaded = true
+params_blend_mode = 1
+params_cull_mode = 2
+albedo_color = Color( 0, 0.329412, 0.639216, 1 )
+albedo_texture = SubResource( 11 )
+
+[sub_resource type="PlaneMesh" id=21]
+size = Vector2( 1.5, 1.5 )
+
+[sub_resource type="Gradient" id=28]
+offsets = PoolRealArray( 0.849231, 0.898462, 1 )
+colors = PoolColorArray( 0.123871, 0.346745, 0.480469, 1, 0.0392157, 0.145098, 0.247059, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture2D" id=7]
+gradient = SubResource( 28 )
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2( 0.518, 0.483 )
+fill_to = Vector2( 0.515, 0 )
+
+[sub_resource type="SpatialMaterial" id=29]
+flags_unshaded = true
+params_blend_mode = 1
+params_billboard_mode = 1
+albedo_texture = SubResource( 7 )
+
+[sub_resource type="QuadMesh" id=30]
+size = Vector2( 2.4, 2.4 )
+
+[sub_resource type="SpatialMaterial" id=36]
+flags_unshaded = true
+albedo_color = Color( 0.203125, 0.754808, 1, 1 )
+
+[sub_resource type="SphereMesh" id=37]
+flip_faces = true
+radial_segments = 128
+rings = 64
+
+[sub_resource type="SphereMesh" id=26]
+resource_local_to_scene = true
+radial_segments = 128
+rings = 64
+
+[sub_resource type="SpatialMaterial" id=27]
+resource_local_to_scene = true
+albedo_texture = ExtResource( 8 )
+
+[sub_resource type="Gradient" id=38]
+offsets = PoolRealArray( 0.627692, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture2D" id=39]
+gradient = SubResource( 38 )
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2( 0.5, 0.5 )
+fill_to = Vector2( 0.5, 0 )
+
+[sub_resource type="SpatialMaterial" id=40]
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_blend_mode = 1
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 0, 0.329412, 0.639216, 1 )
+albedo_texture = SubResource( 39 )
+
+[sub_resource type="Gradient" id=43]
+offsets = PoolRealArray( 0, 0.530744, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=44]
+gradient = SubResource( 43 )
+
+[sub_resource type="ParticlesMaterial" id=41]
+emission_shape = 1
+emission_sphere_radius = 14.0
+gravity = Vector3( 0, 0, 0 )
+scale_random = 0.8
+color_ramp = SubResource( 44 )
+
+[sub_resource type="QuadMesh" id=42]
+size = Vector2( 0.1, 0.1 )
+
+[sub_resource type="StyleBoxFlat" id=45]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.0470588, 0.0941176, 0.133333, 0.784314 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="WidgetWorldMap" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 5 )
+widget_type_id = "WorldMap"
+supported_types = [ 4, 1 ]
+_3d_view = false
+
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stretch = true
+script = ExtResource( 3 )
+
+[node name="Viewport" type="Viewport" parent="ViewportContainer"]
+size = Vector2( 1920, 1080 )
+own_world = true
+world = SubResource( 3 )
+handle_input_locally = false
+msaa = 2
+fxaa = true
+render_target_update_mode = 3
+physics_object_picking = true
+
+[node name="Floor" type="MeshInstance" parent="ViewportContainer/Viewport"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.19447, 0 )
+material_override = SubResource( 20 )
+cast_shadow = 0
+mesh = SubResource( 21 )
+skeleton = NodePath("")
+
+[node name="CamTarget" type="Spatial" parent="ViewportContainer/Viewport"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
+
+[node name="Glow" type="MeshInstance" parent="ViewportContainer/Viewport"]
+material_override = SubResource( 29 )
+cast_shadow = 0
+mesh = SubResource( 30 )
+skeleton = NodePath("../WorldMesh")
+
+[node name="Outline" type="MeshInstance" parent="ViewportContainer/Viewport"]
+transform = Transform( 1.02, 0, 0, 0, 1.02, 0, 0, 0, 1.02, 0, 0, 0 )
+material_override = SubResource( 36 )
+cast_shadow = 0
+mesh = SubResource( 37 )
+skeleton = NodePath("../WorldMesh")
+
+[node name="WorldMesh" type="MeshInstance" parent="ViewportContainer/Viewport"]
+material_override = ExtResource( 1 )
+cast_shadow = 0
+mesh = SubResource( 26 )
+skeleton = NodePath("")
+material/0 = SubResource( 27 )
+
+[node name="Particles" type="Particles" parent="ViewportContainer/Viewport/WorldMesh"]
+material_override = SubResource( 40 )
+cast_shadow = 0
+amount = 1000
+lifetime = 4.0
+process_material = SubResource( 41 )
+draw_pass_1 = SubResource( 42 )
+
+[node name="CameraOrigin" type="Spatial" parent="ViewportContainer/Viewport"]
+transform = Transform( 0.92, -0.39, 0, 0.392, 0.92, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="Camera" type="Camera" parent="ViewportContainer/Viewport/CameraOrigin"]
+transform = Transform( -4.37114e-08, 0.0102624, 0.999947, 0, 0.999947, -0.0102624, -1, -4.48582e-10, -4.37091e-08, 9, 0, 0 )
+fov = 20.0
+
+[node name="ViewportContainer2" type="ViewportContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+stretch = true
+script = ExtResource( 3 )
+
+[node name="Viewport" type="Viewport" parent="ViewportContainer2"]
+size = Vector2( 1920, 1080 )
+own_world = true
+world = SubResource( 3 )
+handle_input_locally = false
+msaa = 1
+fxaa = true
+render_target_update_mode = 0
+physics_object_picking = true
+
+[node name="Sprite3D" type="Sprite3D" parent="ViewportContainer2/Viewport"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0 )
+material_override = ExtResource( 1 )
+cast_shadow = 0
+pixel_size = 0.0038
+texture = ExtResource( 8 )
+
+[node name="Camera" type="Camera" parent="ViewportContainer2/Viewport"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, 0 )
+current = true
+
+[node name="InterfaceMargin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InterfaceMargin"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 1915.0
+margin_bottom = 1075.0
+
+[node name="Label" type="Label" parent="InterfaceMargin/VBoxContainer"]
+margin_right = 1910.0
+margin_bottom = 15.0
+theme_type_variation = "LabelSmall"
+text = "Regions: "
+
+[node name="ComboBox" parent="InterfaceMargin/VBoxContainer" instance=ExtResource( 6 )]
+margin_top = 19.0
+margin_right = 150.0
+margin_bottom = 43.0
+rect_min_size = Vector2( 150, 24 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+clear_button_enabled = true
+
+[node name="Spacer" type="Control" parent="InterfaceMargin/VBoxContainer"]
+margin_top = 47.0
+margin_right = 1910.0
+margin_bottom = 1010.0
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="InterfaceMargin/VBoxContainer"]
+margin_left = 1899.0
+margin_top = 1014.0
+margin_right = 1910.0
+margin_bottom = 1070.0
+size_flags_horizontal = 8
+custom_styles/panel = SubResource( 45 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InterfaceMargin/VBoxContainer/PanelContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 7.0
+margin_bottom = 52.0
+grow_horizontal = 0
+grow_vertical = 0
+custom_constants/separation = 2
+alignment = 2
+
+[node name="Hint" type="Label" parent="InterfaceMargin/VBoxContainer/PanelContainer/VBoxContainer"]
+margin_right = 3.0
+margin_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+theme_type_variation = "LabelCode"
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0.47451 )
+custom_constants/shadow_offset_x = 0
+align = 2
+
+[node name="HSeparator" type="HSeparator" parent="InterfaceMargin/VBoxContainer/PanelContainer/VBoxContainer"]
+margin_top = 22.0
+margin_right = 3.0
+margin_bottom = 26.0
+
+[node name="Total" type="Label" parent="InterfaceMargin/VBoxContainer/PanelContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 3.0
+margin_bottom = 48.0
+theme_type_variation = "LabelCode"
+align = 2
+
+[connection signal="option_changed" from="InterfaceMargin/VBoxContainer/ComboBox" to="." method="_on_ComboBox_option_changed"]

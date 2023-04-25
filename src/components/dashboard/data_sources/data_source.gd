@@ -3,7 +3,7 @@ extends Node
 
 signal query_status
 
-enum TYPES {TIME_SERIES, AGGREGATE_SEARCH, SEARCH, TWO_ENTRIES_AGGREGATE}
+enum TYPES {TIME_SERIES, AGGREGATE_SEARCH, SEARCH, TWO_ENTRIES_AGGREGATE, FIXED_AGGREGATE}
 
 var query : String
 var widget 
@@ -46,3 +46,10 @@ func set_request(new_request : UserAgent.Request):
 		_request.cancel()
 		
 	_request = new_request
+
+
+func is_executing_query() -> bool:
+	if _request == null:
+		return false
+	
+	return _request.state_ == UserAgent.Request.states.DONE

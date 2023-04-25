@@ -35,5 +35,10 @@ margin_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="WaitForConfigUpdateTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
 [connection signal="all_done" from="VBoxContainer/CollectRunDisplay" to="." method="_on_CollectRunDisplay_all_done"]
 [connection signal="started" from="VBoxContainer/CollectRunDisplay" to="." method="_on_CollectRunDisplay_started"]
+[connection signal="timeout" from="WaitForConfigUpdateTimer" to="." method="_on_WaitForConfigUpdateTimer_timeout"]

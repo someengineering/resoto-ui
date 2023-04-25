@@ -6,13 +6,15 @@ const WidgetScenes := {
 	"Indicator" : preload("res://components/dashboard/widget_indicator/widget_indicator.tscn"),
 	"Chart" : preload("res://components/dashboard/widget_chart/widget_chart.tscn"),
 	"Table" : preload("res://components/dashboard/widget_table/widget_table.tscn"),
-	"Heatmap" : preload("res://components/dashboard/widget_heatmap/widget_heatmap.tscn")
+	"Heatmap" : preload("res://components/dashboard/widget_heatmap/widget_heatmap.tscn"),
+	"WorldMap" : preload("res://components/dashboard/widget_world_map/widget_world_map.tscn")
 }
 
 signal deleted
 signal dashboard_changed(dashboard)
 signal dashboard_closed(dashboard)
 signal dashboard_maximized(is_maximized)
+signal dashboard_edit_enabled
 
 var manager: Node = null
 var dashboard_name : String = "" setget set_dashboard_name
@@ -35,28 +37,36 @@ var is_maximized: bool = false setget set_is_maximized
 
 var initial_load : bool = true
 
+var previous_scroll : int = 0
+
 onready var date_button := $VBoxContainer/PanelContainer/Content/HFlowContainer/DateButton
 onready var dashboard := $VBoxContainer/ScrollContainer/Content/Dashboard
 onready var add_widget_popup := $NewWidgetPopup
 onready var range_selector := $DateRangeSelector
 onready var refresh_option := $"%RefreshOptionButton"
 onready var lock_button := $"%DashboardEditButton"
+onready var dashboard_scroll := $VBoxContainer/ScrollContainer
+onready var references := $VBoxContainer/ScrollContainer/Content/Dashboard/References
 
 onready var clouds_combo := find_node("CloudsCombo")
 onready var accounts_combo := find_node("AccountsCombo")
 onready var regions_combo := find_node("RegionsCombo")
 
 
+func _unhandled_input(_event):
+	if add_widget_popup.visible:
+		get_tree().set_input_as_handled()
+
 func _ready() -> void:
 	Style.add($VBoxContainer/MinimizedBar/MinimizeButton, Style.c.LIGHT)
 	Style.add(find_node("RefreshIcon"), Style.c.LIGHT)
 	
-	dashboard.dashboard_container = self
 	add_widget_popup.dashboard_container = self
-	
 	add_widget_popup.from_date = $DateRangeSelector.from.unix_time
 	add_widget_popup.to_date = $DateRangeSelector.to.unix_time
 	add_widget_popup.interval = 144
+	
+	dashboard.dashboard_container = self
 	dashboard.ts_start = $DateRangeSelector.from.unix_time
 	dashboard.ts_end = $DateRangeSelector.to.unix_time
 	dashboard.step = 144
@@ -68,10 +78,13 @@ func _ready() -> void:
 	InfrastructureInformation.connect("infra_info_updated", self, "_on_infra_info_updated")
 	
 	dashboard.lock(true)
-	
-	add_widget_popup.connect("about_to_show", self, "show_popup_bg")
-	add_widget_popup.connect("popup_hide", self, "hide_popup_bg")
 
+
+func _process(_delta):
+	if dashboard_scroll.scroll_vertical != previous_scroll:
+		previous_scroll = dashboard_scroll.scroll_vertical
+		references.mouse_filter = MOUSE_FILTER_STOP
+		$VBoxContainer/ScrollContainer/ScrollTimer.start()
 
 func show_popup_bg():
 	$PopupBG.show()
@@ -123,6 +136,8 @@ func _on_DashboardEditButton_toggled(button_pressed : bool) -> void:
 	dashboard.lock(!is_editing)
 	if !is_editing:
 		emit_signal("dashboard_changed", self)
+	else:
+		emit_signal("dashboard_edit_enabled")
 
 
 func _on_OptionButton_item_selected(_index : int) -> void:
@@ -395,8 +410,7 @@ func _on_NewWidgetPopup_widget_edited():
 
 func _on_DashboardContainer_visibility_changed():
 	if not visible and is_editing:
-		add_widget_popup._close_popup()
-		_on_DashboardEditButton_toggled(false)
+		._close_popup()
 		$"%DashboardEditButton".pressed = false
 
 
@@ -413,3 +427,7 @@ func _on_RefreshTimer_timeout():
 func _notification(what):
 	if what == NOTIFICATION_WM_FOCUS_IN:
 		$RefreshTimer.start()
+
+
+func _on_ScrollTimer_timeout():
+	references.mouse_filter = MOUSE_FILTER_IGNORE

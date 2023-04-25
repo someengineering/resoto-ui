@@ -67,6 +67,11 @@ func get_model(_connect_to:Node, _connect_function:String="_on_get_model_done") 
 	_req_res.connect("done", _connect_to, _connect_function)
 
 
+func get_model_flat(_connect_to:Node, _connect_function:String="_on_get_model_flat_done") -> void:
+	_req_res = _resoto_api.get_model_flat()
+	_req_res.connect("done", _connect_to, _connect_function)
+
+
 func patch_model(_body:String, _connect_to:Node, _connect_function:String="_on_patch_model_done") -> void:
 	_req_res = _resoto_api.patch_model(_body)
 	_req_res.connect("done", _connect_to, _connect_function)
@@ -78,8 +83,8 @@ func get_configs(_connect_to:Node, _connect_function:String="_on_get_configs_don
 
 
 func get_config_id(_connect_to:Node, _config_id:String="resoto.core",
-	_connect_function:String="_on_get_config_id_done"):
-	_req_res = _resoto_api.get_config_id(_config_id)
+	_connect_function:String="_on_get_config_id_done", separate_overrides:bool = false):
+	_req_res = _resoto_api.get_config_id(_config_id, separate_overrides)
 	_req_res.connect("done", _connect_to, _connect_function, [_config_id])
 
 
@@ -158,10 +163,19 @@ func cli_execute_streamed(_command:String, _connect_to:Node,
 	return _req_res
 
 
+func cli_execute_nd_json(_command:String, _connect_to:Node,
+	_connect_data_function:String="_on_cli_execute_nd_json_data",
+	_connect_done_function:String="_on_cli_execute_nd_json_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.post_cli_execute_nd_chunks(_command, graph_id)
+	_req_res.connect("data", _connect_to, _connect_data_function)
+	_req_res.connect("done", _connect_to, _connect_done_function)
+	return _req_res
+
+
 func cli_execute_json(_command:String, _connect_to:Node,
 	_connect_data_function:String="_on_cli_execute_json_data",
 	_connect_done_function:String="_on_cli_execute_json_done") -> ResotoAPI.Request:
-	_req_res = _resoto_api.post_cli_execute_nd_chunks(_command, graph_id)
+	_req_res = _resoto_api.post_cli_execute_json(_command, graph_id)
 	_req_res.connect("data", _connect_to, _connect_data_function)
 	_req_res.connect("done", _connect_to, _connect_done_function)
 	return _req_res
@@ -190,13 +204,33 @@ func get_node_by_id(_node_id:String, _connect_to:Node, _connect_function:String=
 
 
 func _get_infra_info(_connect_to:Node = self,
-	_connect_function:String="_on_get_infra_info_done") -> void:
+	_connect_function:String="_on_get_infra_info_done") -> ResotoAPI.Request:
 	_req_res = _resoto_api.get_infra_info()
 	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
 
 
 func analytics(_query : String, _connect_to : Node, _connect_function:String="_on_analytics_done") -> ResotoAPI.Request:
 	_req_res = _resoto_api.analytics(_query)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+
+
+func ping(_connect_to: Node, _connect_function:String="_on_ping_done"):
+	_req_res = _resoto_api.ping()
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+
+
+func get_benchmark_report(benchmark : String, accounts : PoolStringArray, _connect_to:Node, _connect_function:String="_on_get_benchmark_report_done") -> ResotoAPI.Request:
+	var accounts_filter = accounts.join(",")
+	_req_res = _resoto_api.get_benchmark_report(benchmark, accounts_filter)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+
+
+func get_check_resources(check_id: String, account : String, _connect_to: Node, _connect_function : String = "_on_get_check_resources_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.get_check_resources(check_id, account)
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
 
