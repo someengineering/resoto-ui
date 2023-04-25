@@ -235,3 +235,7 @@ func get_check_resources(check_id: String, account : String, _connect_to: Node, 
 	return _req_res
 
 
+func get_search_structure(search : String, _connect_to : Node,  _connect_function : String = "_on_get_search_structure_done") -> ResotoAPI.Request:
+	_req_res = _resoto_api.get_search_structure(search)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res

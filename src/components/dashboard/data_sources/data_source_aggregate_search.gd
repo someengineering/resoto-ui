@@ -1,9 +1,12 @@
 class_name AggregateSearchDataSource
 extends DataSource
 
+signal structure_received
+
 var grouping_variables := ""
 var grouping_functions := ""
 var search_query := ""
+var query_structure := {}
 
 func _init():
 	type = TYPES.AGGREGATE_SEARCH
@@ -22,8 +25,16 @@ func make_query(dashboard_filters : Dictionary, _attr : Dictionary):
 		q += " and /ancestors.region.reported.name=\"%s\"" % dashboard_filters["region"]
 	if dashboard_filters["account"] != "" and dashboard_filters["account"] != "All":
 		q += " and /ancestors.account.reported.name=\"%s\"" % dashboard_filters["account"]
+		
+	API.get_search_structure(q, self)
+	yield(self, "structure_received")
 	set_request(API.aggregate_search(q, self))
 
+
+func _on_get_search_structure_done(error : int, response : ResotoAPI.Response):
+	if error == OK:
+		query_structure = response.transformed.result
+	emit_signal("structure_received")
 
 func _on_aggregate_search_done(_error : int, response):
 	if _error == ERR_PRINTER_ON_FIRE:
@@ -45,7 +56,9 @@ func _on_aggregate_search_done(_error : int, response):
 	if  response.transformed.result.size() == 0:
 		emit_signal("query_status", FAILED, "Empty Aggregate Search Result", "This search returned an empty result.")
 		return
-	
+
+	if "query_structure" in widget:
+		widget.query_structure = query_structure
 	widget.set_data(response.transformed.result, type)
 	emit_signal("query_status", OK, "")
 
