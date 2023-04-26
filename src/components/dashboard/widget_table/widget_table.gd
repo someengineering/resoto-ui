@@ -7,6 +7,8 @@ var header_color: Color = Color(0, 0.3, 0.58)
 var row_color: Color = Color(0.05, 0.16, 0.27)
 var column_header_color: Color = Color(0.06, 0.2, 0.34)
 
+var query_structure: Dictionary = {}
+
 const HeaderCell = preload("res://components/dashboard/widget_table/widget_table_header_cell.tscn")
 const TableCell = preload("res://components/dashboard/widget_table/widget_table_cell.tscn")
 const DefaultSearchAttributes : Dictionary = {
@@ -114,7 +116,8 @@ func set_data(data, type):
 			set_headers(headers)
 	elif data_source_type == DataSource.TYPES.SEARCH:
 		set_headers(DefaultSearchAttributes.keys())
-		update_column_types()
+		
+	update_column_types()
 		
 	update_page_count(raw_data.size())
 	yield(VisualServer, "frame_post_draw")
@@ -122,23 +125,33 @@ func set_data(data, type):
 
 
 func update_column_types():
-	for key in DefaultSearchAttributes.keys():
-		var prop : String = DefaultSearchAttributes[key][-1]
-		if not prop in _g.resoto_model:
-			var found := false
-			for kind_key in _g.resoto_model:
-				if found:
-					break
-					
-				var kind = _g.resoto_model[kind_key]
-				
-				if "properties" in kind:
-					for property in kind.properties:
-						if property.name == prop:
-							prop = property.kind
-							found = true
-							break
+	var columns_dict := {}
+	if data_source_type == DataSource.TYPES.SEARCH:
+		for key in DefaultSearchAttributes.keys():
+			columns_dict[key] = DefaultSearchAttributes[key][-1]
+	elif "aggregate" in query_structure:
+		for element in query_structure.aggregate.group_by:
+			columns_dict[element["as"]] = element["name"].split(".")[-1]
+	else:
+		return
+	
+	for key in columns_dict:
+		var prop : String = columns_dict[key]
 		
+		var found := false
+		for kind_key in _g.resoto_model:
+			if found:
+				break
+				
+			var kind = _g.resoto_model[kind_key]
+			
+			if "properties" in kind:
+				for property in kind.properties:
+					if property.name == prop:
+						prop = property.kind
+						found = true
+						break
+
 		column_types[key] = _g.resoto_model[prop].runtime_kind
 
 

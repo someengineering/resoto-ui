@@ -281,3 +281,9 @@ func get_check_resources(check_id : String, account_id : String):
 	var request = req_get(query, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
+
+func get_search_structure(search : String):
+	var request = req_post("/graph/resoto/search/structure", search, accept_json_headers)
+	request.connect("pre_done", self,  "_transform_json")
+	return request
+	
