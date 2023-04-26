@@ -137,21 +137,21 @@ func update_column_types():
 	
 	for key in columns_dict:
 		var prop : String = columns_dict[key]
-		if not prop in _g.resoto_model:
-			var found := false
-			for kind_key in _g.resoto_model:
-				if found:
-					break
-					
-				var kind = _g.resoto_model[kind_key]
-				
-				if "properties" in kind:
-					for property in kind.properties:
-						if property.name == prop:
-							prop = property.kind
-							found = true
-							break
 		
+		var found := false
+		for kind_key in _g.resoto_model:
+			if found:
+				break
+				
+			var kind = _g.resoto_model[kind_key]
+			
+			if "properties" in kind:
+				for property in kind.properties:
+					if property.name == prop:
+						prop = property.kind
+						found = true
+						break
+
 		column_types[key] = _g.resoto_model[prop].runtime_kind
 
 
