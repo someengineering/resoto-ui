@@ -21,11 +21,11 @@ func _ready():
 
 
 func _process(_delta):
-	var is_dragging : bool = (
+	var _is_dragging : bool = (
 		Input.is_mouse_button_pressed(1)
 		and graph.get_global_rect().has_point(get_global_mouse_position())
 		and is_visible_in_tree()) 
-	dragging(is_dragging)
+	dragging(_is_dragging)
 
 
 func _input(event):
