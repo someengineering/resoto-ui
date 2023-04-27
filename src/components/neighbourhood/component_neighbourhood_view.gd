@@ -26,6 +26,9 @@ func new_graph_request(_search:String):
 
 
 func on_node_clicked(_node_id:String):
+	if graph_navigator.drag_changed:
+		return
+		
 	if use_for_navigation:
 		emit_signal("clicked_node", _node_id)
 		return

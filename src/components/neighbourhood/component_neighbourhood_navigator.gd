@@ -10,6 +10,9 @@ var drag_stopped:bool		= false
 var is_dragging:bool		= false
 var drag_position:Vector2	= Vector2.ZERO
 
+var last_content_position: Vector2 = Vector2.ZERO
+var drag_changed := false
+
 onready var content = $Content
 onready var drag_hint = $MouseDragHint
 onready var graph : Control = get_parent()
@@ -80,14 +83,18 @@ func dragging(_is_dragging:bool):
 		is_dragging = _is_dragging
 		drag_hint.visible = is_dragging
 		if is_dragging:
+			last_content_position = content.position
 			drag_position = content.position - get_global_mouse_position()
 	
 	if is_dragging:
 		content.position = drag_position + get_global_mouse_position()
 		drag_stopped = false
 		drag_hint.global_position = get_global_mouse_position()
+		drag_changed = (content.position - last_content_position).length() > 1
 	elif not drag_stopped:
 		drag_stopped = true
+		
+	
 
 
 func _on_ButtonZoomPlus_pressed():
