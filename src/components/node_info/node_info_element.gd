@@ -18,7 +18,6 @@ var treemap_button_force_switched : bool	= false
 onready var n_icon_cleaned := $"%NodeIconCleaned"
 onready var n_icon_phantom := $"%NodeIconPhantom"
 onready var property_container := $"%PropertyContainer"
-#onready var leaf_panel := $"%LeafPanel"
 onready var tag_group := $"%TagsGroup"
 onready var graph_a_star := GraphAStar.new()
 
@@ -190,7 +189,6 @@ func update_treemap(_treemap_content:Dictionary = {}):
 	for key in _treemap_content:
 		account_dict[key] = _treemap_content[key]
 	
-#	leaf_panel.hide()
 	$"%TreeMapContainer".show()
 	if treemap_display_mode != default_treemap_mode:
 		$"%TreeMapModeButton".disabled = treemap_display_mode == 0
