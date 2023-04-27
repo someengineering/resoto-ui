@@ -1,7 +1,8 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://components/popups/browser_warning_popup.tscn" type="PackedScene" id=1]
 [ext_resource path="res://components/popups/reconnect_popup.tscn" type="PackedScene" id=2]
+[ext_resource path="res://components/shared/node_display_tooltip.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/icons/icon_128_check.svg" type="Texture" id=4]
 [ext_resource path="res://assets/generic/spin_shader.tres" type="Shader" id=5]
 [ext_resource path="res://components/shared/custom_ext_link_hint_tooltip.tscn" type="PackedScene" id=6]
@@ -127,6 +128,10 @@ layer = 32
 
 [node name="Tooltip" parent="TooltipLayer" instance=ExtResource( 18 )]
 visible = false
+
+[node name="TooltipNode" parent="TooltipLayer" instance=ExtResource( 3 )]
+margin_right = 132.0
+margin_bottom = 80.0
 
 [node name="TooltipLink" parent="TooltipLayer" instance=ExtResource( 6 )]
 visible = false

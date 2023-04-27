@@ -18,7 +18,6 @@ var treemap_button_force_switched : bool	= false
 onready var n_icon_cleaned := $"%NodeIconCleaned"
 onready var n_icon_phantom := $"%NodeIconPhantom"
 onready var property_container := $"%PropertyContainer"
-onready var leaf_panel := $"%LeafPanel"
 onready var tag_group := $"%TagsGroup"
 onready var graph_a_star := GraphAStar.new()
 
@@ -30,7 +29,6 @@ onready var btn_cleanup_remove : Button = $"%RemoveFromCleanupButton"
 
 
 func _ready():
-	Style.add($Margin/VBox/TitleBar/NodeIcon, Style.c.LIGHT)
 	_g.connect("explore_node_by_id", self, "show_node")
 	root_button.connect("pressed", self, "on_id_button_pressed", ["root"])
 
@@ -53,6 +51,24 @@ func show_node(node_id:String, _add_to_history:=true):
 	active_request = API.graph_search(search_command, self, "graph")
 
 
+const NeighbourhoodView = preload("res://components/neighbourhood/component_neighbourhood_view.tscn")
+func create_neighbourhoodview(_node_id:String):
+	for c in $"%NeigbourhoodViewContainer".get_children():
+		c.queue_free()
+	
+	var new_nhv = NeighbourhoodView.instance()
+	$"%NeigbourhoodViewContainer".add_child(new_nhv)
+	new_nhv.use_for_navigation = true
+	new_nhv.main_node_id = _node_id
+	new_nhv.graph_padding = Vector2(150, 50)
+	new_nhv.connect("clicked_node", self, "navigate_from_neighbourhood")
+	new_nhv.display_node(_node_id)
+
+
+func navigate_from_neighbourhood(_node_id:String):
+	show_node(_node_id)
+
+
 func clear_view():
 	# Clean old properties
 	for c in property_container.get_children():
@@ -68,8 +84,6 @@ func clear_view():
 	set_successor_button(false)
 	set_predecessor_button(false)
 	n_icon_cleaned.hide()
-	leaf_panel.hide()
-	$"%TreeMapContainer".show()
 
 
 func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
@@ -93,6 +107,8 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		
 		if not current_result.empty() and current_result[0].has("reported"):
 			$"%AllDataGroup".node_text = Utils.readable_dict(current_result[0].reported)
+			# WIP
+			$"%FullAllDataTextEdit".text = Utils.readable_dict(current_result[0].reported)
 		
 		for r in current_result:
 			if r.type == "node" and r.id == current_node_id:
@@ -147,6 +163,7 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 		_g.emit_signal("add_toast", "Error in Node Info", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
 		show()
 		return
+	
 	if _response.transformed.has("result"):
 		if _response.transformed.result is String and _response.transformed.result.begins_with("Error"):
 			_g.emit_signal("add_toast", "Error in Node Info", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
@@ -157,10 +174,7 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 			for element in _response.transformed.result:
 				treemap_format[element.group[key_name]] = element.count
 			update_treemap(treemap_format)
-		else:
-			$"%TreeMapContainer".hide()
-			leaf_panel.show()
-
+	show_nav_section()
 
 func hide_treemap():
 	find_node("TreeMap").hide()
@@ -175,7 +189,6 @@ func update_treemap(_treemap_content:Dictionary = {}):
 	for key in _treemap_content:
 		account_dict[key] = _treemap_content[key]
 	
-	leaf_panel.hide()
 	$"%TreeMapContainer".show()
 	if treemap_display_mode != default_treemap_mode:
 		$"%TreeMapModeButton".disabled = treemap_display_mode == 0
@@ -237,6 +250,7 @@ func main_node_display(node_data):
 	$"%NodeNameLabel".text = r_name if r_name == r_id else r_name + " (%s)" % r_id
 	var r_kind = node_data.reported.kind
 	$"%KindLabelButton".text = r_kind
+	$"%IconContainer".setup(r_kind)
 	
 	# Reset Buttons
 	$"%AddToCleanupButton".show()
@@ -465,3 +479,43 @@ func _on_protect_query_done(_error:int, _r:ResotoAPI.Response):
 func _on_cleanup_query_done(_error:int, _r:ResotoAPI.Response):
 	if _error:
 		return
+
+
+func show_nav_section():
+	if $"%TreeMapButton".pressed:
+		_on_TreeMapButton_pressed()
+	elif $"%NeighbourhoodButton".pressed:
+		_on_NeighbourhoodButton_pressed()
+	elif $"%AllDetailsButton".pressed:
+		_on_AllDetailsButton_pressed()
+
+
+func _on_TreeMapButton_pressed():
+	$"%TreeMapButton".pressed = true
+	$"%NeighbourhoodButton".pressed = false
+	$"%AllDetailsButton".pressed = false
+	$"%TreeMapContainer".show()
+	$"%AllDataFullView".hide()
+	$"%NeigbourhoodViewContainer".hide()
+
+
+func _on_NeighbourhoodButton_pressed():
+	$"%TreeMapButton".pressed = false
+	$"%NeighbourhoodButton".pressed = true
+	$"%AllDetailsButton".pressed = false
+	$"%TreeMapContainer".hide()
+	$"%AllDataFullView".hide()
+	$"%NeigbourhoodViewContainer".show()
+	create_neighbourhoodview(current_node_id)
+
+func _on_AllDetailsButton_pressed():
+	$"%TreeMapButton".pressed = false
+	$"%NeighbourhoodButton".pressed = false
+	$"%AllDetailsButton".pressed = true
+	$"%AllDataFullView".show()
+	$"%TreeMapContainer".hide()
+	$"%NeigbourhoodViewContainer".hide()
+
+
+func _on_AllDataGroup_show_full_all_data():
+	_on_AllDetailsButton_pressed()

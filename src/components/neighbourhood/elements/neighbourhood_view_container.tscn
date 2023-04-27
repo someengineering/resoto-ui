@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://components/neighbourhood/elements/neighbourhood_view_container.gd" type="Script" id=1]
+
+[node name="SimpleNeighborhood" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Edges" type="Node2D" parent="."]
+
+[node name="Nodes" type="Node2D" parent="."]
+
+[node name="Content" type="HBoxContainer" parent="Nodes"]
+margin_right = 200.0
+mouse_filter = 2
+custom_constants/separation = 0
+
+[node name="Inbound" type="VBoxContainer" parent="Nodes/Content"]
+mouse_filter = 2
+custom_constants/separation = 170
+alignment = 1
+
+[node name="MainNodeContainer" type="VBoxContainer" parent="Nodes/Content"]
+mouse_filter = 2
+alignment = 1
+
+[node name="Outbound" type="VBoxContainer" parent="Nodes/Content"]
+mouse_filter = 2
+custom_constants/separation = 170
+alignment = 1
