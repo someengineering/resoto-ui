@@ -133,9 +133,42 @@
 		}
 	</style>
 	<script>
+		window.onload = function() {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (this.readyState == 4){
+					if (this.status < 300) {
+						let params = (new URL(this.responseURL)).searchParams;
+						const urlParams = new URLSearchParams(params);
+						const redirect = urlParams.get('redirect');
+						if (redirect == "/user"){
+							window.location.replace(window.location.origin + "/login?" + encodeJSONToURL({"redirect": window.location}));
+						}
+					} else {
+						window.location.replace(window.location.origin + "/login?" + encodeJSONToURL({"redirect": window.location}));
+					}
+
+				}
+			};
+			let params = (new URL(window.location)).searchParams;
+			let url = "/user";
+			if (params){
+				url += "?" + params
+			}
+			xhr.open("GET", url, false);
+			xhr.send();
+		};
+
+		function encodeJSONToURL(json) {
+			return Object.entries(json)
+				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+				.join("&");
+		}
+
+	</script>
+	<script>
 		var reader = new FileReader();
 		var input = document.createElement('INPUT');
-
 		function getOS() {
 			let ua = navigator.userAgent
 			let os = "Unknown";
