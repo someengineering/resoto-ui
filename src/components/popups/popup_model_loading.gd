@@ -4,7 +4,7 @@ export (bool) var debug_print_all_groups := false
 export (bool) var debug_print_all_icons := false
 
 func _ready():
-	_g.connect("connect_to_core", self, "start_timer")
+	_g.connect("connected_to_resotocore", self, "start_timer")
 
 
 func start_timer():

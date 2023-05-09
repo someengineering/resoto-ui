@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=2]
 [ext_resource path="res://components/popups/popup_connect.gd" type="Script" id=3]
 [ext_resource path="res://assets/icons/icon_128_hide.svg" type="Texture" id=4]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/resource_icons/icon_user.svg" type="Texture" id=6]
 
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 1, 1, 1, 1 )
@@ -27,7 +29,7 @@ self_modulate = Color( 0.091, 0.11245, 0.13, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1520.0
-margin_bottom = -893.0
+margin_bottom = -898.0
 rect_min_size = Vector2( 400, 150 )
 theme = ExtResource( 1 )
 custom_styles/panel = SubResource( 7 )
@@ -52,7 +54,7 @@ align = 1
 [node name="Margin" type="MarginContainer" parent="Content"]
 margin_top = 29.0
 margin_right = 400.0
-margin_bottom = 305.0
+margin_bottom = 182.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 20
@@ -64,10 +66,11 @@ __meta__ = {
 }
 
 [node name="Connect" type="VBoxContainer" parent="Content/Margin"]
+visible = false
 margin_left = 20.0
 margin_top = 10.0
 margin_right = 380.0
-margin_bottom = 256.0
+margin_bottom = 252.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 15
@@ -97,19 +100,19 @@ margin_bottom = 29.0
 [node name="PSK" type="VBoxContainer" parent="Content/Margin/Connect"]
 margin_top = 75.0
 margin_right = 360.0
-margin_bottom = 129.0
+margin_bottom = 128.0
 custom_constants/separation = 0
 
 [node name="PSKLabel" type="Label" parent="Content/Margin/Connect/PSK"]
 margin_right = 360.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 rect_min_size = Vector2( 100, 0 )
 text = "PSK:"
 
 [node name="Edit" type="HBoxContainer" parent="Content/Margin/Connect/PSK"]
-margin_top = 21.0
+margin_top = 20.0
 margin_right = 360.0
-margin_bottom = 54.0
+margin_bottom = 53.0
 
 [node name="PSKLineEdit" type="LineEdit" parent="Content/Margin/Connect/PSK/Edit"]
 unique_name_in_owner = true
@@ -128,22 +131,22 @@ toggle_mode = true
 icon_tex = ExtResource( 4 )
 
 [node name="Adress" type="VBoxContainer" parent="Content/Margin/Connect"]
-margin_top = 144.0
+margin_top = 143.0
 margin_right = 360.0
-margin_bottom = 198.0
+margin_bottom = 195.0
 custom_constants/separation = 0
 
 [node name="AdressLabel" type="Label" parent="Content/Margin/Connect/Adress"]
 margin_right = 360.0
-margin_bottom = 21.0
+margin_bottom = 20.0
 rect_min_size = Vector2( 100, 0 )
 text = "Resoto Core adress:"
 
 [node name="ResotoAdressEdit" type="LineEdit" parent="Content/Margin/Connect/Adress"]
 unique_name_in_owner = true
-margin_top = 21.0
+margin_top = 20.0
 margin_right = 360.0
-margin_bottom = 54.0
+margin_bottom = 52.0
 size_flags_horizontal = 3
 placeholder_text = "e.g. https://localhost:8900"
 caret_blink = true
@@ -151,10 +154,57 @@ caret_blink_speed = 0.5
 
 [node name="ButtonConnect" type="Button" parent="Content/Margin/Connect"]
 unique_name_in_owner = true
-margin_top = 213.0
+margin_top = 210.0
 margin_right = 360.0
-margin_bottom = 246.0
+margin_bottom = 242.0
 text = "Connect"
+
+[node name="Login" type="VBoxContainer" parent="Content/Margin"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 380.0
+margin_bottom = 133.0
+
+[node name="Label" type="Label" parent="Content/Margin/Login"]
+margin_right = 360.0
+margin_bottom = 30.0
+theme_type_variation = "Label_24"
+text = "Authentication Required"
+align = 1
+valign = 1
+
+[node name="Adress" type="VBoxContainer" parent="Content/Margin/Login"]
+margin_top = 34.0
+margin_right = 360.0
+margin_bottom = 86.0
+custom_constants/separation = 0
+
+[node name="AdressLabel" type="Label" parent="Content/Margin/Login/Adress"]
+margin_right = 360.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
+text = "Resoto Core adress:"
+
+[node name="ResotoAdressEdit" type="LineEdit" parent="Content/Margin/Login/Adress"]
+margin_top = 20.0
+margin_right = 360.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+placeholder_text = "e.g. https://localhost:8900"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="LoginButton" parent="Content/Margin/Login" instance=ExtResource( 5 )]
+margin_left = 270.0
+margin_top = 90.0
+margin_right = 360.0
+margin_bottom = 123.0
+rect_min_size = Vector2( 90, 33 )
+size_flags_horizontal = 12
+size_flags_vertical = 6
+text = "Login"
+align = 2
+icon_tex = ExtResource( 6 )
 
 [node name="ConnectDelay" type="Timer" parent="."]
 wait_time = 0.1
@@ -170,6 +220,8 @@ wait_time = 5.0
 [connection signal="toggled" from="Content/Margin/Connect/PSK/Edit/ShowPSKIcon" to="." method="_on_ShowPSKIcon_toggled"]
 [connection signal="text_entered" from="Content/Margin/Connect/Adress/ResotoAdressEdit" to="." method="_on_ResotoAdressEdit_text_entered"]
 [connection signal="pressed" from="Content/Margin/Connect/ButtonConnect" to="." method="_on_ButtonConnect_pressed"]
+[connection signal="text_entered" from="Content/Margin/Login/Adress/ResotoAdressEdit" to="." method="_on_ResotoAdressEdit_text_entered"]
+[connection signal="pressed" from="Content/Margin/Login/LoginButton" to="." method="_on_LoginButton_pressed"]
 [connection signal="timeout" from="ConnectDelay" to="." method="_on_ConnectDelay_timeout"]
 [connection signal="timeout" from="ConnectTimeoutTimer" to="." method="_on_ConnectTimeoutTimer_timeout"]
 [connection signal="timeout" from="PingTimer" to="." method="_on_PingTimer_timeout"]

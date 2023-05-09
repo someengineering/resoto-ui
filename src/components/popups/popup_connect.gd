@@ -32,6 +32,7 @@ func _on_ButtonConnect_pressed() -> void:
 
 
 func _on_ConnectPopup_about_to_show() -> void:
+
 	psk_line_edit.text = API.psk
 	var protocol:= "https://" if API.use_ssl else "http://"
 	adress_line_edit.text = protocol + API.adress + ":" + str(API.port)
@@ -51,6 +52,7 @@ func start_connect() -> void:
 		info_request.cancel(ERR_PRINTER_ON_FIRE)
 	if infra_request:
 		infra_request.cancel(ERR_PRINTER_ON_FIRE)
+		
 	$Content/Margin/Connect/PSK.hide()
 	$Content/Margin/Connect/Adress.hide()
 	connect_button.hide()
@@ -150,6 +152,7 @@ func not_connected(status_text:String) -> void:
 
 func _on_ConnectDelay_timeout():
 	start_connect()
+	return
 
 
 func reset_timer():
@@ -185,11 +188,24 @@ func _on_PingTimer_timeout():
 
 
 func _on_ping_done(_error: int, _r:ResotoAPI.Response):
+	print(_error)
 	if not is_connected:
 		return
 	if _error or _r.response_code != 200 or _r.body.get_string_from_utf8() != "pong":
+		print("recconect")
 		is_connected = false
 		_g.emit_signal("add_toast", "Lost connection to Resoto Core.", "", 2)
 		$PingTimer.stop()
 		_g.popup_manager.open_popup("ReconnectPopup")
 		start_connect()
+
+
+func _on_LoginButton_pressed():
+	OS.shell_open("%s%s:%d/login?redirect=http://127.0.0.1:8100" % ["https://" if API.use_ssl else "http://", API.adress, API.port])
+	var server = preload("res://components/shared/login_server.tscn").instance()
+	add_child(server)
+	server.connect("got_jwt", self, "_on_jwt")
+
+func _on_jwt(jwt : String):
+	JWT.set_token(jwt)
+	get_system_info()

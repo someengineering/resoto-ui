@@ -133,7 +133,21 @@
 		}
 	</style>
 	<script>
+		var jwt
 		window.onload = function() {
+			jwt = localStorage.getItem("jwt");
+			if (jwt){
+				var parts = jwt.split(".");
+				if (parts.length > 1){
+					var payload = JSON.parse(atob(parts[1]));
+					if ("exp" in payload && payload["exp"] < Date.now()){
+						return;
+						alert(payload["exp"] + ":" + Date.now());
+					}
+					alert("jwt outdated");
+				}
+			}
+
 			var xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = function() {
 				if (this.readyState == 4){
@@ -141,8 +155,14 @@
 						let params = (new URL(this.responseURL)).searchParams;
 						const urlParams = new URLSearchParams(params);
 						const redirect = urlParams.get('redirect');
-						if (redirect == "/user"){
-							window.location.replace(window.location.origin + "/login?" + encodeJSONToURL({"redirect": window.location}));
+						if (redirect == "/authorization/user?"){
+							window.location = "/login?" + encodeJSONToURL({"redirect": window.location});
+						} else {
+							jwt = xhr.getResponseHeader("Authorization").split(" ")[1];
+							localStorage.setItem("jwt", jwt);
+							let url = new URL(window.location.href);
+							url.search = "";
+							window.history.replaceState({}, document.title, url.toString());
 						}
 					} else {
 						window.location.replace(window.location.origin + "/login?" + encodeJSONToURL({"redirect": window.location}));
@@ -151,7 +171,7 @@
 				}
 			};
 			let params = (new URL(window.location)).searchParams;
-			let url = "/user";
+			let url = "/authorization/user";
 			if (params){
 				url += "?" + params
 			}

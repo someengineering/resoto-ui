@@ -239,3 +239,8 @@ func get_search_structure(search : String, _connect_to : Node,  _connect_functio
 	_req_res = _resoto_api.get_search_structure(search)
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
+	
+func renew_token(_connect_to : Node, _connect_function : String = "_on_renew_token_done"):
+	_req_res = _resoto_api.renew_token()
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
