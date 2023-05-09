@@ -23,13 +23,12 @@ func _process(_delta: float) -> void:
 				if bytes > 0:
 					var request_string = client.get_string(bytes)
 					var found = regex.search(request_string).strings[0]
-					print(found)
 					client.put_data("HTTP/1.1 200 OK\nContent-Type: text/html\n\n<html><body>You can close this page!</body></html>".to_ascii())
 					_server.stop()
 					$HTTPRequest.request("http://localhost:8900/authorization/user"+found)
 
 
-func _on_HTTPRequest_request_completed(result, response_code, headers, body):
+func _on_HTTPRequest_request_completed(_result, _response_code, headers, _body):
 	for header in headers:
 		if "Authorization" in header:
 			var jwt = header.split(" ")[2]

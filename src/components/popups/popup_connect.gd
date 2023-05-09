@@ -188,11 +188,9 @@ func _on_PingTimer_timeout():
 
 
 func _on_ping_done(_error: int, _r:ResotoAPI.Response):
-	print(_error)
 	if not is_connected:
 		return
 	if _error or _r.response_code != 200 or _r.body.get_string_from_utf8() != "pong":
-		print("recconect")
 		is_connected = false
 		_g.emit_signal("add_toast", "Lost connection to Resoto Core.", "", 2)
 		$PingTimer.stop()
@@ -201,11 +199,14 @@ func _on_ping_done(_error: int, _r:ResotoAPI.Response):
 
 
 func _on_LoginButton_pressed():
-	OS.shell_open("%s%s:%d/login?redirect=http://127.0.0.1:8100" % ["https://" if API.use_ssl else "http://", API.adress, API.port])
-	var server = preload("res://components/shared/login_server.tscn").instance()
-	add_child(server)
-	server.connect("got_jwt", self, "_on_jwt")
+	if OS.has_feature("HTML5"):
+		HtmlFiles.remove_from_local_storage("jwt")
+	else:
+		OS.shell_open("%s%s:%d/login?redirect=http://127.0.0.1:8100" % ["https://" if API.use_ssl else "http://", API.adress, API.port])
+		var server = preload("res://components/shared/login_server.tscn").instance()
+		add_child(server)
+		server.connect("got_jwt", self, "_on_jwt")
 
 func _on_jwt(jwt : String):
 	JWT.set_token(jwt)
-	get_system_info()
+	start_connect()

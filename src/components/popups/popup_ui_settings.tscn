@@ -57,12 +57,14 @@ margin_right = 610.0
 margin_bottom = 300.0
 
 [node name="ConnectionLabel" type="Label" parent="Content/Content/SettingsTabs/General Settings/VBox" index="0"]
+unique_name_in_owner = true
 margin_right = 590.0
 margin_bottom = 30.0
 theme_type_variation = "Label_24"
 text = "Resoto Core connection"
 
 [node name="ConnectionSettings" type="GridContainer" parent="Content/Content/SettingsTabs/General Settings/VBox" index="1"]
+unique_name_in_owner = true
 margin_top = 34.0
 margin_right = 590.0
 margin_bottom = 102.0

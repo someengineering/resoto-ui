@@ -73,8 +73,7 @@ func connect_websockets(_forced:=false):
 
 
 func _connection_closed(_error):
-	print("Websocket: Connection closed")
-	print(_error)
+	print("Websocket: Connection closed - error? " + str(_error))
 	set_process(false)
 	if auto_reconnect:
 		connect_websockets()

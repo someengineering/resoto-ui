@@ -32,6 +32,12 @@ func _close_popup() -> void:
 	hide()
 
 
+func _ready():
+	if OS.has_feature("HTML5"):
+		$"%ConnectionLabel".hide()
+		$"%ConnectionSettings".hide()
+
+
 # Accepting changes.
 func _on_AddWidgetButton_pressed() -> void:
 	if is_dirty:
@@ -59,6 +65,7 @@ func _on_UISettings_about_to_show() -> void:
 		footerbar.move_child(accept_button, 1)
 	else:
 		footerbar.move_child(accept_button, 0)
+		
 	_g.emit_signal("resh_lite_popup_hide")
 	is_dirty = false
 	$Content/Content/SettingsTabs.current_tab = 0

@@ -133,16 +133,18 @@
 		}
 	</style>
 	<script>
-		var jwt
+		var jwt = "";
+		var expirationTime = 0;
 		window.onload = function() {
 			jwt = localStorage.getItem("jwt");
 			if (jwt){
 				var parts = jwt.split(".");
 				if (parts.length > 1){
 					var payload = JSON.parse(atob(parts[1]));
-					if ("exp" in payload && payload["exp"] < Date.now()){
+					if ("exp" in payload && payload["exp"] * 1000.0 > Date.now()){
+						expirationTime = payload["exp"] * 1000.0;
+						setTimeout(renewJWT, expirationTime - Date.now() - 300000);
 						return;
-						alert(payload["exp"] + ":" + Date.now());
 					}
 					alert("jwt outdated");
 				}
@@ -160,6 +162,7 @@
 						} else {
 							jwt = xhr.getResponseHeader("Authorization").split(" ")[1];
 							localStorage.setItem("jwt", jwt);
+							refreshExpirationTime();
 							let url = new URL(window.location.href);
 							url.search = "";
 							window.history.replaceState({}, document.title, url.toString());
@@ -178,6 +181,34 @@
 			xhr.open("GET", url, false);
 			xhr.send();
 		};
+
+		function refreshExpirationTime(){
+			if (jwt === "") return;
+
+			var parts = jwt.split(".");
+			if (parts.length > 1){
+				var payload = JSON.parse(atob(parts[1]));
+				expirationTime = payload["exp"] * 1000.0;
+				setTimeout(renewJWT, expirationTime - Date.now() - 300000);
+			}
+		}
+
+		function renewJWT(){
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (this.readyState == 4){
+					if (this.status == 200) {
+						jwt = xhr.getResponseHeader("Authorization").split(" ")[1];
+						console.log(jwt)
+						localStorage.setItem("jwt", jwt);
+						refreshExpirationTime();
+					}
+				}
+			};
+			xhr.open("GET", window.location.origin + "/authorization/renew", false);
+			xhr.setRequestHeader("Authorization",  "Bearer " + jwt);
+			xhr.send();
+		}
 
 		function encodeJSONToURL(json) {
 			return Object.entries(json)
