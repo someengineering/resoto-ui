@@ -19,6 +19,8 @@ onready var show_psk_icon = $"%ShowPSKIcon"
 
 
 func _ready():
+	
+	JWT.token = ""
 	if modulate != Color.white:
 		Style.add(self, Style.find_color(modulate))
 	elif self_modulate != Color.white:
@@ -57,7 +59,6 @@ func start_connect() -> void:
 	$Content/Margin/Connect/Adress.hide()
 	connect_button.hide()
 	
-	JWT.token = ""
 	var psk = psk_line_edit.text
 	
 	if OS.has_feature("HTML5"):

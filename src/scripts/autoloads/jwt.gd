@@ -47,7 +47,8 @@ func set_token(_token : String):
 
 func create_jwt(_data: String, _psk: String = psk) -> void:
 	if OS.has_feature("HTML5"):
-		token = HtmlFiles.load_from_local_storage("jwt")
+#		token = HtmlFiles.load_from_local_storage("jwt")
+		token = JavaScript.eval("t")
 		set_token(token)
 		emit_signal("jwt_generated")
 

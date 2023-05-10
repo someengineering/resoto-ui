@@ -133,12 +133,21 @@
 		}
 	</style>
 	<script>
-		var jwt = "";
+		var jwt;
 		var expirationTime = 0;
-		window.onload = function() {
-			jwt = localStorage.getItem("jwt");
-			if (jwt){
-				var parts = jwt.split(".");
+		var key;
+		var iv;
+		var t = "";
+		var ejwt;
+		window.onload = async function() {
+			key = await generateKey();
+			ejwt = localStorage.getItem("jwt");
+			var eiv = localStorage.getItem("iv");
+			if (ejwt != null && eiv != null){
+				jwt = new Uint8Array(JSON.parse(ejwt));
+				iv = new Uint8Array(JSON.parse(eiv));
+				t = await decryptData(key, iv, jwt);
+				var parts = t.split(".");
 				if (parts.length > 1){
 					var payload = JSON.parse(atob(parts[1]));
 					if ("exp" in payload && payload["exp"] * 1000.0 > Date.now()){
@@ -146,12 +155,11 @@
 						setTimeout(renewJWT, expirationTime - Date.now() - 300000);
 						return;
 					}
-					alert("jwt outdated");
 				}
 			}
 
 			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = async function() {
 				if (this.readyState == 4){
 					if (this.status < 300) {
 						let params = (new URL(this.responseURL)).searchParams;
@@ -160,9 +168,12 @@
 						if (redirect == "/authorization/user?"){
 							window.location = "/login?" + encodeJSONToURL({"redirect": window.location});
 						} else {
-							jwt = xhr.getResponseHeader("Authorization").split(" ")[1];
-							localStorage.setItem("jwt", jwt);
-							refreshExpirationTime();
+							var r = await encryptData(key, xhr.getResponseHeader("Authorization").split(" ")[1]);
+							iv = r.iv;
+							jwt = r.data;
+							localStorage.setItem("jwt", JSON.stringify(Array.from(jwt)));
+							localStorage.setItem("iv", JSON.stringify(Array.from(iv)));
+							await refreshExpirationTime();
 							let url = new URL(window.location.href);
 							url.search = "";
 							window.history.replaceState({}, document.title, url.toString());
@@ -182,10 +193,11 @@
 			xhr.send();
 		};
 
-		function refreshExpirationTime(){
+		async function refreshExpirationTime(){
 			if (jwt === "") return;
 
-			var parts = jwt.split(".");
+			t = await decryptData(key, iv, jwt);
+			var parts = t.split(".")
 			if (parts.length > 1){
 				var payload = JSON.parse(atob(parts[1]));
 				expirationTime = payload["exp"] * 1000.0;
@@ -195,12 +207,14 @@
 
 		function renewJWT(){
 			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = async function() {
 				if (this.readyState == 4){
 					if (this.status == 200) {
-						jwt = xhr.getResponseHeader("Authorization").split(" ")[1];
-						console.log(jwt)
-						localStorage.setItem("jwt", jwt);
+						var r = await encryptData(key, xhr.getResponseHeader("Authorization").split(" ")[1]);
+						jwt = r.data;
+						iv = r.iv;
+						localStorage.setItem("jwt", JSON.stringify(Array.from(jwt)));
+						localStorage.setItem("iv", JSON.stringify(Array.from(iv)));
 						refreshExpirationTime();
 					}
 				}
@@ -214,6 +228,31 @@
 			return Object.entries(json)
 				.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
 				.join("&");
+		}
+
+		async function generateKey() {
+			const _0x3116df=_0x20a0;function _0x4670(){const _0x1f8d88=['302636qyhbRd','30505GOFyWJ','4613HrqjEk','AES-GCM','subtle','243990CtJenz','258IovlEo','encrypt','1938128IxAuhU','decrypt','6IHzAjB','240SUOGZG','1259176kGMNeg','importKey','518220YMgFvP'];_0x4670=function(){return _0x1f8d88;};return _0x4670();}function _0x20a0(_0x5e9956,_0x45c6fd){const _0x4670c1=_0x4670();return _0x20a0=function(_0x20a0f5,_0x86fbf9){_0x20a0f5=_0x20a0f5-0x150;let _0x5bce5d=_0x4670c1[_0x20a0f5];return _0x5bce5d;},_0x20a0(_0x5e9956,_0x45c6fd);}(function(_0x3131ee,_0x7aca7f){const _0x23c719=_0x20a0,_0xf3e675=_0x3131ee();while(!![]){try{const _0x1a15e1=parseInt(_0x23c719(0x15d))/0x1+-parseInt(_0x23c719(0x15c))/0x2*(-parseInt(_0x23c719(0x157))/0x3)+parseInt(_0x23c719(0x155))/0x4+-parseInt(_0x23c719(0x15b))/0x5+-parseInt(_0x23c719(0x153))/0x6*(-parseInt(_0x23c719(0x15e))/0x7)+parseInt(_0x23c719(0x159))/0x8+parseInt(_0x23c719(0x152))/0x9*(-parseInt(_0x23c719(0x158))/0xa);if(_0x1a15e1===_0x7aca7f)break;else _0xf3e675['push'](_0xf3e675['shift']());}catch(_0x217369){_0xf3e675['push'](_0xf3e675['shift']());}}}(_0x4670,0x3cd23));const bytes=new Uint8Array([0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xa,0xb,0xc,0xd,0xe,0xf,0x10]),key=await crypto[_0x3116df(0x151)][_0x3116df(0x15a)]('raw',bytes,{'name':_0x3116df(0x150)},![],[_0x3116df(0x154),_0x3116df(0x156)]);return key;
+		}
+
+		async function encryptData(key, data) {
+			const encoder = new TextEncoder();
+			const iv = crypto.getRandomValues(new Uint8Array(12));
+			const encodedData = encoder.encode(data);
+			const encryptedData = await crypto.subtle.encrypt(
+				{ name: 'AES-GCM', iv },
+				key, encodedData
+			);
+			return { iv: iv, data: new Uint8Array(encryptedData) };
+		}	
+
+		async function decryptData(key, iv, encryptedData) {
+			
+			const decryptedData = await crypto.subtle.decrypt(
+				{ name: 'AES-GCM', iv },
+				key, encryptedData
+			);
+			const decoder = new TextDecoder();
+			return decoder.decode(decryptedData);
 		}
 
 	</script>
