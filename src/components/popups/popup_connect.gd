@@ -46,6 +46,7 @@ func start_connect() -> void:
 	
 	if OS.has_feature("HTML5"):
 		var adress : String		= JavaScript.eval("getURL()")
+		print(adress)
 		var use_ssl : bool		= JavaScript.eval("getProtocol()") == "https:"
 		var port : String		= JavaScript.eval("getPort()")
 		if port == "":

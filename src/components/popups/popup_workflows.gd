@@ -11,7 +11,7 @@ func _ready():
 	workflow_display.update_title_text("No active workflow")
 	rect_size.y = 1
 	status_icon = get_node_or_null(status_icon_path)
-	update_running_workflows()
+	_g.connect("connected_to_resotocore", self, "update_running_workflows")
 
 
 func update_running_workflows():

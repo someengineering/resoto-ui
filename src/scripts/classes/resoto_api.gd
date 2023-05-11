@@ -117,6 +117,7 @@ static func parse_chunk( _chunk:PoolByteArray ) -> Chunk:
 
 func post_cli_execute(body:String, graph:String=default_graph) -> ResotoAPI.Request:
 	var path: String = "/cli/execute?graph=" + graph
+	prints("common",path)
 	var request = req_post(path, body, accept_text_headers)
 	request.connect("pre_done", self, "_transform_string")
 	return request
@@ -124,6 +125,7 @@ func post_cli_execute(body:String, graph:String=default_graph) -> ResotoAPI.Requ
 
 func post_cli_execute_json(body:String, graph:String=default_graph) -> ResotoAPI.Request:
 	var path: String = "/cli/execute?graph=" + graph
+	prints("json",path)
 	var request = req_post(path, body, accept_json_headers)
 	request.connect("pre_done", self, "_transform_json")
 	return request
@@ -131,6 +133,7 @@ func post_cli_execute_json(body:String, graph:String=default_graph) -> ResotoAPI
 
 func post_cli_execute_streamed(body:String, graph:String=default_graph) -> ResotoAPI.Request:
 	var path: String = "/cli/execute?graph=" + graph
+	prints("streamed",path)
 	var request = req_post(path, body, accept_text_headers)
 	request.connect("pre_data", self, "_transform_string_chunk")
 	return request
@@ -138,6 +141,7 @@ func post_cli_execute_streamed(body:String, graph:String=default_graph) -> Resot
 
 func post_cli_execute_nd_chunks(body:String, graph:String=default_graph) -> ResotoAPI.Request:
 	var path: String = "/cli/execute?graph=" + graph
+	prints("nd",path)
 	var request = req_post(path, body, accept_json_headers)
 	request.connect("pre_data", self, "_transform_nd_json")
 	return request
