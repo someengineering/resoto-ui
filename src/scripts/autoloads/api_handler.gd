@@ -176,7 +176,6 @@ func cli_execute_json(_command:String, _connect_to:Node,
 	_req_res = _resoto_api.post_cli_execute_json(_command, graph_id)
 	_req_res.connect("data", _connect_to, _connect_data_function)
 	_req_res.connect("done", _connect_to, _connect_done_function)
-	print(_connect_to.name)
 	return _req_res
 
 
