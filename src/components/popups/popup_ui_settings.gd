@@ -53,7 +53,7 @@ func _on_AddWidgetButton_pressed() -> void:
 	var port = int(port_line_edit.text)
 	var psk : String = psk_line_edit.text
 	if (API.adress != adress[0] or API.port != int(port) or API.psk != psk or API.use_ssl != use_ssl):
-		API.connection_config(adress[0], int(port), psk, use_ssl)
+		API.connection_config(adress[0], int(port), use_ssl)
 		_g.popup_manager.open_popup("ConnectPopup")
 		_g.emit_signal("connect_to_core")
 	SaveLoadSettings.save_settings()

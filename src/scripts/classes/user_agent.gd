@@ -78,7 +78,7 @@ class Request:
 	
 	func add_authorization_header(_headers:Array):
 		if JWT.token == "" or JWT.token_expired():
-			JWT.create_jwt("")
+			JWT.create_jwt()
 		_headers.append("Authorization: Bearer %s" % JWT.token)
 	
 	

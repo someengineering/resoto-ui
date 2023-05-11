@@ -6,7 +6,6 @@ const EXPIRE_THRESHOLD:int = TOKEN_EXPIRATION_TIME - 300 # refresh the token eve
 
 signal jwt_generated
 
-var psk: String = "changeme"
 var token: String = ""
 var token_expire: int = 0
 var print_token: bool = false
@@ -45,7 +44,7 @@ func set_token(_token : String):
 		expiration_timer.start((token_expire - Time.get_unix_time_from_system()))
 
 
-func create_jwt(_data: String, _psk: String = psk) -> void:
+func create_jwt() -> void:
 	if OS.has_feature("HTML5"):
 #		token = HtmlFiles.load_from_local_storage("jwt")
 		token = JavaScript.eval("t")
