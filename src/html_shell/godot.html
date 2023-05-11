@@ -201,7 +201,8 @@
 			if (parts.length > 1){
 				var payload = JSON.parse(atob(parts[1]));
 				expirationTime = payload["exp"] * 1000.0;
-				setTimeout(renewJWT, expirationTime - Date.now() - 300000);
+				var timeToExpire = Math.max(expirationTime - Date.now() - 300000, 10000);
+				setTimeout(renewJWT, timeToExpire);
 			}
 		}
 
@@ -220,7 +221,7 @@
 				}
 			};
 			xhr.open("GET", window.location.origin + "/authorization/renew", false);
-			xhr.setRequestHeader("Authorization",  "Bearer " + jwt);
+			xhr.setRequestHeader("Authorization",  "Bearer " + t);
 			xhr.send();
 		}
 
