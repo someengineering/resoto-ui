@@ -48,6 +48,8 @@ func create_jwt() -> void:
 	if OS.has_feature("HTML5"):
 #		token = HtmlFiles.load_from_local_storage("jwt")
 		token = JavaScript.eval("t")
+		if token == "":
+			return
 		set_token(token)
 		emit_signal("jwt_generated")
 

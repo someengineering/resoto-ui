@@ -161,6 +161,10 @@
 			var xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = async function() {
 				if (this.readyState == 4){
+					// 204 is when psk is disabled
+					if (this.status == 204){
+						return;
+					}
 					if (this.status < 300) {
 						let params = (new URL(this.responseURL)).searchParams;
 						const urlParams = new URLSearchParams(params);
