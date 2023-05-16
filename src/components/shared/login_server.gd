@@ -25,7 +25,7 @@ func _process(_delta: float) -> void:
 					var found = regex.search(request_string).strings[0]
 					client.put_data("HTTP/1.1 200 OK\nContent-Type: text/html\n\n<html><body>You can close this page!</body></html>".to_ascii())
 					_server.stop()
-					$HTTPRequest.request("http://localhost:8900/authorization/user"+found)
+					$HTTPRequest.request("%s://%s:%d/authorization/user" % ["https" if API.use_ssl else "http", API.adress, API.port] + found)
 
 
 func _on_HTTPRequest_request_completed(_result, _response_code, headers, _body):
