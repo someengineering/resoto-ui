@@ -48,7 +48,7 @@ func _on_get_model_flat_done(error: int, _response:ResotoAPI.Response):
 		var file_check := File.new()
 		for icon_key in all_icons.keys():
 			var icon_path : String = Style.icon_path % icon_key
-			if file_check.file_exists(icon_path):
+			if file_check.file_exists(icon_path+".import"):
 				Style.icon_files[icon_key] = load(icon_path)
 			else:
 				print("Icon '%s' not found! Using fallback." % icon_path)
