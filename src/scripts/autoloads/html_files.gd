@@ -52,6 +52,10 @@ func load_from_local_storage(item_name : String):
 	return data
 
 
+func remove_from_local_storage(item_name : String):
+	local_storage.removeItem(item_name)
+
+
 func _on_file_read_done(args):
 	var event = args[0]
 	if event.target.readyState == 2:

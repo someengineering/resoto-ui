@@ -287,3 +287,7 @@ func get_search_structure(search : String):
 	request.connect("pre_done", self,  "_transform_json")
 	return request
 	
+
+func renew_token():
+	var request = req_get("/authorization/renew", accept_text_headers)
+	return request

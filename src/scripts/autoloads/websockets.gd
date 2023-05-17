@@ -13,13 +13,13 @@ func _ready():
 
 func refresh_jwt_header() -> void:
 	if JWT.token == "" or JWT.token_expired():
-		JWT.create_jwt("")
+		JWT.create_jwt()
 	ws_header = ["Authorization: Bearer %s" % JWT.token]
 
 
 func refresh_auth_cookie() -> void:
 	if JWT.token == "" or JWT.token_expired():
-		JWT.create_jwt("")
+		JWT.create_jwt()
 	
 	var cookie_content : String = "\"resoto_authorization=\\\"Bearer %s\\\"; path=/events\"" % JWT.token
 	JavaScript.eval("setCookie(%s)" % cookie_content)
@@ -73,8 +73,7 @@ func connect_websockets(_forced:=false):
 
 
 func _connection_closed(_error):
-	print("Websocket: Connection closed")
-	print(_error)
+	print("Websocket: Connection closed - error? " + str(_error))
 	set_process(false)
 	if auto_reconnect:
 		connect_websockets()

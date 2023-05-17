@@ -48,12 +48,10 @@ func set_psk(_new_psk:String) -> void:
 	connection_config()
 
 
-func connection_config(_adress:String = adress, _port:int = port, _psk:String = psk, _use_ssl:bool = use_ssl) -> void:
+func connection_config(_adress:String = adress, _port:int = port, _use_ssl:bool = use_ssl) -> void:
 	adress = _adress
 	port = _port
-	psk = _psk
 	use_ssl = _use_ssl
-	JWT.psk = _psk
 	var protocol:= "https://" if use_ssl else "http://"
 	_resoto_api.options.host = protocol+adress
 	_resoto_api.options.port = port
@@ -237,5 +235,10 @@ func get_check_resources(check_id: String, account : String, _connect_to: Node, 
 
 func get_search_structure(search : String, _connect_to : Node,  _connect_function : String = "_on_get_search_structure_done") -> ResotoAPI.Request:
 	_req_res = _resoto_api.get_search_structure(search)
+	_req_res.connect("done", _connect_to, _connect_function)
+	return _req_res
+	
+func renew_token(_connect_to : Node, _connect_function : String = "_on_renew_token_done"):
+	_req_res = _resoto_api.renew_token()
 	_req_res.connect("done", _connect_to, _connect_function)
 	return _req_res
