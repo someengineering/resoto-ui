@@ -196,10 +196,11 @@ func update_treemap(_treemap_content:Dictionary = {}):
 #			_g.emit_signal("add_toast", "View not available", "Node Successors by their Descendant Count is not available here.", 2, self, 1.5)
 	$"%TreeMapModeButton".modulate.a = 1.0 if !$"%TreeMapModeButton".disabled else 0.0
 	$"%TreeMapTitle".text = "Node Descendants grouped by Kind" if treemap_display_mode == 0 else "Node Successors by their Descendant Count"
-	yield(VisualServer, "frame_post_draw")
+	
 	$"%TreeMap".clear_treemap()
-	$"%TreeMap".create_treemap(account_dict)
 	find_node("TreeMap").show()
+	yield(VisualServer, "frame_post_draw")
+	$"%TreeMap".create_treemap(account_dict)
 
 
 func set_successor_button(_enabled:bool):
