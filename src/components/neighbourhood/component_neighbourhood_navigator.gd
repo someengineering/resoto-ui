@@ -60,10 +60,11 @@ func zoom(_change:float, _pos:Vector2):
 	if new_zoom_level == zoom_level:
 		return
 	emit_signal("change_zoom", new_zoom_level)
-	var parent_rect : Rect2 = graph.get_global_rect()
-	var local_event_pos = (content.position - _pos + parent_rect.position) * -sign(_change) / new_zoom_level
-	var new_pos = content.position - local_event_pos * abs(_change)
 	
+	var prev_mouse_position : Vector2 = content.get_local_mouse_position() * zoom_level
+	var new_mouse_pos : Vector2 = content.get_local_mouse_position() * new_zoom_level
+	var new_pos : Vector2 = content.position + prev_mouse_position - new_mouse_pos
+
 	if zoom_tween.is_active():
 		zoom_tween.seek(0.2)
 		zoom_tween.remove_all()

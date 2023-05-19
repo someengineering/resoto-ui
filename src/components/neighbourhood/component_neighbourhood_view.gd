@@ -65,14 +65,11 @@ func create_view_from_response(result:Array):
 
 var graph_padding := Vector2(400, 150)
 func center_graph():
-	var vis_rect : Rect2 = graph_visualisation.get_visible_rect()
 	var window_size : Vector2 = get_global_rect().size
-	var scaling : Vector2 = (window_size-graph_padding) / vis_rect.size
-	var zoom_factor : float = scaling.x if scaling.x < scaling.y else scaling.y
-	zoom_factor = clamp(zoom_factor, graph_navigator.MIN_ZOOM, graph_navigator.MAX_ZOOM)
+	var zoom_factor := 0.18
 	graph_navigator.set_zoom(zoom_factor)
-	graph_navigator.content.position = (graph_padding/2) - Vector2(100.0*zoom_factor, -15)
-	graph_navigator.content.position += ((window_size - vis_rect.size*zoom_factor)-graph_padding)/2
+	var node_scene = graph_visualisation.node_scenes[main_node_id]
+	graph_navigator.content.position = graph_navigator.global_position - node_scene.node_scene.global_position + window_size / 2.0
 
 
 func create_edges_and_nodes(_result:Array):
