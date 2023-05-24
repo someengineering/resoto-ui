@@ -170,7 +170,7 @@ func _on_LoginButton_pressed():
 	if OS.has_feature("HTML5"):
 		HtmlFiles.remove_from_local_storage("jwt")
 	else:
-		OS.shell_open("%s%s:%d/login?redirect=http://127.0.0.1:8100" % ["https://" if API.use_ssl else "http://", API.adress, API.port])
+		OS.shell_open("%s%s:%d/login?redirect=http://%s:8100" % ["https://" if API.use_ssl else "http://", API.adress, API.port, API.adress])
 		var server = preload("res://components/shared/login_server.tscn").instance()
 		add_child(server)
 		server.connect("got_jwt", self, "_on_jwt")
