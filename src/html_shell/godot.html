@@ -193,7 +193,7 @@
 			if (params){
 				url += "?" + params
 			}
-			xhr.open("GET", url, false);
+			xhr.open("GET", url, true);
 			xhr.send();
 		};
 
@@ -224,7 +224,7 @@
 					}
 				}
 			};
-			xhr.open("GET", window.location.origin + "/authorization/renew", false);
+			xhr.open("GET", window.location.origin + "/authorization/renew", true);
 			xhr.setRequestHeader("Authorization",  "Bearer " + t);
 			xhr.send();
 		}
