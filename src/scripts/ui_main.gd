@@ -2,6 +2,7 @@ extends Control
 
 
 func _ready() -> void:
+	print("UI Starting")
 	_g.connect("fullscreen_hide_menu", self, "_on_fullscreen_hide_menu")
 	_g.connect("ui_scale_increase", self, "ui_scale_up")
 	_g.connect("ui_scale_decrease", self, "ui_scale_down")
@@ -10,7 +11,9 @@ func _ready() -> void:
 	
 	# Check errors of previous session
 	if OS.has_feature("HTML5"):
+		print("before eval")
 		var has_errors = JavaScript.eval('"error" in window.localStorage')
+		print("after eval")
 		if has_errors:
 			var errors = str2var(JavaScript.eval('window.localStorage.getItem("error")'))
 			
@@ -21,15 +24,18 @@ func _ready() -> void:
 				"errors-number" : errors.size()
 			}
 			
+			print("analitics")
 			Analytics.event(Analytics.EventsUI.ERROR, properties, counters)
-			
+			print("2nd eval")
 			JavaScript.eval('window.localStorage.removeItem("error")')
+			print("end starting")
 			
 	var properties := {
 		"UI version" : _g.ui_version
 	}
 	
 	if OS.has_feature("HTML5"):
+		print("Hast html")
 		properties["OS"] = JavaScript.eval("getOS()")
 		properties["browser"] = JavaScript.eval("getBrowser()")
 		_g.browser = properties["browser"]
@@ -40,6 +46,7 @@ func _ready() -> void:
 
 
 func _on_settings_loaded(_found_settings:bool) -> void:
+	print("Settings Loaded")
 	if !_found_settings:
 		var screen_size := OS.get_screen_size()
 		if screen_size.y < 900:
@@ -56,6 +63,7 @@ func _on_settings_loaded(_found_settings:bool) -> void:
 	
 	_g.popup_manager.open_popup("ConnectPopup")
 	_g.popup_manager.popup_connect.connect("connected", self, "_connected", [], CONNECT_ONESHOT)
+	print("Emit connect to core")
 	_g.emit_signal("connect_to_core")
 	
 	# If we ever need Godot to receive URL parameters:
