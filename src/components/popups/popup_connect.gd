@@ -35,24 +35,19 @@ func _on_ConnectPopup_about_to_show() -> void:
 
 
 func connect_to_core() -> void:
-	print("Connect to core...")
 	$ConnectDelay.start()
 
 
 func start_connect() -> void:
-	print("Starting connection...")
 	if info_request:
 		info_request.cancel(ERR_PRINTER_ON_FIRE)
 	if infra_request:
 		infra_request.cancel(ERR_PRINTER_ON_FIRE)
 	
-	prints("HTML: ", OS.has_feature("HTML5"))
 	if OS.has_feature("HTML5"):
-		print("settings...")
 		var adress : String		= JavaScript.eval("getURL()")
 		var use_ssl : bool		= JavaScript.eval("getProtocol()") == "https:"
 		var port : String		= JavaScript.eval("getPort()")
-		print("got settings")
 		if port == "":
 			port = "80" if not use_ssl else "443"
 		API.connection_config(adress, int(port), use_ssl)
@@ -66,7 +61,6 @@ func start_connect() -> void:
 		if adress.size() > 1:
 			port = int(adress[1])
 		API.connection_config(adress[0], int(port), use_ssl)
-	prints("address: ", API.adress)
 	var protocol:= "https://" if API.use_ssl else "http://"
 	address_line_edit.text = protocol + API.adress + ":" + str(API.port)
 	yield(VisualServer, "frame_post_draw")
@@ -133,7 +127,6 @@ func not_connected() -> void:
 
 
 func _on_ConnectDelay_timeout():
-	print("Connect delay")
 	start_connect()
 	return
 
