@@ -14,6 +14,7 @@ onready var main_logo = $"%MainResotoLogo"
 onready var back_button := $"%HistoryBackButton"
 onready var forward_button := $"%HistoryFwdButton"
 onready var history_buttons := $"%HistoryButtons"
+onready var logout_button := $"%LogOutButton"
 
 
 func _ready() -> void:
@@ -28,7 +29,7 @@ func _ready() -> void:
 	history_buttons.visible = not OS.has_feature("HTML5")
 	if not OS.has_feature("HTML5"):
 		UINavigation.connect("navigation_index_changed", self, "_on_navigation_index_changed")
-
+		logout_button.hide()
 
 func init_menu():
 	yield(get_tree(), "idle_frame")
@@ -163,3 +164,9 @@ func _on_JobsBtn_pressed():
 func _on_SetupWizardButton_pressed():
 	_g.emit_signal("setup_wizard_start")
 	close_menu()
+
+
+func _on_LogOutButton_pressed():
+	HtmlFiles.delete_from_local_storage("jwt")
+	HtmlFiles.delete_from_local_storage("iv")
+	JavaScript.eval("location.reload()")
