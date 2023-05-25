@@ -26,7 +26,6 @@ func check_for_settings() ->bool:
 
 
 func load_settings() -> void:
-	print("calling load_settings")
 	if disabled:
 		emit_signal("settings_loaded", false)
 		return

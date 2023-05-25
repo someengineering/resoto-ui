@@ -152,7 +152,7 @@
 					var payload = JSON.parse(atob(parts[1]));
 					if ("exp" in payload && payload["exp"] * 1000.0 > Date.now()){
 						expirationTime = payload["exp"] * 1000.0;
-						//setTimeout(renewJWT, expirationTime - Date.now() - 300000);
+						setTimeout(renewJWT, expirationTime - Date.now() - 300000);
 						return;
 					}
 				}
@@ -206,7 +206,7 @@
 				var payload = JSON.parse(atob(parts[1]));
 				expirationTime = payload["exp"] * 1000.0;
 				var timeToExpire = Math.max(expirationTime - Date.now() - 300000, 10000);
-				//setTimeout(renewJWT, timeToExpire);
+				setTimeout(renewJWT, timeToExpire);
 			}
 		}
 
