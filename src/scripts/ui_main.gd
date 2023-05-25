@@ -22,7 +22,6 @@ func _ready() -> void:
 			}
 			
 			Analytics.event(Analytics.EventsUI.ERROR, properties, counters)
-			
 			JavaScript.eval('window.localStorage.removeItem("error")')
 			
 	var properties := {
@@ -103,4 +102,7 @@ func _on_fullscreen_hide_menu(is_fullscreen:bool) -> void:
 
 func _connected():
 	UINavigation.on_home_loaded()
+	if SaveLoadSettings.disabled:
+		yield(get_tree().create_timer(3), "timeout")
+		_g.emit_signal("add_toast", "IndexedDB not available", "You won't be able to save and load settings without IndexedDB", 2, self, 5)
 	

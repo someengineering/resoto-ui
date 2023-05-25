@@ -27,6 +27,7 @@ func check_for_settings() ->bool:
 
 func load_settings() -> void:
 	if disabled:
+		emit_signal("settings_loaded", false)
 		return
 	var settings : Array = load_settings_file()
 	API.psk = settings[0].psk
