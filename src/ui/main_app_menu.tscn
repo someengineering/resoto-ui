@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/ui_menu.gd" type="Script" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://assets/icons/icon_128_terminal.svg" type="Texture" id=15]
 [ext_resource path="res://assets/icons/icon_128_cleanup_job.svg" type="Texture" id=16]
 [ext_resource path="res://assets/generic/spin_shader_mix.tres" type="Shader" id=17]
+[ext_resource path="res://assets/icons/icon_128_logout.svg" type="Texture" id=18]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=22]
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=23]
 [ext_resource path="res://assets/icons/icon_128_main_jobs.svg" type="Texture" id=24]
@@ -239,14 +240,25 @@ icon_margin = -5
 [node name="Spacer" type="Control" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 252.0
 margin_right = 310.0
-margin_bottom = 963.0
+margin_bottom = 890.0
 size_flags_vertical = 3
 
 [node name="SetupWizardButton" type="Button" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
-margin_top = 931.0
+margin_top = 894.0
+margin_right = 310.0
+margin_bottom = 926.0
+text = "Setup Wizard"
+
+[node name="LogOutButton" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems" instance=ExtResource( 23 )]
+unique_name_in_owner = true
+margin_top = 930.0
 margin_right = 310.0
 margin_bottom = 963.0
-text = "Setup Wizard"
+size_flags_horizontal = 1
+size_flags_vertical = 1
+text = "Log Out"
+icon_tex = ExtResource( 18 )
+icon_margin = 2
 
 [node name="UISettings" type="HBoxContainer" parent="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems"]
 margin_top = 967.0
@@ -594,6 +606,7 @@ mouse_filter = 2
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonTerminals" to="." method="_on_ButtonTerminals_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/Buttons/ButtonConfig" to="." method="_on_ButtonConfig_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/SetupWizardButton" to="." method="_on_SetupWizardButton_pressed"]
+[connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/LogOutButton" to="." method="_on_LogOutButton_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonUISettings" to="." method="_on_ButtonUISettings_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonDocs" to="." method="_on_ButtonDocs_pressed"]
 [connection signal="pressed" from="HamburgerMenu/Panel/MenuContent/HamburgerMenuItems/UISettings/ButtonMessageLog" to="." method="_on_ButtonMessageLog_pressed"]
