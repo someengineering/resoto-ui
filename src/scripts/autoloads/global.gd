@@ -69,7 +69,7 @@ const discord_link:String			 = "https://discord.gg/someengineering"
 
 var ui_test_mode: bool = false
 var ui_scale: float = 1.0 setget set_ui_scale
-var ui_version:String = "3.4.0"
+var ui_version:String = "3.5.0"
 var resotocore_version:String = "n/a"
 var os = "Windows"
 var browser = ""
