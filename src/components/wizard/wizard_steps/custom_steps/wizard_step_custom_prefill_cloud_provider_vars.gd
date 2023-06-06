@@ -13,4 +13,14 @@ func start(_data:Dictionary):
 			wizard.step_variables["do_done"] = "true"
 		if collectors.has("gcp"):
 			wizard.step_variables["gcp_done"] = "true"
+			
+	wizard.step_variables["all_count"] = 0
+	API.cli_execute_json("search all | count", self)
+	
+func _on_cli_execute_json_done(_error: int, _response: ResotoAPI.Response):
+	if _error == OK:
+		var matches: String = _response.transformed.result[0]
+		matches = matches.replace("total matched: ", "")
+		wizard.step_variables["all_count"] = str2var(matches)
+		
 	emit_signal("next")

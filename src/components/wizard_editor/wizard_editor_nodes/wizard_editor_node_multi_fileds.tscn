@@ -1,19 +1,20 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_prompt.gd" type="Script" id=1]
-[ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=1]
+[ext_resource path="res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_multi_fileds.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxLine" id=1]
 color = Color( 0, 0.329412, 0.639216, 1 )
 thickness = 2
 
-[node name="StepPrompt" type="GraphNode"]
-margin_right = 257.0
-margin_bottom = 288.0
-mouse_filter = 1
-title = "Prompt [...]"
-show_close = true
-resizable = true
+[sub_resource type="StyleBoxLine" id=2]
+color = Color( 0, 0.329412, 0.639216, 1 )
+thickness = 2
+
+[node name="GraphNode" type="GraphNode"]
+margin_right = 377.0
+margin_bottom = 343.0
+title = "Multi Fields"
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color( 0.537255, 0.819608, 0.945098, 1 )
@@ -67,7 +68,7 @@ slot/8/left_type = 0
 slot/8/left_color = Color( 1, 1, 1, 1 )
 slot/8/right_enabled = false
 slot/8/right_type = 0
-slot/8/right_color = Color( 1, 1, 1, 1 )
+slot/8/right_color = Color( 0.265427, 0.957031, 0.438328, 1 )
 slot/9/left_enabled = false
 slot/9/left_type = 0
 slot/9/left_color = Color( 1, 1, 1, 1 )
@@ -80,30 +81,36 @@ slot/10/left_color = Color( 1, 1, 1, 1 )
 slot/10/right_enabled = false
 slot/10/right_type = 0
 slot/10/right_color = Color( 1, 1, 1, 1 )
-script = ExtResource( 1 )
+slot/11/left_enabled = false
+slot/11/left_type = 0
+slot/11/left_color = Color( 1, 1, 1, 1 )
+slot/11/right_enabled = false
+slot/11/right_type = 0
+slot/11/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 2 )
 
 [node name="top" type="HBoxContainer" parent="."]
 margin_left = 8.0
 margin_top = 34.0
-margin_right = 358.0
+margin_right = 369.0
 margin_bottom = 66.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Icon" type="TextureRect" parent="top"]
 modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_left = 122.0
-margin_right = 143.0
+margin_left = 128.0
+margin_right = 149.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 21, 21 )
 size_flags_horizontal = 4
-texture = ExtResource( 2 )
+texture = ExtResource( 1 )
 expand = true
 stretch_mode = 6
 
 [node name="uidEdit" type="LineEdit" parent="top"]
-margin_left = 147.0
-margin_right = 227.0
+margin_left = 153.0
+margin_right = 233.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 80, 0 )
 placeholder_text = "unique ID"
@@ -111,14 +118,14 @@ placeholder_text = "unique ID"
 [node name="StepLabel" type="Label" parent="."]
 margin_left = 8.0
 margin_top = 70.0
-margin_right = 358.0
+margin_right = 369.0
 margin_bottom = 90.0
 text = "text:"
 
 [node name="TextEdit" type="TextEdit" parent="."]
 margin_left = 8.0
 margin_top = 94.0
-margin_right = 358.0
+margin_right = 369.0
 margin_bottom = 134.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_vertical = 3
@@ -128,21 +135,21 @@ wrap_enabled = true
 [node name="DocsLabel" type="Label" parent="."]
 margin_left = 8.0
 margin_top = 138.0
-margin_right = 358.0
+margin_right = 369.0
 margin_bottom = 158.0
 text = "docs url:"
 
 [node name="DocsEdit" type="LineEdit" parent="."]
 margin_left = 8.0
 margin_top = 162.0
-margin_right = 358.0
+margin_right = 369.0
 margin_bottom = 194.0
 rect_min_size = Vector2( 350, 0 )
 
 [node name="HSeparator" type="HSeparator" parent="."]
 margin_left = 8.0
 margin_top = 198.0
-margin_right = 358.0
+margin_right = 369.0
 margin_bottom = 218.0
 rect_min_size = Vector2( 0, 20 )
 custom_styles/separator = SubResource( 1 )
@@ -150,8 +157,8 @@ custom_styles/separator = SubResource( 1 )
 [node name="Grid" type="GridContainer" parent="."]
 margin_left = 8.0
 margin_top = 222.0
-margin_right = 358.0
-margin_bottom = 434.0
+margin_right = 369.0
+margin_bottom = 362.0
 columns = 2
 
 [node name="ConfigLabel" type="Label" parent="Grid"]
@@ -162,7 +169,7 @@ text = "config key:"
 
 [node name="ConfigEdit" type="LineEdit" parent="Grid"]
 margin_left = 110.0
-margin_right = 350.0
+margin_right = 330.0
 margin_bottom = 32.0
 placeholder_text = "e.g. resoto.core"
 
@@ -175,7 +182,7 @@ text = "path in config:"
 [node name="PathEdit" type="LineEdit" parent="Grid"]
 margin_left = 110.0
 margin_top = 36.0
-margin_right = 350.0
+margin_right = 330.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 220, 0 )
 placeholder_text = "e.g. resotocore.api.ui_path"
@@ -189,78 +196,68 @@ text = "action:"
 [node name="ActionOption" type="OptionButton" parent="Grid"]
 margin_left = 110.0
 margin_top = 72.0
-margin_right = 350.0
+margin_right = 330.0
 margin_bottom = 104.0
 text = "merge"
 items = [ "merge", null, false, 0, null, "append", null, false, 1, null, "set", null, false, 2, null ]
 selected = 0
 
-[node name="SeparatorLabel" type="Label" parent="Grid"]
+[node name="FormatLabel" type="Label" parent="Grid"]
 margin_top = 114.0
 margin_right = 106.0
 margin_bottom = 134.0
-text = "[] separator:"
-
-[node name="SeparatorEdit" type="LineEdit" parent="Grid"]
-margin_left = 110.0
-margin_top = 108.0
-margin_right = 350.0
-margin_bottom = 140.0
-size_flags_horizontal = 3
-
-[node name="FormatLabel" type="Label" parent="Grid"]
-margin_top = 150.0
-margin_right = 106.0
-margin_bottom = 170.0
 text = "Format:"
 
 [node name="FormatLineEdit" type="LineEdit" parent="Grid"]
 margin_left = 110.0
-margin_top = 144.0
-margin_right = 350.0
-margin_bottom = 176.0
-
-[node name="ExpandLabel" type="Label" parent="Grid"]
-margin_top = 186.0
-margin_right = 106.0
-margin_bottom = 206.0
-text = "Expand field:"
-
-[node name="ExpandCheckBox" type="CheckBox" parent="Grid"]
-margin_left = 110.0
-margin_top = 180.0
-margin_right = 350.0
-margin_bottom = 212.0
+margin_top = 108.0
+margin_right = 330.0
+margin_bottom = 140.0
 
 [node name="HSeparator2" type="HSeparator" parent="."]
 margin_left = 8.0
-margin_top = 438.0
-margin_right = 358.0
-margin_bottom = 458.0
+margin_top = 366.0
+margin_right = 369.0
+margin_bottom = 386.0
 rect_min_size = Vector2( 0, 20 )
-custom_styles/separator = SubResource( 1 )
+custom_styles/separator = SubResource( 2 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 8.0
+margin_top = 390.0
+margin_right = 369.0
+margin_bottom = 422.0
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+margin_top = 6.0
+margin_right = 68.0
+margin_bottom = 26.0
+text = "Out Data:"
+
+[node name="OutDataLineEdit" type="LineEdit" parent="HBoxContainer"]
+margin_left = 72.0
+margin_right = 361.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
 
 [node name="UseDifferentSceneLabel" type="Label" parent="."]
 margin_left = 8.0
-margin_top = 462.0
-margin_right = 358.0
-margin_bottom = 482.0
+margin_top = 426.0
+margin_right = 369.0
+margin_bottom = 446.0
 text = "Scene override (scene path):"
 
 [node name="ScenePathEdit" type="LineEdit" parent="."]
 margin_left = 8.0
-margin_top = 486.0
-margin_right = 358.0
-margin_bottom = 518.0
+margin_top = 450.0
+margin_right = 369.0
+margin_bottom = 482.0
 placeholder_text = "res://example/form.tscn"
 
 [node name="PrevBtn" type="CheckBox" parent="."]
 margin_left = 8.0
-margin_top = 522.0
-margin_right = 358.0
-margin_bottom = 554.0
+margin_top = 486.0
+margin_right = 369.0
+margin_bottom = 518.0
 pressed = true
 text = "Allow Previous Button"
-
-[connection signal="text_changed" from="top/uidEdit" to="." method="_on_uidEdit_text_changed"]
-[connection signal="pressed" from="PrevBtn" to="." method="_on_PrevBtn_pressed"]

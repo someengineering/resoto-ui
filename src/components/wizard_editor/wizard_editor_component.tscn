@@ -140,7 +140,7 @@ custom_constants/margin_bottom = 10
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 188.0
-margin_bottom = 606.0
+margin_bottom = 714.0
 
 [node name="SectionLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
 margin_right = 178.0
@@ -197,73 +197,93 @@ margin_bottom = 260.0
 theme_type_variation = "ButtonSmall"
 text = "Prompt"
 
-[node name="CustomSceneButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+[node name="MultiPromptButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
 margin_top = 264.0
 margin_right = 178.0
 margin_bottom = 296.0
 theme_type_variation = "ButtonSmall"
-text = "Custom Scene"
+text = "Multi Prompt"
 
-[node name="BackendLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
+[node name="MultiFields" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
 margin_top = 300.0
 margin_right = 178.0
-margin_bottom = 320.0
+margin_bottom = 332.0
+theme_type_variation = "ButtonSmall"
+text = "Multi Fields"
+
+[node name="CustomSceneButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 336.0
+margin_right = 178.0
+margin_bottom = 368.0
+theme_type_variation = "ButtonSmall"
+text = "Custom Scene"
+
+[node name="VariableConditionalButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 372.0
+margin_right = 178.0
+margin_bottom = 404.0
+text = "Variable Conditional"
+
+[node name="BackendLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 408.0
+margin_right = 178.0
+margin_bottom = 428.0
 text = "Backend Steps"
 align = 1
 
 [node name="SetVarButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
-margin_top = 324.0
-margin_right = 178.0
-margin_bottom = 356.0
-theme_type_variation = "ButtonSmall"
-text = "Set Wizard Variable"
-
-[node name="ConfigConditionalButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
-margin_top = 360.0
-margin_right = 178.0
-margin_bottom = 392.0
-theme_type_variation = "ButtonSmall"
-text = "Config Conditional"
-
-[node name="ConfigUpdateButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
-margin_top = 396.0
-margin_right = 178.0
-margin_bottom = 428.0
-theme_type_variation = "ButtonSmall"
-text = "Change Config Value"
-
-[node name="CreateObjectButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
 margin_top = 432.0
 margin_right = 178.0
 margin_bottom = 464.0
 theme_type_variation = "ButtonSmall"
-text = "Create JSON Object"
+text = "Set Wizard Variable"
 
-[node name="HandleObjectButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+[node name="ConfigConditionalButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
 margin_top = 468.0
 margin_right = 178.0
 margin_bottom = 500.0
 theme_type_variation = "ButtonSmall"
-text = "Handle JSON Object"
+text = "Config Conditional"
 
-[node name="SaveConfigsButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+[node name="ConfigUpdateButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
 margin_top = 504.0
 margin_right = 178.0
 margin_bottom = 536.0
 theme_type_variation = "ButtonSmall"
+text = "Change Config Value"
+
+[node name="CreateObjectButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 540.0
+margin_right = 178.0
+margin_bottom = 572.0
+theme_type_variation = "ButtonSmall"
+text = "Create JSON Object"
+
+[node name="HandleObjectButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 576.0
+margin_right = 178.0
+margin_bottom = 608.0
+theme_type_variation = "ButtonSmall"
+text = "Handle JSON Object"
+
+[node name="SaveConfigsButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
+margin_top = 612.0
+margin_right = 178.0
+margin_bottom = 644.0
+theme_type_variation = "ButtonSmall"
 text = "Save Configs on Core"
 
 [node name="OtherLabel" type="Label" parent="PopupPanel/MarginContainer/VBoxContainer"]
-margin_top = 540.0
+margin_top = 648.0
 margin_right = 178.0
-margin_bottom = 560.0
+margin_bottom = 668.0
 text = "Others"
 align = 1
 
 [node name="CommentButton" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer"]
-margin_top = 564.0
+margin_top = 672.0
 margin_right = 178.0
-margin_bottom = 596.0
+margin_bottom = 704.0
 theme_type_variation = "ButtonSmall"
 text = "#Comment"
 
@@ -338,7 +358,10 @@ script = ExtResource( 5 )
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/QuestionStepButton" to="." method="_on_AddQuestionButton_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/AnswerButton" to="." method="_on_AddAnswerButton_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/PromptButton" to="." method="_on_AddPromptButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/MultiPromptButton" to="." method="_on_MultiPromptButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/MultiFields" to="." method="_on_MultiFields_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/CustomSceneButton" to="." method="_on_CustomSceneButton_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/VariableConditionalButton" to="." method="_on_VariableConditionalButton_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/SetVarButton" to="." method="_on_SetVarButton_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/ConfigConditionalButton" to="." method="_on_ConfigConditionalButton_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/ConfigUpdateButton" to="." method="_on_AddUpdateConfigButton_pressed"]

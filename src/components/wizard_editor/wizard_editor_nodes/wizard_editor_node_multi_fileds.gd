@@ -4,10 +4,9 @@ var step_text:String = ""
 var docs_link:String = ""
 var config_key:String = ""
 var value_path:String = ""
-var separator:String = ""
 var action:String = "merge"
 var format:String = ""
-var expand_field : bool = false
+var out_data_format:String = ""
 var special_scene_path:String = ""
 var previous_allowed:= true
 var uid:String = ""
@@ -19,10 +18,9 @@ func _ready():
 	$Grid/ConfigEdit.connect("text_changed", self, "_on_ConfigEdit_text_changed")
 	$Grid/PathEdit.connect("text_changed", self, "_on_PathEdit_text_changed")
 	$Grid/ActionOption.connect("item_selected", self, "_on_ActionOption_selected")
-	$Grid/SeparatorEdit.connect("text_changed", self, "_on_SeparatorEdit_text_changed")
 	$ScenePathEdit.connect("text_changed", self, "_on_ScenePathEdit_text_changed")
 	$Grid/FormatLineEdit.connect("text_changed", self, "_on_FormatLineEdit_text_changed")
-	$Grid/ExpandCheckBox.connect("toggled", self, "_on_ExpandCheckBox_toggled")
+	$HBoxContainer/OutDataLineEdit.connect("text_changed", self, "_on_OutDataLineEdit_text_changed")
 
 
 func serialize() -> Dictionary:
@@ -32,15 +30,13 @@ func serialize() -> Dictionary:
 	data["config_key"] = config_key
 	data["value_path"] = value_path
 	data["action"] = action
-	data["separator"] = separator
 	data["special_scene_path"] = special_scene_path
 	data["previous_allowed"] = previous_allowed
 	data["uid"] = uid
 	data["format"] = format
-	data["expand_field"] = expand_field
+	data["out_data_format"] = out_data_format
 	return data
-
-
+	
 func deserialize(data) -> void:
 	base_deserialize(data)
 	for key in data:
@@ -51,10 +47,9 @@ func deserialize(data) -> void:
 	$DocsEdit.text = docs_link
 	$Grid/ConfigEdit.text = config_key
 	$Grid/PathEdit.text = value_path
-	$Grid/SeparatorEdit.text = separator
 	$ScenePathEdit.text = special_scene_path
 	$Grid/FormatLineEdit.text = format
-	$Grid/ExpandCheckBox.pressed = expand_field
+	$HBoxContainer/OutDataLineEdit.text = out_data_format
 	match action:
 		"merge":
 			$Grid/ActionOption.selected = 0
@@ -90,10 +85,6 @@ func _on_ActionOption_selected(index):
 			action = "set"
 
 
-func _on_SeparatorEdit_text_changed(new_text):
-	separator = new_text
-
-
 func _on_ScenePathEdit_text_changed(new_text):
 	special_scene_path = new_text
 
@@ -109,5 +100,5 @@ func _on_uidEdit_text_changed(new_text):
 func _on_FormatLineEdit_text_changed(new_text):
 	format = new_text
 
-func _on_ExpandCheckBox_toggled(value : bool):
-	expand_field = value
+func _on_OutDataLineEdit_text_changed(new_text):
+	out_data_format = new_text

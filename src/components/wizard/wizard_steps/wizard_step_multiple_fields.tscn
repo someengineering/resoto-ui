@@ -1,0 +1,141 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=3]
+[ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=4]
+[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=5]
+[ext_resource path="res://components/wizard/wizard_steps/wizard_step_multiple_fields.gd" type="Script" id=6]
+[ext_resource path="res://components/wizard/wizard_steps/multiple_field_step_template_element.gd" type="Script" id=7]
+
+[node name="WizardStep_MultipleFields" type="ScrollContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 6 )
+intercept_next = true
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextLabel" type="RichTextLabel" parent="VBox"]
+self_modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_right = 1920.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+theme = ExtResource( 1 )
+theme_type_variation = "FontMedium"
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+bbcode_enabled = true
+bbcode_text = "Lorem [code]Ipsum[/code] Dolor, [b]Lorem[/b]"
+text = "Lorem Ipsum Dolor, Lorem"
+fit_content_height = true
+scroll_active = false
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBox"]
+margin_top = 28.0
+margin_right = 1920.0
+margin_bottom = 1043.0
+size_flags_vertical = 3
+
+[node name="ElementList" type="VBoxContainer" parent="VBox/ScrollContainer"]
+unique_name_in_owner = true
+margin_right = 1920.0
+margin_bottom = 1015.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="IconButtonText" parent="VBox" instance=ExtResource( 5 )]
+margin_left = 889.0
+margin_top = 1047.0
+margin_right = 1029.67
+margin_bottom = 1080.0
+size_flags_vertical = 1
+text = "       Add Element"
+icon_tex = ExtResource( 4 )
+
+[node name="MultipleFiledStepTemplateElement" type="PanelContainer" parent="VBox"]
+visible = false
+self_modulate = Color( 0.627451, 0.627451, 0.627451, 1 )
+margin_top = 574.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+size_flags_vertical = 3
+theme_type_variation = "PanelContainerDark"
+script = ExtResource( 7 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox/MultipleFiledStepTemplateElement"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1908.0
+margin_bottom = 498.0
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer"]
+margin_right = 1859.0
+margin_bottom = 490.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer"]
+margin_right = 1859.0
+margin_bottom = 490.0
+size_flags_vertical = 3
+columns = 2
+
+[node name="Label" type="Label" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 6.0
+margin_right = 77.0
+margin_bottom = 26.0
+text = "Project ID:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 81.0
+margin_right = 1859.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer/HBoxContainer"]
+margin_right = 1584.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="CheckBox" type="CheckBox" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer/HBoxContainer"]
+margin_left = 1588.0
+margin_right = 1778.67
+margin_bottom = 32.0
+hint_tooltip = "Unheck if the file is provided manually to resoto.worker"
+pressed = true
+text = "Provide File Content"
+
+[node name="Label2" type="Label" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 253.0
+margin_right = 77.0
+margin_bottom = 273.0
+text = "Profile:"
+
+[node name="TextEdit" type="TextEdit" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 81.0
+margin_top = 36.0
+margin_right = 1859.0
+margin_bottom = 490.0
+rect_min_size = Vector2( 0, 100 )
+size_flags_vertical = 3
+
+[node name="IconButton" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer" instance=ExtResource( 2 )]
+margin_left = 1863.0
+margin_top = 228.0
+margin_right = 1896.0
+margin_bottom = 261.0
+size_flags_vertical = 4
+icon_tex = ExtResource( 3 )
+
+[node name="TextAppearTween" type="Tween" parent="."]
+
+[connection signal="pressed" from="VBox/IconButtonText" to="." method="_on_IconButtonText_pressed"]
+[connection signal="pressed" from="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer/HBoxContainer/CheckBox" to="VBox/MultipleFiledStepTemplateElement" method="_on_CheckBox_pressed"]
+[connection signal="pressed" from="VBox/MultipleFiledStepTemplateElement/HBoxContainer/IconButton" to="VBox/MultipleFiledStepTemplateElement" method="_on_IconButton_pressed"]
+[connection signal="tween_all_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_all_completed"]
+[connection signal="tween_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_completed"]
