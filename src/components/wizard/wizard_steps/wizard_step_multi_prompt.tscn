@@ -35,7 +35,7 @@ scroll_active = false
 [node name="FieldsMargin" type="MarginContainer" parent="VBox"]
 margin_top = 40.0
 margin_right = 1920.0
-margin_bottom = 1044.0
+margin_bottom = 1080.0
 rect_min_size = Vector2( 450, 0 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -48,15 +48,8 @@ custom_constants/margin_bottom = 0
 margin_left = 100.0
 margin_top = 20.0
 margin_right = 1820.0
-margin_bottom = 1004.0
+margin_bottom = 1040.0
 size_flags_vertical = 3
-
-[node name="MandatoryWarning" type="Label" parent="VBox"]
-margin_top = 1060.0
-margin_right = 1920.0
-margin_bottom = 1080.0
-size_flags_vertical = 0
-text = "Missing Mandatory Fields"
 
 [node name="TextAppearTween" type="Tween" parent="."]
 

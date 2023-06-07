@@ -10,6 +10,9 @@ var format := ""
 var out_data_format := ""
 var next_step
 
+func _ready():
+	element_list.add_child(new_element())
+
 
 func start(_data:Dictionary):
 	if not _data["previous_allowed"]:

@@ -60,13 +60,9 @@ func create_fields(_prompts : Array):
 		
 		prompt_field.get_node("Label").text = prompt_data.step_text
 		
-		if prompt.from_port == 1:
-			mandatory_prompts.append(prompt_data)
-			prompt_field.get_node("Label").text += " *"
-			prompt_field.get_node("LineEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
-			prompt_field.get_node("TextEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
-		elif prompt.from_port == 2:
-			optional_prompts.append(prompt_data)
+		mandatory_prompts.append(prompt_data)
+		prompt_field.get_node("LineEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
+		prompt_field.get_node("TextEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
 		
 			
 		$VBox/FieldsMargin/Fields.add_child(prompt_field)
@@ -80,7 +76,6 @@ func mandatory_prompt_text_changed(_new_text : String = ""):
 			all_filled = false
 			break
 			
-	$VBox/MandatoryWarning.text = "" if all_filled else "Missing Mandatory Fields"
 	emit_signal("can_continue", all_filled)
 
 
