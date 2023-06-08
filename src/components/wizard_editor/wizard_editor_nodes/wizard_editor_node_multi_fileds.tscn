@@ -158,7 +158,7 @@ custom_styles/separator = SubResource( 1 )
 margin_left = 8.0
 margin_top = 222.0
 margin_right = 369.0
-margin_bottom = 362.0
+margin_bottom = 445.0
 columns = 2
 
 [node name="ConfigLabel" type="Label" parent="Grid"]
@@ -214,19 +214,44 @@ margin_top = 108.0
 margin_right = 330.0
 margin_bottom = 140.0
 
+[node name="Label" type="Label" parent="Grid"]
+margin_top = 150.0
+margin_right = 106.0
+margin_bottom = 170.0
+text = "Id field name:"
+
+[node name="IdFieldName" type="LineEdit" parent="Grid"]
+margin_left = 110.0
+margin_top = 144.0
+margin_right = 330.0
+margin_bottom = 176.0
+
+[node name="Label2" type="Label" parent="Grid"]
+margin_top = 180.0
+margin_right = 106.0
+margin_bottom = 223.0
+text = "Content Name
+"
+
+[node name="ContentName" type="LineEdit" parent="Grid"]
+margin_left = 110.0
+margin_top = 180.0
+margin_right = 330.0
+margin_bottom = 223.0
+
 [node name="HSeparator2" type="HSeparator" parent="."]
 margin_left = 8.0
-margin_top = 366.0
+margin_top = 449.0
 margin_right = 369.0
-margin_bottom = 386.0
+margin_bottom = 469.0
 rect_min_size = Vector2( 0, 20 )
 custom_styles/separator = SubResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 8.0
-margin_top = 390.0
+margin_top = 473.0
 margin_right = 369.0
-margin_bottom = 422.0
+margin_bottom = 505.0
 
 [node name="Label" type="Label" parent="HBoxContainer"]
 margin_top = 6.0
@@ -242,22 +267,22 @@ size_flags_horizontal = 3
 
 [node name="UseDifferentSceneLabel" type="Label" parent="."]
 margin_left = 8.0
-margin_top = 426.0
+margin_top = 509.0
 margin_right = 369.0
-margin_bottom = 446.0
+margin_bottom = 529.0
 text = "Scene override (scene path):"
 
 [node name="ScenePathEdit" type="LineEdit" parent="."]
 margin_left = 8.0
-margin_top = 450.0
+margin_top = 533.0
 margin_right = 369.0
-margin_bottom = 482.0
+margin_bottom = 565.0
 placeholder_text = "res://example/form.tscn"
 
 [node name="PrevBtn" type="CheckBox" parent="."]
 margin_left = 8.0
-margin_top = 486.0
+margin_top = 569.0
 margin_right = 369.0
-margin_bottom = 518.0
+margin_bottom = 601.0
 pressed = true
 text = "Allow Previous Button"

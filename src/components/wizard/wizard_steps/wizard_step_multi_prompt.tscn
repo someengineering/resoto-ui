@@ -68,18 +68,19 @@ text = "Prompt Field"
 
 [node name="LineEdit" type="LineEdit" parent="FieldTemplate"]
 margin_left = 154.0
-margin_right = 1013.0
+margin_right = 1035.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="TextEdit" type="TextEdit" parent="FieldTemplate"]
-margin_left = 1017.0
-margin_right = 1876.0
+margin_left = 1039.0
+margin_right = 1920.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="CheckBox" type="CheckBox" parent="FieldTemplate"]
+visible = false
 margin_left = 1880.0
 margin_right = 1920.0
 margin_bottom = 32.0

@@ -11,7 +11,20 @@ var out_data_format := ""
 var next_step
 
 func _ready():
-	element_list.add_child(new_element())
+	get_tree().connect("files_dropped", self, "_on_files_dropped")
+	
+
+func _on_files_dropped(files, _screen):
+	if !is_visible_in_tree():
+		return
+	for file_name in files:
+		var file = File.new()
+		if not file.open(files[0], File.READ):
+			var data = file.get_as_text()
+			var element = new_element()
+			element_list.add_child(element)
+			element.line_edit.text = file_name.get_file()
+			element.text_edit.text = data
 
 
 func start(_data:Dictionary):
@@ -25,7 +38,10 @@ func start(_data:Dictionary):
 	config_action = _data.action
 	format = _data.format
 	out_data_format = _data.out_data_format
-	
+	if _data.id_field_name != "":
+		$"%Label".text = _data.id_field_name
+	if _data.content_name != "":
+		$"%Label2".text = _data.content_name
 	text_label.percent_visible = 0
 	text_label.bbcode_text = _data["step_text"].replace("\\n", "\n")
 	
@@ -95,3 +111,6 @@ func forward_can_previous(_can:bool):
 
 func forward_next(_step_id:=0):
 	emit_signal("next", _step_id)
+
+func _on_ElementList_sort_children():
+	$VBox/ScrollContainer/Label.visible = element_list.get_child_count() <= 0

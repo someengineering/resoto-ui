@@ -11,6 +11,12 @@ var placeholder_scene:Node = null
 
 onready var margin = $VBox/LineEditMargin
 
+
+func _ready():
+	$VBox/TextLabel.connect("meta_hover_started", self, "_on_TextLabel_meta_hover_started")
+	$VBox/TextLabel.connect("meta_hover_ended", self, "_on_TextLabel_meta_hover_ended")
+	$VBox/TextLabel.connect("meta_clicked", self, "_on_TextLabel_meta_clicked")
+	
 func _enter_tree():
 	regex.compile("\\[(.*?)\\]")
 

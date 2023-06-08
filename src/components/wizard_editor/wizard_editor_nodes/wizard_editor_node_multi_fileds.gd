@@ -7,6 +7,8 @@ var value_path:String = ""
 var action:String = "merge"
 var format:String = ""
 var out_data_format:String = ""
+var id_field_name : String = ""
+var content_name : String = ""
 var special_scene_path:String = ""
 var previous_allowed:= true
 var uid:String = ""
@@ -21,7 +23,8 @@ func _ready():
 	$ScenePathEdit.connect("text_changed", self, "_on_ScenePathEdit_text_changed")
 	$Grid/FormatLineEdit.connect("text_changed", self, "_on_FormatLineEdit_text_changed")
 	$HBoxContainer/OutDataLineEdit.connect("text_changed", self, "_on_OutDataLineEdit_text_changed")
-
+	$Grid/IdFieldName.connect("text_changed", self, "_on_IdFieldName_text_changed")
+	$Grid/ContentName.connect("text_changed", self, "_on_ContentName_text_changed")
 
 func serialize() -> Dictionary:
 	var data:Dictionary = base_serialize()
@@ -35,6 +38,8 @@ func serialize() -> Dictionary:
 	data["uid"] = uid
 	data["format"] = format
 	data["out_data_format"] = out_data_format
+	data["id_field_name"] = id_field_name
+	data["content_name"] = content_name
 	return data
 	
 func deserialize(data) -> void:
@@ -50,6 +55,8 @@ func deserialize(data) -> void:
 	$ScenePathEdit.text = special_scene_path
 	$Grid/FormatLineEdit.text = format
 	$HBoxContainer/OutDataLineEdit.text = out_data_format
+	$Grid/IdFieldName.text  = id_field_name
+	$Grid/ContentName.text = content_name
 	match action:
 		"merge":
 			$Grid/ActionOption.selected = 0
@@ -102,3 +109,10 @@ func _on_FormatLineEdit_text_changed(new_text):
 
 func _on_OutDataLineEdit_text_changed(new_text):
 	out_data_format = new_text
+
+
+func _on_IdFieldName_text_changed(new_text):
+	id_field_name = new_text
+
+func _on_ContentName_text_changed(new_text):
+	content_name = new_text

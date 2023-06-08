@@ -358,6 +358,8 @@ func _on_AddDashboard_pressed():
 
 
 func _on_files_dropped(files, _screen):
+	if !is_visible_in_tree():
+		return
 	var file = File.new()
 	if not file.open(files[0], File.READ):
 		var data = parse_json(file.get_as_text())
