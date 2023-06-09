@@ -85,6 +85,8 @@ func load_wizard_graph(_wizard_script_name:String=wizard_script_name):
 	data["connections_to"] = {}
 	home_section = data.info.home_screen
 	for c in data.connections:
+		if c.from == "15647":
+			pass
 		if not data.connections_from.has(c.from):
 			data.connections_from[c.from] = []
 		if not data.connections_to.has(c.to):
@@ -127,14 +129,34 @@ func start_wizard():
 			break
 
 
+func set_custom_buttons(buttons : Array):
+	next_button.visible = false
+	prev_button.visible = false
+	for button_data in buttons:
+		var button := Button.new()
+		button.text = button_data["text"]
+		$BG/StepDisplay/StepButtons.add_child(button)
+		button.connect("pressed", self, "show_step", [str(button_data["to"])])
+		
+
+func remove_custom_buttons():
+	next_button.visible = true
+	for button in $BG/StepDisplay/StepButtons.get_children():
+		if button == prev_button or button == next_button:
+			continue
+		button.queue_free()
+
+
 func show_step(_step_id:String):
 	var step_data = get_step_data(_step_id)
+		
 	if start_step_id == "" and visible_step_scene_names.has(step_data.res_name):
 		 start_step_id = _step_id
 	
 	prev_button.visible = start_step_id != _step_id
 	can_previous(true)
 	
+	remove_custom_buttons()
 	
 	update_help(step_data)
 	for c in step_content.get_children():
@@ -144,8 +166,10 @@ func show_step(_step_id:String):
 			current_step.start(step_data)
 			current_step.show()
 			$BG/StepDisplay/Titlebar/SectionTitleLabel.text = current_step.section_name
+			
 			next_button.text = "Close" if not data.connections_from.has(current_step.step_id) else "Next"
 			check_if_can_finish_wizard(step_data)
+			
 			return
 	
 	if data.nodes.has(_step_id):
@@ -177,6 +201,7 @@ func show_step(_step_id:String):
 			home_section_id = str(step_data.id)
 		
 		current_step.start(step_data)
+		
 
 
 func check_if_can_finish_wizard(step_data:Dictionary):
@@ -223,10 +248,13 @@ func can_continue(_can: bool = true):
 
 
 func can_previous(_can:bool):
-	prev_button.disabled = !_can
-	next_button.focus_mode = Control.FOCUS_ALL if _can else Control.FOCUS_NONE
-	$BG/StepDisplay/Titlebar/HomeButton.disabled = !_can
-	$BG/StepDisplay/Titlebar/HomeButton.modulate.a = 0.1 if !_can else 1.0
+	if current_step and not current_step.custom_buttons.empty():
+		set_custom_buttons(current_step.custom_buttons)
+	else:
+		prev_button.disabled = !_can
+		next_button.focus_mode = Control.FOCUS_ALL if _can else Control.FOCUS_NONE
+		$BG/StepDisplay/Titlebar/HomeButton.disabled = !_can
+		$BG/StepDisplay/Titlebar/HomeButton.modulate.a = 0.1 if !_can else 1.0
 
 
 func next_step(_next_on_slot:int=0):

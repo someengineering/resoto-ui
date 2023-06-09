@@ -20,7 +20,8 @@ var wizard_graph_node_scenes:Dictionary = {
 	"StepConfigConditional" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_config_conditional.tscn"),
 	"StepVariableConditional" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_step_variable_conditional.tscn"),
 	"StepMultiPrompt" : preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_multi_prompt.tscn"),
-	"StepMultipleFields": preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_multi_fileds.tscn")
+	"StepMultipleFields": preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_multi_fileds.tscn"),
+	"StepButton": preload("res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_button.tscn")
 }
 
 var initial_position:= Vector2(60,60)
@@ -120,8 +121,9 @@ func _on_CustomSceneButton_pressed():
 
 func _on_VariableConditionalButton_pressed():
 	add_step("StepVariableConditional")
-	
 
+func _on_ButtonStepButton_pressed():
+	add_step("StepButton")
 
 func _on_MultiFields_pressed():
 	add_step("StepMultipleFields")
@@ -283,4 +285,5 @@ func _on_ScriptSelection_open_script_file(_file_name:String):
 
 func _on_BackBtn_pressed():
 	get_tree().change_scene("res://Main.tscn")
+
 

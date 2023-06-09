@@ -19,6 +19,8 @@ var section_name := ""
 var step_id := ""
 var last_step := ""
 
+var custom_buttons := []
+
 var configs_save_n := 0
 
 func start(_data:Dictionary):
