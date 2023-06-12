@@ -9,6 +9,7 @@ var format:String = ""
 var out_data_format:String = ""
 var id_field_name : String = ""
 var content_name : String = ""
+var single_content : bool = false
 var special_scene_path:String = ""
 var previous_allowed:= true
 var uid:String = ""
@@ -25,6 +26,7 @@ func _ready():
 	$HBoxContainer/OutDataLineEdit.connect("text_changed", self, "_on_OutDataLineEdit_text_changed")
 	$Grid/IdFieldName.connect("text_changed", self, "_on_IdFieldName_text_changed")
 	$Grid/ContentName.connect("text_changed", self, "_on_ContentName_text_changed")
+	$Grid/SingleFileCheckBox.connect("toggled", self, "_on_SingleFileCheckBox_toggled")
 
 func serialize() -> Dictionary:
 	var data:Dictionary = base_serialize()
@@ -40,6 +42,7 @@ func serialize() -> Dictionary:
 	data["out_data_format"] = out_data_format
 	data["id_field_name"] = id_field_name
 	data["content_name"] = content_name
+	data["single_content"] = single_content
 	return data
 	
 func deserialize(data) -> void:
@@ -57,6 +60,7 @@ func deserialize(data) -> void:
 	$HBoxContainer/OutDataLineEdit.text = out_data_format
 	$Grid/IdFieldName.text  = id_field_name
 	$Grid/ContentName.text = content_name
+	$Grid/SingleFileCheckBox.pressed = single_content
 	match action:
 		"merge":
 			$Grid/ActionOption.selected = 0
@@ -116,3 +120,6 @@ func _on_IdFieldName_text_changed(new_text):
 
 func _on_ContentName_text_changed(new_text):
 	content_name = new_text
+
+func _on_SingleFileCheckBox_toggled(value : bool):
+	single_content = value

@@ -10,6 +10,8 @@ var format := ""
 var out_data_format := ""
 var next_step
 
+var single_content := false
+
 func _ready():
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	
@@ -22,9 +24,27 @@ func _on_files_dropped(files, _screen):
 		if not file.open(files[0], File.READ):
 			var data = file.get_as_text()
 			var element = new_element()
+			
+			if single_content:
+				for e in element_list.get_children():
+					element_list.remove_child(e)
+					e.queue_free()
+			
 			element_list.add_child(element)
-			element.line_edit.text = file_name.get_file()
-			element.text_edit.text = data
+			element.file_name = file_name.get_file()
+			element.value = data
+			var key : String = element.file_name.replace(".json", "")
+			
+			var existing_keys := []
+			for other in  element_list.get_children():
+				existing_keys.append(other.key)
+				
+			var i := 1
+			while key in existing_keys:
+				key += " (%d)" % i
+				i += 1
+				
+			element.key = key
 
 
 func start(_data:Dictionary):
@@ -40,8 +60,14 @@ func start(_data:Dictionary):
 	out_data_format = _data.out_data_format
 	if _data.id_field_name != "":
 		$"%Label".text = _data.id_field_name
+	else:
+		$"%Label".hide()
+		$VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer/LineEdit.hide()
 	if _data.content_name != "":
 		$"%Label2".text = _data.content_name
+	
+	single_content = _data.single_content
+	
 	text_label.percent_visible = 0
 	text_label.bbcode_text = _data["step_text"].replace("\\n", "\n")
 	

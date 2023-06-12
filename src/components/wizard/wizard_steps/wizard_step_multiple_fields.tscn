@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=1]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=2]
@@ -7,6 +7,9 @@
 [ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=5]
 [ext_resource path="res://components/wizard/wizard_steps/wizard_step_multiple_fields.gd" type="Script" id=6]
 [ext_resource path="res://components/wizard/wizard_steps/multiple_field_step_template_element.gd" type="Script" id=7]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0470588, 0.0941176, 0.133333, 1 )
 
 [node name="WizardStep_MultipleFields" type="ScrollContainer"]
 anchor_right = 1.0
@@ -70,10 +73,9 @@ icon_tex = ExtResource( 4 )
 [node name="MultipleFiledStepTemplateElement" type="PanelContainer" parent="VBox"]
 visible = false
 self_modulate = Color( 0.627451, 0.627451, 0.627451, 1 )
-margin_top = 556.0
+margin_top = 1008.0
 margin_right = 1920.0
 margin_bottom = 1080.0
-size_flags_vertical = 3
 theme_type_variation = "PanelContainerDark"
 script = ExtResource( 7 )
 
@@ -81,19 +83,20 @@ script = ExtResource( 7 )
 margin_left = 12.0
 margin_top = 8.0
 margin_right = 1908.0
-margin_bottom = 516.0
+margin_bottom = 64.0
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer"]
 margin_right = 1859.0
-margin_bottom = 508.0
+margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer"]
 margin_right = 1859.0
-margin_bottom = 508.0
+margin_bottom = 56.0
 size_flags_vertical = 3
+custom_constants/hseparation = 20
 columns = 2
 
 [node name="Label" type="Label" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer"]
@@ -111,24 +114,25 @@ size_flags_horizontal = 3
 
 [node name="Label2" type="Label" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
-margin_top = 262.0
+margin_top = 36.0
 margin_right = 77.0
-margin_bottom = 282.0
+margin_bottom = 56.0
 text = "Profile:"
 
-[node name="TextEdit" type="TextEdit" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer"]
+[node name="FileNameLabel" type="Label" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 81.0
 margin_top = 36.0
 margin_right = 1859.0
-margin_bottom = 508.0
-rect_min_size = Vector2( 0, 100 )
-size_flags_vertical = 3
+margin_bottom = 56.0
+theme_type_variation = "LabelCode"
+custom_styles/normal = SubResource( 1 )
+text = "file name"
 
 [node name="IconButton" parent="VBox/MultipleFiledStepTemplateElement/HBoxContainer" instance=ExtResource( 2 )]
 margin_left = 1863.0
-margin_top = 237.0
+margin_top = 11.0
 margin_right = 1896.0
-margin_bottom = 270.0
+margin_bottom = 44.0
 size_flags_vertical = 4
 icon_tex = ExtResource( 3 )
 

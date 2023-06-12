@@ -158,45 +158,45 @@ custom_styles/separator = SubResource( 1 )
 margin_left = 8.0
 margin_top = 222.0
 margin_right = 369.0
-margin_bottom = 445.0
+margin_bottom = 481.0
 columns = 2
 
 [node name="ConfigLabel" type="Label" parent="Grid"]
 margin_top = 6.0
-margin_right = 106.0
+margin_right = 111.0
 margin_bottom = 26.0
 text = "config key:"
 
 [node name="ConfigEdit" type="LineEdit" parent="Grid"]
-margin_left = 110.0
-margin_right = 330.0
+margin_left = 115.0
+margin_right = 335.0
 margin_bottom = 32.0
 placeholder_text = "e.g. resoto.core"
 
 [node name="PathLabel" type="Label" parent="Grid"]
 margin_top = 42.0
-margin_right = 106.0
+margin_right = 111.0
 margin_bottom = 62.0
 text = "path in config:"
 
 [node name="PathEdit" type="LineEdit" parent="Grid"]
-margin_left = 110.0
+margin_left = 115.0
 margin_top = 36.0
-margin_right = 330.0
+margin_right = 335.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 220, 0 )
 placeholder_text = "e.g. resotocore.api.ui_path"
 
 [node name="ActionLabel" type="Label" parent="Grid"]
 margin_top = 78.0
-margin_right = 106.0
+margin_right = 111.0
 margin_bottom = 98.0
 text = "action:"
 
 [node name="ActionOption" type="OptionButton" parent="Grid"]
-margin_left = 110.0
+margin_left = 115.0
 margin_top = 72.0
-margin_right = 330.0
+margin_right = 335.0
 margin_bottom = 104.0
 text = "merge"
 items = [ "merge", null, false, 0, null, "append", null, false, 1, null, "set", null, false, 2, null ]
@@ -204,54 +204,66 @@ selected = 0
 
 [node name="FormatLabel" type="Label" parent="Grid"]
 margin_top = 114.0
-margin_right = 106.0
+margin_right = 111.0
 margin_bottom = 134.0
 text = "Format:"
 
 [node name="FormatLineEdit" type="LineEdit" parent="Grid"]
-margin_left = 110.0
+margin_left = 115.0
 margin_top = 108.0
-margin_right = 330.0
+margin_right = 335.0
 margin_bottom = 140.0
 
 [node name="Label" type="Label" parent="Grid"]
 margin_top = 150.0
-margin_right = 106.0
+margin_right = 111.0
 margin_bottom = 170.0
 text = "Id field name:"
 
 [node name="IdFieldName" type="LineEdit" parent="Grid"]
-margin_left = 110.0
+margin_left = 115.0
 margin_top = 144.0
-margin_right = 330.0
+margin_right = 335.0
 margin_bottom = 176.0
 
 [node name="Label2" type="Label" parent="Grid"]
 margin_top = 180.0
-margin_right = 106.0
+margin_right = 111.0
 margin_bottom = 223.0
-text = "Content Name
+text = "Content Name:
 "
 
 [node name="ContentName" type="LineEdit" parent="Grid"]
-margin_left = 110.0
+margin_left = 115.0
 margin_top = 180.0
-margin_right = 330.0
+margin_right = 335.0
 margin_bottom = 223.0
+
+[node name="Label3" type="Label" parent="Grid"]
+margin_top = 233.0
+margin_right = 111.0
+margin_bottom = 253.0
+text = "Single File:"
+
+[node name="SingleFileCheckBox" type="CheckBox" parent="Grid"]
+margin_left = 115.0
+margin_top = 227.0
+margin_right = 335.0
+margin_bottom = 259.0
 
 [node name="HSeparator2" type="HSeparator" parent="."]
 margin_left = 8.0
-margin_top = 449.0
+margin_top = 485.0
 margin_right = 369.0
-margin_bottom = 469.0
+margin_bottom = 505.0
 rect_min_size = Vector2( 0, 20 )
 custom_styles/separator = SubResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 8.0
-margin_top = 473.0
+margin_top = 509.0
 margin_right = 369.0
-margin_bottom = 505.0
+margin_bottom = 541.0
 
 [node name="Label" type="Label" parent="HBoxContainer"]
 margin_top = 6.0
@@ -267,22 +279,22 @@ size_flags_horizontal = 3
 
 [node name="UseDifferentSceneLabel" type="Label" parent="."]
 margin_left = 8.0
-margin_top = 509.0
+margin_top = 545.0
 margin_right = 369.0
-margin_bottom = 529.0
+margin_bottom = 565.0
 text = "Scene override (scene path):"
 
 [node name="ScenePathEdit" type="LineEdit" parent="."]
 margin_left = 8.0
-margin_top = 533.0
+margin_top = 569.0
 margin_right = 369.0
-margin_bottom = 565.0
+margin_bottom = 601.0
 placeholder_text = "res://example/form.tscn"
 
 [node name="PrevBtn" type="CheckBox" parent="."]
 margin_left = 8.0
-margin_top = 569.0
+margin_top = 605.0
 margin_right = 369.0
-margin_bottom = 601.0
+margin_bottom = 637.0
 pressed = true
 text = "Allow Previous Button"
