@@ -1,4 +1,5 @@
 extends PanelContainer
+class_name MultiFieldTemplate
 
 var value : String = ""
 var key : String = "" setget set_key, get_key
@@ -7,6 +8,7 @@ var file_content_provided_manually := false
 
 onready var line_edit := $HBoxContainer/VBoxContainer/GridContainer/LineEdit
 onready var file_name_label := $HBoxContainer/VBoxContainer/GridContainer/FileNameLabel
+onready var line_edit_label := $"%Label"
 
 var dragging := false
 

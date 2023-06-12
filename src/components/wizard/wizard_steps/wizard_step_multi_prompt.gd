@@ -3,9 +3,47 @@ extends WizardStep
 var mandatory_prompts := []
 var optional_prompts := []
 
+onready var fields := $VBox/FieldsMargin/Fields
+
 
 func _ready():
 	do_intercept_next = true
+	get_tree().connect("files_dropped", self, "_on_files_dropped")
+	
+
+func _on_files_dropped(files, _screen):
+	if !is_visible_in_tree():
+		return
+	var file = File.new()
+	var file_name = files[0]
+	if not file.open(files[0], File.READ):
+		
+		for field in fields.get_children():
+			if field is MultiFieldTemplate:
+				fields.remove_child(field)
+				field.queue_free()
+				
+		
+		var data = file.get_as_text()
+		var element = preload("res://components/wizard/multi_field_template_element.tscn").instance()
+		
+		
+		for prompt in mandatory_prompts:
+			if prompt.res_name == "StepMultipleFields":
+				prompt["field"] = element
+		
+		fields.add_child(element)
+		element.file_name = file_name.get_file()
+		element.value = data
+		
+		element.line_edit.hide()
+		element.line_edit_label.hide()
+		
+		var key : String = element.file_name.replace(".json", "")
+			
+		element.key = key
+		
+		fields.move_child($VBox/FieldsMargin/Fields/DropFilesLabel, fields.get_child_count())
 
 func start(_data:Dictionary):
 	if not _data["previous_allowed"]:
@@ -34,6 +72,8 @@ func _on_TextAppearTween_tween_completed(_object, key):
 
 func create_fields(_prompts : Array):
 	for field in $VBox/FieldsMargin/Fields.get_children():
+		if field == $VBox/FieldsMargin/Fields/DropFilesLabel:
+			continue
 		$VBox/FieldsMargin/Fields.remove_child(field)
 		field.queue_free()
 		
@@ -43,38 +83,51 @@ func create_fields(_prompts : Array):
 	for prompt in _prompts:
 		if prompt.from_port == 0:
 			continue
-		var prompt_field := $FieldTemplate.duplicate()
+			
 		
 		var prompt_data = wizard.get_step_data(prompt.to)
-		prompt_field.get_node("LineEdit").visible = not prompt_data.expand_field
-		prompt_field.get_node("TextEdit").visible = prompt_data.expand_field
-#		prompt_field.get_node("CheckBox").visible = prompt_data.expand_field
-		prompt_field.get_node("CheckBox").connect("pressed", self, "change_textbox_enabled", [prompt_field.get_node("TextEdit"), prompt_field.get_node("CheckBox")])
-		if prompt_field.get_node("TextEdit").visible: 
-			prompt_field.size_flags_vertical = SIZE_EXPAND_FILL
-		
-		prompt_data["field"] = prompt_field
-		if prompt_data.docs_link != "":
-			prompt_field.get_node("DocButton").show()
-			prompt_field.get_node("DocButton").url = prompt_data.docs_link
-		
-		prompt_field.get_node("Label").text = prompt_data.step_text
 		
 		mandatory_prompts.append(prompt_data)
-		prompt_field.get_node("LineEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
-		prompt_field.get_node("TextEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
 		
+		if prompt_data.res_name == "StepMultipleFields":
+			$VBox/FieldsMargin/Fields/DropFilesLabel.show()
 			
-		$VBox/FieldsMargin/Fields.add_child(prompt_field)
-		prompt_field.show()
+		else:
+			var prompt_field := $FieldTemplate.duplicate()
+			prompt_field.get_node("LineEdit").visible = not prompt_data.expand_field
+			prompt_field.get_node("TextEdit").visible = prompt_data.expand_field
+	#		prompt_field.get_node("CheckBox").visible = prompt_data.expand_field
+			prompt_field.get_node("CheckBox").connect("pressed", self, "change_textbox_enabled", [prompt_field.get_node("TextEdit"), prompt_field.get_node("CheckBox")])
+			if prompt_field.get_node("TextEdit").visible: 
+				prompt_field.size_flags_vertical = SIZE_EXPAND_FILL
+			
+			prompt_data["field"] = prompt_field
+			if prompt_data.docs_link != "":
+				prompt_field.get_node("DocButton").show()
+				prompt_field.get_node("DocButton").url = prompt_data.docs_link
+			
+			prompt_field.get_node("Label").text = prompt_data.step_text
+			
+			prompt_field.get_node("LineEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
+			prompt_field.get_node("TextEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
+			
+				
+			fields.add_child(prompt_field)
+			fields.move_child($VBox/FieldsMargin/Fields/DropFilesLabel, fields.get_child_count())
+			prompt_field.show()
 
 func mandatory_prompt_text_changed(_new_text : String = ""):
 	
 	var all_filled := true
 	for prompt in mandatory_prompts:
-		if get_text_node(prompt).text == "":
-			all_filled = false
-			break
+		if prompt.res_name == "StepMultipleFields":
+			if not ("field" in prompt and is_instance_valid(prompt["field"])):
+				all_filled = false
+				break
+		else:
+			if get_text_node(prompt).text == "":
+				all_filled = false
+				break
 			
 	emit_signal("can_continue", all_filled)
 
@@ -85,18 +138,24 @@ func consume_next():
 	prompts.append_array(mandatory_prompts)
 	
 	for prompt in prompts:
-		var text_node = get_text_node(prompt)
-		if text_node.text == "":
-			continue
 		config_key = prompt.config_key
 		config_value_path = prompt.value_path
 		
-		var value : String = text_node.text
+		var value : String
+		if prompt.res_name == "StepMultipleFields":
+			var key : String = prompt.format.replace("{{key}}",prompt.field.key)
+			value = var2str({key : prompt.field.value})
+		else:
+			var text_node = get_text_node(prompt)
+			if text_node.text == "":
+				continue
+			
+			value = text_node.text
+			
+			if prompt.format != "" and "{{value}}" in prompt.format:
+				value = prompt.format.replace("{{value}}", value)
 		
-		if prompt.format != "" and "{{value}}" in prompt.format:
-			value = prompt.format.replace("{{value}}", value)
-		
-		update_config_string_separator(value, prompt.separator)
+		update_config_string_separator(value, prompt.separator if "separator" in prompt else "")
 		
 	emit_signal("next")
 
@@ -107,3 +166,12 @@ func get_text_node(prompt):
 
 func change_textbox_enabled(text_box : TextEdit, checkbox : CheckBox):
 	text_box.visible = checkbox.pressed
+
+
+func _on_Fields_child_entered_tree(_node):
+	mandatory_prompt_text_changed("")
+
+
+func _on_Fields_child_exiting_tree(_node):
+	if _node is MultiFieldTemplate:
+		emit_signal("can_continue", false)

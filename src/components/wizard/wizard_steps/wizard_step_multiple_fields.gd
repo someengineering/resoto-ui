@@ -59,12 +59,12 @@ func start(_data:Dictionary):
 	format = _data.format
 	out_data_format = _data.out_data_format
 	if _data.id_field_name != "":
-		$"%Label".text = _data.id_field_name
+		default_template.get_node("%Label").text = _data.id_field_name
 	else:
-		$"%Label".hide()
-		$VBox/MultipleFiledStepTemplateElement/HBoxContainer/VBoxContainer/GridContainer/LineEdit.hide()
+		default_template.get_node("%Label").hide()
+		default_template.get_node("HBoxContainer/VBoxContainer/GridContainer/LineEdit").hide()
 	if _data.content_name != "":
-		$"%Label2".text = _data.content_name
+		default_template.get_node("%Label2").text = _data.content_name
 	
 	single_content = _data.single_content
 	

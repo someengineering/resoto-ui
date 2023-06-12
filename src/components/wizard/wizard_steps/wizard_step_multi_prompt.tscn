@@ -51,6 +51,17 @@ margin_right = 1820.0
 margin_bottom = 1040.0
 size_flags_vertical = 3
 
+[node name="DropFilesLabel" type="Label" parent="VBox/FieldsMargin/Fields"]
+visible = false
+margin_right = 1720.0
+margin_bottom = 1020.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+theme_type_variation = "Label_24"
+text = "Drop files here"
+align = 1
+valign = 1
+
 [node name="TextAppearTween" type="Tween" parent="."]
 
 [node name="FieldTemplate" type="HBoxContainer" parent="."]
@@ -92,4 +103,6 @@ visible = false
 margin_left = 150.0
 margin_right = 183.0
 
+[connection signal="child_entered_tree" from="VBox/FieldsMargin/Fields" to="." method="_on_Fields_child_entered_tree"]
+[connection signal="child_exiting_tree" from="VBox/FieldsMargin/Fields" to="." method="_on_Fields_child_exiting_tree"]
 [connection signal="tween_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_completed"]
