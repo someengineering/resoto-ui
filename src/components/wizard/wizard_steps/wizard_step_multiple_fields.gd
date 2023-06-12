@@ -31,20 +31,24 @@ func _on_files_dropped(files, _screen):
 					e.queue_free()
 			
 			element_list.add_child(element)
-			element.file_name = file_name.get_file()
 			element.value = data
-			var key : String = element.file_name.replace(".json", "")
+			var original_key : String = file_name.get_file().replace( "."+file_name.get_file().get_extension(), "")
 			
 			var existing_keys := []
 			for other in  element_list.get_children():
+				if other == element:
+					continue
 				existing_keys.append(other.key)
 				
 			var i := 1
+			var key := original_key
 			while key in existing_keys:
-				key += " (%d)" % i
+				key = original_key + " (%d)" % i
 				i += 1
 				
 			element.key = key
+			
+			element.file_name = format.replace("{{key}}",file_name.get_file())
 
 
 func start(_data:Dictionary):
@@ -87,7 +91,7 @@ func consume_next():
 	var out_value : Array = []
 	
 	for element in $"%ElementList".get_children():
-		var key : String = format.replace("{{key}}",element.key)
+		var key : String = format.replace("{{key}}", element.key)
 		var value : String = element.value
 		
 		if not element.file_content_provided_manually:

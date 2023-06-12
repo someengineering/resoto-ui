@@ -21,8 +21,8 @@ func refresh_results():
 	tree_dict.clear()
 	total_counter.clear()
 	tree.clear()
-	tree.set_column_title(0, "Name")
-	tree.set_column_title(1, "Descendants")
+	tree.set_column_title(0, "Cloud Provider")
+	tree.set_column_title(1, "Number of Resources")
 	var descendants_query := "aggregate(/ancestors.cloud.reported.id as cloud, /ancestors.account.reported.name as account, /ancestors.region.reported.name as region: sum(1) as count): not is(cloud, account, region, graph_root)"
 	API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
 

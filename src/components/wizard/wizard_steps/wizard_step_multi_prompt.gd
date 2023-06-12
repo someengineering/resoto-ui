@@ -3,6 +3,8 @@ extends WizardStep
 var mandatory_prompts := []
 var optional_prompts := []
 
+var drop_file_prompt = null
+
 onready var fields := $VBox/FieldsMargin/Fields
 
 
@@ -15,7 +17,6 @@ func _on_files_dropped(files, _screen):
 	if !is_visible_in_tree():
 		return
 	var file = File.new()
-	var file_name = files[0]
 	if not file.open(files[0], File.READ):
 		
 		for field in fields.get_children():
@@ -23,7 +24,7 @@ func _on_files_dropped(files, _screen):
 				fields.remove_child(field)
 				field.queue_free()
 				
-		
+		$VBox/FieldsMargin/Fields/DropFilesLabel.hide()
 		var data = file.get_as_text()
 		var element = preload("res://components/wizard/multi_field_template_element.tscn").instance()
 		
@@ -33,15 +34,17 @@ func _on_files_dropped(files, _screen):
 				prompt["field"] = element
 		
 		fields.add_child(element)
-		element.file_name = file_name.get_file()
 		element.value = data
 		
 		element.line_edit.hide()
 		element.line_edit_label.hide()
 		
-		var key : String = element.file_name.replace(".json", "")
+		
+		var key : String = element.file_name.replace( "."+element.file_name.get_extension(), "")
 			
 		element.key = key
+		
+		element.file_name = drop_file_prompt.format.replace("{{key}}", element.file_name)
 		
 		fields.move_child($VBox/FieldsMargin/Fields/DropFilesLabel, fields.get_child_count())
 
@@ -91,7 +94,7 @@ func create_fields(_prompts : Array):
 		
 		if prompt_data.res_name == "StepMultipleFields":
 			$VBox/FieldsMargin/Fields/DropFilesLabel.show()
-			
+			drop_file_prompt = prompt_data
 		else:
 			var prompt_field := $FieldTemplate.duplicate()
 			prompt_field.get_node("LineEdit").visible = not prompt_data.expand_field
@@ -175,3 +178,4 @@ func _on_Fields_child_entered_tree(_node):
 func _on_Fields_child_exiting_tree(_node):
 	if _node is MultiFieldTemplate:
 		emit_signal("can_continue", false)
+		$VBox/FieldsMargin/Fields/DropFilesLabel.show()
