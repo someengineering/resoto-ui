@@ -32,6 +32,7 @@ func _on_files_dropped(files, _screen):
 			
 			element_list.add_child(element)
 			element.value = data
+			
 			var original_key : String = file_name.get_file().replace( "."+file_name.get_file().get_extension(), "")
 			
 			var existing_keys := []
@@ -43,12 +44,10 @@ func _on_files_dropped(files, _screen):
 			var i := 1
 			var key := original_key
 			while key in existing_keys:
-				key = original_key + " (%d)" % i
+				key = original_key + "(%d)" % i
 				i += 1
-				
 			element.key = key
-			
-			element.file_name = format.replace("{{key}}",file_name.get_file())
+			element.file_name = key + "." + file_name.get_extension()
 
 
 func start(_data:Dictionary):
@@ -66,7 +65,7 @@ func start(_data:Dictionary):
 		default_template.get_node("%Label").text = _data.id_field_name
 	else:
 		default_template.get_node("%Label").hide()
-		default_template.get_node("HBoxContainer/VBoxContainer/GridContainer/LineEdit").hide()
+		default_template.line_edit.hide()
 	if _data.content_name != "":
 		default_template.get_node("%Label2").text = _data.content_name
 	
@@ -91,13 +90,13 @@ func consume_next():
 	var out_value : Array = []
 	
 	for element in $"%ElementList".get_children():
-		var key : String = format.replace("{{key}}", element.key)
+		var key : String = format.replace("{{key}}", element.key if element.get_node("%Label").visible else element.file_name)
 		var value : String = element.value
 		
 		if not element.file_content_provided_manually:
 			final_value[key] = value
 		
-		out_value.append(out_data_format.replace("{{key}}", element.key).replace("{{value}}", value))
+		out_value.append(out_data_format.replace("{{key}}", key).replace("{{value}}", value))
 		out_value[-1] = str2var(out_value[-1])
 	
 	
