@@ -15,6 +15,12 @@ var single_content := false
 func _ready():
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	
+	
+func _on_id_changed(element):
+	var extension = element.file_name.get_extension()
+	element.file_name = format.replace("{{key}}", element.key)
+	if not element.file_name.ends_with(extension):
+		element.file_name += "." + extension
 
 func _on_files_dropped(files, _screen):
 	if !is_visible_in_tree():
@@ -47,8 +53,9 @@ func _on_files_dropped(files, _screen):
 				key = original_key + "(%d)" % i
 				i += 1
 			element.key = key
-			element.file_name = key + "." + file_name.get_extension()
-
+			element.file_name = format.replace("{{key}}", key)
+			if not element.file_name.ends_with(file_name.get_extension()):
+				element.file_name += "." + file_name.get_extension()
 
 func start(_data:Dictionary):
 	if not _data["previous_allowed"]:
@@ -90,9 +97,13 @@ func consume_next():
 	var out_value : Array = []
 	
 	for element in $"%ElementList".get_children():
-		var key : String = format.replace("{{key}}", element.key if element.get_node("%Label").visible else element.file_name)
+		var key : String
+		if default_template.line_edit.visible:
+			key = format.replace("{{key}}", element.key)
+		else:
+			key = element.file_name
 		var value : String = element.value
-		
+			
 		if not element.file_content_provided_manually:
 			final_value[key] = value
 		
