@@ -83,15 +83,14 @@ func create_answers(_answers:Array):
 				var var_arr : Array = var_check.split("==")
 				if wizard.step_variables.has(var_arr[0]) and wizard.step_variables[var_arr[0]] == var_arr[1]:
 					var check_icon := TextureRect.new()
-					check_icon.texture = load("res://assets/icons/icon_128_config_set.svg")
+					check_icon.texture = load("res://assets/icons/icon_128_big_check.svg")
 					check_icon.expand = true
-					check_icon.rect_min_size = Vector2(48, 48)
-					check_icon.modulate = Color(0.2, 0.9, 0.3)
+					check_icon.rect_min_size = Vector2(64, 64)
 					check_icon.size_flags_vertical = SIZE_SHRINK_END
 					check_icon.size_flags_horizontal = SIZE_SHRINK_END
 					answer_wrapper.add_child(check_icon)
 					new_answer.hint_tooltip = "Already configured!"
-					new_answer.modulate = Color(0.9,1.0,0.9)
+					new_answer.theme_type_variation = "ButtonGreen"
 		
 		
 		if answer.docs_link != "":

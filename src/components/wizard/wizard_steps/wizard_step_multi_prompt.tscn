@@ -49,7 +49,6 @@ margin_left = 100.0
 margin_top = 20.0
 margin_right = 1820.0
 margin_bottom = 1040.0
-size_flags_vertical = 3
 
 [node name="DropFilesLabel" type="Label" parent="VBox/FieldsMargin/Fields"]
 visible = false

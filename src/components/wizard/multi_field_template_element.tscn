@@ -1,79 +1,93 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/icons/icon_file.svg" type="Texture" id=2]
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=3]
 [ext_resource path="res://components/wizard/wizard_steps/multiple_field_step_template_element.gd" type="Script" id=4]
+[ext_resource path="res://components/elements/utility/clipped_label.gd" type="Script" id=5]
 
 [node name="MultipleFieldStepTemplateElement" type="PanelContainer"]
 self_modulate = Color( 0.627451, 0.627451, 0.627451, 1 )
-margin_top = 1008.0
-margin_right = 1920.0
-margin_bottom = 1080.0
+margin_right = 153.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 150, 150 )
 theme_type_variation = "PanelContainerDark"
 script = ExtResource( 4 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="MarginContainer" parent="."]
 margin_left = 12.0
 margin_top = 8.0
-margin_right = 1908.0
-margin_bottom = 64.0
-size_flags_vertical = 3
+margin_right = 223.0
+margin_bottom = 142.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_right = 1859.0
-margin_bottom = 56.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+margin_right = 211.0
+margin_bottom = 134.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
-margin_right = 1859.0
+margin_right = 211.0
 margin_bottom = 32.0
 
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 margin_top = 6.0
-margin_right = 150.0
+margin_right = 77.0
 margin_bottom = 26.0
-rect_min_size = Vector2( 150, 0 )
 text = "Project ID:"
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
-margin_left = 154.0
-margin_right = 1859.0
+unique_name_in_owner = true
+margin_left = 81.0
+margin_right = 211.0
 margin_bottom = 32.0
+rect_min_size = Vector2( 130, 0 )
 size_flags_horizontal = 3
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
 margin_top = 36.0
-margin_right = 1859.0
-margin_bottom = 56.0
+margin_right = 211.0
+margin_bottom = 134.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
+visible = false
 margin_right = 150.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 150, 0 )
 text = "Profile:"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 154.0
-margin_right = 235.0
-margin_bottom = 20.0
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_right = 211.0
+margin_bottom = 74.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
 
-[node name="FileNameLabel" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="IconButton" parent="HBoxContainer/VBoxContainer/HBoxContainer2/TextureRect" instance=ExtResource( 1 )]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -33.0
+margin_right = 0.0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+icon_tex = ExtResource( 3 )
+
+[node name="FileNameLabel" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
-margin_right = 81.0
-margin_bottom = 20.0
+margin_top = 78.0
+margin_right = 211.0
+margin_bottom = 98.0
+hint_tooltip = "file name"
 theme_type_variation = "LabelCode"
 text = "file name"
-
-[node name="IconButton" parent="HBoxContainer" instance=ExtResource( 1 )]
-margin_left = 1863.0
-margin_top = 11.0
-margin_right = 1896.0
-margin_bottom = 44.0
-size_flags_vertical = 4
-icon_tex = ExtResource( 3 )
+align = 1
+script = ExtResource( 5 )
+raw_text = "file name"
 
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
 visible = false
@@ -85,4 +99,4 @@ mouse_filter = 2
 border_color = Color( 0.537255, 0.819608, 0.945098, 1 )
 editor_only = false
 
-[connection signal="pressed" from="HBoxContainer/IconButton" to="." method="_on_IconButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/HBoxContainer2/TextureRect/IconButton" to="." method="_on_IconButton_pressed"]
