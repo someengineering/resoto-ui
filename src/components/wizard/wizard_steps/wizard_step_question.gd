@@ -60,11 +60,17 @@ func create_answers(_answers:Array):
 			spacer.rect_min_size.y = 20
 			answers.add_child(spacer)
 		var answer_wrapper:HBoxContainer = HBoxContainer.new()
+		answer_wrapper.size_flags_horizontal = SIZE_EXPAND_FILL
 		var new_answer:Button = Button.new()
 		new_answer.name = "Btn"
 		new_answer.size_flags_horizontal = SIZE_EXPAND_FILL
 		new_answer.align = Button.ALIGN_LEFT
 		new_answer.text = answer.step_text
+		if answer.icon_path != "":
+			answers.columns = 2
+			new_answer.icon = load(answer.icon_path)
+			new_answer.icon_align = Button.ALIGN_CENTER
+			answer_wrapper.size_flags_vertical = SIZE_EXPAND_FILL
 		new_answer.focus_mode = Control.FOCUS_ALL
 		new_answer.theme_type_variation = "ButtonFocusBorder"
 		new_answer.rect_min_size.y = 40
@@ -121,7 +127,8 @@ func show_answers():
 	for a in answers.get_children():
 		a.modulate.a = 0
 		$TextAppearTween.interpolate_property(a, "modulate:a", 0, 1, 0.2, Tween.TRANS_QUAD, Tween.EASE_OUT, delay)
-		$TextAppearTween.interpolate_property(a, "rect_position:x", -10, 0, 0.2, Tween.TRANS_QUAD, Tween.EASE_OUT, delay)
+		if a.get_node("Btn").icon == null:
+			$TextAppearTween.interpolate_property(a, "rect_position:x", -10, 0, 0.2, Tween.TRANS_QUAD, Tween.EASE_OUT, delay)
 		if delay == 0.0:
 			$TextAppearTween. interpolate_callback(a.get_node("Btn"), 0.2, "grab_focus")
 		delay += 0.05

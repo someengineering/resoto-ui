@@ -37,15 +37,14 @@ custom_constants/margin_right = 30
 custom_constants/margin_top = 30
 custom_constants/margin_left = 30
 
-[node name="Answers" type="VBoxContainer" parent="VBox/AnswerMargin"]
-visible = false
+[node name="Answers" type="GridContainer" parent="VBox/AnswerMargin"]
 margin_left = 30.0
 margin_top = 30.0
 margin_right = 1890.0
 margin_bottom = 1053.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 5
+custom_constants/hseparation = 50
 
 [node name="TextAppearTween" type="Tween" parent="."]
 
