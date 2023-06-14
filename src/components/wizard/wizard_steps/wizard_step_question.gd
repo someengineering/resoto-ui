@@ -90,6 +90,8 @@ func create_answers(_answers:Array):
 					check_icon.size_flags_vertical = SIZE_SHRINK_END
 					check_icon.size_flags_horizontal = SIZE_SHRINK_END
 					answer_wrapper.add_child(check_icon)
+					new_answer.hint_tooltip = "Already configured!"
+					new_answer.modulate = Color(0.9,1.0,0.9)
 		
 		
 		if answer.docs_link != "":
