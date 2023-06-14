@@ -121,6 +121,8 @@ func update_config(new_value):
 				
 			_:
 				if typeof(new_value) == TYPE_DICTIONARY:
+					if current[value_key] == null:
+						current[value_key] = {}
 					current[value_key].merge(new_value)
 				else:
 					current[value_key] = new_value
