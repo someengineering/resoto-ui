@@ -19,7 +19,6 @@ size_flags_vertical = 3
 custom_constants/separation = 16
 
 [node name="TextLabel" type="RichTextLabel" parent="VBox"]
-visible = false
 self_modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
 margin_right = 1920.0
 margin_bottom = 24.0
@@ -34,6 +33,7 @@ fit_content_height = true
 scroll_active = false
 
 [node name="FieldsMargin" type="MarginContainer" parent="VBox"]
+margin_top = 40.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 rect_min_size = Vector2( 450, 0 )
@@ -48,7 +48,7 @@ custom_constants/margin_bottom = 0
 margin_left = 100.0
 margin_top = 20.0
 margin_right = 1820.0
-margin_bottom = 1080.0
+margin_bottom = 1040.0
 size_flags_vertical = 3
 
 [node name="DropFilesLabel" type="Label" parent="VBox/FieldsMargin/Fields"]

@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=3]
 [ext_resource path="res://components/wizard/wizard_steps/multiple_field_step_template_element.gd" type="Script" id=4]
 
-[node name="MultipleFiledStepTemplateElement" type="PanelContainer"]
+[node name="MultipleFieldStepTemplateElement" type="PanelContainer"]
 self_modulate = Color( 0.627451, 0.627451, 0.627451, 1 )
 margin_top = 1008.0
 margin_right = 1920.0

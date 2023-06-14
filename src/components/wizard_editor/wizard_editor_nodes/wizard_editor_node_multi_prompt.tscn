@@ -12,6 +12,7 @@ margin_right = 177.0
 margin_bottom = 201.0
 title = "Multi Prompt"
 show_close = true
+resizable = true
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color( 0.537255, 0.819608, 0.945098, 1 )

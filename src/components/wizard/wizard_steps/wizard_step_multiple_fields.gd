@@ -1,6 +1,6 @@
 extends WizardStep
 
-onready var default_template = $VBox/MultipleFiledStepTemplateElement
+onready var default_template = $VBox/MultipleFieldStepTemplateElement
 onready var element_list := $"%ElementList"
 
 # Prompt Step
@@ -8,6 +8,7 @@ var value_path:= ""
 var template:= ""
 var format := ""
 var out_data_format := ""
+var drop_label_text := "Drop your files here"
 var next_step
 
 var single_content := false
@@ -75,6 +76,10 @@ func start(_data:Dictionary):
 		default_template.line_edit.hide()
 	if _data.content_name != "":
 		default_template.get_node("%Label2").text = _data.content_name
+	
+	if "drop_label_text" in _data and _data.drop_label_text != "":
+		drop_label_text = _data.drop_label_text
+		$VBox/ScrollContainer/Label.text = drop_label_text
 	
 	single_content = _data.single_content
 	

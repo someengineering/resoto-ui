@@ -10,6 +10,7 @@ var out_data_format:String = ""
 var id_field_name : String = ""
 var content_name : String = ""
 var single_content : bool = false
+var drop_label_text := ""
 var special_scene_path:String = ""
 var previous_allowed:= true
 var uid:String = ""
@@ -27,6 +28,8 @@ func _ready():
 	$Grid/IdFieldName.connect("text_changed", self, "_on_IdFieldName_text_changed")
 	$Grid/ContentName.connect("text_changed", self, "_on_ContentName_text_changed")
 	$Grid/SingleFileCheckBox.connect("toggled", self, "_on_SingleFileCheckBox_toggled")
+	$Grid/DropLabelTextLineEdit.connect("text_changed", self, "_on_DropLabelTextLineEdit_changed")
+
 
 func serialize() -> Dictionary:
 	var data:Dictionary = base_serialize()
@@ -43,6 +46,7 @@ func serialize() -> Dictionary:
 	data["id_field_name"] = id_field_name
 	data["content_name"] = content_name
 	data["single_content"] = single_content
+	data["drop_label_text"] = drop_label_text
 	return data
 	
 func deserialize(data) -> void:
@@ -123,3 +127,6 @@ func _on_ContentName_text_changed(new_text):
 
 func _on_SingleFileCheckBox_toggled(value : bool):
 	single_content = value
+	
+func _on_DropLabelTextLineEdit_changed(new_text : String):
+	drop_label_text = new_text

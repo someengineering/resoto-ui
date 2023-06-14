@@ -65,7 +65,7 @@ size_flags_vertical = 1
 text = "       Add Element"
 icon_tex = ExtResource( 4 )
 
-[node name="MultipleFiledStepTemplateElement" parent="VBox" instance=ExtResource( 2 )]
+[node name="MultipleFieldStepTemplateElement" parent="VBox" instance=ExtResource( 2 )]
 visible = false
 
 [node name="TextAppearTween" type="Tween" parent="."]
