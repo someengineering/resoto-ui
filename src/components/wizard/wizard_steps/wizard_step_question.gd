@@ -59,7 +59,7 @@ func create_answers(_answers:Array):
 			var spacer := Control.new()
 			spacer.rect_min_size.y = 20
 			answers.add_child(spacer)
-		var answer_wrapper:HBoxContainer = HBoxContainer.new()
+		var answer_wrapper:MarginContainer = MarginContainer.new()
 		answer_wrapper.size_flags_horizontal = SIZE_EXPAND_FILL
 		var new_answer:Button = Button.new()
 		new_answer.name = "Btn"
@@ -75,6 +75,7 @@ func create_answers(_answers:Array):
 		new_answer.theme_type_variation = "ButtonFocusBorder"
 		new_answer.rect_min_size.y = 40
 		
+		answer_wrapper.add_child(new_answer)
 		# Do variable check:
 		var var_check : String = answer.variable_check
 		if var_check != "":
@@ -82,14 +83,14 @@ func create_answers(_answers:Array):
 				var var_arr : Array = var_check.split("==")
 				if wizard.step_variables.has(var_arr[0]) and wizard.step_variables[var_arr[0]] == var_arr[1]:
 					var check_icon := TextureRect.new()
-					check_icon.texture = load("res://assets/icons/icon_128_check.svg")
+					check_icon.texture = load("res://assets/icons/icon_128_config_set.svg")
 					check_icon.expand = true
-					check_icon.rect_min_size = Vector2(24, 24)
+					check_icon.rect_min_size = Vector2(48, 48)
 					check_icon.modulate = Color(0.2, 0.9, 0.3)
-					check_icon.size_flags_vertical = SIZE_SHRINK_CENTER
+					check_icon.size_flags_vertical = SIZE_SHRINK_END
+					check_icon.size_flags_horizontal = SIZE_SHRINK_END
 					answer_wrapper.add_child(check_icon)
 		
-		answer_wrapper.add_child(new_answer)
 		
 		if answer.docs_link != "":
 			var new_answer_help:Button = IconButton.instance()

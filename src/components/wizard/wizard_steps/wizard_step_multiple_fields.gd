@@ -146,7 +146,7 @@ func _on_TextAppearTween_tween_completed(_object, key):
 
 
 func _on_TextAppearTween_tween_all_completed():
-	emit_signal("can_continue")
+	emit_signal("can_continue", element_list.get_child_count() > 0 )
 
 func forward_can_continue():
 	emit_signal("can_continue")
@@ -159,3 +159,4 @@ func forward_next(_step_id:=0):
 
 func _on_ElementList_sort_children():
 	$VBox/ScrollContainer/Label.visible = element_list.get_child_count() <= 0
+	emit_signal("can_continue", element_list.get_child_count() > 0 )

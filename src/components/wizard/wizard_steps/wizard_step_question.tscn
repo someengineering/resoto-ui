@@ -48,5 +48,7 @@ custom_constants/hseparation = 50
 
 [node name="TextAppearTween" type="Tween" parent="."]
 
+[node name="MarginContainer" type="MarginContainer" parent="."]
+
 [connection signal="tween_all_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_all_completed"]
 [connection signal="tween_completed" from="TextAppearTween" to="." method="_on_TextAppearTween_tween_completed"]
