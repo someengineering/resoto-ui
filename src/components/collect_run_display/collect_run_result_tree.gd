@@ -48,7 +48,8 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 	if error:
 		if error == ERR_PRINTER_ON_FIRE:
 			return
-		_g.emit_signal("add_toast", "Error in Collect Result display", "", 1, self)
+		elif _response.response_code != 404:
+			_g.emit_signal("add_toast", "Error in Collect Result display", "", 1, self)
 		return
 	if _response.transformed.has("result"):
 		build_counted_dict(_response.transformed.result)
