@@ -35,19 +35,8 @@ text = "Lorem Ipsum Dolor, Lorem"
 fit_content_height = true
 scroll_active = false
 
-[node name="Label" type="Label" parent="VBox"]
-margin_left = 847.0
-margin_top = 27.0
-margin_right = 1073.0
-margin_bottom = 64.3333
-size_flags_horizontal = 4
-theme_type_variation = "Label_36"
-text = "Drop your files here"
-align = 1
-valign = 1
-
 [node name="ReferenceRect" type="Panel" parent="VBox"]
-margin_top = 69.0
+margin_top = 28.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 size_flags_horizontal = 3
@@ -64,12 +53,23 @@ margin_bottom = -5.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ElementList" type="HFlowContainer" parent="VBox/ReferenceRect/ScrollContainer"]
+[node name="ElementList" type="VBoxContainer" parent="VBox/ReferenceRect/ScrollContainer"]
 unique_name_in_owner = true
 margin_right = 1910.0
-margin_bottom = 1001.0
+margin_bottom = 1042.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBox/ReferenceRect/ScrollContainer"]
+unique_name_in_owner = true
+margin_right = 1910.0
+margin_bottom = 1042.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+theme_type_variation = "Label_36"
+text = "Drop your files here"
+align = 1
+valign = 1
 
 [node name="IconButtonText" parent="VBox" instance=ExtResource( 5 )]
 visible = false

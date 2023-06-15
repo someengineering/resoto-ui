@@ -16,7 +16,7 @@ var drop_position = Vector2.ZERO
 
 func set_file_name(_name : String):
 	file_name = _name
-	file_name_label.raw_text = _name
+	file_name_label.text = _name
 	
 func get_key() -> String:
 	return line_edit.text

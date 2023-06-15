@@ -79,7 +79,7 @@ func start(_data:Dictionary):
 	
 	if "drop_label_text" in _data and _data.drop_label_text != "":
 		drop_label_text = _data.drop_label_text
-		$VBox/Label.text = drop_label_text
+		$"%Label".text = drop_label_text
 	
 	single_content = _data.single_content
 	
@@ -158,5 +158,5 @@ func forward_next(_step_id:=0):
 	emit_signal("next", _step_id)
 
 func _on_ElementList_sort_children():
-	$VBox/Label.visible = element_list.get_child_count() <= 0 or not single_content
+	$"%Label".visible = element_list.get_child_count() <= 0
 	emit_signal("can_continue", element_list.get_child_count() > 0 )
