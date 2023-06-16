@@ -85,8 +85,6 @@ func load_wizard_graph(_wizard_script_name:String=wizard_script_name):
 	data["connections_to"] = {}
 	home_section = data.info.home_screen
 	for c in data.connections:
-		if c.from == "15647":
-			pass
 		if not data.connections_from.has(c.from):
 			data.connections_from[c.from] = []
 		if not data.connections_to.has(c.to):

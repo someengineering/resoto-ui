@@ -178,6 +178,18 @@ func consume_next():
 		
 		update_config_string_separator(value, prompt.separator if "separator" in prompt else "")
 		
+	if drop_file_prompt == null:
+		var paths = "resotoworker.files_in_home_dir".split(".")
+	
+		var config = wizard.remote_configs["resoto.worker"]
+
+		for path in paths:
+			config = config[path]
+			
+		if "~/.aws/credentials" in config:
+			config.erase("~/.aws/credentials")
+			wizard.emit_signal("setup_wizard_changed_config")
+		
 	emit_signal("next")
 
 

@@ -103,7 +103,7 @@ func start(_data:Dictionary):
 	var connections : Array = wizard.data.connections_from[step_id]
 	var to_id = connections[0].to
 	
-	if "config_key" in wizard.data.nodes[to_id]: 
+	if "value_path" in  wizard.data.nodes[to_id] and  wizard.data.nodes[to_id].value_path in ["gcp.service_account", "k8s.config_files"]: 
 		var to_config_key : String = wizard.data.nodes[to_id].config_key
 		var to_value_path : String = wizard.data.nodes[to_id].value_path
 		
