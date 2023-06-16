@@ -19,6 +19,8 @@ func set_file_name(_name : String):
 	file_name_label.text = _name
 	
 func get_key() -> String:
+	if line_edit == null:
+		return ""
 	return line_edit.text
 	
 func set_key(_key : String):

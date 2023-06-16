@@ -45,6 +45,8 @@ func _on_files_dropped(files, _screen):
 		
 		element.file_name = drop_file_prompt.format.replace("{{key}}", element.file_name)
 		
+
+		
 		fields.move_child($VBox/FieldsMargin/Fields/DropFilesLabel, fields.get_child_count())
 
 func start(_data:Dictionary):
@@ -72,12 +74,10 @@ func _on_TextAppearTween_tween_completed(_object, key):
 		wizard.character.state = wizard.character.States.IDLE
 
 
-func create_fields(_prompts : Array):
-	for field in $VBox/FieldsMargin/Fields.get_children():
-		if field == $VBox/FieldsMargin/Fields/DropFilesLabel:
-			continue
-		$VBox/FieldsMargin/Fields.remove_child(field)
-		field.queue_free()
+func create_fields(_prompts : Array): 
+	
+	if fields.get_child_count() > 1:
+		return
 		
 	mandatory_prompts = []
 	optional_prompts = []
@@ -92,7 +92,26 @@ func create_fields(_prompts : Array):
 		mandatory_prompts.append(prompt_data)
 		
 		if prompt_data.res_name == "StepMultipleFields":
-			$VBox/FieldsMargin/Fields/DropFilesLabel.show()
+			
+			var paths = prompt_data.value_path.split(".")
+	
+			var config = wizard.remote_configs[prompt_data.config_key]
+
+			for path in paths:
+				config = config[path]
+				
+			if "~/.aws/credentials" in config and fields.get_child_count() > 1:
+				var value = config["~/.aws/credentials"]
+				var element = preload("res://components/wizard/multi_field_template_element.tscn").instance()
+				fields.add_child(element)
+
+				element.value = value
+				element.key = "~/.aws/credentials"
+				element.file_name = "~/.aws/credentials"
+				prompt_data["field"] = element
+			else: 
+				$VBox/FieldsMargin/Fields/DropFilesLabel.show()
+			
 			drop_file_prompt = prompt_data
 		else:
 			var prompt_field := $FieldTemplate.duplicate()
@@ -178,3 +197,14 @@ func _on_Fields_child_exiting_tree(_node):
 	if _node is MultiFieldTemplate:
 		emit_signal("can_continue", false)
 		$VBox/FieldsMargin/Fields/DropFilesLabel.show()
+		
+		var paths = drop_file_prompt.value_path.split(".")
+	
+		var config = wizard.remote_configs[drop_file_prompt.config_key]
+
+		for path in paths:
+			config = config[path]
+			
+		if "~/.aws/credentials" in config:
+			config.erase("~/.aws/credentials")
+			wizard.emit_signal("setup_wizard_changed_config")

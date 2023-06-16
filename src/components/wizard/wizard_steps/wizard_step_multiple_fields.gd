@@ -135,6 +135,22 @@ func start(_data:Dictionary):
 				element.value = value
 				element.key = files[file]
 				element.file_name = file
+	else:
+		var paths := value_path.split(".")
+	
+		var config = wizard.remote_configs[config_key]
+
+		for path in paths:
+			config = config[path]
+			
+		if "~/.aws/credentials" in config:
+			var value = config["~/.aws/credentials"]
+			var element = new_element()
+			element_list.add_child(element)
+			element.connect("tree_exiting", self,  "_on_element_tree_exiting", [element])
+			element.value = value
+			element.key = "~/.aws/credentials"
+			element.file_name = "~/.aws/credentials"
 
 
 func consume_next():
