@@ -23,8 +23,8 @@ func _on_id_changed(element):
 	if not element.file_name.ends_with(extension):
 		element.file_name += "." + extension
 
-func _on_files_dropped(files, _screen):
-	if !is_visible_in_tree():
+func _on_files_dropped(files, _screen, force := false):
+	if !is_visible_in_tree() and not force:
 		return
 	for file_name in files:
 		var file = File.new()
@@ -38,6 +38,7 @@ func _on_files_dropped(files, _screen):
 					e.queue_free()
 			
 			element_list.add_child(element)
+			element.connect("tree_exiting", self,  "_on_element_tree_exiting", [element])
 			element.value = data
 			
 			var original_key : String = file_name.get_file().replace( "."+file_name.get_file().get_extension(), "")
@@ -93,6 +94,47 @@ func start(_data:Dictionary):
 	$TextAppearTween.interpolate_property(text_label, "percent_visible", 0, 1, duration, Tween.TRANS_LINEAR, Tween.EASE_OUT, 0.15)
 	$TextAppearTween.start()
 	wizard.character.state = wizard.character.States.TALK
+	
+	# Prefill files
+	
+	if element_list.get_child_count() > 0:
+		return
+
+	var connections : Array = wizard.data.connections_from[step_id]
+	var to_id = connections[0].to
+	
+	if "config_key" in wizard.data.nodes[to_id]: 
+		var to_config_key : String = wizard.data.nodes[to_id].config_key
+		var to_value_path : String = wizard.data.nodes[to_id].value_path
+		
+		var config = wizard.remote_configs[to_config_key]
+		var paths := to_value_path.split(".")
+		for path in paths:
+			config = config[path]
+		
+		var files : Dictionary = {}
+		for file in config:
+			if file is Dictionary:
+				files[file.path] = file.path
+			else:
+				files[file] = file.get_file().replace("." + file.get_extension(), "")
+			
+		paths = value_path.split(".")
+	
+		config = wizard.remote_configs[config_key]
+
+		for path in paths:
+			config = config[path]
+			
+		for file in files:
+			if file in config:
+				var value = config[file]
+				var element = new_element()
+				element_list.add_child(element)
+				element.connect("tree_exiting", self,  "_on_element_tree_exiting", [element])
+				element.value = value
+				element.key = files[file]
+				element.file_name = file
 
 
 func consume_next():
@@ -160,3 +202,21 @@ func forward_next(_step_id:=0):
 func _on_ElementList_sort_children():
 	$"%Label".visible = element_list.get_child_count() <= 0
 	emit_signal("can_continue", element_list.get_child_count() > 0 )
+
+func _on_element_tree_exiting(element):
+	var key : String
+	if default_template.line_edit.visible:
+		key = format.replace("{{key}}", element.key)
+	else:
+		key = element.file_name
+	
+	var paths := value_path.split(".")
+	
+	var config = wizard.remote_configs[config_key]
+	
+	for path in paths:
+		config = config[path]
+		
+	if key in config:
+		config.erase(key)
+		wizard.emit_signal("setup_wizard_changed_config")

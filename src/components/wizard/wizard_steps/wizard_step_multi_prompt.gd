@@ -39,7 +39,6 @@ func _on_files_dropped(files, _screen):
 		element.line_edit.hide()
 		element.line_edit_label.hide()
 		
-		
 		var key : String = element.file_name.replace( "."+element.file_name.get_extension(), "")
 			
 		element.key = key

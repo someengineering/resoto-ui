@@ -34,7 +34,7 @@
 			"id": 3717,
 			"res_name": "StepComment",
 			"offset": "Vector2( 920, -200 )",
-			"rect_size": "Vector2( 355.003, 80.002 )",
+			"rect_size": "Vector2( 355.003, 80.0024 )",
 			"headline_text": "Resoto Setup"
 		},
 		"4050": {
@@ -139,7 +139,7 @@
 			"id": 7789,
 			"res_name": "StepSection",
 			"offset": "Vector2( 3120, -260 )",
-			"rect_size": "Vector2( 224.996, 185 )",
+			"rect_size": "Vector2( 224.997, 185 )",
 			"section_name": "finish_setup",
 			"section_display_title": ""
 		},
@@ -165,7 +165,7 @@
 			"id": 8229,
 			"res_name": "StepCustomScene",
 			"offset": "Vector2( 5200, -440 )",
-			"rect_size": "Vector2( 366.002, 288 )",
+			"rect_size": "Vector2( 366.001, 288 )",
 			"docs_link": "",
 			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_collect_run_result.tscn",
 			"uid": ""
@@ -307,7 +307,7 @@
 			"id": 15676,
 			"res_name": "StepCustomScene",
 			"offset": "Vector2( 4480, -440 )",
-			"rect_size": "Vector2( 366.002, 288 )",
+			"rect_size": "Vector2( 366.001, 288 )",
 			"docs_link": "",
 			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_collect_run_status.tscn",
 			"uid": ""
@@ -323,14 +323,14 @@
 			"id": 15919,
 			"res_name": "StepComment",
 			"offset": "Vector2( -1160, -200 )",
-			"rect_size": "Vector2( 355.002, 80.002 )",
+			"rect_size": "Vector2( 355.002, 80.0024 )",
 			"headline_text": "Setup Intro"
 		},
 		"15992": {
 			"id": 15992,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1800, 60 )",
-			"rect_size": "Vector2( 347.399, 232 )",
+			"rect_size": "Vector2( 347.398, 232 )",
 			"step_text": "",
 			"docs_link": "",
 			"custom_order": 4,
@@ -881,7 +881,7 @@
 			"id": 69475,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 4960, 1680 )",
-			"rect_size": "Vector2( 420.012, 564 )",
+			"rect_size": "Vector2( 420.013, 564 )",
 			"step_text": "Please enter the role name you want to use.",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -933,7 +933,7 @@
 			"id": 83857,
 			"res_name": "StepComment",
 			"offset": "Vector2( 0, 3680 )",
-			"rect_size": "Vector2( 355.001, 80.0023 )",
+			"rect_size": "Vector2( 355.001, 80.0022 )",
 			"headline_text": "GCP Setup"
 		},
 		"84670": {
@@ -1005,7 +1005,7 @@
 			"id": 97618,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 540, 5300 )",
-			"rect_size": "Vector2( 514.439, 421.479 )",
+			"rect_size": "Vector2( 514.438, 421.479 )",
 			"step_text": "The simplest way to connect to your cluster is using a kubeconfig file.\n\nFor this method to work, Resoto Worker needs to have access to the configured file.\n\nIn case this is not possible, or difficult to achieve, you can configure the access directly.",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -1245,7 +1245,7 @@
 			"id": 139063,
 			"res_name": "StepComment",
 			"offset": "Vector2( -180, 2300 )",
-			"rect_size": "Vector2( 355.002, 80.0019 )",
+			"rect_size": "Vector2( 355.001, 80.002 )",
 			"headline_text": "AWS Setup"
 		},
 		"148056": {
@@ -1338,7 +1338,7 @@
 			"id": 201971,
 			"res_name": "StepComment",
 			"offset": "Vector2( 8600, 2220 )",
-			"rect_size": "Vector2( 355.01, 80.0001 )",
+			"rect_size": "Vector2( 355.01, 80 )",
 			"headline_text": "Finish aws setup"
 		},
 		"587178": {
@@ -1654,7 +1654,7 @@
 			"id": 54724,
 			"res_name": "StepComment",
 			"offset": "Vector2( -2660, 3660 )",
-			"rect_size": "Vector2( 355, 80.0011 )",
+			"rect_size": "Vector2( 355, 80.001 )",
 			"headline_text": "TODO: Add notes"
 		},
 		"57295": {
@@ -1869,7 +1869,7 @@
 			"rect_size": "Vector2( 236, 305 )",
 			"config_key": "resoto.worker",
 			"value_path": "k8s.config_files",
-			"action": "merge",
+			"action": "set",
 			"value": "[]"
 		},
 		"40958": {
