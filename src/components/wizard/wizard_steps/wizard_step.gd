@@ -129,7 +129,10 @@ func update_config(new_value):
 	
 	# If the original does not have the key
 	else:
-		current[value_key] = null if new_value == "null" else new_value
+		if new_value is String:
+			current[value_key] = null if new_value == "null" else new_value
+		else:
+			current[value_key] = new_value
 
 
 func save_configs():
