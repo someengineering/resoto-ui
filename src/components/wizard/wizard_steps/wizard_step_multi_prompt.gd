@@ -184,7 +184,10 @@ func consume_next():
 		var config = wizard.remote_configs["resoto.worker"]
 
 		for path in paths:
-			config = config[path]
+			if path in config:
+				config = config[path]
+			else:
+				break
 			
 		if "~/.aws/credentials" in config:
 			config.erase("~/.aws/credentials")
