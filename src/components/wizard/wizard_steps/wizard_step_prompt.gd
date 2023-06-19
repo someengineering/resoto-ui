@@ -44,6 +44,23 @@ func start(_data:Dictionary):
 	wizard.character.state = wizard.character.States.TALK
 	$VBox/LineEditMargin/LineEdit.hide()
 	$VBox/LineEditMargin/TextEdit.hide()
+	
+#	var found := true
+#
+#	var paths := value_path.split(".")
+#	var config = wizard.remote_configs[config_key]
+#
+#	for path in paths:
+#		if path in config:
+#			config = config[path]
+#		else:
+#			found = false
+#			break
+#
+#	if found:
+#		$VBox/LineEditMargin/LineEdit.text = str(config) if config != null else ""
+#		$VBox/LineEditMargin/TextEdit.text = str(config) if config != null else ""
+	
 	_on_WizardStep_StepPrompt_resized()
 
 

@@ -69,5 +69,5 @@ func _on_ValueEdit_text_changed(new_text):
 	value = new_text
 
 
-func _on_CheckBox_toggled(value : bool):
-	make_null = value
+func _on_CheckBox_toggled(_value : bool):
+	make_null = _value

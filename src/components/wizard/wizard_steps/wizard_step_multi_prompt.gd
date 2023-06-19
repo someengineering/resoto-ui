@@ -132,6 +132,25 @@ func create_fields(_prompts : Array):
 			prompt_field.get_node("LineEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
 			prompt_field.get_node("TextEdit").connect("text_changed", self, "mandatory_prompt_text_changed")
 			
+			var prompt_config_key : String = prompt_data.config_key
+			var prompt_value_path : String = prompt_data.value_path
+			
+			var found := true
+			
+			var paths := prompt_value_path.split(".")
+			var config = wizard.remote_configs[prompt_config_key]
+			
+			for path in paths:
+				if path in config:
+					config = config[path]
+				else:
+					found = false
+					break
+					
+			if found:
+				prompt_field.get_node("LineEdit").text = str(config) if config != null else ""
+				prompt_field.get_node("TextEdit").text = str(config) if config != null else ""
+			
 				
 			fields.add_child(prompt_field)
 			fields.move_child($VBox/FieldsMargin/Fields/DropFilesLabel, fields.get_child_count())
