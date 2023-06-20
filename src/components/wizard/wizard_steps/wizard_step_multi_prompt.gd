@@ -100,7 +100,7 @@ func create_fields(_prompts : Array):
 			for path in paths:
 				config = config[path]
 				
-			if "~/.aws/credentials" in config and fields.get_child_count() > 1:
+			if config != null and "~/.aws/credentials" in config and fields.get_child_count() > 1:
 				var value = config["~/.aws/credentials"]
 				var element = preload("res://components/wizard/multi_field_template_element.tscn").instance()
 				fields.add_child(element)
@@ -141,7 +141,7 @@ func create_fields(_prompts : Array):
 			var config = wizard.remote_configs[prompt_config_key]
 			
 			for path in paths:
-				if path in config:
+				if config != null and path in config:
 					config = config[path]
 				else:
 					found = false
@@ -203,12 +203,12 @@ func consume_next():
 		var config = wizard.remote_configs["resoto.worker"]
 
 		for path in paths:
-			if path in config:
+			if config != null and path in config:
 				config = config[path]
 			else:
 				break
 			
-		if "~/.aws/credentials" in config:
+		if config != null and "~/.aws/credentials" in config:
 			config.erase("~/.aws/credentials")
 			wizard.emit_signal("setup_wizard_changed_config")
 		
@@ -239,6 +239,6 @@ func _on_Fields_child_exiting_tree(_node):
 		for path in paths:
 			config = config[path]
 			
-		if "~/.aws/credentials" in config:
+		if config != null and "~/.aws/credentials" in config:
 			config.erase("~/.aws/credentials")
 			wizard.emit_signal("setup_wizard_changed_config")
