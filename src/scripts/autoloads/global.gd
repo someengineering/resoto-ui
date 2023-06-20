@@ -48,6 +48,7 @@ signal setup_wizard_start
 signal setup_wizard_done
 signal setup_wizard_minimized
 signal collect_run_finished
+signal collect_run_display_all_done
 
 # Websocket
 signal websocket_message

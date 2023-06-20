@@ -39,6 +39,11 @@ size_flags_vertical = 3
 wait_time = 5.0
 one_shot = true
 
+[node name="CheckRunningWorkflows" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
 [connection signal="all_done" from="VBoxContainer/CollectRunDisplay" to="." method="_on_CollectRunDisplay_all_done"]
 [connection signal="started" from="VBoxContainer/CollectRunDisplay" to="." method="_on_CollectRunDisplay_started"]
 [connection signal="timeout" from="WaitForConfigUpdateTimer" to="." method="_on_WaitForConfigUpdateTimer_timeout"]
+[connection signal="timeout" from="CheckRunningWorkflows" to="." method="_on_CheckRunningWorkflows_timeout"]
