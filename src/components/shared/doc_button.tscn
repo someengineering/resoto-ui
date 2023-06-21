@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/icons/icon_128_help_external_link.svg" type="Texture" id=2]
+[ext_resource path="res://components/shared/doc_button.gd" type="Script" id=3]
+
+[node name="DocButton" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+icon_tex = null
+url = ""
+
+[node name="Icon" parent="Margin" index="0"]
+texture = ExtResource( 2 )
+
+[connection signal="pressed" from="." to="." method="_on_DocButton_pressed"]

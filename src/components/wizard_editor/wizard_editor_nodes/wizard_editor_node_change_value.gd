@@ -4,6 +4,7 @@ var config_key:String = ""
 var value_path:String = ""
 var action:String = ""
 var value:String = ""
+var make_null := false
 
 
 func _ready():
@@ -11,7 +12,7 @@ func _ready():
 	$PathEdit.connect("text_changed", self, "_on_PathEdit_text_changed")
 	$ActionOption.connect("item_selected", self, "_on_ActionOption_selected")
 	$ValueEdit.connect("text_changed", self, "_on_ValueEdit_text_changed")
-
+	$CheckBox.connect("toggled", self, "_on_CheckBox_toggled")
 
 func serialize() -> Dictionary:
 	var data:Dictionary = base_serialize()
@@ -19,6 +20,7 @@ func serialize() -> Dictionary:
 	data["value_path"] = value_path
 	data["action"] = action
 	data["value"] = value
+	data["make_null"] = make_null
 	return data
 
 
@@ -29,10 +31,13 @@ func deserialize(data) -> void:
 		value_path = data["value_path"]
 	action = data["action"]
 	value = data["value"]
+	if data.has("make_null"):
+		make_null = data["make_null"]
 	
 	$ConfigEdit.text = config_key
 	$PathEdit.text = value_path
 	$ValueEdit.text = value
+	$CheckBox.pressed = make_null
 	match action:
 		"merge":
 			$ActionOption.selected = 0
@@ -62,3 +67,7 @@ func _on_ActionOption_selected(index):
 
 func _on_ValueEdit_text_changed(new_text):
 	value = new_text
+
+
+func _on_CheckBox_toggled(_value : bool):
+	make_null = _value

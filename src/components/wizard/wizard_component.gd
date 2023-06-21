@@ -12,7 +12,7 @@ export var is_collector_config_wizard := false
 export var wizard_script_name := ""
 export var text_scroll_speed := 0.005
 
-var visible_step_scene_names := ["StepText", "StepQuestion", "StepPrompt", "StepCustomScene"]
+var visible_step_scene_names := ["StepText", "StepQuestion", "StepPrompt", "StepCustomScene", "StepMultipleFields"]
 
 var wizard_step_scenes:Dictionary = {
 	"StepSection" : preload("res://components/wizard/wizard_steps/wizard_step_section.tscn"),
@@ -25,7 +25,10 @@ var wizard_step_scenes:Dictionary = {
 	"StepHandleObject" : preload("res://components/wizard/wizard_steps/wizard_step_handle_object.tscn"),
 	"StepSaveConfigsOnCore" : preload("res://components/wizard/wizard_steps/wizard_step_save_configs_on_core.tscn"),
 	"StepSetVariable" : preload("res://components/wizard/wizard_steps/wizard_step_set_variable.tscn"),
-	"StepConfigConditional" : preload("res://components/wizard/wizard_steps/wizard_step_config_conditional.tscn")
+	"StepConfigConditional" : preload("res://components/wizard/wizard_steps/wizard_step_config_conditional.tscn"),
+	"StepVariableConditional" : preload("res://components/wizard/wizard_steps/wizard_step_variable_conditional.tscn"),
+	"StepMultiPrompt" : preload("res://components/wizard/wizard_steps/wizard_step_multi_prompt.tscn"),
+	"StepMultipleFields" : preload("res://components/wizard/wizard_steps/wizard_step_multiple_fields.tscn")
 }
 
 var current_step:Node = null
@@ -36,6 +39,7 @@ var step_variables := {}
 var home_section := ""
 var home_section_id := ""
 var remote_configs := {}
+var remaining_configs_number := 0
 var config_changed := false
 var start_step_id := ""
 var muted := false
@@ -93,6 +97,7 @@ func load_wizard_graph(_wizard_script_name:String=wizard_script_name):
 		if n.has("config_key") and n.config_key != "":
 			used_configs[n.config_key] = null
 	
+	remaining_configs_number = used_configs.size()
 	get_remote_configs(used_configs.keys())
 
 
@@ -102,17 +107,15 @@ func get_remote_configs(_config_keys:Array):
 
 
 func _on_get_config_id_done(_error:int, _r:ResotoAPI.Response, _config_key:String):
+	remaining_configs_number -= 1
 	if _r.response_code >= 200 and _r.response_code < 300:
-		remote_configs[_config_key] = _r.transformed.result
-		start_wizard()
-	
+		remote_configs[_config_key] = _r.transformed.result	
 	elif _r.response_code == 404:
 		remote_configs[_config_key] = {}
-		start_wizard()
-	
 	else:
 		_g.emit_signal("add_toast", "Error receiving Config", "Config '%s' created a problem." % _config_key, FAILED)
-
+	if remaining_configs_number <= 0:
+		start_wizard()
 
 func start_wizard():
 	wizard_complete = false
@@ -124,13 +127,34 @@ func start_wizard():
 			break
 
 
+func set_custom_buttons(buttons : Array):
+	next_button.visible = false
+	prev_button.visible = false
+	for button_data in buttons:
+		var button := Button.new()
+		button.text = button_data["text"]
+		$BG/StepDisplay/StepButtons.add_child(button)
+		button.connect("pressed", self, "show_step", [str(button_data["to"])])
+		
+
+func remove_custom_buttons():
+	next_button.visible = true
+	for button in $BG/StepDisplay/StepButtons.get_children():
+		if button == prev_button or button == next_button:
+			continue
+		button.queue_free()
+
+
 func show_step(_step_id:String):
 	var step_data = get_step_data(_step_id)
+		
 	if start_step_id == "" and visible_step_scene_names.has(step_data.res_name):
 		 start_step_id = _step_id
 	
 	prev_button.visible = start_step_id != _step_id
 	can_previous(true)
+	
+	remove_custom_buttons()
 	
 	update_help(step_data)
 	for c in step_content.get_children():
@@ -139,9 +163,11 @@ func show_step(_step_id:String):
 			current_step = c
 			current_step.start(step_data)
 			current_step.show()
-			$BG/StepDisplay/Titlebar/SectionTitleLabel.text = current_step.section_name
+#			$BG/StepDisplay/Titlebar/SectionTitleLabel.text = current_step.section_name
+			
 			next_button.text = "Close" if not data.connections_from.has(current_step.step_id) else "Next"
 			check_if_can_finish_wizard(step_data)
+			
 			return
 	
 	if data.nodes.has(_step_id):
@@ -173,6 +199,7 @@ func show_step(_step_id:String):
 			home_section_id = str(step_data.id)
 		
 		current_step.start(step_data)
+		
 
 
 func check_if_can_finish_wizard(step_data:Dictionary):
@@ -213,16 +240,19 @@ func update_help(_step_data:Dictionary):
 		help_hint_button.visible = false
 
 
-func can_continue():
-	next_button.disabled = false
-	next_button.focus_mode = Control.FOCUS_ALL
+func can_continue(_can: bool = true):
+	next_button.disabled = !_can
+	next_button.focus_mode = Control.FOCUS_ALL if _can else Control.FOCUS_NONE
 
 
 func can_previous(_can:bool):
-	prev_button.disabled = !_can
-	next_button.focus_mode = Control.FOCUS_ALL if _can else Control.FOCUS_NONE
-	$BG/StepDisplay/Titlebar/HomeButton.disabled = !_can
-	$BG/StepDisplay/Titlebar/HomeButton.modulate.a = 0.1 if !_can else 1.0
+	if current_step and not current_step.custom_buttons.empty():
+		set_custom_buttons(current_step.custom_buttons)
+	else:
+		prev_button.disabled = !_can
+		next_button.focus_mode = Control.FOCUS_ALL if _can else Control.FOCUS_NONE
+		$BG/StepDisplay/Titlebar/HomeButton.disabled = !_can
+		$BG/StepDisplay/Titlebar/HomeButton.modulate.a = 0.1 if !_can else 1.0
 
 
 func next_step(_next_on_slot:int=0):
@@ -263,6 +293,8 @@ func lose_focus():
 
 func clear_step():
 	for c in step_content.get_children():
+		if c is ReferenceRect:
+			continue
 		c.hide()
 
 

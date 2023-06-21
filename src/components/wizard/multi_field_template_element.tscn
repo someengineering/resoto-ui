@@ -1,0 +1,101 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/icons/icon_file.svg" type="Texture" id=2]
+[ext_resource path="res://assets/icons/icon_128_delete_trashcan.svg" type="Texture" id=3]
+[ext_resource path="res://components/wizard/wizard_steps/multiple_field_step_template_element.gd" type="Script" id=4]
+
+[node name="MultipleFieldStepTemplateElement" type="PanelContainer"]
+self_modulate = Color( 0.627451, 0.627451, 0.627451, 1 )
+margin_right = 615.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 100 )
+theme_type_variation = "PanelContainerDark"
+script = ExtResource( 4 )
+
+[node name="HBoxContainer" type="MarginContainer" parent="."]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 603.0
+margin_bottom = 92.0
+
+[node name="VBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+margin_right = 591.0
+margin_bottom = 84.0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_right = 120.0
+margin_bottom = 84.0
+rect_min_size = Vector2( 120, 0 )
+size_flags_vertical = 3
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="HBoxContainer2" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
+margin_left = 124.0
+margin_right = 554.0
+margin_bottom = 84.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="HBoxContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+margin_top = 14.0
+margin_right = 430.0
+margin_bottom = 70.0
+columns = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+margin_top = 6.0
+margin_right = 77.0
+margin_bottom = 26.0
+text = "Project ID:"
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 81.0
+margin_right = 430.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 130, 0 )
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+margin_top = 36.0
+margin_right = 77.0
+margin_bottom = 56.0
+text = "Profile:"
+
+[node name="FileNameLabel" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 81.0
+margin_top = 36.0
+margin_right = 430.0
+margin_bottom = 56.0
+hint_tooltip = "file name"
+mouse_filter = 1
+theme_type_variation = "LabelCode"
+text = "file name"
+
+[node name="IconButton" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 1 )]
+margin_left = 558.0
+margin_top = 25.0
+margin_right = 591.0
+margin_bottom = 58.0
+size_flags_vertical = 4
+icon_tex = ExtResource( 3 )
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+visible = false
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1908.0
+margin_bottom = 498.0
+mouse_filter = 2
+border_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+editor_only = false
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/IconButton" to="." method="_on_IconButton_pressed"]

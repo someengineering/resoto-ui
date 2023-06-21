@@ -1,0 +1,313 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/icons/icon_128_rename.svg" type="Texture" id=1]
+[ext_resource path="res://components/wizard_editor/wizard_editor_nodes/wizard_editor_node_multi_fields.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxLine" id=1]
+color = Color( 0, 0.329412, 0.639216, 1 )
+thickness = 2
+
+[sub_resource type="StyleBoxLine" id=2]
+color = Color( 0, 0.329412, 0.639216, 1 )
+thickness = 2
+
+[node name="GraphNode" type="GraphNode"]
+margin_right = 377.0
+margin_bottom = 343.0
+title = "Multi Fields"
+resizable = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color( 1, 1, 1, 1 )
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color( 1, 1, 1, 1 )
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color( 1, 1, 1, 1 )
+slot/4/right_enabled = false
+slot/4/right_type = 0
+slot/4/right_color = Color( 1, 1, 1, 1 )
+slot/5/left_enabled = false
+slot/5/left_type = 0
+slot/5/left_color = Color( 1, 1, 1, 1 )
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color( 1, 1, 1, 1 )
+slot/6/left_enabled = false
+slot/6/left_type = 0
+slot/6/left_color = Color( 1, 1, 1, 1 )
+slot/6/right_enabled = false
+slot/6/right_type = 0
+slot/6/right_color = Color( 1, 1, 1, 1 )
+slot/7/left_enabled = false
+slot/7/left_type = 0
+slot/7/left_color = Color( 1, 1, 1, 1 )
+slot/7/right_enabled = false
+slot/7/right_type = 0
+slot/7/right_color = Color( 1, 1, 1, 1 )
+slot/8/left_enabled = false
+slot/8/left_type = 0
+slot/8/left_color = Color( 1, 1, 1, 1 )
+slot/8/right_enabled = false
+slot/8/right_type = 0
+slot/8/right_color = Color( 0.265427, 0.957031, 0.438328, 1 )
+slot/9/left_enabled = false
+slot/9/left_type = 0
+slot/9/left_color = Color( 1, 1, 1, 1 )
+slot/9/right_enabled = false
+slot/9/right_type = 0
+slot/9/right_color = Color( 1, 1, 1, 1 )
+slot/10/left_enabled = false
+slot/10/left_type = 0
+slot/10/left_color = Color( 1, 1, 1, 1 )
+slot/10/right_enabled = false
+slot/10/right_type = 0
+slot/10/right_color = Color( 1, 1, 1, 1 )
+slot/11/left_enabled = false
+slot/11/left_type = 0
+slot/11/left_color = Color( 1, 1, 1, 1 )
+slot/11/right_enabled = false
+slot/11/right_type = 0
+slot/11/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 2 )
+
+[node name="top" type="HBoxContainer" parent="."]
+margin_left = 8.0
+margin_top = 34.0
+margin_right = 369.0
+margin_bottom = 66.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="top"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 128.0
+margin_right = 149.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 21, 21 )
+size_flags_horizontal = 4
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6
+
+[node name="uidEdit" type="LineEdit" parent="top"]
+margin_left = 153.0
+margin_right = 233.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 80, 0 )
+placeholder_text = "unique ID"
+
+[node name="StepLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 70.0
+margin_right = 369.0
+margin_bottom = 90.0
+text = "text:"
+
+[node name="TextEdit" type="TextEdit" parent="."]
+margin_left = 8.0
+margin_top = 94.0
+margin_right = 369.0
+margin_bottom = 134.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_vertical = 3
+theme_type_variation = "FontDefault"
+wrap_enabled = true
+
+[node name="DocsLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 138.0
+margin_right = 369.0
+margin_bottom = 158.0
+text = "docs url:"
+
+[node name="DocsEdit" type="LineEdit" parent="."]
+margin_left = 8.0
+margin_top = 162.0
+margin_right = 369.0
+margin_bottom = 194.0
+rect_min_size = Vector2( 350, 0 )
+
+[node name="HSeparator" type="HSeparator" parent="."]
+margin_left = 8.0
+margin_top = 198.0
+margin_right = 369.0
+margin_bottom = 218.0
+rect_min_size = Vector2( 0, 20 )
+custom_styles/separator = SubResource( 1 )
+
+[node name="Grid" type="GridContainer" parent="."]
+margin_left = 8.0
+margin_top = 222.0
+margin_right = 369.0
+margin_bottom = 517.0
+columns = 2
+
+[node name="ConfigLabel" type="Label" parent="Grid"]
+margin_top = 6.0
+margin_right = 111.0
+margin_bottom = 26.0
+text = "config key:"
+
+[node name="ConfigEdit" type="LineEdit" parent="Grid"]
+margin_left = 115.0
+margin_right = 335.0
+margin_bottom = 32.0
+placeholder_text = "e.g. resoto.core"
+
+[node name="PathLabel" type="Label" parent="Grid"]
+margin_top = 42.0
+margin_right = 111.0
+margin_bottom = 62.0
+text = "path in config:"
+
+[node name="PathEdit" type="LineEdit" parent="Grid"]
+margin_left = 115.0
+margin_top = 36.0
+margin_right = 335.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 220, 0 )
+placeholder_text = "e.g. resotocore.api.ui_path"
+
+[node name="ActionLabel" type="Label" parent="Grid"]
+margin_top = 78.0
+margin_right = 111.0
+margin_bottom = 98.0
+text = "action:"
+
+[node name="ActionOption" type="OptionButton" parent="Grid"]
+margin_left = 115.0
+margin_top = 72.0
+margin_right = 335.0
+margin_bottom = 104.0
+text = "merge"
+items = [ "merge", null, false, 0, null, "append", null, false, 1, null, "set", null, false, 2, null ]
+selected = 0
+
+[node name="FormatLabel" type="Label" parent="Grid"]
+margin_top = 114.0
+margin_right = 111.0
+margin_bottom = 134.0
+text = "Format:"
+
+[node name="FormatLineEdit" type="LineEdit" parent="Grid"]
+margin_left = 115.0
+margin_top = 108.0
+margin_right = 335.0
+margin_bottom = 140.0
+
+[node name="Label" type="Label" parent="Grid"]
+margin_top = 150.0
+margin_right = 111.0
+margin_bottom = 170.0
+text = "Id field name:"
+
+[node name="IdFieldName" type="LineEdit" parent="Grid"]
+margin_left = 115.0
+margin_top = 144.0
+margin_right = 335.0
+margin_bottom = 176.0
+
+[node name="Label2" type="Label" parent="Grid"]
+margin_top = 180.0
+margin_right = 111.0
+margin_bottom = 223.0
+text = "Content Name:
+"
+
+[node name="ContentName" type="LineEdit" parent="Grid"]
+margin_left = 115.0
+margin_top = 180.0
+margin_right = 335.0
+margin_bottom = 223.0
+
+[node name="Label3" type="Label" parent="Grid"]
+margin_top = 233.0
+margin_right = 111.0
+margin_bottom = 253.0
+text = "Single File:"
+
+[node name="SingleFileCheckBox" type="CheckBox" parent="Grid"]
+margin_left = 115.0
+margin_top = 227.0
+margin_right = 335.0
+margin_bottom = 259.0
+
+[node name="Label4" type="Label" parent="Grid"]
+margin_top = 269.0
+margin_right = 111.0
+margin_bottom = 289.0
+text = "Drop label text:"
+
+[node name="DropLabelTextLineEdit" type="LineEdit" parent="Grid"]
+margin_left = 115.0
+margin_top = 263.0
+margin_right = 335.0
+margin_bottom = 295.0
+
+[node name="HSeparator2" type="HSeparator" parent="."]
+margin_left = 8.0
+margin_top = 521.0
+margin_right = 369.0
+margin_bottom = 541.0
+rect_min_size = Vector2( 0, 20 )
+custom_styles/separator = SubResource( 2 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 8.0
+margin_top = 545.0
+margin_right = 369.0
+margin_bottom = 577.0
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+margin_top = 6.0
+margin_right = 68.0
+margin_bottom = 26.0
+text = "Out Data:"
+
+[node name="OutDataLineEdit" type="LineEdit" parent="HBoxContainer"]
+margin_left = 72.0
+margin_right = 361.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="UseDifferentSceneLabel" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 581.0
+margin_right = 369.0
+margin_bottom = 601.0
+text = "Scene override (scene path):"
+
+[node name="ScenePathEdit" type="LineEdit" parent="."]
+margin_left = 8.0
+margin_top = 605.0
+margin_right = 369.0
+margin_bottom = 637.0
+placeholder_text = "res://example/form.tscn"
+
+[node name="PrevBtn" type="CheckBox" parent="."]
+margin_left = 8.0
+margin_top = 641.0
+margin_right = 369.0
+margin_bottom = 673.0
+pressed = true
+text = "Allow Previous Button"

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=134 format=2]
+[gd_resource type="Theme" load_steps=139 format=2]
 
 [ext_resource path="res://assets/theme/theme_switch_off.png" type="Texture" id=1]
 [ext_resource path="res://assets/theme/theme_checkbox_on.png" type="Texture" id=2]
@@ -226,6 +226,55 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.537255, 0.819608, 0.945098, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=134]
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0.0427246, 0.120458, 0.195313, 1 )
+border_color = Color( 0.462745, 0.25098, 0.737255, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id=135]
+
+[sub_resource type="StyleBoxFlat" id=136]
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color( 0.265427, 0.957031, 0.438328, 1 )
+border_color = Color( 0.913725, 0.552941, 0.968627, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=137]
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0.20751, 0.757812, 0.345086, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=138]
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color( 0.265427, 0.957031, 0.438328, 1 )
+border_color = Color( 0.913725, 0.552941, 0.968627, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -1030,6 +1079,16 @@ ButtonFlatDefault/styles/normal = SubResource( 5 )
 ButtonFocusBorder/base_type = "Button"
 ButtonFocusBorder/fonts/font = SubResource( 110 )
 ButtonFocusBorder/styles/focus = SubResource( 92 )
+ButtonGreen/base_type = "Button"
+ButtonGreen/colors/font_color = Color( 0.828125, 1, 0.871094, 1 )
+ButtonGreen/colors/font_color_focus = Color( 1, 1, 1, 1 )
+ButtonGreen/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+ButtonGreen/constants/hseparation = 0
+ButtonGreen/styles/disabled = SubResource( 134 )
+ButtonGreen/styles/focus = SubResource( 135 )
+ButtonGreen/styles/hover = SubResource( 136 )
+ButtonGreen/styles/normal = SubResource( 137 )
+ButtonGreen/styles/pressed = SubResource( 138 )
 ButtonKindLabel/colors/font_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 ButtonKindLabel/colors/font_color_disabled = Color( 0.0588235, 0.2, 0.337255, 1 )
 ButtonKindLabel/colors/font_color_focus = Color( 0.0588235, 0.2, 0.337255, 1 )

@@ -49,7 +49,7 @@ slot/5/right_type = 0
 slot/5/right_color = Color( 1, 1, 1, 1 )
 slot/6/left_enabled = false
 slot/6/left_type = 0
-slot/6/left_color = Color( 1, 1, 1, 1 )
+slot/6/left_color = Color( 0.265427, 0.957031, 0.438328, 1 )
 slot/6/right_enabled = false
 slot/6/right_type = 0
 slot/6/right_color = Color( 1, 1, 1, 1 )
@@ -65,6 +65,12 @@ slot/8/left_color = Color( 1, 1, 1, 1 )
 slot/8/right_enabled = false
 slot/8/right_type = 0
 slot/8/right_color = Color( 1, 1, 1, 1 )
+slot/9/left_enabled = false
+slot/9/left_type = 0
+slot/9/left_color = Color( 1, 1, 1, 1 )
+slot/9/right_enabled = false
+slot/9/right_type = 0
+slot/9/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 2 )
 
 [node name="Icon" type="TextureRect" parent="."]
@@ -137,3 +143,10 @@ margin_bottom = 295.0
 text = "merge"
 items = [ "merge", null, false, 0, null, "append", null, false, 1, null, "set", null, false, 2, null ]
 selected = 0
+
+[node name="CheckBox" type="CheckBox" parent="."]
+margin_left = 8.0
+margin_top = 299.0
+margin_right = 228.0
+margin_bottom = 331.0
+text = "Make Null"

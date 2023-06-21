@@ -1,4 +1,5 @@
 tool
+class_name IconButton
 extends Button
 
 export (Texture) var icon_tex:Texture setget set_icon_tex

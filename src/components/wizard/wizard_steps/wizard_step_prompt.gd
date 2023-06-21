@@ -4,11 +4,19 @@ extends WizardStep
 var value:= ""
 var value_path:= ""
 var separator:= ""
+var format := ""
+var expand_field : bool = false
 var regex:RegEx = RegEx.new()
 var placeholder_scene:Node = null
 
 onready var margin = $VBox/LineEditMargin
 
+
+func _ready():
+	$VBox/TextLabel.connect("meta_hover_started", self, "_on_TextLabel_meta_hover_started")
+	$VBox/TextLabel.connect("meta_hover_ended", self, "_on_TextLabel_meta_hover_ended")
+	$VBox/TextLabel.connect("meta_clicked", self, "_on_TextLabel_meta_clicked")
+	
 func _enter_tree():
 	regex.compile("\\[(.*?)\\]")
 
@@ -23,7 +31,10 @@ func start(_data:Dictionary):
 	value_path = _data.value_path
 	config_action = _data.action
 	separator = _data.separator
+	format = _data.format
+	expand_field = _data.expand_field
 	$VBox/LineEditMargin/LineEdit.text = ""
+	$VBox/LineEditMargin/TextEdit.text = ""
 	text_label.percent_visible = 0
 	text_label.bbcode_text = _data["step_text"].replace("\\n", "\n")
 	var duration = float(text_label.text.length()) / wizard.text_scroll_speed
@@ -32,6 +43,24 @@ func start(_data:Dictionary):
 	$TextAppearTween.start()
 	wizard.character.state = wizard.character.States.TALK
 	$VBox/LineEditMargin/LineEdit.hide()
+	$VBox/LineEditMargin/TextEdit.hide()
+	
+#	var found := true
+#
+#	var paths := value_path.split(".")
+#	var config = wizard.remote_configs[config_key]
+#
+#	for path in paths:
+#		if path in config:
+#			config = config[path]
+#		else:
+#			found = false
+#			break
+#
+#	if found:
+#		$VBox/LineEditMargin/LineEdit.text = str(config) if config != null else ""
+#		$VBox/LineEditMargin/TextEdit.text = str(config) if config != null else ""
+	
 	_on_WizardStep_StepPrompt_resized()
 
 
@@ -45,8 +74,13 @@ func _on_TextAppearTween_tween_completed(_object, key):
 
 
 func _on_TextAppearTween_tween_all_completed():
-	$VBox/LineEditMargin/LineEdit.show()
-	$VBox/LineEditMargin/LineEdit.grab_focus()
+	if not expand_field:
+		$VBox/LineEditMargin/LineEdit.show()
+		$VBox/LineEditMargin/LineEdit.grab_focus()
+	else:
+		$VBox/LineEditMargin/TextEdit.show()
+		$VBox/LineEditMargin/TextEdit.grab_focus()
+	
 	emit_signal("can_continue")
 
 
@@ -65,6 +99,9 @@ func consume_next():
 		final_value_path = final_value_path.trim_prefix(save_in_json_object.strings[0]).trim_prefix(".")
 	
 	config_value_path = final_value_path
+	
+	if format != "" and "{{value}}" in format:
+		value = format.replace("{{value}}", value)
 	
 	if save_in_json_object != null:
 		wizard.new_json_objects[save_in_json_object.strings[1]][final_value_path] = value
@@ -95,3 +132,7 @@ func _on_WizardStep_StepPrompt_resized():
 	var margin_x = clamp((total_size/4)-140, 0, 200)
 	margin.add_constant_override("margin_left", margin_x)
 	margin.add_constant_override("margin_right", margin_x)
+
+
+func _on_TextEdit_text_changed():
+	value = $VBox/LineEditMargin/TextEdit.text

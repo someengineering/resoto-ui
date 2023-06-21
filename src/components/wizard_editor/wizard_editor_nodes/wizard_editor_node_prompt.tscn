@@ -151,7 +151,7 @@ custom_styles/separator = SubResource( 1 )
 margin_left = 8.0
 margin_top = 222.0
 margin_right = 358.0
-margin_bottom = 362.0
+margin_bottom = 434.0
 columns = 2
 
 [node name="ConfigLabel" type="Label" parent="Grid"]
@@ -208,33 +208,57 @@ margin_right = 350.0
 margin_bottom = 140.0
 size_flags_horizontal = 3
 
+[node name="FormatLabel" type="Label" parent="Grid"]
+margin_top = 150.0
+margin_right = 106.0
+margin_bottom = 170.0
+text = "Format:"
+
+[node name="FormatLineEdit" type="LineEdit" parent="Grid"]
+margin_left = 110.0
+margin_top = 144.0
+margin_right = 350.0
+margin_bottom = 176.0
+
+[node name="ExpandLabel" type="Label" parent="Grid"]
+margin_top = 186.0
+margin_right = 106.0
+margin_bottom = 206.0
+text = "Expand field:"
+
+[node name="ExpandCheckBox" type="CheckBox" parent="Grid"]
+margin_left = 110.0
+margin_top = 180.0
+margin_right = 350.0
+margin_bottom = 212.0
+
 [node name="HSeparator2" type="HSeparator" parent="."]
 margin_left = 8.0
-margin_top = 366.0
+margin_top = 438.0
 margin_right = 358.0
-margin_bottom = 386.0
+margin_bottom = 458.0
 rect_min_size = Vector2( 0, 20 )
 custom_styles/separator = SubResource( 1 )
 
 [node name="UseDifferentSceneLabel" type="Label" parent="."]
 margin_left = 8.0
-margin_top = 390.0
+margin_top = 462.0
 margin_right = 358.0
-margin_bottom = 410.0
+margin_bottom = 482.0
 text = "Scene override (scene path):"
 
 [node name="ScenePathEdit" type="LineEdit" parent="."]
 margin_left = 8.0
-margin_top = 414.0
+margin_top = 486.0
 margin_right = 358.0
-margin_bottom = 446.0
+margin_bottom = 518.0
 placeholder_text = "res://example/form.tscn"
 
 [node name="PrevBtn" type="CheckBox" parent="."]
 margin_left = 8.0
-margin_top = 450.0
+margin_top = 522.0
 margin_right = 358.0
-margin_bottom = 482.0
+margin_bottom = 554.0
 pressed = true
 text = "Allow Previous Button"
 

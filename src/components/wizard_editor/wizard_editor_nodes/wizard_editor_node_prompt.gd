@@ -6,6 +6,8 @@ var config_key:String = ""
 var value_path:String = ""
 var separator:String = ""
 var action:String = "merge"
+var format:String = ""
+var expand_field : bool = false
 var special_scene_path:String = ""
 var previous_allowed:= true
 var uid:String = ""
@@ -19,6 +21,8 @@ func _ready():
 	$Grid/ActionOption.connect("item_selected", self, "_on_ActionOption_selected")
 	$Grid/SeparatorEdit.connect("text_changed", self, "_on_SeparatorEdit_text_changed")
 	$ScenePathEdit.connect("text_changed", self, "_on_ScenePathEdit_text_changed")
+	$Grid/FormatLineEdit.connect("text_changed", self, "_on_FormatLineEdit_text_changed")
+	$Grid/ExpandCheckBox.connect("toggled", self, "_on_ExpandCheckBox_toggled")
 
 
 func serialize() -> Dictionary:
@@ -32,20 +36,15 @@ func serialize() -> Dictionary:
 	data["special_scene_path"] = special_scene_path
 	data["previous_allowed"] = previous_allowed
 	data["uid"] = uid
+	data["format"] = format
+	data["expand_field"] = expand_field
 	return data
 
 
 func deserialize(data) -> void:
 	base_deserialize(data)
-	step_text = data["step_text"]
-	docs_link = data["docs_link"]
-	config_key = data["config_key"]
-	value_path = data["value_path"]
-	action = data["action"]
-	separator = data["separator"]
-	special_scene_path = data["special_scene_path"]
-	previous_allowed = data["previous_allowed"]
-	uid = data["uid"]
+	for key in data:
+		set(key, data[key])
 	$top/uidEdit.text = uid
 	$PrevBtn.pressed = previous_allowed
 	$TextEdit.text = step_text
@@ -54,6 +53,8 @@ func deserialize(data) -> void:
 	$Grid/PathEdit.text = value_path
 	$Grid/SeparatorEdit.text = separator
 	$ScenePathEdit.text = special_scene_path
+	$Grid/FormatLineEdit.text = format
+	$Grid/ExpandCheckBox.pressed = expand_field
 	match action:
 		"merge":
 			$Grid/ActionOption.selected = 0
@@ -103,3 +104,10 @@ func _on_PrevBtn_pressed():
 
 func _on_uidEdit_text_changed(new_text):
 	uid = new_text
+
+
+func _on_FormatLineEdit_text_changed(new_text):
+	format = new_text
+
+func _on_ExpandCheckBox_toggled(value : bool):
+	expand_field = value

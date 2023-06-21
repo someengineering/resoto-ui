@@ -19,6 +19,10 @@ var section_name := ""
 var step_id := ""
 var last_step := ""
 
+var custom_buttons := []
+
+var configs_save_n := 0
+
 func start(_data:Dictionary):
 	pass
 
@@ -117,31 +121,41 @@ func update_config(new_value):
 				
 			_:
 				if typeof(new_value) == TYPE_DICTIONARY:
+					if current[value_key] == null:
+						current[value_key] = {}
 					current[value_key].merge(new_value)
 				else:
 					current[value_key] = new_value
 	
 	# If the original does not have the key
 	else:
-		current[value_key] = new_value
+		if new_value is String:
+			current[value_key] = null if new_value == "null" else new_value
+		else:
+			current[value_key] = new_value
 
 
 func save_configs():
 	wizard.emit_signal("setup_wizard_collecting")
+	configs_save_n =  wizard.remote_configs.keys().size()
 	for config_id in wizard.remote_configs.keys():
 		if _g.ui_test_mode:
 			print(Utils.readable_dict(wizard.remote_configs[config_id]))
 			API.put_config_id_dry_run(self, config_id, JSON.print(wizard.remote_configs[config_id]))
 		else:
 			API.put_config_id(self, config_id, JSON.print(wizard.remote_configs[config_id]))
-
+		
 
 func _on_put_config_id_done(_error:int, _r:ResotoAPI.Response):
+	configs_save_n -= 1
+	if configs_save_n <= 0:
+		emit_signal("config_save_success")
 	if str(_r.response_code).begins_with("2"):
 		_g.emit_signal("add_toast", "Configurations saved", "", OK)
-		emit_signal("config_save_success")
+#		emit_signal("config_save_success")
 	else:
-		emit_signal("config_save_fail")
+#		emit_signal("config_save_fail")
+		pass
 
 
 func _on_put_config_id_dry_run_done(_error:int, _r:ResotoAPI.Response):

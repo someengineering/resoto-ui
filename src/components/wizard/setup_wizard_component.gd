@@ -68,18 +68,26 @@ func _on_WizardControl_setup_wizard_finished():
 
 
 func _check_for_setup_wizard_autostart():
-	API.get_config_id(self, "resoto.worker")
+	API.get_configs(self)
+	
+func _on_get_configs_done(_error: int, _response: ResotoAPI.Response) -> void:
+	if _error:
+		return
+		
+	if "resoto.ui.setup" in _response.transformed.result:
+		API.get_config_id(self, "resoto.ui.setup")
+	else:
+		API.get_config_id(self, "resoto.worker")
 
 
 # Check for automatic start of the Setup Wizard
 func _on_get_config_id_done(_error:int, _response:ResotoAPI.Response, _config_key:String) -> void:
 	if _error:
 		return
-	var worker_config : Dictionary = _response.transformed.result
-	if worker_config.has("resotoworker") and worker_config.resotoworker.has("collector"):
-		# If the collector array has more than one element
-		# (two when example was found), do not start the setup wizard
-		var min_collectors := 2 if worker_config.resotoworker.collector.has("example") else 1
-		if worker_config.resotoworker.collector.size() >= min_collectors:
-			return
+
+	elif _config_key == "resoto.ui.setup":
+		var setup_config: Dictionary = _response.transformed.result
+		if "resotosetup" in setup_config and "completed" in setup_config.resotosetup:
+			if str2var(setup_config.resotosetup.completed):
+				return
 	_start_wizard()

@@ -21,8 +21,8 @@ func refresh_results():
 	tree_dict.clear()
 	total_counter.clear()
 	tree.clear()
-	tree.set_column_title(0, "Name")
-	tree.set_column_title(1, "Descendants")
+	tree.set_column_title(0, "Cloud Provider")
+	tree.set_column_title(1, "Number of Resources")
 	var descendants_query := "aggregate(/ancestors.cloud.reported.id as cloud, /ancestors.account.reported.name as account, /ancestors.region.reported.name as region: sum(1) as count): not is(cloud, account, region, graph_root)"
 	API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
 
@@ -48,7 +48,8 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 	if error:
 		if error == ERR_PRINTER_ON_FIRE:
 			return
-		_g.emit_signal("add_toast", "Error in Collect Result display", "", 1, self)
+		elif _response.response_code != 404:
+			_g.emit_signal("add_toast", "Error in Collect Result display", "", 1, self)
 		return
 	if _response.transformed.has("result"):
 		build_counted_dict(_response.transformed.result)

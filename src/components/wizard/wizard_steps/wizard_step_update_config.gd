@@ -8,5 +8,8 @@ func start(_data):
 	var value		= _data.value
 	var separator	= _data.separator if _data.has("separator") else ""
 	
+	if _data.make_null:
+		value = "null"
+	
 	update_config_string_separator(value, separator)
 	emit_signal("next")

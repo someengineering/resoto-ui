@@ -94,7 +94,7 @@ rect_min_size = Vector2( 0, 50 )
 custom_constants/separation = 10
 
 [node name="SectionTitleLabel" type="Label" parent="BG/StepDisplay/Titlebar"]
-margin_right = 1524.0
+margin_right = 1477.0
 margin_bottom = 36.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -153,8 +153,8 @@ icon_tex = ExtResource( 10 )
 icon_margin = 3
 
 [node name="HelpDiscordButton" parent="BG/StepDisplay/Titlebar" instance=ExtResource( 2 )]
-margin_left = 1534.0
-margin_right = 1574.0
+margin_left = 1537.0
+margin_right = 1577.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 hint_tooltip = "[center][img=200x60]res://assets/resoto/Resoto_logo_and_text.svg[/img]

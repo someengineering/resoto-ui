@@ -154,6 +154,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://components/neighbourhood/elements/neighbourhood_view_node_element.gd"
 }, {
+"base": "Button",
+"class": "IconButton",
+"language": "GDScript",
+"path": "res://components/elements/styled/icon_button.gd"
+}, {
 "base": "BaseWidget",
 "class": "Indicator",
 "language": "GDScript",
@@ -178,6 +183,11 @@ _global_script_classes=[ {
 "class": "LineEditInt",
 "language": "GDScript",
 "path": "res://components/config/config_templates/component_config_line_edit_int.gd"
+}, {
+"base": "PanelContainer",
+"class": "MultiFieldTemplate",
+"language": "GDScript",
+"path": "res://components/wizard/wizard_steps/multiple_field_step_template_element.gd"
 }, {
 "base": "CanvasLayer",
 "class": "PopupManager",
@@ -279,11 +289,13 @@ _global_script_class_icons={
 "GraphLayoutEdge": "",
 "GraphLayoutNeighborhood": "",
 "GraphLayoutNode": "",
+"IconButton": "",
 "Indicator": "",
 "JWTGenerator": "",
 "LabelLeftClickCopy": "",
 "LineEditFloat": "",
 "LineEditInt": "",
+"MultiFieldTemplate": "",
 "PopupManager": "",
 "ResotoAPI": "",
 "RotatedLabel": "",

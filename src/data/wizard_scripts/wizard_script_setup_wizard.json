@@ -7,17 +7,17 @@
 		"1444": {
 			"id": 1444,
 			"res_name": "StepSection",
-			"offset": "Vector2( -440, -100 )",
-			"rect_size": "Vector2( 225, 189 )",
+			"offset": "Vector2( -1160, -100 )",
+			"rect_size": "Vector2( 225.001, 189 )",
 			"section_name": "start",
 			"section_display_title": "Welcome to Resoto!"
 		},
 		"2330": {
 			"id": 2330,
 			"res_name": "StepText",
-			"offset": "Vector2( 260, -100 )",
-			"rect_size": "Vector2( 380, 680 )",
-			"step_text": "Hello and welcome!\n\n[b]I am [color=#e98df7]C.K.[/color] and I am a Wizard![/b]\n\nI will help you to set up your Resoto  installation.\n\nYou can always [url=ui_help://You can open this Setup Wizard from the 'Settings' popup in the main menu]come back here later[/url] and use my help to setup different cloud providers.\n\n\nThis setup wizard is shown on start-up until a Collector is configured.",
+			"offset": "Vector2( -900, -20 )",
+			"rect_size": "Vector2( 380, 679.997 )",
+			"step_text": "Greetings! 🎉\n\n[b]I'm [color=#e98df7]C.K.[/color], your Setup Wizard. Welcome to Resoto![/b]\n\nIn the next few steps we want to connect to one or more cloud providers. This integration is essential to unlock the full power of Resoto.\n\nSo, let's get started on this exciting journey! 🚀",
 			"docs_link": "",
 			"previous_allowed": false,
 			"uid": ""
@@ -33,37 +33,37 @@
 		"3717": {
 			"id": 3717,
 			"res_name": "StepComment",
-			"offset": "Vector2( 680, -200 )",
-			"rect_size": "Vector2( 355, 80.001 )",
+			"offset": "Vector2( 1180, -300 )",
+			"rect_size": "Vector2( 355.005, 80.0021 )",
 			"headline_text": "Resoto Setup"
 		},
 		"4050": {
 			"id": 4050,
 			"res_name": "StepQuestion",
-			"offset": "Vector2( 940, -100 )",
+			"offset": "Vector2( 1180, -100 )",
 			"rect_size": "Vector2( 400, 680 )",
-			"step_text": "Resoto is able to talk to and collect data from different cloud providers.\n\nIn order to setup the system, you need to select at least one provider.\n\nAfter each setup, you will return here.",
+			"step_text": "Resoto is able to talk to and collect data from different cloud providers.\n\nIn order to setup the system, you need to select at least one provider.",
 			"docs_link": "",
 			"highlight_ids": "",
-			"previous_allowed": false,
+			"previous_allowed": true,
 			"uid": "configured_collectors"
 		},
 		"5492": {
 			"id": 5492,
 			"res_name": "StepHandleObject",
 			"offset": "Vector2( 3060, 5120 )",
-			"rect_size": "Vector2( 350.199, 349.999 )",
+			"rect_size": "Vector2( 350.191, 350.003 )",
 			"config_key": "resoto.worker",
 			"value_path": "k8s.config_files",
 			"variable_name": "k8s_config_file",
-			"action": "",
+			"action": "merge",
 			"wrap_as_array": true
 		},
 		"6270": {
 			"id": 6270,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 3220, 4220 )",
-			"rect_size": "Vector2( 400, 720 )",
+			"rect_size": "Vector2( 400, 720.003 )",
 			"step_text": "Enter the path to the GCP service account file.\n\nPlease make sure that this file is accessible to ResotoWorker.\n\n[b]Example[/b]\n[code]/path/to/serviceaccount.json[/code]",
 			"docs_link": "https://cloud.google.com/iam/docs/creating-managing-service-account-keys",
 			"config_key": "resoto.worker",
@@ -72,13 +72,15 @@
 			"separator": ",",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"6750": {
 			"id": 6750,
 			"res_name": "StepText",
-			"offset": "Vector2( 300, -700 )",
-			"rect_size": "Vector2( 600, 320 )",
+			"offset": "Vector2( 420, -700 )",
+			"rect_size": "Vector2( 600.002, 320 )",
 			"step_text": "Have fun and enjoy Resoto!\n\nJoin our Discord if you have questions, need support, or want to chat about Infrastructure Intelligence!",
 			"docs_link": "",
 			"previous_allowed": false,
@@ -88,7 +90,7 @@
 			"id": 6770,
 			"res_name": "StepText",
 			"offset": "Vector2( 4200, 0 )",
-			"rect_size": "Vector2( 420, 320 )",
+			"rect_size": "Vector2( 420.001, 320 )",
 			"step_text": "There was a problem saving your configuration.\n\nPlease check if all data you entered is correct!",
 			"docs_link": "",
 			"previous_allowed": false,
@@ -98,17 +100,18 @@
 			"id": 6896,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1800, -600 )",
-			"rect_size": "Vector2( 344, 196 )",
-			"step_text": "Amazon Web Services (AWS)",
+			"rect_size": "Vector2( 344.001, 232 )",
+			"step_text": "",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": "aws_done==true"
+			"variable_check": "aws_done==true",
+			"icon_path": "res://assets/provider_icons/aws.svg"
 		},
 		"7078": {
 			"id": 7078,
 			"res_name": "StepSetVariable",
 			"offset": "Vector2( 9020, 2360 )",
-			"rect_size": "Vector2( 225, 185 )",
+			"rect_size": "Vector2( 225.001, 185.002 )",
 			"variable_name": "aws_done",
 			"variable_value": "true"
 		},
@@ -116,7 +119,7 @@
 			"id": 7433,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 5460, 2300 )",
-			"rect_size": "Vector2( 505.126, 386.346 )",
+			"rect_size": "Vector2( 505.13, 386.355 )",
 			"step_text": "Do you want to scrape your accounts from the organizations?\nScraping the organization requires specific permissions.\n\nPlease find additional information in the help at the top right.",
 			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws",
 			"highlight_ids": "",
@@ -126,8 +129,8 @@
 		"7512": {
 			"id": 7512,
 			"res_name": "StepCustomScene",
-			"offset": "Vector2( -160, -100 )",
-			"rect_size": "Vector2( 366, 280 )",
+			"offset": "Vector2( -480, -80 )",
+			"rect_size": "Vector2( 366.002, 279.999 )",
 			"docs_link": "",
 			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_prefill_cloud_provider_vars.tscn",
 			"uid": ""
@@ -135,8 +138,8 @@
 		"7789": {
 			"id": 7789,
 			"res_name": "StepSection",
-			"offset": "Vector2( 3400, -260 )",
-			"rect_size": "Vector2( 225, 185 )",
+			"offset": "Vector2( 3120, -260 )",
+			"rect_size": "Vector2( 224.999, 185 )",
 			"section_name": "finish_setup",
 			"section_display_title": ""
 		},
@@ -144,25 +147,26 @@
 			"id": 8115,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 320, 6900 )",
-			"rect_size": "Vector2( 236, 313.001 )",
+			"rect_size": "Vector2( 236.009, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "resotoworker.collector",
 			"action": "merge",
-			"value": "[\"digitalocean\"]"
+			"value": "[\"digitalocean\"]",
+			"make_null": false
 		},
 		"8170": {
 			"id": 8170,
 			"res_name": "StepSection",
 			"offset": "Vector2( 4200, -440 )",
-			"rect_size": "Vector2( 225, 185 )",
+			"rect_size": "Vector2( 225.005, 185 )",
 			"section_name": "collect_run",
 			"section_display_title": "Collecting Resources"
 		},
 		"8229": {
 			"id": 8229,
 			"res_name": "StepCustomScene",
-			"offset": "Vector2( 5200, -440 )",
-			"rect_size": "Vector2( 366.001, 288 )",
+			"offset": "Vector2( 5300, -440 )",
+			"rect_size": "Vector2( 366, 288 )",
 			"docs_link": "",
 			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_collect_run_result.tscn",
 			"uid": ""
@@ -171,21 +175,23 @@
 			"id": 8770,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1800, -380 )",
-			"rect_size": "Vector2( 345, 196 )",
-			"step_text": "Google Cloud Platform (GCP)",
+			"rect_size": "Vector2( 345.001, 232 )",
+			"step_text": "",
 			"docs_link": "",
 			"custom_order": 8,
-			"variable_check": "gcp_done==true"
+			"variable_check": "gcp_done==true",
+			"icon_path": "res://assets/provider_icons/google-cloud.svg"
 		},
 		"10406": {
 			"id": 10406,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1800, -160 )",
-			"rect_size": "Vector2( 348, 196 )",
-			"step_text": "Kubernetes",
+			"rect_size": "Vector2( 348.001, 232 )",
+			"step_text": "",
 			"docs_link": "",
 			"custom_order": 7,
-			"variable_check": "k8s_done==true"
+			"variable_check": "k8s_done==true",
+			"icon_path": "res://assets/provider_icons/kubernetes.svg"
 		},
 		"11223": {
 			"id": 11223,
@@ -197,8 +203,8 @@
 		"11453": {
 			"id": 11453,
 			"res_name": "StepQuestion",
-			"offset": "Vector2( 5620, -440 )",
-			"rect_size": "Vector2( 359.999, 399.999 )",
+			"offset": "Vector2( 5580, -1040 )",
+			"rect_size": "Vector2( 360.003, 399.999 )",
 			"step_text": "Do you want to finish the setup wizard or go back and change settings?",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -209,7 +215,7 @@
 			"id": 12260,
 			"res_name": "StepHandleObject",
 			"offset": "Vector2( 4560, 5840 )",
-			"rect_size": "Vector2( 380.001, 349.999 )",
+			"rect_size": "Vector2( 380.005, 350 )",
 			"config_key": "resoto.worker",
 			"value_path": "k8s.configs",
 			"variable_name": "k8s_config",
@@ -220,7 +226,7 @@
 			"id": 13296,
 			"res_name": "StepSetVariable",
 			"offset": "Vector2( 5040, 3860 )",
-			"rect_size": "Vector2( 225, 185 )",
+			"rect_size": "Vector2( 225, 185.002 )",
 			"variable_name": "gcp_done",
 			"variable_value": "true"
 		},
@@ -228,21 +234,21 @@
 			"id": 13364,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 4660, 0 )",
-			"rect_size": "Vector2( 225, 125 )",
+			"rect_size": "Vector2( 224.993, 125 )",
 			"section_goto": "resoto_setup"
 		},
 		"13400": {
 			"id": 13400,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 2180, -160 )",
-			"rect_size": "Vector2( 225, 127 )",
+			"rect_size": "Vector2( 224.997, 127 )",
 			"section_goto": "k8s_setup"
 		},
 		"13529": {
 			"id": 13529,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 6880, 2620 )",
-			"rect_size": "Vector2( 469.8, 467.563 )",
+			"rect_size": "Vector2( 469.796, 467.562 )",
 			"step_text": "It is possible to scrape different accounts.\n\nSince the organization should not be scraped, do you want to define the list of accounts to scrape?",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -253,7 +259,7 @@
 			"id": 13714,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 540, 3800 )",
-			"rect_size": "Vector2( 591, 389 )",
+			"rect_size": "Vector2( 591.001, 389.002 )",
 			"step_text": "Google Cloud is using service account files in order to connect to an account.\nResoto Worker needs access to such a file to scrape the account.\nIf you have multiple accounts, you need to provide a service account file for each account.\n\nIf Resoto is running inside Google Cloud, it is possible to autodetect the accounts to scrape. In this case permissions need to be set for the instance Resoto is running on.\n\nSee help for more information.",
 			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/gcp",
 			"highlight_ids": "",
@@ -263,7 +269,7 @@
 		"14015": {
 			"id": 14015,
 			"res_name": "StepSection",
-			"offset": "Vector2( 680, -100 )",
+			"offset": "Vector2( 880, 140 )",
 			"rect_size": "Vector2( 225, 189 )",
 			"section_name": "resoto_setup",
 			"section_display_title": "Cloud Provider Setup"
@@ -271,29 +277,30 @@
 		"14271": {
 			"id": 14271,
 			"res_name": "StepAnswer",
-			"offset": "Vector2( 6080, -440 )",
-			"rect_size": "Vector2( 264, 196 )",
+			"offset": "Vector2( 6040, -1040 )",
+			"rect_size": "Vector2( 275, 232 )",
 			"step_text": "Finish setup!",
 			"docs_link": "",
 			"custom_order": 4,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"14598": {
 			"id": 14598,
 			"res_name": "StepHandleObject",
 			"offset": "Vector2( 3060, 5500 )",
-			"rect_size": "Vector2( 352, 350 )",
+			"rect_size": "Vector2( 352.004, 349.999 )",
 			"config_key": "resoto.worker",
 			"value_path": "k8s.config_files",
 			"variable_name": "k8s_config_file",
-			"action": "",
+			"action": "merge",
 			"wrap_as_array": true
 		},
 		"14821": {
 			"id": 14821,
 			"res_name": "StepSection",
-			"offset": "Vector2( 4900, -440 )",
-			"rect_size": "Vector2( 225, 185 )",
+			"offset": "Vector2( 5040, -440 )",
+			"rect_size": "Vector2( 225.006, 185 )",
 			"section_name": "result_screen",
 			"section_display_title": "Collect Results"
 		},
@@ -301,7 +308,7 @@
 			"id": 15676,
 			"res_name": "StepCustomScene",
 			"offset": "Vector2( 4480, -440 )",
-			"rect_size": "Vector2( 366.001, 288 )",
+			"rect_size": "Vector2( 366, 288 )",
 			"docs_link": "",
 			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_collect_run_status.tscn",
 			"uid": ""
@@ -310,41 +317,43 @@
 			"id": 15731,
 			"res_name": "StepComment",
 			"offset": "Vector2( 0, 6800 )",
-			"rect_size": "Vector2( 355, 80.0015 )",
+			"rect_size": "Vector2( 355, 80.0029 )",
 			"headline_text": "DigitalOcean Setup"
 		},
 		"15919": {
 			"id": 15919,
 			"res_name": "StepComment",
-			"offset": "Vector2( -440, -200 )",
-			"rect_size": "Vector2( 355, 80.001 )",
+			"offset": "Vector2( -1160, -200 )",
+			"rect_size": "Vector2( 355, 80.0023 )",
 			"headline_text": "Setup Intro"
 		},
 		"15992": {
 			"id": 15992,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1800, 60 )",
-			"rect_size": "Vector2( 347.4, 196 )",
-			"step_text": "DigitalOcean",
+			"rect_size": "Vector2( 347.399, 232 )",
+			"step_text": "",
 			"docs_link": "",
 			"custom_order": 4,
-			"variable_check": "do_done==true"
+			"variable_check": "do_done==true",
+			"icon_path": "res://assets/provider_icons/digitalocean.svg"
 		},
 		"16908": {
 			"id": 16908,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 7400, 2620 )",
-			"rect_size": "Vector2( 264, 196 )",
+			"rect_size": "Vector2( 275, 232 )",
 			"step_text": "No",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"17418": {
 			"id": 17418,
 			"res_name": "StepConfigConditional",
 			"offset": "Vector2( 3480, 2060 )",
-			"rect_size": "Vector2( 260.001, 260 )",
+			"rect_size": "Vector2( 259.996, 260 )",
 			"variable_name": "aws.profiles",
 			"variable_value": "1",
 			"operation": "<=",
@@ -355,34 +364,36 @@
 			"id": 17446,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 7400, 2900 )",
-			"rect_size": "Vector2( 264, 196 )",
+			"rect_size": "Vector2( 275, 232 )",
 			"step_text": "Yes",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"19854": {
 			"id": 19854,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 2180, 60 )",
-			"rect_size": "Vector2( 225, 127 )",
+			"rect_size": "Vector2( 224.997, 127 )",
 			"section_goto": "digitalocean_setup"
 		},
 		"20399": {
 			"id": 20399,
 			"res_name": "StepAnswer",
-			"offset": "Vector2( 6080, -200 )",
-			"rect_size": "Vector2( 264, 240 )",
+			"offset": "Vector2( 6040, -800 )",
+			"rect_size": "Vector2( 275, 240 )",
 			"step_text": "Go back and change settings",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"21137": {
 			"id": 21137,
 			"res_name": "StepSetVariable",
 			"offset": "Vector2( 5640, 5500 )",
-			"rect_size": "Vector2( 224.999, 185 )",
+			"rect_size": "Vector2( 224.995, 185.001 )",
 			"variable_name": "k8s_done",
 			"variable_value": "true"
 		},
@@ -390,44 +401,47 @@
 			"id": 22432,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1180, 3800 )",
-			"rect_size": "Vector2( 478, 196 )",
+			"rect_size": "Vector2( 478.001, 232 )",
 			"step_text": "Discover GCP projects automatically",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"23560": {
 			"id": 23560,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 6080, 1820 )",
-			"rect_size": "Vector2( 361, 196 )",
+			"rect_size": "Vector2( 360.992, 232 )",
 			"step_text": "Yes",
 			"docs_link": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_security_iam.html",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"24906": {
 			"id": 24906,
 			"res_name": "StepComment",
 			"offset": "Vector2( 4200, -600 )",
-			"rect_size": "Vector2( 355.001, 80 )",
+			"rect_size": "Vector2( 355.004, 80 )",
 			"headline_text": "Show collect progress"
 		},
 		"26404": {
 			"id": 26404,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 1700, 3800 )",
-			"rect_size": "Vector2( 382.001, 313 )",
+			"rect_size": "Vector2( 382.015, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "gcp.service_account",
 			"action": "merge",
-			"value": "[]"
+			"value": "[]",
+			"make_null": false
 		},
 		"26588": {
 			"id": 26588,
 			"res_name": "StepSetVariable",
 			"offset": "Vector2( 2540, 6900 )",
-			"rect_size": "Vector2( 225, 185 )",
+			"rect_size": "Vector2( 225.002, 185.002 )",
 			"variable_name": "do_done",
 			"variable_value": "true"
 		},
@@ -435,48 +449,50 @@
 			"id": 26844,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 6080, 2620 )",
-			"rect_size": "Vector2( 363, 196 )",
+			"rect_size": "Vector2( 362.992, 232 )",
 			"step_text": "No (default)",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"26904": {
 			"id": 26904,
 			"res_name": "StepCreateObject",
 			"offset": "Vector2( 1640, 6020 )",
-			"rect_size": "Vector2( 225, 126.999 )",
+			"rect_size": "Vector2( 224.984, 127.002 )",
 			"variable_name": "k8s_config"
 		},
 		"27678": {
 			"id": 27678,
 			"res_name": "StepSectionGoto",
-			"offset": "Vector2( 6400, -200 )",
-			"rect_size": "Vector2( 225, 125 )",
+			"offset": "Vector2( 6200, 220 )",
+			"rect_size": "Vector2( 225.002, 125 )",
 			"section_goto": "resoto_setup"
 		},
 		"29978": {
 			"id": 29978,
 			"res_name": "StepSectionGoto",
-			"offset": "Vector2( 6400, -440 )",
-			"rect_size": "Vector2( 225, 127 )",
+			"offset": "Vector2( 6680, -440 )",
+			"rect_size": "Vector2( 225.002, 127 )",
 			"section_goto": "setup_complete"
 		},
 		"30694": {
 			"id": 30694,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 6480, 1820 )",
-			"rect_size": "Vector2( 342, 313 )",
+			"rect_size": "Vector2( 342.003, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "aws.scrape_org",
 			"action": "set",
-			"value": "true"
+			"value": "true",
+			"make_null": false
 		},
 		"32172": {
 			"id": 32172,
 			"res_name": "StepText",
 			"offset": "Vector2( 8600, 2360 )",
-			"rect_size": "Vector2( 400, 480 )",
+			"rect_size": "Vector2( 400.033, 480.002 )",
 			"step_text": "The AWS Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
 			"docs_link": "",
 			"previous_allowed": true,
@@ -486,14 +502,14 @@
 			"id": 32354,
 			"res_name": "StepCreateObject",
 			"offset": "Vector2( 1660, 5300 )",
-			"rect_size": "Vector2( 225, 127 )",
+			"rect_size": "Vector2( 224.997, 127 )",
 			"variable_name": "k8s_config_file"
 		},
 		"32588": {
 			"id": 32588,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 3660, 4220 )",
-			"rect_size": "Vector2( 223.922, 300 )",
+			"rect_size": "Vector2( 223.912, 300 )",
 			"step_text": "Do you want to add more GCP service accounts?",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -504,49 +520,53 @@
 			"id": 32691,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 680, 6900 )",
-			"rect_size": "Vector2( 519.999, 539.998 )",
+			"rect_size": "Vector2( 520.008, 564.003 )",
 			"step_text": "Please enter the token to access your account.\n\n[url=https://cloud.digitalocean.com/account/api/tokens]Click here[/url] to get help retrieving the access token.",
 			"docs_link": "",
 			"config_key": "resoto.worker",
 			"value_path": "digitalocean.api_tokens",
-			"action": "replace",
+			"action": "merge",
 			"separator": ",",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"33697": {
 			"id": 33697,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 3920, 4220 )",
-			"rect_size": "Vector2( 264.001, 196 )",
+			"rect_size": "Vector2( 275.002, 232 )",
 			"step_text": "No",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"34704": {
 			"id": 34704,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 2180, -580 )",
-			"rect_size": "Vector2( 225, 127 )",
+			"rect_size": "Vector2( 224.997, 127 )",
 			"section_goto": "aws_setup"
 		},
 		"35691": {
 			"id": 35691,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 3920, 4620 )",
-			"rect_size": "Vector2( 264.001, 196 )",
+			"rect_size": "Vector2( 275.002, 232 )",
 			"step_text": "Yes",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"35925": {
 			"id": 35925,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 2340, 6020 )",
-			"rect_size": "Vector2( 419.999, 560.001 )",
+			"rect_size": "Vector2( 420.004, 564 )",
 			"step_text": "Please enter the url of the Kubernetes API server.\n\nThis is usually something like:\n[code]https://<host>:<port>[/code]\nExample: [code]https://k8s-cluster-server.example.com[/code]",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -555,41 +575,33 @@
 			"separator": "",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"36398": {
 			"id": 36398,
 			"res_name": "StepComment",
 			"offset": "Vector2( 3400, -400 )",
-			"rect_size": "Vector2( 500, 80.0005 )",
+			"rect_size": "Vector2( 500.002, 80.0002 )",
 			"headline_text": "Finish Setup and Save Config to Core"
 		},
 		"36411": {
 			"id": 36411,
 			"res_name": "StepHandleObject",
 			"offset": "Vector2( 4560, 6260 )",
-			"rect_size": "Vector2( 376.646, 350 )",
+			"rect_size": "Vector2( 376.645, 349.998 )",
 			"config_key": "resoto.worker",
 			"value_path": "k8s.configs",
 			"variable_name": "k8s_config",
 			"action": "merge",
 			"wrap_as_array": true
 		},
-		"37287": {
-			"id": 37287,
-			"res_name": "StepAnswer",
-			"offset": "Vector2( 1800, 280 )",
-			"rect_size": "Vector2( 344.445, 211.668 )",
-			"step_text": "My cloud provider is not listed here",
-			"docs_link": "",
-			"custom_order": 2,
-			"variable_check": ""
-		},
 		"37535": {
 			"id": 37535,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 2120, 3800 )",
-			"rect_size": "Vector2( 360, 320 )",
+			"rect_size": "Vector2( 360.002, 320.001 )",
 			"step_text": "Resoto will detect the accounts to scrape based on the instance profile Resoto Worker is running on.\n\nYou are all set!",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -600,16 +612,17 @@
 			"id": 40002,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 6500, 2620 )",
-			"rect_size": "Vector2( 344, 313.001 )",
+			"rect_size": "Vector2( 344.001, 341.001 )",
 			"config_key": "resoto.worker",
 			"value_path": "aws.scrape_org",
 			"action": "set",
-			"value": "false"
+			"value": "false",
+			"make_null": false
 		},
 		"42350": {
 			"id": 42350,
 			"res_name": "StepQuestion",
-			"offset": "Vector2( 1260, 6900 )",
+			"offset": "Vector2( 1260, 6820 )",
 			"rect_size": "Vector2( 380, 300.001 )",
 			"step_text": "Do you have more cluster tokens to add?",
 			"docs_link": "",
@@ -621,14 +634,14 @@
 			"id": 43219,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 2180, -380 )",
-			"rect_size": "Vector2( 225, 127 )",
+			"rect_size": "Vector2( 224.997, 127 )",
 			"section_goto": "gcp_setup"
 		},
 		"44107": {
 			"id": 44107,
 			"res_name": "StepText",
 			"offset": "Vector2( 2220, 280 )",
-			"rect_size": "Vector2( 860, 360 )",
+			"rect_size": "Vector2( 860.003, 360 )",
 			"step_text": "We are working hard on expanding our plugins every day.\n\nIt could also be that the provider or plugin you want to use is not available here but in other ways of setting up Resoto.\n\nPlease check out the docs (click the ? in the upper right corner) and join our Discord to get direct support!",
 			"docs_link": "https://resoto.com/docs/getting-started",
 			"previous_allowed": true,
@@ -637,18 +650,19 @@
 		"44684": {
 			"id": 44684,
 			"res_name": "StepAnswer",
-			"offset": "Vector2( 1740, 7200 )",
-			"rect_size": "Vector2( 264, 196.001 )",
+			"offset": "Vector2( 1720, 7320 )",
+			"rect_size": "Vector2( 275, 232.002 )",
 			"step_text": "Yes",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"44887": {
 			"id": 44887,
 			"res_name": "StepText",
 			"offset": "Vector2( 4580, 3860 )",
-			"rect_size": "Vector2( 420, 420 )",
+			"rect_size": "Vector2( 420.003, 420 )",
 			"step_text": "The Google Cloud Platform Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
 			"docs_link": "",
 			"previous_allowed": true,
@@ -658,7 +672,7 @@
 			"id": 45237,
 			"res_name": "StepText",
 			"offset": "Vector2( 5220, 5500 )",
-			"rect_size": "Vector2( 399.999, 380 )",
+			"rect_size": "Vector2( 399.996, 380.001 )",
 			"step_text": "The Kubernetes Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
 			"docs_link": "",
 			"previous_allowed": true,
@@ -668,27 +682,29 @@
 			"id": 46009,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1740, 6900 )",
-			"rect_size": "Vector2( 264, 196 )",
+			"rect_size": "Vector2( 275.001, 232 )",
 			"step_text": "No",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"47535": {
 			"id": 47535,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 2540, 3800 )",
-			"rect_size": "Vector2( 348.845, 196 )",
+			"rect_size": "Vector2( 348.854, 232 )",
 			"step_text": "Fantastic!",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"48328": {
 			"id": 48328,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 2820, 6020 )",
-			"rect_size": "Vector2( 460, 560.001 )",
+			"rect_size": "Vector2( 459.987, 564 )",
 			"step_text": "Please enter the certificate authority data.\nThis is the base64 encoded certificate authority data of the cluster.\n\nYou can find this data in the kubeconfig file in the related cluster section.\n\nOnly required in case of a custom certificate.\nLeave the field empty, if this is not the case.",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -697,23 +713,26 @@
 			"separator": "",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"49370": {
 			"id": 49370,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 2540, 4040 )",
-			"rect_size": "Vector2( 345.959, 209.799 )",
+			"rect_size": "Vector2( 345.956, 232 )",
 			"step_text": "Add additional GCP service account files",
 			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/gcp",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"49866": {
 			"id": 49866,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 3880, 1680 )",
-			"rect_size": "Vector2( 589, 365 )",
+			"rect_size": "Vector2( 589.02, 364.999 )",
 			"step_text": "Do you want Resoto to use a specific role that you have setup in AWS?\n\nThis is not required.",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -724,7 +743,7 @@
 			"id": 53647,
 			"res_name": "StepText",
 			"offset": "Vector2( 2120, 6900 )",
-			"rect_size": "Vector2( 400, 419.998 )",
+			"rect_size": "Vector2( 400, 420.002 )",
 			"step_text": "The DigitalOcean Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
 			"docs_link": "",
 			"previous_allowed": true,
@@ -734,14 +753,14 @@
 			"id": 56941,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 2820, 6900 )",
-			"rect_size": "Vector2( 225.001, 126.999 )",
+			"rect_size": "Vector2( 224.986, 127 )",
 			"section_goto": "resoto_setup"
 		},
 		"57110": {
 			"id": 57110,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 3320, 6020 )",
-			"rect_size": "Vector2( 456, 492 )",
+			"rect_size": "Vector2( 456, 564 )",
 			"step_text": "Please enter the personal user access token.",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -750,47 +769,50 @@
 			"separator": "",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"58881": {
 			"id": 58881,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 4560, 1980 )",
-			"rect_size": "Vector2( 300.002, 196 )",
+			"rect_size": "Vector2( 300.002, 232 )",
 			"step_text": "No",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"59950": {
 			"id": 59950,
 			"res_name": "StepSection",
 			"offset": "Vector2( -180, 2400 )",
-			"rect_size": "Vector2( 224.999, 189 )",
-			"section_name": "aws_setup",
+			"rect_size": "Vector2( 225, 188.998 )",
+			"section_name": "aws_setup_backup",
 			"section_display_title": "Resoto AWS Collector"
 		},
 		"60651": {
 			"id": 60651,
 			"res_name": "StepSection",
 			"offset": "Vector2( 0, 3800 )",
-			"rect_size": "Vector2( 225, 189 )",
-			"section_name": "gcp_setup",
+			"rect_size": "Vector2( 225.001, 188.998 )",
+			"section_name": "gcp_setup_backup",
 			"section_display_title": "Resoto GCP Collector"
 		},
 		"61346": {
 			"id": 61346,
 			"res_name": "StepSection",
 			"offset": "Vector2( 0, 5300 )",
-			"rect_size": "Vector2( 225, 189 )",
-			"section_name": "k8s_setup",
+			"rect_size": "Vector2( 225.001, 189.003 )",
+			"section_name": "k8s_setup_backup",
 			"section_display_title": "Resoto Kubernetes Collector"
 		},
 		"61921": {
 			"id": 61921,
 			"res_name": "StepSection",
 			"offset": "Vector2( 0, 6900 )",
-			"rect_size": "Vector2( 225, 189 )",
+			"rect_size": "Vector2( 225.001, 189 )",
 			"section_name": "digitalocean_setup",
 			"section_display_title": "Resoto DigitalOcean Collector"
 		},
@@ -798,7 +820,7 @@
 			"id": 61929,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 3820, 6020 )",
-			"rect_size": "Vector2( 401, 300 )",
+			"rect_size": "Vector2( 401.001, 300 )",
 			"step_text": "Do you have more cluster configurations to add?",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -809,57 +831,62 @@
 			"id": 63220,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 4560, 1680 )",
-			"rect_size": "Vector2( 294.002, 196.001 )",
+			"rect_size": "Vector2( 294.002, 232 )",
 			"step_text": "Yes",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"64714": {
 			"id": 64714,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1180, 4220 )",
-			"rect_size": "Vector2( 479.88, 270.277 )",
+			"rect_size": "Vector2( 479.876, 270.271 )",
 			"step_text": "Use service account file(s) to connect",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"64951": {
 			"id": 64951,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 4260, 6260 )",
-			"rect_size": "Vector2( 264, 196.001 )",
+			"rect_size": "Vector2( 275.001, 232 )",
 			"step_text": "No",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"65559": {
 			"id": 65559,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 4260, 6020 )",
-			"rect_size": "Vector2( 264, 196 )",
+			"rect_size": "Vector2( 275.001, 232 )",
 			"step_text": "Yes",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"69306": {
 			"id": 69306,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 100, 2400 )",
-			"rect_size": "Vector2( 296.041, 313 )",
+			"rect_size": "Vector2( 296.045, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "resotoworker.collector",
 			"action": "merge",
-			"value": "[\"aws\"]"
+			"value": "[\"aws\"]",
+			"make_null": false
 		},
 		"69475": {
 			"id": 69475,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 4960, 1680 )",
-			"rect_size": "Vector2( 420, 492 )",
+			"rect_size": "Vector2( 420.016, 564 )",
 			"step_text": "Please enter the role name you want to use.",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -868,19 +895,21 @@
 			"separator": "",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"71307": {
 			"id": 71307,
 			"res_name": "StepSaveConfigsOnCore",
 			"offset": "Vector2( 3680, -260 )",
-			"rect_size": "Vector2( 219, 188 )"
+			"rect_size": "Vector2( 219.003, 188 )"
 		},
 		"76525": {
 			"id": 76525,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 460, 2400 )",
-			"rect_size": "Vector2( 340, 340 )",
+			"rect_size": "Vector2( 340.005, 339.999 )",
 			"step_text": "AWS allows several access methods to connect to your account(s).\n\nWhich one do you want to use?",
 			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws#authentication",
 			"highlight_ids": "",
@@ -891,31 +920,32 @@
 			"id": 77730,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 5340, 3860 )",
-			"rect_size": "Vector2( 225.001, 127 )",
+			"rect_size": "Vector2( 225.019, 127.001 )",
 			"section_goto": "resoto_setup"
 		},
 		"81056": {
 			"id": 81056,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1080, 1500 )",
-			"rect_size": "Vector2( 275.399, 238.605 )",
+			"rect_size": "Vector2( 275.404, 238.601 )",
 			"step_text": "Resoto is running on a machine with a configured InstanceProfile",
 			"docs_link": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"83857": {
 			"id": 83857,
 			"res_name": "StepComment",
 			"offset": "Vector2( 0, 3680 )",
-			"rect_size": "Vector2( 355, 80.0004 )",
+			"rect_size": "Vector2( 355, 80.0039 )",
 			"headline_text": "GCP Setup"
 		},
 		"84670": {
 			"id": 84670,
 			"res_name": "StepText",
 			"offset": "Vector2( 1420, 1500 )",
-			"rect_size": "Vector2( 600, 240 )",
+			"rect_size": "Vector2( 600.001, 240 )",
 			"step_text": "Using an instance profile does not require any additional configuration.\n\nPlease make sure the permissions are set correctly in IAM for the instance Resoto Worker is running on.",
 			"docs_link": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html",
 			"previous_allowed": true,
@@ -925,34 +955,36 @@
 			"id": 91169,
 			"res_name": "StepComment",
 			"offset": "Vector2( 0, 5200 )",
-			"rect_size": "Vector2( 355, 80 )",
+			"rect_size": "Vector2( 355, 80.001 )",
 			"headline_text": "Kubernetes Setup"
 		},
 		"92219": {
 			"id": 92219,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1080, 1760 )",
-			"rect_size": "Vector2( 280, 260 )",
+			"rect_size": "Vector2( 280.001, 260.001 )",
 			"step_text": "AWS access environment variables are provided to Resoto",
 			"docs_link": "https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#environment-variables",
 			"custom_order": 8,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"93915": {
 			"id": 93915,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 280, 5300 )",
-			"rect_size": "Vector2( 236, 312.999 )",
+			"rect_size": "Vector2( 236.003, 341.003 )",
 			"config_key": "resoto.worker",
 			"value_path": "resotoworker.collector",
 			"action": "merge",
-			"value": "[\"k8s\"]"
+			"value": "[\"k8s\"]",
+			"make_null": false
 		},
 		"94485": {
 			"id": 94485,
 			"res_name": "StepText",
 			"offset": "Vector2( 1420, 1760 )",
-			"rect_size": "Vector2( 600, 260 )",
+			"rect_size": "Vector2( 600.001, 260.001 )",
 			"step_text": "Using environment variables does not require any additional configuration.\n\nPlease make sure the variables are available to the Resoto Worker process.",
 			"docs_link": "",
 			"previous_allowed": true,
@@ -962,7 +994,7 @@
 			"id": 97446,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 7720, 2900 )",
-			"rect_size": "Vector2( 577.244, 518.682 )",
+			"rect_size": "Vector2( 577.26, 564.005 )",
 			"step_text": "Enter all account ids to be scraped, separated by comma.",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -971,13 +1003,15 @@
 			"separator": ",",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"97618": {
 			"id": 97618,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 540, 5300 )",
-			"rect_size": "Vector2( 514.438, 421.478 )",
+			"rect_size": "Vector2( 514.435, 421.479 )",
 			"step_text": "The simplest way to connect to your cluster is using a kubeconfig file.\n\nFor this method to work, Resoto Worker needs to have access to the configured file.\n\nIn case this is not possible, or difficult to achieve, you can configure the access directly.",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -988,27 +1022,29 @@
 			"id": 99489,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1080, 2040 )",
-			"rect_size": "Vector2( 280, 240 )",
+			"rect_size": "Vector2( 280.001, 240 )",
 			"step_text": "Use an AWS AccessKey and Secret Key",
 			"docs_link": "Configure Access and Secret Key",
 			"custom_order": 6,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"100530": {
 			"id": 100530,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1080, 2660 )",
-			"rect_size": "Vector2( 282.601, 253 )",
+			"rect_size": "Vector2( 282.604, 253.001 )",
 			"step_text": "Use AWS Profiles",
 			"docs_link": "Usually located at ~/.aws/config",
 			"custom_order": 4,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"102181": {
 			"id": 102181,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 6880, 1820 )",
-			"rect_size": "Vector2( 240.001, 400 )",
+			"rect_size": "Vector2( 240.008, 400.001 )",
 			"step_text": "Should Resoto assume that role inside the current account as well?",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -1019,37 +1055,40 @@
 			"id": 102377,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1080, 3220 )",
-			"rect_size": "Vector2( 300, 240 )",
+			"rect_size": "Vector2( 300.003, 240.001 )",
 			"step_text": "The Option I would like to use is not listed here",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"102826": {
 			"id": 102826,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1140, 5300 )",
-			"rect_size": "Vector2( 410.76, 196 )",
+			"rect_size": "Vector2( 410.762, 232.004 )",
 			"step_text": "Resoto has access to a kubeconfig file",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"106362": {
 			"id": 106362,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 1140, 6020 )",
-			"rect_size": "Vector2( 410.76, 196 )",
+			"rect_size": "Vector2( 410.762, 232 )",
 			"step_text": "Configure the access directly",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"107012": {
 			"id": 107012,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 1420, 2040 )",
-			"rect_size": "Vector2( 393.799, 492 )",
+			"rect_size": "Vector2( 393.803, 564.001 )",
 			"step_text": "Enter the AWS Access Key ID",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -1058,13 +1097,15 @@
 			"separator": "",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"109673": {
 			"id": 109673,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 1920, 5300 )",
-			"rect_size": "Vector2( 480, 620 )",
+			"rect_size": "Vector2( 479.994, 620 )",
 			"step_text": "Resoto can use a kubeconfig file to access your Kubernetes cluster(s).\n\nPlease enter the path to the kubeconfig file.\n\n[b]Example[/b]\n[code]/path/to/kubeconfig[/code]",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -1073,23 +1114,26 @@
 			"separator": "",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"114327": {
 			"id": 114327,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 7200, 1820 )",
-			"rect_size": "Vector2( 264, 196 )",
+			"rect_size": "Vector2( 275.002, 232 )",
 			"step_text": "Yes",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"114670": {
 			"id": 114670,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 1840, 2040 )",
-			"rect_size": "Vector2( 418.279, 492 )",
+			"rect_size": "Vector2( 418.278, 564.001 )",
 			"step_text": "Enter the AWS Secret Access Key",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -1098,43 +1142,48 @@
 			"separator": "",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"114995": {
 			"id": 114995,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 7200, 2060 )",
-			"rect_size": "Vector2( 264, 196 )",
+			"rect_size": "Vector2( 275.002, 232 )",
 			"step_text": "No",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"119788": {
 			"id": 119788,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 280, 3800 )",
-			"rect_size": "Vector2( 236, 313 )",
+			"rect_size": "Vector2( 236.003, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "resotoworker.collector",
 			"action": "merge",
-			"value": "[\"gcp\"]"
+			"value": "[\"gcp\"]",
+			"make_null": false
 		},
 		"122981": {
 			"id": 122981,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 7500, 1720 )",
-			"rect_size": "Vector2( 236, 305 )",
+			"rect_size": "Vector2( 236.004, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "aws.assume_current",
 			"action": "set",
-			"value": "true"
+			"value": "true",
+			"make_null": false
 		},
 		"124668": {
 			"id": 124668,
 			"res_name": "StepQuestion",
 			"offset": "Vector2( 2440, 5300 )",
-			"rect_size": "Vector2( 260, 359.999 )",
+			"rect_size": "Vector2( 260.001, 360.003 )",
 			"step_text": "Do you have more kubeconfig files to access other Kubernetes clusters?",
 			"docs_link": "",
 			"highlight_ids": "",
@@ -1145,71 +1194,76 @@
 			"id": 128215,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 2760, 5300 )",
-			"rect_size": "Vector2( 264.001, 196 )",
+			"rect_size": "Vector2( 275, 232.004 )",
 			"step_text": "Yes",
 			"docs_link": "",
 			"custom_order": 0,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"128981": {
 			"id": 128981,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 7760, 1720 )",
-			"rect_size": "Vector2( 236, 305 )",
+			"rect_size": "Vector2( 236, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "aws.do_not_scrape_current",
 			"action": "set",
-			"value": "true"
+			"value": "true",
+			"make_null": false
 		},
 		"129548": {
 			"id": 129548,
 			"res_name": "StepAnswer",
 			"offset": "Vector2( 2760, 5500 )",
-			"rect_size": "Vector2( 264.001, 196 )",
+			"rect_size": "Vector2( 275, 232.001 )",
 			"step_text": "No",
 			"docs_link": "",
 			"custom_order": 10,
-			"variable_check": ""
+			"variable_check": "",
+			"icon_path": ""
 		},
 		"133408": {
 			"id": 133408,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 5920, 5500 )",
-			"rect_size": "Vector2( 224.999, 127 )",
+			"rect_size": "Vector2( 224.997, 127.001 )",
 			"section_goto": "resoto_setup"
 		},
 		"134957": {
 			"id": 134957,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 7500, 2060 )",
-			"rect_size": "Vector2( 236, 305 )",
+			"rect_size": "Vector2( 236.004, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "aws.assume_current",
 			"action": "set",
-			"value": "false"
+			"value": "false",
+			"make_null": false
 		},
 		"138039": {
 			"id": 138039,
 			"res_name": "StepUpdateConfig",
 			"offset": "Vector2( 7760, 2060 )",
-			"rect_size": "Vector2( 236, 305 )",
+			"rect_size": "Vector2( 236, 341 )",
 			"config_key": "resoto.worker",
 			"value_path": "aws.do_not_scrape_current",
 			"action": "set",
-			"value": "false"
+			"value": "false",
+			"make_null": false
 		},
 		"139063": {
 			"id": 139063,
 			"res_name": "StepComment",
 			"offset": "Vector2( -180, 2300 )",
-			"rect_size": "Vector2( 355, 80 )",
+			"rect_size": "Vector2( 355.001, 80.0024 )",
 			"headline_text": "AWS Setup"
 		},
 		"148056": {
 			"id": 148056,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 1420, 2640 )",
-			"rect_size": "Vector2( 600, 540 )",
+			"rect_size": "Vector2( 600.001, 564.001 )",
 			"step_text": "Enter the name of your profile.\n\nYou can enter multiple profiles separated by a comma.",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -1218,13 +1272,15 @@
 			"separator": ",",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"148682": {
 			"id": 148682,
 			"res_name": "StepPrompt",
 			"offset": "Vector2( 1920, 6020 )",
-			"rect_size": "Vector2( 366, 560.001 )",
+			"rect_size": "Vector2( 366.002, 564 )",
 			"step_text": "Please enter the name of the cluster.\n\nThis name can be chosen freely, but should be unique.",
 			"docs_link": "",
 			"config_key": "resoto.worker",
@@ -1233,13 +1289,15 @@
 			"separator": "",
 			"special_scene_path": "",
 			"previous_allowed": true,
-			"uid": ""
+			"uid": "",
+			"format": "",
+			"expand_field": false
 		},
 		"155747": {
 			"id": 155747,
 			"res_name": "StepText",
 			"offset": "Vector2( 1420, 3220 )",
-			"rect_size": "Vector2( 600, 440 )",
+			"rect_size": "Vector2( 600.001, 440.004 )",
 			"step_text": "I am able to handle the most common cases to connect to AWS.\n\nIt looks we do not cover your use case.\n\nSince most options to connect to AWS are implemented, you might be able to configure the access yourself by adjusting the configuration.\n\nPlease check out the docs (click the ? in the upper right corner) and join our Discord to get direct support!",
 			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/aws",
 			"previous_allowed": true,
@@ -1249,50 +1307,809 @@
 			"id": 164195,
 			"res_name": "StepSectionGoto",
 			"offset": "Vector2( 9320, 2360 )",
-			"rect_size": "Vector2( 225, 127 )",
+			"rect_size": "Vector2( 225, 127.001 )",
 			"section_goto": "resoto_setup"
 		},
 		"180243": {
 			"id": 180243,
 			"res_name": "StepComment",
 			"offset": "Vector2( 3860, 1420 )",
-			"rect_size": "Vector2( 798, 80 )",
+			"rect_size": "Vector2( 798.007, 80.0001 )",
 			"headline_text": "Check for aws.profiles and show Role Prompt if profiles <= 1"
 		},
 		"186585": {
 			"id": 186585,
 			"res_name": "StepComment",
 			"offset": "Vector2( 6080, 2480 )",
-			"rect_size": "Vector2( 355, 80 )",
+			"rect_size": "Vector2( 355.002, 80.002 )",
 			"headline_text": "scrape org = false"
 		},
 		"187971": {
 			"id": 187971,
 			"res_name": "StepComment",
 			"offset": "Vector2( 6080, 1680 )",
-			"rect_size": "Vector2( 355, 80 )",
+			"rect_size": "Vector2( 355.002, 80 )",
 			"headline_text": "scrape org = true"
 		},
 		"191106": {
 			"id": 191106,
 			"res_name": "StepComment",
 			"offset": "Vector2( 6880, 2480 )",
-			"rect_size": "Vector2( 355.001, 80 )",
+			"rect_size": "Vector2( 355.004, 80.002 )",
 			"headline_text": "scrape accounts ?"
 		},
 		"194828": {
 			"id": 194828,
 			"res_name": "StepComment",
 			"offset": "Vector2( 6900, 1660 )",
-			"rect_size": "Vector2( 355, 80 )",
+			"rect_size": "Vector2( 355.005, 80.0002 )",
 			"headline_text": "assume role in account?"
 		},
 		"201971": {
 			"id": 201971,
 			"res_name": "StepComment",
 			"offset": "Vector2( 8600, 2220 )",
-			"rect_size": "Vector2( 355, 80 )",
+			"rect_size": "Vector2( 355.007, 80.0005 )",
 			"headline_text": "Finish aws setup"
+		},
+		"117649": {
+			"id": 117649,
+			"res_name": "StepVariableConditional",
+			"offset": "Vector2( 300, -180 )",
+			"rect_size": "Vector2( 251.001, 209 )",
+			"variable_name": "all_count",
+			"variable_value": "10",
+			"operation": "<",
+			"kind": "compare_values"
+		},
+		"131830": {
+			"id": 131830,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 600, 0 )",
+			"rect_size": "Vector2( 225.002, 125 )",
+			"section_goto": "resources_found"
+		},
+		"118700": {
+			"id": 118700,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( -4360, 1440 )",
+			"rect_size": "Vector2( 280, 319.999 )",
+			"step_text": "What do you want to collect?",
+			"docs_link": "",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"122819": {
+			"id": 122819,
+			"res_name": "StepSection",
+			"offset": "Vector2( -4940, 1440 )",
+			"rect_size": "Vector2( 225, 185.002 )",
+			"section_name": "aws_setup",
+			"section_display_title": "Resoto AWS Collector"
+		},
+		"125270": {
+			"id": 125270,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3920, 1240 )",
+			"rect_size": "Vector2( 420, 232 )",
+			"step_text": "Collect an organization",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"126302": {
+			"id": 126302,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3900, 1540 )",
+			"rect_size": "Vector2( 275, 232 )",
+			"step_text": "Collect multiple distinct accounts",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"127457": {
+			"id": 127457,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3920, 1820 )",
+			"rect_size": "Vector2( 275, 232 )",
+			"step_text": "Collect a single account",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"152561": {
+			"id": 152561,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( -3460, 960 )",
+			"rect_size": "Vector2( 420, 480 )",
+			"step_text": "To collect data from multiple accounts in an organization in AWS, you'll first need access to one AWS account with permissions to assume a role in all other accounts.\n\nResoto provides a [url=https://resoto.com/docs/how-to-guides/configuration/roll-out-resoto-aws-permissions-with-cloudformation]CloudFormation Template[/url] that will define required permissions and roles. You can see all required permissions here: [url=https://resoto.com/docs/reference/permissions/aws]AWS Permissions[/url].\n\nPlease define how to access the first account:",
+			"docs_link": "https://resoto.com/docs/how-to-guides/configuration/roll-out-resoto-aws-permissions-with-cloudformation",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"159455": {
+			"id": 159455,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3000, 760 )",
+			"rect_size": "Vector2( 275, 232 )",
+			"step_text": "Resoto runs inside AWS on a machine with a configured Instance Profile",
+			"docs_link": "",
+			"custom_order": 2,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"172282": {
+			"id": 172282,
+			"res_name": "StepMultiPrompt",
+			"offset": "Vector2( -2680, 680 )",
+			"rect_size": "Vector2( 400, 500 )",
+			"step_text": "Resoto is running in AWS with a configured instance profile - lovely!\nPlease define the role’s name to assume in all accounts in the organization. If you have deployed the [url=https://resoto.com/docs/how-to-guides/configuration/roll-out-resoto-aws-permissions-with-cloudformation]CloudFormation Template[/url], the role name is ResotoAccess. ",
+			"docs_link": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"191214": {
+			"id": 191214,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( -1900, 520 )",
+			"rect_size": "Vector2( 366, 564.001 )",
+			"step_text": "Role",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "aws.role",
+			"action": "set",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": "",
+			"format": "",
+			"expand_field": false
+		},
+		"207698": {
+			"id": 207698,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3000, 1020 )",
+			"rect_size": "Vector2( 280, 280 )",
+			"step_text": "Use an AWS AccessKey and Secret Key",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"212748": {
+			"id": 212748,
+			"res_name": "StepMultiPrompt",
+			"offset": "Vector2( -2640, 1200 )",
+			"rect_size": "Vector2( 480, 539.999 )",
+			"step_text": "Please define access to [url=https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html]AWS using AccessKey and SecretKey[/url].\nIn addition, we need the role’s name to assume in all accounts in the organization. If you have deployed the [url=https://resoto.com/docs/how-to-guides/configuration/roll-out-resoto-aws-permissions-with-cloudformation]CloudFormation Template[/url], the role name is ResotoAccess. \n",
+			"docs_link": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"223979": {
+			"id": 223979,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( -1880, 1120 )",
+			"rect_size": "Vector2( 366, 564 )",
+			"step_text": "Access Key ID",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "aws.access_key_id",
+			"action": "set",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": "",
+			"format": "",
+			"expand_field": false
+		},
+		"235541": {
+			"id": 235541,
+			"res_name": "StepPrompt",
+			"offset": "Vector2( -1880, 1740 )",
+			"rect_size": "Vector2( 366, 564.001 )",
+			"step_text": "Secret Access Key",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "aws.secret_access_key",
+			"action": "set",
+			"separator": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": "",
+			"format": "",
+			"expand_field": false
+		},
+		"124790": {
+			"id": 124790,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -4640, 1440 )",
+			"rect_size": "Vector2( 236, 341.001 )",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.collector",
+			"action": "merge",
+			"value": "[\"aws\"]",
+			"make_null": false
+		},
+		"221843": {
+			"id": 221843,
+			"res_name": "StepText",
+			"offset": "Vector2( -460, 1380 )",
+			"rect_size": "Vector2( 340.002, 399.999 )",
+			"step_text": "The AWS Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"42800": {
+			"id": 42800,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3000, 1540 )",
+			"rect_size": "Vector2( 275, 232 )",
+			"step_text": "Use AWS Profile",
+			"docs_link": "",
+			"custom_order": 1,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"16658": {
+			"id": 16658,
+			"res_name": "StepMultiPrompt",
+			"offset": "Vector2( -2660, 1820 )",
+			"rect_size": "Vector2( 480.001, 420 )",
+			"step_text": "Please drop your [url=https://docs.aws.amazon.com/sdkref/latest/guide/file-format.html]AWS credentials file[/url] to connect to AWS.\nIn addition, we need the role’s name to assume in all accounts in the organization. If you have deployed the [url=https://resoto.com/docs/how-to-guides/configuration/roll-out-resoto-aws-permissions-with-cloudformation]CloudFormation Template[/url], the role name is ResotoAccess. ",
+			"docs_link": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"37242": {
+			"id": 37242,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( -3660, 2420 )",
+			"rect_size": "Vector2( 320, 620 )",
+			"step_text": "Please define how Resoto should access this account.\nResoto also needs a set of [url=https://resoto.com/docs/reference/iam-permissions/aws]permissions[/url] to work. Consider deploying our [url=https://resoto.com/docs/how-to-guides/configuration/roll-out-resoto-aws-permissions-with-cloudformation]CloudFormation Template[/url], which creates a role ResotoAccess with all required permissions.",
+			"docs_link": "https://resoto.com/docs/reference/permissions/aws",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"43841": {
+			"id": 43841,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3280, 2300 )",
+			"rect_size": "Vector2( 275, 232 )",
+			"step_text": "Resoto runs inside AWS on a machine with a configured Instance Profile",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"15494": {
+			"id": 15494,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3290, 2560 )",
+			"rect_size": "Vector2( 275, 232 )",
+			"step_text": "Use an AWS AccessKey and Secret Key",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"19502": {
+			"id": 19502,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -2680, 3440 )",
+			"rect_size": "Vector2( 275.001, 232 )",
+			"step_text": "Use AWS Profile",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"22281": {
+			"id": 22281,
+			"res_name": "StepText",
+			"offset": "Vector2( -2800, 2430 )",
+			"rect_size": "Vector2( 360, 360.001 )",
+			"step_text": "This method assumes that Resoto is running inside AWS.\nThe account Resoto is running on will be collected.",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"39710": {
+			"id": 39710,
+			"res_name": "StepMultiPrompt",
+			"offset": "Vector2( -2800, 2820 )",
+			"rect_size": "Vector2( 460, 520 )",
+			"step_text": "Please define access to AWS using [url=https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html]AccessKey and SecretKey[/url].\n",
+			"docs_link": "",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"52560": {
+			"id": 52560,
+			"res_name": "StepComment",
+			"offset": "Vector2( -4940, 1320 )",
+			"rect_size": "Vector2( 355, 80.0002 )",
+			"headline_text": "AWS Setup"
+		},
+		"54724": {
+			"id": 54724,
+			"res_name": "StepComment",
+			"offset": "Vector2( -2660, 3660 )",
+			"rect_size": "Vector2( 355, 80 )",
+			"headline_text": "TODO: Add notes"
+		},
+		"57295": {
+			"id": 57295,
+			"res_name": "StepComment",
+			"offset": "Vector2( -3600, 1540 )",
+			"rect_size": "Vector2( 355, 80.0013 )",
+			"headline_text": "Todo Add notes"
+		},
+		"72014": {
+			"id": 72014,
+			"res_name": "StepSection",
+			"offset": "Vector2( -5020, 4420 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"section_name": "gcp_setup",
+			"section_display_title": "Resoto GCP Collector"
+		},
+		"19815": {
+			"id": 19815,
+			"res_name": "StepSetVariable",
+			"offset": "Vector2( -60, 1400 )",
+			"rect_size": "Vector2( 224.998, 185.001 )",
+			"variable_name": "aws_done",
+			"variable_value": "true"
+		},
+		"21980": {
+			"id": 21980,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 220, 1400 )",
+			"rect_size": "Vector2( 225.015, 125 )",
+			"section_goto": "resoto_setup"
+		},
+		"32166": {
+			"id": 32166,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -4700, 4520 )",
+			"rect_size": "Vector2( 236, 341 )",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.collector",
+			"action": "merge",
+			"value": "[\"gcp\"]",
+			"make_null": false
+		},
+		"44772": {
+			"id": 44772,
+			"res_name": "StepQuestion",
+			"offset": "Vector2( -4360, 4340 )",
+			"rect_size": "Vector2( 360, 399.999 )",
+			"step_text": "Google Cloud is using service account files in order to connect to an account.\nResoto Worker needs access to such a file to scrape the account.\nIf you have multiple accounts, you need to provide a service account file for each account.\n\nIf Resoto is running inside Google Cloud, it is possible to autodetect the accounts to scrape. In this case permissions need to be set for the instance Resoto is running on.\n\nSee help for more information.",
+			"docs_link": "https://resoto.com/docs/getting-started/configure-cloud-provider-access/gcp",
+			"highlight_ids": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"52412": {
+			"id": 52412,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3840, 4180 )",
+			"rect_size": "Vector2( 275, 232.001 )",
+			"step_text": "Discover Projects automatically",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"55444": {
+			"id": 55444,
+			"res_name": "StepText",
+			"offset": "Vector2( -2720, 4320 )",
+			"rect_size": "Vector2( 500, 419.998 )",
+			"step_text": "The Google Cloud Platform Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"60683": {
+			"id": 60683,
+			"res_name": "StepSetVariable",
+			"offset": "Vector2( -1900, 4580 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"variable_name": "gcp_done",
+			"variable_value": "true"
+		},
+		"61483": {
+			"id": 61483,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( -1620, 4580 )",
+			"rect_size": "Vector2( 225, 125 )",
+			"section_goto": "resoto_setup"
+		},
+		"65384": {
+			"id": 65384,
+			"res_name": "StepComment",
+			"offset": "Vector2( -5020, 4300 )",
+			"rect_size": "Vector2( 355, 80 )",
+			"headline_text": "GCP Setup"
+		},
+		"14043": {
+			"id": 14043,
+			"res_name": "StepAnswer",
+			"offset": "Vector2( -3960, 4500 )",
+			"rect_size": "Vector2( 275, 232 )",
+			"step_text": "Use service account file(s) to connect",
+			"docs_link": "",
+			"custom_order": 0,
+			"variable_check": "",
+			"icon_path": ""
+		},
+		"15631": {
+			"id": 15631,
+			"res_name": "StepMultipleFields",
+			"offset": "Vector2( -3620, 4500 )",
+			"rect_size": "Vector2( 377, 683 )",
+			"step_text": " To get GCP service account files, navigate to Google Cloud Console, select [url=https://console.cloud.google.com/iam-admin/serviceaccounts]'IAM & Admin' > 'Service Accounts'[/url] and choose your project.\n\nCreate a JSON key for your service account under 'Manage keys' > 'Add Key' > 'Create new key'. \nUpload the JSON file here. \n\nRepeat as needed for other projects.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.files_in_home_dir",
+			"action": "merge",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": "",
+			"format": "~/.gcp/{{key}}.json",
+			"out_data_format": "{{key}}",
+			"id_field_name": "Project ID",
+			"content_name": "Service Account File:    ",
+			"single_content": false,
+			"drop_label_text": "Drop your service account files here."
+		},
+		"17246": {
+			"id": 17246,
+			"res_name": "StepComment",
+			"offset": "Vector2( -5120, 5540 )",
+			"rect_size": "Vector2( 355, 80 )",
+			"headline_text": "Kubernetes Setup"
+		},
+		"19621": {
+			"id": 19621,
+			"res_name": "StepSection",
+			"offset": "Vector2( -5100, 5640 )",
+			"rect_size": "Vector2( 225, 185.003 )",
+			"section_name": "k8s_setup",
+			"section_display_title": "Resoto Kubernetes Collector"
+		},
+		"26360": {
+			"id": 26360,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -4780, 5640 )",
+			"rect_size": "Vector2( 236, 341.001 )",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.collector",
+			"action": "merge",
+			"value": "[\"k8s\"]",
+			"make_null": false
+		},
+		"36185": {
+			"id": 36185,
+			"res_name": "StepMultipleFields",
+			"offset": "Vector2( -4460, 5480 )",
+			"rect_size": "Vector2( 377, 683.001 )",
+			"step_text": "Drop the [url=https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/]kubeconfig Files[/url] to your clusters here.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.files_in_home_dir",
+			"action": "merge",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": "",
+			"format": "~/.kube/{{key}}",
+			"out_data_format": "{\"path\":\"{{key}}\", \"contexts\": [], \"all_contexts\": true}",
+			"id_field_name": "",
+			"content_name": "kubeconfig File:    ",
+			"single_content": false,
+			"drop_label_text": "Drop the kubeconfig Files here."
+		},
+		"46925": {
+			"id": 46925,
+			"res_name": "StepText",
+			"offset": "Vector2( -3660, 5460 )",
+			"rect_size": "Vector2( 540, 559.998 )",
+			"step_text": "The Kubernetes Collector is setup.\n\nIf you encounter problems while collecting, you can find all the settings in the [url=ui_help://The Configuration Editor can be opened from the main menu or the home screen.]Configuration Editor[/url].",
+			"docs_link": "",
+			"previous_allowed": true,
+			"uid": ""
+		},
+		"50837": {
+			"id": 50837,
+			"res_name": "StepSetVariable",
+			"offset": "Vector2( -3040, 5460 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"variable_name": "k8s_done",
+			"variable_value": "true"
+		},
+		"53300": {
+			"id": 53300,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( -2720, 5460 )",
+			"rect_size": "Vector2( 225, 125.001 )",
+			"section_goto": "resoto_setup"
+		},
+		"19186": {
+			"id": 19186,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -3100, 4480 )",
+			"rect_size": "Vector2( 236.002, 341.002 )",
+			"config_key": "resoto.worker",
+			"value_path": "gcp.service_account",
+			"action": "set",
+			"value": "[]",
+			"make_null": false
+		},
+		"18996": {
+			"id": 18996,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -3980, 5460 )",
+			"rect_size": "Vector2( 236, 341 )",
+			"config_key": "resoto.worker",
+			"value_path": "k8s.config_files",
+			"action": "set",
+			"value": "[]",
+			"make_null": false
+		},
+		"40958": {
+			"id": 40958,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 940, -300 )",
+			"rect_size": "Vector2( 225, 125 )",
+			"section_goto": "collect_run_startup"
+		},
+		"15647": {
+			"id": 15647,
+			"res_name": "StepButton",
+			"offset": "Vector2( 5810, -480 )",
+			"rect_size": "Vector2( 260, 160 )",
+			"step_text": "This looks awesome - let’s get started!",
+			"uid": ""
+		},
+		"17535": {
+			"id": 17535,
+			"res_name": "StepButton",
+			"offset": "Vector2( 5800, -220 )",
+			"rect_size": "Vector2( 260.001, 160 )",
+			"step_text": "Let me refine the configuration",
+			"uid": ""
+		},
+		"37553": {
+			"id": 37553,
+			"res_name": "StepSection",
+			"offset": "Vector2( -80, -80 )",
+			"rect_size": "Vector2( 225.002, 185 )",
+			"section_name": "check_count",
+			"section_display_title": ""
+		},
+		"15793": {
+			"id": 15793,
+			"res_name": "StepMultipleFields",
+			"offset": "Vector2( -2000, 2420 )",
+			"rect_size": "Vector2( 377.001, 683 )",
+			"step_text": "Profile",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.files_in_home_dir",
+			"action": "merge",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": "",
+			"format": "~/.aws/credentials",
+			"out_data_format": "",
+			"id_field_name": "",
+			"content_name": "Profile",
+			"single_content": true,
+			"drop_label_text": "Drop your AWS Credentials File here."
+		},
+		"29908": {
+			"id": 29908,
+			"res_name": "StepMultipleFields",
+			"offset": "Vector2( -3540, 3220 )",
+			"rect_size": "Vector2( 559.998, 700 )",
+			"step_text": "Please drop your [url=https://docs.aws.amazon.com/sdkref/latest/guide/file-format.html]AWS credentials file[/url] that includes all profiles to accounts Resoto should collect.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.files_in_home_dir",
+			"action": "merge",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": "",
+			"format": "~/.aws/credentials",
+			"out_data_format": "",
+			"id_field_name": "",
+			"content_name": "",
+			"single_content": true,
+			"drop_label_text": "Drop your AWS Credentials File here."
+		},
+		"38057": {
+			"id": 38057,
+			"res_name": "StepMultipleFields",
+			"offset": "Vector2( -2080, 3460 )",
+			"rect_size": "Vector2( 520.002, 780 )",
+			"step_text": "Please drop your [url=https://docs.aws.amazon.com/sdkref/latest/guide/file-format.html]AWS credentials file[/url] that includes the profile to the account.",
+			"docs_link": "",
+			"config_key": "resoto.worker",
+			"value_path": "resotoworker.files_in_home_dir",
+			"action": "merge",
+			"special_scene_path": "",
+			"previous_allowed": true,
+			"uid": "",
+			"format": "~/.aws/credentials",
+			"out_data_format": "",
+			"id_field_name": "",
+			"content_name": "",
+			"single_content": true,
+			"drop_label_text": "Drop your AWS Credentials File here."
+		},
+		"38063": {
+			"id": 38063,
+			"res_name": "StepCustomScene",
+			"offset": "Vector2( 5260, -20 )",
+			"rect_size": "Vector2( 366.001, 288 )",
+			"docs_link": "",
+			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_show_collected.tscn",
+			"uid": ""
+		},
+		"38724": {
+			"id": 38724,
+			"res_name": "StepSection",
+			"offset": "Vector2( 4980, -20 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"section_name": "resources_found",
+			"section_display_title": "Resources Found!"
+		},
+		"70529": {
+			"id": 70529,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -3080, 4020 )",
+			"rect_size": "Vector2( 236, 341.001 )",
+			"config_key": "resoto.worker",
+			"value_path": "gcp.service_account",
+			"action": "set",
+			"value": "[\"\"]",
+			"make_null": false
+		},
+		"80907": {
+			"id": 80907,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -960, 2160 )",
+			"rect_size": "Vector2( 236.001, 341.002 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.access_key_id",
+			"action": "set",
+			"value": "null",
+			"make_null": true
+		},
+		"34757": {
+			"id": 34757,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -700, 2080 )",
+			"rect_size": "Vector2( 236, 341.001 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.secret_access_key",
+			"action": "set",
+			"value": "null",
+			"make_null": true
+		},
+		"39723": {
+			"id": 39723,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -1220, 2780 )",
+			"rect_size": "Vector2( 236, 341 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.role",
+			"action": "set",
+			"value": "null",
+			"make_null": true
+		},
+		"52010": {
+			"id": 52010,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( -1380, 1720 )",
+			"rect_size": "Vector2( 236, 341 )",
+			"config_key": "resoto.worker",
+			"value_path": "aws.role",
+			"action": "set",
+			"value": "null",
+			"make_null": true
+		},
+		"19451": {
+			"id": 19451,
+			"res_name": "StepCustomScene",
+			"offset": "Vector2( -3500, 4020 )",
+			"rect_size": "Vector2( 366, 288 )",
+			"docs_link": "",
+			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_clear_gcp_from_home_files.tscn",
+			"uid": ""
+		},
+		"79826": {
+			"id": 79826,
+			"res_name": "StepCustomScene",
+			"offset": "Vector2( -1560, 2420 )",
+			"rect_size": "Vector2( 366, 300 )",
+			"docs_link": "",
+			"special_scene_path": "res://components/wizard/wizard_steps/custom_steps/wizard_step_custom_clear_aws_from_home_files.tscn",
+			"uid": ""
+		},
+		"18917": {
+			"id": 18917,
+			"res_name": "StepVariableConditional",
+			"offset": "Vector2( 640, -360 )",
+			"rect_size": "Vector2( 251, 209 )",
+			"variable_name": "running_workflows",
+			"variable_value": "0",
+			"operation": ">",
+			"kind": "compare_values"
+		},
+		"18641": {
+			"id": 18641,
+			"res_name": "StepVariableConditional",
+			"offset": "Vector2( 4620, -780 )",
+			"rect_size": "Vector2( 251, 209 )",
+			"variable_name": "startup",
+			"variable_value": "true",
+			"operation": "",
+			"kind": "compare_values"
+		},
+		"21300": {
+			"id": 21300,
+			"res_name": "StepVariableConditional",
+			"offset": "Vector2( 4960, -880 )",
+			"rect_size": "Vector2( 251, 209 )",
+			"variable_name": "all_count",
+			"variable_value": "10",
+			"operation": ">",
+			"kind": "compare_values"
+		},
+		"30165": {
+			"id": 30165,
+			"res_name": "StepSectionGoto",
+			"offset": "Vector2( 5320, -980 )",
+			"rect_size": "Vector2( 225, 125 )",
+			"section_goto": "resoto_setup"
+		},
+		"33844": {
+			"id": 33844,
+			"res_name": "StepUpdateConfig",
+			"offset": "Vector2( 6120, -480 )",
+			"rect_size": "Vector2( 236, 341 )",
+			"config_key": "resoto.ui.setup",
+			"value_path": "resotosetup.completed",
+			"action": "set",
+			"value": "true",
+			"make_null": false
+		},
+		"44349": {
+			"id": 44349,
+			"res_name": "StepSaveConfigsOnCore",
+			"offset": "Vector2( 6400, -480 )",
+			"rect_size": "Vector2( 219, 188 )"
+		},
+		"17694": {
+			"id": 17694,
+			"res_name": "StepSection",
+			"offset": "Vector2( 4200, -240 )",
+			"rect_size": "Vector2( 225, 185 )",
+			"section_name": "collect_run_startup",
+			"section_display_title": "Gathering Resources from Cloud Providers"
 		}
 	},
 	"connections": [
@@ -1312,24 +2129,6 @@
 			"from": "4050",
 			"from_port": 0,
 			"to": "10406",
-			"to_port": 0
-		},
-		{
-			"from": "3573",
-			"from_port": 0,
-			"to": "6750",
-			"to_port": 0
-		},
-		{
-			"from": "14015",
-			"from_port": 0,
-			"to": "4050",
-			"to_port": 0
-		},
-		{
-			"from": "2330",
-			"from_port": 0,
-			"to": "14015",
 			"to_port": 0
 		},
 		{
@@ -1360,18 +2159,6 @@
 			"from": "15992",
 			"from_port": 0,
 			"to": "19854",
-			"to_port": 0
-		},
-		{
-			"from": "4050",
-			"from_port": 0,
-			"to": "37287",
-			"to_port": 0
-		},
-		{
-			"from": "37287",
-			"from_port": 0,
-			"to": "44107",
 			"to_port": 0
 		},
 		{
@@ -1861,30 +2648,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "7789",
-			"from_port": 0,
-			"to": "71307",
-			"to_port": 0
-		},
-		{
-			"from": "1444",
-			"from_port": 0,
-			"to": "7512",
-			"to_port": 0
-		},
-		{
-			"from": "7512",
-			"from_port": 0,
-			"to": "2330",
-			"to_port": 0
-		},
-		{
-			"from": "8229",
-			"from_port": 0,
-			"to": "11453",
-			"to_port": 0
-		},
-		{
 			"from": "11453",
 			"from_port": 0,
 			"to": "14271",
@@ -1897,33 +2660,9 @@
 			"to_port": 0
 		},
 		{
-			"from": "14271",
-			"from_port": 0,
-			"to": "29978",
-			"to_port": 0
-		},
-		{
-			"from": "20399",
-			"from_port": 0,
-			"to": "27678",
-			"to_port": 0
-		},
-		{
-			"from": "71307",
-			"from_port": 0,
-			"to": "8170",
-			"to_port": 0
-		},
-		{
 			"from": "8170",
 			"from_port": 0,
 			"to": "15676",
-			"to_port": 0
-		},
-		{
-			"from": "15676",
-			"from_port": 0,
-			"to": "14821",
 			"to_port": 0
 		},
 		{
@@ -2050,6 +2789,534 @@
 			"from": "148056",
 			"from_port": 0,
 			"to": "17418",
+			"to_port": 0
+		},
+		{
+			"from": "3573",
+			"from_port": 0,
+			"to": "6750",
+			"to_port": 0
+		},
+		{
+			"from": "118700",
+			"from_port": 0,
+			"to": "125270",
+			"to_port": 0
+		},
+		{
+			"from": "118700",
+			"from_port": 0,
+			"to": "126302",
+			"to_port": 0
+		},
+		{
+			"from": "118700",
+			"from_port": 0,
+			"to": "127457",
+			"to_port": 0
+		},
+		{
+			"from": "125270",
+			"from_port": 0,
+			"to": "152561",
+			"to_port": 0
+		},
+		{
+			"from": "152561",
+			"from_port": 0,
+			"to": "159455",
+			"to_port": 0
+		},
+		{
+			"from": "159455",
+			"from_port": 0,
+			"to": "172282",
+			"to_port": 0
+		},
+		{
+			"from": "172282",
+			"from_port": 2,
+			"to": "191214",
+			"to_port": 0
+		},
+		{
+			"from": "152561",
+			"from_port": 0,
+			"to": "207698",
+			"to_port": 0
+		},
+		{
+			"from": "207698",
+			"from_port": 0,
+			"to": "212748",
+			"to_port": 0
+		},
+		{
+			"from": "212748",
+			"from_port": 1,
+			"to": "223979",
+			"to_port": 0
+		},
+		{
+			"from": "212748",
+			"from_port": 1,
+			"to": "235541",
+			"to_port": 0
+		},
+		{
+			"from": "212748",
+			"from_port": 2,
+			"to": "191214",
+			"to_port": 0
+		},
+		{
+			"from": "152561",
+			"from_port": 0,
+			"to": "42800",
+			"to_port": 0
+		},
+		{
+			"from": "42800",
+			"from_port": 0,
+			"to": "16658",
+			"to_port": 0
+		},
+		{
+			"from": "16658",
+			"from_port": 2,
+			"to": "191214",
+			"to_port": 0
+		},
+		{
+			"from": "127457",
+			"from_port": 0,
+			"to": "37242",
+			"to_port": 0
+		},
+		{
+			"from": "37242",
+			"from_port": 0,
+			"to": "43841",
+			"to_port": 0
+		},
+		{
+			"from": "37242",
+			"from_port": 0,
+			"to": "15494",
+			"to_port": 0
+		},
+		{
+			"from": "37242",
+			"from_port": 0,
+			"to": "19502",
+			"to_port": 0
+		},
+		{
+			"from": "43841",
+			"from_port": 0,
+			"to": "22281",
+			"to_port": 0
+		},
+		{
+			"from": "15494",
+			"from_port": 0,
+			"to": "39710",
+			"to_port": 0
+		},
+		{
+			"from": "39710",
+			"from_port": 1,
+			"to": "223979",
+			"to_port": 0
+		},
+		{
+			"from": "39710",
+			"from_port": 1,
+			"to": "235541",
+			"to_port": 0
+		},
+		{
+			"from": "19815",
+			"from_port": 0,
+			"to": "21980",
+			"to_port": 0
+		},
+		{
+			"from": "44772",
+			"from_port": 0,
+			"to": "52412",
+			"to_port": 0
+		},
+		{
+			"from": "60683",
+			"from_port": 0,
+			"to": "61483",
+			"to_port": 0
+		},
+		{
+			"from": "44772",
+			"from_port": 0,
+			"to": "14043",
+			"to_port": 0
+		},
+		{
+			"from": "14043",
+			"from_port": 0,
+			"to": "15631",
+			"to_port": 0
+		},
+		{
+			"from": "19621",
+			"from_port": 0,
+			"to": "26360",
+			"to_port": 0
+		},
+		{
+			"from": "26360",
+			"from_port": 0,
+			"to": "36185",
+			"to_port": 0
+		},
+		{
+			"from": "46925",
+			"from_port": 0,
+			"to": "50837",
+			"to_port": 0
+		},
+		{
+			"from": "50837",
+			"from_port": 0,
+			"to": "53300",
+			"to_port": 0
+		},
+		{
+			"from": "36185",
+			"from_port": 0,
+			"to": "18996",
+			"to_port": 0
+		},
+		{
+			"from": "18996",
+			"from_port": 0,
+			"to": "46925",
+			"to_port": 0
+		},
+		{
+			"from": "1444",
+			"from_port": 0,
+			"to": "2330",
+			"to_port": 0
+		},
+		{
+			"from": "2330",
+			"from_port": 0,
+			"to": "7512",
+			"to_port": 0
+		},
+		{
+			"from": "14015",
+			"from_port": 0,
+			"to": "4050",
+			"to_port": 0
+		},
+		{
+			"from": "117649",
+			"from_port": 1,
+			"to": "131830",
+			"to_port": 0
+		},
+		{
+			"from": "8229",
+			"from_port": 0,
+			"to": "15647",
+			"to_port": 0
+		},
+		{
+			"from": "8229",
+			"from_port": 0,
+			"to": "17535",
+			"to_port": 0
+		},
+		{
+			"from": "17535",
+			"from_port": 0,
+			"to": "27678",
+			"to_port": 0
+		},
+		{
+			"from": "7512",
+			"from_port": 0,
+			"to": "37553",
+			"to_port": 0
+		},
+		{
+			"from": "16658",
+			"from_port": 1,
+			"to": "15793",
+			"to_port": 0
+		},
+		{
+			"from": "19502",
+			"from_port": 0,
+			"to": "38057",
+			"to_port": 0
+		},
+		{
+			"from": "71307",
+			"from_port": 0,
+			"to": "8170",
+			"to_port": 0
+		},
+		{
+			"from": "38724",
+			"from_port": 0,
+			"to": "38063",
+			"to_port": 0
+		},
+		{
+			"from": "38063",
+			"from_port": 0,
+			"to": "15647",
+			"to_port": 0
+		},
+		{
+			"from": "38063",
+			"from_port": 0,
+			"to": "17535",
+			"to_port": 0
+		},
+		{
+			"from": "15631",
+			"from_port": 0,
+			"to": "19186",
+			"to_port": 0
+		},
+		{
+			"from": "55444",
+			"from_port": 0,
+			"to": "60683",
+			"to_port": 0
+		},
+		{
+			"from": "72014",
+			"from_port": 0,
+			"to": "32166",
+			"to_port": 0
+		},
+		{
+			"from": "32166",
+			"from_port": 0,
+			"to": "44772",
+			"to_port": 0
+		},
+		{
+			"from": "221843",
+			"from_port": 0,
+			"to": "19815",
+			"to_port": 0
+		},
+		{
+			"from": "122819",
+			"from_port": 0,
+			"to": "124790",
+			"to_port": 0
+		},
+		{
+			"from": "124790",
+			"from_port": 0,
+			"to": "118700",
+			"to_port": 0
+		},
+		{
+			"from": "80907",
+			"from_port": 0,
+			"to": "34757",
+			"to_port": 0
+		},
+		{
+			"from": "126302",
+			"from_port": 0,
+			"to": "29908",
+			"to_port": 0
+		},
+		{
+			"from": "39723",
+			"from_port": 0,
+			"to": "80907",
+			"to_port": 0
+		},
+		{
+			"from": "16658",
+			"from_port": 0,
+			"to": "80907",
+			"to_port": 0
+		},
+		{
+			"from": "34757",
+			"from_port": 0,
+			"to": "221843",
+			"to_port": 0
+		},
+		{
+			"from": "212748",
+			"from_port": 0,
+			"to": "221843",
+			"to_port": 0
+		},
+		{
+			"from": "172282",
+			"from_port": 0,
+			"to": "221843",
+			"to_port": 0
+		},
+		{
+			"from": "39710",
+			"from_port": 0,
+			"to": "52010",
+			"to_port": 0
+		},
+		{
+			"from": "52010",
+			"from_port": 0,
+			"to": "221843",
+			"to_port": 0
+		},
+		{
+			"from": "19186",
+			"from_port": 0,
+			"to": "55444",
+			"to_port": 0
+		},
+		{
+			"from": "70529",
+			"from_port": 0,
+			"to": "55444",
+			"to_port": 0
+		},
+		{
+			"from": "52412",
+			"from_port": 0,
+			"to": "19451",
+			"to_port": 0
+		},
+		{
+			"from": "19451",
+			"from_port": 0,
+			"to": "70529",
+			"to_port": 0
+		},
+		{
+			"from": "38057",
+			"from_port": 0,
+			"to": "39723",
+			"to_port": 0
+		},
+		{
+			"from": "29908",
+			"from_port": 0,
+			"to": "39723",
+			"to_port": 0
+		},
+		{
+			"from": "22281",
+			"from_port": 0,
+			"to": "79826",
+			"to_port": 0
+		},
+		{
+			"from": "79826",
+			"from_port": 0,
+			"to": "39723",
+			"to_port": 0
+		},
+		{
+			"from": "117649",
+			"from_port": 0,
+			"to": "18917",
+			"to_port": 0
+		},
+		{
+			"from": "18917",
+			"from_port": 0,
+			"to": "40958",
+			"to_port": 0
+		},
+		{
+			"from": "15676",
+			"from_port": 0,
+			"to": "18641",
+			"to_port": 0
+		},
+		{
+			"from": "18641",
+			"from_port": 0,
+			"to": "21300",
+			"to_port": 0
+		},
+		{
+			"from": "18641",
+			"from_port": 1,
+			"to": "14821",
+			"to_port": 0
+		},
+		{
+			"from": "21300",
+			"from_port": 1,
+			"to": "30165",
+			"to_port": 0
+		},
+		{
+			"from": "21300",
+			"from_port": 0,
+			"to": "38724",
+			"to_port": 0
+		},
+		{
+			"from": "18917",
+			"from_port": 1,
+			"to": "14015",
+			"to_port": 0
+		},
+		{
+			"from": "37553",
+			"from_port": 0,
+			"to": "117649",
+			"to_port": 0
+		},
+		{
+			"from": "15647",
+			"from_port": 0,
+			"to": "33844",
+			"to_port": 0
+		},
+		{
+			"from": "7789",
+			"from_port": 0,
+			"to": "71307",
+			"to_port": 0
+		},
+		{
+			"from": "33844",
+			"from_port": 0,
+			"to": "44349",
+			"to_port": 0
+		},
+		{
+			"from": "44349",
+			"from_port": 0,
+			"to": "29978",
+			"to_port": 0
+		},
+		{
+			"from": "44349",
+			"from_port": 1,
+			"to": "6770",
+			"to_port": 0
+		},
+		{
+			"from": "17694",
+			"from_port": 0,
+			"to": "15676",
 			"to_port": 0
 		}
 	]
