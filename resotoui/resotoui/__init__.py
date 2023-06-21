@@ -13,7 +13,7 @@ __description__ = "The Resoto UI."
 __author__ = "Some Engineering Inc."
 __license__ = "Apache 2.0"
 __copyright__ = "Copyright © 2022 Some Engineering Inc."
-__version__ = "3.5.0"
+__version__ = "3.6.0"
 
 local_path = os.path.abspath(os.path.dirname(__file__))
 ui_path = os.path.join(local_path, "ui")
