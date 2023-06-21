@@ -163,7 +163,7 @@ func show_step(_step_id:String):
 			current_step = c
 			current_step.start(step_data)
 			current_step.show()
-			$BG/StepDisplay/Titlebar/SectionTitleLabel.text = current_step.section_name
+#			$BG/StepDisplay/Titlebar/SectionTitleLabel.text = current_step.section_name
 			
 			next_button.text = "Close" if not data.connections_from.has(current_step.step_id) else "Next"
 			check_if_can_finish_wizard(step_data)

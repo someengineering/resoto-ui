@@ -13,6 +13,12 @@ script = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
+[node name="StartupLabel" type="Label" parent="VBoxContainer"]
+visible = false
+margin_right = 1920.0
+margin_bottom = 20.0
+text = "Resoto is gathering Resources from all cloud providers, whether auto-detected or configured from a previous session. Hang tight as this may take a moment."
+
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
 margin_right = 1920.0
 margin_bottom = 100.0

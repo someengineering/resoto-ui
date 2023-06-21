@@ -5,6 +5,13 @@ func start(_data:Dictionary):
 	emit_signal("can_previous", false)
 	$VBoxContainer/CollectRunDisplay.wait_for_config_update()
 	$WaitForConfigUpdateTimer.start()
+	
+	if wizard.config_changed:
+		wizard.step_variables["startup"] = false 
+		$VBoxContainer/StartupLabel.hide()
+	else:
+		wizard.step_variables["startup"] = true 
+		$VBoxContainer/StartupLabel.show()
 
 
 func _on_cli_execute_done(error:int, _response:UserAgent.Response) -> void:
@@ -26,11 +33,8 @@ func _on_WaitForConfigUpdateTimer_timeout():
 	$VBoxContainer/CollectRunDisplay.wait_for_core()
 	yield(get_tree(), "idle_frame")
 	if wizard.config_changed:
-		
-		wizard.step_variables["startup"] = false 
 		API.cli_execute("workflow run collect_and_cleanup", self)
 	else:
-		wizard.step_variables["startup"] = true 
 		if wizard.step_variables["running_workflows"] == 0:
 			API.cli_execute_json("search all | count", self, "_on_search_all_done")
 		else:
