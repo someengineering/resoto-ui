@@ -489,7 +489,7 @@ func edit_widget(widget) -> void:
 
 
 func _close_popup():
-	_on_NewWidgetPopup_popup_hide()
+	_hide_popup()
 
 
 func _on_NewWidgetPopup_popup_hide():

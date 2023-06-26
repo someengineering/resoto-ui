@@ -248,7 +248,7 @@ func _on_cli_execute_streamed_data(data:String) -> void:
 	
 	if line_count > write_line_count:
 		data_chunks.resize(chunk_idx)
-		console.append_bbcode(data_chunks)
+		console.append_bbcode(data_chunks.join(""))
 		data_chunks.resize(max_data_chunks)
 		chunk_idx = 0
 		line_count = 0
