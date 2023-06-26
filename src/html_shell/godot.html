@@ -137,17 +137,21 @@
 		var jwt;
 		var expirationTime = 0;
 		var key;
-		var iv;
 		var t = "";
-		var ejwt;
 		window.onload = async function() {
+
+			let iv = localStorage.getItem("iv");
+			if (iv != null) {
+				// previous version of jwt, remove it
+				localStorage.removeItem("jwt");
+				localStorage.removeItem("iv");
+			}
+
 			key = await generateKey();
-			ejwt = localStorage.getItem("jwt");
-			var eiv = localStorage.getItem("iv");
-			if (ejwt != null && eiv != null){
-				jwt = crypto.sublte === undefined ? ejwt : new Uint8Array( JSON.parse(ejwt));
-				iv = crypto.sublte === undefined ? eiv : new Uint8Array(JSON.parse(eiv));
-				t = await decryptData(key, eiv, ejwt);
+			jwt = localStorage.getItem("jwt");
+
+			if (jwt != null){
+				t = await decryptData(key, jwt);
 				var parts = t.split(".");
 				if (parts.length > 1){
 					var payload = JSON.parse(atob(parts[1]));
@@ -174,10 +178,8 @@
 							window.location = "/login?" + encodeJSONToURL({"redirect": window.location});
 						} else {
 							var r = await encryptData(key, xhr.getResponseHeader("Authorization").split(" ")[1]);
-							iv = r.iv;
 							jwt = r.data;
-							localStorage.setItem("jwt", crypto.sublte === undefined ? jwt : JSON.stringify(Array.from(jwt)));
-							localStorage.setItem("iv", crypto.sublte === undefined ? iv : JSON.stringify(Array.from(iv)));
+							localStorage.setItem("jwt", jwt);
 							await refreshExpirationTime();
 							let url = new URL(window.location.href);
 							url.search = "";
@@ -201,7 +203,7 @@
 		async function refreshExpirationTime(){
 			if (jwt === "") return;
 
-			t = await decryptData(key, iv, jwt);
+			t = await decryptData(key, jwt);
 			var parts = t.split(".")
 			if (parts.length > 1){
 				var payload = JSON.parse(atob(parts[1]));
@@ -218,9 +220,7 @@
 					if (this.status == 200) {
 						var r = await encryptData(key, xhr.getResponseHeader("Authorization").split(" ")[1]);
 						jwt = r.data;
-						iv = r.iv;
-						localStorage.setItem("jwt", crypto.sublte === undefined ? jwt : JSON.stringify(Array.from(jwt)));
-						localStorage.setItem("iv", crypto.sublte === undefined ? iv : JSON.stringify(Array.from(iv)));
+						localStorage.setItem("jwt", jwt);
 						refreshExpirationTime();
 					}
 				}
@@ -237,40 +237,17 @@
 		}
 
 		async function generateKey() {
-			if (crypto.subtle == undefined){
-				return 'resoto-secret';
-			}
-			const _0x3116df=_0x20a0;function _0x4670(){const _0x1f8d88=['302636qyhbRd','30505GOFyWJ','4613HrqjEk','AES-GCM','subtle','243990CtJenz','258IovlEo','encrypt','1938128IxAuhU','decrypt','6IHzAjB','240SUOGZG','1259176kGMNeg','importKey','518220YMgFvP'];_0x4670=function(){return _0x1f8d88;};return _0x4670();}function _0x20a0(_0x5e9956,_0x45c6fd){const _0x4670c1=_0x4670();return _0x20a0=function(_0x20a0f5,_0x86fbf9){_0x20a0f5=_0x20a0f5-0x150;let _0x5bce5d=_0x4670c1[_0x20a0f5];return _0x5bce5d;},_0x20a0(_0x5e9956,_0x45c6fd);}(function(_0x3131ee,_0x7aca7f){const _0x23c719=_0x20a0,_0xf3e675=_0x3131ee();while(!![]){try{const _0x1a15e1=parseInt(_0x23c719(0x15d))/0x1+-parseInt(_0x23c719(0x15c))/0x2*(-parseInt(_0x23c719(0x157))/0x3)+parseInt(_0x23c719(0x155))/0x4+-parseInt(_0x23c719(0x15b))/0x5+-parseInt(_0x23c719(0x153))/0x6*(-parseInt(_0x23c719(0x15e))/0x7)+parseInt(_0x23c719(0x159))/0x8+parseInt(_0x23c719(0x152))/0x9*(-parseInt(_0x23c719(0x158))/0xa);if(_0x1a15e1===_0x7aca7f)break;else _0xf3e675['push'](_0xf3e675['shift']());}catch(_0x217369){_0xf3e675['push'](_0xf3e675['shift']());}}}(_0x4670,0x3cd23));const bytes=new Uint8Array([0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xa,0xb,0xc,0xd,0xe,0xf,0x10]),key=await crypto[_0x3116df(0x151)][_0x3116df(0x15a)]('raw',bytes,{'name':_0x3116df(0x150)},![],[_0x3116df(0x154),_0x3116df(0x156)]);return key;
+			return 'resoto-secret';
 		}
 
 		async function encryptData(key, data) {
-			const encoder = new TextEncoder();
-			if (crypto.subtle === undefined){
-				const iv = CryptoJS.lib.WordArray.random(12);
 				const encryptedData = CryptoJS.AES.encrypt(data, key).toString();
-				return { iv: iv, data: encryptedData };
-			}
-			const iv = crypto.getRandomValues(new Uint8Array(12));
-			const encodedData = encoder.encode(data);
-			const encryptedData = await crypto.subtle.encrypt(
-				{ name: 'AES-GCM', iv },
-				key, encodedData
-			);
-
-			return { iv: iv, data: new Uint8Array(encryptedData) };
+				return { data: encryptedData };
 		}	
 
-		async function decryptData(key, iv, encryptedData) {
-			const decoder = new TextDecoder();
-			if (crypto.subtle === undefined) {
+		async function decryptData(key, encryptedData) {
 				const decryptedData = CryptoJS.AES.decrypt(encryptedData, key);
 				return decryptedData.toString(CryptoJS.enc.Utf8);
-			}
-			const decryptedData = await crypto.subtle.decrypt(
-				{ name: 'AES-GCM', iv },
-				key, encryptedData
-			);
-			return decoder.decode(decryptedData);
 		}
 
 	</script>
