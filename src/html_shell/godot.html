@@ -139,8 +139,17 @@
 		var key;
 		var t = "";
 		window.onload = async function() {
+
+			let iv = localStorage.getItem("iv");
+			if (iv != null) {
+				// previous version of jwt, remove it
+				localStorage.removeItem("jwt");
+				localStorage.removeItem("iv");
+			}
+
 			key = await generateKey();
 			jwt = localStorage.getItem("jwt");
+
 			if (jwt != null){
 				t = await decryptData(key, jwt);
 				var parts = t.split(".");
