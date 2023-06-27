@@ -23,10 +23,6 @@ func _ready():
 	_g.popup_manager.popup_connect = self
 	_g.connect("connect_to_core", self, "connect_to_core")
 	
-	if OS.has_feature("html5"):
-		$Content/Margin/Login/Adress/ResotoAdressEdit.text = JavaScript.eval("window.location.origin")
-		print(JavaScript.eval("window.location.origin"))
-		$Content/Margin/Login/Adress/ResotoAdressEdit.editable = false
 
 
 func _on_ButtonConnect_pressed() -> void:
@@ -36,6 +32,10 @@ func _on_ButtonConnect_pressed() -> void:
 func _on_ConnectPopup_about_to_show() -> void:
 	var protocol:= "https://" if API.use_ssl else "http://"
 	address_line_edit.text = protocol + API.adress + ":" + str(API.port)
+	if OS.has_feature("html5"):
+		$Content/Margin/Login/Adress/ResotoAdressEdit.text = JavaScript.eval("window.location.origin")
+		$Content/Margin/Login/Adress/ResotoAdressEdit.editable = false
+		prints("origin:",JavaScript.eval("window.location.origin"))
 	_g.emit_signal("resh_lite_popup_hide")
 
 
@@ -56,6 +56,9 @@ func start_connect() -> void:
 		if port == "":
 			port = "80" if not use_ssl else "443"
 		API.connection_config(adress, int(port), use_ssl)
+		$Content/Margin/Login/Adress/ResotoAdressEdit.text = JavaScript.eval("window.location.origin")
+		$Content/Margin/Login/Adress/ResotoAdressEdit.editable = false
+		prints("origin2:",JavaScript.eval("window.location.origin"))
 	else:
 		var a_t = address_line_edit.text.strip_edges()
 		var adress = a_t.split("://")

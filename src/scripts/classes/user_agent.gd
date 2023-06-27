@@ -84,7 +84,6 @@ class Request:
 	func request_(_method:int = method, _path:String = path, _headers:Array = headers, _body:String = body) -> void:
 		if not _g.authorized:
 			cancel()
-			return
 		var http_status:int= http_.get_status()
 		
 		if false:
