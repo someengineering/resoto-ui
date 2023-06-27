@@ -35,7 +35,7 @@ func _on_ConnectPopup_about_to_show() -> void:
 	if OS.has_feature("html5"):
 		$Content/Margin/Login/Adress/ResotoAdressEdit.text = JavaScript.eval("window.location.origin")
 		$Content/Margin/Login/Adress/ResotoAdressEdit.editable = false
-		prints("origin:",JavaScript.eval("window.location.origin"))
+
 	_g.emit_signal("resh_lite_popup_hide")
 
 
@@ -58,7 +58,7 @@ func start_connect() -> void:
 		API.connection_config(adress, int(port), use_ssl)
 		$Content/Margin/Login/Adress/ResotoAdressEdit.text = JavaScript.eval("window.location.origin")
 		$Content/Margin/Login/Adress/ResotoAdressEdit.editable = false
-		prints("origin2:",JavaScript.eval("window.location.origin"))
+
 	else:
 		var a_t = address_line_edit.text.strip_edges()
 		var adress = a_t.split("://")
