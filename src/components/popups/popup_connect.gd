@@ -22,7 +22,6 @@ func _ready():
 		Style.add_self(self, Style.find_color(self_modulate))
 	_g.popup_manager.popup_connect = self
 	_g.connect("connect_to_core", self, "connect_to_core")
-	
 
 
 func _on_ButtonConnect_pressed() -> void:
