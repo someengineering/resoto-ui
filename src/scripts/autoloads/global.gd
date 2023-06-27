@@ -84,6 +84,8 @@ var is_connected_to_resotocore:bool	= false
 var content_manager: ContentManager	= null
 var popup_manager: PopupManager		= null
 
+var authorized : bool = true
+
 
 func set_ui_scale(_ui_scale:float) -> void:
 	ui_scale = _ui_scale

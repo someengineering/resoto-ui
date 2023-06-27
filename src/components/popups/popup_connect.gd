@@ -22,6 +22,11 @@ func _ready():
 		Style.add_self(self, Style.find_color(self_modulate))
 	_g.popup_manager.popup_connect = self
 	_g.connect("connect_to_core", self, "connect_to_core")
+	
+	if OS.has_feature("html5"):
+		$Content/Margin/Login/Adress/ResotoAdressEdit.text = JavaScript.eval("window.location.origin")
+		print(JavaScript.eval("window.location.origin"))
+		$Content/Margin/Login/Adress/ResotoAdressEdit.editable = false
 
 
 func _on_ButtonConnect_pressed() -> void:
@@ -168,6 +173,7 @@ func _on_ping_done(_error: int, _r:ResotoAPI.Response):
 func _on_LoginButton_pressed():
 	if OS.has_feature("HTML5"):
 		HtmlFiles.remove_from_local_storage("jwt")
+		JavaScript.eval("location.reload()")
 	else:
 		OS.shell_open("%s%s:%d/login?redirect=http://%s:8100" % ["https://" if API.use_ssl else "http://", API.adress, API.port, API.adress])
 		var server = preload("res://components/shared/login_server.tscn").instance()

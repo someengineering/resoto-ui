@@ -13,10 +13,10 @@ var print_token: bool = false
 onready var expiration_timer := Timer.new()
 
 
-func _ready():
-	add_child(expiration_timer)
-	expiration_timer.one_shot = true
-	expiration_timer.connect("timeout", self, "renew_token")
+#func _ready():
+#	add_child(expiration_timer)
+#	expiration_timer.one_shot = true
+#	expiration_timer.connect("timeout", self, "renew_token")
 
 
 func token_expired() ->bool:
@@ -32,6 +32,7 @@ func _on_renew_token_done(_error: int, _response: ResotoAPI.Response):
 	if _error:
 		return
 	set_token(_response.headers["Authorization"].split(" ")[1])
+	_g.authorized = true
 	pass
 
 
@@ -40,8 +41,8 @@ func set_token(_token : String):
 	var payload := token.split(".")[1]
 	var decoded_payload : String = Marshalls.base64_to_utf8(_convert_base64(payload))
 	token_expire = parse_json(decoded_payload).exp - 300
-	if not OS.has_feature("HTML5"):
-		expiration_timer.start((token_expire - Time.get_unix_time_from_system()))
+#	if not OS.has_feature("HTML5"):
+#		expiration_timer.start((token_expire - Time.get_unix_time_from_system()))
 
 
 func create_jwt() -> void:
