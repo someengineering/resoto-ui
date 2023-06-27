@@ -42,6 +42,7 @@ func set_token(_token : String):
 	var payload := token.split(".")[1]
 	var decoded_payload : String = Marshalls.base64_to_utf8(_convert_base64(payload))
 	token_expire = parse_json(decoded_payload).exp - 300
+	_g.authorized = true
 	if not OS.has_feature("HTML5"):
 		expiration_timer.start((token_expire - Time.get_unix_time_from_system()))
 
