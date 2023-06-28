@@ -25,7 +25,6 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 
 [node name="ConnectPopup" type="PopupPanel"]
-visible = true
 self_modulate = Color( 0.091, 0.11245, 0.13, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -31,6 +31,10 @@ func _on_ButtonConnect_pressed() -> void:
 func _on_ConnectPopup_about_to_show() -> void:
 	var protocol:= "https://" if API.use_ssl else "http://"
 	address_line_edit.text = protocol + API.adress + ":" + str(API.port)
+	if OS.has_feature("html5"):
+		$Content/Margin/Login/Adress/ResotoAdressEdit.text = JavaScript.eval("window.location.origin")
+		$Content/Margin/Login/Adress/ResotoAdressEdit.editable = false
+
 	_g.emit_signal("resh_lite_popup_hide")
 
 
@@ -51,6 +55,9 @@ func start_connect() -> void:
 		if port == "":
 			port = "80" if not use_ssl else "443"
 		API.connection_config(adress, int(port), use_ssl)
+		$Content/Margin/Login/Adress/ResotoAdressEdit.text = JavaScript.eval("window.location.origin")
+		$Content/Margin/Login/Adress/ResotoAdressEdit.editable = false
+
 	else:
 		var a_t = address_line_edit.text.strip_edges()
 		var adress = a_t.split("://")
@@ -168,6 +175,7 @@ func _on_ping_done(_error: int, _r:ResotoAPI.Response):
 func _on_LoginButton_pressed():
 	if OS.has_feature("HTML5"):
 		HtmlFiles.remove_from_local_storage("jwt")
+		JavaScript.eval("location.reload()")
 	else:
 		OS.shell_open("%s%s:%d/login?redirect=http://%s:8100" % ["https://" if API.use_ssl else "http://", API.adress, API.port, API.adress])
 		var server = preload("res://components/shared/login_server.tscn").instance()

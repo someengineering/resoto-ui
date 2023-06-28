@@ -6,7 +6,6 @@ var options: Options
 var cookies_: Dictionary = {}
 var requests_: Array     = []
 
-
 class Options:
 	var host: String  = ""
 	var port: int     = 80
@@ -83,6 +82,9 @@ class Request:
 	
 	
 	func request_(_method:int = method, _path:String = path, _headers:Array = headers, _body:String = body) -> void:
+		if not _g.authorized and JWT.token != "":
+			cancel()
+		
 		var http_status:int= http_.get_status()
 		
 		if false:
@@ -115,6 +117,7 @@ class Request:
 				add_authorization_header(_headers)
 				var err : int = http_.request(_method, _path, _headers, _body)
 				if err != OK:
+					print(err)
 					emit_signal("done", err, null)
 					state_ = states.DONE
 				else:
@@ -130,6 +133,7 @@ class Request:
 			
 			states.RECEIVE:
 				if http_status != HTTPClient.STATUS_BODY and http_status != HTTPClient.STATUS_CONNECTED:
+					print(http_status)
 					emit_signal("done", -1, null)
 					state_ = states.DONE
 				else:

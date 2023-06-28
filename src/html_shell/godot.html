@@ -396,7 +396,7 @@
 
 		console.defaultError = console.error.bind(console);
 		console.error = function(){
-		arg = arguments;
+			arg = arguments;
 			console.defaultError.apply(console, arguments);
 			window.localStorage.setItem("error", JSON.stringify(arguments));
 		}

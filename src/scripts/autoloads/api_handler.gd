@@ -6,7 +6,7 @@ var _req_res: ResotoAPI.Request
 var _resoto_api: ResotoAPI = ResotoAPI.new()
 
 var adress: String		= "127.0.0.1" setget set_adress
-var port: int			= 8900 setget set_port
+var port: int			= 8980 setget set_port
 var psk: String			= DEFAULT_PSK setget set_psk
 var graph_id: String	= "resoto"
 var use_ssl: bool		= false setget set_use_ssl
