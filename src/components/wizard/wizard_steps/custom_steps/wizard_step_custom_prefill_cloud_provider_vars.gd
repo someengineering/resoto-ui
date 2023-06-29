@@ -4,6 +4,8 @@ var workflow_done := false
 var search_all_done := false
 
 func start(_data:Dictionary):
+	search_all_done = false
+	workflow_done = false
 	if (wizard.remote_configs.has("resoto.worker") and
 	wizard.remote_configs["resoto.worker"].has("resotoworker") and
 	wizard.remote_configs["resoto.worker"]["resotoworker"].has("collector")):
