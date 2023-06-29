@@ -404,9 +404,12 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 		
 		if not default:
 			var property_keys : Array = []
+			var optional_keys : Array = []
 			if config_model.has(kind) and config_model[kind].has("properties"):
 				for properties in config_model[kind].properties:
 					property_keys.append(properties.name)
+					if not properties.required:
+						optional_keys.append(properties.name)
 			
 			# This is a fallback for the highest level of the config
 			# (Because the first dictionary is not rendered)
@@ -414,6 +417,12 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 				property_keys = _property_value.keys()
 			
 			for key in property_keys:
+				if not key in _property_value:
+					if key in optional_keys:
+						continue
+					else:
+						_g.emit_signal("add_toast", "Missing configuration property", "The required property %s was not defined for %s." % [key, _parent.model.fqn], 2, self, 3)
+						continue
 				var element = _property_value[key]
 				var element_property = find_in_properties(model.properties, key)
 				if element_property.empty():
