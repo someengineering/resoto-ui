@@ -14,7 +14,7 @@ onready var expiration_timer := Timer.new()
 
 
 func _ready():
-	if not OS.has_feature("html5"):
+	if not OS.has_feature("HTML5"):
 		add_child(expiration_timer)
 		expiration_timer.one_shot = true
 		expiration_timer.connect("timeout", self, "renew_token")
