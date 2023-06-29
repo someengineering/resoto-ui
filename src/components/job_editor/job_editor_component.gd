@@ -34,6 +34,8 @@ func _on_jobs_list_done(_error:int, _response:UserAgent.Response) -> void:
 		return
 	if _response.transformed.has("result"):
 		buffered_jobs.clear()
+		if _response.transformed.result.empty():
+			job_tree_root = job_tree.create_item()
 		for job in _response.transformed.result:
 			create_job_element(job)
 

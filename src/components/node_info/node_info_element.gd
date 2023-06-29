@@ -247,7 +247,7 @@ func main_node_display(node_data):
 	
 	# Name (ID) and Kind
 	var r_name = node_data.reported.name
-	var r_id = node_data.reported.id
+	var r_id = node_data.reported.id if "id" in node_data.reported else "null"
 	$"%NodeNameLabel".text = r_name if r_name == r_id else r_name + " (%s)" % r_id
 	var r_kind = node_data.reported.kind
 	$"%KindLabelButton".text = r_kind
@@ -355,8 +355,9 @@ func _on_SuccessorsButton_pressed():
 
 
 func _on_KindLabelButton_pressed():
-	_g.emit_signal("explore_node_list_kind", current_main_node.reported.kind)
-	Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "kind"})
+	if current_main_node.reported.kind != null:
+		_g.emit_signal("explore_node_list_kind", current_main_node.reported.kind)
+		Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "kind"})
 
 
 func _on_NodeIDCopyButton_pressed():

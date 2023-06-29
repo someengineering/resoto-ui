@@ -54,6 +54,7 @@ class Request:
 		path = _path
 		headers = _headers
 		body = _body
+		response_ = Response.new()
 	
 	
 	func cancel(err_code:int=ERR_PRINTER_ON_FIRE) -> void:
@@ -144,7 +145,6 @@ class Request:
 					emit_signal("done", -1, null)
 					state_ = states.DONE
 				else:
-					response_				= Response.new()
 					response_.response_code	= http_.get_response_code()
 					response_.status_code	= http_status
 					response_.headers		= http_.get_response_headers_as_dictionary()

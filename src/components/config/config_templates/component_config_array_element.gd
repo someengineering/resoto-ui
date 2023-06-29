@@ -96,6 +96,8 @@ func get_value():
 			var new_value:Dictionary = config_component.build_dict(content_elements)
 			return new_value
 		"any":
+			if content_elements.empty():
+				return null
 			return content_elements[0].value
 
 

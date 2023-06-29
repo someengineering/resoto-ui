@@ -161,28 +161,31 @@ func _on_get_configs_done(_error: int, response):
 
 
 func _on_get_config_id_done(_error : int, _response, _config):
-	var dashboard = _response.transformed.result
-	if dashboard is Dictionary:
-		if not default_dashboard_found:
-			if ("ui_dashboard" in dashboard and dashboard["ui_dashboard"].dashboard_name == DefaultDashboardName) or "dashboard_name" in dashboard and dashboard.dashboard_name == DefaultDashboardName:
-				default_dashboard_found = true
-			
-		# If ui_dashboard is not present (old dashboards) assing the whole result for retrocompatibility
-		if "ui_dashboard" in dashboard:
-			available_dashboards[dashboard["ui_dashboard"].dashboard_name.replace(" ", "_")] = dashboard["ui_dashboard"]
-		else:
-			var dashboard_name = dashboard.dashboard_name.replace(" ", "_")
-			available_dashboards[dashboard_name] = dashboard
-
-			API.put_config_id(self, get_db_config_name(dashboard.dashboard_name), JSON.print({"ui_dashboard" : dashboard}), "_on_update_dashboard_config_done")
-
-		dashboards_loaded += 1
-		if dashboards_loaded >= total_saved_dashboards:
+	if _error:
+		_g.emit_signal("add_toast", "Error loading dashboard %s." % _config, "", 1, self)
+	else:
+		var dashboard = _response.transformed.result
+		if dashboard is Dictionary:
 			if not default_dashboard_found:
-				restore_default_dashboard()
+				if ("ui_dashboard" in dashboard and dashboard["ui_dashboard"].dashboard_name == DefaultDashboardName) or "dashboard_name" in dashboard and dashboard.dashboard_name == DefaultDashboardName:
+					default_dashboard_found = true
+				
+			# If ui_dashboard is not present (old dashboards) assing the whole result for retrocompatibility
+			if "ui_dashboard" in dashboard:
+				available_dashboards[dashboard["ui_dashboard"].dashboard_name.replace(" ", "_")] = dashboard["ui_dashboard"]
 			else:
-				emit_signal("all_dashboards_loaded")
-				_refresh_dashboard_list()
+				var dashboard_name = dashboard.dashboard_name.replace(" ", "_")
+				available_dashboards[dashboard_name] = dashboard
+
+				API.put_config_id(self, get_db_config_name(dashboard.dashboard_name), JSON.print({"ui_dashboard" : dashboard}), "_on_update_dashboard_config_done")
+
+	dashboards_loaded += 1
+	if dashboards_loaded >= total_saved_dashboards:
+		if not default_dashboard_found:
+			restore_default_dashboard()
+		else:
+			emit_signal("all_dashboards_loaded")
+			_refresh_dashboard_list()
 
 
 func _on_update_dashboard_config_done(_error : int, _response : ResotoAPI.Response):
