@@ -53,7 +53,8 @@ func _on_settings_loaded(_found_settings:bool) -> void:
 		SaveLoadSettings.save_settings()
 	yield(get_tree(), "idle_frame")
 	
-	_g.popup_manager.open_popup("ConnectPopup")
+	if not OS.has_feature("HTML5"):
+		_g.popup_manager.open_popup("ConnectPopup")
 	_g.popup_manager.popup_connect.connect("connected", self, "_connected", [], CONNECT_ONESHOT)
 	_g.emit_signal("connect_to_core")
 	
