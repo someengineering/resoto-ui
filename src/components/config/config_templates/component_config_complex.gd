@@ -22,6 +22,17 @@ onready var null_value = $HeaderBG/Header/Top/VarValueIsNull
 onready var content = $Margin/Content
 
 
+func _draw():
+	if is_null and required:
+		var rect = get_rect()
+		rect.position = -2*Vector2.ONE
+		rect = rect.grow(5)
+		$"%MissingRequiredLabel".show()
+		draw_rect(rect, Color("#f44444"), false, 1.0)
+	else:
+		$"%MissingRequiredLabel".hide()
+
+
 func _ready() -> void:
 	Style.add($HeaderBG/Header/Top/Expand, Style.c.LIGHT)
 	
@@ -64,10 +75,10 @@ func set_expand_fixed():
 
 func set_required(_value:bool) -> void:
 	required = _value
-	if is_null:
-		$HeaderBG/Header/Top/ButtonAddValue.show()
-	else:
-		$HeaderBG/Header/Top/ButtonSetToNull.show()
+	if required:
+		if is_null:
+			$HeaderBG/Header/Top/ButtonAddValue.show()
+	$HeaderBG/Header/Top/ButtonSetToNull.hide()
 
 
 func set_value(_value) -> void:
@@ -114,8 +125,8 @@ func set_to_null(to_null:bool) -> void:
 	is_null = to_null
 	$HeaderBG/Header/Top/Expand.visible = !is_null
 	$HeaderBG/Header/Top/VarValueIsNull.visible = is_null
+	$HeaderBG/Header/Top/ButtonAddValue.visible = is_null
 	if not required:
-		$HeaderBG/Header/Top/ButtonAddValue.visible = is_null
 		$HeaderBG/Header/Top/ButtonSetToNull.visible = !is_null
 
 
