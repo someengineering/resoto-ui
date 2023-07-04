@@ -197,6 +197,7 @@ size_flags_vertical = 3
 custom_styles/panel = SubResource( 20 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBox/HBoxContainer/MainPanel"]
+unique_name_in_owner = true
 margin_right = 1471.0
 margin_bottom = 1040.0
 size_flags_horizontal = 3

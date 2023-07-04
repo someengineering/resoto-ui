@@ -80,6 +80,18 @@ size_flags_horizontal = 0
 theme_type_variation = "Label_24"
 text = "Test"
 
+[node name="MissingRequiredLabel" type="Label" parent="HeaderBG/Header/Top"]
+unique_name_in_owner = true
+visible = false
+margin_left = 64.0
+margin_top = 7.0
+margin_right = 183.0
+margin_bottom = 22.0
+theme_type_variation = "LabelSmall"
+custom_colors/font_color = Color( 0.956863, 0.266667, 0.266667, 1 )
+text = "(Missing required value)"
+valign = 2
+
 [node name="VarValueIsNull" type="Label" parent="HeaderBG/Header/Top"]
 visible = false
 modulate = Color( 1, 1, 1, 0.439216 )

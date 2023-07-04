@@ -53,6 +53,18 @@ custom_colors/font_color = Color( 0.803922, 0.631373, 0.109804, 1 )
 text = "(overriden by external config file)"
 valign = 2
 
+[node name="MissingRequiredLabel" type="Label" parent="VarContent"]
+unique_name_in_owner = true
+visible = false
+margin_left = 91.0
+margin_top = 5.0
+margin_right = 210.0
+margin_bottom = 20.0
+theme_type_variation = "LabelSmall"
+custom_colors/font_color = Color( 0.956863, 0.266667, 0.266667, 1 )
+text = "(Missing required value)"
+valign = 2
+
 [node name="VarValueIsNull" type="Label" parent="VarContent"]
 visible = false
 modulate = Color( 1, 1, 1, 0.439216 )

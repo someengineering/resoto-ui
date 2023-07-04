@@ -17,6 +17,15 @@ var font_height := 1.0
 
 onready var null_value = $VarContent/VarValueIsNull
 
+func _draw():
+	if value == null and required:
+		var rect = get_rect()
+		rect.position = -2*Vector2.ONE
+		rect = rect.grow(5)
+		$"%MissingRequiredLabel".show()
+		draw_rect(rect, Color("#f44444"), false, 1.0)
+	else:
+		$"%MissingRequiredLabel".hide()
 
 func show_description(_show:bool) -> void:
 	$"%DescriptionContainer".visible = _show if description != "" else false
@@ -59,7 +68,6 @@ func set_default(_value:bool) -> void:
 func set_required(_value:bool) -> void:
 	required = _value
 	if required:
-		$VarContent/ButtonAddValue.hide()
 		$VarContent/ButtonSetToNull.hide()
 		return
 	
@@ -145,8 +153,8 @@ func set_to_null(to_null:bool) -> void:
 	null_value.hide()
 #	null_value.visible = to_null
 	
+	$VarContent/ButtonAddValue.visible = to_null
 	if not required:
-		$VarContent/ButtonAddValue.visible = to_null
 		$VarContent/ButtonSetToNull.visible = !to_null
 
 

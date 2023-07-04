@@ -18,6 +18,14 @@ onready var enum_button:OptionButton = $"%VarValueEnum"
 onready var null_value = $VarContent/VarValueIsNull
 
 
+func _draw():
+	if is_null and required:
+		var rect = get_rect()
+		rect.position = -2*Vector2.ONE
+		rect = rect.grow(5)
+		draw_rect(rect, Color("#f44444"), false, 1.0)
+
+
 func show_description(_show:bool) -> void:
 	$"%DescriptionContainer".visible = _show if description != "" else false
 
@@ -45,7 +53,6 @@ func set_overridden(o: bool):
 func set_required(_value:bool) -> void:
 	required = _value
 	if required:
-		$VarContent/ButtonAddValue.hide()
 		$VarContent/ButtonSetToNull.hide()
 		return
 	
@@ -99,8 +106,9 @@ func set_to_null(to_null:bool) -> void:
 	enum_button.visible = !is_null
 	null_value.visible = is_null
 	
+	
+	$VarContent/ButtonAddValue.visible = is_null
 	if not required:
-		$VarContent/ButtonAddValue.visible = is_null
 		$VarContent/ButtonSetToNull.visible = !is_null
 
 

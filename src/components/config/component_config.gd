@@ -46,6 +46,8 @@ var tabs_content : Dictionary = {}
 var tabs_content_keys : Array = []
 var _active_tab_id : int = -1
 
+var required_elements : Array = []
+
 onready var tabs : Tabs = find_node("Tabs")
 onready var content = $"%Content"
 
@@ -220,6 +222,7 @@ func build_config_page():
 	new_config_page.value = active_config
 	var new_elements = []
 	elements_in_overrides = []
+	required_elements = []
 	
 	# If the config is completely empty, just add a raw json display
 	if active_config.keys().empty():
@@ -285,6 +288,23 @@ func add_new_config_page(_title:String) -> Node:
 
 
 func save_config() -> void:
+	
+	for element in required_elements:
+		if element.value == null:
+			_g.emit_signal("add_toast", "Missing required element '%s'" % element.key, "", 1)
+			var p = element.get_parent()
+			while p != $"%Content":
+				if p.has_method("expand"):
+					p.expand(true)
+				p = p.get_parent()
+				
+			yield(VisualServer,"frame_post_draw")
+			yield(VisualServer,"frame_post_draw")
+			
+			$"%ScrollContainer".scroll_vertical = element.rect_global_position.y - $"%Content".rect_global_position.y - 10
+			
+			return
+	
 	var json_config_result = convert_active_config_to_string()
 	if json_config_result.error != OK:
 		_g.emit_signal("add_toast", "Error saving configuration.", "", 1, self)
@@ -303,15 +323,20 @@ func convert_active_config_to_string() -> Dictionary:
 	var new_config:Dictionary = {}
 	for config_element in config_page.content_elements:
 		if "key" in config_element:
-			if config_element.key == "slack":
-				pass
 			new_config[config_element.key] = config_element.value
+			if config_element.value == null:
+				pass
 		else:
 			new_config = config_element.value
+			
+			if config_element.value == null:
+				pass
+				
 		if "value_creation_error" in config_element:
 			if config_element.value_creation_error:
 				result.error = FAILED
 				return result
+				
 	result.dict = new_config
 	var json_string = JSON.print(new_config)
 	if json_string.begins_with("{\"\":"):
@@ -366,9 +391,6 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 	var model_search = find_in_model(kind)
 	var model = model_search[1]
 	
-	if _name == "slack":
-		pass
-	
 	if BASE_KINDS.has(kind) and not use_raw_mode:
 		# Create a new "Simple"
 		var simple_property = null
@@ -404,9 +426,14 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 		
 		if not default:
 			var property_keys : Array = []
+			var optional_keys : Array = []
 			if config_model.has(kind) and config_model[kind].has("properties"):
 				for properties in config_model[kind].properties:
 					property_keys.append(properties.name)
+					if properties.name in ["Default Values", "default_values"]:
+						pass
+					if not properties.required:
+						optional_keys.append(properties.name)
 			
 			# This is a fallback for the highest level of the config
 			# (Because the first dictionary is not rendered)
@@ -414,7 +441,11 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 				property_keys = _property_value.keys()
 			
 			for key in property_keys:
-				var element = _property_value[key]
+				var element = null
+				
+				if key in _property_value:
+					element = _property_value[key]
+					
 				var element_property = find_in_properties(model.properties, key)
 				if element_property.empty():
 					var element_model_search = find_in_model(key)
@@ -515,6 +546,8 @@ func create_complex(_name:String, kind:String, _property_value, properties, _par
 	if properties.has("description"):
 		new_complex.description = properties.description
 		new_complex.required = properties.required
+		if new_complex.required and _property_value == null:
+			required_elements.append(new_complex)
 	else:
 		new_complex.description = ""
 	
@@ -546,6 +579,8 @@ func create_simple(_name:String, _value, _kind, _properties, _parent:Control, de
 		new_value.key = _properties.name
 		new_value.description = _properties.description
 		new_value.required = _properties.required
+		if new_value.required and _value == null:
+			required_elements.append(new_value)
 	else:
 		new_value.key = _name
 		new_value.description = ""
@@ -577,6 +612,8 @@ func create_enum(_name:String, _value, _kind, _properties, _enum_values, _parent
 		new_value.key = _properties.name
 		new_value.description = _properties.description
 		new_value.required = _properties.required
+		if new_value.required and _value == null:
+			required_elements.append(new_value)
 	else:
 		new_value.key = _name
 		new_value.description = ""
@@ -612,19 +649,22 @@ func create_array(_name:String, _value, _kind, _properties, _parent:Control, def
 		new_array_container.model = complex_properties
 	
 	
+	if _value == null:
+		new_array_container.is_null = true
+	new_array_container.value = _value
+	
 	# if _properties is null, the created node represents a array element.
 	if _properties:
 		new_array_container.key = _properties.name
 		if _properties.has("description"):
 			new_array_container.description = _properties.description
 		new_array_container.required = _properties.required
+		if new_array_container.required and _value == null:
+			required_elements.append(new_array_container)
 	else:
 		new_array_container.description = ""
 		new_array_container.required = false
 	
-	if _value == null:
-		new_array_container.is_null = true
-	new_array_container.value = _value
 	
 	if _name in active_config_overrides:
 		elements_in_overrides.append(new_array_container)
@@ -654,19 +694,22 @@ func create_dict(_name:String, _kind, _value, _properties, _parent:Control, defa
 	new_dict_container.key = _name
 	new_dict_container.descriptions_as_hints = descriptions_as_hints
 	
+	if _value == null:
+		new_dict_container.is_null = true
+	new_dict_container.value = _value
+	
 	# if _properties is null, the created node represents a array element.
 	if _properties:
 		new_dict_container.key = _properties.name
 		if _properties.has("description"):
 			new_dict_container.description = _properties.description
 		new_dict_container.required = _properties.required
+		if new_dict_container.required and _value == null:
+			required_elements.append(new_dict_container)
 	else:
 		new_dict_container.description = ""
 		new_dict_container.required = false
 	
-	if _value == null:
-		new_dict_container.is_null = true
-	new_dict_container.value = _value
 	if _name in active_config_overrides:
 		elements_in_overrides.append(new_dict_container)
 	return new_dict_container
