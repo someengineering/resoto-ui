@@ -107,8 +107,6 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		
 		if not current_result.empty() and current_result[0].has("reported"):
 			$"%AllDataGroup".node_text = Utils.readable_dict(current_result[0].reported)
-			# WIP
-			$"%FullAllDataTextEdit".text = Utils.readable_dict(current_result[0].reported)
 		
 		for r in current_result:
 			if r.type == "node" and r.id == current_node_id:
@@ -169,11 +167,17 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 			_g.emit_signal("add_toast", "Error in Node Info", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
 			return
 		if not _response.transformed.result.empty():
+			$"%TreeMapButton".disabled = false
 			var treemap_format:= {}
 			var key_name:String = _response.transformed.result[0]["group"].keys()[0]
+			print(_response.transformed.result.size())
 			for element in _response.transformed.result:
 				treemap_format[element.group[key_name]] = element.count
 			update_treemap(treemap_format)
+		else:
+			_on_NeighbourhoodButton_pressed()
+			$"%TreeMapButton".disabled = true
+			
 	show_nav_section()
 
 func hide_treemap():
