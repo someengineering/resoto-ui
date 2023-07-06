@@ -453,7 +453,7 @@ func create_benchmark_model(data : Dictionary):
 func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
 	var branch_checks : Array = []
 	number_of_nodes += 10
-	if "children" in data:
+	if "children" in data and data.children != null:
 		for child in data.children:
 			var element = new_check_collection_tree_item(child)
 			element.set_collection_icon(BenchmarkCollectionDisplay.TYPES.COLLECTION)
@@ -461,7 +461,7 @@ func populate_tree_branch(data : Dictionary, root : CustomTreeItem) -> Array:
 			item.connect("pressed", self, "_on_tree_item_pressed")
 			branch_checks.append_array(populate_tree_branch(child, item))
 			number_of_nodes += 9
-	elif "checks" in data:
+	elif "checks" in data and data.checks != null:
 		for check in data.checks:
 			number_of_nodes += 5
 			var element = new_check_result_tree_item(check)
@@ -525,11 +525,11 @@ func look_for_checks_in_element(element : Dictionary) -> Array:
 	if element.empty():
 		return []
 	
-	if "checks" in element:
+	if "checks" in element and element.checks != null:
 		return element["checks"]
 	
 	for child in element["children"]:
-		if "checks" in child:
+		if "checks" in child and child.checks != null:
 			all_checks.append_array(child["checks"])
 		else:
 			all_checks.append_array(look_for_checks_in_element(child))
@@ -585,7 +585,7 @@ func find_model_element_by_title(title : String, model : Dictionary):
 	if model["title"] == title:
 		return model
 
-	if "children" in model:
+	if "children" in model and model.children != null:
 		for element in model["children"]:
 			if element["title"] == title:
 				result = element
