@@ -1,6 +1,7 @@
 extends Control
 
 signal node_shown(node_id)
+signal count_done(count)
 
 var active_request :ResotoAPI.Request
 var aggregation_request :ResotoAPI.Request
@@ -13,7 +14,6 @@ var last_aggregation_query	: String		= ""
 var default_treemap_mode : int				= 1
 var treemap_button_script_pressed : bool	= false
 var treemap_button_force_switched : bool	= false
-
 
 onready var n_icon_cleaned := $"%NodeIconCleaned"
 onready var n_icon_phantom := $"%NodeIconPhantom"
@@ -81,8 +81,6 @@ func clear_view():
 	$"%TreeMapModeButton".set_pressed_direct(false)
 	$"%NodeNameLabel".set("custom_colors/font_color", Color.transparent)
 	$"%KindLabelButton".set("custom_colors/font_color", Color.transparent)
-	set_successor_button(false)
-	set_predecessor_button(false)
 	n_icon_cleaned.hide()
 
 
@@ -111,8 +109,6 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 		for r in current_result:
 			if r.type == "node" and r.id == current_node_id:
 				main_node_display(r)
-				set_successor_button(false)
-				set_predecessor_button(true)
 				hide_treemap()
 				treemap_display_mode = default_treemap_mode
 				$"%TreeMapModeButton".disabled = false
@@ -124,15 +120,12 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 						aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
 					else:
 						aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
-						set_predecessor_button(false)
-						set_successor_button(true)
+
 				elif treemap_display_mode == 1:
 					if r.has("reported") and r.reported.has("kind"):
 						var descendants_query:= "aggregate(/ancestors.%s.reported.name: sum(1) as count): /ancestors.%s.reported.id%s and /ancestors.%s.reported.name!=null"
 						match r.reported.kind:
 							"graph_root":
-								set_predecessor_button(false)
-								set_successor_button(true)
 								descendants_query = descendants_query % ["cloud", "cloud", "!=null", "cloud"]
 							"cloud":
 								descendants_query = descendants_query % ["account", "cloud", "=\"" + r.reported.id + "\"", "account"]
@@ -152,6 +145,9 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 						pass
 		show()
 		emit_signal("node_shown", tag_group.node_id)
+		
+		if $"%SuccessorsPredecessorsButton".pressed:
+			_on_SuccessorsPredecessorsButton_pressed()
 
 
 func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> void:
@@ -170,12 +166,12 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 			$"%TreeMapButton".disabled = false
 			var treemap_format:= {}
 			var key_name:String = _response.transformed.result[0]["group"].keys()[0]
-			print(_response.transformed.result.size())
 			for element in _response.transformed.result:
 				treemap_format[element.group[key_name]] = element.count
 			update_treemap(treemap_format)
 		else:
-			_on_NeighbourhoodButton_pressed()
+			if $"%TreeMapButton".pressed:
+				_on_NeighbourhoodButton_pressed()
 			$"%TreeMapButton".disabled = true
 			
 	show_nav_section()
@@ -187,7 +183,6 @@ func hide_treemap():
 func update_treemap(_treemap_content:Dictionary = {}):
 	if _treemap_content.empty():
 		return
-	set_successor_button(true)
 	
 	var account_dict:= {}
 	for key in _treemap_content:
@@ -205,16 +200,6 @@ func update_treemap(_treemap_content:Dictionary = {}):
 	find_node("TreeMap").show()
 	yield(VisualServer, "frame_post_draw")
 	$"%TreeMap".create_treemap(account_dict)
-
-
-func set_successor_button(_enabled:bool):
-	$"%SuccessorsButton".disabled = !_enabled
-	$"%SuccessorsButton".modulate.a = 1 if _enabled else 0
-
-
-func set_predecessor_button(_enabled:bool):
-	$"%PredecessorsButton".disabled = !_enabled
-	$"%PredecessorsButton".modulate.a = 1 if _enabled else 0
 
 
 onready var breadcrumb_container = find_node("BreadcrumbContainer")
@@ -345,17 +330,61 @@ func _on_get_node_from_id_done(_error:int, _r:ResotoAPI.Response) -> void:
 	if _r.transformed.result:
 		show_node(_r.transformed.result[0].id)
 
-
-func _on_PredecessorsButton_pressed():
-	var search_command = "id(\"" + current_main_node.id + "\") <--"
-	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "<--")
-	Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "from-node"})
-
-
-func _on_SuccessorsButton_pressed():
-	var search_command = "id(\"" + current_main_node.id + "\") -->"
-	_g.emit_signal("explore_node_list_from_node", current_main_node, search_command, "-->")
-	Analytics.event(Analytics.EventsExplore.EXPLORE_NODE_LIST, {"explore": "from-node"})
+	
+func _on_successors_search_done(error:int, _response:UserAgent.Response) -> void:
+	for child in $"%SuccessorsContainer".get_children():
+		$"%SuccessorsContainer".remove_child(child)
+		child.queue_free()
+		
+	if error:
+		if error == ERR_PRINTER_ON_FIRE:
+			return
+		_g.emit_signal("add_toast", "Error in Node List", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
+		return
+	
+	if _response.transformed.has("result"):
+		show_data(_response.transformed.result, $"%SuccessorsContainer")
+	
+func _on_predecessors_search_done(error:int, _response:UserAgent.Response) -> void:
+	for child in $"%PredecessorsContainer".get_children():
+		$"%PredecessorsContainer".remove_child(child)
+		child.queue_free()
+		
+	if error:
+		if error == ERR_PRINTER_ON_FIRE:
+			return
+		_g.emit_signal("add_toast", "Error in Node List", Utils.err_enum_to_string(error) + "\nBody: "+ active_request.body, 1, self)
+		return
+	
+	if _response.transformed.has("result"):
+		show_data(_response.transformed.result, $"%PredecessorsContainer")
+		
+func show_data(result, parent_node):
+	for r in result:
+		var new_result = preload("res://components/fulltext_search_menu/full_text_search_result_template.tscn").instance()
+		new_result.name = r.id
+		new_result.node_id = r.id
+		new_result.hint_tooltip = "id: " + r.id
+		var ancestors:String = ""
+		if r.has("ancestors"):
+			if r.ancestors.has("cloud"):
+				ancestors += r.ancestors.cloud.reported.name
+			if r.ancestors.has("account"):
+				var r_account = r.ancestors.account.reported.name
+				r_account = Utils.truncate_string_px(r_account, 4, 150.0)
+				ancestors += " > " + r_account
+			if r.ancestors.has("region"):
+				ancestors += " > " + r.ancestors.region.reported.name
+			if r.ancestors.has("zone"):
+				ancestors += " > " + r.ancestors.zone.reported.name
+				
+		new_result.get_node("VBox/Top/ResultKind").text = r.reported.name
+		new_result.get_node("VBox/Top/ResultName").text = r.reported.kind
+		new_result.get_node("VBox/ResultDetails").text = ancestors
+		
+		new_result.connect("pressed", self, "show_node", [r.id, true])
+		
+		parent_node.add_child(new_result)
 
 
 func _on_KindLabelButton_pressed():
@@ -500,28 +529,51 @@ func _on_TreeMapButton_pressed():
 	$"%TreeMapButton".pressed = true
 	$"%NeighbourhoodButton".pressed = false
 	$"%AllDetailsButton".pressed = false
+	$"%SuccessorsPredecessorsButton".pressed = false
 	$"%TreeMapContainer".show()
 	$"%AllDataFullView".hide()
 	$"%NeigbourhoodViewContainer".hide()
+	$"%SuccessorsPredecessorsContainer".hide()
 
 
 func _on_NeighbourhoodButton_pressed():
 	$"%TreeMapButton".pressed = false
 	$"%NeighbourhoodButton".pressed = true
 	$"%AllDetailsButton".pressed = false
+	$"%SuccessorsPredecessorsButton".pressed = false
 	$"%TreeMapContainer".hide()
 	$"%AllDataFullView".hide()
 	$"%NeigbourhoodViewContainer".show()
+	$"%SuccessorsPredecessorsContainer".hide()
 	create_neighbourhoodview(current_node_id)
 
 func _on_AllDetailsButton_pressed():
 	$"%TreeMapButton".pressed = false
 	$"%NeighbourhoodButton".pressed = false
 	$"%AllDetailsButton".pressed = true
+	$"%SuccessorsPredecessorsButton".pressed = false
 	$"%AllDataFullView".show()
 	$"%TreeMapContainer".hide()
 	$"%NeigbourhoodViewContainer".hide()
+	$"%SuccessorsPredecessorsContainer".hide()
 
 
 func _on_AllDataGroup_show_full_all_data():
 	_on_AllDetailsButton_pressed()
+
+
+func _on_SuccessorsPredecessorsButton_pressed():
+	$"%TreeMapButton".pressed = false
+	$"%NeighbourhoodButton".pressed = false
+	$"%AllDetailsButton".pressed = false
+	$"%SuccessorsPredecessorsButton".pressed = true
+	$"%AllDataFullView".hide()
+	$"%TreeMapContainer".hide()
+	$"%NeigbourhoodViewContainer".hide()
+	$"%SuccessorsPredecessorsContainer".show()
+	
+	var search_command = "id(\"" + current_main_node.id + "\") -->"
+	API.graph_search(search_command, self, "list", "_on_successors_search_done")
+	
+	search_command = "id(\"" + current_main_node.id + "\") <--"
+	API.graph_search(search_command, self, "list", "_on_predecessors_search_done")
