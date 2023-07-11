@@ -1,7 +1,6 @@
 extends Control
 
 signal node_shown(node_id)
-signal count_done(count)
 
 var active_request :ResotoAPI.Request
 var aggregation_request :ResotoAPI.Request
