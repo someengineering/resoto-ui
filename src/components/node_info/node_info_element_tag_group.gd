@@ -57,7 +57,6 @@ func add_tag(_variable:="purple", _value:="sheep"):
 	if node_id == "":
 		return
 	var add_tag_query : String = "search id(\"%s\") | tag update \"%s\" \"%s\"" % [node_id, _variable, _value]
-	
 	if not _g.ui_test_mode:
 		API.cli_execute(add_tag_query, self, "_on_add_tag_query_done")
 	else:
@@ -68,6 +67,13 @@ func add_tag(_variable:="purple", _value:="sheep"):
 func _on_add_tag_query_done(_error:int, _r:ResotoAPI.Response):
 	if _error:
 		return
+	
+	var body := _r.body.get_string_from_utf8()
+	
+	if body.begins_with("error: "):
+		_g.emit_signal("add_toast", "Couldn't add tag", body, 1, self, 3)
+		return
+	
 	emit_signal("tags_request_refresh")
 	# Refresh list
 	# This has to be done when I can test it on a live installation.
@@ -90,6 +96,13 @@ func delete_tag(_tag_variable:String):
 func _on_delete_tag_query_done(_error:int, _r:ResotoAPI.Response):
 	if _error:
 		return
+		
+	var body := _r.body.get_string_from_utf8()
+	
+	if body.begins_with("error: "):
+		_g.emit_signal("add_toast", "Couldn't delete tag", body, 1, self, 3)
+		return
+		
 	emit_signal("tags_request_refresh")
 	# Refresh list
 	# This has to be done when I can test it on a live installation.
@@ -112,6 +125,13 @@ func change_tag(_tag_variable:String, _tag_value:String):
 func _on_change_tag_query_done(_error:int, _r:ResotoAPI.Response):
 	if _error:
 		return
+		
+	var body := _r.body.get_string_from_utf8()
+
+	if body.begins_with("error: "):
+		_g.emit_signal("add_toast", "Couldn't update tag", body, 1, self, 3)
+		return
+		
 	emit_signal("tags_request_refresh")
 	# Refresh list
 	# This has to be done when I can test it on a live installation.
