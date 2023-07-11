@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://components/elements/styled/styled_icon_button_hover.gd" type="Script" id=9]
 [ext_resource path="res://assets/theme/dynamic_font_one_px.tres" type="DynamicFont" id=10]
 [ext_resource path="res://assets/resoto/Resoto-Logo_med.svg" type="Texture" id=11]
+[ext_resource path="res://components/shared/int_spinbox_big.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/icons/icon_128_arrow.svg" type="Texture" id=13]
 [ext_resource path="res://assets/icons/icon_128_circle_big.svg" type="Texture" id=14]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=15]
@@ -751,6 +752,7 @@ highlight_all_occurrences = true
 
 [node name="SuccessorsPredecessorsContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer"]
 unique_name_in_owner = true
+visible = false
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1390.0
@@ -776,7 +778,7 @@ text = "Predecessors"
 [node name="ScrollContainer" type="ScrollContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer"]
 margin_top = 34.0
 margin_right = 674.0
-margin_bottom = 877.0
+margin_bottom = 840.0
 size_flags_vertical = 3
 custom_styles/bg = SubResource( 11 )
 
@@ -785,9 +787,39 @@ unique_name_in_owner = true
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 669.0
-margin_bottom = 838.0
+margin_bottom = 801.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="PredecessorsPageSpinner" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer" instance=ExtResource( 12 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 494.0
+margin_top = 844.0
+margin_right = 674.0
+margin_bottom = 877.0
+size_flags_horizontal = 8
+prefix = "Page"
+max_value = 10000
+use_max_value = true
+min_value = 1
+value_to_set = 1.0
+
+[node name="IntEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner" index="0"]
+update_on_writing = false
+
+[node name="Timer2" type="Timer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner/IntEdit" index="0"]
+wait_time = 0.65
+
+[node name="PopupMenu2" type="PopupMenu" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner/IntEdit" index="1"]
+items = [ "Cut", null, 0, false, false, 0, 268435544, null, "", false, "Copy", null, 0, false, false, 1, 268435523, null, "", false, "Paste", null, 0, false, false, 2, 268435542, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Select All", null, 0, false, false, 4, 268435521, null, "", false, "Clear", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Undo", null, 0, false, false, 5, 268435546, null, "", false, "Redo", null, 0, false, false, 6, 301989978, null, "", false ]
+
+[node name="Timer3" type="Timer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner/IntEdit" index="2"]
+wait_time = 0.65
+
+[node name="PopupMenu3" type="PopupMenu" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner/IntEdit" index="3"]
+items = [ "Cut", null, 0, false, false, 0, 268435544, null, "", false, "Copy", null, 0, false, false, 1, 268435523, null, "", false, "Paste", null, 0, false, false, 2, 268435542, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Select All", null, 0, false, false, 4, 268435521, null, "", false, "Clear", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Undo", null, 0, false, false, 5, 268435546, null, "", false, "Redo", null, 0, false, false, 6, 301989978, null, "", false ]
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer"]
 margin_left = 686.0
@@ -804,7 +836,7 @@ text = "Successors"
 [node name="ScrollContainer" type="ScrollContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2"]
 margin_top = 34.0
 margin_right = 674.0
-margin_bottom = 877.0
+margin_bottom = 840.0
 size_flags_vertical = 3
 custom_styles/bg = SubResource( 11 )
 
@@ -813,9 +845,27 @@ unique_name_in_owner = true
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 669.0
-margin_bottom = 838.0
+margin_bottom = 801.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="SuccessorsPageSpinner" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2" instance=ExtResource( 12 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 494.0
+margin_top = 844.0
+margin_right = 674.0
+margin_bottom = 877.0
+size_flags_horizontal = 8
+prefix = "Page"
+max_value = 10000
+use_max_value = true
+min_value = 1
+value_to_set = 1.0
+
+[node name="IntEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2/SuccessorsPageSpinner" index="0"]
+update_on_writing = false
 
 [node name="Templates" type="Control" parent="."]
 visible = false
@@ -864,5 +914,9 @@ script = ExtResource( 7 )
 [connection signal="option_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup" method="_on_AllDataFilter_option_changed"]
 [connection signal="text_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup" method="_on_AllDataFilter_text_changed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title/AllDataMaximizeButton" to="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup" method="_on_AllDataMaximizeButton_pressed"]
+[connection signal="value_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner" to="." method="_on_PredecessorsPageSpinner_value_changed"]
+[connection signal="value_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2/SuccessorsPageSpinner" to="." method="_on_SuccessorsPageSpinner_value_changed"]
 
 [editable path="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/RemoveFromCleanupButton"]
+[editable path="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner"]
+[editable path="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2/SuccessorsPageSpinner"]

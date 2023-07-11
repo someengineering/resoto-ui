@@ -15,6 +15,10 @@ var default_treemap_mode : int				= 1
 var treemap_button_script_pressed : bool	= false
 var treemap_button_force_switched : bool	= false
 
+var successors_count := 0
+var predecessors_count := 0
+var page_size := 50
+
 onready var n_icon_cleaned := $"%NodeIconCleaned"
 onready var n_icon_phantom := $"%NodeIconPhantom"
 onready var property_container := $"%PropertyContainer"
@@ -26,6 +30,8 @@ onready var btn_protect_add : Button = $"%ProtectButton"
 onready var btn_protect_remove : Button = $"%UnProtectButton"
 onready var btn_cleanup_add : Button = $"%AddToCleanupButton"
 onready var btn_cleanup_remove : Button = $"%RemoveFromCleanupButton"
+onready var successors_spinner := $"%SuccessorsPageSpinner"
+onready var predecessors_spinner := $"%PredecessorsPageSpinner"
 
 
 func _ready():
@@ -572,8 +578,58 @@ func _on_SuccessorsPredecessorsButton_pressed():
 	$"%NeigbourhoodViewContainer".hide()
 	$"%SuccessorsPredecessorsContainer".show()
 	
-	var search_command = "id(\"" + current_main_node.id + "\") -->"
-	API.graph_search(search_command, self, "list", "_on_successors_search_done")
+	var search_command = "id(\"" + current_main_node.id + "\") -->" 
+
+	API.cli_execute_json("search " + search_command + " | count", self, "cli_data", "_on_successors_count_done")
 	
-	search_command = "id(\"" + current_main_node.id + "\") <--"
-	API.graph_search(search_command, self, "list", "_on_predecessors_search_done")
+	search_command = "id(\"" + current_main_node.id + "\") -->" 
+	API.cli_execute_json("search " + search_command + " | count", self, "cli_data", "_on_predecessors_count_done")
+	
+func _on_successors_count_done(_e, _r):
+	if _e:
+		successors_count = 0
+	else:
+		successors_count = int(_r.transformed.result[0].split(": ")[1])
+	
+	if successors_count > page_size:
+		successors_spinner.show()
+# warning-ignore:integer_division
+		successors_spinner.max_value = ceil(float(successors_count) / page_size)
+	else:
+		successors_spinner.hide()
+		
+	successors_spinner.value = 1
+	
+func _on_predecessors_count_done(_e, _r):
+	if _e:
+		predecessors_count = 0
+	else:
+		predecessors_count = int(_r.transformed.result[0].split(" ")[1])
+		
+	if predecessors_count > page_size:
+		predecessors_spinner.show()
+# warning-ignore:integer_division
+		predecessors_spinner.max_value = ceil(float(successors_count) / page_size)
+
+	else:
+		predecessors_spinner.hide()
+		
+	predecessors_spinner.value = 1
+		
+func cli_data(_e, _r):
+	pass
+
+func _on_PredecessorsPageSpinner_value_changed(value):
+	if current_main_node.empty():
+		return
+	var search_command = "id(\"" + current_main_node.id + "\") <--"+ " limit %d, %d" % [page_size* (value-1), page_size]
+	print(search_command)
+	API.graph_search(search_command , self, "list", "_on_predecessors_search_done")
+	
+
+
+func _on_SuccessorsPageSpinner_value_changed(value):
+	if current_main_node.empty():
+		return
+	var search_command = "id(\"" + current_main_node.id + "\") -->" 
+	API.graph_search(search_command + " limit %d, %d" % [page_size * (value-1), page_size], self, "list", "_on_successors_search_done")
