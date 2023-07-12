@@ -38,7 +38,7 @@ The UI ships as part of the [Resoto Docker](https://resoto.com/docs/getting-star
 
 The version number must be changed in two files:
 
-`resotoui\__init__.py` -> `__version__ = "X.Y.Z"`
+`resotoui\resotoui\__init__.py` -> `__version__ = "X.Y.Z"`
 
 `src\scripts\autoloads\global.gd` -> `var ui_version:String= X.Y.Z`
 
@@ -48,9 +48,12 @@ Just create a new release, the title of the release is always `vX.Y.Z` while the
 
 **3) Create a PR in the Resoto repo to bump the UI version**
 
-You need to change the UI version accordingly here:
+You need to change the UI version (`resotoui==X.Y.X`) accordingly here:
 
-`https://github.com/someengineering/resoto/blob/main/resotocore/requirements.txt` -> `resotoui==X.Y.Z`
+* [requirements-all.txt](https://github.com/someengineering/resoto/blob/main/requirements-all.txt)
+* [requirements-extra.txt](https://github.com/someengineering/resoto/blob/main/requirements-extra.txt)
+* [requirements-test.txt](https://github.com/someengineering/resoto/blob/main/requirements-test.txt)
+* [requirements.txt](https://github.com/someengineering/resoto/blob/main/requirements.txt)
 
 Then open a pull request with the change.
 
