@@ -150,8 +150,7 @@ func parse_message(_m:Dictionary):
 			run_error_count += 1
 			if run_errors.size() < 100:
 				run_errors.append(_m.data.message)
-			var properties := {"error" : _m.data.message}
-			Analytics.event(Analytics.EventWizard.ERROR, properties)
+
 			refresh_error_tooltip()
 	
 	elif m_type == message_types[MessageTypes.PROGRESS]:
