@@ -97,6 +97,7 @@ func analytics_event_data(event : int, context := {}, counters := {}) -> Diction
 	var data : Dictionary = {
 		"system" : "ui",
 		"kind" : events[event],
+		"ui-version" : _g.ui_version,
 		"context" : {
 			"session-id": session_id,
 			"user-id": user_id
