@@ -709,18 +709,15 @@ content_margin_bottom = 10.0
 bg_color = Color( 0, 0, 0, 0 )
 
 [sub_resource type="StyleBoxFlat" id=83]
+content_margin_left = 4.0
+content_margin_right = 4.0
 content_margin_top = 4.0
 content_margin_bottom = 4.0
-bg_color = Color( 0.0431373, 0.156863, 0.266667, 1 )
+bg_color = Color( 0.0588235, 0.2, 0.337255, 1 )
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-expand_margin_left = 4.0
-expand_margin_right = 4.0
-shadow_color = Color( 0, 0, 0, 0.0784314 )
-shadow_size = 30
-shadow_offset = Vector2( 0, -3 )
 
 [sub_resource type="StyleBoxFlat" id=120]
 content_margin_left = 10.0

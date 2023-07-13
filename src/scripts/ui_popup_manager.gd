@@ -56,7 +56,7 @@ func _process(_delta:float):
 		w_rect.size /= _g.ui_scale
 		var tt_rect := tt.get_global_rect()
 		# If the tooltip is outside the window
-		if not w_rect.encloses(tt_rect):
+		if not w_rect.encloses(tt_rect) and not tt == n_tooltip_node:
 			if tt_rect.end.x > w_rect.end.x:
 				tt.rect_position.x = w_rect.end.x - tt_rect.size.x
 			elif tt_rect.position.x < 0:

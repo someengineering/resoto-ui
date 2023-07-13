@@ -16,6 +16,7 @@ onready var new_tag_val_edit := $AddTagPopup/NewTagData/NewTagValueEdit
 func clear():
 	for c in tags_content.get_children():
 		c.queue_free()
+	$VBox/ScrollContainer.rect_min_size.y = 0
 
 
 func create_tags(tags:Dictionary):
