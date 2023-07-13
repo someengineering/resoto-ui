@@ -163,7 +163,7 @@ rect_min_size = Vector2( 0, 20 )
 [node name="Status" type="VBoxContainer" parent="VBox"]
 margin_top = 600.0
 margin_right = 1920.0
-margin_bottom = 636.0
+margin_bottom = 600.0
 alignment = 1
 
 [node name="ModelReceivePopup" parent="VBox/Status" instance=ExtResource( 14 )]

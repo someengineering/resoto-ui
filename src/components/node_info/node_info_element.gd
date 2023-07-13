@@ -54,12 +54,17 @@ func show_node(node_id:String, _add_to_history:=true):
 	current_node_id = node_id
 	tag_group.node_id = current_node_id
 	active_request = API.graph_search(search_command, self, "graph")
+	$"%TreeMap".clear_treemap()
+	clear_neighbourhood_view()
 
+
+func clear_neighbourhood_view():
+	for c in $"%NeigbourhoodViewContainer".get_children():
+		c.queue_free()
 
 const NeighbourhoodView = preload("res://components/neighbourhood/component_neighbourhood_view.tscn")
 func create_neighbourhoodview(_node_id:String):
-	for c in $"%NeigbourhoodViewContainer".get_children():
-		c.queue_free()
+	clear_neighbourhood_view()
 	
 	var new_nhv = NeighbourhoodView.instance()
 	$"%NeigbourhoodViewContainer".add_child(new_nhv)
@@ -337,10 +342,6 @@ func _on_get_node_from_id_done(_error:int, _r:ResotoAPI.Response) -> void:
 
 	
 func _on_successors_search_done(error:int, _response:UserAgent.Response) -> void:
-	for child in $"%SuccessorsContainer".get_children():
-		$"%SuccessorsContainer".remove_child(child)
-		child.queue_free()
-		
 	if error:
 		if error == ERR_PRINTER_ON_FIRE:
 			return
@@ -350,11 +351,7 @@ func _on_successors_search_done(error:int, _response:UserAgent.Response) -> void
 	if _response.transformed.has("result"):
 		show_data(_response.transformed.result, $"%SuccessorsContainer")
 	
-func _on_predecessors_search_done(error:int, _response:UserAgent.Response) -> void:
-	for child in $"%PredecessorsContainer".get_children():
-		$"%PredecessorsContainer".remove_child(child)
-		child.queue_free()
-		
+func _on_predecessors_search_done(error:int, _response:UserAgent.Response) -> void:		
 	if error:
 		if error == ERR_PRINTER_ON_FIRE:
 			return
@@ -388,6 +385,7 @@ func show_data(result, parent_node):
 		new_result.get_node("VBox/ResultDetails").text = ancestors
 		
 		new_result.connect("pressed", self, "show_node", [r.id, true])
+		new_result.connect("pressed", self, "_on_NeighbourhoodButton_pressed")
 		
 		parent_node.add_child(new_result)
 
@@ -542,6 +540,8 @@ func _on_TreeMapButton_pressed():
 
 
 func _on_NeighbourhoodButton_pressed():
+	if not $"%NeigbourhoodViewContainer".visible:
+		create_neighbourhoodview(current_node_id)
 	$"%TreeMapButton".pressed = false
 	$"%NeighbourhoodButton".pressed = true
 	$"%AllDetailsButton".pressed = false
@@ -550,7 +550,6 @@ func _on_NeighbourhoodButton_pressed():
 	$"%AllDataFullView".hide()
 	$"%NeigbourhoodViewContainer".show()
 	$"%SuccessorsPredecessorsContainer".hide()
-	create_neighbourhoodview(current_node_id)
 
 func _on_AllDetailsButton_pressed():
 	$"%TreeMapButton".pressed = false
@@ -577,8 +576,15 @@ func _on_SuccessorsPredecessorsButton_pressed():
 	$"%NeigbourhoodViewContainer".hide()
 	$"%SuccessorsPredecessorsContainer".show()
 	
+	for child in $"%SuccessorsContainer".get_children():
+		$"%SuccessorsContainer".remove_child(child)
+		child.queue_free()
+	
+	for child in $"%PredecessorsContainer".get_children():
+		$"%PredecessorsContainer".remove_child(child)
+		child.queue_free()
+	
 	var search_command = "id(\"" + current_main_node.id + "\") -->" 
-
 	API.cli_execute_json("search " + search_command + " | count", self, "cli_data", "_on_successors_count_done")
 	
 	search_command = "id(\"" + current_main_node.id + "\") -->" 
@@ -621,14 +627,14 @@ func cli_data(_e, _r):
 func _on_PredecessorsPageSpinner_value_changed(value):
 	if current_main_node.empty():
 		return
-	var search_command = "id(\"" + current_main_node.id + "\") <--"+ " limit %d, %d" % [page_size* (value-1), page_size]
-	print(search_command)
-	API.graph_search(search_command , self, "list", "_on_predecessors_search_done")
 	
+	var search_command = "id(\"" + current_main_node.id + "\") <--"+ " limit %d, %d" % [page_size* (value-1), page_size]
+	API.graph_search(search_command , self, "list", "_on_predecessors_search_done")
 
 
 func _on_SuccessorsPageSpinner_value_changed(value):
 	if current_main_node.empty():
 		return
+	
 	var search_command = "id(\"" + current_main_node.id + "\") -->" 
 	API.graph_search(search_command + " limit %d, %d" % [page_size * (value-1), page_size], self, "list", "_on_successors_search_done")

@@ -119,6 +119,7 @@ custom_styles/panel = SubResource( 7 )
 custom_styles/panel = SubResource( 35 )
 
 [node name="UISettingsPopup" parent="." instance=ExtResource( 8 )]
+visible = false
 custom_styles/panel = SubResource( 34 )
 
 [node name="ToastManager" parent="." instance=ExtResource( 9 )]
@@ -187,6 +188,7 @@ stretch_mode = 6
 [node name="BrowserWarningPopup" parent="." instance=ExtResource( 1 )]
 
 [node name="ReconnectPopup" parent="." instance=ExtResource( 2 )]
+visible = false
 
 [connection signal="about_to_show" from="ConfirmPopup" to="ConfirmPopup" method="_on_ConfirmPopup_about_to_show"]
 [connection signal="pressed" from="WizardButton" to="WizardButton" method="_on_WizardButton_pressed"]

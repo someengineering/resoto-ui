@@ -534,8 +534,8 @@ alignment = 1
 
 [node name="TreeMapButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
 unique_name_in_owner = true
-margin_left = 431.0
-margin_right = 519.667
+margin_left = 454.0
+margin_right = 542.667
 margin_bottom = 32.0
 toggle_mode = true
 pressed = true
@@ -543,27 +543,27 @@ text = "Treemap"
 
 [node name="NeighbourhoodButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
 unique_name_in_owner = true
-margin_left = 523.0
-margin_right = 660.333
+margin_left = 546.0
+margin_right = 683.333
 margin_bottom = 32.0
 toggle_mode = true
 text = "Neighbourhood"
 
 [node name="AllDetailsButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
 unique_name_in_owner = true
-margin_left = 664.0
-margin_right = 743.333
+margin_left = 687.0
+margin_right = 760.333
 margin_bottom = 32.0
 toggle_mode = true
-text = "All Data"
+text = "Details"
 
 [node name="SuccessorsPredecessorsButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
 unique_name_in_owner = true
-margin_left = 747.0
-margin_right = 968.333
+margin_left = 764.0
+margin_right = 946.667
 margin_bottom = 32.0
 toggle_mode = true
-text = "Successors / Predecessors"
+text = "Connected Resources"
 
 [node name="PanelContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation"]
 margin_top = 36.0

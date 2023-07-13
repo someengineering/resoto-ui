@@ -20,7 +20,7 @@ func _on_ButtonDashboards_pressed():
 
 
 func _on_ButtonExplore_pressed():
-	_g.emit_signal("nav_change_section_explore", "last")
+	_g.emit_signal("nav_change_section_explore", "root")
 
 
 func _on_ButtonConfig_pressed():
