@@ -17,6 +17,7 @@ var treemap_button_force_switched : bool	= false
 var successors_count := 0
 var predecessors_count := 0
 var page_size := 50
+var treemap_format := {}
 
 onready var n_icon_cleaned := $"%NodeIconCleaned"
 onready var n_icon_phantom := $"%NodeIconPhantom"
@@ -38,7 +39,7 @@ func _ready():
 	root_button.connect("pressed", self, "on_id_button_pressed", ["root"])
 
 
-func show_node(node_id:String, _add_to_history:=true):
+func show_node(node_id:String, _add_to_history:=true, view:="last"):
 	if node_id != current_node_id:
 		clear_view()
 	# cancel the active request... this created problems with the signal returning old requests
@@ -54,8 +55,16 @@ func show_node(node_id:String, _add_to_history:=true):
 	current_node_id = node_id
 	tag_group.node_id = current_node_id
 	active_request = API.graph_search(search_command, self, "graph")
+	
 	$"%TreeMap".clear_treemap()
+	
 	clear_neighbourhood_view()
+	
+	match view:
+		"treemap":
+			select_nav_section($"%TreeMapButton")
+		"neighborhood":
+			select_nav_section($"%NeighbourhoodButton")
 
 
 func clear_neighbourhood_view():
@@ -126,10 +135,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 				if treemap_display_mode == 0:
 					var descendants_query:= "aggregate(kind: sum(1) as count): id(\"%s\") -[1:]->" % str(current_node_id)
 					last_aggregation_query = descendants_query
-					if r.id != "root":
-						aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
-					else:
-						aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
+					aggregation_request = API.aggregate_search(descendants_query, self, "_on_get_descendants_query_done")
 
 				elif treemap_display_mode == 1:
 					if r.has("reported") and r.reported.has("kind"):
@@ -174,14 +180,13 @@ func _on_get_descendants_query_done(error:int, _response:UserAgent.Response) -> 
 			return
 		if not _response.transformed.result.empty():
 			$"%TreeMapButton".disabled = false
-			var treemap_format:= {}
+			treemap_format = {}
 			var key_name:String = _response.transformed.result[0]["group"].keys()[0]
 			for element in _response.transformed.result:
 				treemap_format[element.group[key_name]] = element.count
-			update_treemap(treemap_format)
 		else:
 			if $"%TreeMapButton".pressed:
-				_on_NeighbourhoodButton_pressed()
+				select_nav_section($"%NeighbourhoodButton")
 			$"%TreeMapButton".disabled = true
 			
 	show_nav_section()
@@ -521,12 +526,16 @@ func _on_cleanup_query_done(_error:int, _r:ResotoAPI.Response):
 
 func show_nav_section():
 	if $"%TreeMapButton".pressed:
-		_on_TreeMapButton_pressed()
+		update_treemap(treemap_format)
 	elif $"%NeighbourhoodButton".pressed:
-		_on_NeighbourhoodButton_pressed()
+		create_neighbourhoodview(current_node_id)
 	elif $"%AllDetailsButton".pressed:
 		_on_AllDetailsButton_pressed()
 
+func select_nav_section(button: Button):
+	if not button.pressed:
+		button.pressed = true
+		button.emit_signal("pressed")
 
 func _on_TreeMapButton_pressed():
 	$"%TreeMapButton".pressed = true
@@ -537,11 +546,10 @@ func _on_TreeMapButton_pressed():
 	$"%AllDataFullView".hide()
 	$"%NeigbourhoodViewContainer".hide()
 	$"%SuccessorsPredecessorsContainer".hide()
+	update_treemap(treemap_format)
 
 
 func _on_NeighbourhoodButton_pressed():
-	if not $"%NeigbourhoodViewContainer".visible:
-		create_neighbourhoodview(current_node_id)
 	$"%TreeMapButton".pressed = false
 	$"%NeighbourhoodButton".pressed = true
 	$"%AllDetailsButton".pressed = false
@@ -550,6 +558,7 @@ func _on_NeighbourhoodButton_pressed():
 	$"%AllDataFullView".hide()
 	$"%NeigbourhoodViewContainer".show()
 	$"%SuccessorsPredecessorsContainer".hide()
+#	create_neighbourhoodview(current_node_id)
 
 func _on_AllDetailsButton_pressed():
 	$"%TreeMapButton".pressed = false
@@ -638,3 +647,9 @@ func _on_SuccessorsPageSpinner_value_changed(value):
 	
 	var search_command = "id(\"" + current_main_node.id + "\") -->" 
 	API.graph_search(search_command + " limit %d, %d" % [page_size * (value-1), page_size], self, "list", "_on_successors_search_done")
+
+
+func _on_NeigbourhoodViewContainer_visibility_changed():
+	if $"%NeigbourhoodViewContainer".visible and $"%NeigbourhoodViewContainer".get_child_count() == 0:
+		create_neighbourhoodview(current_node_id)
+		pass

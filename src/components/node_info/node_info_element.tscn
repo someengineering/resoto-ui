@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -71,6 +71,8 @@ corner_radius_bottom_left = 4
 shadow_color = Color( 0, 0, 0, 0.0784314 )
 shadow_size = 10
 shadow_offset = Vector2( 0, 4 )
+
+[sub_resource type="ButtonGroup" id=12]
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 12.0
@@ -538,7 +540,7 @@ margin_left = 454.0
 margin_right = 542.667
 margin_bottom = 32.0
 toggle_mode = true
-pressed = true
+group = SubResource( 12 )
 text = "Treemap"
 
 [node name="NeighbourhoodButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
@@ -547,6 +549,7 @@ margin_left = 546.0
 margin_right = 683.333
 margin_bottom = 32.0
 toggle_mode = true
+group = SubResource( 12 )
 text = "Neighbourhood"
 
 [node name="AllDetailsButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
@@ -555,6 +558,7 @@ margin_left = 687.0
 margin_right = 760.333
 margin_bottom = 32.0
 toggle_mode = true
+group = SubResource( 12 )
 text = "Details"
 
 [node name="SuccessorsPredecessorsButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
@@ -563,6 +567,7 @@ margin_left = 764.0
 margin_right = 946.667
 margin_bottom = 32.0
 toggle_mode = true
+group = SubResource( 12 )
 text = "Connected Resources"
 
 [node name="PanelContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation"]
@@ -574,6 +579,7 @@ size_flags_vertical = 3
 
 [node name="NeigbourhoodViewContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer"]
 unique_name_in_owner = true
+visible = false
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1390.0
@@ -905,6 +911,7 @@ script = ExtResource( 7 )
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/NeighbourhoodButton" to="." method="_on_NeighbourhoodButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/AllDetailsButton" to="." method="_on_AllDetailsButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/SuccessorsPredecessorsButton" to="." method="_on_SuccessorsPredecessorsButton_pressed"]
+[connection signal="visibility_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/NeigbourhoodViewContainer" to="." method="_on_NeigbourhoodViewContainer_visibility_changed"]
 [connection signal="toggled" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton_old" to="." method="_on_TreeMapModeButton_toggled"]
 [connection signal="toggled" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton" to="." method="_on_TreeMapModeButton_toggled"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapCopyButton" to="." method="_on_TreeMapCopyButton_pressed"]
