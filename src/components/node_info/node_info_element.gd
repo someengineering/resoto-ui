@@ -40,6 +40,8 @@ func _ready():
 
 
 func show_node(node_id:String, _add_to_history:=true, view:="last"):
+	if _g.resoto_model.empty():
+		yield(_g, "model_loaded")
 	if node_id != current_node_id:
 		clear_view()
 	# cancel the active request... this created problems with the signal returning old requests

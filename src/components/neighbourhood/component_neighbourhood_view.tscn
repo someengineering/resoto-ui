@@ -98,6 +98,7 @@ margin_bottom = 100.0
 text = "back"
 
 [node name="LoadingOverlay" parent="." instance=ExtResource( 8 )]
+visible = true
 
 [connection signal="pressed" from="Buttons/UIZoomGroup/ButtonZoomMinus" to="GraphNavigator" method="_on_ButtonZoomMinus_pressed"]
 [connection signal="pressed" from="Buttons/UIZoomGroup/ButtonZoomCenter" to="." method="_on_ButtonZoomCenter_pressed"]

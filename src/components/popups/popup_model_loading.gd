@@ -53,5 +53,5 @@ func _on_get_model_flat_done(error: int, _response:ResotoAPI.Response):
 			else:
 				print("Icon '%s' not found! Using fallback." % icon_path)
 				Style.icon_files[icon_key] = load(Style.icon_fallback)
-		
+		_g.emit_signal("model_loaded")
 		queue_free()
