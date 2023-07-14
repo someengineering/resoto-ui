@@ -36,12 +36,14 @@ func on_node_clicked(_node_id:String):
 		display_node(_node_id)
 
 func display_node(_node_id:String):
+	$LoadingOverlay.show()
 	main_node_id = _node_id
 	var search_syntax = "id(\"%s\") <-[0:2]->" % main_node_id
 	new_graph_request(search_syntax)
 
 
 func _on_graph_search_done(error:int, response:UserAgent.Response) -> void:
+	$LoadingOverlay.hide()
 	if error:
 		if error == ERR_PRINTER_ON_FIRE:
 			return

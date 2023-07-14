@@ -530,6 +530,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="NodeNavButtons" type="HBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation"]
+unique_name_in_owner = true
 margin_right = 1400.0
 margin_bottom = 32.0
 alignment = 1

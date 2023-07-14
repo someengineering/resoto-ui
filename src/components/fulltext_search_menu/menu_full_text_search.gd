@@ -183,7 +183,7 @@ func show_search_results(results:Array, error:="") -> void:
 
 func on_result_button_clicked(_id:String):
 	popup.hide()
-	_g.emit_signal("explore_node_by_id", _id)
+	_g.emit_signal("explore_node_by_id", _id, true, "Neighbourhood")
 
 
 func _on_FullTextSearch_gui_input(event):

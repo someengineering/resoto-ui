@@ -60,11 +60,19 @@ func show_node(node_id:String, _add_to_history:=true, view:="last"):
 	
 	clear_neighbourhood_view()
 	
-	match view:
-		"treemap":
-			select_nav_section($"%TreeMapButton")
-		"neighborhood":
-			select_nav_section($"%NeighbourhoodButton")
+	for button in $"%NodeNavButtons".get_children():
+		if button.text == view:
+			select_nav_section(button)
+			break
+
+
+func get_selected_nav_section():
+	var section := "last"
+	for button in $"%NodeNavButtons".get_children():
+		if button.pressed:
+			section = button.text
+			break
+	return section
 
 
 func clear_neighbourhood_view():
@@ -160,7 +168,7 @@ func _on_graph_search_done(error:int, _response:UserAgent.Response) -> void:
 						# use fallback
 						pass
 		show()
-		emit_signal("node_shown", tag_group.node_id)
+		emit_signal("node_shown", tag_group.node_id, get_selected_nav_section())
 		
 		if $"%SuccessorsPredecessorsButton".pressed:
 			_on_SuccessorsPredecessorsButton_pressed()
@@ -531,6 +539,8 @@ func show_nav_section():
 		create_neighbourhoodview(current_node_id)
 	elif $"%AllDetailsButton".pressed:
 		_on_AllDetailsButton_pressed()
+	elif $"%SuccessorsPredecessorsButton".pressed():
+		_on_SuccessorsPredecessorsButton_pressed()
 
 func select_nav_section(button: Button):
 	if not button.pressed:
@@ -547,6 +557,7 @@ func _on_TreeMapButton_pressed():
 	$"%NeigbourhoodViewContainer".hide()
 	$"%SuccessorsPredecessorsContainer".hide()
 	update_treemap(treemap_format)
+	emit_signal("node_shown", current_node_id, $"%TreeMapButton".text)
 
 
 func _on_NeighbourhoodButton_pressed():
@@ -558,7 +569,7 @@ func _on_NeighbourhoodButton_pressed():
 	$"%AllDataFullView".hide()
 	$"%NeigbourhoodViewContainer".show()
 	$"%SuccessorsPredecessorsContainer".hide()
-#	create_neighbourhoodview(current_node_id)
+	emit_signal("node_shown", current_node_id, $"%NeighbourhoodButton".text)
 
 func _on_AllDetailsButton_pressed():
 	$"%TreeMapButton".pressed = false
@@ -569,6 +580,7 @@ func _on_AllDetailsButton_pressed():
 	$"%TreeMapContainer".hide()
 	$"%NeigbourhoodViewContainer".hide()
 	$"%SuccessorsPredecessorsContainer".hide()
+	emit_signal("node_shown", current_node_id, $"%AllDetailsButton".text)
 
 
 func _on_AllDataGroup_show_full_all_data():
@@ -584,6 +596,8 @@ func _on_SuccessorsPredecessorsButton_pressed():
 	$"%TreeMapContainer".hide()
 	$"%NeigbourhoodViewContainer".hide()
 	$"%SuccessorsPredecessorsContainer".show()
+	
+	emit_signal("node_shown", current_node_id, $"%SuccessorsPredecessorsButton".text)
 	
 	for child in $"%SuccessorsContainer".get_children():
 		$"%SuccessorsContainer".remove_child(child)

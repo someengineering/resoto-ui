@@ -306,7 +306,7 @@ func _on_ParentNodeButton_pressed():
 func _on_node_button_pressed(id:String):
 	reset_display()
 	_g.content_manager.change_section_explore("node_single_info")
-	_g.content_manager.find_node("NodeSingleInfo").show_node(id, true, "neighborhood")
+	_g.content_manager.find_node("NodeSingleInfo").show_node(id, true, "Neighbourhood")
 
 
 func reset_display():
