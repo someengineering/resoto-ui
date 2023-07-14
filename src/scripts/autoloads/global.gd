@@ -3,6 +3,7 @@ extends Node
 # Connection
 signal connected_to_resotocore
 signal connect_to_core
+signal model_loaded
 
 # Toasts
 signal add_toast

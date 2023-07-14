@@ -8,24 +8,24 @@
 
 [node name="TagElement" type="PanelContainer"]
 margin_right = 356.0
-margin_bottom = 45.0
+margin_bottom = 58.0
 rect_min_size = Vector2( 0, 45 )
 theme = ExtResource( 3 )
 theme_type_variation = "PanelContainerTagElement"
 script = ExtResource( 5 )
 
 [node name="VBox" type="VBoxContainer" parent="."]
+margin_left = 4.0
 margin_top = 4.0
-margin_right = 356.0
-margin_bottom = 41.0
-custom_constants/separation = -5
+margin_right = 352.0
+margin_bottom = 63.0
 
 [node name="Var" type="HBoxContainer" parent="VBox"]
-margin_right = 356.0
+margin_right = 348.0
 margin_bottom = 22.0
 
 [node name="TagVariable" type="Label" parent="VBox/Var"]
-margin_right = 308.0
+margin_right = 300.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -34,8 +34,8 @@ text = "variable"
 autowrap = true
 
 [node name="SearchTag" parent="VBox/Var" instance=ExtResource( 2 )]
-margin_left = 312.0
-margin_right = 332.0
+margin_left = 304.0
+margin_right = 324.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 20, 20 )
 hint_tooltip = "Search for this Tag"
@@ -44,8 +44,8 @@ icon_tex = ExtResource( 6 )
 icon_margin = 1
 
 [node name="DeleteTag" parent="VBox/Var" instance=ExtResource( 2 )]
-margin_left = 336.0
-margin_right = 356.0
+margin_left = 328.0
+margin_right = 348.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 20, 20 )
 hint_tooltip = "Delete this Tag"
@@ -54,12 +54,13 @@ icon_tex = ExtResource( 1 )
 icon_margin = 1
 
 [node name="Val" type="HBoxContainer" parent="VBox"]
-margin_top = 17.0
-margin_right = 356.0
-margin_bottom = 37.0
+margin_top = 26.0
+margin_right = 348.0
+margin_bottom = 59.0
 custom_constants/separation = 0
 
 [node name="EqualLabel" type="Label" parent="VBox/Val"]
+visible = false
 modulate = Color( 1, 1, 1, 0.588235 )
 margin_right = 9.0
 margin_bottom = 20.0
@@ -69,12 +70,11 @@ text = ":"
 valign = 2
 
 [node name="TagValue" type="LineEdit" parent="VBox/Val"]
-margin_left = 9.0
-margin_right = 356.0
-margin_bottom = 20.0
+margin_right = 348.0
+margin_bottom = 33.0
 size_flags_horizontal = 3
 theme = ExtResource( 3 )
-theme_type_variation = "TextEditTag"
+theme_type_variation = "LineEditCode"
 text = "test"
 max_length = 255
 

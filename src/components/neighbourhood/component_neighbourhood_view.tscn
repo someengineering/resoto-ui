@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/icons/icon_128_add.svg" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://components/neighbourhood/component_neighbourhood_navigator.gd" type="Script" id=5]
 [ext_resource path="res://components/neighbourhood/component_neighbourhood_view.gd" type="Script" id=6]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=7]
+[ext_resource path="res://components/dashboard/shared/loading_overlay.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0.934426, 1 )
@@ -95,6 +96,9 @@ margin_top = 68.0
 margin_right = 152.0
 margin_bottom = 100.0
 text = "back"
+
+[node name="LoadingOverlay" parent="." instance=ExtResource( 8 )]
+visible = true
 
 [connection signal="pressed" from="Buttons/UIZoomGroup/ButtonZoomMinus" to="GraphNavigator" method="_on_ButtonZoomMinus_pressed"]
 [connection signal="pressed" from="Buttons/UIZoomGroup/ButtonZoomCenter" to="." method="_on_ButtonZoomCenter_pressed"]

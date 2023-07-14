@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://components/node_info/node_info_element.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/dark_theme.tres" type="Theme" id=2]
@@ -11,12 +11,11 @@
 [ext_resource path="res://components/elements/styled/styled_icon_button_hover.gd" type="Script" id=9]
 [ext_resource path="res://assets/theme/dynamic_font_one_px.tres" type="DynamicFont" id=10]
 [ext_resource path="res://assets/resoto/Resoto-Logo_med.svg" type="Texture" id=11]
-[ext_resource path="res://components/elements/styled/icon_button_text.tscn" type="PackedScene" id=12]
+[ext_resource path="res://components/shared/int_spinbox_big.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/icons/icon_128_arrow.svg" type="Texture" id=13]
 [ext_resource path="res://assets/icons/icon_128_circle_big.svg" type="Texture" id=14]
 [ext_resource path="res://components/elements/styled/icon_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://components/shared/icon_from_kind.gd" type="Script" id=16]
-[ext_resource path="res://components/elements/styled/icon_button_text_aligned.tscn" type="PackedScene" id=17]
 [ext_resource path="res://components/shared/combo_box.tscn" type="PackedScene" id=18]
 [ext_resource path="res://assets/icons/icon_128_search.svg" type="Texture" id=19]
 [ext_resource path="res://components/node_info/node_info_element_all_data.gd" type="Script" id=20]
@@ -73,7 +72,7 @@ shadow_color = Color( 0, 0, 0, 0.0784314 )
 shadow_size = 10
 shadow_offset = Vector2( 0, 4 )
 
-[sub_resource type="StyleBoxEmpty" id=6]
+[sub_resource type="ButtonGroup" id=12]
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 12.0
@@ -85,6 +84,19 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="StyleBoxFlat" id=11]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0.0822449, 0.154572, 0.214844, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="NodeInfoElement" type="Control"]
 anchor_right = 1.0
@@ -239,42 +251,9 @@ rect_min_size = Vector2( 450, 0 )
 mouse_filter = 2
 custom_constants/separation = 20
 
-[node name="Actions" type="HBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails"]
-margin_right = 450.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 400, 33 )
-size_flags_horizontal = 3
-custom_constants/separation = 10
-
-[node name="PredecessorsButton" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/Actions" instance=ExtResource( 12 )]
-unique_name_in_owner = true
-margin_right = 195.0
-size_flags_horizontal = 11
-text = "      Show Predecessors"
-align = 0
-icon_tex = ExtResource( 13 )
-flip_h = true
-
-[node name="Spacer" type="Control" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/Actions"]
-margin_left = 205.0
-margin_right = 245.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 40, 0 )
-
-[node name="SuccessorsButton" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/Actions" instance=ExtResource( 17 )]
-unique_name_in_owner = true
-margin_left = 255.0
-margin_right = 450.0
-size_flags_horizontal = 3
-text = "Show Successors       "
-align = 2
-icon_tex = ExtResource( 13 )
-icon_align_right = true
-
 [node name="NodeBaseInfo" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails"]
-margin_top = 53.0
 margin_right = 450.0
-margin_bottom = 98.0
+margin_bottom = 45.0
 mouse_filter = 2
 theme_type_variation = "PanelContainerDark"
 
@@ -443,9 +422,9 @@ columns = 2
 
 [node name="TagsGroup" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails"]
 unique_name_in_owner = true
-margin_top = 118.0
+margin_top = 65.0
 margin_right = 450.0
-margin_bottom = 163.0
+margin_bottom = 110.0
 size_flags_horizontal = 3
 theme_type_variation = "PanelContainerDark"
 script = ExtResource( 27 )
@@ -496,7 +475,7 @@ self_modulate = Color( 0.0470588, 0.0941176, 0.133333, 1 )
 margin_left = 12.0
 margin_top = 8.0
 margin_right = 438.0
-margin_bottom = 136.0
+margin_bottom = 170.0
 custom_styles/panel = SubResource( 9 )
 script = ExtResource( 7 )
 
@@ -507,128 +486,41 @@ margin_right = 416.0
 margin_bottom = 152.0
 
 [node name="NewTagVariableLabel" type="Label" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData"]
-margin_right = 418.0
-margin_bottom = 16.0
+margin_right = 406.0
+margin_bottom = 15.0
 theme_type_variation = "LabelSmall"
 text = "Tag name"
 
 [node name="NewTagVariableEdit" type="LineEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData"]
-margin_top = 20.0
-margin_right = 418.0
-margin_bottom = 53.0
+margin_top = 19.0
+margin_right = 406.0
+margin_bottom = 51.0
 max_length = 255
 caret_blink = true
 caret_blink_speed = 0.5
 
 [node name="NewTagValueLabel" type="Label" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData"]
-margin_top = 57.0
-margin_right = 418.0
-margin_bottom = 73.0
+margin_top = 55.0
+margin_right = 406.0
+margin_bottom = 70.0
 theme_type_variation = "LabelSmall"
 text = "Value"
 
 [node name="NewTagValueEdit" type="LineEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData"]
-margin_top = 77.0
-margin_right = 418.0
-margin_bottom = 110.0
+margin_top = 74.0
+margin_right = 406.0
+margin_bottom = 106.0
 max_length = 255
 caret_blink = true
 caret_blink_speed = 0.5
 
 [node name="AddNewTagButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData"]
-margin_left = 365.0
-margin_top = 114.0
-margin_right = 418.0
-margin_bottom = 147.0
+margin_left = 352.667
+margin_top = 110.0
+margin_right = 406.0
+margin_bottom = 142.0
 size_flags_horizontal = 10
 text = "Add"
-
-[node name="AllDataGroup" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails" groups=["persistent"]]
-unique_name_in_owner = true
-margin_top = 183.0
-margin_right = 450.0
-margin_bottom = 953.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_type_variation = "PanelContainerDark"
-script = ExtResource( 20 )
-
-[node name="VBox" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup"]
-margin_left = 12.0
-margin_top = 8.0
-margin_right = 438.0
-margin_bottom = 762.0
-
-[node name="Title" type="HBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox"]
-margin_right = 426.0
-margin_bottom = 25.0
-custom_constants/separation = 5
-
-[node name="AllDataLabel" type="Label" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title"]
-margin_right = 136.0
-margin_bottom = 25.0
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_type_variation = "LabelBold"
-text = "All Data"
-
-[node name="AllDataSearchIcon" type="TextureRect" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title"]
-modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
-margin_left = 141.0
-margin_top = 2.0
-margin_right = 161.0
-margin_bottom = 22.0
-rect_min_size = Vector2( 20, 20 )
-size_flags_vertical = 6
-texture = ExtResource( 19 )
-expand = true
-stretch_mode = 6
-script = ExtResource( 7 )
-
-[node name="AllDataFilter" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title" instance=ExtResource( 18 )]
-margin_left = 166.0
-margin_right = 366.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 200, 24 )
-align_items_left = true
-clear_button_enabled = true
-small_results = true
-
-[node name="AllDataCopyButton" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title" instance=ExtResource( 21 )]
-margin_left = 371.0
-margin_top = 0.0
-margin_right = 396.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 25, 25 )
-size_flags_vertical = 5
-
-[node name="AllDataMaximizeButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title"]
-modulate = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
-margin_left = 401.0
-margin_right = 426.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 25, 25 )
-hint_tooltip = "Maximize All Data"
-mouse_filter = 1
-size_flags_vertical = 5
-theme_type_variation = "ButtonBorderless"
-custom_fonts/font = ExtResource( 10 )
-toggle_mode = true
-icon = ExtResource( 8 )
-flat = true
-expand_icon = true
-script = ExtResource( 9 )
-
-[node name="AllDataTextEdit" type="TextEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox"]
-margin_top = 29.0
-margin_right = 426.0
-margin_bottom = 754.0
-rect_min_size = Vector2( 0, 160 )
-size_flags_vertical = 3
-custom_styles/focus = SubResource( 6 )
-text = "..."
-readonly = true
-highlight_all_occurrences = true
 
 [node name="NodeNavigation" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent"]
 margin_left = 500.0
@@ -638,34 +530,46 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="NodeNavButtons" type="HBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation"]
+unique_name_in_owner = true
 margin_right = 1400.0
 margin_bottom = 32.0
 alignment = 1
 
 [node name="TreeMapButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
 unique_name_in_owner = true
-margin_left = 544.0
-margin_right = 632.667
+margin_left = 454.0
+margin_right = 542.667
 margin_bottom = 32.0
 toggle_mode = true
-pressed = true
+group = SubResource( 12 )
 text = "Treemap"
 
 [node name="NeighbourhoodButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
 unique_name_in_owner = true
-margin_left = 636.0
-margin_right = 773.333
+margin_left = 546.0
+margin_right = 683.333
 margin_bottom = 32.0
 toggle_mode = true
+group = SubResource( 12 )
 text = "Neighbourhood"
 
 [node name="AllDetailsButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
 unique_name_in_owner = true
-margin_left = 777.0
-margin_right = 856.333
+margin_left = 687.0
+margin_right = 760.333
 margin_bottom = 32.0
 toggle_mode = true
-text = "All Data"
+group = SubResource( 12 )
+text = "Details"
+
+[node name="SuccessorsPredecessorsButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons"]
+unique_name_in_owner = true
+margin_left = 764.0
+margin_right = 946.667
+margin_bottom = 32.0
+toggle_mode = true
+group = SubResource( 12 )
+text = "Connected Resources"
 
 [node name="PanelContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation"]
 margin_top = 36.0
@@ -676,6 +580,7 @@ size_flags_vertical = 3
 
 [node name="NeigbourhoodViewContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer"]
 unique_name_in_owner = true
+visible = false
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1390.0
@@ -763,18 +668,211 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 4 )
 
-[node name="FullAllDataTextEdit" type="TextEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView"]
+[node name="AllDataGroup" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView" groups=["persistent"]]
 unique_name_in_owner = true
 margin_left = 12.0
 margin_top = 8.0
 margin_right = 1368.0
 margin_bottom = 889.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = "PanelContainerDark"
+script = ExtResource( 20 )
+
+[node name="VBox" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 1344.0
+margin_bottom = 873.0
+
+[node name="Title" type="HBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox"]
+margin_right = 1332.0
+margin_bottom = 25.0
+custom_constants/separation = 5
+
+[node name="AllDataLabel" type="Label" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title"]
+margin_right = 1072.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = "LabelBold"
+text = "All Data"
+
+[node name="AllDataSearchIcon" type="TextureRect" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title"]
+modulate = Color( 0.537255, 0.819608, 0.945098, 1 )
+margin_left = 1077.0
+margin_top = 2.0
+margin_right = 1097.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 20, 20 )
+size_flags_vertical = 6
+texture = ExtResource( 19 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 7 )
+
+[node name="AllDataFilter" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title" instance=ExtResource( 18 )]
+margin_left = 1102.0
+margin_right = 1302.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 200, 24 )
+align_items_left = true
+clear_button_enabled = true
+small_results = true
+
+[node name="AllDataCopyButton" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title" instance=ExtResource( 21 )]
+margin_left = 1307.0
+margin_top = 0.0
+margin_right = 1332.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+size_flags_vertical = 5
+
+[node name="AllDataMaximizeButton" type="Button" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title"]
+visible = false
+modulate = Color( 0.537255, 0.819608, 0.945098, 0.470588 )
+margin_left = 1307.0
+margin_right = 1332.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+hint_tooltip = "Maximize All Data"
+mouse_filter = 1
+size_flags_vertical = 5
+theme_type_variation = "ButtonBorderless"
+custom_fonts/font = ExtResource( 10 )
+toggle_mode = true
+icon = ExtResource( 8 )
+flat = true
+expand_icon = true
+script = ExtResource( 9 )
+
+[node name="AllDataTextEdit" type="TextEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox"]
+margin_top = 29.0
+margin_right = 1332.0
+margin_bottom = 865.0
 rect_min_size = Vector2( 0, 160 )
 size_flags_vertical = 3
 custom_styles/focus = SubResource( 6 )
 text = "..."
 readonly = true
 highlight_all_occurrences = true
+
+[node name="SuccessorsPredecessorsContainer" type="PanelContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer"]
+unique_name_in_owner = true
+visible = false
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1390.0
+margin_bottom = 907.0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1370.0
+margin_bottom = 887.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer"]
+margin_right = 674.0
+margin_bottom = 877.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer"]
+margin_right = 674.0
+margin_bottom = 30.0
+theme_type_variation = "Label_24"
+text = "Predecessors"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer"]
+margin_top = 34.0
+margin_right = 674.0
+margin_bottom = 840.0
+size_flags_vertical = 3
+custom_styles/bg = SubResource( 11 )
+
+[node name="PredecessorsContainer" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 669.0
+margin_bottom = 801.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PredecessorsPageSpinner" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer" instance=ExtResource( 12 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 494.0
+margin_top = 844.0
+margin_right = 674.0
+margin_bottom = 877.0
+size_flags_horizontal = 8
+prefix = "Page"
+max_value = 10000
+use_max_value = true
+min_value = 1
+value_to_set = 1.0
+
+[node name="IntEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner" index="0"]
+update_on_writing = false
+
+[node name="Timer2" type="Timer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner/IntEdit" index="0"]
+wait_time = 0.65
+
+[node name="PopupMenu2" type="PopupMenu" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner/IntEdit" index="1"]
+items = [ "Cut", null, 0, false, false, 0, 268435544, null, "", false, "Copy", null, 0, false, false, 1, 268435523, null, "", false, "Paste", null, 0, false, false, 2, 268435542, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Select All", null, 0, false, false, 4, 268435521, null, "", false, "Clear", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Undo", null, 0, false, false, 5, 268435546, null, "", false, "Redo", null, 0, false, false, 6, 301989978, null, "", false ]
+
+[node name="Timer3" type="Timer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner/IntEdit" index="2"]
+wait_time = 0.65
+
+[node name="PopupMenu3" type="PopupMenu" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner/IntEdit" index="3"]
+items = [ "Cut", null, 0, false, false, 0, 268435544, null, "", false, "Copy", null, 0, false, false, 1, 268435523, null, "", false, "Paste", null, 0, false, false, 2, 268435542, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Select All", null, 0, false, false, 4, 268435521, null, "", false, "Clear", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Undo", null, 0, false, false, 5, 268435546, null, "", false, "Redo", null, 0, false, false, 6, 301989978, null, "", false ]
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer"]
+margin_left = 686.0
+margin_right = 1360.0
+margin_bottom = 877.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2"]
+margin_right = 674.0
+margin_bottom = 30.0
+theme_type_variation = "Label_24"
+text = "Successors"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2"]
+margin_top = 34.0
+margin_right = 674.0
+margin_bottom = 840.0
+size_flags_vertical = 3
+custom_styles/bg = SubResource( 11 )
+
+[node name="SuccessorsContainer" type="VBoxContainer" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2/ScrollContainer"]
+unique_name_in_owner = true
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 669.0
+margin_bottom = 801.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SuccessorsPageSpinner" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2" instance=ExtResource( 12 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 494.0
+margin_top = 844.0
+margin_right = 674.0
+margin_bottom = 877.0
+size_flags_horizontal = 8
+prefix = "Page"
+max_value = 10000
+use_max_value = true
+min_value = 1
+value_to_set = 1.0
+
+[node name="IntEdit" parent="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2/SuccessorsPageSpinner" index="0"]
+update_on_writing = false
 
 [node name="Templates" type="Control" parent="."]
 visible = false
@@ -802,8 +900,6 @@ script = ExtResource( 7 )
 
 [connection signal="pressed" from="Margin/VBox/BreadcrumbContainer/ResourceListButton" to="." method="_on_ResourceListButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/TitleBar/KindLabelButton" to="." method="_on_KindLabelButton_pressed"]
-[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/Actions/PredecessorsButton" to="." method="_on_PredecessorsButton_pressed"]
-[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/Actions/SuccessorsButton" to="." method="_on_SuccessorsButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/NodeIDCopyButton" to="." method="_on_NodeIDCopyButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/ProtectButton" to="." method="_on_ProtectButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/UnProtectButton" to="." method="_on_UnProtectButton_pressed"]
@@ -812,17 +908,23 @@ script = ExtResource( 7 )
 [connection signal="tags_request_refresh" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup" to="." method="_on_TagsGroup_tags_request_refresh"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/VBox/TagTitleBar/AddTagButton" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup" method="_on_AddTagButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup/AddTagPopup/NewTagData/AddNewTagButton" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/TagsGroup" method="_on_AddNewTagButton_pressed"]
-[connection signal="show_full_all_data" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" to="." method="_on_AllDataGroup_show_full_all_data"]
-[connection signal="option_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataFilter_option_changed"]
-[connection signal="text_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataFilter_text_changed"]
-[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup/VBox/Title/AllDataMaximizeButton" to="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/AllDataGroup" method="_on_AllDataMaximizeButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/TreeMapButton" to="." method="_on_TreeMapButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/NeighbourhoodButton" to="." method="_on_NeighbourhoodButton_pressed"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/AllDetailsButton" to="." method="_on_AllDetailsButton_pressed"]
+[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/NodeNavButtons/SuccessorsPredecessorsButton" to="." method="_on_SuccessorsPredecessorsButton_pressed"]
+[connection signal="visibility_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/NeigbourhoodViewContainer" to="." method="_on_NeigbourhoodViewContainer_visibility_changed"]
 [connection signal="toggled" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton_old" to="." method="_on_TreeMapModeButton_toggled"]
 [connection signal="toggled" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapModeButton" to="." method="_on_TreeMapModeButton_toggled"]
 [connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMapTitleBar/TreeMapCopyButton" to="." method="_on_TreeMapCopyButton_pressed"]
 [connection signal="pressed_lmb" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed_lmb"]
 [connection signal="pressed_rmb" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/TreeMapContainer/VBoxContainer/TreeMap" to="." method="_on_TreeMap_pressed_rmb"]
+[connection signal="show_full_all_data" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup" to="." method="_on_AllDataGroup_show_full_all_data"]
+[connection signal="option_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup" method="_on_AllDataFilter_option_changed"]
+[connection signal="text_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title/AllDataFilter" to="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup" method="_on_AllDataFilter_text_changed"]
+[connection signal="pressed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup/VBox/Title/AllDataMaximizeButton" to="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/AllDataFullView/AllDataGroup" method="_on_AllDataMaximizeButton_pressed"]
+[connection signal="value_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner" to="." method="_on_PredecessorsPageSpinner_value_changed"]
+[connection signal="value_changed" from="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2/SuccessorsPageSpinner" to="." method="_on_SuccessorsPageSpinner_value_changed"]
 
 [editable path="Margin/VBox/ScrollContainer/NodeContent/NodeDetails/NodeBaseInfo/VBox/PropertyTitle/RemoveFromCleanupButton"]
+[editable path="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer/PredecessorsPageSpinner"]
+[editable path="Margin/VBox/ScrollContainer/NodeContent/NodeNavigation/PanelContainer/SuccessorsPredecessorsContainer/HSplitContainer/VBoxContainer2/SuccessorsPageSpinner"]

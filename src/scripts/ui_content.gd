@@ -69,6 +69,9 @@ func change_section_explore(type:String):
 			last_visited_explore_section = "node_single_info"
 		else:
 			change_section(last_visited_explore_section)
+	elif type == "root":
+		_g.emit_signal("explore_node_by_id", "root", true, "Treemap")
+		last_visited_explore_section = "node_single_info"
 	elif type == "node_single_info" or type == "node_list_info":
 		last_visited_explore_section = type
 		change_section(type)
