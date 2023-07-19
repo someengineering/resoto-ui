@@ -541,7 +541,7 @@ func show_nav_section():
 		create_neighbourhoodview(current_node_id)
 	elif $"%AllDetailsButton".pressed:
 		_on_AllDetailsButton_pressed()
-	elif $"%SuccessorsPredecessorsButton".pressed():
+	elif $"%SuccessorsPredecessorsButton".pressed:
 		_on_SuccessorsPredecessorsButton_pressed()
 
 func select_nav_section(button: Button):
