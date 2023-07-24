@@ -437,13 +437,13 @@ func add_element(_name:String, kind:String, _property_value, _parent:Control, de
 			
 			# This is a fallback for the highest level of the config
 			# (Because the first dictionary is not rendered)
-			if not property_keys.has(_property_value.keys()[0]):
+			if _property_value != null and not property_keys.has(_property_value.keys()[0]):
 				property_keys = _property_value.keys()
 			
 			for key in property_keys:
 				var element = null
 				
-				if key in _property_value:
+				if _property_value != null and key in _property_value:
 					element = _property_value[key]
 					
 				var element_property = find_in_properties(model.properties, key)
