@@ -1,5 +1,9 @@
 # `Resoto UI`
 
+## Deprecation Note
+
+`Resoto UI` is no longer actively developed and maintained. Please visit [Fix](https://fix.security), the asset inventory for your cloud security posture.
+
 ## Table of contents
 
 * [Overview](#overview)
